@@ -4,7 +4,7 @@ import Wrapper from './layout/Wrapper';
 
 function App() {
   return (
-    <div className="App">
+    <>
       <Wrapper />
       {/* <header className="App-header">
         <img src={logo} className="App-logo" alt="logo" />
@@ -20,7 +20,7 @@ function App() {
           Learn React
         </a>
       </header> */}
-    </div>
+    </>
   );
 }
 

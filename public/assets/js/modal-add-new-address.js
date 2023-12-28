@@ -24,11 +24,13 @@ $(function () {
 document.addEventListener('DOMContentLoaded', function () {
   (function () {
     // initCustomOptionCheck on modal show to update the custom select
+    window.addEventListener("DOMContentLoaded", (event) => {
     let addNewAddress = document.getElementById('addNewAddress');
     addNewAddress.addEventListener('show.bs.modal', function (event) {
       // Init custom option check
       window.Helpers.initCustomOptionCheck();
     });
+  })
 
     FormValidation.formValidation(document.getElementById('addNewAddressForm'), {
       fields: {

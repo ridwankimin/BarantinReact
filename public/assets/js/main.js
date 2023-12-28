@@ -115,8 +115,7 @@ if (document.getElementById('layout-menu')) {
     }
   } else {
     // Removed style switcher element if not using template customizer
-    styleSwitcherToggleEl.parentElement.remove();
-    // styleSwitcherToggleEl.parents().remove();
+      // styleSwitcherToggleEl.parentElement.remove();
   }
 
   // Update light/dark image based on current style
@@ -416,9 +415,9 @@ if (typeof $ !== 'undefined') {
       };
 
       // Search JSON
-      var searchJson = 'search-vertical.json'; // For vertical layout
+      var searchJson = '../assets/json/search-vertical.json'; // For vertical layout
       if ($('#layout-menu').hasClass('menu-horizontal')) {
-        var searchJson = 'search-horizontal.json'; // For vertical layout
+        var searchJson = '../assets/json/search-horizontal.json'; // For vertical layout
       }
       // Search API AJAX call
       var searchData = $.ajax({

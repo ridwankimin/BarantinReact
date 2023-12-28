@@ -1,9 +1,11 @@
-import React from 'react'
+import React, { useState } from 'react'
 import logbar from '../logo/barantins.png'
 
 function Navbar() {
+    let [menuOpen, setMenuOpen] = useState(false)
+    let sidebarClassname = menuOpen ? 'menu-item open menu-item-animating open' : 'menu-item menu-item-animating menu-item-closing';
     // const [menuOpen, setMenuOpen] = useState(false)
-    // const handleMenuOpen = () => menuOpen === false ? setMenuOpen(true) : setMenuOpen(false);
+    let handleMenuOpen = () => menuOpen === false ? setMenuOpen(true) : setMenuOpen(false);
   return (
     <aside id="layout-menu" className="layout-menu menu-vertical menu bg-menu-theme">
                 <div className="app-brand demo">
@@ -21,7 +23,7 @@ function Navbar() {
 
                 <div className="menu-inner-shadow"></div>
 
-                <ul className="menu-inner py-1">
+                <ul className="menu-inner py-1 overflow-auto">
                     <li className="menu-item">
                         <a href="index.php" className="menu-link">
                             <i className="menu-icon tf-icons bx bx-home-circle"></i>
@@ -30,40 +32,40 @@ function Navbar() {
                     </li>
 
                     <li className="menu-header small text-uppercase"><span className="menu-header-text">Apps &amp; Pages</span></li>
-                    {/* <li className={menuOpen ? "menu-item open menu-item-animating open" : "menu-item menu-item-animating menu-item-closing"} onClick={handleMenuOpen}> */}
-                    <li className="menu-item">
+                    {/* <li menu="0" className={menuOpen ? "menu-item open menu-item-animating open" : "menu-item menu-item-animating menu-item-closing"} onClick={handleMenuOpen(0)}> */}
+                    <li className={sidebarClassname} onClick={handleMenuOpen}>
                         <a href="#" className="menu-link menu-toggle">
                             <i className="menu-icon tf-icons bx bx-food-menu"></i>
                             <div data-i18n="Informasi Pre Border">Informasi Pre Border</div>
                         </a>
                         <ul className="menu-sub">
                             <li className="menu-item">
-                                <a href="index.php?page=k11" className="menu-link">
+                                <a href={'/k11'} className="menu-link">
                                     <div data-i18n="K-1.1">K-1.1</div>
                                 </a>
                             </li>
                             <li className="menu-item">
-                                <a href="index.php?page=k12" className="menu-link">
+                                <a href={'/k12'} className="menu-link">
                                     <div data-i18n="K-1.2">K-1.2</div>
                                 </a>
                             </li>
                             <li className="menu-item">
-                                <a href="index.php?page=k13" className="menu-link">
+                                <a href={'/k13'} className="menu-link">
                                     <div data-i18n="K-1.3">K-1.3</div>
                                 </a>
                             </li>
                             <li className="menu-item">
-                                <a href="index.php?page=k14" className="menu-link">
+                                <a href={'/k14'} className="menu-link">
                                     <div data-i18n="K-1.4">K-1.4</div>
                                 </a>
                             </li>
                             <li className="menu-item">
-                                <a href="index.php?page=k15" className="menu-link">
+                                <a href={'/k15'} className="menu-link">
                                     <div data-i18n="K-1.5">K-1.5</div>
                                 </a>
                             </li>
                             <li className="menu-item">
-                                <a href="index.php?page=k16" className="menu-link">
+                                <a href={'/k16'} className="menu-link">
                                     <div data-i18n="K-1.6">K-1.6</div>
                                 </a>
                             </li>

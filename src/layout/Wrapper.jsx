@@ -4,7 +4,7 @@ import Footer from './Footer'
 
 function Wrapper() {
   return (
-    <div className="layout-wrapper layout-content-navbar">
+    <div className="layout-wrapper light-style layout-content-navbar">
       <div className="layout-container">
         <Navbar />
         <Footer />
