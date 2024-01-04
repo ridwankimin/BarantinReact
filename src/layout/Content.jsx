@@ -5,6 +5,7 @@ import {
     Route,
   } from "react-router-dom";
 import Beranda from '../pages/Beranda';
+// import DataDiri1 from '../component/DocK11/DataDiri1';
 import DocK11 from '../pages/preborder/DocK11';
 import DocK12 from '../pages/preborder/DocK12';
 import DocK13 from '../pages/preborder/DocK13';
@@ -41,6 +42,7 @@ function Content() {
     <BrowserRouter>
         <Routes>
           <Route path="/" element={<Beranda />} />
+          {/* <Route path="/k11" element={<DataDiri1 />} /> */}
           <Route path="/k11" element={<DocK11 />} />
           <Route path="/k12" element={<DocK12 />} />
           <Route path="/k13" element={<DocK13 />} />

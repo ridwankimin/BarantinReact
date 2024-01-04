@@ -1,84 +1,105 @@
-import axios from 'axios';
-import { useEffect, useState } from 'react';
+import axios from "axios";
 
-function Master() {
-    let [dataNegara,setDataNegara] = useState([]);
-const qs = require('qs');
-let data = qs.stringify({
-  'key': 'hayoloh' 
-});
+const url = 'http://localhost/api-barantin/';
+// const contentType = 'application/json';
+// const qs = require('qs');
+// const tokenAuth = process.env.REACT_APP_API_KEY
 
-let config = {
-  method: 'post',
-  maxBodyLength: Infinity,
-  url: 'http://ws.karantina.pertanian.go.id/api/master/index.php?a=getNeg',
-  headers: { 
-    'Content-Type': 'application/x-www-form-urlencoded'
-  },
-  data : data
-};
+export default class Master {
 
-axios.request(config)
-.then((response) => {
-  console.log(JSON.stringify(response.data));
-  setDataNegara(response.data)
-})
-.catch((error) => {
-  console.log(error);
-});
+    masterNegara() {
+        return axios.get(url + 'negara', {
+            headers: {
+            //   'Cookie': 'PHPSESSID=jgepu06btvgculap0gl0tao0fp',
+            }
+        })
+    }
+    
+    masterProv() {
+        return axios.get(url + 'provinsi', {
+            headers: {
+            //   'Cookie': 'PHPSESSID=jgepu06btvgculap0gl0tao0fp',
+            }
+        })
+    }
 
-   
-    // return getNegara;
-    // const getNegara = async ()=> {
-    //     const response = await fetch(url);
-    //     const dataNegara = await response.json();
-    //     return dataNegara;
-    // }
-
-    // console.log(getNegara);
-    // return useEffect(() => {
-    //     axios
-    //     .get('http://ws.karantina.pertanian.go.id/api/master/index.php?a=getNeg')
-    //     .then(response=>{
-    //         console.log(response.data);
-    //     })
-    //     .catch(error => {
-    //         console.log(error);
-    //     });
-    // });
-//     let [dataNegara,setDataNegara] = useState([])
-//     const qs = require('qs');
-//     let data = qs.stringify({
-//                     'key': 'hayoloh' 
-//                 });
-
-//     let config = {
-//             method: 'post',
-//             maxBodyLength: Infinity,
-//             url: 'http://ws.karantina.pertanian.go.id/api/master/index.php?a=getNeg',
-//             headers: { 
-//                 'Content-Type': 'application/x-www-form-urlencoded',
-//                 'Access-Control-Allow-Origin': '*',
-//                 'Access-Control-Allow-Credentials': 'true',
-//             },
-//             data : data
-//         };
-
-//     axios.request(config)
-//     .then((response) => {
-//         // console.log(JSON.stringify(response.data));
-//         setDataNegara(response.data)
-//     })
-//     .catch((error) => {
-//         // console.log(error);
-//     });
-  return (
-    <>
-        {dataNegara.map((data) => (
-            <option value={data.id}>{data.kode} - {data.nama}</option>
-        ))}
-    </>
-  )
+    masterKota(data) {
+        if(data) {
+            return axios.get(url + 'kota/prov/' + data, {
+                headers: {
+                //   'Cookie': 'PHPSESSID=jgepu06btvgculap0gl0tao0fp',
+                }
+            })
+        } else {
+            return axios.get(url + 'kota', {
+                headers: {
+                //   'Cookie': 'PHPSESSID=jgepu06btvgculap0gl0tao0fp',
+                }
+            })
+        }
+    }
+    
+    masterPelabuhanID(idData) {
+        return axios.get(url + 'port/ctry/' + idData, {
+            headers: {
+            //   'Cookie': 'PHPSESSID=jgepu06btvgculap0gl0tao0fp',
+            }
+        })
+    }
+    
+    masterKemasan() {
+        return axios.get(url + 'kemasan', {
+            headers: {
+            //   'Cookie': 'PHPSESSID=jgepu06btvgculap0gl0tao0fp',
+            }
+        })
+    }
+    
+    masterMataUang() {
+        return axios.get(url + 'matauang', {
+            headers: {
+            //   'Cookie': 'PHPSESSID=jgepu06btvgculap0gl0tao0fp',
+            }
+        })
+    }
+    
+    masterKlasKT(gol) {
+        return axios.get(url + 'klaskt/gol/' + gol, {
+            headers: {
+            //   'Cookie': 'PHPSESSID=jgepu06btvgculap0gl0tao0fp',
+            }
+        })
+    }
+    
+    masterKomKT() {
+        return axios.get(url + 'komkt', {
+            headers: {
+            //   'Cookie': 'PHPSESSID=jgepu06btvgculap0gl0tao0fp',
+            }
+        })
+    }
+    
+    masterKomKH(idData) {
+        return axios.get(url + 'komkh/gol/' + idData, {
+            headers: {
+            //   'Cookie': 'PHPSESSID=jgepu06btvgculap0gl0tao0fp',
+            }
+        })
+    }
+    
+    masterSatuan(kar) {
+        return axios.get(url + 'satuan/kar/' + kar, {
+            headers: {
+            //   'Cookie': 'PHPSESSID=jgepu06btvgculap0gl0tao0fp',
+            }
+        })
+    }
+    
+    masterHS(kar) {
+        return axios.get(url + 'hs/kar/' + kar, {
+            headers: {
+            //   'Cookie': 'PHPSESSID=jgepu06btvgculap0gl0tao0fp',
+            }
+        })
+    }
 }
-
-export default Master
