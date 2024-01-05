@@ -8,15 +8,15 @@ function Navbar() {
     let handleMenuOpen = () => menuOpen === false ? setMenuOpen(true) : setMenuOpen(false);
   return (
     <aside id="layout-menu" className="layout-menu menu-vertical menu bg-menu-theme">
-                <div className="app-brand demo">
+                <div className="app-brand demo" style={{background: 'black'}}>
                     <a href="index.html" className="app-brand-link">
                         <img src={logbar} alt="Barantin App" width="150px" />
                     </a>
 
-                    <a href="#" className="layout-menu-toggle menu-link text-large ms-auto">
+                    {/* <a href="#" className="layout-menu-toggle menu-link text-large ms-auto">
                         <i className="bx menu-toggle-icon d-none d-xl-block fs-4 align-middle"></i>
                         <i className="bx bx-x d-block d-xl-none bx-sm align-middle"></i>
-                    </a>
+                    </a> */}
                 </div>
 
                 <div className="menu-divider mt-0"></div>
@@ -28,6 +28,18 @@ function Navbar() {
                         <a href="index.php" className="menu-link">
                             <i className="menu-icon tf-icons bx bx-home-circle"></i>
                             <div data-i18n="Dashboards">Dashboards</div>
+                        </a>
+                    </li>
+                    <li className="menu-item">
+                        <a href={'/datam'} className="menu-link">
+                            <i className="menu-icon tf-icons bx bx-grid"></i>
+                            <div data-i18n="Data Masuk">Data Masuk</div>
+                        </a>
+                    </li>
+                    <li className="menu-item">
+                        <a href={'/datam'} className="menu-link">
+                            <i className="menu-icon tf-icons bx bx-credit-card"></i>
+                            <div data-i18n="Data Masuk">Kwitansi</div>
                         </a>
                     </li>
 

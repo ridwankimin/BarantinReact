@@ -36,6 +36,7 @@ import DocKT3 from '../pages/pembebasan/kt/DocKT3';
 import DocKT4 from '../pages/pembebasan/kt/DocKT4';
 import DocK14 from '../pages/preborder/DocK14';
 import DocK15 from '../pages/preborder/DocK15';
+import DataMasuk from '../pages/DataMasuk';
 
 function Content() {
   return (
@@ -43,6 +44,7 @@ function Content() {
         <Routes>
           <Route path="/" element={<Beranda />} />
           {/* <Route path="/k11" element={<DataDiri1 />} /> */}
+          <Route path="/datam" element={<DataMasuk />} />
           <Route path="/k11" element={<DocK11 />} />
           <Route path="/k12" element={<DocK12 />} />
           <Route path="/k13" element={<DocK13 />} />

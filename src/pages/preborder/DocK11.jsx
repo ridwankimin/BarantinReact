@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useCallback, useMemo, useState } from 'react'
 import PersonSvg from '../../logo/svg/PersonSvg'
 import ShipSvg from '../../logo/svg/ShipSvg'
 import PackageSvg from '../../logo/svg/PackageSvg'
@@ -16,16 +16,41 @@ import MasterHS from '../../model/master/MasterHS'
 import { useForm } from 'react-hook-form'
 // import { motion } from "framer-motion";
 import MasterProv from '../../model/master/MasterProv'
+import {decode as base64_decode, encode as base64_encode} from 'base-64';
+import PtkModel from '../../model/PtkModel'
 // import { getValue } from '@testing-library/user-event/dist/utils'
 // import Select from 'react-select'
 // import $ from 'jquery';
 // import Select from 'react-select'
 
 function DocK11() {
-    // let [dataDiri, setDataDiri] = useState({});
+    function makeid(length) {
+        let result = '';
+        const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+        const charactersLength = characters.length;
+        let counter = 0;
+        while (counter < length) {
+            result += characters.charAt(Math.floor(Math.random() * charactersLength));
+          counter += 1;
+        }
+        return result;
+    }
+
+    function dateNow() {
+        let n = date.getFullYear() + '-' + addZero(date.getMonth() + 1) + '-' + addZero(date.getDate()) + ' ' + addZero(date.getHours()) + ':' + addZero(date.getMinutes()) + ":" + addZero(date.getSeconds());
+        return n;
+    }
+
+    let [arrayTabSatu, setArrayTabSatu] = useState({});
+
+
+    
+    // console.log(makeid(5));
+    
+    let [dataDiri, setDataDiri] = useState({});
     // let [pelabuhan, setPelabuhan] = useState({});
     let [dataSelect, setdataSelect] = useState({});
-
+    
     function handlePeruntukanKT(e) {
         setdataSelect(values => ({...values, [e.target.name]: <MasterKlasKT/>}))
     }
@@ -51,25 +76,22 @@ function DocK11() {
     }
     
     function handleKota(e) {
-        let dataId = null; 
-        if(e.target.iddata) {
-            dataId = e.target.iddata;
-        } else {
-            dataId = null;
-        }
-        setdataSelect(values => ({...values, [e.target.name]: <MasterKota iddata={dataId}/>}))
+        
+        // const dataId = funcdata()
+        console.log(e.target.dataset.input)
+        setdataSelect(values => ({...values, [e.target.name]: <MasterKota iddata={e.target.dataset.input}/>}))
     }
     
     function handlePelabuhan(e) {
         let dataId = null; 
-        if(e.target.iddata) {
-            dataId = e.target.iddata;
+        if(e.target.dataset.input) {
+            dataId = e.target.dataset.input;
         } else {
             dataId = null;
         }
         setdataSelect(values => ({...values, [e.target.name]: <MasterPelabuhan iddata={dataId}/>}))
     }
-        
+
     // const handleNegara = (props) => {
         //     const apiNegara = new MasterNegara()
         //     setdataSelect(values => ({...values, [props.jenis]: apiNegara}))
@@ -163,10 +185,30 @@ function DocK11() {
         setValueKontainer("stuffKontainer", "");
         setValueKontainer("segel", "");
     };
+    const date = new Date();
+    function addZero(i) {
+        if (i < 10) {i = "0" + i}
+        return i;
+    }
+      console.count()
+    // console.log(Date.now())
+    // console.log(dateNow())
+        // console.log('0100ET' + date.getTime() + date.getYear() + date.getMonth() + date.getDay() + makeid(5))
+        // console.log(date.getYear())
 
     const onSubmitPemohon = (data) => {
+        setValuePemohon("makeid", makeid(5));
+        setValuePemohon("datenow", dateNow());
+        const modelPemohon = new PtkModel();
+
+        const response = modelPemohon.tabPemohon(data)
+
+        // const date = new Date();
         setWizardPage(wizardPage + 1)
+        // 1500-15KPL01-2-20221013-002
         setFormTab(values => ({...values, tab1: false}))
+
+        // console.log(arrayTabSatu);
         // props.updateUser(data);
         // navigate("/second");
     };
@@ -191,7 +233,7 @@ function DocK11() {
         // navigate("/second");
       };
     
-    // const handleDataDiri = (event) => {
+    // const handleDataDiri = event => {
     //     const name = event.target.name;
     //     const value = event.target.value;
     //     setDataDiri(values => ({...values, [name]: value}))
@@ -397,6 +439,8 @@ function DocK11() {
                 <div className="bs-stepper-content border-top">
                         <div id="cardPemohon" className={wizardPage === 1 ? "content active dstepper-block" : "content"}>
                         <form className="input-form" onSubmit={handleFormPemohon(onSubmitPemohon)}>
+                            <input type="hidden" name='makeid' value={makeid(5)} {...registerPemohon("makeid")} />
+                            <input type="hidden" name='datenow' value={dateNow()} {...registerPemohon("datenow")} />
       {/* <motion.div
         initial={{ x: "-100vw" }}
         animate={{ x: 0 }}
@@ -405,9 +449,9 @@ function DocK11() {
         <div className="row">
           <div className="col-sm-6">
               <div className="card card-action mb-4">
-                  <div className="card-header">
+                  <div className="card-header mb-3 p-2" style={{backgroundColor: '#123138'}}>
                       <div className="card-action-title">
-                          <h5 className="mb-0">Pemohon</h5>
+                          <h5 className="mb-0 text-lightest">Pemohon</h5>
                       </div>
                       <div className="card-action-element">
                           <ul className="list-inline mb-0">
@@ -436,11 +480,11 @@ function DocK11() {
                               <label className="col-sm-3 col-form-label" htmlFor="pJRutin">Pengguna Jasa Rutin <span className='text-danger'>*</span></label>
                               <div className="col-sm-9">
                                   <div className="form-check form-check-inline">
-                                      <input className="form-check-input" type="radio" name="pJRutin" id="ya" value="Ya" {...registerPemohon("pJRutin", { required: "Mohon pilih jenis pengguna jasa."})} />
+                                      <input className="form-check-input" type="radio" name="pJRutin" id="ya" value="1" {...registerPemohon("pJRutin", { required: "Mohon pilih jenis pengguna jasa."})} />
                                       <label className="form-check-label" htmlFor="ya">Ya</label>
                                   </div>
                                   <div className="form-check form-check-inline">
-                                      <input className="form-check-input" type="radio" name="pJRutin" id="tidak" value="Tidak"  {...registerPemohon("pJRutin")}/>
+                                      <input className="form-check-input" type="radio" name="pJRutin" id="tidak" value="0"  {...registerPemohon("pJRutin")}/>
                                       <label className="form-check-label" htmlFor="tidak">Tidak</label>
                                   </div>
                                   {errorsPemohon.pJRutin && <><br/><small className="text-danger">{errorsPemohon.pJRutin.message}</small></>}
@@ -463,7 +507,7 @@ function DocK11() {
                           <div className="row mb-3">
                               <label className="col-sm-3 col-form-label" htmlFor="provPemohon">Provinsi <span className='text-danger'>*</span></label>
                               <div className="col-sm-9">
-                                    <select name="provPemohon" id="provPemohon" onClick={handleProv} {...registerPemohon("provPemohon", { required: "Mohon pilih provinsi pemohon."})} className={errorsPemohon.provPemohon ? "form-control  form-control-sm is-invalid" : "form-control  form-control-sm"}>
+                                    <select name="provPemohon" id="provPemohon" onClick={dataSelect.provPemohon ? null : handleProv} {...registerPemohon("provPemohon", { required: "Mohon pilih provinsi pemohon."})} className={errorsPemohon.provPemohon ? "form-control  form-control-sm is-invalid" : "form-control  form-control-sm"}>
                                         <option value="">--</option>
                                         {dataSelect.provPemohon}
                                         {/* <MasterProv/> */}
@@ -475,7 +519,7 @@ function DocK11() {
                           <div className="row mb-3">
                               <label className="col-sm-3 col-form-label" htmlFor="kotaPemohon">Kota/Kab <span className='text-danger'>*</span></label>
                               <div className="col-sm-9">
-                                    <select name="kotaPemohon" id="kotaPemohon" iddata={cekdataDiri.provPemohon} onClick={handleKota} className={errorsPemohon.kotaPemohon ? "form-control form-control-sm is-invalid" : "form-control form-control-sm"} {...registerPemohon("kotaPemohon", { required: "Mohon pilih kota pemohon."})}>
+                                    <select name="kotaPemohon" id={cekdataDiri.provPemohon} data-input={cekdataDiri.provPemohon} onClick={handleKota} className={errorsPemohon.kotaPemohon ? "form-control form-control-sm is-invalid" : "form-control form-control-sm"} {...registerPemohon("kotaPemohon", { required: "Mohon pilih kota pemohon."})}>
                                         <option value="">--</option>
                                         {cekdataDiri.provPemohon === "" ? <option value="" disabled>Mohon Pilih Provinsi terlebih dahulu</option> : dataSelect.kotaPemohon }
                                     </select>
@@ -521,9 +565,9 @@ function DocK11() {
           </div>
           <div className="col-sm-6">
               <div className="card card-action mb-4">
-                  <div className="card-header">
+                  <div className="card-header mb-3 p-2" style={{backgroundColor: '#123138'}}>
                       <div className="card-action-title">
-                          <h5 className="mb-0">Penandatangan Dokumen</h5>
+                          <h5 className="mb-0 text-lightest">Penandatangan Dokumen</h5>
                       </div>
                       <div className="card-action-element">
                           <ul className="list-inline mb-0">
@@ -567,16 +611,16 @@ function DocK11() {
                           <div className="row mb-3">
                               <label className="col-sm-3 col-form-label" htmlFor="jabatanTtd">Jabatan</label>
                               <div className="col-sm-9">
-                                  <input type="text" id="jabatanTtd" name="jabatanTtd" className="form-control form-control-sm" placeholder="Jabatan" />
+                                  <input type="text" id="jabatanTtd" name="jabatanTtd" {...registerPemohon("jabatanTtd")} className="form-control form-control-sm" placeholder="Jabatan" />
                               </div>
                           </div>
                       </div>
                   </div>
               </div>
               <div className="card card-action mb-4">
-                  <div className="card-header">
+                  <div className="card-header mb-3 p-2" style={{backgroundColor: '#123138'}}>
                       <div className="card-action-title">
-                          <h5 className="mb-0">Contact Person</h5>
+                          <h5 className="mb-0 text-lightest">Contact Person</h5>
                       </div>
                       <div className="card-action-element">
                           <ul className="list-inline mb-0">
@@ -612,9 +656,9 @@ function DocK11() {
           </div>
           <div className="col-sm-6">
               <div className="card card-action mb-4">
-                  <div className="card-header">
+                  <div className="card-header mb-3 p-2" style={{backgroundColor: '#123138'}}>
                       <div className="card-action-title">
-                          <h5 className="mb-0">Pengirim</h5>
+                          <h5 className="mb-0 text-lightest">Pengirim</h5>
                       </div>
                       <div className="card-action-element">
                           <ul className="list-inline mb-0">
@@ -667,7 +711,8 @@ function DocK11() {
                               <label className="col-sm-3 col-form-label" htmlFor="negaraPengirim">Negara <span className='text-danger'>*</span></label>
                               <div className="col-sm-9">
                                 {/* <select id="negaraPengirim" data-style="btn-default btn-sm" data-live-search-style="begins" data-actions-box="true" data-live-search="true" name="negaraPengirim" {...registerPemohon("negaraPengirim", { required: "Mohon pilih negara pengirim."})} className={errorsPemohon.negaraPengirim ? "form-control form-control-sm is-invalid" : "form-control form-control-sm selectpicker"}> */}
-                                <select id="negaraPengirim" onClick={handleNegara} name="negaraPengirim" {...registerPemohon("negaraPengirim", { required: "Mohon pilih negara pengirim."})} className={errorsPemohon.negaraPengirim ? "form-control form-control-sm is-invalid" : "form-control form-control-sm"}>
+                                <select id="negaraPengirim" onClick={dataSelect.negaraPengirim ? null : handleNegara} name="negaraPengirim" {...registerPemohon("negaraPengirim", { required: "Mohon pilih negara pengirim."})} className={errorsPemohon.negaraPengirim ? "form-control form-control-sm is-invalid" : "form-control form-control-sm"}>
+                                {/* <select id="negaraPengirim" value={data} name="negaraPengirim"  className="form-control select2 form-control-sm"> */}
                                     <option value="">--</option>
                                     {dataSelect.negaraPengirim}
                                     {/* <MasterNegara/> */}
@@ -679,7 +724,7 @@ function DocK11() {
                             <div className="row mb-3">
                                 <label className="col-sm-3 col-form-label" htmlFor="provPengirim">Provinsi</label>
                                 <div className="col-sm-9">
-                                    <select id="provPengirim" name="provPengirim" onClick={handleProv} {...registerPemohon('provPengirim')} className="form-control form-control-sm">
+                                    <select id="provPengirim" name="provPengirim" onClick={dataSelect.provPengirim ? null : handleProv} {...registerPemohon('provPengirim')} className="form-control form-control-sm">
                                       <option value="">--</option>
                                       {dataSelect.provPengirim}
                                       {/* <MasterProv/> */}
@@ -689,9 +734,9 @@ function DocK11() {
                             <div className="row mb-3">
                                 <label className="col-sm-3 col-form-label" htmlFor="kotaPengirim">Kota/Kabupaten</label>
                                 <div className="col-sm-9">
-                                  <select id="kotaPengirim" name="kotaPengirim" iddata={cekdataDiri.provPengirim} onClick={handleKota} {...registerPemohon('kotaPengirim')} className="form-control form-control-sm">
+                                  <select id="kotaPengirim" name="kotaPengirim" data-input={cekdataDiri.provPengirim} onClick={handleKota} {...registerPemohon('kotaPengirim')} className="form-control form-control-sm">
                                       <option value="">--</option>
-                                      {/* <MasterKota iddata={cekdataDiri.provPengirim}/> */}
+                                      {/* <MasterKota data-input={cekdataDiri.provPengirim}/> */}
                                       {cekdataDiri.provPengirim === "" ? <option value="" disabled>Mohon Pilih Provinsi Pengirim terlebih dahulu</option> : dataSelect.kotaPengirim }
                                   </select>
                                 </div>
@@ -707,9 +752,9 @@ function DocK11() {
           </div>
           <div className="col-sm-6">
               <div className="card card-action mb-4">
-                  <div className="card-header">
+                  <div className="card-header mb-3 p-2" style={{backgroundColor: '#123138'}}>
                       <div className="card-action-title">
-                          <h5 className="mb-0">Penerima</h5>
+                          <h5 className="mb-0 text-lightest">Penerima</h5>
                       </div>
                       <div className="card-action-element">
                           <ul className="list-inline mb-0">
@@ -760,7 +805,7 @@ function DocK11() {
                           <div className="row mb-3">
                               <label className="col-sm-3 col-form-label" htmlFor="negaraPenerima">Negara <span className='text-danger'>*</span></label>
                               <div className="col-sm-9">
-                                <select id="negaraPenerima" onClick={handleNegara} name="negaraPenerima" className={errorsPemohon.negaraPenerima ? "form-control form-control-sm is-invalid" : "form-control form-control-sm"} {...registerPemohon("negaraPenerima", { required: "Mohon pilih negara penerima."})}>
+                                <select id="negaraPenerima" onClick={dataSelect.negaraPenerima ? null :handleNegara} name="negaraPenerima" className={errorsPemohon.negaraPenerima ? "form-control form-control-sm is-invalid" : "form-control form-control-sm"} {...registerPemohon("negaraPenerima", { required: "Mohon pilih negara penerima."})}>
                                     <option value="">--</option>
                                     {dataSelect.negaraPenerima}
                                     {/* <MasterNegara/> */}
@@ -772,7 +817,7 @@ function DocK11() {
                             <div className="row mb-3">
                                 <label className="col-sm-3 col-form-label" htmlFor="provPenerima">Provinsi</label>
                                 <div className="col-sm-9">
-                                    <select id="provPenerima" name="provPenerima" onClick={handleProv} {...registerPemohon("provPenerima")} className="form-control form-control-sm" placeholder="Kota Penerima">
+                                    <select id="provPenerima" name="provPenerima" onClick={dataSelect.provPenerima ? null : handleProv} {...registerPemohon("provPenerima")} className="form-control form-control-sm" placeholder="Kota Penerima">
                                         <option value="">--</option>
                                         {dataSelect.provPenerima}
                                         {/* <MasterProv/> */}
@@ -782,9 +827,9 @@ function DocK11() {
                             <div className="row mb-3">
                                 <label className="col-sm-3 col-form-label" htmlFor="kotaPenerima">Kota/Kabupaten</label>
                                 <div className="col-sm-9">
-                                    <select id="kotaPenerima" name="kotaPenerima" iddata={cekdataDiri.provPenerima} onClick={handleKota} {...registerPemohon("kotaPenerima")} className="form-control form-control-sm" placeholder="Kota Penerima">
+                                    <select id="kotaPenerima" name="kotaPenerima" data-input={cekdataDiri.provPenerima} onClick={handleKota} {...registerPemohon("kotaPenerima")} className="form-control form-control-sm" placeholder="Kota Penerima">
                                         <option value="">--</option>
-                                        {/* <MasterKota iddata={cekdataDiri.provPenerima}/> */}
+                                        {/* <MasterKota data-input={cekdataDiri.provPenerima}/> */}
                                         {cekdataDiri.provPenerima === "" ? <option value="" disabled>Mohon pilih provinsi penerima terlebih dahulu</option> : dataSelect.kotaPenerima }
                                     </select>
                                 </div>
@@ -834,11 +879,13 @@ function DocK11() {
                                                 <div className="row mb-3">
                                                     <label className="col-sm-3 col-form-label" htmlFor="negaraAsal">Negara Asal <span className='text-danger'>*</span></label>
                                                     <div className="col-sm-9">
-                                                        <select id="negaraAsal" name="negaraAsal" onClick={handleNegara} {...registerPelabuhan("negaraAsal", { required: "Mohon pilih negara asal."})} className={errorsPelabuhan.negaraAsal ? "form-control form-control-sm is-invalid" : "form-control form-control-sm"} >
+                                                        <select id="negaraAsal" name="negaraAsal" onClick={dataSelect.negaraAsal ? null : handleNegara} {...registerPelabuhan("negaraAsal", { required: "Mohon pilih negara asal."})} className={errorsPelabuhan.negaraAsal ? "form-control form-control-sm is-invalid" : "form-control select2 form-control-sm"} >
+                                                        {/* <select id="negaraAsal" name="negaraAsal" value={dataDiri.negaraAsal || ""} onChange={handleDataDiri} className="form-control select2 form-control-sm" > */}
                                                         <option value="">--</option>
                                                         {dataSelect.negaraAsal}
                                                             {/* <MasterNegara/> */}
                                                         </select>
+                                                        <p>{dataDiri.negaraAsal}</p>
                                                         {errorsPelabuhan.negaraAsal && <small className="text-danger">{errorsPelabuhan.negaraAsal.message}</small>}
                                                     </div>
                                                 </div>
@@ -858,7 +905,7 @@ function DocK11() {
                                                     <label className="col-sm-3 col-form-label" htmlFor="negaraTujuan">Negara Tujuan <span className='text-danger'>*</span></label>
                                                     <div className="col-sm-9">
                                                         {/* <input type="text" id="negara_tujuan" className="form-control form-control-sm" placeholder="Negara Tujuan" /> */}
-                                                        <select name="negaraTujuan" id="negaraTujuan" onClick={handleNegara} {...registerPelabuhan("negaraTujuan", { required: "Mohon pilih negara tujuan."})} className={errorsPelabuhan.negaraTujuan ? "form-control form-control-sm is-invalid" : "form-control form-control-sm"}>
+                                                        <select name="negaraTujuan" id="negaraTujuan" onClick={dataSelect.negaraTujuan ? null : handleNegara} {...registerPelabuhan("negaraTujuan", { required: "Mohon pilih negara tujuan."})} className={errorsPelabuhan.negaraTujuan ? "form-control form-control-sm is-invalid" : "form-control form-control-sm"}>
                                                         <option value="">--</option>
                                                         {dataSelect.negaraTujuan}
                                                             {/* <MasterNegara/> */}
@@ -896,7 +943,7 @@ function DocK11() {
                                                 <div className="row mb-3">
                                                     <label className="col-sm-3 col-form-label" htmlFor="negaraTransit">Negara Transit</label>
                                                     <div className="col-sm-9">
-                                                    <select type="text" id="negaraTransit" onClick={handleNegara} name='negaraTransit' {...registerPelabuhan("negaraTransit")} className="form-control form-control-sm">
+                                                    <select type="text" id="negaraTransit" onClick={dataSelect.negaraTransit ? null : handleNegara} name='negaraTransit' {...registerPelabuhan("negaraTransit")} className="form-control form-control-sm">
                                                         <option value="">--</option>
                                                         {dataSelect.negaraTransit}
                                                             {/* <MasterNegara/> */}
@@ -928,10 +975,10 @@ function DocK11() {
                                                 <div className="row mb-3">
                                                     <label className="col-sm-3 col-form-label" htmlFor="pelMuat">Muat / Asal <span className='text-danger'>*</span></label>
                                                     <div className="col-sm-9">
-                                                        <select name="pelMuat" id="pelMuat" iddata={cekdataPelabuhan.negaraAsal} onClick={handlePelabuhan} {...registerPelabuhan("pelMuat", { required: "Mohon pilih pelabuhan muat/asal."})} className={errorsPelabuhan.pelMuat ? "form-control form-control-sm is-invalid" : "form-control form-control-sm"}>
+                                                        <select name="pelMuat" id="pelMuat" data-input={cekdataPelabuhan.negaraAsal} onClick={handlePelabuhan} {...registerPelabuhan("pelMuat", { required: "Mohon pilih pelabuhan muat/asal."})} className={errorsPelabuhan.pelMuat ? "form-control form-control-sm is-invalid" : "form-control form-control-sm"}>
                                                             <option value="">--</option>
                                                             {cekdataPelabuhan.negaraAsal === "" ? <option value="" disabled>Mohon pilih negara asal</option> : dataSelect.pelMuat }
-                                                            {/* <MasterPelabuhan iddata={cekdataPelabuhan.negaraAsal}/> */}
+                                                            {/* <MasterPelabuhan data-input={cekdataPelabuhan.negaraAsal}/> */}
                                                         </select>
                                                         {errorsPelabuhan.pelMuat && <small className="text-danger">{errorsPelabuhan.pelMuat.message}</small>}
                                                     </div>
@@ -939,10 +986,10 @@ function DocK11() {
                                                 <div className="row mb-3">
                                                     <label className="col-sm-3 col-form-label" htmlFor="pelBongkar">Bongkar / Tujuan <span className='text-danger'>*</span></label>
                                                     <div className="col-sm-9">
-                                                        <select name="pelBongkar" id="pelBongkar" iddata={cekdataPelabuhan.negaraTujuan} onClick={handlePelabuhan} {...registerPelabuhan("pelBongkar", { required: "Mohon pilih pelabuhan bongkar."})} className={errorsPelabuhan.pelBongkar ? "form-control form-control-sm is-invalid" : "form-control form-control-sm"}>
+                                                        <select name="pelBongkar" id="pelBongkar" data-input={cekdataPelabuhan.negaraTujuan} onClick={handlePelabuhan} {...registerPelabuhan("pelBongkar", { required: "Mohon pilih pelabuhan bongkar."})} className={errorsPelabuhan.pelBongkar ? "form-control form-control-sm is-invalid" : "form-control form-control-sm"}>
                                                             <option value="">--</option>
                                                             {cekdataPelabuhan.negaraTujuan === "" ? <option value="" disabled>Mohon pilih negara tujuan</option> : dataSelect.pelBongkar }
-                                                            {/* <MasterPelabuhan iddata={cekdataPelabuhan.negaraTujuan}/> */}
+                                                            {/* <MasterPelabuhan data-input={cekdataPelabuhan.negaraTujuan}/> */}
                                                         </select>
                                                         {errorsPelabuhan.pelBongkar && <small className="text-danger">{errorsPelabuhan.pelBongkar.message}</small>}
                                                         {/* <input type="text" id="pel_bongkar" className="form-control form-control-sm" placeholder="Pelabuhan Bongkar / Tujuan" /> */}
@@ -958,10 +1005,10 @@ function DocK11() {
                                                 <div className="row mb-3">
                                                     <label className="col-sm-3 col-form-label" htmlFor="pelTransit">Pelabuhan Transit</label>
                                                     <div className="col-sm-9">
-                                                        <select name="pelTransit" id="pelTransit" iddata={cekdataPelabuhan.negaraTransit} onClick={handlePelabuhan} {...registerPelabuhan("pelTransit")} className="form-control form-control-sm">
+                                                        <select name="pelTransit" id="pelTransit" data-input={cekdataPelabuhan.negaraTransit} onClick={handlePelabuhan} {...registerPelabuhan("pelTransit")} className="form-control form-control-sm">
                                                             <option value="">--</option>
                                                             {cekdataPelabuhan.negaraTransit === "" ? <option value="" disabled>Mohon pilih negara tujuan</option> : dataSelect.pelTransit }
-                                                            {/* <MasterPelabuhan iddata={cekdataPelabuhan.negaraTransit}/> */}
+                                                            {/* <MasterPelabuhan data-input={cekdataPelabuhan.negaraTransit}/> */}
                                                         </select>
                                                         {/* <input type="text" id="pel_transit" className="form-control form-control-sm" placeholder="Pelabuhan Transit" /> */}
                                                     </div>
@@ -1031,7 +1078,7 @@ function DocK11() {
                                                 <div className="row mb-3">
                                                     <label className="col-sm-3 col-form-label" htmlFor="benderaTransit">Bendera</label>
                                                     <div className="col-sm-9">
-                                                        <select id="benderaTransit" name="benderaTransit" onClick={handleNegara} {...registerPelabuhan("benderaTransit")} className="form-control form-control-sm">
+                                                        <select id="benderaTransit" name="benderaTransit" onClick={dataSelect.benderaTransit ? null : handleNegara} {...registerPelabuhan("benderaTransit")} className="form-control form-control-sm">
                                                             <option value="">--</option>
                                                             {dataSelect.benderaTransit}
                                                             {/* <MasterNegara/> */}
@@ -1117,7 +1164,7 @@ function DocK11() {
                                                 <div className="row mb-3">
                                                     <label className="col-sm-3 col-form-label" htmlFor="benderaAkhir">Bendera</label>
                                                     <div className="col-sm-9">
-                                                        <select id="benderaAkhir" name="benderaAkhir" onClick={handleNegara} {...registerPelabuhan("benderaAkhir")} className="form-control form-control-sm">
+                                                        <select id="benderaAkhir" name="benderaAkhir" onClick={dataSelect.benderaAkhir ? null : handleNegara} {...registerPelabuhan("benderaAkhir")} className="form-control form-control-sm">
                                                             <option value="">--</option>
                                                             {dataSelect.benderaAkhir}
                                                             {/* <MasterNegara/> */}
@@ -1878,7 +1925,7 @@ function DocK11() {
                         </div>
                         <div className="col-6">
                           <label className="form-label" htmlFor="negaraAsalMP">Negara Asal</label>
-                            <select name="negaraAsalMP" id="negaraAsalMP" onClick={handleNegara} className="form-control form-control-sm">
+                            <select name="negaraAsalMP" id="negaraAsalMP" onClick={dataSelect.negaraAsalMP ? null : handleNegara} className="form-control form-control-sm">
                                 <option value="">--</option>
                                 {dataSelect.negaraAsalMP}
                                 {/* <MasterNegara/> */}

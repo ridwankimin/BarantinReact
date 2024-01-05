@@ -4,7 +4,7 @@ import Content from './Content'
 function Footer() {
   return (
     <div className="layout-page">
-                <nav className="layout-navbar navbar navbar-expand-xl align-items-center bg-navbar-theme" id="layout-navbar">
+                <nav className="layout-navbar navbar navbar-expand-xl align-items-center" style={{background: '#123138'}} id="layout-navbar">
                     <div className="container-fluid">
                         <div className="layout-menu-toggle navbar-nav align-items-xl-center me-3 me-xl-0 d-xl-none">
                             <a className="nav-item nav-link px-0 me-xl-4" href="#">
@@ -13,14 +13,6 @@ function Footer() {
                         </div>
 
                         <div className="navbar-nav-right d-flex align-items-center" id="navbar-collapse">
-                            <div className="navbar-nav align-items-center">
-                                <div className="nav-item navbar-search-wrapper mb-0">
-                                    <a className="nav-item nav-link search-toggler px-0" href="#">
-                                        <i className="bx bx-search-alt bx-sm"></i>
-                                        <span className="d-none d-md-inline-block text-muted">Search (Ctrl+/)</span>
-                                    </a>
-                                </div>
-                            </div>
 
                             <ul className="navbar-nav flex-row align-items-center ms-auto">
                                 <li className="nav-item me-2 me-xl-0">
@@ -110,10 +102,11 @@ function Footer() {
                                 </li>
 
                                 <li className="nav-item navbar-dropdown dropdown-user dropdown">
-                                    <a className="nav-link dropdown-toggle hide-arrow" href="#" data-bs-toggle="dropdown">
-                                        <div className="avatar avatar-online">
-                                            <img src="assets/img/avatars/1.png" className="rounded-circle" />
-                                        </div>
+                                    <a className="nav-link dropdown-toggle" href="#" data-bs-toggle="dropdown" style={{color: 'white'}}>
+                                        {/* <div className="avatar avatar-online"> */}
+                                        <i className="menu-icon tf-icons bx bx-user-circle"></i>
+                                            {/* <img src="assets/img/avatars/1.png" className="rounded-circle" /> */}
+                                        {/* </div> */}
                                     </a>
                                     <ul className="dropdown-menu dropdown-menu-end">
                                         <li>
@@ -121,7 +114,7 @@ function Footer() {
                                                 <div className="d-flex">
                                                     <div className="flex-shrink-0 me-3">
                                                         <div className="avatar avatar-online">
-                                                            <img src="assets/img/avatars/1.png" className="rounded-circle" />
+                                                        <i className="menu-icon tf-icons bx bx-user-circle"></i>
                                                         </div>
                                                     </div>
                                                     <div className="flex-grow-1">

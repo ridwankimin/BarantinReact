@@ -15,70 +15,70 @@ $(function () {
 
   if (dt_scrollable_table.length) {
     var dt_scrollableTable = dt_scrollable_table.DataTable({
-      ajax: assetsPath + 'json/table-datatable.json',
-      columns: [
-        { data: 'full_name' },
-        { data: 'post' },
-        { data: 'email' },
-        { data: 'city' },
-        { data: 'start_date' },
-        { data: 'salary' },
-        { data: 'age' },
-        { data: 'experience' },
-        { data: '' },
-        { data: '' }
-      ],
+      // ajax: assetsPath + 'json/table-datatable.json',
+      // columns: [
+      //   { data: 'full_name' },
+      //   { data: 'post' },
+      //   { data: 'email' },
+      //   { data: 'city' },
+      //   { data: 'start_date' },
+      //   { data: 'salary' },
+      //   { data: 'age' },
+      //   { data: 'experience' },
+      //   { data: '' },
+      //   { data: '' }
+      // ],
       columnDefs: [
         {
           // Label
           targets: -2,
-          render: function (data, type, full, meta) {
-            var $status_number = full['status'];
-            var $status = {
-              1: { title: 'Current', class: 'bg-label-primary' },
-              2: { title: 'Professional', class: ' bg-label-success' },
-              3: { title: 'Rejected', class: ' bg-label-danger' },
-              4: { title: 'Resigned', class: ' bg-label-warning' },
-              5: { title: 'Applied', class: ' bg-label-info' }
-            };
-            if (typeof $status[$status_number] === 'undefined') {
-              return data;
-            }
-            return (
-              '<span class="badge rounded-pill ' +
-              $status[$status_number].class +
-              '">' +
-              $status[$status_number].title +
-              '</span>'
-            );
-          }
+          // render: function (data, type, full, meta) {
+          //   var $status_number = full['status'];
+          //   var $status = {
+          //     1: { title: 'Current', class: 'bg-label-primary' },
+          //     2: { title: 'Professional', class: ' bg-label-success' },
+          //     3: { title: 'Rejected', class: ' bg-label-danger' },
+          //     4: { title: 'Resigned', class: ' bg-label-warning' },
+          //     5: { title: 'Applied', class: ' bg-label-info' }
+          //   };
+          //   if (typeof $status[$status_number] === 'undefined') {
+          //     return data;
+          //   }
+          //   return (
+          //     '<span class="badge rounded-pill ' +
+          //     $status[$status_number].class +
+          //     '">' +
+          //     $status[$status_number].title +
+          //     '</span>'
+          //   );
+          // }
         },
-        {
-          // Actions
-          targets: -1,
-          title: 'Actions',
-          searchable: false,
-          orderable: false,
-          render: function (data, type, full, meta) {
-            return (
-              '<div class="d-inline-block">' +
-              '<a href="javascript:;" class="btn btn-sm btn-icon dropdown-toggle hide-arrow" data-bs-toggle="dropdown"><i class="bx bx-dots-vertical-rounded"></i></a>' +
-              '<div class="dropdown-menu dropdown-menu-end m-0">' +
-              '<a href="javascript:;" class="dropdown-item">Details</a>' +
-              '<a href="javascript:;" class="dropdown-item">Archive</a>' +
-              '<div class="dropdown-divider"></div>' +
-              '<a href="javascript:;" class="dropdown-item text-danger delete-record">Delete</a>' +
-              '</div>' +
-              '</div>' +
-              '<a href="javascript:;" class="item-edit text-body"><i class="bx bxs-edit"></i></a>'
-            );
-          }
-        }
+        // {
+        //   // Actions
+        //   targets: -1,
+        //   title: 'Actions',
+        //   searchable: false,
+        //   orderable: false,
+        //   render: function (data, type, full, meta) {
+        //     return (
+        //       '<div class="d-inline-block">' +
+        //       '<a href="javascript:;" class="btn btn-sm btn-icon dropdown-toggle hide-arrow" data-bs-toggle="dropdown"><i class="bx bx-dots-vertical-rounded"></i></a>' +
+        //       '<div class="dropdown-menu dropdown-menu-end m-0">' +
+        //       '<a href="javascript:;" class="dropdown-item">Details</a>' +
+        //       '<a href="javascript:;" class="dropdown-item">Archive</a>' +
+        //       '<div class="dropdown-divider"></div>' +
+        //       '<a href="javascript:;" class="dropdown-item text-danger delete-record">Delete</a>' +
+        //       '</div>' +
+        //       '</div>' +
+        //       '<a href="javascript:;" class="item-edit text-body"><i class="bx bxs-edit"></i></a>'
+        //     );
+        //   }
+        // }
       ],
       // Scroll options
       scrollY: '300px',
       scrollX: true,
-      dom: '<"row"<"col-sm-12 col-md-6"l><"col-sm-12 col-md-6 d-flex justify-content-center justify-content-md-end"f>>t<"row"<"col-sm-12 col-md-6"i><"col-sm-12 col-md-6"p>>'
+      // dom: '<"row"<"col-sm-12 col-md-6"l><"col-sm-12 col-md-6 d-flex justify-content-center justify-content-md-end"f>>t<"row"<"col-sm-12 col-md-6"i><"col-sm-12 col-md-6"p>>'
     });
   }
 
