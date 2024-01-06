@@ -43,7 +43,7 @@ function Navbar() {
                         </a>
                     </li>
 
-                    <li className="menu-header small text-uppercase"><span className="menu-header-text">Apps &amp; Pages</span></li>
+                    <li className="menu-header small text-uppercase"><span className="menu-header-text">Apps &amp; Menu</span></li>
                     {/* <li menu="0" className={menuOpen ? "menu-item open menu-item-animating open" : "menu-item menu-item-animating menu-item-closing"} onClick={handleMenuOpen(0)}> */}
                     <li className={sidebarClassname} onClick={handleMenuOpen}>
                         <a href="#" className="menu-link menu-toggle">

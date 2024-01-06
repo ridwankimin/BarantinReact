@@ -862,9 +862,9 @@ function DocK11() {
                             <div className="row">
                                 <div className="col-sm-6">
                                     <div className="card card-action mb-4">
-                                        <div className="card-header">
+                                        <div className="card-header mb-3 p-2" style={{backgroundColor: '#123138'}}>
                                             <div className="card-action-title">
-                                                <h5 className="mb-0">Asal - Tujuan</h5>
+                                                <h5 className="mb-0 text-lightest">Asal - Tujuan</h5>
                                             </div>
                                             <div className="card-action-element">
                                                 <ul className="list-inline mb-0">
@@ -958,9 +958,9 @@ function DocK11() {
                                 </div>
                                 <div className="col-sm-6">
                                     <div className="card card-action mb-4">
-                                        <div className="card-header">
+                                        <div className="card-header mb-3 p-2" style={{backgroundColor: '#123138'}}>
                                             <div className="card-action-title">
-                                                <h5 className="mb-0">Pelabuhan</h5>
+                                                <h5 className="mb-0 text-lightest">Pelabuhan</h5>
                                             </div>
                                             <div className="card-action-element">
                                                 <ul className="list-inline mb-0">
@@ -1021,9 +1021,9 @@ function DocK11() {
                                 <div className="col-sm-6">
                                     <div style={{display: cekdataPelabuhan.transitOpsi === 'Ya' ? 'block' : 'none' }}>
                                     <div className="card card-action mb-4">
-                                        <div className="card-header">
+                                        <div className="card-header mb-3 p-2" style={{backgroundColor: '#123138'}}>
                                             <div className="card-action-title">
-                                                <h5 className="mb-0">Pengangkutan Sebelum Transit</h5>
+                                                <h5 className="mb-0 text-lightest">Pengangkutan Sebelum Transit</h5>
                                             </div>
                                             <div className="card-action-element">
                                                 <ul className="list-inline mb-0">
@@ -1104,9 +1104,9 @@ function DocK11() {
                                 </div>
                                 <div className="col-sm-6">
                                     <div className="card card-action mb-4">
-                                        <div className="card-header">
+                                        <div className="card-header mb-3 p-2" style={{backgroundColor: '#123138'}}>
                                             <div className="card-action-title">
-                                                <h5 className="mb-0">Pengangkutan Terakhir</h5>
+                                                <h5 className="mb-0 text-lightest">Pengangkutan Terakhir</h5>
                                             </div>
                                             <div className="card-action-element">
                                                 <ul className="list-inline mb-0">
@@ -1259,9 +1259,9 @@ function DocK11() {
                                 <div className="row">
                                 <div className="col-sm-12">
                                     <div className="card card-action mb-4">
-                                        <div className="card-header">
+                                        <div className="card-header mb-3 p-2" style={{backgroundColor: '#123138'}}>
                                             <div className="card-action-title">
-                                                <h5 className="mb-0">Uraian</h5>
+                                                <h5 className="mb-0 text-lightest">Uraian</h5>
                                             </div>
                                             <div className="card-action-element">
                                                 <ul className="list-inline mb-0">
@@ -1419,9 +1419,9 @@ function DocK11() {
                                         </div>
                                     </div>
                                     <div className="card card-action mb-4">
-                                        <div className="card-header">
+                                        <div className="card-header mb-3 p-2" style={{backgroundColor: '#123138'}}>
                                             <div className="card-action-title">
-                                                <h5 className="mb-0">Detil Media Pembawa</h5>
+                                                <h5 className="mb-0 text-lightest">Detil Media Pembawa</h5>
                                             </div>
                                             <div className="card-action-element">
                                                 <ul className="list-inline mb-0">
@@ -1582,9 +1582,9 @@ function DocK11() {
                             <div className="row mb-3">
                                 <div className="col-sm-12">
                                     <div className="card card-action mb-4">
-                                        <div className="card-header">
+                                        <div className="card-header mb-3 p-2" style={{backgroundColor: '#123138'}}>
                                             <div className="card-action-title">
-                                                <h5 className="mb-0">Detil Dokumen</h5>
+                                                <h5 className="mb-0 text-lightest">Detil Dokumen</h5>
                                             </div>
                                             <div className="card-action-element">
                                                 <ul className="list-inline mb-0">

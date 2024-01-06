@@ -87,18 +87,18 @@ function DataMasuk() {
                         </div>
                         <div class="card-datatable text-nowrap">
                             <table className="dt-scrollableTable table table-bordered table-sm">
-                                <thead style={{backgroundColor: '#000000', color: 'white' }}>
+                                <thead style={{backgroundColor: '#123138' }}>
                                 <tr>
-                                    <th>Name</th>
-                                    <th>Position</th>
-                                    <th>Email</th>
-                                    <th>City</th>
-                                    <th>Date</th>
-                                    <th>Salary</th>
-                                    <th>Age</th>
-                                    <th>Experience</th>
-                                    <th>Status</th>
-                                    <th>Action</th>
+                                    <th className='text-lightest'>Name</th>
+                                    <th className='text-lightest'>Position</th>
+                                    <th className='text-lightest'>Email</th>
+                                    <th className='text-lightest'>City</th>
+                                    <th className='text-lightest'>Date</th>
+                                    <th className='text-lightest'>Salary</th>
+                                    <th className='text-lightest'>Age</th>
+                                    <th className='text-lightest'>Experience</th>
+                                    <th className='text-lightest'>Status</th>
+                                    <th className='text-lightest'>Action</th>
                                 </tr>
                                 </thead>
                                 <tbody>
