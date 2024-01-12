@@ -39,7 +39,7 @@ function Navbar() {
                     <li className="menu-item">
                         <a href={'/datam'} className="menu-link">
                             <i className="menu-icon tf-icons bx bx-credit-card"></i>
-                            <div data-i18n="Data Masuk">Kwitansi</div>
+                            <div data-i18n="Kwitansi">Kwitansi</div>
                         </a>
                     </li>
 

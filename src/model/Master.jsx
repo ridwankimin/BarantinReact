@@ -102,4 +102,12 @@ export default class Master {
             }
         })
     }
+    
+    masterDok(kar) {
+        return axios.get(url + 'dokumen/kar/' + kar, {
+            headers: {
+            //   'Cookie': 'PHPSESSID=jgepu06btvgculap0gl0tao0fp',
+            }
+        })
+    }
 }

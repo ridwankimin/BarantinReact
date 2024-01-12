@@ -24,7 +24,7 @@ useEffect(() => {
     <>
   {dataHS?.map((data) => (
           // [{'value': data.id, 'label': data.nama},]
-            <option value={data.id} key={data.id}>{data.kode} - {data.nama_en}</option>
+            <option value={data.kode} key={data.id}>{data.kode} - {data.nama_en}</option>
         ))}
     </>
   )

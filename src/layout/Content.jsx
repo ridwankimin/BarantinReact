@@ -46,6 +46,7 @@ function Content() {
           {/* <Route path="/k11" element={<DataDiri1 />} /> */}
           <Route path="/datam" element={<DataMasuk />} />
           <Route path="/k11" element={<DocK11 />} />
+          <Route path="/k11/:idPtk" element={<DocK11 />} />
           <Route path="/k12" element={<DocK12 />} />
           <Route path="/k13" element={<DocK13 />} />
           <Route path="/k14" element={<DocK14 />} />

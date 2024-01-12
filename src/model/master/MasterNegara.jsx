@@ -50,9 +50,10 @@ useEffect(() => {
   return (
     <>
   {dataNegara?.map((data) => (
-          // [{'value': data.id, 'label': data.nama},]
-            <option value={data.id} key={data.id}>{data.kode} - {data.nama}</option>
-        ))}
+    data.id != '99' &&
+    // [{'value': data.id, 'label': data.nama},]
+      <option value={data.id} key={data.id}>{data.kode} - {data.nama}</option>
+  ))}
     </>
   )
 }

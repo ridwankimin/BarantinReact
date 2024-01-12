@@ -24,7 +24,7 @@ useEffect(() => {
     <>
   {dataKomKT?.map((data) => (
           // [{'value': data.id, 'label': data.nama},]
-            <option value={data.id + ";" + data.kode_komoditas + ";" + data.nama + ";" + data.nama_latin} key={data.id}>{data.nama} - {data.nama_en}</option>
+            <option value={data.id + ";" + data.nama + ";" + data.nama_latin} key={data.id}>{data.nama} - {data.nama_en}</option>
         ))}
     </>
   )
