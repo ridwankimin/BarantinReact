@@ -3,14 +3,14 @@ import React from 'react'
 function DataMasuk() {
   return (
     <div className="container-xxl flex-grow-1 container-p-y">
-    <h6 class="text-muted">PROSES DATA MASUK</h6>
-                  <div class="card shadow-none border mb-3">
-                    <div class="card-header border-bottom">
-                      <ul class="nav nav-tabs card-header-tabs" role="tablist">
-                        <li class="nav-item">
+    <h6 className="text-muted">PROSES DATA MASUK</h6>
+                  <div className="card shadow-none border mb-3">
+                    <div className="card-header border-bottom">
+                      <ul className="nav nav-tabs card-header-tabs" role="tablist">
+                        <li className="nav-item">
                           <button
                             type="button"
-                            class="nav-link active"
+                            className="nav-link active"
                             role="tab"
                             data-bs-toggle="tab"
                             data-bs-target="#navs-justified-ppk-active"
@@ -19,10 +19,10 @@ function DataMasuk() {
                             PPK Online
                           </button>
                         </li>
-                        <li class="nav-item">
+                        <li className="nav-item">
                           <button
                             type="button"
-                            class="nav-link"
+                            className="nav-link"
                             role="tab"
                             data-bs-toggle="tab"
                             data-bs-target="#navs-justified-ssm"
@@ -31,10 +31,10 @@ function DataMasuk() {
                             SSM
                           </button>
                         </li>
-                        <li class="nav-item">
+                        <li className="nav-item">
                           <button
                             type="button"
-                            class="nav-link"
+                            className="nav-link"
                             data-bs-toggle="tab"
                             data-bs-target="#navs-justified-dol"
                             aria-controls="navs-justified-dol"
@@ -43,10 +43,10 @@ function DataMasuk() {
                             Domas Online
                           </button>
                         </li>
-                        <li class="nav-item">
+                        <li className="nav-item">
                           <button
                             type="button"
-                            class="nav-link"
+                            className="nav-link"
                             data-bs-toggle="tab"
                             data-bs-target="#navs-justified-nil"
                             aria-controls="navs-justified-nil"
@@ -55,10 +55,10 @@ function DataMasuk() {
                             Nota Intelejen
                           </button>
                         </li>
-                        <li class="nav-item">
+                        <li className="nav-item">
                           <button
                             type="button"
-                            class="nav-link"
+                            className="nav-link"
                             data-bs-toggle="tab"
                             data-bs-target="#navs-justified-str"
                             aria-controls="navs-justified-str"
@@ -69,8 +69,8 @@ function DataMasuk() {
                         </li>
                       </ul>
                     </div>
-                    <div class="tab-content">
-                      <div class="tab-pane fade show active" id="navs-justified-ppk-active" role="tabpanel">
+                    <div className="tab-content">
+                      <div className="tab-pane fade show active" id="navs-justified-ppk-active" role="tabpanel">
                         <a href='/k11' className='btn btn-sm btn-primary'>Tambah Baru</a>
                         <div className='row'>
                             <div className='col-2'>
@@ -85,7 +85,7 @@ function DataMasuk() {
                                 <button style={{marginTop: '23px'}} className='btn btn-sm btn-info'>Filter</button>
                             </div>
                         </div>
-                        <div class="card-datatable text-nowrap">
+                        <div className="card-datatable text-nowrap">
                             <table className="dt-scrollableTable table table-bordered table-sm">
                                 <thead style={{backgroundColor: '#123138' }}>
                                 <tr>
@@ -442,25 +442,25 @@ function DataMasuk() {
                             </table>
                         </div>
                       </div>
-                      <div class="tab-pane fade" id="navs-justified-ssm" role="tabpanel">
-                        <h4 class="card-title">Special link title</h4>
-                        <p class="card-text">With supporting text below as a natural lead-in to additional content.</p>
-                        <a href="javascript:void(0)" class="btn btn-secondary">Go somewhere</a>
+                      <div className="tab-pane fade" id="navs-justified-ssm" role="tabpanel">
+                        <h4 className="card-title">Special link title</h4>
+                        <p className="card-text">With supporting text below as a natural lead-in to additional content.</p>
+                        <a href="#" className="btn btn-secondary">Go somewhere</a>
                       </div>
-                      <div class="tab-pane fade" id="navs-justified-dol" role="tabpanel">
-                        <h4 class="card-title">Special link title</h4>
-                        <p class="card-text">With supporting text below as a natural lead-in to additional content.</p>
-                        <a href="javascript:void(0)" class="btn btn-secondary">Go somewhere</a>
+                      <div className="tab-pane fade" id="navs-justified-dol" role="tabpanel">
+                        <h4 className="card-title">Special link title</h4>
+                        <p className="card-text">With supporting text below as a natural lead-in to additional content.</p>
+                        <a href="#" className="btn btn-secondary">Go somewhere</a>
                       </div>
-                      <div class="tab-pane fade" id="navs-justified-nil" role="tabpanel">
-                        <h4 class="card-title">Special link title</h4>
-                        <p class="card-text">With supporting text below as a natural lead-in to additional content.</p>
-                        <a href="javascript:void(0)" class="btn btn-secondary">Go somewhere</a>
+                      <div className="tab-pane fade" id="navs-justified-nil" role="tabpanel">
+                        <h4 className="card-title">Special link title</h4>
+                        <p className="card-text">With supporting text below as a natural lead-in to additional content.</p>
+                        <a href="#" className="btn btn-secondary">Go somewhere</a>
                       </div>
-                      <div class="tab-pane fade" id="navs-justified-str" role="tabpanel">
-                        <h4 class="card-title">Special link title</h4>
-                        <p class="card-text">With supporting text below as a natural lead-in to additional content.</p>
-                        <a href="javascript:void(0)" class="btn btn-secondary">Go somewhere</a>
+                      <div className="tab-pane fade" id="navs-justified-str" role="tabpanel">
+                        <h4 className="card-title">Special link title</h4>
+                        <p className="card-text">With supporting text below as a natural lead-in to additional content.</p>
+                        <a href="#" className="btn btn-secondary">Go somewhere</a>
                       </div>
                     </div>
                   </div>

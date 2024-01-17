@@ -3,6 +3,7 @@ import {
     BrowserRouter ,
     Routes,
     Route,
+    useLocation 
   } from "react-router-dom";
 import Beranda from '../pages/Beranda';
 // import DataDiri1 from '../component/DocK11/DataDiri1';
@@ -37,6 +38,19 @@ import DocKT4 from '../pages/pembebasan/kt/DocKT4';
 import DocK14 from '../pages/preborder/DocK14';
 import DocK15 from '../pages/preborder/DocK15';
 import DataMasuk from '../pages/DataMasuk';
+import DocK21 from '../pages/penugasan/DocK21';
+import DocK22 from '../pages/penugasan/DocK22';
+import DocK31 from '../pages/pemeriksaan/DocK31';
+import DocK32 from '../pages/pemeriksaan/DocK32';
+import DocK33 from '../pages/pemeriksaan/DocK33';
+import DocK34 from '../pages/pemeriksaan/DocK34';
+import DocK35 from '../pages/pemeriksaan/DocK35';
+import DocK36 from '../pages/pemeriksaan/DocK36';
+import DocK37 from '../pages/pemeriksaan/DocK37';
+import DocK37a from '../pages/pemeriksaan/DocK37a';
+import DocK38 from '../pages/pemeriksaan/DocK38';
+import DocK39 from '../pages/pemeriksaan/DocK39';
+import DocK310 from '../pages/pemeriksaan/DocK310';
 
 function Content() {
   return (
@@ -51,6 +65,19 @@ function Content() {
           <Route path="/k13" element={<DocK13 />} />
           <Route path="/k14" element={<DocK14 />} />
           <Route path="/k15" element={<DocK15 />} />
+          <Route path="/k21" element={<DocK21 />} />
+          <Route path="/k22" element={<DocK22 />} />
+          <Route path="/k31" element={<DocK31 />} />
+          <Route path="/k32" element={<DocK32 />} />
+          <Route path="/k33" element={<DocK33 />} />
+          <Route path="/k34" element={<DocK34 />} />
+          <Route path="/k35" element={<DocK35 />} />
+          <Route path="/k36" element={<DocK36 />} />
+          <Route path="/k37" element={<DocK37 />} />
+          <Route path="/k37a" element={<DocK37a />} />
+          <Route path="/k38" element={<DocK38 />} />
+          <Route path="/k39" element={<DocK39 />} />
+          <Route path="/k310" element={<DocK310 />} />
           <Route path="/k61" element={<DocK61 />} />
           <Route path="/k62" element={<DocK62 />} />
           <Route path="/k64" element={<DocK64 />} />

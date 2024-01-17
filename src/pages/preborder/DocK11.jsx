@@ -28,48 +28,58 @@ function DocK11() {
     let navigate = useNavigate();
     const { idPtk } = useParams()
     let [dataIdPage, setDataIdPage] = useState({});
-    useEffect(()=>{
-        let ptkDecode = idPtk ? base64_decode(idPtk) : "";
-        let ptkNomor = idPtk ? ptkDecode.split('m0R3N0r1R') : "";
-        setDataIdPage(values => ({...values,
-            noAju: idPtk ? base64_decode(ptkNomor[0]) : "",
-            noIdPtk: idPtk ? base64_decode(ptkNomor[1]) : "",
-            noPermohonan: idPtk ? base64_decode(ptkNomor[2]) : "",
-        }));
-    },[idPtk])
-    // console.log(dataIdPage.noIdPtk)
+    let [opsiVerif, setOpsiVerif] = useState();
 
+    // useEffect(() => {
+    //     $('#negaraPengirim').select2();
+    //     return () => {
+    //       // Cleanup Select2 when the component unmounts
+    //       $('#negaraPengirim').select2('destroy');
+    //     };
+    //   }, []);
+    
     // let noAju = idPtk ? base64_decode(ptkNomor[0]) : "";
     // let noIdPtk = idPtk ? base64_decode(ptkNomor[1]) : "";
     // let noPermohonan = idPtk ? base64_decode(ptkNomor[2]) : "";
     // console.log(noIdPtk)
 
-    const [selectedFile, setSelectedFile] = useState(null);
+    // function makeid(length) {
+    //     let result = '';
+    //     const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+    //     const charactersLength = characters.length;
+    //     let counter = 0;
+    //     while (counter < length) {
+    //         result += characters.charAt(Math.floor(Math.random() * charactersLength));
+    //       counter += 1;
+    //     }
+    //     return result;
+    // }
 
-    function makeid(length) {
-        let result = '';
-        const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
-        const charactersLength = characters.length;
-        let counter = 0;
-        while (counter < length) {
-            result += characters.charAt(Math.floor(Math.random() * charactersLength));
-          counter += 1;
-        }
-        return result;
-    }
-
-    function idptkexist() {
-        return dataIdPage.noIdPtk;
-    }
+    // function idptkexist() {
+    //     return dataIdPage.noIdPtk;
+    // }
 
     // console.log(idptkexist())
 
-    function dateNow() {
-        let n = date.getFullYear() + '-' + addZero(date.getMonth() + 1) + '-' + addZero(date.getDate()) + ' ' + addZero(date.getHours()) + ':' + addZero(date.getMinutes()) + ":" + addZero(date.getSeconds());
-        return n;
-    }
+    // function dateNow() {
+    //     let n = date.getFullYear() + '-' + addZero(date.getMonth() + 1) + '-' + addZero(date.getDate()) + ' ' + addZero(date.getHours()) + ':' + addZero(date.getMinutes()) + ":" + addZero(date.getSeconds());
+    //     return n;
+    // }
     
     let [dataSelect, setdataSelect] = useState({});
+    // console.log(data.fileDokumen)
+    // useEffect(() => {
+    //     const masterSelectNegara = <MasterNegara/>;
+    //     const masterSelectProv = <MasterProv/>;
+    //     const masterSelectKota = <MasterKota/>;
+    //     setdataSelect(values => ({...values,
+    //         provPemohon: masterSelectProv,
+    //         kotaPemohon: masterSelectKota,
+    //         negaraPengirim: masterSelectNegara,
+    //         provPengirim: masterSelectProv,
+    //         kotaPengirim: masterSelectKota,
+    //     }));
+    // }, [])
     
     function handlePermohonan(e) {
         if(e.target.value === 'EX') {
@@ -109,9 +119,56 @@ function DocK11() {
         setValueDetilMP("namaLatin", dataPisahKT[2])
     }
     
+    function handleSelectNegPengirim(e) {
+        console.log(e);
+        console.log("select")
+    }
 
     function handleNegara(e) {
         setdataSelect(values => ({...values, [e.target.name]: <MasterNegara/>}))
+    }
+
+    function handleRef() {
+        setValuePemohon("provPemohon", cekdataDiri.provPemohon)
+        setValuePemohon("kotaPemohon", cekdataDiri.kotaPemohon)
+        setValuePemohon("negaraPengirim", cekdataDiri.negaraPengirim)
+        setValuePemohon("provPengirim", cekdataDiri.provPengirim)
+        setValuePemohon("kotaPengirim", cekdataDiri.kotaPengirim)
+        setValuePemohon("negaraPenerima", cekdataDiri.negaraPenerima)
+        setValuePemohon("provPenerima", cekdataDiri.provPenerima)
+        setValuePemohon("kotaPenerima", cekdataDiri.kotaPenerima)
+        alert(cekdataPelabuhan.pelMuat)
+                    setValuePelabuhan("tglBerangkatAkhir", cekdataPelabuhan.tglBerangkatAkhir);
+                    setValuePelabuhan("negaraAsal", cekdataPelabuhan.negaraAsal);
+                    setValuePelabuhan("negaraTujuan", cekdataPelabuhan.negaraTujuan);
+                    setValuePelabuhan("negaraTransit", cekdataPelabuhan.negaraTransit);
+                    setValuePelabuhan("pelMuat", cekdataPelabuhan.pelMuat);
+                    setValuePelabuhan("pelBongkar", cekdataPelabuhan.pelBongkar);
+                    setValuePelabuhan("pelTransit", cekdataPelabuhan.pelTransit);
+                    setValuePelabuhan("modaTransit", cekdataPelabuhan.modaTransit);
+                    setValuePelabuhan("tipeTransit", cekdataPelabuhan.tipeTransit);
+                    setValuePelabuhan("namaAlatAngkutTransit", cekdataPelabuhan.namaAlatAngkutTransit);
+                    setValuePelabuhan("benderaTransit", cekdataPelabuhan.benderaTransit);
+                    setValuePelabuhan("nomorAlatAngkutTransit", cekdataPelabuhan.nomorAlatAngkutTransit);
+                    setValuePelabuhan("callSignTransit", cekdataPelabuhan.callSignTransit);
+                    setValuePelabuhan("tglTibaTransit", cekdataPelabuhan.tglTibaTransit);
+                    setValuePelabuhan("tglBerangkatTransit", cekdataPelabuhan.tglBerangkatTransit);
+                    setValuePelabuhan("modaAkhir", cekdataPelabuhan.modaAkhir);
+                    setValuePelabuhan("modaAkhirLainnya", cekdataPelabuhan.modaAkhirLainnya);
+                    setValuePelabuhan("tipeAkhir", cekdataPelabuhan.tipeAkhir);
+                    setValuePelabuhan("namaAlatAngkutAkhir", cekdataPelabuhan.namaAlatAngkutAkhir);
+                    setValuePelabuhan("benderaAkhir", cekdataPelabuhan.benderaAkhir);
+                    setValuePelabuhan("nomorAlatAngkutAkhir", cekdataPelabuhan.nomorAlatAngkutAkhir);
+                    setValuePelabuhan("callSignAkhir", cekdataPelabuhan.callSignAkhir);
+                    setValuePelabuhan("tglTibaAkhir", cekdataPelabuhan.tglTibaAkhir);
+                    setValuePelabuhan("tglBerangkatAkhir", cekdataPelabuhan.tglBerangkatAkhir);
+                    setValuePelabuhan("transitOpsi", cekdataPelabuhan.transitOpsi);
+                    setValuePelabuhan("cekKontainer", cekdataPelabuhan.cekKontainer);
+                    setValuePelabuhan("sandar", cekdataPelabuhan.sandar);
+    }
+    
+    function handleMPDetil(e) {
+        setValueDetilMP("jenisKar", e.target.value);
     }
     
     function handleJenisDokumen(e) {
@@ -182,21 +239,22 @@ function DocK11() {
         // tab3: true,
         // tab4: true,
     });
-    let [komoditas, setKomoditas] = useState({});
+    // let [komoditas, setKomoditas] = useState({});
     let [komMP, setKomMP] = useState({});
-    let [arrKontainer, setArrKontainer] = useState([]);
-    let [kontainer, setKontainer] = useState({
-        noKontainer: "",
-        tipeKontainer: "",
-        ukuranKontainer: "",
-        stuffKontainer: "",
-        segel: ""
-    });
+    // let [arrKontainer, setArrKontainer] = useState([]);
+    // let [kontainer, setKontainer] = useState({
+    //     noKontainer: "",
+    //     tipeKontainer: "",
+    //     ukuranKontainer: "",
+    //     stuffKontainer: "",
+    //     segel: ""
+    // });
 
     const {
 		register: registerPemohon,
         setValue: setValuePemohon,
         watch: watchPemohon,
+        control: controlPemohon,
 		handleSubmit: handleFormPemohon,
         formState: { errors: errorsPemohon },
 	} = useForm()
@@ -207,6 +265,13 @@ function DocK11() {
         watch: watchPelabuhan,
 		handleSubmit: handleFormPelabuhan,
         formState: { errors: errorsPelabuhan },
+	} = useForm()
+    
+    const {
+        register: registerDokPeriksa,
+        setValue: setValueDokPeriksa,
+        watch: watchDokPeriksa,
+		handleSubmit: handleFormDokPeriksa,
 	} = useForm()
 	
     const {
@@ -256,7 +321,7 @@ function DocK11() {
             watch: watchDokumen,
             setValue: setValueDokumen,
             handleSubmit: handleFormDokumen,
-            control: controlDokumen,
+            // control: controlDokumen,
             reset: resetFormDokumen,
             formState: { errors: errorsDokumen },
         } = useForm({
@@ -275,7 +340,7 @@ function DocK11() {
     
     const {
         register: registerKonfirmasi,
-        // setValue: setValueDokumen,
+        setValue: setValueKonfirmasi,
         watch: watchKonfirmasi,
         handleSubmit: handleFormKonfirmasi,
         // formState: { errors: errorsDokumen },
@@ -285,6 +350,7 @@ function DocK11() {
     const cekdataPelabuhan = watchPelabuhan()
     const cekdataMP = watchMP()
     const cekdataDokumen = watchDokumen()
+    const cekdataDokPeriksa = watchDokPeriksa()
     const cekdataKonfirmasi = watchKonfirmasi()
   
     // const onSubmitMP = (data) => {
@@ -293,10 +359,159 @@ function DocK11() {
     //     console.log(data)
     // };
     // console.log(cekdataDokumen.datenow)
+
+    useEffect(()=>{
+        let ptkDecode = idPtk ? base64_decode(idPtk) : "";
+        let ptkNomor = idPtk ? ptkDecode.split('m0R3N0r1R') : "";
+        setDataIdPage(values => ({...values,
+            noAju: idPtk ? base64_decode(ptkNomor[0]) : "",
+            noIdPtk: idPtk ? base64_decode(ptkNomor[1]) : "",
+            noPermohonan: idPtk ? base64_decode(ptkNomor[2]) : "",
+        }));
+                // setValuePemohon("idPtk", dataIdPage.noIdPtk);
+                // setValuePemohon("noAju", dataIdPage.noAju)
+                // setValueKontainer("idPtk", dataIdPage.noIdPtk);
+                // setValuePelabuhan("idPtk", dataIdPage.noIdPtk);
+                // setValuePelabuhan("noAju", dataIdPage.noAju);
+                // setValueMP("idPtk", dataIdPage.noIdPtk);
+                // setValueMP("noAju", dataIdPage.noAju);
+                // setValueDetilMP("idPtk", dataIdPage.noIdPtk);
+                // setValueDokumen("idPtk",dataIdPage.noIdPtk);
+                // setValueKonfirmasi("idPtk", dataIdPage.noIdPtk);
+                // setValueKonfirmasi("noAju", dataIdPage.noAju);
+        if(idPtk) {
+            const modelPemohon = new PtkModel();
+            const response = modelPemohon.getPtkId(base64_decode(ptkNomor[1]));
+            response
+            .then((response) => {
+                if(response.data.status === '200') {
+                    const masterSelectNegara = <MasterNegara/>;
+                    const masterSelectProv = <MasterProv/>;
+                    const masterSelectKota = <MasterKota/>;
+                    const masterSelectPelabuhan = <MasterPelabuhan/>;
+                    const masterSelectKemasan = <MasterKemasan/>;
+                    const masterSelectMataUang = <MasterMataUang/>;
+                    console.log(response.data.data)
+                    setdataSelect(values => ({...values,
+                        provPemohon: masterSelectProv,
+                        kotaPemohon: masterSelectKota,
+                        negaraPengirim: masterSelectNegara,
+                        provPengirim: masterSelectProv,
+                        kotaPengirim: masterSelectKota,
+                        negaraPenerima: masterSelectNegara,
+                        provPenerima: masterSelectProv,
+                        kotaPenerima: masterSelectKota,
+                        negaraAsal: masterSelectNegara,
+                        pelMuat: masterSelectPelabuhan,
+                        negaraTujuan: masterSelectNegara,
+                        pelBongkar: masterSelectPelabuhan,
+                        negaraTransit: masterSelectNegara,
+                        pelTransit: masterSelectPelabuhan,
+                        negaraAsalMP: masterSelectNegara,
+                        negaraTujuanMP: masterSelectNegara,
+                        benderaAkhir: masterSelectNegara,
+                        benderaTransit: masterSelectNegara,
+                        jenisKemasan: masterSelectKemasan,
+                        satuanNilai: masterSelectMataUang,
+                    }));
+                    alert(response.data.message);
+                    isiDataPtk(response)
+                }
+            })
+            .catch((error) => {
+                console.log(error.response);
+            });
+        }
+    },[]) 
+
+    
+    function isiDataPtk(response) {
+        setTimeout(() => {
+            setValuePemohon("jenisForm", response.data.data.jenis_dokumen);
+            setValuePemohon("pJRutin", response.data.data.is_guest);
+            setValuePemohon("namaPemohon", response.data.data.nama_pemohon);
+            setValuePemohon("permohonan", response.data.data.jenis_permohonan);
+            setValuePemohon("jenisIdentitasPemohon", response.data.data.jenis_identitas_pemohon);
+            setValuePemohon("noIdentitasPemohon", response.data.data.nomor_identitas_pemohon);
+            setValuePemohon("alamatPemohon", response.data.data.alamat_pemohon);
+            setValuePemohon("nomorTlp", response.data.data.telepon_pemohon);
+            setValuePemohon("nomorFax", response.data.data.fax_pemohon);
+            setValuePemohon("provPemohon", response.data.data.provinsi_pemohon_id);
+            setValuePemohon("kotaPemohon", response.data.data.kota_kab_pemohon_id);
+            setValuePemohon("namaCp", response.data.data.nama_cp);
+            setValuePemohon("alamatCp", response.data.data.alamat_cp);
+            setValuePemohon("teleponCp", response.data.data.telepon_cp);
+            setValuePemohon("namaTtd", response.data.data.nama_ttd);
+            setValuePemohon("jenisIdentitasTtd", response.data.data.jenis_identitas_ttd);
+            setValuePemohon("noIdentitasTtd", response.data.data.nomor_identitas_ttd);
+            setValuePemohon("jabatanTtd", response.data.data.jabatan_ttd);
+            setValuePemohon("alamatTtd", response.data.data.alamat_ttd);
+            setValuePemohon("namaPengirim", response.data.data.nama_pengirim);
+            setValuePemohon("alamatPengirim", response.data.data.alamat_pengirim);
+            setValuePemohon("nomorTlpPengirim", response.data.data.telepon_pengirim);
+            setValuePemohon("jenisIdentitasPengirim", response.data.data.jenis_identitas_pengirim);
+            setValuePemohon("noIdentitasPengirim", response.data.data.nomor_identitas_pengirim);
+            setValuePemohon("provPengirim", response.data.data.provinsi_pengirim_id);
+            setValuePemohon("kotaPengirim", response.data.data.kota_kab_pengirim_id);
+            setValuePemohon("negaraPengirim", response.data.data.negara_pengirim_id);
+            setValuePemohon("namaPenerima", response.data.data.nama_penerima);
+            setValuePemohon("alamatPenerima", response.data.data.alamat_penerima);
+            setValuePemohon("nomorTlpPenerima", response.data.data.telepon_penerima);
+            setValuePemohon("jenisIdentitasPenerima", response.data.data.jenis_identitas_penerima);
+            setValuePemohon("noIdentitasPenerima", response.data.data.nomor_identitas_penerima);
+            setValuePemohon("provPenerima", response.data.data.provinsi_penerima_id);
+            setValuePemohon("kotaPenerima", response.data.data.kota_kab_penerima_id);
+            setValuePemohon("negaraPenerima", response.data.data.negara_penerima_id);
+            
+            setValuePelabuhan("tglBerangkatAkhir", response.data.data.tanggal_rencana_masuk);
+            setValuePelabuhan("negaraAsal", response.data.data.negara_muat_id);
+            setValuePelabuhan("negaraTujuan", response.data.data.negara_bongkar_id);
+            setValuePelabuhan("negaraTransit", response.data.data.negara_transit_id);
+            setValuePelabuhan("modaTransit", response.data.data.moda_alat_angkut_transit_id);
+            setValuePelabuhan("tipeTransit", response.data.data.tipe_alat_angkut_transit_id);
+            setValuePelabuhan("namaAlatAngkutTransit", response.data.data.nama_alat_angkut_transit);
+            setValuePelabuhan("benderaTransit", response.data.data.bendera_alat_angkut_transit_id);
+            setValuePelabuhan("nomorAlatAngkutTransit", response.data.data.no_voyage_transit);
+            setValuePelabuhan("callSignTransit", response.data.data.call_sign_transit);
+            setValuePelabuhan("tglTibaTransit", response.data.data.tanggal_rencana_tiba_transit);
+            setValuePelabuhan("tglBerangkatTransit", response.data.data.tanggal_rencana_berangkat_transit);
+            setValuePelabuhan("modaAkhir", response.data.data.moda_alat_angkut_terakhir_id);
+            setValuePelabuhan("modaAkhirLainnya", response.data.data.moda_alat_angkut_lainnya);
+            setValuePelabuhan("tipeAkhir", response.data.data.tipe_alat_angkut_terakhir_id);
+            setValuePelabuhan("namaAlatAngkutAkhir", response.data.data.nama_alat_angkut_terakhir);
+            setValuePelabuhan("benderaAkhir", response.data.data.bendera_alat_angkut_terakhir_id);
+            setValuePelabuhan("nomorAlatAngkutAkhir", response.data.data.no_voyage_terakhir);
+            setValuePelabuhan("callSignAkhir", response.data.data.call_sign_terakhir);
+            setValuePelabuhan("tglTibaAkhir", response.data.data.tanggal_rencana_tiba_terakhir);
+            setValuePelabuhan("tglBerangkatAkhir", response.data.data.tanggal_rencana_berangkat_terakhir);
+            setValuePelabuhan("transitOpsi", response.data.data.is_transit);
+            setValuePelabuhan("cekKontainer", response.data.data.is_kontainer);
+            setValuePelabuhan("sandar", response.data.data.sandar);
+            setValuePelabuhan("pelMuat", response.data.data.pelabuhan_muat_id);
+            setValuePelabuhan("pelBongkar", response.data.data.pelabuhan_bongkar_id);
+            setValuePelabuhan("pelTransit", response.data.data.pelabuhan_transit_id);
+            
+            setValueMP("mediaPembawa", response.data.data.jenis_karantina);
+            setValueMP("jenisMp", response.data.data.jenis_media_pembawa_id);
+            setValueMP("jenisKemasan", response.data.data.kemasan_id);
+            setValueMP("merkKemasan", response.data.data.merk_kemasan);
+            setValueMP("jumlahKemasan", response.data.data.jumlah_kemasan);
+            setValueMP("tandaKemasan", response.data.data.tanda_khusus);
+            setValueMP("nilaiBarang", response.data.data.nilai_barang);
+            setValueMP("satuanNilai", response.data.data.mata_uang);
+            setValueMP("negaraAsalMP", response.data.data.negara_asal_id);
+            setValueMP("daerahAsalMP", response.data.data.kota_kab_asal_id);
+            setValueMP("negaraTujuanMP", response.data.data.negara_tujuan_id);
+            setValueMP("daerahTujuanMP", response.data.data.kota_kab_tujuan_id);
+            setValueMP("tingkatOlah", response.data.data.tingkat_pengolahan);
+            setValueMP("infoTambahan", response.data.data.informasi_tambahan);
+        }, 500
+        )
+    }
     
     const onSubmitDokumen = (data) => {
-        setValueDokumen("idPtk", idptkexist)
-        setValueDokumen("datenow", dateNow)
+        // setValueDokumen("idPtk", dataIdPage.noIdPtk)
+        // setValueDokumen("datenow", dateNow())
         // console.log(data.fileDokumen)
         const modelPemohon = new PtkModel();
 
@@ -309,9 +524,10 @@ function DocK11() {
                 // setFormTab(values => ({...values, tab4: false}))
                 // setWizardPage(wizardPage + 1)
                 if(response.data.status === '201') {
-                    resetFormDokumen()
-                    setSelectedFile(null)
+                    resetFormDokumen();
+                    // setSelectedFile(null)
                     dataDokumenPtk();
+                    "fileDokumenUpload".target.value = "";
                 }
             })
             .catch((error) => {
@@ -320,8 +536,8 @@ function DocK11() {
     }
 
     const onSubmitDetilMP = (data) => {
-        setValueDetilMP("idPtk", idptkexist)
-        setValueDetilMP("datenow", dateNow)
+        // setValueDetilMP("idPtk", dataIdPage.noIdPtk)
+        // setValueDetilMP("datenow", dateNow())
         const modelPemohon = new PtkModel();
 
         const response = modelPemohon.pushKomoditi(data);
@@ -346,17 +562,23 @@ function DocK11() {
         // setValueKontainer("stuffKontainer", "");
         // setValueKontainer("segel", "");
     };
-    const date = new Date();
-    function addZero(i) {
-        if (i < 10) {i = "0" + i}
-        return i;
-    }
-      console.count()
+    // const date = new Date();
+    // function addZero(i) {
+    //     if (i < 10) {i = "0" + i}
+    //     return i;
+    // }
 
-   const onSubmitPemohon = (data) => {
+    console.count()
+
+    const onSubmitPemohon = (data) => {
     const modelPemohon = new PtkModel();
 
         if(idPtk) {
+            // setValuePemohon("idPtk", dataIdPage.noIdPtk)
+            // setValuePemohon("noAju", dataIdPage.noAju)
+            // setValuePemohon("noPermohonan", dataIdPage.noPermohonan)
+            // setValuePemohon("makeid", makeid())
+            // setValuePemohon("datenow", dateNow())
             const response = modelPemohon.tabPemohonUpdate(data);
             response
             .then((response) => {
@@ -370,6 +592,8 @@ function DocK11() {
                 alert(error.response.status + " - " + error.response.data.message)
             });
         } else {
+            // setValuePemohon("makeid", makeid())
+            // setValuePemohon("datenow", dateNow())
             const response = modelPemohon.tabPemohonInsert(data);
             response
             .then((response) => {
@@ -381,6 +605,19 @@ function DocK11() {
                     noIdPtk: response.data.data.id,
                     noPermohonan: "",
                 }));
+                setValuePemohon("idPtk", response.data.data.id);
+                setValuePemohon("noAju", response.data.data.no_aju)
+                setValueKontainer("idPtk", response.data.data.id);
+                setValuePelabuhan("idPtk", response.data.data.id);
+                setValuePelabuhan("noAju", response.data.data.no_aju);
+                setValueMP("idPtk", response.data.data.id);
+                setValueMP("noAju", response.data.data.no_aju);
+                setValueDetilMP("idPtk", response.data.data.id);
+                setValueDokumen("idPtk",response.data.data.id);
+                setValueDokumen("noAju", response.data.data.no_aju);
+                setValueKonfirmasi("idPtk", response.data.data.id);
+                setValueKonfirmasi("noAju", response.data.data.no_aju);
+
                 setFormTab(values => ({...values, tab2: false}))
                 setWizardPage(wizardPage + 1)
             })
@@ -391,14 +628,17 @@ function DocK11() {
         }
     };
 
-    const iddataaa = base64_encode(base64_encode("0100EX1704689579488124010G1C7") + 'm0R3N0r1R' + base64_encode("bbd50300-df02-4870-829b-9c10da4e8b28") + "m0R3N0r1R");
+    const iddataaa = base64_encode(base64_encode("0100EX1240113150657GZTL5") + 'm0R3N0r1R' + base64_encode("a3678a03-5f2d-4ba7-acd1-e749d9e4b0ba") + "m0R3N0r1R");
     console.log(iddataaa)
 
     const onSubmitPelabuhan = (data) => {
         // setValuePelabuhan("idPtk", noIdPtk)
         const modelPemohon = new PtkModel();
-
+        
         if(idPtk) {
+            // setValuePelabuhan("idPtk", dataIdPage.noIdPtk)
+            // setValuePelabuhan("noAju", dataIdPage.noAju)
+            // setValuePelabuhan("datenow", dateNow())
             const response = modelPemohon.tabPelabuhan(data);
             response
             .then((response) => {
@@ -420,7 +660,10 @@ function DocK11() {
         const modelPemohon = new PtkModel();
 
         if(idPtk) {
-            const response = modelPemohon.tabKomoditas(data);
+            // setValueMP("idPtk", dataIdPage.noIdPtk)
+            // setValueMP("noAju", dataIdPage.noAju)
+            // setValueMP("datenow", dateNow())
+             const response = modelPemohon.tabKomoditas(data);
             response
             .then((response) => {
                 console.log(response.data)
@@ -435,6 +678,30 @@ function DocK11() {
         } else {
             alert('Data id kosong')
         }
+    };
+    
+    const onSubmitDokPeriksa = (data) => {
+        console.log(data)
+        setFormTab(values => ({...values, tab5: false}))
+        setWizardPage(wizardPage + 1)
+        // const modelPemohon = new PtkModel();
+
+        // if(idPtk) {
+            // const response = modelPemohon.tabKomoditas(data);
+            // response
+            // .then((response) => {
+            //     console.log(response.data)
+            //     alert(response.data.status + " - " + response.data.message)
+            //     setFormTab(values => ({...values, tab5: false}))
+            //     setWizardPage(wizardPage + 1)
+            // })
+            // .catch((error) => {
+            //     console.log(error);
+            //     alert(error.response.status + " - " + error.response.data.message)
+            // });
+        // } else {
+        //     alert('Data id kosong')
+        // }
     };
     
     const onSubmitKonfirmasi = (data) => {
@@ -461,7 +728,9 @@ function DocK11() {
       const onSubmitKontainer = (data) => {
         // setValueKontainer("idPtk", noIdPtk);
         const modelPemohon = new PtkModel();
-
+        // setValueKontainer("idPtk", dataIdPage.noIdPtk)
+        // setValueKontainer("datenow", dateNow())
+        
         const response = modelPemohon.pushDetilKontainer(data);
             response
             .then((response) => {
@@ -558,11 +827,11 @@ function DocK11() {
         setKomMP(values => ({...values, [komMP.kodeKomoditasMP]: kom[1]}))
     }
     
-    const handleKomoditas = (event) => {
-        const name = event.target.name;
-        const value = event.target.value;
-        setKomoditas(values => ({...values, [name]: value}))
-    }
+    // const handleKomoditas = (event) => {
+    //     const name = event.target.name;
+    //     const value = event.target.value;
+    //     setKomoditas(values => ({...values, [name]: value}))
+    // }
 
     let [wizardPage, setWizardPage] = useState(1);
     let [editKontainer, setEditKontainer] = useState();
@@ -628,7 +897,7 @@ function DocK11() {
                     console.log(error.response);
                 });
             }
-            console.log("datadok : " + dokumenPtk)
+            // console.log("datadok : " + dokumenPtk)
         }
         
         function dataKomoditiPtk() {
@@ -703,11 +972,11 @@ function DocK11() {
                 <div className="row p-2">
                     <label className="col-sm-1 col-form-label" htmlFor="noAju">NOMOR AJU</label>
                     <div className="col-sm-4">
-                        <input type="text" className='form-control' value={dataIdPage.noAju} disabled />
+                        <input type="text" className='form-control' value={dataIdPage.noAju || ""} disabled />
                     </div>
-                    <label className="offset-sm-1 col-sm-2 col-form-label" htmlFor="noAju">NOMOR PERMOHONAN</label>
+                    <label className="offset-sm-1 col-sm-2 col-form-label" htmlFor="noDok">NOMOR DOKUMEN</label>
                     <div className="col-sm-4">
-                        <input type="text" className='form-control' value={dataIdPage.noPermohonan} disabled />
+                        <input type="text" className='form-control' value={dataIdPage.noPermohonan || ""} disabled />
                     </div>
                 </div>
                 <hr className='m-1' />
@@ -768,12 +1037,11 @@ function DocK11() {
                 <div className="bs-stepper-content border-top">
                         <div id="cardPemohon" className={wizardPage === 1 ? "content active dstepper-block" : "content"}>
                         <form className="input-form" onSubmit={handleFormPemohon(onSubmitPemohon)}>
-                            <input type="hidden" name='idPtk' value={idptkexist()} {...registerPemohon("idPtk")} />
-                            <input type="hidden" name='noAju' value={dataIdPage.noAju}  {...registerPemohon("noAju")} />
-                            <input type="hidden" name='noPermohonan' value={dataIdPage.noPermohonan}  {...registerPemohon("noPermohonan")} />
-                            <input type="hidden" name='tabWizard' value={wizardPage.toString()} {...registerPemohon("tabWizard")} />
-                            <input type="hidden" name='makeid' value={makeid(5)} {...registerPemohon("makeid")} />
-                            <input type="hidden" name='datenow' value={dateNow()} {...registerPemohon("datenow")} />
+                            <input type="hidden" name='idPtk' {...registerPemohon("idPtk")} />
+                            <input type="hidden" name='noAju' {...registerPemohon("noAju")} />
+                            <input type="hidden" name='noPermohonan' {...registerPemohon("noPermohonan")} />
+                            {/* <input type="hidden" name='makeid' value={makeid || ""} {...registerPemohon("makeid")} /> */}
+                            {/* <input type="hidden" name='datenow' value={dateNow || ""} {...registerPemohon("datenow")} /> */}
       {/* <motion.div
         initial={{ x: "-100vw" }}
         animate={{ x: 0 }}
@@ -786,6 +1054,7 @@ function DocK11() {
                       <div className="card-action-title">
                           <h5 className="mb-0 text-lightest">Pemohon</h5>
                       </div>
+                      <button className='col-sm-1 btn btn-sm btn-success' type='button' onClick={handleRef}><center><i className="menu-icon tf-icons bx bx-sync"></i></center></button>
                       <div className="card-action-element">
                           <ul className="list-inline mb-0">
                               <li className="list-inline-item">
@@ -854,8 +1123,8 @@ function DocK11() {
                               <div className="col-sm-9">
                                     <select name="provPemohon" id="provPemohon" onClick={dataSelect.provPemohon ? null : handleProv} {...registerPemohon("provPemohon", { required: "Mohon pilih provinsi pemohon."})} className={errorsPemohon.provPemohon ? "form-control  form-control-sm is-invalid" : "form-control  form-control-sm"}>
                                         <option value="">--</option>
-                                        {dataSelect.provPemohon}
                                         {/* <MasterProv/> */}
+                                        {dataSelect.provPemohon}
                                     </select>
                                     {errorsPemohon.provPemohon && <small className="text-danger">{errorsPemohon.provPemohon.message}</small>}
                               </div>
@@ -883,13 +1152,6 @@ function DocK11() {
                               </div>
                           </div>
                           <div className="row mb-3">
-                              <label className="col-sm-3 col-form-label" htmlFor="emailPemohon">Email <span className='text-danger'>*</span></label>
-                              <div className="col-sm-9">
-                                  <input type="email" id="emailPemohon" name="emailPemohon" {...registerPemohon("emailPemohon", { required: "Mohon isi email pemohon.", pattern: { value: /^[^@ ]+@[^@ ]+\.[^@ .]{2,}$/, message: "Email tidak valid." }})} className={errorsPemohon.emailPemohon ? "form-control form-control-sm is-invalid" : "form-control form-control-sm"} placeholder="Email" />
-                                  {errorsPemohon.emailPemohon && <small className="text-danger">{errorsPemohon.emailPemohon.message}</small>}
-                              </div>
-                          </div>
-                          <div className="row mb-3">
                               <label className="col-sm-3 col-form-label" htmlFor="jenisIdentitasPemohon">Identitas <span className='text-danger'>*</span></label>
                               <div className="col-sm-2">
                                   <select className={errorsPemohon.jenisIdentitasPemohon ? "form-control form-control-sm is-invalid" : "form-control form-control-sm"} name="jenisIdentitasPemohon" id="jenisIdentitasPemohon" {...registerPemohon("jenisIdentitasPemohon", { required: true})}>
@@ -906,7 +1168,7 @@ function DocK11() {
                               </div>
                           </div>
                           <div className="form-check mt-3">
-                          <input className="form-check-input" type="checkbox" name='samaTTD' id="samaTTD" onChange={handleCekSameTTD} />
+                          <input className="form-check-input" value="" type="checkbox" name='samaTTD' id="samaTTD" onChange={handleCekSameTTD} />
                           <label className="form-check-label" htmlFor="samaTTD"> Pemohon sama dengan penandatangan dokumen. </label>
                         </div>
                       </div>
@@ -1069,6 +1331,28 @@ function DocK11() {
                                     {cekdataDiri.permohonan === 'EX' || cekdataDiri.permohonan === 'IM' ? dataSelect.negaraPengirim : null}
                                     {/* <MasterNegara/> */}
                                 </select>
+                                {/* <Controller
+                                control={controlPemohon}
+                                name={"negaraPengirim"}
+                                className=""
+                                rules={{ required: "Harap upload file dokumen persyaratan." }}
+                                render={({ field: { value, onChange, ...field } }) => {
+                                return (
+                                    <select
+                                    // name='negaraPengirim'
+                                    {...field}
+                                    selected={value}
+                                    onChange={(val) => field.onChange(val)}
+                                    onClick={dataSelect.negaraPengirim ? null : handleNegara}
+                                    className="form-control select2 form-control-sm"
+                                    id="negaraPengirim">
+                                        <option value="">--</option>
+                                        <option value="99">ID - INDONESIA</option>
+                                        {cekdataDiri.permohonan === 'EX' || cekdataDiri.permohonan === 'IM' ? dataSelect.negaraPengirim : null}
+                                    </select>
+                                );
+                                }}
+                            /> */}
                                 {errorsPemohon.negaraPengirim && <small className="text-danger">{errorsPemohon.negaraPengirim.message}</small>}
                               </div>
                           </div>
@@ -1095,7 +1379,7 @@ function DocK11() {
                             </div>
                           </div>
                         <div className="form-check mt-3">
-                          <input className="form-check-input" type="checkbox" name='samaPengirim' id="samaPengirim" onChange={handleCekSamePengirim} />
+                          <input className="form-check-input" type="checkbox" value="" name='samaPengirim' id="samaPengirim" onChange={handleCekSamePengirim} />
                           <label className="form-check-label" htmlFor="samaPengirim"> Sama dengan pemohon. </label>
                         </div>
                       </div>
@@ -1189,7 +1473,7 @@ function DocK11() {
                             </div>
                           </div>
                           <div className="form-check mt-3">
-                            <input className="form-check-input" type="checkbox" name='samaPenerima' id="samaPenerima" onChange={handleCekSamePenerima} />
+                            <input className="form-check-input" type="checkbox" value="" name='samaPenerima' id="samaPenerima" onChange={handleCekSamePenerima} />
                             <label className="form-check-label" htmlFor="samaPenerima"> Sama dengan pemohon. </label>
                         </div>
                       </div>
@@ -1212,10 +1496,9 @@ function DocK11() {
   </div>
                         <div id="cardPelabuhan" className={wizardPage === 2 ? "content active dstepper-block" : "content"}>
                         <form className="input-form" onSubmit={handleFormPelabuhan(onSubmitPelabuhan)}>
-                            <input type="hidden" name='idPtk' value={idptkexist()} {...registerPelabuhan("idPtk")} />
-                            <input type="hidden" name='noAju' value={dataIdPage.noAju}  {...registerPelabuhan("noAju")} />
-                            <input type="hidden" name='tabWizard' value={wizardPage} {...registerPelabuhan("tabWizard")} />
-                            <input type="hidden" name='datenow' value={dateNow()} {...registerPelabuhan("datenow")} />
+                            <input type="hidden" name='idPtk' {...registerPelabuhan("idPtk")} />
+                            <input type="hidden" name='noAju' {...registerPelabuhan("noAju")} />
+                            {/* <input type="hidden" name='datenow' value={dateNow || ""} {...registerPelabuhan("datenow")} /> */}
 
                             <div className="row">
                                 <div className="col-sm-6">
@@ -1224,6 +1507,7 @@ function DocK11() {
                                             <div className="card-action-title">
                                                 <h5 className="mb-0 text-lightest">Pengirim - Penerima</h5>
                                             </div>
+                                            <button className='col-sm-1 btn btn-sm btn-success' type='button' onClick={handleRef}><center><i className="menu-icon tf-icons bx bx-sync"></i></center></button>
                                             <div className="card-action-element">
                                                 <ul className="list-inline mb-0">
                                                     <li className="list-inline-item">
@@ -1634,10 +1918,9 @@ function DocK11() {
                         {/* <!-- Payment --> */}
                         <div id="cardKomoditas" className={wizardPage === 3 ? "content active dstepper-block" : "content"}>
                             <form className="input-form" onSubmit={handleFormMP(onSubmitKomoditas)}>
-                            <input type="hidden" name='idPtk' value={idptkexist()} {...registerMP("idPtk")} />
-                            <input type="hidden" name='noAju' value={dataIdPage.noAju}  {...registerMP("noAju")} />
-                            <input type="hidden" name='tabWizard' value={wizardPage} {...registerMP("tabWizard")} />
-                            <input type="hidden" name='datenow' value={dateNow()} {...registerMP("datenow")} />
+                            <input type="hidden" name='idPtk' {...registerMP("idPtk")} />
+                            <input type="hidden" name='noAju' {...registerMP("noAju")} />
+                            {/* <input type="hidden" name='datenow' value={dateNow || ""} {...registerMP("datenow")} /> */}
 
                                 <div className="row">
                                 <div className="col-sm-12">
@@ -1661,7 +1944,7 @@ function DocK11() {
                                                             <div className="row mb-3">
                                                                 <label className="col-sm-3 col-form-label" htmlFor="mediaPembawa">Media Pembawa <span className='text-danger'>*</span></label>
                                                                 <div className="col-sm-4">
-                                                                    <select name="mediaPembawa" id="mediaPembawa" {...registerMP("mediaPembawa", { required: "Mohon pilih media pembawa."})} className={errorsMP.mediaPembawa ? "form-control form-control-sm is-invalid" : "form-control form-control-sm"}>
+                                                                    <select name="mediaPembawa" id="mediaPembawa" onChange={handleMPDetil} {...registerMP("mediaPembawa", { required: "Mohon pilih media pembawa."})} className={errorsMP.mediaPembawa ? "form-control form-control-sm is-invalid" : "form-control form-control-sm"}>
                                                                         <option value="">--</option>
                                                                         <option value="H">Hewan</option>
                                                                         <option value="I">Ikan</option>
@@ -1990,69 +2273,164 @@ function DocK11() {
                         {/* <!-- Confirmation --> */}
                         <div id="cardDokumen" className={wizardPage === 4 ? "content active dstepper-block" : "content"}>
                             <div className="row mb-3">
-                                <div className="col-sm-12">
-                                    <div className="card card-action mb-4">
-                                        <div className="card-header mb-3 p-2" style={{backgroundColor: '#123138'}}>
-                                            <div className="card-action-title">
-                                                <h5 className="mb-0 text-lightest">Detil Dokumen</h5>
+                                <form onSubmit={handleFormDokPeriksa(onSubmitDokPeriksa)}>
+                                    <input type="hidden" name='idPtk' {...registerDokPeriksa("idPtk")} />
+                                    <input type="hidden" name='noAju' {...registerDokPeriksa("noAju")} />
+                                    <div className="col-sm-12">
+                                        <div className="card card-action mb-4">
+                                            <div className="card-header mb-3 p-2" style={{backgroundColor: '#123138'}}>
+                                                <div className="card-action-title">
+                                                    <h5 className="mb-0 text-lightest">Detil Dokumen</h5>
+                                                </div>
+                                                <div className="card-action-element">
+                                                    <ul className="list-inline mb-0">
+                                                        <li className="list-inline-item">
+                                                            <a href="#" className="card-collapsible"><i className="tf-icons bx bx-chevron-up"></i></a>
+                                                        </li>
+                                                    </ul>
+                                                </div>
                                             </div>
-                                            <div className="card-action-element">
-                                                <ul className="list-inline mb-0">
-                                                    <li className="list-inline-item">
-                                                        <a href="#" className="card-collapsible"><i className="tf-icons bx bx-chevron-up"></i></a>
-                                                    </li>
-                                                </ul>
+                                            <div className="collapse show">
+                                                <div className="row">
+                                                    <div className="col-sm-12">
+                                                        <div className="card-body pt-0">
+                                                            <div className="row g-3 mb-3">
+                                                                <div className="col-md-12">
+                                                                    <button type="button" className="btn btn-xs btn-primary" data-bs-toggle={cekdataMP.mediaPembawa ? "modal" : ""} data-bs-target={cekdataMP.mediaPembawa ? "#modDokumen" : ""} onClick={cekdataMP.mediaPembawa ? null : () => {alert('Mohon pilih media pembawa terlebih dahulu!')}}>Tambah Dokumen</button>
+                                                                    <button type="button" className="btn btn-xs btn-info float-end"  onClick={dataDokumenPtk}><i className="menu-icon tf-icons bx bx-sync"></i> Refresh Data</button>
+                                                                </div>
+                                                                <div className="table-responsive text-nowrap">
+                                                                    <table className="table table-sm table-bordered table-hover table-striped dataTable">
+                                                                        <thead>
+                                                                            <tr>
+                                                                                <th>No</th>
+                                                                                <th>Jenis Dokumen</th>
+                                                                                <th>No Dokumen</th>
+                                                                                <th>Tgl Dokumen</th>
+                                                                                <th>Asal Penerbit</th>
+                                                                                <th>Keterangan</th>
+                                                                                <th>File</th>
+                                                                                <th>Act</th>
+                                                                            </tr>
+                                                                        </thead>
+                                                                        <tbody>
+                                                                            {dokumenPtk ? (dokumenPtk?.map((data, index) => (
+                                                                                    <tr key={index}>
+                                                                                        <td>{index + 1}</td>
+                                                                                        <td>{data.nama_dokumen}</td>
+                                                                                        <td>{data.no_dokumen}</td>
+                                                                                        <td>{moment(data.tanggal_dokumen).format('YYYY-MM-DD')}</td>
+                                                                                        <td>{data.negara}</td>
+                                                                                        <td>{data.keterangan}</td>
+                                                                                        <td><a href={"http://localhost/api-barantin/dokupload/20240111/" + data.efile} target='_blank' rel='noreferrer'>{data.efile}</a></td>
+                                                                                        <td>
+                                                                                            <div className="dropdown">
+                                                                                                <button type="button" className="btn p-0 dropdown-toggle hide-arrow" data-bs-toggle="dropdown">
+                                                                                                    <i className="bx bx-dots-vertical-rounded"></i>
+                                                                                                </button>
+                                                                                                <div className="dropdown-menu">
+                                                                                                    <a className="dropdown-item" type="button" onClick={() => {setEditKontainer(index)}} data-bs-toggle="modal" data-bs-target="#modKontainer"><i className="bx bx-edit-alt me-1"></i> Edit</a>
+                                                                                                    <a className="dropdown-item" href="#"><i className="bx bx-trash me-1"></i> Delete</a>
+                                                                                                </div>
+                                                                                            </div>
+                                                                                        </td>
+                                                                                    </tr>
+                                                                                ))
+                                                                            ) : null }
+                                                                        </tbody>
+                                                                    </table>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
                                             </div>
                                         </div>
-                                        <div className="collapse show">
-                                            <div className="row">
-                                                <div className="col-sm-12">
-                                                    <div className="card-body pt-0">
-                                                        <div className="row g-3 mb-3">
-                                                            <div className="col-md-12">
-                                                                <button type="button" className="btn btn-xs btn-primary" data-bs-toggle={cekdataMP.mediaPembawa ? "modal" : ""} data-bs-target={cekdataMP.mediaPembawa ? "#modDokumen" : ""} onClick={cekdataMP.mediaPembawa ? null : () => {alert('Mohon pilih media pembawa terlebih dahulu!')}}>Tambah Dokumen</button>
-                                                                <button type="button" className="btn btn-xs btn-info float-end"  onClick={dataDokumenPtk}><i className="menu-icon tf-icons bx bx-sync"></i> Refresh Data</button>
-                                                            </div>
-                                                            <div className="table-responsive text-nowrap">
-                                                                <table className="table table-sm table-bordered table-hover table-striped dataTable">
-                                                                    <thead>
-                                                                        <tr>
-                                                                            <th>No</th>
-                                                                            <th>Jenis Dokumen</th>
-                                                                            <th>No Dokumen</th>
-                                                                            <th>Tgl Dokumen</th>
-                                                                            <th>Asal Penerbit</th>
-                                                                            <th>Keterangan</th>
-                                                                            <th>File</th>
-                                                                            <th>Act</th>
-                                                                        </tr>
-                                                                    </thead>
-                                                                    <tbody>
-                                                                        {dokumenPtk ? (dokumenPtk?.map((data, index) => (
-                                                                                <tr key={index}>
-                                                                                    <td>{index + 1}</td>
-                                                                                    <td>{data.nama_dokumen}</td>
-                                                                                    <td>{data.no_dokumen}</td>
-                                                                                    <td>{moment(data.tanggal_dokumen).format('YYYY-MM-DD')}</td>
-                                                                                    <td>{data.negara}</td>
-                                                                                    <td>{data.keterangan}</td>
-                                                                                    <td><a href={"http://localhost/api-barantin/dokupload/20240111/" + data.efile} target='_blank' rel='noreferrer'>{data.efile}</a></td>
-                                                                                    <td>
-                                                                                        <div className="dropdown">
-                                                                                            <button type="button" className="btn p-0 dropdown-toggle hide-arrow" data-bs-toggle="dropdown">
-                                                                                                <i className="bx bx-dots-vertical-rounded"></i>
-                                                                                            </button>
-                                                                                            <div className="dropdown-menu">
-                                                                                                <a className="dropdown-item" type="button" onClick={() => {setEditKontainer(index)}} data-bs-toggle="modal" data-bs-target="#modKontainer"><i className="bx bx-edit-alt me-1"></i> Edit</a>
-                                                                                                <a className="dropdown-item" href="#"><i className="bx bx-trash me-1"></i> Delete</a>
-                                                                                            </div>
-                                                                                        </div>
-                                                                                    </td>
-                                                                                </tr>
-                                                                            ))
-                                                                        ) : null }
-                                                                    </tbody>
-                                                                </table>
+                                        <div className="card card-action mb-4">
+                                            <div className="card-header mb-3 p-2" style={{backgroundColor: '#123138'}}>
+                                                <div className="card-action-title">
+                                                    <h5 className="mb-0 text-lightest">Tempat Pemeriksaan Tindakan Karantina</h5>
+                                                </div>
+                                                <div className="card-action-element">
+                                                    <ul className="list-inline mb-0">
+                                                        <li className="list-inline-item">
+                                                            <a href="#" className="card-collapsible"><i className="tf-icons bx bx-chevron-up"></i></a>
+                                                        </li>
+                                                    </ul>
+                                                </div>
+                                            </div>
+                                            <div className="collapse show">
+                                                <div className="row">
+                                                    <div className="col-sm-12">
+                                                        <div className="card-body pt-0">
+                                                            <div className="row g-3 mb-3">
+                                                                <div className="col-sm-6">
+                                                                    <div className="row">
+                                                                        <label className="col-sm-4 col-form-label" htmlFor="tempatPeriksaPtk">Tempat Pemeriksaan</label>
+                                                                        <div className="col-sm-8">
+                                                                        {/* {...registeTempatPtk("tempatPeriksaPtk")} */}
+                                                                            <select name="tempatPeriksaPtk" id="tempatPeriksaPtk" {...registerDokPeriksa("tempatPeriksaPtk")} className="form-control form-control-sm">
+                                                                                <option value="">--</option>
+                                                                                <option value="1">Ditempat pemasukan/pengeluaran</option>
+                                                                                <option value="2">Diluar pemasukan/pengeluaran</option>
+                                                                            </select>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                                <div className="col-sm-6">
+                                                                    <div className="row">
+                                                                        <label className="col-sm-4 col-form-label" htmlFor="ketLainPeriksaPtk">Keterangan Lainnya</label>
+                                                                        <div className="col-sm-8">
+                                                                        {/* {...registeTempatPtk("tempatPeriksaPtk")} */}
+                                                                        <input type="text" name='ketLainPeriksaPtk' id='ketLainPeriksaPtk' {...registerDokPeriksa("ketLainPeriksaPtk")} className='form-control form-control-sm' />
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                                <div className="col-sm-6">
+                                                                    <div className="row">
+                                                                        <label className="col-sm-4 col-form-label" htmlFor="namaTempatPeriksaPtk">Nama Tempat</label>
+                                                                        <div className="col-sm-8">
+                                                                        {/* {...registeTempatPtk("tempatPeriksaPtk")} */}
+                                                                        <input type="text" name='namaTempatPeriksaPtk' id='namaTempatPeriksaPtk' {...registerDokPeriksa("namaTempatPeriksaPtk")} className='form-control form-control-sm' />
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                                <div className="col-sm-6">
+                                                                    <div className="row">
+                                                                        <label className="col-sm-4 col-form-label" htmlFor="waktuPeriksaPtk">Waktu Pelaksanaan</label>
+                                                                        <div className="col-sm-8">
+                                                                        {/* {...registeTempatPtk("tempatPeriksaPtk")} */}
+                                                                        <input type="datetime-local" name='waktuPeriksaPtk' id='waktuPeriksaPtk' {...registerDokPeriksa("waktuPeriksaPtk")} className='form-control form-control-sm' />
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                                <div className="col-sm-6">
+                                                                    <div className="row">
+                                                                        <label className="col-sm-4 col-form-label" htmlFor="alamatTempatPeriksaPtk">Alamat Tempat</label>
+                                                                        <div className="col-sm-8">
+                                                                        {/* {...registeTempatPtk("tempatPeriksaPtk")} */}
+                                                                        <input type="text" name='alamatTempatPeriksaPtk' id='alamatTempatPeriksaPtk' {...registerDokPeriksa("alamatTempatPeriksaPtk")} className='form-control form-control-sm' />
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                                <div className="col-sm-6">
+                                                                    <div className="row">
+                                                                        <label className="col-sm-4 col-form-label" htmlFor="lokasiMPPeriksaPtk">Lokasi MP</label>
+                                                                        <div className="col-sm-8">
+                                                                        {/* {...registeTempatPtk("tempatPeriksaPtk")} */}
+                                                                        <input type="text" name='lokasiMPPeriksaPtk' id='lokasiMPPeriksaPtk' {...registerDokPeriksa("lokasiMPPeriksaPtk")} className='form-control form-control-sm' />
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                                <div className="col-sm-6">
+                                                                    <div className="row">
+                                                                        <label className="col-sm-4 col-form-label" htmlFor="tempatProduksiPeriksaPtk">Tempat Produksi</label>
+                                                                        <div className="col-sm-8">
+                                                                        {/* {...registeTempatPtk("tempatPeriksaPtk")} */}
+                                                                        <input type="text" name='tempatProduksiPeriksaPtk' id='tempatProduksiPeriksaPtk' {...registerDokPeriksa("tempatProduksiPeriksaPtk")} className='form-control form-control-sm' />
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
                                                             </div>
                                                         </div>
                                                     </div>
@@ -2060,7 +2438,6 @@ function DocK11() {
                                             </div>
                                         </div>
                                     </div>
-                                </div>
                                     <div className="col-12 d-flex justify-content-between">
                                         <button type="button" className="btn btn-label-secondary" onClick={() => setWizardPage(wizardPage - 1)}>
                                             <i className="bx bx-chevron-left bx-sm ms-sm-n2"></i>
@@ -2071,6 +2448,7 @@ function DocK11() {
                                             <i className="bx bx-chevron-right bx-sm me-sm-n2"></i>
                                         </button>
                                     </div>
+                                </form>
                             </div>
                         </div>
                         <div id="cardKonfirmasi" className={wizardPage === 5 ? "content active dstepper-block" : "content"}>
@@ -2083,10 +2461,9 @@ function DocK11() {
                                     </p>
                                 </div>
                                 <form onSubmit={handleFormKonfirmasi(onSubmitKonfirmasi)}>
-                                    <input type="hidden" name='idPtk' value={idptkexist()} {...registerKonfirmasi("idPtk")} />
-                                    <input type="hidden" name='noAju' value={dataIdPage.noAju}  {...registerKonfirmasi("noAju")} />
-                                    <input type="hidden" name='tabWizard' value={wizardPage.toString()} {...registerKonfirmasi("tabWizard")} />
-                                    <input type="hidden" name='datenow' value={dateNow()} {...registerKonfirmasi("datenow")} />
+                                    <input type="hidden" name='idPtk' {...registerKonfirmasi("idPtk")} />
+                                    <input type="hidden" name='noAju' {...registerKonfirmasi("noAju")} />
+                                    {/* <input type="hidden" name='datenow' value={dateNow || ""} {...registerKonfirmasi("datenow")} /> */}
                                     <div className="col-12 d-flex justify-content-between">
                                         <button type="button" className="btn btn-primary btn-prev" onClick={() => setWizardPage(wizardPage - 1)}>
                                             <i className="bx bx-chevron-left bx-sm ms-sm-n2"></i>
@@ -2098,6 +2475,49 @@ function DocK11() {
                                         </button>
                                     </div>
                                 </form>
+                            </div>
+                            <hr />
+                            <div className="card">
+                                <div className="card-header mb-3 p-2" style={{backgroundColor: '#123138'}}>
+                                    <div className="card-action-title">
+                                        <h5 className="mb-0 text-lightest">Verifikasi PTK</h5>
+                                    </div>
+                                </div>
+                                <div className="card-body">
+                                    <div className="col-sm-6">
+                                        <div className="form-check form-check-inline">
+                                            <input className="form-check-input" type="radio" name="pJRutin" id="ya" value="1" onClick={() => setOpsiVerif(true)} />
+                                            <label className="form-check-label" htmlFor="ya">Setujui PTK</label>
+                                        </div>
+                                        <div className="form-check form-check-inline">
+                                            <input className="form-check-input" type="radio" name="pJRutin" id="tidak" value="0" onClick={() => setOpsiVerif(false)}/>
+                                            <label className="form-check-label" htmlFor="tidak">Tolak PTK</label>
+                                        </div>
+                                    </div>
+                                    <br />
+                                    <div className="col-sm-4" style={{display: (opsiVerif ? 'none' : 'block')}}>
+                                        <div className="mb-3">
+                                            <label className="form-label" htmlFor="basic-default-fullname">Alasan Tolak</label>
+                                            <textarea name="" id="" rows="2" className="form-control form-control-sm"></textarea>
+                                        </div>
+                                    </div>
+                                    <div className="col-sm-4" style={{display: (opsiVerif ? 'block' : 'none')}}>
+                                        <div className="mb-3">
+                                            <label className="form-label" htmlFor="basic-default-fullname"><b><u>Tanda Terima Laporan PTK</u></b></label>
+                                            <div className="row mb-3">
+                                                <label className="col-sm-5 col-form-label" htmlFor="tglTerimaVeerif">Tgl Terima</label>
+                                                <div className="col-sm-7">
+                                                    <input type="datetime-local" id="tglTerimaVerif" name="tglTerimaVerif" className="form-control form-control-sm" />
+                                                </div>
+                                                <label className="col-sm-5 col-form-label" htmlFor="petugasVerif">Petugas Penerima</label>
+                                                <div className="col-sm-7">
+                                                    <input type="text" id="petugasVerif" name="petugasVerif" className="form-control form-control-sm" />
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <button className='btn btn-dark' type='button'>Proses PTK</button>
+                                </div>
                             </div>
                         </div>
                 </div>
@@ -2114,9 +2534,9 @@ function DocK11() {
                         <p>{editKontainer}</p>
                       </div>
                       <form className="row" onSubmit={handleFormKontainer(onSubmitKontainer)}>
-                            <input type="hidden" name='idPtk' value={idptkexist()} {...registerKontainer("idPtk")} />
-                            <input type="hidden" name='datenow' value={dateNow()} {...registerKontainer("datenow")} />
-                      <input type="hidden" name='idDataKontainer' {...registerKontainer("idDataKontainer")} />
+                            <input type="hidden" name='idPtk' {...registerKontainer("idPtk")} />
+                            {/* <input type="hidden" name='datenow' value={dateNow || ""} {...registerKontainer("datenow")} /> */}
+                            <input type="hidden" name='idDataKontainer' value={(() => setValueKontainer("idDataKontainer", dataIdPage.idDataKontainer)) || ""} {...registerKontainer("idDataKontainer")} />
                         <div className="col-6">
                           <label className="form-label" htmlFor="noKontainer">No Kontainer <span className='text-danger'>*</span></label>
                           <div className="input-group input-group-merge">
@@ -2202,8 +2622,9 @@ function DocK11() {
                         <h3>Tambah Dokumen Baru</h3>
                       </div>
                       <form className="row" onSubmit={handleFormDokumen(onSubmitDokumen)}>
-                            <input type="hidden" name='idPtk' value={idptkexist()} {...registerDokumen("idPtk")} />
-                            <input type="hidden" name='datenow' value={dateNow()} {...registerDokumen("datenow")} />
+                            <input type="hidden" name='idPtk' {...registerDokumen("idPtk")} />
+                            <input type="hidden" name='noAju' {...registerDokumen("noAju")} />
+                            {/* <input type="hidden" name='datenow' value={dateNow || ""} {...registerDokumen("datenow")} /> */}
                         <div className="col-6">
                           <label className="form-label" htmlFor="kategoriDokumen">Kategori Dokumen <span className='text-danger'>*</span></label>
                           <div className="input-group input-group-merge">
@@ -2290,7 +2711,7 @@ function DocK11() {
                                 }}
                             /> */}
                             <input type="hidden" name='fileDokumen' {...registerDokumen("fileDokumen")} />
-                            <input type='file' name="fileDokumenUpload" id="fileDokumenUpload" value={selectedFile} onChange={handleBase64Upload} className="form-control form-control-sm" />
+                            <input type='file' name="fileDokumenUpload" id="fileDokumenUpload" onChange={handleBase64Upload} className="form-control form-control-sm" />
                           </div>
                         </div>
                         <div className="col-6 text-center mt-4">
@@ -2317,9 +2738,9 @@ function DocK11() {
                         <h3 className="address-title">Tambah Media Pembawa {cekdataMP.mediaPembawa === 'H' ? 'Hewan' : (cekdataMP.mediaPembawa === 'I' ? 'Ikan' : 'Tumbuhan')}</h3>
                       </div>
                       <form onSubmit={handleFormDetilMP(onSubmitDetilMP)} className="row g-3">
-                      <input type="hidden" name='idPtk' value={idptkexist()} {...registerDetilMP("idPtk")} />
-                      <input type="hidden" name='datenow' value={dateNow} {...registerDetilMP("datenow")} />
-                      <input type="hidden" name='jenisKar' value={cekdataMP.jenisMp} {...registerDetilMP("jenisKar")} />
+                      <input type="hidden" name='idPtk' {...registerDetilMP("idPtk")} />
+                      {/* <input type="hidden" name='datenow' value={dateNow || ""} {...registerDetilMP("datenow")} /> */}
+                      <input type="hidden" name='jenisKar' {...registerDetilMP("jenisKar")} />
                              {cekdataMP.mediaPembawa === 'T' ?
                         <>
                         <div className="col-6">

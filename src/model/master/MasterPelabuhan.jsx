@@ -2,19 +2,26 @@ import { useCallback, useEffect, useMemo, useState } from 'react';
 import Master from '../Master';
 
 function MasterPelabuhan(props) {
+  let data = "";
+  if(props.iddata) {
+    data = props.iddata
+  } else {
+    data = null;
+  }
+
    let [dataPelabuhan,setDataPelabuhan] = useState([]);
 
    let master = useMemo(() => new Master(), [])
 
    const getListPelabuhan = useCallback(async () => {
     try {
-        const response = await master.masterPelabuhanID(props.iddata)
+        const response = await master.masterPelabuhanID(data)
         setDataPelabuhan(response.data.data)
     } catch (error) {
         console.log(error)
         setDataPelabuhan([])
     }
-}, [master, props.iddata])
+}, [master, data])
 
 useEffect(() => {
   getListPelabuhan()

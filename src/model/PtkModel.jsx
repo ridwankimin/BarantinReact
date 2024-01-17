@@ -1,10 +1,29 @@
 import axios from "axios";
-import { Navigate, json } from "react-router-dom";
+// import { Navigate, json } from "react-router-dom";
 import { v4 as uuidv4 } from 'uuid';
-import {decode as base64_decode, encode as base64_encode} from 'base-64';
+// import {decode as base64_decode, encode as base64_encode} from 'base-64';
 const date = new Date();
 const url = 'http://localhost/api-barantin/';
 
+function makeid(length) {
+  let result = '';
+  const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+  const charactersLength = characters.length;
+  let counter = 0;
+  while (counter < length) {
+      result += characters.charAt(Math.floor(Math.random() * charactersLength));
+    counter += 1;
+  }
+  return result;
+}
+function addZero(i) {
+  if (i < 10) {i = "0" + i}
+  return i;
+}
+function dateNow() {
+  let n = date.getFullYear() + '-' + addZero(date.getMonth() + 1) + '-' + addZero(date.getDate()) + ' ' + addZero(date.getHours()) + ':' + addZero(date.getMinutes()) + ":" + addZero(date.getSeconds());
+  return n;
+}
 export default class PtkModel {
   tabPemohonInsert(data) {
     const uuid = uuidv4();
@@ -12,12 +31,12 @@ export default class PtkModel {
       let datasend = {
             "id": uuid,
             // "tab": data.tabWizard,
-            "no_aju": '0100' + data.permohonan + date.getTime() + date.getYear() + date.getMonth() + date.getDay() + data.makeid,
+            "no_aju": '0100' + data.permohonan + date.getYear() + (date.getMonth() < 9 ? "0" + (date.getMonth() + 1) : date.getMonth())+ (date.getDate() < 10 ? "0" + date.getDate() : date.getDate()) + (date.getHours() < 10 ? "0" + date.getHours() : date.getHours()) + (date.getMinutes() < 10 ? "0" + date.getMinutes() : date.getMinutes()) + (date.getSeconds() <10 ? "0" + date.getSeconds() : date.getSeconds()) + makeid(5),
             // 'tgl_aju' => $data['tgl_aju'],
             "jenis_dokumen": data.jenisForm,
-            "is_guest": data.pjRutin, //ok           // pemohon rutin/guest: 0,1
+            "is_guest": data.pJRutin, //ok           // pemohon rutin/guest: 0,1
             "user_id": 123, //pake session
-            "pengguna_jasa_id": 456, // pake
+            "pengguna_jasa_id": 456, // pake session
             "calo_id": 0,
             "upt_id": 1, //poake session
             "kode_wilker": '0100', //poake session
@@ -57,7 +76,7 @@ export default class PtkModel {
             "status_ptk": '0',
             "is_from_ptk": 1,
             "user_created": 123, // pake session
-            "created_at": data.datenow // ok
+            "created_at": dateNow() // ok
       }
         console.log(JSON.stringify(datasend))
               
@@ -127,7 +146,7 @@ export default class PtkModel {
             "status_ptk": '0',
             "is_from_ppk": 1,
             "user_created": 123, //pake session
-            "updated_at": data.datenow
+            "updated_at": dateNow()
         }
         let config = {
           method: 'put',
@@ -137,6 +156,19 @@ export default class PtkModel {
             'Content-Type': 'application/json', 
           },
           data : datasend
+        };
+        
+        return axios.request(config)
+      }
+
+      getPtkId(id) {
+        let config = {
+          method: 'get',
+          maxBodyLength: Infinity,
+          url: url + 'ptk/' + id,
+          headers: { 
+            'Content-Type': 'application/json', 
+          }
         };
         
         return axios.request(config)
@@ -176,7 +208,7 @@ export default class PtkModel {
           'tanggal_rencana_berangkat_terakhir': data.tglBerangkatAkhir, // ok
           'is_transit': data.transitOpsi, // ok
           'is_kontainer': data.cekKontainer, // ok
-          'updated_at': data.datenow
+          'updated_at': dateNow()
         }
         console.log(JSON.stringify(datasend))
       let config = {
@@ -222,7 +254,7 @@ export default class PtkModel {
           // 'is_draft': '1',
           'tingkat_pengolahan': data.tingkatOlah,
           'informasi_tambahan': data.infoTambahan,
-          'updated_at': data.datenow
+          'updated_at': dateNow()
         }
         console.log(JSON.stringify(datasend))
       let config = {
@@ -242,7 +274,13 @@ export default class PtkModel {
         let datasend = {
           'id': data.idPtk, // ok
           'tab': '5',
-          'tgl_aju': data.datenow
+          'no_aju': data.noAju,
+          'status_ptk': 1,
+          'status_internal': "pengajuan",
+          'is_verifikasi': 0,
+          'is_draft': 0,
+          'tgl_aju': dateNow(),
+          'updated_at': dateNow()
         }
         let config = {
           method: 'put',
@@ -293,7 +331,7 @@ export default class PtkModel {
         'stuff_kontainer_id': data.stuffKontainer,
         'tipe_kontainer_id': data.tipeKontainer,
         'segel': data.segel,
-        'created_at': data.datenow,
+        'created_at': dateNow(),
       };
       console.log(JSON.stringify(datasend))
       let config = {
@@ -319,7 +357,7 @@ export default class PtkModel {
         'stuff_kontainer_id': data.stuffKontainer,
         'tipe_kontainer_id': data.tipeKontainer,
         'segel': data.segel,
-        'created_at': data.datenow,
+        'created_at': dateNow(),
       };
       console.log(JSON.stringify(datasend))
       let config = {
@@ -345,7 +383,7 @@ export default class PtkModel {
         'stuff_kontainer_id': data.stuffKontainer,
         'tipe_kontainer_id': data.tipeKontainer,
         'segel': data.segel,
-        'created_at': data.datenow,
+        'created_at': dateNow(),
       };
       console.log(JSON.stringify(datasend))
       let config = {
@@ -386,7 +424,7 @@ export default class PtkModel {
             'mata_uang': data.satuanNilaiMP,
             'kurs': "1", // dari API curs
             'harga_rp': "1000000", // konversi inputan ke RP (Jika mata_uang <> 'IDR'>)
-            'created_at': data.datenow,
+            'created_at': dateNow(),
       };
       console.log(JSON.stringify(datasend))
       let config = {
@@ -449,7 +487,9 @@ export default class PtkModel {
       const uuid = uuidv4();
       let datasend = {
         'id': uuid,
+        // 'ptk_id': data.idPtk,
         'ptk_id': data.idPtk,
+        'no_aju': data.noAju,
         'jenis_dokumen_id': data.jenisDokumen,
         'kategori_dokumen': data.kategoriDokumen,
         'no_dokumen': data.noDokumen,
@@ -458,7 +498,7 @@ export default class PtkModel {
         'kota_kab_asal_id': data.kotaAsalDokumen,
         'keterangan': data.ketDokumen,
         'efile': data.fileDokumen,
-        'created_at': data.datenow,
+        'created_at': dateNow(),
       };
       console.log(JSON.stringify(datasend))
       let config = {

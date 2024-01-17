@@ -197,10 +197,7 @@ function Footer() {
                     <footer className="content-footer footer bg-footer-theme">
                         <div className="container-fluid d-flex flex-wrap justify-content-between py-2 flex-md-row flex-column">
                             <div className="mb-2 mb-md-0">
-                                ©
-                                <script>
-                                    document.write(new Date().getFullYear());
-                                </script>
+                                © - Badan Karantina Indonesia
                             </div>
                         </div>
                     </footer>
