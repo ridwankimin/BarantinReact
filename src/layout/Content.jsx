@@ -51,6 +51,13 @@ import DocK37a from '../pages/pemeriksaan/DocK37a';
 import DocK38 from '../pages/pemeriksaan/DocK38';
 import DocK39 from '../pages/pemeriksaan/DocK39';
 import DocK310 from '../pages/pemeriksaan/DocK310';
+import DocK41 from '../pages/singmat/DocK41';
+import DocK42 from '../pages/singmat/DocK42';
+import DocK51 from '../pages/perlakuan/DocK51';
+import DocK52 from '../pages/perlakuan/DocK52';
+import DocK53 from '../pages/perlakuan/DocK53';
+import DocK54 from '../pages/perlakuan/DocK54';
+import DocK55 from '../pages/perlakuan/DocK55';
 
 function Content() {
   return (
@@ -78,6 +85,13 @@ function Content() {
           <Route path="/k38" element={<DocK38 />} />
           <Route path="/k39" element={<DocK39 />} />
           <Route path="/k310" element={<DocK310 />} />
+          <Route path="/k41" element={<DocK41 />} />
+          <Route path="/k42" element={<DocK42 />} />
+          <Route path="/k51" element={<DocK51 />} />
+          <Route path="/k52" element={<DocK52 />} />
+          <Route path="/k53" element={<DocK53 />} />
+          <Route path="/k54" element={<DocK54 />} />
+          <Route path="/k55" element={<DocK55 />} />
           <Route path="/k61" element={<DocK61 />} />
           <Route path="/k62" element={<DocK62 />} />
           <Route path="/k64" element={<DocK64 />} />

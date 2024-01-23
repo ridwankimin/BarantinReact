@@ -98,8 +98,9 @@ function DocK37() {
                 </div>
                 <div className="row">
                     <div className="col-sm-12">
-                        <button type="button" className="btn btn-primary">Simpan</button>
-                        <button type="button" className="btn btn-danger">Batal</button>
+                        <button type="button" className="btn btn-primary me-sm-2 me-1">Simpan</button>
+                        <button type="button" className="btn btn-danger me-sm-2 me-1">Batal</button>
+                        <a href={require("../../dok/k37.pdf")} rel="noopener noreferrer" target='_blank' className="btn btn-warning"><i className="bx bx-printer bx-xs"></i>&nbsp; Print</a>
                         <button type="button" onClick={() => navigate('/k37a')} className="btn btn-info float-end"><i className="menu-icon tf-icons bx bx-send"></i>Pemeriksaan Fisik/Kesehatan</button>
                     </div>
                 </div>

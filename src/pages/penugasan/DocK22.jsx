@@ -1,7 +1,9 @@
 import React from 'react'
 import { useState } from 'react'
+import { useNavigate } from 'react-router-dom';
 
 function DocK22() {
+    let navigate = useNavigate();
     let [isNomor, setIsNomor] = useState(false)
     let [data, setData] = useState({
         noAju: "0100EX20240122095900K4O5R",
@@ -107,6 +109,16 @@ function DocK22() {
                             <label className="col-sm-2 col-form-label" htmlFor="nomor_k12">Tanggal</label>
                             <div className="col-sm-3">
                                 <input type="date" value={data.tglSurtug} id="nomor_k12" className="form-control form-control-sm" placeholder="Tanggal" disabled />
+                            </div>
+                            <div className="col-sm-2">
+                                {/* <button onClick={() => window.open({Pdf}, '_blank')} type='button' className='btn btn-info float-end'>
+                                    <i className="bx bx-print bx-sm"></i>
+                                    Print
+                                </button> */}
+                                <a href={require("../../dok/k22.pdf")} rel="noopener noreferrer" target='_blank' className='btn btn-info pb-1 float-end'>
+                                    <i className="bx bx-printer bx-sm"></i>
+                                    Print
+                                </a>
                             </div>
                         </div>
                     </div>
@@ -290,7 +302,11 @@ function DocK22() {
                             </div>
                         </div>
                     </div> */}
-                    
+                    <button type='button' style={{display: (isNomor ? 'block' : 'none')}} onClick={() => navigate("/k37")} className='btn btn-info pb-1 float-end'>
+                    <i className="bx bx-send bx-sm"></i>
+                        Pemeriksaan Administrasi
+                    </button>
+                    {/* <button className='btn btn-info float-end'>Pemeriksaan Administrasi</button> */}
                 </div>
             </div>
         </div>

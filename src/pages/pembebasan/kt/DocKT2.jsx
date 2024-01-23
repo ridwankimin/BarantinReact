@@ -142,7 +142,7 @@ function DocKT2() {
                 <div className="row mb-3">
                     <label className="col-sm-3 col-form-label" htmlFor="multicol-full-name">Treatment</label>
                     <div className="col-sm-9">
-                        <select id="treatment" className="select2 form-select" data-allow-clear="true">
+                        <select id="treatment" className="form-select" data-allow-clear="true">
                             <option value="">Select</option>
                             <option value="-">-</option>
                         </select>
@@ -157,7 +157,7 @@ function DocKT2() {
                 <div className="row mb-3">
                     <label className="col-sm-3 col-form-label" htmlFor="multicol-full-name">Chemical (active ingredient)</label>
                     <div className="col-sm-9">
-                        <select id="chemical" className="select2 form-select" data-allow-clear="true">
+                        <select id="chemical" className="form-select" data-allow-clear="true">
                             <option value="">Select</option>
                             <option value="-">-</option>
                         </select>

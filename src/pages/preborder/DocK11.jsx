@@ -2858,12 +2858,24 @@ function DocK11() {
                                                 </div>
                                             </div>
                                         </div>
-                                        <button className='btn btn-dark' type='submit'>Proses PTK</button>
+                                        <div className='row'>
+                                            <div className='col-sm-2'>
+                                                <button className='btn btn-dark' type='submit'>Proses PTK</button>
+                                            </div>
+                                            <div className='col-sm-2'>
+                                                <a className='btn btn-warning pb-1' href={require("../../dok/k11.pdf")} rel="noopener noreferrer" target='_blank'>
+                                                    <i className="bx bx-printer bx-sm"></i>
+                                                    print
+                                                </a>
+                                            </div>
+                                            <div className='col-sm-8'>
+                                                <button style={{display: (dataIdPage.noPermohonan ? 'block' : 'none')}} type='button' onClick={() => navigate("/k22")} className='btn btn-info pb-1 float-end'>
+                                                <i className="bx bx-send bx-sm"></i>
+                                                    Buat Surat Tugas
+                                                </button>
+                                            </div>
+                                        </div>
                                         {/* <div> */}
-                                            <button style={{display: (dataIdPage.noPermohonan ? 'block' : 'none')}} type='button' onClick={() => navigate("/k22")} className='btn btn-info float-end'>
-                                            <i className="bx bx-send bx-sm"></i>
-                                                Buat Surat Tugas
-                                            </button>
                                         {/* </div> */}
                                     </form>
 

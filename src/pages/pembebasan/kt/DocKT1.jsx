@@ -4,8 +4,11 @@ function DocKT1() {
   return (
     <div className="container-xxl flex-grow-1 container-p-y">
     <h4 className="py-3 breadcrumb-wrapper mb-4">
-        <span className="text-muted fw-light">Pembebasan/</span> KT-1 (PHYTOSANITARY FOR EXPORT)
+        KT-1 <span className="fw-light" style={{color: 'blue'}}>PHYTOSANITARY FOR EXPORT</span>
     </h4>
+    {/* <h4 className="py-3 breadcrumb-wrapper mb-4">
+        <span className="text-muted fw-light">Pembebasan/</span> KT-1 (PHYTOSANITARY FOR EXPORT)
+    </h4> */}
     
     {/* <!-- Multi Column with Form Separator --> */}
     <div className="row">
@@ -142,7 +145,7 @@ function DocKT1() {
                 <div className="row mb-3">
                     <label className="col-sm-3 col-form-label" htmlFor="multicol-full-name">Treatment</label>
                     <div className="col-sm-9">
-                        <select id="treatment" className="select2 form-select" data-allow-clear="true">
+                        <select id="treatment" className="form-select" data-allow-clear="true">
                             <option value="">Select</option>
                             <option value="-">-</option>
                         </select>
@@ -157,7 +160,7 @@ function DocKT1() {
                 <div className="row mb-3">
                     <label className="col-sm-3 col-form-label" htmlFor="multicol-full-name">Chemical (active ingredient)</label>
                     <div className="col-sm-9">
-                        <select id="chemical" className="select2 form-select" data-allow-clear="true">
+                        <select id="chemical" className="form-select" data-allow-clear="true">
                             <option value="">Select</option>
                             <option value="-">-</option>
                         </select>
@@ -206,7 +209,8 @@ function DocKT1() {
                     <div className="row justify-content-end">
                         <div className="col-sm-9">
                             <button type="submit" className="btn btn-primary me-sm-2 me-1">Submit</button>
-                            <button type="reset" className="btn btn-label-secondary">Cancel</button>
+                            <button type="reset" className="btn btn-label-secondary me-sm-2 me-1">Cancel</button>
+                            <a href={require("../../../dok/kt1.pdf")} rel="noopener noreferrer" target='_blank' className="btn btn-warning"><i className="bx bx-printer bx-xs"></i>&nbsp; Print</a>
                         </div>
                     </div>
                 </div>
