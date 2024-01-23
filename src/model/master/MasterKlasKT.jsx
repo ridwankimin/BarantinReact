@@ -7,19 +7,42 @@ function MasterKlasKT(props) {
    let master = useMemo(() => new Master(), [])
 
    const getListKlasKT = useCallback(async () => {
-    try {
-        const response = await master.masterKlasKT(props.gol)
-        setDataKlasKT(response.data.data)
-    } catch (error) {
-        console.log(error)
-        setDataKlasKT([])
-    }
+      if(props.gol === 'A') {
+        try {
+            const response = await master.masterKlasKT(props.gol)
+            setDataKlasKT(response.data.data)
+        } catch (error) {
+            console.log(error)
+            setDataKlasKT([])
+        }
+      } else {
+          try {
+           const response = await master.masterKlasKT("B")
+           setDataKlasKT(response.data.data)
+          } catch (error) {
+            console.log(error)
+            setDataKlasKT([])
+          }
+          try {
+            const response = await master.masterKlasKT("C")
+            setDataKlasKT(dataKlasKT => dataKlasKT.concat(response.data.data))
+          } catch (error) {
+            console.log(error)
+            setDataKlasKT([])
+          }
+          try {
+            const response = await master.masterKlasKT("D")
+            setDataKlasKT(dataKlasKT => dataKlasKT.concat(response.data.data))
+          } catch (error) {
+              console.log(error)
+              setDataKlasKT([])
+          }
+     }
 }, [master,props.gol])
 
 useEffect(() => {
   getListKlasKT()
 }, [getListKlasKT])
-
   return (
     <>
   {dataKlasKT?.map((data) => (

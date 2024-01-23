@@ -1,25 +1,28 @@
-// import logo from './logo.svg';
 // import './App.css';
+import Cookies from "js-cookie";
+import Login from './layout/Login';
 import Wrapper from './layout/Wrapper';
 
 function App() {
+  // Cookies.remove("token");
+  // Cookies.remove("isLogin");
+  // const SetCookie = () => {
+    // Cookies.set("token", "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9", {
+    //   expires: 7,
+    // });
+  // };
+  // const setLogin = () => {
+  //     Cookies.set("isLogin", "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9", {
+  //       expires: 7,
+  //     });
+  // };
+  // console.log(Cookies.get("token"))
+  // console.log(process.env)
   return (
     <>
-      <Wrapper />
-      {/* <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header> */}
+      {/* <Wrapper /> */}
+      {Cookies.get("isLogin") ? <Wrapper /> : <Login />}
+      
     </>
   );
 }

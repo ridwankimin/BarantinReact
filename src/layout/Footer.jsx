@@ -1,7 +1,17 @@
 import React from 'react'
 import Content from './Content'
+import Cookies from 'js-cookie';
+// import { useNavigate } from 'react-router-dom';
 
 function Footer() {
+    // let navigate = useNavigate();
+    const handleLogout = () => {
+        Cookies.remove("isLogin");
+        // alert('A name was submitted: ' + this.state.value);
+        alert("logout berhasil")
+        // navigate('/')
+        window.location.reload();
+    }
   return (
     <div className="layout-page">
                 <nav className="layout-navbar navbar navbar-expand-xl align-items-center" style={{background: '#123138'}} id="layout-navbar">
@@ -19,86 +29,6 @@ function Footer() {
                                     <a className="nav-link style-switcher-toggle hide-arrow" href="#">
                                         <i className="bx bx-sm"></i>
                                     </a>
-                                </li>
-
-                                <li className="nav-item dropdown-shortcuts navbar-dropdown dropdown me-2 me-xl-0">
-                                    <a className="nav-link dropdown-toggle hide-arrow" href="#" data-bs-toggle="dropdown" data-bs-auto-close="outside" aria-expanded="false">
-                                        <i className="bx bx-grid-alt bx-sm"></i>
-                                    </a>
-                                    <div className="dropdown-menu dropdown-menu-end py-0">
-                                        <div className="dropdown-menu-header border-bottom">
-                                            <div className="dropdown-header d-flex align-items-center py-3">
-                                                <h5 className="text-body mb-0 me-auto">Shortcuts</h5>
-                                                <a href="#" className="dropdown-shortcuts-add text-body" data-bs-toggle="tooltip" data-bs-placement="top" title="Add shortcuts"><i className="bx bx-sm bx-plus-circle"></i></a>
-                                            </div>
-                                        </div>
-                                        <div className="dropdown-shortcuts-list scrollable-container">
-                                            <div className="row row-bordered overflow-visible g-0">
-                                                <div className="dropdown-shortcuts-item col">
-                                                    <span className="dropdown-shortcuts-icon bg-label-secondary rounded-circle mb-2">
-                                                        <i className="bx bx-calendar fs-4"></i>
-                                                    </span>
-                                                    <a href="app-calendar.html" className="stretched-link">Calendar</a>
-                                                    <small className="text-muted mb-0">Appointments</small>
-                                                </div>
-                                                <div className="dropdown-shortcuts-item col">
-                                                    <span className="dropdown-shortcuts-icon bg-label-secondary rounded-circle mb-2">
-                                                        <i className="bx bx-food-menu fs-4"></i>
-                                                    </span>
-                                                    <a href="app-invoice-list.html" className="stretched-link">Invoice App</a>
-                                                    <small className="text-muted mb-0">Manage Accounts</small>
-                                                </div>
-                                            </div>
-                                            <div className="row row-bordered overflow-visible g-0">
-                                                <div className="dropdown-shortcuts-item col">
-                                                    <span className="dropdown-shortcuts-icon bg-label-secondary rounded-circle mb-2">
-                                                        <i className="bx bx-user fs-4"></i>
-                                                    </span>
-                                                    <a href="app-user-list.html" className="stretched-link">User App</a>
-                                                    <small className="text-muted mb-0">Manage Users</small>
-                                                </div>
-                                                <div className="dropdown-shortcuts-item col">
-                                                    <span className="dropdown-shortcuts-icon bg-label-secondary rounded-circle mb-2">
-                                                        <i className="bx bx-check-shield fs-4"></i>
-                                                    </span>
-                                                    <a href="app-access-roles.html" className="stretched-link">Role Management</a>
-                                                    <small className="text-muted mb-0">Permission</small>
-                                                </div>
-                                            </div>
-                                            <div className="row row-bordered overflow-visible g-0">
-                                                <div className="dropdown-shortcuts-item col">
-                                                    <span className="dropdown-shortcuts-icon bg-label-secondary rounded-circle mb-2">
-                                                        <i className="bx bx-pie-chart-alt-2 fs-4"></i>
-                                                    </span>
-                                                    <a href="index.html" className="stretched-link">Dashboard</a>
-                                                    <small className="text-muted mb-0">User Profile</small>
-                                                </div>
-                                                <div className="dropdown-shortcuts-item col">
-                                                    <span className="dropdown-shortcuts-icon bg-label-secondary rounded-circle mb-2">
-                                                        <i className="bx bx-cog fs-4"></i>
-                                                    </span>
-                                                    <a href="pages-account-settings-account.html" className="stretched-link">Setting</a>
-                                                    <small className="text-muted mb-0">Account Settings</small>
-                                                </div>
-                                            </div>
-                                            <div className="row row-bordered overflow-visible g-0">
-                                                <div className="dropdown-shortcuts-item col">
-                                                    <span className="dropdown-shortcuts-icon bg-label-secondary rounded-circle mb-2">
-                                                        <i className="bx bx-help-circle fs-4"></i>
-                                                    </span>
-                                                    <a href="pages-help-center-landing.html" className="stretched-link">Help Center</a>
-                                                    <small className="text-muted mb-0">FAQs & Articles</small>
-                                                </div>
-                                                <div className="dropdown-shortcuts-item col">
-                                                    <span className="dropdown-shortcuts-icon bg-label-secondary rounded-circle mb-2">
-                                                        <i className="bx bx-window-open fs-4"></i>
-                                                    </span>
-                                                    <a href="modal-examples.html" className="stretched-link">Modals</a>
-                                                    <small className="text-muted mb-0">Useful Popups</small>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
                                 </li>
 
                                 <li className="nav-item navbar-dropdown dropdown-user dropdown">
@@ -173,7 +103,7 @@ function Footer() {
                                             <div className="dropdown-divider"></div>
                                         </li>
                                         <li>
-                                            <a className="dropdown-item" href="auth-login-cover.html" target="_blank">
+                                            <a className="dropdown-item" onClick={handleLogout}>
                                                 <i className="bx bx-power-off me-2"></i>
                                                 <span className="align-middle">Log Out</span>
                                             </a>

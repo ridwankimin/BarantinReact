@@ -31,7 +31,7 @@ export default class PtkModel {
       let datasend = {
             "id": uuid,
             // "tab": data.tabWizard,
-            "no_aju": '0100' + data.permohonan + date.getYear() + (date.getMonth() < 9 ? "0" + (date.getMonth() + 1) : date.getMonth())+ (date.getDate() < 10 ? "0" + date.getDate() : date.getDate()) + (date.getHours() < 10 ? "0" + date.getHours() : date.getHours()) + (date.getMinutes() < 10 ? "0" + date.getMinutes() : date.getMinutes()) + (date.getSeconds() <10 ? "0" + date.getSeconds() : date.getSeconds()) + makeid(5),
+            "no_aju": '0100' + data.permohonan + date.getFullYear() + (date.getMonth() < 9 ? "0" + (date.getMonth() + 1) : date.getMonth())+ (date.getDate() < 10 ? "0" + date.getDate() : date.getDate()) + (date.getHours() < 10 ? "0" + date.getHours() : date.getHours()) + (date.getMinutes() < 10 ? "0" + date.getMinutes() : date.getMinutes()) + (date.getSeconds() <10 ? "0" + date.getSeconds() : date.getSeconds()) + makeid(5),
             // 'tgl_aju' => $data['tgl_aju'],
             "jenis_dokumen": data.jenisForm,
             "is_guest": data.pJRutin, //ok           // pemohon rutin/guest: 0,1
@@ -103,7 +103,7 @@ export default class PtkModel {
             "no_aju": data.noAju, // ok
             // 'tgl_aju' => $data['tgl_aju'],
             "jenis_dokumen": data.jenisForm, // ok
-            "is_guest": data.pjRutin,            // pemohon rutin/guest: 0,1
+            "is_guest": data.pJRutin,            // pemohon rutin/guest: 0,1
             "user_id": 123, // ok pake session
             "pengguna_jasa_id": 456, // ok pake session
             "calo_id": 0,
@@ -173,6 +173,32 @@ export default class PtkModel {
         
         return axios.request(config)
       }
+      
+      getPtkList(input) {
+        let datasend = {
+            "dFrom": input.dFrom,
+            "dTo": input.dTo,
+            "search": input.search, // AJU, DRAFT, DOK
+            "jenis_permohonan": input.jenisPermohonan, //EX, IM dst
+            "jenis_karantina": input.jenisKarantina, // H, I, T
+            "jenis_dokumen": input.jenisDokumen, // PTK, NHI, BST
+            "upt_id": "1", // PAKE SESSION
+            "kode_wilker": "0100" // PAKE SESSION
+        }
+
+        let config = {
+          method: 'post',
+          maxBodyLength: Infinity,
+          url: url + 'ptk/filter',
+          headers: { 
+            'Content-Type': 'application/json', 
+          },
+          data: datasend
+        };
+        console.log(JSON.stringify(datasend))
+        
+        return axios.request(config)
+      }
 
       tabPelabuhan(data) {
         let datasend = {
@@ -231,9 +257,9 @@ export default class PtkModel {
           'no_aju': data.noAju, // ok
           'jenis_karantina': data.mediaPembawa, // ok
           'jenis_media_pembawa_id': data.jenisMp, // ok
-          // 'jenis_angkut' : data.jenisAngkut // curah/non curah
-          // 'peruntukan' : data.peruntukan // ?
-          // 'peruntukan_lain' : data.peruntukanLain // ?
+          'is_curah' : data.jenisAngkut, // curah/non curah
+          'peruntukan_id' : data.peruntukan, // ?
+          'peruntukan_lainnya' : data.peruntukanLain, // ?
           'kemasan_id': data.jenisKemasan,
           'merk_kemasan': data.merkKemasan,
           'jumlah_kemasan': data.jumlahKemasan,
@@ -242,8 +268,8 @@ export default class PtkModel {
           'mata_uang': data.satuanNilai,
           'negara_asal_id': data.negaraAsalMP,
           'negara_tujuan_id': data.negaraTujuanMP,
-          'kota_kab_asal_id': data, //? 
-          'kota_kab_tujuan_id': data, //? 
+          'kota_kab_asal_id': data.daerahAsalMP, //? 
+          'kota_kab_tujuan_id': data.daerahTujuanMP, //? 
           // 'status_ppk': data,
           // 'alasan_penolakan': data,
           // 'status_pnbp': data,
@@ -273,12 +299,11 @@ export default class PtkModel {
     tabKonfirmasi(data) {
         let datasend = {
           'id': data.idPtk, // ok
-          'tab': '5',
+          'tab': 5,
           'no_aju': data.noAju,
-          'status_ptk': 1,
-          'status_internal': "pengajuan",
-          'is_verifikasi': 0,
-          'is_draft': 0,
+          'status_ptk': 9, // draft:0 ;dikirim:9 ;diterima:1 ; ditolak:2
+          // 'is_verifikasi': 0,
+          // 'is_draft': 0,
           'tgl_aju': dateNow(),
           'updated_at': dateNow()
         }
@@ -471,25 +496,13 @@ export default class PtkModel {
     }
     
     pushDetilDokumen(data) {
-      // const formData = new FormData();
-      // formData.append("fileDokumen", data.fileDokumen)
-      // console.log(formData)
-      // let [dataFile, setDataFile] = useState();
-      // let fileReader = new FileReader();
-      // let dataFile = "";
-      // fileReader.readAsDataURL(data.fileDokumen);
- 
-      // fileReader.onload = (event) => {
-      //   console.log(event.target.result);
-      // }
-      // console.log(fileReader)
-      // console.log(data.fileDokumen);
       const uuid = uuidv4();
       let datasend = {
         'id': uuid,
-        // 'ptk_id': data.idPtk,
         'ptk_id': data.idPtk,
+        // 'ptk_id': "355d8f7c-2d9d-469e-82d5-60d8125847c9",
         'no_aju': data.noAju,
+        // 'no_aju': "0100EX1240118134959V4N8M",
         'jenis_dokumen_id': data.jenisDokumen,
         'kategori_dokumen': data.kategoriDokumen,
         'no_dokumen': data.noDokumen,
@@ -511,6 +524,37 @@ export default class PtkModel {
         },
         data: datasend
       };
+      
+      return axios.request(config)
+    }
+    
+    ptkVerify(data) {
+      let datasend = {
+        'id': data.idPtk,
+        'no_aju': data.noAju,
+        'jenis_karantina': data.mediaPembawaVerif,
+        'is_verifikasi': 1,
+        'status_ptk': data.opsiVerif,       // draft:0 ;dikirim:9 ;diterima:1 ; ditolak:2 
+        'status_internal': 'p0', // p0: verifikasi ptk | p1a: periksa admin | p1b: periksa fisik&kesehatan 
+        'alasan_penolakan': data.alasanTolak,
+        'no_dok_permohonan': data.noDokumen,
+        // 'no_dok_permohonan': "2024-T-0100-K.1.1-000003",
+        'tgl_dok_permohonan': data.tglTerimaVerif,
+        'petugas': data.petugasVerif, // pake session
+        'nip': '123',
+      };
+      // console.log(JSON.stringify(datasend))
+      let config = {
+        method: 'put',
+        maxBodyLength: Infinity,
+        url: url + 'ptk-verify/' + data.idPtk,
+        headers: { 
+          'Content-Type': 'application/json', 
+          // 'Content-Type': 'multipart/form-data'
+        },
+        data: datasend
+      };
+      console.log(JSON.stringify(config))
       
       return axios.request(config)
     }

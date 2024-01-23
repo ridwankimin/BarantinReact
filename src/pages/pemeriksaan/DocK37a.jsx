@@ -1,10 +1,15 @@
 import React from 'react'
+import { useNavigate } from 'react-router-dom';
 
 function DocK37a() {
+    let navigate = useNavigate();
   return (
     <div className="container-xxl flex-grow-1 container-p-y">
     <h4 className="py-3 breadcrumb-wrapper mb-4">
-        K-3.7a <span className="text-muted fw-light">LAPORAN HASIL PEMERIKSAAN FISIK DAN KESEHATAN</span>
+        K-3.7a <span className="fw-light" style={{color: 'blue'}}>LAPORAN HASIL PEMERIKSAAN FISIK DAN KESEHATAN</span>
+    <div className="offset-sm-6 col-sm-6">
+        <a href='https://esps.karantina.pertanian.go.id/elab' rel="noreferrer" target='_blank' className='btn btn-info float-end'><i className="menu-icon tf-icons bx bx-send"></i>elab Barantin</a>
+    </div>
     </h4>
 
     <div className="row">
@@ -112,7 +117,7 @@ function DocK37a() {
                                     </div>
                                 </div>
                             </div>
-                            <div className="card accordion-item">
+                            {/* <div className="card accordion-item">
                                 <h2 className="accordion-header" id="headerExporter">
                                     <button className="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseExporter" aria-expanded="true" aria-controls="collapseExporter">
                                         Pemeriksaan untuk Pengawasan dan Pengendalian
@@ -183,7 +188,7 @@ function DocK37a() {
                                         </div>
                                     </div>
                                 </div>
-                            </div>
+                            </div> */}
                             <div className="card accordion-item">
                                 <h2 className="accordion-header" id="headerImporter">
                                     <button className="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseImporter" aria-expanded="true" aria-controls="collapseImporter">
@@ -214,9 +219,10 @@ function DocK37a() {
                     </div>
                 </div>
                 <div className="row">
-                    <div className="col-sm-2">
+                    <div className="col-sm-12">
                         <button type="button" className="btn btn-primary">Simpan</button>
                         <button type="button" className="btn btn-danger">Batal</button>
+                        <button type="button" onClick={() => navigate('/k22')} className="btn btn-info float-end"><i className="menu-icon tf-icons bx bx-send"></i>Surat Tugas</button>
                     </div>
                 </div>
             </form>

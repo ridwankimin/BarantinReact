@@ -23,7 +23,6 @@ function Navbar() {
         setKetSubMenu(e.target.dataset.i18n);
     } 
     // console.log((window.location.pathname.split("/")[1]) === 'k11' ? "ok" : "tidak")
-    console.log(window.location)
   return (
     <aside id="layout-menu" className="layout-menu menu-vertical menu bg-menu-theme">
                 <div className="app-brand demo" style={{background: 'black'}}>

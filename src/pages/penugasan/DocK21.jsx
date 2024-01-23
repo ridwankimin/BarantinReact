@@ -4,7 +4,7 @@ function DocK21() {
   return (
     <div className="container-xxl flex-grow-1 container-p-y">
     <h4 className="py-3 breadcrumb-wrapper mb-4">
-        K-2.1 <span className="text-muted fw-light">HASIL ANALISA PERMOHONAN/SERAH TERIMA MEDIA PEMBAWA/NHI</span>
+        K-2.1 <span className="fw-light" style={{color: 'blue'}}>HASIL ANALISA PERMOHONAN/SERAH TERIMA MEDIA PEMBAWA/NHI</span>
     </h4>
 
     <div className="row">

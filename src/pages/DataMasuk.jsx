@@ -1,6 +1,42 @@
-import React from 'react'
+/* eslint-disable jsx-a11y/anchor-is-valid */
+import React, {useState} from 'react'
+import DataMasukTable from '../model/DataMasukTable'
+import { useForm } from 'react-hook-form'
+
+function datenow() {
+  var today = new Date();
+  var dd = String(today.getDate()).padStart(2, '0');
+  var mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
+  var yyyy = today.getFullYear();
+  
+  today = yyyy + '-' + mm + '-' + dd;
+  return today
+}
 
 function DataMasuk() {
+  let [tabel, setTabel] = useState({})
+
+  const {
+    register: registerPtk,
+    setValue: setValuePtk,
+    watch: watchPtk,
+    handleSubmit: handleFormPtk,
+    formState: { errors: errorsPtk }
+} = useForm({
+  defaultValues: {
+    dFrom: datenow(),
+    dTo: datenow(),
+  }
+})
+
+const cekdataDokumen = watchPtk();
+
+const onSubmitPtk = (data) => {
+  const dataMasuk = <DataMasukTable dataIn={data}/>;
+  // console.log(dataMasuk)
+  setTabel(values => ({...values, "ptk": dataMasuk }));
+  };
+
   return (
     <div className="container-xxl flex-grow-1 container-p-y">
     <h6 className="text-muted">PROSES DATA MASUK</h6>
@@ -71,376 +107,66 @@ function DataMasuk() {
                     </div>
                     <div className="tab-content">
                       <div className="tab-pane fade show active" id="navs-justified-ppk-active" role="tabpanel">
-                        <a href='/k11' className='btn btn-sm btn-primary'>Tambah Baru</a>
-                        <div className='row'>
-                            <div className='col-2'>
-                                <label htmlFor="tglMulai">Tgl Awal</label>
-                                <input type="date" id='tglMulai' name='tglMulai' className='form-control form-control-sm' />
-                            </div>
-                            <div className='col-2'>
-                                <label htmlFor="tglAkhir">Tgl Akhir</label>
-                                <input type="date" id='tglAkhir' name='tglAkhir' className='form-control form-control-sm'/>
-                            </div>
-                            <div className='col-2'>
-                                <button style={{marginTop: '23px'}} className='btn btn-sm btn-info'>Filter</button>
-                            </div>
-                        </div>
-                        <div className="card-datatable text-nowrap">
-                            <table className="dt-scrollableTable table table-bordered table-sm">
-                                <thead style={{backgroundColor: '#123138' }}>
-                                <tr>
-                                    <th className='text-lightest'>Name</th>
-                                    <th className='text-lightest'>Position</th>
-                                    <th className='text-lightest'>Email</th>
-                                    <th className='text-lightest'>City</th>
-                                    <th className='text-lightest'>Date</th>
-                                    <th className='text-lightest'>Salary</th>
-                                    <th className='text-lightest'>Age</th>
-                                    <th className='text-lightest'>Experience</th>
-                                    <th className='text-lightest'>Status</th>
-                                    <th className='text-lightest'>Action</th>
-                                </tr>
-                                </thead>
-                                <tbody>
-                                    <tr>
-                                        <td>tes</td>
-                                        <td>tes</td>
-                                        <td>tes</td>
-                                        <td>tes</td>
-                                        <td>tes</td>
-                                        <td>tes</td>
-                                        <td>tes</td>
-                                        <td>tes</td>
-                                        <td>tes</td>
-                                        <td>tes</td>
-                                    </tr>
-                                    <tr>
-                                        <td>alamat</td>
-                                        <td>alamat</td>
-                                        <td>alamat</td>
-                                        <td>alamat</td>
-                                        <td>alamat</td>
-                                        <td>alamat</td>
-                                        <td>alamat</td>
-                                        <td>alamat</td>
-                                        <td>alamat</td>
-                                        <td>alamat</td>
-                                    </tr>
-                                    <tr>
-                                        <td>tes</td>
-                                        <td>tes</td>
-                                        <td>tes</td>
-                                        <td>tes</td>
-                                        <td>tes</td>
-                                        <td>tes</td>
-                                        <td>tes</td>
-                                        <td>tes</td>
-                                        <td>tes</td>
-                                        <td>tes</td>
-                                    </tr>
-                                    <tr>
-                                        <td>alamat</td>
-                                        <td>alamat</td>
-                                        <td>alamat</td>
-                                        <td>alamat</td>
-                                        <td>alamat</td>
-                                        <td>alamat</td>
-                                        <td>alamat</td>
-                                        <td>alamat</td>
-                                        <td>alamat</td>
-                                        <td>alamat</td>
-                                    </tr>
-                                    <tr>
-                                        <td>tes</td>
-                                        <td>tes</td>
-                                        <td>tes</td>
-                                        <td>tes</td>
-                                        <td>tes</td>
-                                        <td>tes</td>
-                                        <td>tes</td>
-                                        <td>tes</td>
-                                        <td>tes</td>
-                                        <td>tes</td>
-                                    </tr>
-                                    <tr>
-                                        <td>alamat</td>
-                                        <td>alamat</td>
-                                        <td>alamat</td>
-                                        <td>alamat</td>
-                                        <td>alamat</td>
-                                        <td>alamat</td>
-                                        <td>alamat</td>
-                                        <td>alamat</td>
-                                        <td>alamat</td>
-                                        <td>alamat</td>
-                                    </tr>
-                                    <tr>
-                                        <td>tes</td>
-                                        <td>tes</td>
-                                        <td>tes</td>
-                                        <td>tes</td>
-                                        <td>tes</td>
-                                        <td>tes</td>
-                                        <td>tes</td>
-                                        <td>tes</td>
-                                        <td>tes</td>
-                                        <td>tes</td>
-                                    </tr>
-                                    <tr>
-                                        <td>alamat</td>
-                                        <td>alamat</td>
-                                        <td>alamat</td>
-                                        <td>alamat</td>
-                                        <td>alamat</td>
-                                        <td>alamat</td>
-                                        <td>alamat</td>
-                                        <td>alamat</td>
-                                        <td>alamat</td>
-                                        <td>alamat</td>
-                                    </tr>
-                                    <tr>
-                                        <td>tes</td>
-                                        <td>tes</td>
-                                        <td>tes</td>
-                                        <td>tes</td>
-                                        <td>tes</td>
-                                        <td>tes</td>
-                                        <td>tes</td>
-                                        <td>tes</td>
-                                        <td>tes</td>
-                                        <td>tes</td>
-                                    </tr>
-                                    <tr>
-                                        <td>alamat</td>
-                                        <td>alamat</td>
-                                        <td>alamat</td>
-                                        <td>alamat</td>
-                                        <td>alamat</td>
-                                        <td>alamat</td>
-                                        <td>alamat</td>
-                                        <td>alamat</td>
-                                        <td>alamat</td>
-                                        <td>alamat</td>
-                                    </tr>
-                                    <tr>
-                                        <td>tes</td>
-                                        <td>tes</td>
-                                        <td>tes</td>
-                                        <td>tes</td>
-                                        <td>tes</td>
-                                        <td>tes</td>
-                                        <td>tes</td>
-                                        <td>tes</td>
-                                        <td>tes</td>
-                                        <td>tes</td>
-                                    </tr>
-                                    <tr>
-                                        <td>alamat</td>
-                                        <td>alamat</td>
-                                        <td>alamat</td>
-                                        <td>alamat</td>
-                                        <td>alamat</td>
-                                        <td>alamat</td>
-                                        <td>alamat</td>
-                                        <td>alamat</td>
-                                        <td>alamat</td>
-                                        <td>alamat</td>
-                                    </tr>
-                                    <tr>
-                                        <td>tes</td>
-                                        <td>tes</td>
-                                        <td>tes</td>
-                                        <td>tes</td>
-                                        <td>tes</td>
-                                        <td>tes</td>
-                                        <td>tes</td>
-                                        <td>tes</td>
-                                        <td>tes</td>
-                                        <td>tes</td>
-                                    </tr>
-                                    <tr>
-                                        <td>alamat</td>
-                                        <td>alamat</td>
-                                        <td>alamat</td>
-                                        <td>alamat</td>
-                                        <td>alamat</td>
-                                        <td>alamat</td>
-                                        <td>alamat</td>
-                                        <td>alamat</td>
-                                        <td>alamat</td>
-                                        <td>alamat</td>
-                                    </tr>
-                                    <tr>
-                                        <td>tes</td>
-                                        <td>tes</td>
-                                        <td>tes</td>
-                                        <td>tes</td>
-                                        <td>tes</td>
-                                        <td>tes</td>
-                                        <td>tes</td>
-                                        <td>tes</td>
-                                        <td>tes</td>
-                                        <td>tes</td>
-                                    </tr>
-                                    <tr>
-                                        <td>alamat</td>
-                                        <td>alamat</td>
-                                        <td>alamat</td>
-                                        <td>alamat</td>
-                                        <td>alamat</td>
-                                        <td>alamat</td>
-                                        <td>alamat</td>
-                                        <td>alamat</td>
-                                        <td>alamat</td>
-                                        <td>alamat</td>
-                                    </tr>
-                                    <tr>
-                                        <td>tes</td>
-                                        <td>tes</td>
-                                        <td>tes</td>
-                                        <td>tes</td>
-                                        <td>tes</td>
-                                        <td>tes</td>
-                                        <td>tes</td>
-                                        <td>tes</td>
-                                        <td>tes</td>
-                                        <td>tes</td>
-                                    </tr>
-                                    <tr>
-                                        <td>alamat</td>
-                                        <td>alamat</td>
-                                        <td>alamat</td>
-                                        <td>alamat</td>
-                                        <td>alamat</td>
-                                        <td>alamat</td>
-                                        <td>alamat</td>
-                                        <td>alamat</td>
-                                        <td>alamat</td>
-                                        <td>alamat</td>
-                                    </tr>
-                                    <tr>
-                                        <td>tes</td>
-                                        <td>tes</td>
-                                        <td>tes</td>
-                                        <td>tes</td>
-                                        <td>tes</td>
-                                        <td>tes</td>
-                                        <td>tes</td>
-                                        <td>tes</td>
-                                        <td>tes</td>
-                                        <td>tes</td>
-                                    </tr>
-                                    <tr>
-                                        <td>alamat</td>
-                                        <td>alamat</td>
-                                        <td>alamat</td>
-                                        <td>alamat</td>
-                                        <td>alamat</td>
-                                        <td>alamat</td>
-                                        <td>alamat</td>
-                                        <td>alamat</td>
-                                        <td>alamat</td>
-                                        <td>alamat</td>
-                                    </tr>
-                                    <tr>
-                                        <td>tes</td>
-                                        <td>tes</td>
-                                        <td>tes</td>
-                                        <td>tes</td>
-                                        <td>tes</td>
-                                        <td>tes</td>
-                                        <td>tes</td>
-                                        <td>tes</td>
-                                        <td>tes</td>
-                                        <td>tes</td>
-                                    </tr>
-                                    <tr>
-                                        <td>alamat</td>
-                                        <td>alamat</td>
-                                        <td>alamat</td>
-                                        <td>alamat</td>
-                                        <td>alamat</td>
-                                        <td>alamat</td>
-                                        <td>alamat</td>
-                                        <td>alamat</td>
-                                        <td>alamat</td>
-                                        <td>alamat</td>
-                                    </tr>
-                                    <tr>
-                                        <td>tes</td>
-                                        <td>tes</td>
-                                        <td>tes</td>
-                                        <td>tes</td>
-                                        <td>tes</td>
-                                        <td>tes</td>
-                                        <td>tes</td>
-                                        <td>tes</td>
-                                        <td>tes</td>
-                                        <td>tes</td>
-                                    </tr>
-                                    <tr>
-                                        <td>alamat</td>
-                                        <td>alamat</td>
-                                        <td>alamat</td>
-                                        <td>alamat</td>
-                                        <td>alamat</td>
-                                        <td>alamat</td>
-                                        <td>alamat</td>
-                                        <td>alamat</td>
-                                        <td>alamat</td>
-                                        <td>alamat</td>
-                                    </tr>
-                                    <tr>
-                                        <td>tes</td>
-                                        <td>tes</td>
-                                        <td>tes</td>
-                                        <td>tes</td>
-                                        <td>tes</td>
-                                        <td>tes</td>
-                                        <td>tes</td>
-                                        <td>tes</td>
-                                        <td>tes</td>
-                                        <td>tes</td>
-                                    </tr>
-                                    <tr>
-                                        <td>alamat</td>
-                                        <td>alamat</td>
-                                        <td>alamat</td>
-                                        <td>alamat</td>
-                                        <td>alamat</td>
-                                        <td>alamat</td>
-                                        <td>alamat</td>
-                                        <td>alamat</td>
-                                        <td>alamat</td>
-                                        <td>alamat</td>
-                                    </tr>
-                                    <tr>
-                                        <td>tes</td>
-                                        <td>tes</td>
-                                        <td>tes</td>
-                                        <td>tes</td>
-                                        <td>tes</td>
-                                        <td>tes</td>
-                                        <td>tes</td>
-                                        <td>tes</td>
-                                        <td>tes</td>
-                                        <td>tes</td>
-                                    </tr>
-                                    <tr>
-                                        <td>alamat</td>
-                                        <td>alamat</td>
-                                        <td>alamat</td>
-                                        <td>alamat</td>
-                                        <td>alamat</td>
-                                        <td>alamat</td>
-                                        <td>alamat</td>
-                                        <td>alamat</td>
-                                        <td>alamat</td>
-                                        <td>alamat</td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                        </div>
+                        <a href='/k11' className='btn btn-sm btn-primary mb-3'>Tambah Baru</a>
+                        <form onSubmit={handleFormPtk(onSubmitPtk)}>
+                          <div className='row'>
+                              <div className='col-2'>
+                                  <label htmlFor="dFrom">Tgl Awal</label>
+                                  <input type="date" id='dFrom' name='dFrom' {...registerPtk("dFrom", { required: "Mohon isi tanggal awal.",})} className={errorsPtk.dFrom ? "form-control form-control-sm is-invalid" : "form-control form-control-sm"} />
+                                  {errorsPtk.dFrom && <small className="text-danger">{errorsPtk.dFrom.message}</small>}                            
+                              </div>
+                              <div className='col-2'>
+                                  <label htmlFor="dTo">Tgl Akhir</label>
+                                  <input type="date" id='dTo' name='dTo' {...registerPtk("dTo", { required: "Mohon isi tanggal akhir.", })} className={errorsPtk.dTo ? "form-control form-control-sm is-invalid" : "form-control form-control-sm"}/>
+                                  {errorsPtk.dTo && <small className="text-danger">{errorsPtk.dTo.message}</small>}                            
+                              </div>
+                              <div className='col-2'>
+                                  <label htmlFor="search">Filter Berdasarkan</label>
+                                  <select name="search" id="search" {...registerPtk("search")} className='form-control form-control-sm'>
+                                    <option value="DRAFT">Tanggal Permohonan Draft</option>
+                                    <option value="AJU">Tgl Aju</option>
+                                    <option value="DOK">Tgl Dokumen</option>
+                                  </select>
+                              </div>
+                              <div className='col-2'>
+                                  <label htmlFor="jenisPermohonan">Jenis Permohonan</label>
+                                  <select name="jenisPermohonan" id="jenisPermohonan" {...registerPtk("jenisPermohonan")} className='form-control form-control-sm'>
+                                    <option value="">-Semua-</option>
+                                    <option value="EX">Ekspor</option>
+                                    <option value="IM">Impor</option>
+                                    <option value="DM">Domestik Masuk</option>
+                                    <option value="DK">Domestik Keluar</option>
+                                    <option value="TR">Transit</option>
+                                    <option value="RE">Re Ekspor</option>
+                                    <option value="RI">Re Impor</option>
+                                    <option value="ST">Serah Terima</option>
+                                  </select>
+                              </div>
+                              <div className='col-1'>
+                                  <label htmlFor="jenisKarantina">Karantina</label>
+                                  <select name="jenisKarantina" id="jenisKarantina" {...registerPtk("jenisKarantina")} className='form-control form-control-sm'>
+                                    <option value="">-Semua-</option>
+                                    <option value="H">Hewan</option>
+                                    <option value="I">Ikan</option>
+                                    <option value="T">Tumbuhan</option>
+                                  </select>
+                              </div>
+                              <div className='col-2'>
+                                  <label htmlFor="jenisDokumen">Jenis Dokumen</label>
+                                  <select name="jenisDokumen" id="jenisDokumen" {...registerPtk("jenisDokumen")} className='form-control form-control-sm'>
+                                    <option value="">-Semua-</option>
+                                    <option value="PTK">PTK - Permohonan Tindakan Karantina</option>
+                                    <option value="NHI">NHI - Nota Hasil Intelejen</option>
+                                    <option value="BST">BST - Serah Terima</option>
+                                  </select>
+                              </div>
+                              <div className='col-1'>
+                                  <button type='submit' style={{marginTop: '13px'}} className='btn btn-success'>Filter</button>
+                              </div>
+                          </div>
+                        </form>
+                        <hr />
+                        {tabel.ptk ? tabel.ptk : null}
                       </div>
                       <div className="tab-pane fade" id="navs-justified-ssm" role="tabpanel">
                         <h4 className="card-title">Special link title</h4>

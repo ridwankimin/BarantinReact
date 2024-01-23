@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useCallback, useEffect, useMemo, useState } from 'react'
 import PersonSvg from '../../logo/svg/PersonSvg'
 import ShipSvg from '../../logo/svg/ShipSvg'
 import PackageSvg from '../../logo/svg/PackageSvg'
@@ -22,6 +22,8 @@ import { useNavigate, useParams } from 'react-router-dom'
 import MasterKomKH from '../../model/master/MasterKomKH'
 import MasterDokumen from '../../model/master/MasterDokumen'
 import moment from 'moment/moment'
+import Select from 'react-select'
+import Master from '../../model/Master'
 // import $ from 'jquery';
 
 function DocK11() {
@@ -30,79 +32,53 @@ function DocK11() {
     let [dataIdPage, setDataIdPage] = useState({});
     let [opsiVerif, setOpsiVerif] = useState();
 
-    // useEffect(() => {
-    //     $('#negaraPengirim').select2();
-    //     return () => {
-    //       // Cleanup Select2 when the component unmounts
-    //       $('#negaraPengirim').select2('destroy');
-    //     };
-    //   }, []);
-    
-    // let noAju = idPtk ? base64_decode(ptkNomor[0]) : "";
-    // let noIdPtk = idPtk ? base64_decode(ptkNomor[1]) : "";
-    // let noPermohonan = idPtk ? base64_decode(ptkNomor[2]) : "";
-    // console.log(noIdPtk)
-
-    // function makeid(length) {
-    //     let result = '';
-    //     const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
-    //     const charactersLength = characters.length;
-    //     let counter = 0;
-    //     while (counter < length) {
-    //         result += characters.charAt(Math.floor(Math.random() * charactersLength));
-    //       counter += 1;
-    //     }
-    //     return result;
-    // }
-
-    // function idptkexist() {
-    //     return dataIdPage.noIdPtk;
-    // }
-
-    // console.log(idptkexist())
-
-    // function dateNow() {
-    //     let n = date.getFullYear() + '-' + addZero(date.getMonth() + 1) + '-' + addZero(date.getDate()) + ' ' + addZero(date.getHours()) + ':' + addZero(date.getMinutes()) + ":" + addZero(date.getSeconds());
-    //     return n;
-    // }
-    
     let [dataSelect, setdataSelect] = useState({});
-    // console.log(data.fileDokumen)
-    // useEffect(() => {
-    //     const masterSelectNegara = <MasterNegara/>;
-    //     const masterSelectProv = <MasterProv/>;
-    //     const masterSelectKota = <MasterKota/>;
-    //     setdataSelect(values => ({...values,
-    //         provPemohon: masterSelectProv,
-    //         kotaPemohon: masterSelectKota,
-    //         negaraPengirim: masterSelectNegara,
-    //         provPengirim: masterSelectProv,
-    //         kotaPengirim: masterSelectKota,
-    //     }));
-    // }, [])
+    let [ptkLengkap, setPtkLengkap] = useState(false);
     
     function handlePermohonan(e) {
         if(e.target.value === 'EX') {
             setValuePemohon("negaraPengirim", "99");
+            setValuePemohon("negaraPengirimView", "ID - INDONESIA");
             setValuePemohon("negaraPenerima", "");
+            setValuePemohon("negaraPenerimaView", "");
             setValuePelabuhan("negaraAsal", "99");
+            setValuePelabuhan("negaraAsalView", "ID - INDONESIA");
             setValuePelabuhan("negaraTujuan", "");
+            setValuePelabuhan("negaraTujuanView", "");
             setValueMP("negaraAsalMP", "99");
+            setValueMP("negaraAsalMPView", "ID - INDONESIA");
             setValueMP("negaraTujuanMP", "");
+            setValueMP("negaraTujuanMPView", "");
+            handlePelabuhan("99", "pelMuat")
         } else if(e.target.value === 'IM') {
             setValuePemohon("negaraPenerima", "99");
+            setValuePemohon("negaraPenerimaView", "ID - INDONESIA");
             setValuePemohon("negaraPengirim", "");
+            setValuePemohon("negaraPengirimView", "");
             setValuePelabuhan("negaraAsal", "");
+            setValuePelabuhan("negaraAsalView", "");
             setValuePelabuhan("negaraTujuan", "99");
+            setValuePelabuhan("negaraTujuanView", "ID - INDONESIA");
             setValueMP("negaraAsalMP", "");
+            setValueMP("negaraAsalMPView", "");
             setValueMP("negaraTujuanMP", "99");
+            setValueMP("negaraTujuanMPView", "ID - INDONESIA");
+            handlePelabuhan("99", "pelBongkar")
         } else {
             setValuePemohon("negaraPenerima", "99");
+            setValuePemohon("negaraPenerimaView", "ID - INDONESIA");
             setValuePemohon("negaraPengirim", "99");
+            setValuePemohon("negaraPengirimView", "ID - INDONESIA");
             setValuePelabuhan("negaraAsal", "99");
+            setValuePelabuhan("negaraAsalView", "ID - INDONESIA");
             setValuePelabuhan("negaraTujuan", "99");
+            setValuePelabuhan("negaraTujuanView", "ID - INDONESIA");
             setValueMP("negaraAsalMP", "99");
+            setValueMP("negaraAsalMPView", "ID - INDONESIA");
             setValueMP("negaraTujuanMP", "99");
+            setValueMP("negaraTujuanMPView", "ID - INDONESIA");
+            handlePelabuhan("99", "pelMuat")
+            handlePelabuhan("99", "pelBongkar")
         }
         // setdataSelect(values => ({...values, [e.target.name]: <MasterKlasKT gol={e.target.dataset.gol}/>}))
     }
@@ -168,12 +144,15 @@ function DocK11() {
     }
     
     function handleMPDetil(e) {
+        console.log(e.label)
+        setValueMP("mediaPembawa", e.target.value);
         setValueDetilMP("jenisKar", e.target.value);
+        handleJenisDokumen(e.target.value);
     }
     
-    function handleJenisDokumen(e) {
-        setdataSelect(values => ({...values, [e.target.name]: <MasterDokumen kar={e.target.dataset.kar}/>}))
-    }
+    // function handleJenisDokumen(e) {
+    //     setdataSelect(values => ({...values, [e.target.name]: <MasterDokumen kar={e.target.dataset.kar}/>}))
+    // }
     
     function handleKemasan(e) {
         setdataSelect(values => ({...values, [e.target.name]: <MasterKemasan/>}))
@@ -207,19 +186,9 @@ function DocK11() {
         setdataSelect(values => ({...values, [e.target.name]: <MasterMataUang/>}))
     }
     
-    function handleKota(e) {
-        setdataSelect(values => ({...values, [e.target.name]: <MasterKota iddata={e.target.dataset.input}/>}))
-    }
-    
-    function handlePelabuhan(e) {
-        let dataId = null; 
-        if(e.target.dataset.input) {
-            dataId = e.target.dataset.input;
-        } else {
-            dataId = null;
-        }
-        setdataSelect(values => ({...values, [e.target.name]: <MasterPelabuhan iddata={dataId}/>}))
-    }
+    // function handleKota(e) {
+    //     setdataSelect(values => ({...values, [e.target.name]: <MasterKota iddata={e.target.dataset.input}/>}))
+    // }
     
     function handleKomoditasKT(e) {
         setdataSelect(values => ({...values, [e.target.name]: <MasterKomKT />}))
@@ -261,6 +230,7 @@ function DocK11() {
     
     const {
         register: registerPelabuhan,
+        control: controlPelabuhan,
         setValue: setValuePelabuhan,
         watch: watchPelabuhan,
 		handleSubmit: handleFormPelabuhan,
@@ -288,12 +258,13 @@ function DocK11() {
             ukuranKontainer: "",
             stuffKontainer: "",
             segel: "",
-          }
+        }
     })
     
     const {
 		register: registerMP,
         watch: watchMP,
+        control: controlMP,
         setValue: setValueMP,
         handleSubmit: handleFormMP,
         formState: { errors: errorsMP },
@@ -321,7 +292,7 @@ function DocK11() {
             watch: watchDokumen,
             setValue: setValueDokumen,
             handleSubmit: handleFormDokumen,
-            // control: controlDokumen,
+            control: controlDokumen,
             reset: resetFormDokumen,
             formState: { errors: errorsDokumen },
         } = useForm({
@@ -346,12 +317,22 @@ function DocK11() {
         // formState: { errors: errorsDokumen },
     } = useForm()
     
+    const {
+        register: registerVerify,
+        setValue: setValueVerify,
+        watch: watchVerify,
+        handleSubmit: handleFormVerify,
+        formState: { errors: errorsVerify },
+    } = useForm()
+
+    
     const cekdataDiri = watchPemohon()
     const cekdataPelabuhan = watchPelabuhan()
     const cekdataMP = watchMP()
     const cekdataDokumen = watchDokumen()
     const cekdataDokPeriksa = watchDokPeriksa()
     const cekdataKonfirmasi = watchKonfirmasi()
+    const cekdataVerify = watchVerify()
   
     // const onSubmitMP = (data) => {
     //     setWizardPage(wizardPage + 1)
@@ -385,35 +366,19 @@ function DocK11() {
             response
             .then((response) => {
                 if(response.data.status === '200') {
-                    const masterSelectNegara = <MasterNegara/>;
-                    const masterSelectProv = <MasterProv/>;
-                    const masterSelectKota = <MasterKota/>;
-                    const masterSelectPelabuhan = <MasterPelabuhan/>;
-                    const masterSelectKemasan = <MasterKemasan/>;
-                    const masterSelectMataUang = <MasterMataUang/>;
                     console.log(response.data.data)
-                    setdataSelect(values => ({...values,
-                        provPemohon: masterSelectProv,
-                        kotaPemohon: masterSelectKota,
-                        negaraPengirim: masterSelectNegara,
-                        provPengirim: masterSelectProv,
-                        kotaPengirim: masterSelectKota,
-                        negaraPenerima: masterSelectNegara,
-                        provPenerima: masterSelectProv,
-                        kotaPenerima: masterSelectKota,
-                        negaraAsal: masterSelectNegara,
-                        pelMuat: masterSelectPelabuhan,
-                        negaraTujuan: masterSelectNegara,
-                        pelBongkar: masterSelectPelabuhan,
-                        negaraTransit: masterSelectNegara,
-                        pelTransit: masterSelectPelabuhan,
-                        negaraAsalMP: masterSelectNegara,
-                        negaraTujuanMP: masterSelectNegara,
-                        benderaAkhir: masterSelectNegara,
-                        benderaTransit: masterSelectNegara,
-                        jenisKemasan: masterSelectKemasan,
-                        satuanNilai: masterSelectMataUang,
-                    }));
+                    setdataSelect(values => ({...values, "jenisKemasan": <MasterKemasan/>}));
+                    setdataSelect(values => ({...values, "satuanNilai": <MasterMataUang/>}));
+                    setdataSelect(values => ({...values, "daerahAsalMP": {value: response.data.data.ptk.kota_kab_asal_id, label: response.data.data.ptk.kota_asal}}))
+                    setdataSelect(values => ({...values, "daerahTujuanMP": {value: response.data.data.ptk.kota_kab_tujuan_id, label: response.data.data.ptk.kota_tujuan}}))
+                    setdataSelect(values => ({...values, "pelMuat": {value: response.data.data.ptk.pelabuhan_muat_id, label: response.data.data.ptk.kd_pelabuhan_muat + " - " + response.data.data.ptk.pelabuhan_muat}}))
+                    setdataSelect(values => ({...values, "pelBongkar": {value: response.data.data.ptk.pelabuhan_bongkar_id, label: response.data.data.ptk.kd_pelabuhan_bongkar + " - " + response.data.data.ptk.pelabuhan_bongkar}}))
+                    if(response.data.data.ptk.is_transit === 1) {
+                        setdataSelect(values => ({...values, "pelTransit": {value: response.data.data.ptk.pelabuhan_transit_id, label: response.data.data.ptk.kd_pelabuhan_transit + " - " + response.data.data.ptk.pelabuhan_transit}}))
+                    }
+                    handleJenisDokumen(response.data.data.ptk.jenis_karantina);
+                    // handleKota(null, "daerahAsalMP");
+                    // handleKota(null, "daerahTujuanMP");
                     alert(response.data.message);
                     isiDataPtk(response)
                 }
@@ -427,85 +392,135 @@ function DocK11() {
     
     function isiDataPtk(response) {
         setTimeout(() => {
-            setValuePemohon("jenisForm", response.data.data.jenis_dokumen);
-            setValuePemohon("pJRutin", response.data.data.is_guest);
-            setValuePemohon("namaPemohon", response.data.data.nama_pemohon);
-            setValuePemohon("permohonan", response.data.data.jenis_permohonan);
-            setValuePemohon("jenisIdentitasPemohon", response.data.data.jenis_identitas_pemohon);
-            setValuePemohon("noIdentitasPemohon", response.data.data.nomor_identitas_pemohon);
-            setValuePemohon("alamatPemohon", response.data.data.alamat_pemohon);
-            setValuePemohon("nomorTlp", response.data.data.telepon_pemohon);
-            setValuePemohon("nomorFax", response.data.data.fax_pemohon);
-            setValuePemohon("provPemohon", response.data.data.provinsi_pemohon_id);
-            setValuePemohon("kotaPemohon", response.data.data.kota_kab_pemohon_id);
-            setValuePemohon("namaCp", response.data.data.nama_cp);
-            setValuePemohon("alamatCp", response.data.data.alamat_cp);
-            setValuePemohon("teleponCp", response.data.data.telepon_cp);
-            setValuePemohon("namaTtd", response.data.data.nama_ttd);
-            setValuePemohon("jenisIdentitasTtd", response.data.data.jenis_identitas_ttd);
-            setValuePemohon("noIdentitasTtd", response.data.data.nomor_identitas_ttd);
-            setValuePemohon("jabatanTtd", response.data.data.jabatan_ttd);
-            setValuePemohon("alamatTtd", response.data.data.alamat_ttd);
-            setValuePemohon("namaPengirim", response.data.data.nama_pengirim);
-            setValuePemohon("alamatPengirim", response.data.data.alamat_pengirim);
-            setValuePemohon("nomorTlpPengirim", response.data.data.telepon_pengirim);
-            setValuePemohon("jenisIdentitasPengirim", response.data.data.jenis_identitas_pengirim);
-            setValuePemohon("noIdentitasPengirim", response.data.data.nomor_identitas_pengirim);
-            setValuePemohon("provPengirim", response.data.data.provinsi_pengirim_id);
-            setValuePemohon("kotaPengirim", response.data.data.kota_kab_pengirim_id);
-            setValuePemohon("negaraPengirim", response.data.data.negara_pengirim_id);
-            setValuePemohon("namaPenerima", response.data.data.nama_penerima);
-            setValuePemohon("alamatPenerima", response.data.data.alamat_penerima);
-            setValuePemohon("nomorTlpPenerima", response.data.data.telepon_penerima);
-            setValuePemohon("jenisIdentitasPenerima", response.data.data.jenis_identitas_penerima);
-            setValuePemohon("noIdentitasPenerima", response.data.data.nomor_identitas_penerima);
-            setValuePemohon("provPenerima", response.data.data.provinsi_penerima_id);
-            setValuePemohon("kotaPenerima", response.data.data.kota_kab_penerima_id);
-            setValuePemohon("negaraPenerima", response.data.data.negara_penerima_id);
+            setValuePemohon("idPtk", response.data.data.ptk.id);
+            setValuePemohon("noAju", response.data.data.ptk.no_aju)
+            setValueKontainer("idPtk", response.data.data.ptk.id);
+            setValuePelabuhan("idPtk", response.data.data.ptk.id);
+            setValuePelabuhan("noAju", response.data.data.ptk.no_aju);
+            setValueMP("idPtk", response.data.data.ptk.id);
+            setValueMP("noAju", response.data.data.ptk.no_aju);
+            setValueDetilMP("idPtk", response.data.data.ptk.id);
+            setValueDokumen("idPtk",response.data.data.ptk.id);
+            setValueDokumen("noAju", response.data.data.ptk.no_aju);
+            setValueKonfirmasi("idPtk", response.data.data.ptk.id);
+            setValueKonfirmasi("noAju", response.data.data.ptk.no_aju);
+            setValueVerify("idPtk", response.data.data.ptk.id); // delete soon
+            setValueVerify("noAju", response.data.data.ptk.no_aju); // delete soon
+            setValueVerify("mediaPembawaVerif", response.data.data.ptk.jenis_karantina); // delete soon
+
+
+            setValuePemohon("jenisForm", response.data.data.ptk.jenis_dokumen);
+            setValuePemohon("pJRutin", response.data.data.ptk.is_guest ? response.data.data.ptk.is_guest.toString() : "");
+            setValuePemohon("namaPemohon", response.data.data.ptk.nama_pemohon);
+            setValuePemohon("permohonan", response.data.data.ptk.jenis_permohonan);
+            setValuePemohon("jenisIdentitasPemohon", response.data.data.ptk.jenis_identitas_pemohon);
+            setValuePemohon("noIdentitasPemohon", response.data.data.ptk.nomor_identitas_pemohon);
+            setValuePemohon("alamatPemohon", response.data.data.ptk.alamat_pemohon);
+            setValuePemohon("nomorTlp", response.data.data.ptk.telepon_pemohon);
+            setValuePemohon("nomorFax", response.data.data.ptk.fax_pemohon);
+            setValuePemohon("provPemohon", response.data.data.ptk.provinsi_pemohon_id);
+            setValuePemohon("provPemohonView", response.data.data.ptk.provinsi_pemohon);
+            setValuePemohon("kotaPemohon", response.data.data.ptk.kota_kab_pemohon_id);
+            setValuePemohon("kotaPemohonView", response.data.data.ptk.kota_pemohon);
+            setValuePemohon("namaCp", response.data.data.ptk.nama_cp);
+            setValuePemohon("alamatCp", response.data.data.ptk.alamat_cp);
+            setValuePemohon("teleponCp", response.data.data.ptk.telepon_cp);
+            setValuePemohon("namaTtd", response.data.data.ptk.nama_ttd);
+            setValuePemohon("jenisIdentitasTtd", response.data.data.ptk.jenis_identitas_ttd);
+            setValuePemohon("noIdentitasTtd", response.data.data.ptk.nomor_identitas_ttd);
+            setValuePemohon("jabatanTtd", response.data.data.ptk.jabatan_ttd);
+            setValuePemohon("alamatTtd", response.data.data.ptk.alamat_ttd);
+            setValuePemohon("namaPengirim", response.data.data.ptk.nama_pengirim);
+            setValuePemohon("alamatPengirim", response.data.data.ptk.alamat_pengirim);
+            setValuePemohon("nomorTlpPengirim", response.data.data.ptk.telepon_pengirim);
+            setValuePemohon("jenisIdentitasPengirim", response.data.data.ptk.jenis_identitas_pengirim);
+            setValuePemohon("noIdentitasPengirim", response.data.data.ptk.nomor_identitas_pengirim);
+            setValuePemohon("provPengirim", response.data.data.ptk.provinsi_pengirim_id);
+            setValuePemohon("provPengirimView", response.data.data.ptk.provinsi_pengirim);
+            setValuePemohon("kotaPengirim", response.data.data.ptk.kota_kab_pengirim_id);
+            setValuePemohon("kotaPengirimView", response.data.data.ptk.kota_pengirim);
+            setValuePemohon("negaraPengirim", response.data.data.ptk.negara_pengirim_id);
+            setValuePemohon("negaraPengirimView", response.data.data.ptk.kd_negara_pengirim + " - " + response.data.data.ptk.negara_pengirim);
+            setValuePemohon("namaPenerima", response.data.data.ptk.nama_penerima);
+            setValuePemohon("alamatPenerima", response.data.data.ptk.alamat_penerima);
+            setValuePemohon("nomorTlpPenerima", response.data.data.ptk.telepon_penerima);
+            setValuePemohon("jenisIdentitasPenerima", response.data.data.ptk.jenis_identitas_penerima);
+            setValuePemohon("noIdentitasPenerima", response.data.data.ptk.nomor_identitas_penerima);
+            setValuePemohon("provPenerima", response.data.data.ptk.provinsi_penerima_id);
+            setValuePemohon("provPenerimaView", response.data.data.ptk.provinsi_penerima);
+            setValuePemohon("kotaPenerima", response.data.data.ptk.kota_kab_penerima_id);
+            setValuePemohon("kotaPenerimaView", response.data.data.ptk.kota_penerima);
+            setValuePemohon("negaraPenerima", response.data.data.ptk.negara_penerima_id);
+            setValuePemohon("negaraPenerimaView", response.data.data.ptk.kd_negara_penerima + " - " + response.data.data.ptk.negara_penerima);
             
-            setValuePelabuhan("tglBerangkatAkhir", response.data.data.tanggal_rencana_masuk);
-            setValuePelabuhan("negaraAsal", response.data.data.negara_muat_id);
-            setValuePelabuhan("negaraTujuan", response.data.data.negara_bongkar_id);
-            setValuePelabuhan("negaraTransit", response.data.data.negara_transit_id);
-            setValuePelabuhan("modaTransit", response.data.data.moda_alat_angkut_transit_id);
-            setValuePelabuhan("tipeTransit", response.data.data.tipe_alat_angkut_transit_id);
-            setValuePelabuhan("namaAlatAngkutTransit", response.data.data.nama_alat_angkut_transit);
-            setValuePelabuhan("benderaTransit", response.data.data.bendera_alat_angkut_transit_id);
-            setValuePelabuhan("nomorAlatAngkutTransit", response.data.data.no_voyage_transit);
-            setValuePelabuhan("callSignTransit", response.data.data.call_sign_transit);
-            setValuePelabuhan("tglTibaTransit", response.data.data.tanggal_rencana_tiba_transit);
-            setValuePelabuhan("tglBerangkatTransit", response.data.data.tanggal_rencana_berangkat_transit);
-            setValuePelabuhan("modaAkhir", response.data.data.moda_alat_angkut_terakhir_id);
-            setValuePelabuhan("modaAkhirLainnya", response.data.data.moda_alat_angkut_lainnya);
-            setValuePelabuhan("tipeAkhir", response.data.data.tipe_alat_angkut_terakhir_id);
-            setValuePelabuhan("namaAlatAngkutAkhir", response.data.data.nama_alat_angkut_terakhir);
-            setValuePelabuhan("benderaAkhir", response.data.data.bendera_alat_angkut_terakhir_id);
-            setValuePelabuhan("nomorAlatAngkutAkhir", response.data.data.no_voyage_terakhir);
-            setValuePelabuhan("callSignAkhir", response.data.data.call_sign_terakhir);
-            setValuePelabuhan("tglTibaAkhir", response.data.data.tanggal_rencana_tiba_terakhir);
-            setValuePelabuhan("tglBerangkatAkhir", response.data.data.tanggal_rencana_berangkat_terakhir);
-            setValuePelabuhan("transitOpsi", response.data.data.is_transit);
-            setValuePelabuhan("cekKontainer", response.data.data.is_kontainer);
-            setValuePelabuhan("sandar", response.data.data.sandar);
-            setValuePelabuhan("pelMuat", response.data.data.pelabuhan_muat_id);
-            setValuePelabuhan("pelBongkar", response.data.data.pelabuhan_bongkar_id);
-            setValuePelabuhan("pelTransit", response.data.data.pelabuhan_transit_id);
+            setValuePelabuhan("tglBerangkatAkhir", response.data.data.ptk.tanggal_rencana_masuk);
+            setValuePelabuhan("negaraAsal", response.data.data.ptk.negara_muat_id);
+            setValuePelabuhan("negaraAsalView", response.data.data.ptk.kd_negara_muat + " - " + response.data.data.ptk.negara_muat);
+            setValuePelabuhan("negaraTujuan", response.data.data.ptk.negara_bongkar_id);
+            setValuePelabuhan("negaraTujuanView", response.data.data.ptk.kd_negara_bongkar + " - " + response.data.data.ptk.negara_bongkar);
+            setValuePelabuhan("negaraTransit", response.data.data.ptk.negara_transit_id);
+            setValuePelabuhan("negaraTransitView", response.data.data.ptk.kd_negara_transit + " - " + response.data.data.ptk.negara_transit);
+            setValuePelabuhan("modaTransit", response.data.data.ptk.moda_alat_angkut_transit_id);
+            setValuePelabuhan("tipeTransit", response.data.data.ptk.tipe_alat_angkut_transit_id);
+            setValuePelabuhan("namaAlatAngkutTransit", response.data.data.ptk.nama_alat_angkut_transit);
+            setValuePelabuhan("benderaTransit", response.data.data.ptk.bendera_alat_angkut_transit_id);
+            setValuePelabuhan("benderaTransitView", response.data.data.ptk.kd_bendera_alat_angkut_transit + " - " + response.data.data.ptk.bendera_alat_angkut_transit);
+            setValuePelabuhan("nomorAlatAngkutTransit", response.data.data.ptk.no_voyage_transit);
+            setValuePelabuhan("callSignTransit", response.data.data.ptk.call_sign_transit);
+            setValuePelabuhan("tglTibaTransit", response.data.data.ptk.tanggal_rencana_tiba_transit);
+            setValuePelabuhan("tglBerangkatTransit", response.data.data.ptk.tanggal_rencana_berangkat_transit);
+            setValuePelabuhan("modaAkhir", response.data.data.ptk.moda_alat_angkut_terakhir_id);
+            setValuePelabuhan("modaAkhirLainnya", response.data.data.ptk.moda_alat_angkut_lainnya);
+            setValuePelabuhan("tipeAkhir", response.data.data.ptk.tipe_alat_angkut_terakhir_id);
+            setValuePelabuhan("namaAlatAngkutAkhir", response.data.data.ptk.nama_alat_angkut_terakhir);
+            setValuePelabuhan("benderaAkhir", response.data.data.ptk.bendera_alat_angkut_terakhir_id);
+            setValuePelabuhan("benderaAkhirView", response.data.data.ptk.kd_bendera_alat_angkut_terakhir + " - " + response.data.data.ptk.bendera_alat_angkut_terakhir);
+            setValuePelabuhan("nomorAlatAngkutAkhir", response.data.data.ptk.no_voyage_terakhir);
+            setValuePelabuhan("callSignAkhir", response.data.data.ptk.call_sign_terakhir);
+            setValuePelabuhan("tglTibaAkhir", response.data.data.ptk.tanggal_rencana_tiba_terakhir);
+            setValuePelabuhan("tglBerangkatAkhir", response.data.data.ptk.tanggal_rencana_berangkat_terakhir);
+            setValuePelabuhan("transitOpsi", response.data.data.ptk.is_transit === null ? "" :response.data.data.ptk.is_transit.toString());
+            setValuePelabuhan("cekKontainer", response.data.data.ptk.is_kontainer ? response.data.data.ptk.is_kontainer.toString() : "");
+            setValuePelabuhan("sandar", response.data.data.ptk.gudang_id);
+            setValuePelabuhan("pelMuat", response.data.data.ptk.pelabuhan_muat_id);
+            setValuePelabuhan("pelMuatView", response.data.data.ptk.kd_pelabuhan_muat + " - " + response.data.data.ptk.pelabuhan_muat);
+            setValuePelabuhan("pelBongkar", response.data.data.ptk.pelabuhan_bongkar_id);
+            setValuePelabuhan("pelBongkarView", response.data.data.ptk.kd_pelabuhan_bongkar + " - " + response.data.data.ptk.pelabuhan_bongkar);
+            setValuePelabuhan("pelTransit", response.data.data.ptk.pelabuhan_transit_id);
+            setValuePelabuhan("pelTransitView", response.data.data.ptk.kd_pelabuhan_transit + " - " + response.data.data.ptk.pelabuhan_transit);
+            setKontainerPtk(response.data.data.ptk_kontainer)
             
-            setValueMP("mediaPembawa", response.data.data.jenis_karantina);
-            setValueMP("jenisMp", response.data.data.jenis_media_pembawa_id);
-            setValueMP("jenisKemasan", response.data.data.kemasan_id);
-            setValueMP("merkKemasan", response.data.data.merk_kemasan);
-            setValueMP("jumlahKemasan", response.data.data.jumlah_kemasan);
-            setValueMP("tandaKemasan", response.data.data.tanda_khusus);
-            setValueMP("nilaiBarang", response.data.data.nilai_barang);
-            setValueMP("satuanNilai", response.data.data.mata_uang);
-            setValueMP("negaraAsalMP", response.data.data.negara_asal_id);
-            setValueMP("daerahAsalMP", response.data.data.kota_kab_asal_id);
-            setValueMP("negaraTujuanMP", response.data.data.negara_tujuan_id);
-            setValueMP("daerahTujuanMP", response.data.data.kota_kab_tujuan_id);
-            setValueMP("tingkatOlah", response.data.data.tingkat_pengolahan);
-            setValueMP("infoTambahan", response.data.data.informasi_tambahan);
-        }, 500
+            setValueMP("mediaPembawa", response.data.data.ptk.jenis_karantina);
+            setValueMP("jenisMp", response.data.data.ptk.jenis_media_pembawa_id ? response.data.data.ptk.jenis_media_pembawa_id.toString() : "");
+            setValueMP("jenisKemasan", response.data.data.ptk.kemasan_id);
+            setValueMP("jenisAngkut", response.data.data.ptk.is_curah ? response.data.data.ptk.is_curah.toString() : "");
+            setValueMP("peruntukan", response.data.data.ptk.peruntukan_id ? response.data.data.ptk.peruntukan_id.toString() : "");
+            setValueMP("merkKemasan", response.data.data.ptk.merk_kemasan);
+            setValueMP("jumlahKemasan", response.data.data.ptk.jumlah_kemasan);
+            setValueMP("tandaKemasan", response.data.data.ptk.tanda_khusus);
+            setValueMP("nilaiBarang", response.data.data.ptk.nilai_barang);
+            setValueMP("satuanNilai", response.data.data.ptk.mata_uang);
+            setValueMP("negaraAsalMP", response.data.data.ptk.negara_asal_id);
+            setValueMP("negaraAsalMPView", response.data.data.ptk.kd_negara_asal + " - " + response.data.data.ptk.negara_asal);
+            setValueMP("daerahAsalMP", response.data.data.ptk.kota_kab_asal_id);
+            setValueMP("daerahAsalMPView", response.data.data.ptk.kota_asal);
+            setValueMP("negaraTujuanMP", response.data.data.ptk.negara_tujuan_id);
+            setValueMP("negaraTujuanMPView", response.data.data.ptk.kd_negara_tujuan + " - " + response.data.data.ptk.negara_tujuan);
+            setValueMP("daerahTujuanMP", response.data.data.ptk.kota_kab_tujuan_id);
+            setValueMP("tingkatOlah", response.data.data.ptk.tingkat_pengolahan ? response.data.data.ptk.tingkat_pengolahan.toString() : "");
+            setValueMP("infoTambahan", response.data.data.ptk.informasi_tambahan);
+            setKomoditiPtk(response.data.data.ptk_komoditi);
+
+            setValueVerify("opsiVerif", response.data.data.ptk.is_verifikasi);
+            setValueVerify("tglTerimaVerif", response.data.data.ptk.tgl_dok_permohonan);
+            setValueVerify("alasanTolak", response.data.data.ptk.alasan_penolakan);
+            setValueVerify("petugasVerif", response.data.data.ptk.alasan_penolakan);
+
+            setDokumenPtk(response.data.data.ptk_dokumen);
+            if(response.data.data.ptk.tgl_aju) {
+                setPtkLengkap(true);
+            }
+        }, 400
         )
     }
     
@@ -628,8 +643,8 @@ function DocK11() {
         }
     };
 
-    const iddataaa = base64_encode(base64_encode("0100EX1240113150657GZTL5") + 'm0R3N0r1R' + base64_encode("a3678a03-5f2d-4ba7-acd1-e749d9e4b0ba") + "m0R3N0r1R");
-    console.log(iddataaa)
+    // const iddataaa = base64_encode(base64_encode("0100EX1240113150657GZTL5") + 'm0R3N0r1R' + base64_encode("a3678a03-5f2d-4ba7-acd1-e749d9e4b0ba") + "m0R3N0r1R");
+    // console.log(iddataaa)
 
     const onSubmitPelabuhan = (data) => {
         // setValuePelabuhan("idPtk", noIdPtk)
@@ -712,7 +727,47 @@ function DocK11() {
             response
             .then((response) => {
                 console.log(response.data)
-                alert(response.data.status + " - " + response.data.message)
+                if(response.data.status === '201') {
+                    setPtkLengkap(true);
+                    setValueVerify("idPtk", data.idPtk);
+                    setValueVerify("noAju", data.noAju);
+                    setValueVerify("mediaPembawaVerif", cekdataMP.mediaPembawa);
+                    alert(response.data.status + " - " + response.data.message)
+                } else {
+                    alert(response.data.status + " - " + response.data.message)
+                }
+                // setFormTab(values => ({...values, tab4: false}))
+                // setWizardPage(wizardPage + 1)
+            })
+            .catch((error) => {
+                console.log(error);
+                alert(error.response.status + " - " + error.response.data.message)
+            });
+        } else {
+            alert('Data id kosong')
+        }
+    };
+    
+    const onSubmitVerify = (data) => {
+        const modelPemohon = new PtkModel();
+
+        if(idPtk) {
+            const response = modelPemohon.ptkVerify(data);
+            response
+            .then((response) => {
+                console.log(response.data)
+                if(response.data.status === '201') {
+                    // setPtkLengkap(true);
+                    navigate('/k11/' + base64_encode(base64_encode(cekdataDiri.noAju) + 'm0R3N0r1R' + base64_encode(cekdataDiri.idPtk) + "m0R3N0r1R" + base64_encode(response.data.data.no_dok_permohonan)))
+                    setDataIdPage(values => ({...values,
+                        noPermohonan: response.data.data.no_dok_permohonan,
+                    }));
+                    setValueVerify("noDokumen", response.data.data.no_dok_permohonan);
+                    // response.data.data.no_dok_permohonan
+                    alert(response.data.status + " - " + response.data.message)
+                } else {
+                    alert(response.data.status + " - " + response.data.message)
+                }
                 // setFormTab(values => ({...values, tab4: false}))
                 // setWizardPage(wizardPage + 1)
             })
@@ -773,7 +828,9 @@ function DocK11() {
             setValuePemohon("nomorTlpPengirim", cekdataDiri.nomorTlp);
             setValuePemohon("negaraPengirim", (cekdataDiri.permohonan === 'IM' ? "" : "99"));
             setValuePemohon("provPengirim", (cekdataDiri.permohonan === 'IM' ? "" : cekdataDiri.provPemohon));
+            setValuePemohon("provPengirimView", (cekdataDiri.permohonan === 'IM' ? "" : cekdataDiri.provPemohonView));
             setValuePemohon("kotaPengirim", (cekdataDiri.permohonan === 'IM' ? "" : cekdataDiri.kotaPemohon));
+            setValuePemohon("kotaPengirimView", (cekdataDiri.permohonan === 'IM' ? "" : cekdataDiri.kotaPemohonView));
         } else {
             setValuePemohon("namaPengirim", "");
             setValuePemohon("alamatPengirim", "");
@@ -783,6 +840,8 @@ function DocK11() {
             setValuePemohon("negaraPengirim", "");
             setValuePemohon("provPengirim", "");
             setValuePemohon("kotaPengirim", "");
+            setValuePemohon("provPengirimView", "");
+            setValuePemohon("kotaPengirimView", "");
         }
     }
     
@@ -795,7 +854,9 @@ function DocK11() {
             setValuePemohon("nomorTlpPenerima", cekdataDiri.nomorTlp);
             setValuePemohon("negaraPenerima", (cekdataDiri.permohonan === 'EX' ? "" : "99"));
             setValuePemohon("provPenerima", (cekdataDiri.permohonan === 'EX' ? "" : cekdataDiri.provPemohon));
+            setValuePemohon("provPenerimaView", (cekdataDiri.permohonan === 'EX' ? "" : cekdataDiri.provPemohonView));
             setValuePemohon("kotaPenerima", (cekdataDiri.permohonan === 'EX' ? "" : cekdataDiri.kotaPemohon));
+            setValuePemohon("kotaPenerimaView", (cekdataDiri.permohonan === 'EX' ? "" : cekdataDiri.kotaPemohonView));
         } else {
             setValuePemohon("namaPenerima", "");
             setValuePemohon("alamatPenerima", "");
@@ -805,6 +866,8 @@ function DocK11() {
             setValuePemohon("negaraPenerima", "");
             setValuePemohon("provPenerima", "");
             setValuePemohon("kotaPenerima", "");
+            setValuePemohon("provPenerimaView", "");
+            setValuePemohon("kotaPenerimaView", "");
         }
     }
 
@@ -954,16 +1017,191 @@ function DocK11() {
             } 
         }
     }
-    // function getDataKontId(props) {
 
-    // }
+    let master = useMemo(() => new Master(), [])
+    const getListNegara = useCallback(async () => {
+        try {
+        const response = await master.masterNegara();
+        if(response.data.status === '200') {
+            let dataneg = response.data.data;
+            const arraySelectNegara = dataneg.map(item => {
+                return {
+                    value: item.id.toString(),
+                    label: item.kode + " - " + item.nama
+                }
+            })
+            // setSelect2Negara(arraySelectNegara)
+            setdataSelect(values => ({...values, "negaraPengirim": arraySelectNegara }));
+            setdataSelect(values => ({...values, "negaraPenerima": arraySelectNegara }));
+            setdataSelect(values => ({...values, "negaraAsal": arraySelectNegara }));
+            setdataSelect(values => ({...values, "negaraTujuan": arraySelectNegara }));
+            setdataSelect(values => ({...values, "negaraTransit": arraySelectNegara }));
+            setdataSelect(values => ({...values, "negaraAsalMP": arraySelectNegara }));
+            setdataSelect(values => ({...values, "negaraTujuanMP": arraySelectNegara }));
+            setdataSelect(values => ({...values, "negaraAsalDokumen": arraySelectNegara }));
+            setdataSelect(values => ({...values, "benderaTransit": arraySelectNegara }));
+            setdataSelect(values => ({...values, "benderaAkhir": arraySelectNegara }));
+        }
+    } catch (error) {
+        console.log(error)
+        setdataSelect(values => ({...values, "negaraPengirim": [] }));
+        setdataSelect(values => ({...values, "negaraPenerima": [] }));
+        setdataSelect(values => ({...values, "negaraAsal": [] }));
+        setdataSelect(values => ({...values, "negaraTujuan": [] }));
+        setdataSelect(values => ({...values, "negaraTransit": [] }));
+        setdataSelect(values => ({...values, "negaraAsalMP": [] }));
+        setdataSelect(values => ({...values, "negaraTujuanMP": [] }));
+        setdataSelect(values => ({...values, "negaraAsalDokumen": [] }));
+    }
+    }, [master])
+
+    useEffect(() => {
+        getListNegara()
+    }, [getListNegara])
+
+    const getListProv = useCallback(async () => {
+        try {
+            const response = await master.masterProv()
+            if(response.data.status === '200') {
+                let dataProv = response.data.data;
+                const arraySelectProv = dataProv.map(item => {
+                    return {
+                        value: item.id.toString(),
+                        label: item.nama
+                    }
+                })
+                setdataSelect(values => ({...values, provPemohon: arraySelectProv }))
+                setdataSelect(values => ({...values, provPengirim: arraySelectProv }))
+                setdataSelect(values => ({...values, provPenerima: arraySelectProv }))
+            }
+        } catch (error) {
+            console.log(error)
+            setdataSelect(values => ({...values, provPemohon: [] }))
+            setdataSelect(values => ({...values, provPengirim: [] }))
+            setdataSelect(values => ({...values, provPenerima: [] }))
+        }
+    }, [master])
     
+    useEffect(() => {
+      getListProv()
+    }, [getListProv])
+
+    const handleKota = useCallback(async (e, pel) => {
+        // if(e && pel) {
+            // let dataid = '';
+            // if(e === '') {
+            //     dataid = null
+            // } else {
+            //     dataid = e;
+            // }
+            // console.log(dataid)
+            try {
+                const response = await master.masterKota(e)
+                if(response.data.status === '200') {
+                    let dataKota = response.data.data;
+                    const arraySelectKota = dataKota.map(item => {
+                    return {
+                        value: item.id.toString(),
+                        label: item.nama
+                    }
+                    })
+                    setdataSelect(values => ({...values, [pel]: arraySelectKota}))
+                }
+                // console.log(dataSelect.pelMuat)
+            } catch (error) {
+            console.log(error)
+            setdataSelect(values => ({...values, [pel]: []}))
+            }
+        // }
+    }, [master])
+
+    useEffect(() => {
+        handleKota()
+    }, [handleKota])
+
+    const handlePelabuhan = useCallback(async (e, pel) => {
+        if(e && pel) {
+            try {
+                const response = await master.masterPelabuhanID(e)
+                if(response.data.status === '200') {
+                    let dataPel = response.data.data;
+                    const arraySelectPelabuhan = dataPel.map(item => {
+                    return {
+                        value: item.id.toString(),
+                        label: item.kode + " - " + item.nama
+                    }
+                    })
+                    setdataSelect(values => ({...values, [pel]: arraySelectPelabuhan}))
+                }
+                // console.log(dataSelect.pelMuat)
+            } catch (error) {
+            console.log(error)
+            setdataSelect(values => ({...values, [pel]: []}))
+            }
+        }
+    }, [master])
+
+    useEffect(() => {
+        handlePelabuhan()
+    }, [handlePelabuhan])
+
+    const handleJenisDokumen = useCallback(async (e) => {
+        if(e) {
+            try {
+                const response = await master.masterDok(e)
+                if(response.data.status === '200') {
+                    let jenisDok = response.data.data;
+                    const arraySelectJenisDok = jenisDok.map(item => {
+                    return {
+                        value: item.id,
+                        label: item.kode + " - " + item.nama
+                    }
+                    })
+                    setdataSelect(values => ({...values, "jenisDokumen": arraySelectJenisDok}))
+                }
+            } catch (error) {
+                console.log(error)
+                setdataSelect(values => ({...values, "jenisDokumen": []}))
+            }
+        }
+    }, [master])
+    
+    useEffect(() => {
+        handleJenisDokumen()
+    }, [handleJenisDokumen])
+
+    function handleSelectPemohon(e, pel) {
+        // console.log(e)
+        if(e) {
+            setValuePemohon(pel, e.value);
+            setValuePemohon(pel + "View", e.label);
+        }
+    }
+    
+    function handleSelectPelabuhan(e, pel) {
+        // console.log(e)
+        if(e) {
+            setValuePelabuhan(pel, e.value);
+            setValuePelabuhan(pel + "View", e.label);
+        }
+    }
+    
+    function handleSelectNegKomoditas(e, pel) {
+        // console.log(e)
+        if(e) {
+            setValueMP(pel, e.value);
+            setValueMP(pel + "View", e.label);
+        }
+    }
+
   return (
     <div className="container-xxl flex-grow-1 container-p-y">
     <h4 className="py-3 breadcrumb-wrapper mb-4">
-        K-1.1 <span className="text-muted fw-light">PERMOHONAN TINDAKAN KARANTINA DAN PENGAWASAN DAN/ATAU PENGENDALIAN
+        K-1.1 <span style={{color: "blue"}}>PERMOHONAN TINDAKAN KARANTINA
+         {/* DAN PENGAWASAN DAN/ATAU PENGENDALIAN
             SERTA BERITA ACARA SERAH TERIMA MEDIA PEMBAWA DI TEMPAT PEMASUKAN,
-            PENGELUARAN DAN/ATAU TRANSIT</span>
+            PENGELUARAN DAN/ATAU TRANSIT */}
+            </span>
     </h4>
 
     <div className="row">
@@ -1040,8 +1278,6 @@ function DocK11() {
                             <input type="hidden" name='idPtk' {...registerPemohon("idPtk")} />
                             <input type="hidden" name='noAju' {...registerPemohon("noAju")} />
                             <input type="hidden" name='noPermohonan' {...registerPemohon("noPermohonan")} />
-                            {/* <input type="hidden" name='makeid' value={makeid || ""} {...registerPemohon("makeid")} /> */}
-                            {/* <input type="hidden" name='datenow' value={dateNow || ""} {...registerPemohon("datenow")} /> */}
       {/* <motion.div
         initial={{ x: "-100vw" }}
         animate={{ x: 0 }}
@@ -1080,35 +1316,35 @@ function DocK11() {
                           <div className="row mb-3">
                               <label className="col-sm-3 col-form-label" htmlFor="permohonan">Jenis Permohonan <span className='text-danger'>*</span></label>
                               <div className="col-sm-9">
-                                  <select className={errorsPemohon.permohonan ? "form-control form-control-sm is-invalid" : "form-control form-control-sm"} name="permohonan" id="permohonan" {...registerPemohon("permohonan", { required: "Mohon pilih jenis permohonan."})} onChange={handlePermohonan}>
-                                      <option value="">--</option>
-                                      <option value="EX">Ekspor</option>
-                                      <option value="IM">Impor</option>
-                                      <option value="DM">Domestik Masuk</option>
-                                      <option value="DK">Domestik Keluar</option>
-                                  </select>
+                                    <select className={errorsPemohon.permohonan ? "form-control form-control-sm is-invalid" : "form-control form-control-sm"} name="permohonan" id="permohonan" {...registerPemohon("permohonan", { required: "Mohon pilih jenis permohonan."})} onChange={handlePermohonan}>
+                                        <option value="">--</option>
+                                        <option value="EX">Ekspor</option>
+                                        <option value="IM">Impor</option>
+                                        <option value="DM">Domestik Masuk</option>
+                                        <option value="DK">Domestik Keluar</option>
+                                    </select>
                                   {errorsPemohon.permohonan && <small className="text-danger">{errorsPemohon.permohonan.message}</small>}
                               </div>
                           </div>
                           <div className="row mb-3">
                               <label className="col-sm-3 col-form-label" htmlFor="pJRutin">Pengguna Jasa Rutin <span className='text-danger'>*</span></label>
                               <div className="col-sm-9">
-                                  <div className="form-check form-check-inline">
-                                      <input className="form-check-input" type="radio" name="pJRutin" id="ya" value="0" {...registerPemohon("pJRutin", { required: "Mohon pilih jenis pengguna jasa."})} />
-                                      <label className="form-check-label" htmlFor="ya">Ya</label>
-                                  </div>
-                                  <div className="form-check form-check-inline">
-                                      <input className="form-check-input" type="radio" name="pJRutin" id="tidak" value="1"  {...registerPemohon("pJRutin")}/>
-                                      <label className="form-check-label" htmlFor="tidak">Tidak</label>
-                                  </div>
-                                  {errorsPemohon.pJRutin && <><br/><small className="text-danger">{errorsPemohon.pJRutin.message}</small></>}
+                                    <div className="form-check form-check-inline">
+                                        <input className="form-check-input" type="radio" name="pJRutin" id="ya" value="0" {...registerPemohon("pJRutin", { required: "Mohon pilih jenis pengguna jasa."})} />
+                                        <label className="form-check-label" htmlFor="ya">Ya</label>
+                                    </div>
+                                    <div className="form-check form-check-inline">
+                                        <input className="form-check-input" type="radio" name="pJRutin" id="tidak" value="1"  {...registerPemohon("pJRutin")}/>
+                                        <label className="form-check-label" htmlFor="tidak">Tidak</label>
+                                    </div>
+                                    {errorsPemohon.pJRutin && <><br/><small className="text-danger">{errorsPemohon.pJRutin.message}</small></>}
                               </div>
                           </div>
                           <div className="row mb-3">
                               <label className="col-sm-3 col-form-label" htmlFor="namaPemohon">Nama <span className='text-danger'>*</span></label>
                               <div className="col-sm-9">
-                                  <input type="text" id="namaPemohon" name="namaPemohon" {...registerPemohon("namaPemohon", { required: "Mohon isi nama pemohon."})} className={errorsPemohon.namaPemohon ? "form-control form-control-sm is-invalid" : "form-control form-control-sm"} placeholder="Nama Pemohon" />
-                                  {errorsPemohon.namaPemohon && <small className="text-danger">{errorsPemohon.namaPemohon.message}</small>}
+                                    <input type="text" id="namaPemohon" name="namaPemohon" {...registerPemohon("namaPemohon", { required: "Mohon isi nama pemohon."})} className={errorsPemohon.namaPemohon ? "form-control form-control-sm is-invalid" : "form-control form-control-sm"} placeholder="Nama Pemohon" />
+                                    {errorsPemohon.namaPemohon && <small className="text-danger">{errorsPemohon.namaPemohon.message}</small>}
                               </div>
                           </div>
                           <div className="row mb-3">
@@ -1121,21 +1357,30 @@ function DocK11() {
                           <div className="row mb-3">
                               <label className="col-sm-3 col-form-label" htmlFor="provPemohon">Provinsi <span className='text-danger'>*</span></label>
                               <div className="col-sm-9">
-                                    <select name="provPemohon" id="provPemohon" onClick={dataSelect.provPemohon ? null : handleProv} {...registerPemohon("provPemohon", { required: "Mohon pilih provinsi pemohon."})} className={errorsPemohon.provPemohon ? "form-control  form-control-sm is-invalid" : "form-control  form-control-sm"}>
-                                        <option value="">--</option>
-                                        {/* <MasterProv/> */}
-                                        {dataSelect.provPemohon}
-                                    </select>
+                                    <Controller
+                                        control={controlPemohon}
+                                        name={"provPemohon"}
+                                        className="form-control form-control-sm"
+                                        rules={{ required: "Mohon pilih provinsi pemohon." }}
+                                        render={({ field: { value, ...field } }) => (
+                                            <Select value={{id: cekdataDiri.provPemohon, label: cekdataDiri.provPemohonView }} {...field} options={dataSelect.provPemohon} onChange={(e) => handleSelectPemohon(e, "provPemohon") & handleKota(e.value, "kotaPemohon")} />
+                                        )}
+                                    />
                                     {errorsPemohon.provPemohon && <small className="text-danger">{errorsPemohon.provPemohon.message}</small>}
                               </div>
                           </div>
                           <div className="row mb-3">
                               <label className="col-sm-3 col-form-label" htmlFor="kotaPemohon">Kota/Kab <span className='text-danger'>*</span></label>
                               <div className="col-sm-9">
-                                    <select name="kotaPemohon" id={cekdataDiri.provPemohon} data-input={cekdataDiri.provPemohon} onClick={handleKota} className={errorsPemohon.kotaPemohon ? "form-control form-control-sm is-invalid" : "form-control form-control-sm"} {...registerPemohon("kotaPemohon", { required: "Mohon pilih kota pemohon."})}>
-                                        <option value="">--</option>
-                                        {cekdataDiri.provPemohon === "" ? <option value="" disabled>Mohon Pilih Provinsi terlebih dahulu</option> : dataSelect.kotaPemohon }
-                                    </select>
+                                    <Controller
+                                        control={controlPemohon}
+                                        name={"kotaPemohon"}
+                                        className="form-control form-control-sm"
+                                        rules={{ required: false }}
+                                        render={({ field: { value, ...field } }) => (
+                                            <Select value={{id: cekdataDiri.kotaPemohon, label: cekdataDiri.kotaPemohonView }} {...field} options={dataSelect.kotaPemohon} onChange={(e) => handleSelectPemohon(e, "kotaPemohon")} />
+                                        )}
+                                    />
                                     {errorsPemohon.kotaPemohon && <small className="text-danger">{errorsPemohon.kotaPemohon.message}</small>}
                               </div>
                           </div>
@@ -1323,36 +1568,15 @@ function DocK11() {
                           <div className="row mb-3">
                               <label className="col-sm-3 col-form-label" htmlFor="negaraPengirim">Negara <span className='text-danger'>*</span></label>
                               <div className="col-sm-9">
-                                {/* <select id="negaraPengirim" data-style="btn-default btn-sm" data-live-search-style="begins" data-actions-box="true" data-live-search="true" name="negaraPengirim" {...registerPemohon("negaraPengirim", { required: "Mohon pilih negara pengirim."})} className={errorsPemohon.negaraPengirim ? "form-control form-control-sm is-invalid" : "form-control form-control-sm selectpicker"}> */}
-                                <select id="negaraPengirim" onClick={dataSelect.negaraPengirim ? null : handleNegara} name="negaraPengirim" {...registerPemohon("negaraPengirim", { required: "Mohon pilih negara pengirim."})} className={errorsPemohon.negaraPengirim ? "form-control form-control-sm is-invalid" : "form-control form-control-sm"}>
-                                {/* <select id="negaraPengirim" value={data} name="negaraPengirim"  className="form-control select2 form-control-sm"> */}
-                                    <option value="">--</option>
-                                    <option value="99">ID - INDONESIA</option>
-                                    {cekdataDiri.permohonan === 'EX' || cekdataDiri.permohonan === 'IM' ? dataSelect.negaraPengirim : null}
-                                    {/* <MasterNegara/> */}
-                                </select>
-                                {/* <Controller
-                                control={controlPemohon}
-                                name={"negaraPengirim"}
-                                className=""
-                                rules={{ required: "Harap upload file dokumen persyaratan." }}
-                                render={({ field: { value, onChange, ...field } }) => {
-                                return (
-                                    <select
-                                    // name='negaraPengirim'
-                                    {...field}
-                                    selected={value}
-                                    onChange={(val) => field.onChange(val)}
-                                    onClick={dataSelect.negaraPengirim ? null : handleNegara}
-                                    className="form-control select2 form-control-sm"
-                                    id="negaraPengirim">
-                                        <option value="">--</option>
-                                        <option value="99">ID - INDONESIA</option>
-                                        {cekdataDiri.permohonan === 'EX' || cekdataDiri.permohonan === 'IM' ? dataSelect.negaraPengirim : null}
-                                    </select>
-                                );
-                                }}
-                            /> */}
+                                <Controller
+                                    control={controlPemohon}
+                                    name={"negaraPengirim"}
+                                    className="form-control form-control-sm"
+                                    rules={{ required: "Mohon pilih negara pengirim." }}
+                                    render={({ field: { value, ...field } }) => (
+                                        <Select value={{id: cekdataDiri.negaraPengirim, label: cekdataDiri.negaraPengirimView }} {...field} options={dataSelect.negaraPengirim} onChange={(e) => handleSelectPemohon(e, "negaraPengirim")} />
+                                    )}
+                                />
                                 {errorsPemohon.negaraPengirim && <small className="text-danger">{errorsPemohon.negaraPengirim.message}</small>}
                               </div>
                           </div>
@@ -1360,21 +1584,30 @@ function DocK11() {
                             <div className="row mb-3">
                                 <label className="col-sm-3 col-form-label" htmlFor="provPengirim">Provinsi</label>
                                 <div className="col-sm-9">
-                                    <select id="provPengirim" name="provPengirim" onClick={dataSelect.provPengirim ? null : handleProv} {...registerPemohon('provPengirim')} className="form-control form-control-sm">
-                                      <option value="">--</option>
-                                      {dataSelect.provPengirim}
-                                      {/* <MasterProv/> */}
-                                    </select>  
+                                    <Controller
+                                        control={controlPemohon}
+                                        name={"provPengirim"}
+                                        className="form-control form-control-sm"
+                                        rules={{ required: false }}
+                                        render={({ field: { value, ...field } }) => (
+                                            // <Select value={{id: cekdataDiri.provPengirim, label: cekdataDiri.provPengirimView }} {...field} options={dataSelect.provPengirim} onChange={(e) => handleSelectPemohon(e, "provPengirim") & handleKota(e.value, "kotaPengirim")} />
+                                            <Select value={{id: cekdataDiri.provPengirim, label: cekdataDiri.provPengirimView }} {...field} options={dataSelect.provPengirim} onChange={(e) => handleSelectPemohon(e, "provPengirim")} />
+                                        )}
+                                    />
                                 </div>
                             </div>
                             <div className="row mb-3">
                                 <label className="col-sm-3 col-form-label" htmlFor="kotaPengirim">Kota/Kabupaten</label>
                                 <div className="col-sm-9">
-                                  <select id="kotaPengirim" name="kotaPengirim" data-input={cekdataDiri.provPengirim} onClick={handleKota} {...registerPemohon('kotaPengirim')} className="form-control form-control-sm">
-                                      <option value="">--</option>
-                                      {/* <MasterKota data-input={cekdataDiri.provPengirim}/> */}
-                                      {cekdataDiri.provPengirim === "" ? <option value="" disabled>Mohon Pilih Provinsi Pengirim terlebih dahulu</option> : dataSelect.kotaPengirim }
-                                  </select>
+                                    <Controller
+                                        control={controlPemohon}
+                                        name={"kotaPengirim"}
+                                        className="form-control form-control-sm"
+                                        rules={{ required: false }}
+                                        render={({ field: { value, ...field } }) => (
+                                            <Select value={{id: cekdataDiri.kotaPengirim, label: cekdataDiri.kotaPengirimView }} {...field} options={dataSelect.kotaPengirim} onChange={(e) => handleSelectPemohon(e, "kotaPengirim")} />
+                                        )}
+                                    />
                                 </div>
                             </div>
                           </div>
@@ -1405,7 +1638,7 @@ function DocK11() {
                           <div className="row mb-3">
                               <label className="col-sm-3 col-form-label" htmlFor="namaPenerima">Nama <span className='text-danger'>*</span></label>
                               <div className="col-sm-9">
-                                  <input type="text" id="namaPenerima" name="namaPenerima" {...registerPemohon("namaPenerima", { required: "Mohon isi negara penerima."})} className={errorsPemohon.namaPenerima ? "form-control form-control-sm is-invalid" : "form-control form-control-sm"} placeholder="Nama Penerima" />
+                                  <input type="text" id="namaPenerima" name="namaPenerima" {...registerPemohon("namaPenerima", { required: "Mohon isi nama penerima."})} className={errorsPemohon.namaPenerima ? "form-control form-control-sm is-invalid" : "form-control form-control-sm"} placeholder="Nama Penerima" />
                                   {errorsPemohon.namaPenerima && <small className="text-danger">{errorsPemohon.namaPenerima.message}</small>}
                               </div>
                           </div>
@@ -1441,12 +1674,20 @@ function DocK11() {
                           <div className="row mb-3">
                               <label className="col-sm-3 col-form-label" htmlFor="negaraPenerima">Negara <span className='text-danger'>*</span></label>
                               <div className="col-sm-9">
-                                <select id="negaraPenerima" onClick={dataSelect.negaraPenerima ? null :handleNegara} name="negaraPenerima" className={errorsPemohon.negaraPenerima ? "form-control form-control-sm is-invalid" : "form-control form-control-sm"} {...registerPemohon("negaraPenerima", { required: "Mohon pilih negara penerima."})}>
+                              <Controller
+                                    control={controlPemohon}
+                                    name={"negaraPenerima"}
+                                    className="form-control form-control-sm"
+                                    rules={{ required: "Mohon pilih negara penerima." }}
+                                    render={({ field: { value, ...field } }) => (
+                                        <Select value={{id: cekdataDiri.negaraPenerima, label: cekdataDiri.negaraPenerimaView }} {...field} options={dataSelect.negaraPenerima ? dataSelect.negaraPenerima : []} onChange={(e) => handleSelectPemohon(e, "negaraPenerima")} />
+                                    )}
+                                />
+                                {/* <select id="negaraPenerima" onClick={dataSelect.negaraPenerima ? null :handleNegara} name="negaraPenerima" className={errorsPemohon.negaraPenerima ? "form-control form-control-sm is-invalid" : "form-control form-control-sm"} {...registerPemohon("negaraPenerima", { required: "Mohon pilih negara penerima."})}>
                                     <option value="">--</option>
                                     <option value="99">ID - INDONESIA</option>
                                     {cekdataDiri.permohonan === 'EX' || cekdataDiri.permohonan === 'IM' ? dataSelect.negaraPenerima : null}
-                                    {/* <MasterNegara/> */}
-                                </select>
+                                </select> */}
                                 {errorsPemohon.negaraPenerima && <small className="text-danger">{errorsPemohon.negaraPenerima.message}</small>}
                               </div>
                           </div>
@@ -1454,21 +1695,38 @@ function DocK11() {
                             <div className="row mb-3">
                                 <label className="col-sm-3 col-form-label" htmlFor="provPenerima">Provinsi</label>
                                 <div className="col-sm-9">
-                                    <select id="provPenerima" name="provPenerima" onClick={dataSelect.provPenerima ? null : handleProv} {...registerPemohon("provPenerima")} className="form-control form-control-sm" placeholder="Kota Penerima">
+                                    <Controller
+                                        control={controlPemohon}
+                                        name={"provPenerima"}
+                                        className="form-control form-control-sm"
+                                        rules={{ required: false }}
+                                        render={({ field: { value, ...field } }) => (
+                                            // <Select value={{id: cekdataDiri.provPenerima, label: cekdataDiri.provPenerimaView }} {...field} options={dataSelect.provPenerima} onChange={(e) => handleSelectPemohon(e, "provPenerima") & handleKota(e.value, "kotaPenerima")} />
+                                            <Select value={{id: cekdataDiri.provPenerima, label: cekdataDiri.provPenerimaView }} {...field} options={dataSelect.provPenerima} onChange={(e) => handleSelectPemohon(e, "provPenerima")} />
+                                        )}
+                                    />
+                                    {/* <select id="provPenerima" name="provPenerima" onClick={dataSelect.provPenerima ? null : handleProv} {...registerPemohon("provPenerima")} className="form-control form-control-sm" placeholder="Kota Penerima">
                                         <option value="">--</option>
                                         {dataSelect.provPenerima}
-                                        {/* <MasterProv/> */}
-                                    </select>
+                                    </select> */}
                                 </div>
                             </div>
                             <div className="row mb-3">
                                 <label className="col-sm-3 col-form-label" htmlFor="kotaPenerima">Kota/Kabupaten</label>
                                 <div className="col-sm-9">
-                                    <select id="kotaPenerima" name="kotaPenerima" data-input={cekdataDiri.provPenerima} onClick={handleKota} {...registerPemohon("kotaPenerima")} className="form-control form-control-sm" placeholder="Kota Penerima">
+                                    <Controller
+                                        control={controlPemohon}
+                                        name={"kotaPenerima"}
+                                        className="form-control form-control-sm"
+                                        rules={{ required: false }}
+                                        render={({ field: { value, ...field } }) => (
+                                            <Select value={{id: cekdataDiri.kotaPenerima, label: cekdataDiri.kotaPenerimaView }} {...field} options={dataSelect.kotaPenerima} onChange={(e) => handleSelectPemohon(e, "kotaPenerima")} />
+                                        )}
+                                    />
+                                    {/* <select id="kotaPenerima" name="kotaPenerima" data-input={cekdataDiri.provPenerima} onClick={handleKota} {...registerPemohon("kotaPenerima")} className="form-control form-control-sm" placeholder="Kota Penerima">
                                         <option value="">--</option>
-                                        {/* <MasterKota data-input={cekdataDiri.provPenerima}/> */}
                                         {cekdataDiri.provPenerima === "" ? <option value="" disabled>Mohon pilih provinsi penerima terlebih dahulu</option> : dataSelect.kotaPenerima }
-                                    </select>
+                                    </select> */}
                                 </div>
                             </div>
                           </div>
@@ -1486,7 +1744,7 @@ function DocK11() {
                   <span className="d-sm-inline-block d-none">Sebelumnya</span>
               </button>
               <button type="submit" className="btn btn-primary">
-                  <span className="d-sm-inline-block d-none me-sm-1">Selanjutnya</span>
+                  <span className="d-sm-inline-block d-none me-sm-1">Simpan & Lanjutkan</span>
                   <i className="bx bx-chevron-right bx-sm me-sm-n2"></i>
               </button>
           </div>
@@ -1521,27 +1779,40 @@ function DocK11() {
                                                 <div className="row mb-3">
                                                     <label className="col-sm-3 col-form-label" htmlFor="negaraAsal">Negara Pengirim <span className='text-danger'>*</span></label>
                                                     <div className="col-sm-9">
-                                                        <select id="negaraAsal" name="negaraAsal" onClick={dataSelect.negaraAsal ? null : handleNegara} {...registerPelabuhan("negaraAsal", { required: "Mohon pilih negara asal."})} className={errorsPelabuhan.negaraAsal ? "form-control form-control-sm is-invalid" : "form-control form-control-sm"} >
-                                                        {/* <select id="negaraAsal" name="negaraAsal" value={dataDiri.negaraAsal || ""} onChange={handleDataDiri} className="form-control select2 form-control-sm" > */}
-                                                        <option value="">--</option>
-                                                        <option value="99">ID - INDONESIA</option>
-                                                        {cekdataDiri.permohonan === 'EX' || cekdataDiri.permohonan === 'IM' ? dataSelect.negaraAsal : null}
-                                                            {/* <MasterNegara/> */}
-                                                        </select>
-                                                        {/* <p>{dataDiri.negaraAsal}</p> */}
+                                                        <Controller
+                                                            control={controlPelabuhan}
+                                                            name={"negaraAsal"}
+                                                            className="form-control form-control-sm"
+                                                            rules={{ required: "Mohon pilih negara pelabuhan pengirim." }}
+                                                            render={({ field: { value, ...field } }) => (
+                                                                <Select value={{id: cekdataPelabuhan.negaraAsal, label: cekdataPelabuhan.negaraAsalView }} {...field} options={dataSelect.negaraAsal ? dataSelect.negaraAsal : []} onChange={(e) => e ? setValuePelabuhan("negaraAsal", e.value) & setValuePelabuhan("negaraAsalView", e.label) & handlePelabuhan(e.value, "pelMuat") : null} />
+                                                            )}
+                                                        />
+                                                        {/* <select id="negaraAsal" name="negaraAsal" onClick={dataSelect.negaraAsal ? null : handleNegara} {...registerPelabuhan("negaraAsal", { required: "Mohon pilih negara asal."})} className={errorsPelabuhan.negaraAsal ? "form-control form-control-sm is-invalid" : "form-control form-control-sm"} >
+                                                            <option value="">--</option>
+                                                            <option value="99">ID - INDONESIA</option>
+                                                            {cekdataDiri.permohonan === 'EX' || cekdataDiri.permohonan === 'IM' ? dataSelect.negaraAsal : null}
+                                                        </select> */}
                                                         {errorsPelabuhan.negaraAsal && <small className="text-danger">{errorsPelabuhan.negaraAsal.message}</small>}
                                                     </div>
                                                 </div>
                                                 <div className="row mb-3">
                                                     <label className="col-sm-3 col-form-label" htmlFor="negaraTujuan">Negara penerima <span className='text-danger'>*</span></label>
                                                     <div className="col-sm-9">
-                                                        {/* <input type="text" id="negara_tujuan" className="form-control form-control-sm" placeholder="Negara Tujuan" /> */}
-                                                        <select name="negaraTujuan" id="negaraTujuan" onClick={dataSelect.negaraTujuan ? null : handleNegara} {...registerPelabuhan("negaraTujuan", { required: "Mohon pilih negara tujuan."})} className={errorsPelabuhan.negaraTujuan ? "form-control form-control-sm is-invalid" : "form-control form-control-sm"}>
+                                                        <Controller
+                                                            control={controlPelabuhan}
+                                                            name={"negaraTujuan"}
+                                                            className="form-control form-control-sm"
+                                                            rules={{ required: "Mohon pilih negara pelabuhan pengirim." }}
+                                                            render={({ field: { value, ...field } }) => (
+                                                                <Select value={{id: cekdataPelabuhan.negaraTujuan, label: cekdataPelabuhan.negaraTujuanView }} {...field} options={dataSelect.negaraTujuan} onChange={(e) => e ? setValuePelabuhan("negaraTujuan", e.value) & setValuePelabuhan("negaraTujuanView", e.label) & handlePelabuhan(e.value, "pelBongkar") : null} />
+                                                            )}
+                                                        />
+                                                        {/* <select name="negaraTujuan" id="negaraTujuan" onClick={dataSelect.negaraTujuan ? null : handleNegara} {...registerPelabuhan("negaraTujuan", { required: "Mohon pilih negara tujuan."})} className={errorsPelabuhan.negaraTujuan ? "form-control form-control-sm is-invalid" : "form-control form-control-sm"}>
                                                             <option value="">--</option>
                                                             <option value="99">ID - INDONESIA</option>
                                                             {cekdataDiri.permohonan === 'EX' || cekdataDiri.permohonan === 'IM' ? dataSelect.negaraTujuan : null}
-                                                            {/* <MasterNegara/> */}
-                                                        </select>
+                                                        </select> */}
                                                         {errorsPelabuhan.negaraTujuan && <small className="text-danger">{errorsPelabuhan.negaraTujuan.message}</small>}
                                                     </div>
                                                 </div>
@@ -1563,12 +1834,20 @@ function DocK11() {
                                                 <div className="row mb-3">
                                                     <label className="col-sm-3 col-form-label" htmlFor="negaraTransit">Negara Transit</label>
                                                     <div className="col-sm-9">
-                                                    <select type="text" id="negaraTransit" onClick={dataSelect.negaraTransit ? null : handleNegara} name='negaraTransit' {...registerPelabuhan("negaraTransit")} className="form-control form-control-sm">
+                                                        <Controller
+                                                            control={controlPelabuhan}
+                                                            name={"negaraTransit"}
+                                                            className="form-control form-control-sm"
+                                                            rules={{ required: false }}
+                                                            render={({ field: { value, ...field } }) => (
+                                                                <Select value={{id: cekdataPelabuhan.negaraTransit, label: cekdataPelabuhan.negaraTransitView }} {...field} options={dataSelect.negaraTransit} onChange={(e) => e ? setValuePelabuhan("negaraTransit", e.value) & setValuePelabuhan("negaraTransitView", e.label) & handlePelabuhan(e.value, "pelTransit") : null} />
+                                                            )}
+                                                        />
+                                                    {/* <select type="text" id="negaraTransit" onClick={dataSelect.negaraTransit ? null : handleNegara} name='negaraTransit' {...registerPelabuhan("negaraTransit")} className="form-control form-control-sm">
                                                         <option value="">--</option>
                                                         <option value="99">ID - INDONESIA</option>
                                                         {dataSelect.negaraTransit}
-                                                            {/* <MasterNegara/> */}
-                                                    </select>
+                                                    </select> */}
                                                         {/* <input type="text" id="negara_transit" className="form-control form-control-sm" placeholder="Negara Transit" /> */}
                                                     </div>
                                                 </div>
@@ -1596,22 +1875,38 @@ function DocK11() {
                                                 <div className="row mb-3">
                                                     <label className="col-sm-3 col-form-label" htmlFor="pelMuat">Muat / Asal <span className='text-danger'>*</span></label>
                                                     <div className="col-sm-9">
-                                                        <select name="pelMuat" id="pelMuat" data-input={cekdataPelabuhan.negaraAsal} onClick={handlePelabuhan} {...registerPelabuhan("pelMuat", { required: "Mohon pilih pelabuhan muat/asal."})} className={errorsPelabuhan.pelMuat ? "form-control form-control-sm is-invalid" : "form-control form-control-sm"}>
+                                                        <Controller
+                                                            control={controlPelabuhan}
+                                                            name={"pelMuat"}
+                                                            className="form-control form-control-sm"
+                                                            rules={{ required: "Mohon pilih pelabuhan muat/asal." }}
+                                                            render={({ field: { value,placeholder, ...field } }) => (
+                                                                <Select placeholder={<div>Mohon pilih Negara Asal</div>}  value={{id: cekdataPelabuhan.pelMuat, label: cekdataPelabuhan.pelMuatView }} {...field} options={dataSelect.pelMuat} onChange={(e) => e ? setValuePelabuhan("pelMuat", e.value) & setValuePelabuhan("pelMuatView", e.label) : null} />
+                                                            )}
+                                                        />
+                                                        {/* <select name="pelMuat" id="pelMuat" data-input={cekdataPelabuhan.negaraAsal} onClick={handlePelabuhan} {...registerPelabuhan("pelMuat", { required: "Mohon pilih pelabuhan muat/asal."})} className={errorsPelabuhan.pelMuat ? "form-control form-control-sm is-invalid" : "form-control form-control-sm"}>
                                                             <option value="">--</option>
                                                             {cekdataPelabuhan.negaraAsal === "" ? <option value="" disabled>Mohon pilih negara asal</option> : dataSelect.pelMuat }
-                                                            {/* <MasterPelabuhan data-input={cekdataPelabuhan.negaraAsal}/> */}
-                                                        </select>
+                                                        </select> */}
                                                         {errorsPelabuhan.pelMuat && <small className="text-danger">{errorsPelabuhan.pelMuat.message}</small>}
                                                     </div>
                                                 </div>
                                                 <div className="row mb-3">
                                                     <label className="col-sm-3 col-form-label" htmlFor="pelBongkar">Bongkar / Tujuan <span className='text-danger'>*</span></label>
                                                     <div className="col-sm-9">
-                                                        <select name="pelBongkar" id="pelBongkar" data-input={cekdataPelabuhan.negaraTujuan} onClick={handlePelabuhan} {...registerPelabuhan("pelBongkar", { required: "Mohon pilih pelabuhan bongkar."})} className={errorsPelabuhan.pelBongkar ? "form-control form-control-sm is-invalid" : "form-control form-control-sm"}>
+                                                        <Controller
+                                                            control={controlPelabuhan}
+                                                            name={"pelBongkar"}
+                                                            className="form-control form-control-sm"
+                                                            rules={{ required: "Mohon pilih pelabuhan bongkar." }}
+                                                            render={({ field: { value, ...field } }) => (
+                                                                <Select value={{id: cekdataPelabuhan.pelBongkar, label: cekdataPelabuhan.pelBongkarView }} {...field} options={dataSelect.pelBongkar} onChange={(e) => e ? setValuePelabuhan("pelBongkar", e.value) & setValuePelabuhan("pelBongkarView", e.label) : null} />
+                                                            )}
+                                                        />
+                                                        {/* <select name="pelBongkar" id="pelBongkar" data-input={cekdataPelabuhan.negaraTujuan} onClick={handlePelabuhan} {...registerPelabuhan("pelBongkar", { required: "Mohon pilih pelabuhan bongkar."})} className={errorsPelabuhan.pelBongkar ? "form-control form-control-sm is-invalid" : "form-control form-control-sm"}>
                                                             <option value="">--</option>
                                                             {cekdataPelabuhan.negaraTujuan === "" ? <option value="" disabled>Mohon pilih negara tujuan</option> : dataSelect.pelBongkar }
-                                                            {/* <MasterPelabuhan data-input={cekdataPelabuhan.negaraTujuan}/> */}
-                                                        </select>
+                                                        </select> */}
                                                         {errorsPelabuhan.pelBongkar && <small className="text-danger">{errorsPelabuhan.pelBongkar.message}</small>}
                                                         {/* <input type="text" id="pel_bongkar" className="form-control form-control-sm" placeholder="Pelabuhan Bongkar / Tujuan" /> */}
                                                     </div>
@@ -1626,12 +1921,19 @@ function DocK11() {
                                                 <div className="row mb-3">
                                                     <label className="col-sm-3 col-form-label" htmlFor="pelTransit">Pelabuhan Transit</label>
                                                     <div className="col-sm-9">
-                                                        <select name="pelTransit" id="pelTransit" data-input={cekdataPelabuhan.negaraTransit} onClick={handlePelabuhan} {...registerPelabuhan("pelTransit")} className="form-control form-control-sm">
+                                                        <Controller
+                                                            control={controlPelabuhan}
+                                                            name={"pelTransit"}
+                                                            className="form-control form-control-sm"
+                                                            rules={{ required: false }}
+                                                            render={({ field: { value, ...field } }) => (
+                                                                <Select value={{id: cekdataPelabuhan.pelTransit, label: cekdataPelabuhan.pelTransitView }} {...field} options={dataSelect.pelTransit} onChange={(e) => e ? setValuePelabuhan("pelTransit", e.value) & setValuePelabuhan("pelTransitView", e.label) : null} />
+                                                            )}
+                                                        />
+                                                        {/* <select name="pelTransit" id="pelTransit" data-input={cekdataPelabuhan.negaraTransit} onClick={handlePelabuhan} {...registerPelabuhan("pelTransit")} className="form-control form-control-sm">
                                                             <option value="">--</option>
                                                             {cekdataPelabuhan.negaraTransit === "" ? <option value="" disabled>Mohon pilih negara tujuan</option> : dataSelect.pelTransit }
-                                                            {/* <MasterPelabuhan data-input={cekdataPelabuhan.negaraTransit}/> */}
-                                                        </select>
-                                                        {/* <input type="text" id="pel_transit" className="form-control form-control-sm" placeholder="Pelabuhan Transit" /> */}
+                                                        </select> */}
                                                     </div>
                                                 </div>
                                                 </div>
@@ -1705,12 +2007,20 @@ function DocK11() {
                                                 <div className="row mb-3">
                                                     <label className="col-sm-3 col-form-label" htmlFor="benderaTransit">Bendera</label>
                                                     <div className="col-sm-9">
-                                                        <select id="benderaTransit" name="benderaTransit" onClick={dataSelect.benderaTransit ? null : handleNegara} {...registerPelabuhan("benderaTransit")} className="form-control form-control-sm">
+                                                        <Controller
+                                                            control={controlPelabuhan}
+                                                            name={"benderaTransit"}
+                                                            className="form-control form-control-sm"
+                                                            rules={{ required: false }}
+                                                            render={({ field: { value, ...field } }) => (
+                                                                <Select value={{id: cekdataPelabuhan.benderaTransit, label: cekdataPelabuhan.benderaTransitView }} {...field} options={dataSelect.benderaTransit} onChange={(e) => e ? setValuePelabuhan("benderaTransit", e.value) & setValuePelabuhan("benderaTransitView", e.label) : null} />
+                                                            )}
+                                                        />
+                                                        {/* <select id="benderaTransit" name="benderaTransit" onClick={dataSelect.benderaTransit ? null : handleNegara} {...registerPelabuhan("benderaTransit")} className="form-control form-control-sm">
                                                             <option value="">--</option>
                                                             <option value="99">ID - INDONESIA</option>
                                                             {dataSelect.benderaTransit}
-                                                            {/* <MasterNegara/> */}
-                                                        </select>
+                                                        </select> */}
                                                     </div>
                                                 </div>
                                                 <div className="row mb-3">
@@ -1802,12 +2112,20 @@ function DocK11() {
                                                 <div className="row mb-3">
                                                     <label className="col-sm-3 col-form-label" htmlFor="benderaAkhir">Bendera</label>
                                                     <div className="col-sm-9">
-                                                        <select id="benderaAkhir" name="benderaAkhir" onClick={dataSelect.benderaAkhir ? null : handleNegara} {...registerPelabuhan("benderaAkhir")} className="form-control form-control-sm">
+                                                        <Controller
+                                                            control={controlPelabuhan}
+                                                            name={"benderaAkhir"}
+                                                            className="form-control form-control-sm"
+                                                            rules={{ required: false }}
+                                                            render={({ field: { value, ...field } }) => (
+                                                                <Select value={{id: cekdataPelabuhan.benderaAkhir, label: cekdataPelabuhan.benderaAkhirView }} {...field} options={dataSelect.benderaAkhir} onChange={(e) => e ? setValuePelabuhan("benderaAkhir", e.value) & setValuePelabuhan("benderaAkhirView", e.label) : null} />
+                                                            )}
+                                                        />
+                                                        {/* <select id="benderaAkhir" name="benderaAkhir" onClick={dataSelect.benderaAkhir ? null : handleNegara} {...registerPelabuhan("benderaAkhir")} className="form-control form-control-sm">
                                                             <option value="">--</option>
                                                             <option value="99">ID - INDONESIA</option>
                                                             {dataSelect.benderaAkhir}
-                                                            {/* <MasterNegara/> */}
-                                                        </select>
+                                                        </select> */}
                                                     </div>
                                                 </div>
                                                 <div className="row mb-3">
@@ -1907,7 +2225,7 @@ function DocK11() {
                                         <span className="d-sm-inline-block d-none">Sebelumnya</span>
                                     </button>
                                     <button type="submit" className="btn btn-primary">
-                                        <span className="d-sm-inline-block d-none me-sm-1">Selanjutnya</span>
+                                        <span className="d-sm-inline-block d-none me-sm-1">Simpan & Lanjutkan</span>
                                         <i className="bx bx-chevron-right bx-sm me-sm-n2"></i>
                                     </button>
                                 </div>
@@ -1944,12 +2262,27 @@ function DocK11() {
                                                             <div className="row mb-3">
                                                                 <label className="col-sm-3 col-form-label" htmlFor="mediaPembawa">Media Pembawa <span className='text-danger'>*</span></label>
                                                                 <div className="col-sm-4">
-                                                                    <select name="mediaPembawa" id="mediaPembawa" onChange={handleMPDetil} {...registerMP("mediaPembawa", { required: "Mohon pilih media pembawa."})} className={errorsMP.mediaPembawa ? "form-control form-control-sm is-invalid" : "form-control form-control-sm"}>
-                                                                        <option value="">--</option>
-                                                                        <option value="H">Hewan</option>
-                                                                        <option value="I">Ikan</option>
-                                                                        <option value="T">Tumbuhan</option>
-                                                                    </select>
+                                                                {/* <Controller
+                                                                        control={controlMP}
+                                                                        name={"mediaPembawa"}
+                                                                        className="form-control form-control-sm"
+                                                                        rules={{ required: "Mohon pilih media pembawa." }}
+                                                                        render={({ field: { value, ...field } }) => (
+                                                                            <select {...field} value={{id: cekdataMP.mediaPembawa, label: cekdataMP.mediaPembawaView }} name="mediaPembawa" id="mediaPembawa" onChange={handleMPDetil } className={errorsMP.mediaPembawa ? "form-control form-control-sm is-invalid" : "form-control form-control-sm"}>
+                                                                                <option value="">--</option>
+                                                                                <option value="H" selected>Hewan</option>
+                                                                                <option value="I">Ikan</option>
+                                                                                <option value="T">Tumbuhan</option>
+                                                                            </select>
+                                                                            // <Select value={{id: cekdataMP.negaraAsalMP, label: cekdataMP.negaraAsalMPView }} {...field} options={dataSelect.negaraAsalMP} onChange={(e) => handleSelectNegKomoditas(e, "negaraAsalMP") & (e.value === '99' ? handleKota(null, "daerahAsalMP") : null)} />
+                                                                            )}
+                                                                        /> */}
+                                                                        <select name="mediaPembawa" id="mediaPembawa" {...registerMP("mediaPembawa", { required: "Mohon pilih media pembawa."})} onChange={handleMPDetil} className={errorsMP.mediaPembawa ? "form-control form-control-sm is-invalid" : "form-control form-control-sm"}>
+                                                                            <option value="">--</option>
+                                                                            <option value="H">Hewan</option>
+                                                                            <option value="I">Ikan</option>
+                                                                            <option value="T">Tumbuhan</option>
+                                                                        </select>
                                                                 </div>
                                                                 {errorsMP.mediaPembawa && <div className="offset-3 col-sm-9"><small className="text-danger">{errorsMP.mediaPembawa.message}</small></div>}
                                                             </div>
@@ -1990,11 +2323,11 @@ function DocK11() {
                                                                 <label className="col-sm-3 col-form-label" htmlFor="jenisAngkut">Jenis Angkut <span className='text-danger'>*</span></label>
                                                                 <div className="col-sm-9">
                                                                     <div className="form-check form-check-inline">
-                                                                        <input className="form-check-input" type="radio" name="jenisAngkut" id="curah" value="Curah" {...registerMP("jenisAngkut", { required: "Mohon pilih jenis angkut."})} />
+                                                                        <input className="form-check-input" type="radio" name="jenisAngkut" id="curah" value="1" {...registerMP("jenisAngkut", { required: "Mohon pilih jenis angkut."})} />
                                                                         <label className="form-check-label" htmlFor="curah">Curah</label>
                                                                     </div>
                                                                     <div className="form-check form-check-inline">
-                                                                        <input className="form-check-input" type="radio" name="jenisAngkut" id="noncurah" value="Non Curah" {...registerMP("jenisAngkut")} />
+                                                                        <input className="form-check-input" type="radio" name="jenisAngkut" id="noncurah" value="0" {...registerMP("jenisAngkut")} />
                                                                         <label className="form-check-label" htmlFor="noncurah">Non Curah</label>
                                                                     </div>
                                                                 </div>
@@ -2024,46 +2357,78 @@ function DocK11() {
                                                             <div className="row mb-3">
                                                                 <label className="col-sm-3 col-form-label" htmlFor="negaraAsalMP">Negara Asal Komoditas <span className='text-danger'>*</span></label>
                                                                 <div className="col-sm-6">
-                                                                    <select name="negaraAsalMP" id="negaraAsalMP" onClick={handleNegara} {...registerMP("negaraAsalMP", { required: "Mohon pilih negara asal komoditas."})} className={errorsMP.negaraAsalMP ? "form-control form-control-sm is-invalid" : "form-control form-control-sm"}>
+                                                                    <Controller
+                                                                        control={controlMP}
+                                                                        name={"negaraAsalMP"}
+                                                                        className="form-control form-control-sm"
+                                                                        rules={{ required: "Mohon pilih negara asal komoditas." }}
+                                                                        render={({ field: { value, ...field } }) => (
+                                                                            <Select value={{id: cekdataMP.negaraAsalMP, label: cekdataMP.negaraAsalMPView }} {...field} options={dataSelect.negaraAsalMP} onChange={(e) => handleSelectNegKomoditas(e, "negaraAsalMP") & (e.value === '99' ? handleKota(null, "daerahAsalMP") : null)} />
+                                                                        )}
+                                                                    />
+                                                                    {/* <select name="negaraAsalMP" id="negaraAsalMP" onClick={handleNegara} {...registerMP("negaraAsalMP", { required: "Mohon pilih negara asal komoditas."})} className={errorsMP.negaraAsalMP ? "form-control form-control-sm is-invalid" : "form-control form-control-sm"}>
                                                                         <option value="">--</option>
                                                                         <option value="99">ID - INDONESIA</option>
                                                                         {cekdataDiri.permohonan === 'EX' || cekdataDiri.permohonan === 'IM' ? dataSelect.negaraAsalMP : null}
-                                                                    </select>
+                                                                    </select> */}
                                                                 </div>
                                                                 {errorsMP.negaraAsalMP && <div className="offset-3 col-sm-9"><small className="text-danger">{errorsMP.negaraAsalMP.message}</small></div>}
                                                             </div>
-                                                            <div className="row mb-3">
+                                                            <div className="row mb-3" style={{visibility: (cekdataMP.negaraAsalMP === 99 | cekdataMP.negaraAsalMP === '99' ? "visible" : "hidden")}}>
                                                                 <label className="col-sm-3 col-form-label" htmlFor="daerahAsalMP">Daerah Asal</label>
                                                                 <div className="col-sm-6">
-                                                                    {/* <input type="text" id="daerah_asal" className="form-control form-control-sm" placeholder="Daerah Asal" /> */}
-                                                                    <select name="daerahAsalMP" id="daerahAsalMP" onClick={handleKota} {...registerMP("daerahAsalMP")} className="form-control form-control-sm">
+                                                                    <Controller
+                                                                        control={controlMP}
+                                                                        name={"daerahAsalMP"}
+                                                                        className="form-control form-control-sm"
+                                                                        rules={{ required: false }}
+                                                                        render={({ field: { value, ...field } }) => (
+                                                                            <Select value={{id: cekdataMP.daerahAsalMP, label: cekdataMP.daerahAsalMPView }} {...field} options={dataSelect.daerahAsalMP} onChange={(e) => handleSelectNegKomoditas(e, "daerahAsalMP")} />
+                                                                        )}
+                                                                    />
+                                                                    {/* <select name="daerahAsalMP" id="daerahAsalMP"  {...registerMP("daerahAsalMP")} className="form-control form-control-sm">
                                                                     <option value="">--</option>
                                                                     {cekdataMP.negaraAsalMP === '99' ? dataSelect.daerahAsalMP : null}
-                                                                        {/* <MasterKota/> */}
-                                                                    </select>
+                                                                    </select> */}
                                                                     {errorsMP.daerahAsal && <small className="text-danger">{errorsMP.daerahAsalMP.message}</small>}
                                                                 </div>
                                                             </div>
                                                             <div className="row mb-3">
                                                                 <label className="col-sm-3 col-form-label" htmlFor="negaraTujuanMP">Negara Tujuan Komoditas <span className='text-danger'>*</span></label>
                                                                 <div className="col-sm-6">
-                                                                    <select name="negaraTujuanMP" id="negaraTujuanMP" onClick={handleNegara} {...registerMP("negaraTujuanMP", { required: "Mohon pilih negara tujuan komoditas."})} className={errorsMP.negaraTujuanMP ? "form-control form-control-sm is-invalid" : "form-control form-control-sm"}>
+                                                                    <Controller
+                                                                        control={controlMP}
+                                                                        name={"negaraTujuanMP"}
+                                                                        className="form-control form-control-sm"
+                                                                        rules={{ required: "Mohon pilih negara tujuan komoditas." }}
+                                                                        render={({ field: { value, ...field } }) => (
+                                                                            <Select value={{id: cekdataMP.negaraTujuanMP, label: cekdataMP.negaraTujuanMPView }} {...field} options={dataSelect.negaraTujuanMP} onChange={(e) => handleSelectNegKomoditas(e, "negaraTujuanMP") & (e.value === '99' ? handleKota(e.value, "daerahTujuanMP") : null)} />
+                                                                        )}
+                                                                    />
+                                                                    {/* <select name="negaraTujuanMP" id="negaraTujuanMP" onClick={handleNegara} {...registerMP("negaraTujuanMP", { required: "Mohon pilih negara tujuan komoditas."})} className={errorsMP.negaraTujuanMP ? "form-control form-control-sm is-invalid" : "form-control form-control-sm"}>
                                                                         <option value="">--</option>
                                                                         <option value="99">ID - INDONESIA</option>
                                                                         {cekdataDiri.permohonan === 'EX' || cekdataDiri.permohonan === 'IM' ? dataSelect.negaraTujuanMP : null}
-                                                                    </select>
+                                                                    </select> */}
                                                                 </div>
                                                                 {errorsMP.negaraTujuanMP && <div className="offset-3 col-sm-9"><small className="text-danger">{errorsMP.negaraTujuanMP.message}</small></div>}
                                                             </div>
-                                                            <div className="row mb-3">
+                                                            <div className="row mb-3" style={{visibility: (cekdataMP.negaraTujuanMP === 99 | cekdataMP.negaraTujuanMP === '99' ? "visible" : "hidden")}}>
                                                                 <label className="col-sm-3 col-form-label" htmlFor="daerahTujuanMP">Daerah Tujuan</label>
                                                                 <div className="col-sm-6">
-                                                                <select name="daerahTujuanMP" id="daerahTujuanMP" onClick={handleKota} {...registerMP("daerahTujuanMP")} className="form-control form-control-sm">
+                                                                    <Controller
+                                                                        control={controlMP}
+                                                                        name={"daerahTujuanMP"}
+                                                                        className="form-control form-control-sm"
+                                                                        rules={{ required: false }}
+                                                                        render={({ field: { value, ...field } }) => (
+                                                                            <Select value={{id: cekdataMP.daerahTujuanMP, label: cekdataMP.daerahTujuanMPView }} {...field} options={dataSelect.daerahTujuanMP} onChange={(e) => handleSelectNegKomoditas(e, "daerahTujuanMP")} />
+                                                                        )}
+                                                                    />
+                                                                    {/* <select name="daerahTujuanMP" id="daerahTujuanMP"  {...registerMP("daerahTujuanMP")} className="form-control form-control-sm">
                                                                     <option value="">--</option>
                                                                     {cekdataMP.negaraTujuanMP === '99' ? dataSelect.daerahTujuanMP : null}
-                                                                        {/* <MasterKota/> */}
-                                                                    </select>
-                                                                    {/* <input type="text" id="daerah_tujuan" className="form-control form-control-sm" placeholder="Daerah Tujuan" /> */}
+                                                                    </select> */}
                                                                     {errorsMP.daerahTujuanMP && <small className="text-danger">{errorsMP.daerahTujuanMP.message}</small>}
                                                                 </div>
                                                             </div>
@@ -2161,30 +2526,6 @@ function DocK11() {
                                                 <div className="col-sm-12">
                                                     <div className="card-body pt-0">
                                                         <div className="row g-3 mb-3">
-                                                            <div className="col-sm-6">
-                                                                <div className="row mb-3">
-                                                                    <label className="col-sm-4 col-form-label" htmlFor="namaTercetak">Nama Tercetak</label>
-                                                                    <div className="col-sm-8">
-                                                                        <input type="text" id="namaTercetak" name="namaTercetak" {...registerMP("namaTercetak")} className="form-control form-control-sm" placeholder="Nama Tercetak" />
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                            <div className="col-sm-6">
-                                                                <div className="row mb-3">
-                                                                    <label className="col-sm-4 col-form-label" htmlFor="namaLatinTc">Nama Latin Tercetak</label>
-                                                                    <div className="col-sm-8">
-                                                                        <input type="text" id="namaLatinTc" name="namaLatinTc" {...registerMP("namaLatinTc")} className="form-control form-control-sm" placeholder="Nama Latin Tercetak" />
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                            <div className="col-sm-12">
-                                                                <div className="row mb-2">
-                                                                    <label className="col-sm-2 col-form-label" htmlFor="bentukJumlahTc">Bentuk, {cekdataMP.mediaPembawa === 'T' ? 'Deskripsi Kemasan' : 'Jumlah Tercetak'}</label>
-                                                                    <div className="col-sm-4">
-                                                                        <input type="text" id="bentukJumlahTc" name="bentukJumlahTc" {...registerMP("bentukJumlahTc")} className="form-control form-control-sm" placeholder="Bentuk, Jumlah Tercetak" />
-                                                                    </div>
-                                                                </div>
-                                                            </div>
                                                             <div className="col-md-12">
                                                                 <button type="button" className="btn btn-xs btn-primary" data-bs-toggle={cekdataMP.jenisMp ? "modal" : ""} data-bs-target={cekdataMP.jenisMp ? "#modKomoditas" : ""} onClick={cekdataMP.jenisMp ? null : () => {alert("Mohon Pilih Jenis Media Pembawa")}}>Tambah Komoditas</button>
                                                                 <button type="button" className="btn btn-xs btn-info float-end"  onClick={dataKomoditiPtk}><i className="menu-icon tf-icons bx bx-sync"></i> Refresh Data</button>
@@ -2230,7 +2571,6 @@ function DocK11() {
                                                                                         <td>{data.sat_lain}</td>
                                                                                         <td>{data.jantan}</td>
                                                                                         <td>{data.betina}</td>
-                                                                                        <td><a href={"http://localhost/api-barantin/dokupload/20240111/" + data.efile} target='_blank' rel='noreferrer'>{data.efile}</a></td>
                                                                                         <td>
                                                                                             <div className="dropdown">
                                                                                                 <button type="button" className="btn p-0 dropdown-toggle hide-arrow" data-bs-toggle="dropdown">
@@ -2262,7 +2602,7 @@ function DocK11() {
                                         <span className="d-sm-inline-block d-none">Sebelumnya</span>
                                     </button>
                                     <button type="submit" className="btn btn-primary">
-                                        <span className="d-sm-inline-block d-none me-sm-1">Selanjutnya</span>
+                                        <span className="d-sm-inline-block d-none me-sm-1">Simpan & Lanjutkan</span>
                                         <i className="bx bx-chevron-right bx-sm me-sm-n2"></i>
                                     </button>
                                 </div>
@@ -2322,7 +2662,7 @@ function DocK11() {
                                                                                         <td>{moment(data.tanggal_dokumen).format('YYYY-MM-DD')}</td>
                                                                                         <td>{data.negara}</td>
                                                                                         <td>{data.keterangan}</td>
-                                                                                        <td><a href={"http://localhost/api-barantin/dokupload/20240111/" + data.efile} target='_blank' rel='noreferrer'>{data.efile}</a></td>
+                                                                                        <td><a href={"http://localhost/api-barantin/" + data.efile} target='_blank' rel='noreferrer'>{data.efile}</a></td>
                                                                                         <td>
                                                                                             <div className="dropdown">
                                                                                                 <button type="button" className="btn p-0 dropdown-toggle hide-arrow" data-bs-toggle="dropdown">
@@ -2346,7 +2686,7 @@ function DocK11() {
                                                 </div>
                                             </div>
                                         </div>
-                                        <div className="card card-action mb-4">
+                                        {/* <div className="card card-action mb-4">
                                             <div className="card-header mb-3 p-2" style={{backgroundColor: '#123138'}}>
                                                 <div className="card-action-title">
                                                     <h5 className="mb-0 text-lightest">Tempat Pemeriksaan Tindakan Karantina</h5>
@@ -2368,7 +2708,6 @@ function DocK11() {
                                                                     <div className="row">
                                                                         <label className="col-sm-4 col-form-label" htmlFor="tempatPeriksaPtk">Tempat Pemeriksaan</label>
                                                                         <div className="col-sm-8">
-                                                                        {/* {...registeTempatPtk("tempatPeriksaPtk")} */}
                                                                             <select name="tempatPeriksaPtk" id="tempatPeriksaPtk" {...registerDokPeriksa("tempatPeriksaPtk")} className="form-control form-control-sm">
                                                                                 <option value="">--</option>
                                                                                 <option value="1">Ditempat pemasukan/pengeluaran</option>
@@ -2381,7 +2720,6 @@ function DocK11() {
                                                                     <div className="row">
                                                                         <label className="col-sm-4 col-form-label" htmlFor="ketLainPeriksaPtk">Keterangan Lainnya</label>
                                                                         <div className="col-sm-8">
-                                                                        {/* {...registeTempatPtk("tempatPeriksaPtk")} */}
                                                                         <input type="text" name='ketLainPeriksaPtk' id='ketLainPeriksaPtk' {...registerDokPeriksa("ketLainPeriksaPtk")} className='form-control form-control-sm' />
                                                                         </div>
                                                                     </div>
@@ -2390,7 +2728,6 @@ function DocK11() {
                                                                     <div className="row">
                                                                         <label className="col-sm-4 col-form-label" htmlFor="namaTempatPeriksaPtk">Nama Tempat</label>
                                                                         <div className="col-sm-8">
-                                                                        {/* {...registeTempatPtk("tempatPeriksaPtk")} */}
                                                                         <input type="text" name='namaTempatPeriksaPtk' id='namaTempatPeriksaPtk' {...registerDokPeriksa("namaTempatPeriksaPtk")} className='form-control form-control-sm' />
                                                                         </div>
                                                                     </div>
@@ -2399,7 +2736,6 @@ function DocK11() {
                                                                     <div className="row">
                                                                         <label className="col-sm-4 col-form-label" htmlFor="waktuPeriksaPtk">Waktu Pelaksanaan</label>
                                                                         <div className="col-sm-8">
-                                                                        {/* {...registeTempatPtk("tempatPeriksaPtk")} */}
                                                                         <input type="datetime-local" name='waktuPeriksaPtk' id='waktuPeriksaPtk' {...registerDokPeriksa("waktuPeriksaPtk")} className='form-control form-control-sm' />
                                                                         </div>
                                                                     </div>
@@ -2408,7 +2744,6 @@ function DocK11() {
                                                                     <div className="row">
                                                                         <label className="col-sm-4 col-form-label" htmlFor="alamatTempatPeriksaPtk">Alamat Tempat</label>
                                                                         <div className="col-sm-8">
-                                                                        {/* {...registeTempatPtk("tempatPeriksaPtk")} */}
                                                                         <input type="text" name='alamatTempatPeriksaPtk' id='alamatTempatPeriksaPtk' {...registerDokPeriksa("alamatTempatPeriksaPtk")} className='form-control form-control-sm' />
                                                                         </div>
                                                                     </div>
@@ -2417,7 +2752,6 @@ function DocK11() {
                                                                     <div className="row">
                                                                         <label className="col-sm-4 col-form-label" htmlFor="lokasiMPPeriksaPtk">Lokasi MP</label>
                                                                         <div className="col-sm-8">
-                                                                        {/* {...registeTempatPtk("tempatPeriksaPtk")} */}
                                                                         <input type="text" name='lokasiMPPeriksaPtk' id='lokasiMPPeriksaPtk' {...registerDokPeriksa("lokasiMPPeriksaPtk")} className='form-control form-control-sm' />
                                                                         </div>
                                                                     </div>
@@ -2426,7 +2760,6 @@ function DocK11() {
                                                                     <div className="row">
                                                                         <label className="col-sm-4 col-form-label" htmlFor="tempatProduksiPeriksaPtk">Tempat Produksi</label>
                                                                         <div className="col-sm-8">
-                                                                        {/* {...registeTempatPtk("tempatPeriksaPtk")} */}
                                                                         <input type="text" name='tempatProduksiPeriksaPtk' id='tempatProduksiPeriksaPtk' {...registerDokPeriksa("tempatProduksiPeriksaPtk")} className='form-control form-control-sm' />
                                                                         </div>
                                                                     </div>
@@ -2436,7 +2769,7 @@ function DocK11() {
                                                     </div>
                                                 </div>
                                             </div>
-                                        </div>
+                                        </div> */}
                                     </div>
                                     <div className="col-12 d-flex justify-content-between">
                                         <button type="button" className="btn btn-label-secondary" onClick={() => setWizardPage(wizardPage - 1)}>
@@ -2471,52 +2804,69 @@ function DocK11() {
                                         </button>
                                         <button type="submit" className="btn btn-success">
                                             <i className="bx bx-save bx-sm"></i>
-                                            <span className="d-sm-inline-block d-none me-sm-1">Simpan</span>
+                                            <span className="d-sm-inline-block d-none me-sm-1">Simpan & Kirim</span>
                                         </button>
                                     </div>
                                 </form>
                             </div>
                             <hr />
-                            <div className="card">
+                            <div className="card" style={{display: (ptkLengkap ? "block" : "none")}}>
                                 <div className="card-header mb-3 p-2" style={{backgroundColor: '#123138'}}>
                                     <div className="card-action-title">
                                         <h5 className="mb-0 text-lightest">Verifikasi PTK</h5>
                                     </div>
                                 </div>
                                 <div className="card-body">
-                                    <div className="col-sm-6">
-                                        <div className="form-check form-check-inline">
-                                            <input className="form-check-input" type="radio" name="pJRutin" id="ya" value="1" onClick={() => setOpsiVerif(true)} />
-                                            <label className="form-check-label" htmlFor="ya">Setujui PTK</label>
+                                    <form onSubmit={handleFormVerify(onSubmitVerify)}>
+                                        <input type="hidden" name="idPtk" {...registerVerify("idPtk")} />
+                                        <input type="hidden" name="noAju" {...registerVerify("noAju")} />
+                                        <input type="hidden" name="noDokumen" {...registerVerify("noDokumen")} />
+                                        <input type="hidden" name="mediaPembawaVerif" {...registerVerify("mediaPembawaVerif")} />
+                                        <div className="col-sm-6">
+                                            <div className="form-check form-check-inline">
+                                                <input className="form-check-input" type="radio" name="opsiVerif" id="ya" value="1" onClick={() => setOpsiVerif(true) & setValueVerify("alasanTolak", "")} {...registerVerify("opsiVerif", { required: "Mohon pilih verifikasi."})} />
+                                                <label className="form-check-label" htmlFor="ya">Setujui PTK</label>
+                                            </div>
+                                            <div className="form-check form-check-inline">
+                                                <input className="form-check-input" type="radio" name="opsiVerif" id="tidak" value="2" onClick={() => setOpsiVerif(false) & setValueVerify("tglTerimaVerif", "") & setValueVerify("petugasVerif", "")} {...registerVerify("opsiVerif")}/>
+                                                <label className="form-check-label" htmlFor="tidak">Tolak PTK</label>
+                                            </div>
+                                            {errorsVerify.opsiVerif && <small className="text-danger">{errorsVerify.opsiVerif.message}</small>}
                                         </div>
-                                        <div className="form-check form-check-inline">
-                                            <input className="form-check-input" type="radio" name="pJRutin" id="tidak" value="0" onClick={() => setOpsiVerif(false)}/>
-                                            <label className="form-check-label" htmlFor="tidak">Tolak PTK</label>
+                                        <br />
+                                        <div className="col-sm-4" style={{display: (cekdataVerify.opsiVerif === '2' ? 'block' : 'none')}}>
+                                            <div className="mb-3">
+                                                <label className="form-label" htmlFor="basic-default-fullname">Alasan Tolak</label>
+                                                <textarea name="alasanTolak" id="alasanTolak" rows="2" {...registerVerify("alasanTolak", { required: (cekdataVerify.opsiVerif === '2' ? "Mohon isi alasan tolak." : false)})} className={errorsVerify.alasanTolak ? "form-control form-control-sm is-invalid" : "form-control form-control-sm"}></textarea>
+                                            </div>
+                                            {errorsVerify.alasanTolak && <small className="text-danger">{errorsVerify.alasanTolak.message}</small>}
                                         </div>
-                                    </div>
-                                    <br />
-                                    <div className="col-sm-4" style={{display: (opsiVerif ? 'none' : 'block')}}>
-                                        <div className="mb-3">
-                                            <label className="form-label" htmlFor="basic-default-fullname">Alasan Tolak</label>
-                                            <textarea name="" id="" rows="2" className="form-control form-control-sm"></textarea>
-                                        </div>
-                                    </div>
-                                    <div className="col-sm-4" style={{display: (opsiVerif ? 'block' : 'none')}}>
-                                        <div className="mb-3">
-                                            <label className="form-label" htmlFor="basic-default-fullname"><b><u>Tanda Terima Laporan PTK</u></b></label>
-                                            <div className="row mb-3">
-                                                <label className="col-sm-5 col-form-label" htmlFor="tglTerimaVeerif">Tgl Terima</label>
-                                                <div className="col-sm-7">
-                                                    <input type="datetime-local" id="tglTerimaVerif" name="tglTerimaVerif" className="form-control form-control-sm" />
-                                                </div>
-                                                <label className="col-sm-5 col-form-label" htmlFor="petugasVerif">Petugas Penerima</label>
-                                                <div className="col-sm-7">
-                                                    <input type="text" id="petugasVerif" name="petugasVerif" className="form-control form-control-sm" />
+                                        <div className="col-sm-4" style={{display: (cekdataVerify.opsiVerif === '1' ? 'block' : 'none')}}>
+                                            <div className="mb-3">
+                                                <label className="form-label" htmlFor="basic-default-fullname"><b><u>Tanda Terima Laporan PTK</u></b></label>
+                                                <div className="row mb-3">
+                                                    <label className="col-sm-5 col-form-label" htmlFor="tglTerimaVerif">Tgl Terima</label>
+                                                    <div className="col-sm-7">
+                                                        <input type="datetime-local" id="tglTerimaVerif" name="tglTerimaVerif" {...registerVerify("tglTerimaVerif", { required: (cekdataVerify.opsiVerif === '1' ? "Mohon tanggal terima." : false)})} className={errorsVerify.tglTerimaVerif ? "form-control form-control-sm is-invalid" : "form-control form-control-sm"} />
+                                                        {errorsVerify.tglTerimaVerif && <small className="text-danger">{errorsVerify.tglTerimaVerif.message}</small>}
+                                                    </div>
+                                                    <label className="col-sm-5 col-form-label" htmlFor="petugasVerif">Petugas Penerima</label>
+                                                    <div className="col-sm-7">
+                                                        <input type="text" id="petugasVerif" name="petugasVerif" {...registerVerify("petugasVerif", { required: (cekdataVerify.opsiVerif === '1' ? "Mohon isi nama petugas verifikasi." : false)})} className={errorsVerify.petugasVerif ? "form-control form-control-sm is-invalid" : "form-control form-control-sm"} />
+                                                        {errorsVerify.petugasVerif && <small className="text-danger">{errorsVerify.petugasVerif.message}</small>}
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
-                                    </div>
-                                    <button className='btn btn-dark' type='button'>Proses PTK</button>
+                                        <button className='btn btn-dark' type='submit'>Proses PTK</button>
+                                        {/* <div> */}
+                                            <button style={{display: (dataIdPage.noPermohonan ? 'block' : 'none')}} type='button' onClick={() => navigate("/k22")} className='btn btn-info float-end'>
+                                            <i className="bx bx-send bx-sm"></i>
+                                                Buat Surat Tugas
+                                            </button>
+                                        {/* </div> */}
+                                    </form>
+
                                 </div>
                             </div>
                         </div>
@@ -2536,7 +2886,7 @@ function DocK11() {
                       <form className="row" onSubmit={handleFormKontainer(onSubmitKontainer)}>
                             <input type="hidden" name='idPtk' {...registerKontainer("idPtk")} />
                             {/* <input type="hidden" name='datenow' value={dateNow || ""} {...registerKontainer("datenow")} /> */}
-                            <input type="hidden" name='idDataKontainer' value={(() => setValueKontainer("idDataKontainer", dataIdPage.idDataKontainer)) || ""} {...registerKontainer("idDataKontainer")} />
+                            <input type="hidden" name='idDataKontainer' value={(() => setValueKontainer("idDataKontainer", dataIdPage.idDataKontainer)) | ""} {...registerKontainer("idDataKontainer")} />
                         <div className="col-6">
                           <label className="form-label" htmlFor="noKontainer">No Kontainer <span className='text-danger'>*</span></label>
                           <div className="input-group input-group-merge">
@@ -2638,12 +2988,21 @@ function DocK11() {
                         </div>
                         <div className="col-6">
                           <label className="form-label" htmlFor="jenisDokumen">Jenis Dokumen <span className='text-danger'>*</span></label>
-                          <div className="input-group input-group-merge">
-                            <select name="jenisDokumen" id="jenisDokumen" data-kar={cekdataMP.mediaPembawa} onClick={handleJenisDokumen}{...registerDokumen("jenisDokumen", { required: "Mohon pilih jenis dokumen."})} className={errorsDokumen.jenisDokumen ? "form-control form-control-sm is-invalid" : "form-control form-control-sm"}>
+                          {/* <div className="input-group input-group-merge"> */}
+                                <Controller
+                                    control={controlDokumen}
+                                    name={"jenisDokumen"}
+                                    className="form-control form-control-sm"
+                                    rules={{ required: false }}
+                                    render={({ field: { value, ...field } }) => (
+                                        <Select value={{id: cekdataDokumen.jenisDokumen, label: cekdataDokumen.jenisDokumenView }} {...field} options={dataSelect.jenisDokumen} onChange={(e) => setValueDokumen("jenisDokumen", e.value) & setValueDokumen("jenisDokumenView", e.label)} />
+                                    )}
+                                />
+                            {/* <select name="jenisDokumen" id="jenisDokumen" data-kar={cekdataMP.mediaPembawa} onClick={handleJenisDokumen}{...registerDokumen("jenisDokumen", { required: "Mohon pilih jenis dokumen."})} className={errorsDokumen.jenisDokumen ? "form-control form-control-sm is-invalid" : "form-control form-control-sm"}>
                                 <option value="">--</option>
                                 {dataSelect.jenisDokumen}
-                            </select>
-                          </div>
+                            </select> */}
+                          {/* </div> */}
                           {errorsDokumen.jenisDokumen && <small className="text-danger">{errorsDokumen.jenisDokumen.message}</small>}
                         </div>
                         <div className="col-6">
@@ -2655,13 +3014,22 @@ function DocK11() {
                         </div>
                         <div className="col-6">
                           <label className="form-label" htmlFor="negaraAsalDokumen">Negara Penerbit <span className='text-danger'>*</span></label>
-                          <div className="input-group input-group-merge">
-                            <select name="negaraAsalDokumen" id="negaraAsalDokumen" onClick={handleNegara}{...registerDokumen("negaraAsalDokumen", { required: "Mohon pilih negara penerbit dokumen."})} className={errorsDokumen.negaraAsalDokumen ? "form-control form-control-sm is-invalid" : "form-control form-control-sm"}>
+                          {/* <div className="input-group input-group-merge"> */}
+                                <Controller
+                                    control={controlDokumen}
+                                    name={"negaraAsalDokumen"}
+                                    className="form-control form-control-sm"
+                                    rules={{ required: "Mohon pilih negara penerbit dokumen." }}
+                                    render={({ field: { value, ...field } }) => (
+                                        <Select value={{id: cekdataDokumen.negaraAsalDokumen, label: cekdataDokumen.negaraAsalDokumenView }} {...field} options={dataSelect.negaraAsalDokumen} onChange={(e) => setValueDokumen("negaraAsalDokumen", e.value) & setValueDokumen("negaraAsalDokumenView", e.label) & (e.value === '99' ? handleKota(null, "kotaAsalDokumen") : null)} />
+                                    )}
+                                />
+                            {/* <select name="negaraAsalDokumen" id="negaraAsalDokumen" onClick={handleNegara}{...registerDokumen("negaraAsalDokumen", { required: "Mohon pilih negara penerbit dokumen."})} className={errorsDokumen.negaraAsalDokumen ? "form-control form-control-sm is-invalid" : "form-control form-control-sm"}>
                                 <option value="">--</option>
                                 <option value="99">ID - INDONESIA</option>
                                 {dataSelect.negaraAsalDokumen}
-                            </select>
-                         </div>
+                            </select> */}
+                         {/* </div> */}
                           {errorsDokumen.negaraAsalDokumen && <small className="text-danger">{errorsDokumen.negaraAsalDokumen.message}</small>}
                         </div>
                         <div className="col-6">
@@ -2673,12 +3041,21 @@ function DocK11() {
                         </div>
                         <div className="col-6" style={{visibility: (cekdataDokumen.negaraAsalDokumen === '99' ? 'visible' : 'hidden')}}>
                             <label className="form-label" htmlFor="kotaAsalDokumen">Kota Penerbit</label>
-                            <div className="input-group input-group-merge">
-                                <select name="kotaAsalDokumen" id="kotaAsalDokumen" onClick={cekdataDokumen.negaraAsalDokumen === '99' ? handleKota : null} {...registerDokumen("kotaAsalDokumen")} className="form-control form-control-sm">
+                            {/* <div className="input-group input-group-merge"> */}
+                                <Controller
+                                    control={controlDokumen}
+                                    name={"kotaAsalDokumen"}
+                                    className="form-control form-control-sm"
+                                    rules={{ required: false }}
+                                    render={({ field: { value, ...field } }) => (
+                                        <Select value={{id: cekdataDokumen.kotaAsalDokumen, label: cekdataDokumen.kotaAsalDokumenView }} {...field} options={dataSelect.kotaAsalDokumen} onChange={(e) => setValueDokumen("kotaAsalDokumen", e.value) & setValueDokumen("kotaAsalDokumenView", e.label)} />
+                                    )}
+                                />
+                                {/* <select name="kotaAsalDokumen" id="kotaAsalDokumen" onClick={cekdataDokumen.negaraAsalDokumen === '99' ? null : null} {...registerDokumen("kotaAsalDokumen")} className="form-control form-control-sm">
                                     <option value="">--</option>
                                     {dataSelect.kotaAsalDokumen}
-                                </select>
-                            </div>
+                                </select> */}
+                            {/* </div> */}
                           {/* {errorsDokumen.kotaAsalDokumen && <small className="text-danger">{errorsDokumen.kotaAsalDokumen.message}</small>} */}
                         </div>
                         <div className="col-6">
@@ -2744,7 +3121,7 @@ function DocK11() {
                              {cekdataMP.mediaPembawa === 'T' ?
                         <>
                         <div className="col-6">
-                          <label className="form-label" htmlFor="peruntukanMP">Peruntukan</label>
+                          <label className="form-label" htmlFor="peruntukanMP">Klasifikasi</label>
                           <select name="peruntukanMP" id="peruntukanMP" data-gol={(cekdataMP.jenisMp === '4' ? 'A' : '!=A')} onClick={handlePeruntukanKT} {...registerDetilMP("peruntukanMP")} className="form-control form-control-sm">
                             <option value="">--</option>
                             {dataSelect.peruntukanMP}
