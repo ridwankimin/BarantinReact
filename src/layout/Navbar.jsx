@@ -14,6 +14,8 @@ function Navbar() {
             setMenuOpen(!menuOpen);
         }
         setKetMenu(e.target.dataset.i18n);
+        // console.log(menuOpen)
+        // console.log(e.target.dataset.i18n);
     } 
     
     function handleSubMenuOpen(e) {
@@ -21,6 +23,9 @@ function Navbar() {
             setSubMenuOpen(!subMenuOpen);
         }
         setKetSubMenu(e.target.dataset.i18n);
+        // console.log(ketMenu)
+        // console.log(subMenuOpen)
+        // console.log(e.target.dataset.i18n);
     } 
     // console.log((window.location.pathname.split("/")[1]) === 'k11' ? "ok" : "tidak")
   return (
@@ -63,7 +68,7 @@ function Navbar() {
                     <li className="menu-header small text-uppercase"><span className="menu-header-text">Apps &amp; Menu</span></li>
                     {/* <li menu="0" className={menuOpen ? "menu-item open menu-item-animating open" : "menu-item menu-item-animating menu-item-closing"} onClick={handleMenuOpen(0)}> */}
                     <li className={(ketMenu === 'Informasi Pre Border' && menuOpen === true) || window.location.pathname.split("/")[1] === 'k11' || window.location.pathname.split("/")[1] === 'k12' || window.location.pathname.split("/")[1] === 'k13' || window.location.pathname.split("/")[1] === 'k14' || window.location.pathname.split("/")[1] === 'k15' || window.location.pathname.split("/")[1] === 'k16' ? 'menu-item open menu-item-animating open' : 'menu-item menu-item-animating menu-item-closing'}>
-                        <a style={{backgroundColor: "#123138"}} href="#" className="menu-link menu-toggle" data-i18n="Informasi Pre Border" onClick={handleMenuOpen}>
+                        <a style={{backgroundColor: "#123138"}} href="#" className="menu-link menu-toggle text-lightest" data-i18n="Informasi Pre Border" onClick={handleMenuOpen}>
                             <i className="menu-icon tf-icons bx bx-food-menu"></i>
                             <div data-i18n="Informasi Pre Border">Informasi Pre Border</div>
                         </a>
@@ -101,7 +106,7 @@ function Navbar() {
                         </ul>
                     </li>
                     <li className={(ketMenu === 'Analisa Awal & Penugasan' && menuOpen === true) || window.location.pathname.split("/")[1] === 'k21' || window.location.pathname.split("/")[1] === 'k22' ? 'menu-item open menu-item-animating open' : 'menu-item menu-item-animating menu-item-closing'}>
-                        <a style={{backgroundColor: "#123138"}} href="#" className="menu-link menu-toggle" data-i18n="Analisa Awal & Penugasan" onClick={handleMenuOpen}>
+                        <a style={{backgroundColor: "#123138"}} href="#" className="menu-link menu-toggle text-lightest" data-i18n="Analisa Awal & Penugasan" onClick={handleMenuOpen}>
                             <i className="menu-icon tf-icons bx bx-user"></i>
                             <div data-i18n="Analisa Awal & Penugasan">Analisa Awal & Penugasan</div>
                         </a>
@@ -119,7 +124,7 @@ function Navbar() {
                         </ul>
                     </li>
                     <li className={(ketMenu === 'Pemeriksaan' && menuOpen === true) || window.location.pathname.split("/")[1] === 'k31' || window.location.pathname.split("/")[1] === 'k32' || window.location.pathname.split("/")[1] === 'k33' || window.location.pathname.split("/")[1] === 'k34' || window.location.pathname.split("/")[1] === 'k35' || window.location.pathname.split("/")[1] === 'k36' || window.location.pathname.split("/")[1] === 'k37' || window.location.pathname.split("/")[1] === 'k37a' || window.location.pathname.split("/")[1] === 'k38' || window.location.pathname.split("/")[1] === 'k39' || window.location.pathname.split("/")[1] === 'k310' ? 'menu-item open menu-item-animating open' : 'menu-item menu-item-animating menu-item-closing'}>
-                        <a style={{backgroundColor: "#123138"}} href="#" className="menu-link menu-toggle" data-i18n="Pemeriksaan" onClick={handleMenuOpen}>
+                        <a style={{backgroundColor: "#123138"}} href="#" className="menu-link menu-toggle text-lightest" data-i18n="Pemeriksaan" onClick={handleMenuOpen}>
                             <i className="menu-icon tf-icons bx bx-check-shield"></i>
                             <div data-i18n="Pemeriksaan">Pemeriksaan</div>
                         </a>
@@ -154,14 +159,14 @@ function Navbar() {
                                     <div data-i18n="K-3.6">K-3.6</div>
                                 </a>
                             </li>
-                            <li className={window.location.pathname.split("/")[1] === 'k37' ? "menu-item active" : "menu-item"}>
-                                <a href={'/k37'} className="menu-link" title='LAPORAN HASIL PEMERIKSAAN ADMINISTRATIF'>
-                                    <div data-i18n="K-3.7">K-3.7</div>
+                            <li className={window.location.pathname.split("/")[1] === 'k37a' ? "menu-item active" : "menu-item"}>
+                                <a href={'/k37a'} className="menu-link" title='LAPORAN HASIL PEMERIKSAAN ADMINISTRATIF'>
+                                    <div data-i18n="K-3.7a">K-3.7a</div>
                                 </a>
                             </li>
-                            <li className={window.location.pathname.split("/")[1] === 'k37a' ? "menu-item active" : "menu-item"}>
-                                <a href={'/k37a'} className="menu-link" title='LAPORAN HASIL PEMERIKSAAN FISIK DAN KESEHATAN'>
-                                    <div data-i18n="K-3.7a">K-3.7a</div>
+                            <li className={window.location.pathname.split("/")[1] === 'k37b' ? "menu-item active" : "menu-item"}>
+                                <a href={'/k37b'} className="menu-link" title='LAPORAN HASIL PEMERIKSAAN KESEHATAN'>
+                                    <div data-i18n="K-3.7b">K-3.7b</div>
                                 </a>
                             </li>
                             <li className={window.location.pathname.split("/")[1] === 'k38' ? "menu-item active" : "menu-item"}>
@@ -182,7 +187,7 @@ function Navbar() {
                         </ul>
                     </li>
                     <li className={(ketMenu === 'SingMat' && menuOpen === true) || window.location.pathname.split("/")[1] === 'k41' || window.location.pathname.split("/")[1] === 'k42' ? 'menu-item open menu-item-animating open' : 'menu-item menu-item-animating menu-item-closing'}>
-                        <a style={{backgroundColor: "#123138"}} href="#" className="menu-link menu-toggle" data-i18n="SingMat" onClick={handleMenuOpen}>
+                        <a style={{backgroundColor: "#123138"}} href="#" className="menu-link menu-toggle text-lightest" data-i18n="SingMat" onClick={handleMenuOpen}>
                             <i className="menu-icon tf-icons fa-solid fa-hands-holding-circle"></i>
                             <div data-i18n="SingMat">SingMat</div>
                         </a>
@@ -200,27 +205,27 @@ function Navbar() {
                         </ul>
                     </li>
                     <li className={(ketMenu === 'Perlakuan' && menuOpen === true) || window.location.pathname.split("/")[1] === 'k51' || window.location.pathname.split("/")[1] === 'k52' || window.location.pathname.split("/")[1] === 'k53' || window.location.pathname.split("/")[1] === 'k54' || window.location.pathname.split("/")[1] === 'k55' ? 'menu-item open menu-item-animating open' : 'menu-item menu-item-animating menu-item-closing'}>
-                        <a style={{backgroundColor: "#123138"}} href="#" className="menu-link menu-toggle" data-i18n="Perlakuan" onClick={handleMenuOpen}>
+                        <a style={{backgroundColor: "#123138"}} href="#" className="menu-link menu-toggle text-lightest" data-i18n="Perlakuan" onClick={handleMenuOpen}>
                             <i className="menu-icon tf-icons fa-solid fa-hands-holding-circle"></i>
                             <div data-i18n="Perlakuan">Perlakuan</div>
                         </a>
                         <ul className="menu-sub">
                             <li className={window.location.pathname.split("/")[1] === 'k51' ? "menu-item active" : "menu-item"}>
-                                <a href={'/k51'} className="menu-link" title='SERTIFIKAT PERLAKUAN'>
+                                <a href={'/k51'} className="menu-link" title='SERTIFIKAT PERLAKUAN / TREATMENT CERTIFICATE'>
                                     <div data-i18n="K-5.1">K-5.1</div>
                                 </a>
                             </li>
                             <li className={window.location.pathname.split("/")[1] === 'k52' ? "menu-item active" : "menu-item"}>
-                                <a href={'/k52'} className="menu-link" title='TREATMENT CERTIFICATE'>
+                                <a href={'/k52'} className="menu-link" title='SERTIFIKAT FUMIGASI / FUMIGATION CERTIFICATE'>
                                     <div data-i18n="K-5.2">K-5.2</div>
                                 </a>
                             </li>
                             <li className={window.location.pathname.split("/")[1] === 'k53' ? "menu-item active" : "menu-item"}>
-                                <a href={'/k53'} className="menu-link" title='SERTIFIKAT FUMIGASI'>
+                                <a href={'/k53'} className="menu-link" title='LAPORAN HASIL PERLAKUAN'>
                                     <div data-i18n="K-5.3">K-5.3</div>
                                 </a>
                             </li>
-                            <li className={window.location.pathname.split("/")[1] === 'k54' ? "menu-item active" : "menu-item"}>
+                            {/* <li className={window.location.pathname.split("/")[1] === 'k54' ? "menu-item active" : "menu-item"}>
                                 <a href={'/k54'} className="menu-link" title='FUMIGATION CERTIFICATE'>
                                     <div data-i18n="K-5.4">K-5.4</div>
                                 </a>
@@ -229,11 +234,11 @@ function Navbar() {
                                 <a href={'/k55'} className="menu-link" title='LAPORAN HASIL PERLAKUAN'>
                                     <div data-i18n="K-5.5">K-5.5</div>
                                 </a>
-                            </li>
+                            </li> */}
                         </ul>
                     </li>
                     <li className={(ketMenu === 'Penahanan' && menuOpen === true) || window.location.pathname.split("/")[1] === 'k61' || window.location.pathname.split("/")[1] === 'k62' || window.location.pathname.split("/")[1] === 'k64' ? 'menu-item open menu-item-animating open' : 'menu-item menu-item-animating menu-item-closing'}>
-                        <a style={{backgroundColor: "#123138"}} href="#" className="menu-link menu-toggle" data-i18n="Penahanan" onClick={handleMenuOpen}>
+                        <a style={{backgroundColor: "#123138"}} href="#" className="menu-link menu-toggle text-lightest" data-i18n="Penahanan" onClick={handleMenuOpen}>
                             <i className="menu-icon tf-icons fa-solid fa-handcuffs"></i>
                             <div data-i18n="Penahanan">Penahanan</div>
                         </a>
@@ -256,7 +261,7 @@ function Navbar() {
                         </ul>
                     </li>
                     <li className={(ketMenu === 'Penolakan' && menuOpen === true) || window.location.pathname.split("/")[1] === 'k71' || window.location.pathname.split("/")[1] === 'k72' || window.location.pathname.split("/")[1] === 'k73' || window.location.pathname.split("/")[1] === 'k74' || window.location.pathname.split("/")[1] === 'k75' || window.location.pathname.split("/")[1] === 'k76' ? 'menu-item open menu-item-animating open' : 'menu-item menu-item-animating menu-item-closing'}>
-                        <a style={{backgroundColor: "#123138"}} href="#" className="menu-link menu-toggle" data-i18n="Penolakan" onClick={handleMenuOpen}>
+                        <a style={{backgroundColor: "#123138"}} href="#" className="menu-link menu-toggle text-lightest" data-i18n="Penolakan" onClick={handleMenuOpen}>
                             <i className="menu-icon tf-icons fa-solid fa-shield-halved"></i>
                             <div data-i18n="Penolakan">Penolakan</div>
                         </a>
@@ -294,7 +299,7 @@ function Navbar() {
                         </ul>
                     </li>
                     <li className={(ketMenu === 'Pemusnahan' && menuOpen === true) || window.location.pathname.split("/")[1] === 'k81' || window.location.pathname.split("/")[1] === 'k82' ? 'menu-item open menu-item-animating open' : 'menu-item menu-item-animating menu-item-closing'}>
-                        <a style={{backgroundColor: "#123138"}} href="#" className="menu-link menu-toggle" data-i18n="Pemusnahan" onClick={handleMenuOpen}>
+                        <a style={{backgroundColor: "#123138"}} href="#" className="menu-link menu-toggle text-lightest" data-i18n="Pemusnahan" onClick={handleMenuOpen}>
                             <i className="menu-icon tf-icons fa-solid fa-skull-crossbones"></i>
                             <div data-i18n="Pemusnahan">Pemusnahan</div>
                         </a>
@@ -312,7 +317,7 @@ function Navbar() {
                         </ul>
                     </li>
                     <li className={(ketMenu === 'Pembebasan' && menuOpen === true) || window.location.pathname.split("/")[1] === 'k91' || window.location.pathname.split("/")[1] === 'k92h' || window.location.pathname.split("/")[1] === 'k92i' || window.location.pathname.split("/")[1] === 'k92t' || window.location.pathname.split("/")[1] === 'k93' || window.location.pathname.split("/")[1] === 'k94' || window.location.pathname.split("/")[1] === 'kh1' || window.location.pathname.split("/")[1] === 'kh2' || window.location.pathname.split("/")[1] === 'ki1' || window.location.pathname.split("/")[1] === 'ki2' || window.location.pathname.split("/")[1] === 'kt1' || window.location.pathname.split("/")[1] === 'kt2' || window.location.pathname.split("/")[1] === 'kt3' || window.location.pathname.split("/")[1] === 'kt4' ? 'menu-item open menu-item-animating open' : 'menu-item menu-item-animating menu-item-closing'}>
-                        <a style={{backgroundColor: "#123138"}} href="#" className="menu-link menu-toggle" data-i18n="Pembebasan" onClick={handleMenuOpen}>
+                        <a style={{backgroundColor: "#123138"}} href="#" className="menu-link menu-toggle text-lightest" data-i18n="Pembebasan" onClick={handleMenuOpen}>
                             <i className="menu-icon tf-icons bx bx-file"></i>
                             <div data-i18n="Pembebasan">Pembebasan</div>
                         </a>
@@ -323,7 +328,7 @@ function Navbar() {
                                 </a>
                             </li>
                             <li className={(ketMenu === 'Pembebasan' && ketSubMenu === 'K-9.2' && subMenuOpen === true) || window.location.pathname.split("/")[1] === 'k92h' || window.location.pathname.split("/")[1] === 'k92i' || window.location.pathname.split("/")[1] === 'k92t' ? 'menu-item open menu-item-animating open' : 'menu-item menu-item-animating menu-item-closing'}>
-                                <a href="#" className="menu-link menu-toggle" data-i18n="K-9.2" onClick={handleSubMenuOpen}>
+                                <a style={{backgroundColor: "#123138"}} href="#" className="menu-link menu-toggle text-lightest" data-i18n="K-9.2" onClick={handleSubMenuOpen}>
                                     <div data-i18n="K-9.2">K-9.2</div>
                                 </a>
                                 <ul className="menu-sub">
@@ -350,7 +355,7 @@ function Navbar() {
                                 </a>
                             </li>
                             <li className={(ketMenu === 'Pembebasan' && ketSubMenu === 'Karantina & Pengawasan' && subMenuOpen === true) || window.location.pathname.split("/")[1] === 'k94' ? 'menu-item open menu-item-animating open' : 'menu-item menu-item-animating menu-item-closing'}>
-                                <a href="#" className="menu-link menu-toggle" data-i18n="Karantina & Pengawasan" onClick={handleSubMenuOpen}>
+                                <a style={{backgroundColor: "#123138"}} href="#" className="menu-link menu-toggle text-lightest" data-i18n="Karantina & Pengawasan" onClick={handleSubMenuOpen}>
                                     <i className="menu-icon tf-icons bx bx-user"></i>
                                     <div data-i18n="Karantina & Pengawasan">Karantina & Pengawasan</div>
                                 </a>
@@ -363,7 +368,7 @@ function Navbar() {
                                 </ul>
                             </li>
                             <li className={(ketMenu === 'Pembebasan' && ketSubMenu === 'KH' && subMenuOpen === true) || window.location.pathname.split("/")[1] === 'kh1' || window.location.pathname.split("/")[1] === 'kh2' ? 'menu-item open menu-item-animating open' : 'menu-item menu-item-animating menu-item-closing'}>
-                                <a href="#" data-i18n="KH" className="menu-link menu-toggle" onClick={handleSubMenuOpen}>
+                                <a style={{backgroundColor: "#123138"}} href="#" className="menu-link menu-toggle text-lightest" data-i18n="KH" onClick={handleSubMenuOpen}>
                                     <i className="menu-icon tf-icons bx bx-user"></i>
                                     <div data-i18n="KH">KH</div>
                                 </a>
@@ -381,7 +386,7 @@ function Navbar() {
                                 </ul>
                             </li>
                             <li className={(ketMenu === 'Pembebasan' && ketSubMenu === 'KI' && subMenuOpen === true) || window.location.pathname.split("/")[1] === 'ki1' || window.location.pathname.split("/")[1] === 'ki2' ? 'menu-item open menu-item-animating open' : 'menu-item menu-item-animating menu-item-closing'}>
-                                <a href="#" data-i18n="KI" className="menu-link menu-toggle" onClick={handleSubMenuOpen}>
+                                <a style={{backgroundColor: "#123138"}} href="#" className="menu-link menu-toggle text-lightest" data-i18n="KI" onClick={handleSubMenuOpen}>
                                     <i className="menu-icon tf-icons bx bx-user"></i>
                                     <div data-i18n="KI">KI</div>
                                 </a>
@@ -399,11 +404,11 @@ function Navbar() {
                                 </ul>
                             </li>
                             <li className={(ketMenu === 'Pembebasan' && ketSubMenu === 'KT' && subMenuOpen === true) || window.location.pathname.split("/")[1] === 'kt1' || window.location.pathname.split("/")[1] === 'kt2' || window.location.pathname.split("/")[1] === 'kt3' || window.location.pathname.split("/")[1] === 'kt4' ? 'menu-item open menu-item-animating open' : 'menu-item menu-item-animating menu-item-closing'}>
-                                <a href="#" data-i18n="KT" className="menu-link menu-toggle" onClick={handleSubMenuOpen}>
+                                <a style={{backgroundColor: "#123138"}} href="#" className="menu-link menu-toggle text-lightest" data-i18n="KT" onClick={handleSubMenuOpen}>
                                     <i className="menu-icon tf-icons bx bx-user"></i>
                                     <div data-i18n="KT">KT</div>
                                 </a>
-                                <ul className={window.location.pathname.split("/")[1] === 'k94' ? "menu-item active" : "menu-item"}>
+                                <ul className="menu-sub">
                                     <li className={window.location.pathname.split("/")[1] === 'kt1' ? "menu-item active" : "menu-item"}>
                                         <a href={'/kt1'} className="menu-link" title='PHYTOSANITARY CERTIFICATE'>
                                             <div data-i18n="KT-1">KT-1</div>
@@ -429,7 +434,7 @@ function Navbar() {
                         </ul>
                     </li>
                     <li className={ketMenu === 'Penegakkan Hukum' && menuOpen === true ? 'menu-item open menu-item-animating open' : 'menu-item menu-item-animating menu-item-closing'}>
-                        <a style={{backgroundColor: "#123138"}} href="#" className="menu-link menu-toggle" data-i18n="Penegakkan Hukum" onClick={handleMenuOpen}>
+                        <a style={{backgroundColor: "#123138"}} href="#" className="menu-link menu-toggle text-lightest" data-i18n="Penegakkan Hukum" onClick={handleMenuOpen}>
                             <i className="menu-icon tf-icons fa-solid fa-person-military-pointing"></i>
                             <div data-i18n="Penegakkan Hukum">Penegakkan Hukum</div>
                         </a>

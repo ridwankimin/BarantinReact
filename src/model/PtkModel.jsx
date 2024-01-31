@@ -295,6 +295,31 @@ export default class PtkModel {
   
       return axios.request(config)
     }
+    
+    tabTempatPeriksa(data) {
+        let datasend = {
+          'tab': '4', // ok
+          'id': data.idPtk, // ok
+          'no_aju': data.noAju, // ok
+          'tempat_pemeriksaan': data.tempatPeriksaPtk,
+          'instalasi_karantina_id': data.tempatPeriksaPtk === 'IK' ? data.namaTempatPeriksaPtk.split(";")[0] : "",
+          'tempat_lain_id': data.tempatPeriksaPtk === 'TL' ? data.namaTempatPeriksaPtk.split(";")[0] : "",
+          'nama_tempat_pemeriksaan': data.tempatPeriksaPtk === 'DL' ? data.namaTempatPeriksaPtk : data.namaTempatPeriksaPtk.split(";")[1],
+          'alamat_tempat_pemeriksaan': data.alamatTempatPeriksaPtk,
+          }
+        console.log(JSON.stringify(datasend))
+      let config = {
+        method: 'put',
+        maxBodyLength: Infinity,
+        url: url + 'ptk/' + data.idPtk,
+        headers: { 
+          'Content-Type': 'application/json', 
+        },
+        data : datasend
+      };
+  
+      return axios.request(config)
+    }
 
     tabKonfirmasi(data) {
         let datasend = {
@@ -349,46 +374,20 @@ export default class PtkModel {
     pushDetilKontainer(data) {
       const uuid = uuidv4();
       let datasend = {
-        'id': uuid,
+        'id': data.idDataKontainer === '' ? uuid : data.idDataKontainer,
         'ptk_id': data.idPtk,
         'nomor': data.noKontainer,
         'ukuran_kontainer_id': data.ukuranKontainer,
         'stuff_kontainer_id': data.stuffKontainer,
         'tipe_kontainer_id': data.tipeKontainer,
         'segel': data.segel,
-        'created_at': dateNow(),
+        // 'created_at': dateNow(),
       };
-      console.log(JSON.stringify(datasend))
+      // console.log(JSON.stringify(datasend))
       let config = {
-        method: 'post',
+        method: data.idDataKontainer === '' ? 'post' : 'put',
         maxBodyLength: Infinity,
-        url: url + 'ptk-kont',
-        headers: { 
-          'Content-Type': 'application/json', 
-        },
-        data: datasend
-      };
-      
-      return axios.request(config)
-    }
-    
-    putDetilKontainer(data) {
-      const uuid = uuidv4();
-      let datasend = {
-        'id': uuid,
-        'ptk_id': data.idPtk,
-        'nomor': data.noKontainer,
-        'ukuran_kontainer_id': data.ukuranKontainer,
-        'stuff_kontainer_id': data.stuffKontainer,
-        'tipe_kontainer_id': data.tipeKontainer,
-        'segel': data.segel,
-        'created_at': dateNow(),
-      };
-      console.log(JSON.stringify(datasend))
-      let config = {
-        method: 'put',
-        maxBodyLength: Infinity,
-        url: url + 'ptk-kont',
+        url: url + (data.idDataKontainer === '' ? 'ptk-kont' : 'ptk-kont/' + data.idDataKontainer),
         headers: { 
           'Content-Type': 'application/json', 
         },
@@ -495,10 +494,23 @@ export default class PtkModel {
       return axios.request(config)
     }
     
+    getDokumenId(id) {
+      let config = {
+        method: 'get',
+        maxBodyLength: Infinity,
+        url: url + 'ptk-dok/' + id,
+        headers: { 
+          'Content-Type': 'application/json', 
+        },
+      };
+      
+      return axios.request(config)
+    }
+    
     pushDetilDokumen(data) {
       const uuid = uuidv4();
       let datasend = {
-        'id': uuid,
+        'id': data.idDataDokumen === '' ? uuid : data.idDataDokumen,
         'ptk_id': data.idPtk,
         // 'ptk_id': "355d8f7c-2d9d-469e-82d5-60d8125847c9",
         'no_aju': data.noAju,
@@ -511,13 +523,13 @@ export default class PtkModel {
         'kota_kab_asal_id': data.kotaAsalDokumen,
         'keterangan': data.ketDokumen,
         'efile': data.fileDokumen,
-        'created_at': dateNow(),
+        // 'created_at': dateNow(),
       };
-      console.log(JSON.stringify(datasend))
+      // console.log(JSON.stringify(datasend))
       let config = {
-        method: 'post',
+        method: data.idDataDokumen === '' ? 'post' : 'put',
         maxBodyLength: Infinity,
-        url: url + 'ptk-dok',
+        url: url + (data.idDataDokumen === '' ? 'ptk-dok' : 'ptk-dok/' + data.idDataDokumen),
         headers: { 
           'Content-Type': 'application/json', 
           // 'Content-Type': 'multipart/form-data'

@@ -46,7 +46,6 @@ import DocK33 from '../pages/pemeriksaan/DocK33';
 import DocK34 from '../pages/pemeriksaan/DocK34';
 import DocK35 from '../pages/pemeriksaan/DocK35';
 import DocK36 from '../pages/pemeriksaan/DocK36';
-import DocK37 from '../pages/pemeriksaan/DocK37';
 import DocK37a from '../pages/pemeriksaan/DocK37a';
 import DocK38 from '../pages/pemeriksaan/DocK38';
 import DocK39 from '../pages/pemeriksaan/DocK39';
@@ -58,6 +57,7 @@ import DocK52 from '../pages/perlakuan/DocK52';
 import DocK53 from '../pages/perlakuan/DocK53';
 import DocK54 from '../pages/perlakuan/DocK54';
 import DocK55 from '../pages/perlakuan/DocK55';
+import DocK37b from '../pages/pemeriksaan/DocK37b';
 
 function Content() {
   return (
@@ -80,8 +80,8 @@ function Content() {
           <Route path="/k34" element={<DocK34 />} />
           <Route path="/k35" element={<DocK35 />} />
           <Route path="/k36" element={<DocK36 />} />
-          <Route path="/k37" element={<DocK37 />} />
           <Route path="/k37a" element={<DocK37a />} />
+          <Route path="/k37b" element={<DocK37b />} />
           <Route path="/k38" element={<DocK38 />} />
           <Route path="/k39" element={<DocK39 />} />
           <Route path="/k310" element={<DocK310 />} />

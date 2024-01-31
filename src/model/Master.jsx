@@ -110,4 +110,20 @@ export default class Master {
             }
         })
     }
+    
+    masterOPTK() {
+        return axios.get(url + 'optk', {
+            headers: {
+            //   'Cookie': 'PHPSESSID=jgepu06btvgculap0gl0tao0fp',
+            }
+        })
+    }
+
+    masterHPHK() {
+        return axios.get(url + 'hphk', {
+            headers: {
+            //   'Cookie': 'PHPSESSID=jgepu06btvgculap0gl0tao0fp',
+            }
+        })
+    }
 }

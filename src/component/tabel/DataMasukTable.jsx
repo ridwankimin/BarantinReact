@@ -1,8 +1,9 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react'
 import DataTable from 'react-data-table-component'
-import PtkModel from './PtkModel'
+import PtkModel from '../../model/PtkModel'
 import { useNavigate } from 'react-router-dom'
 import {decode as base64_decode, encode as base64_encode} from 'base-64'
+import Cookies from 'js-cookie'
 
 const tableCustomStyles = {
     headCells: {
@@ -223,7 +224,20 @@ function DataMasukTable(props) {
     function handleClick(e) {
         if (window.confirm('Anda memilih No AJU ' + e.selectedRows[0].noAju)) {
             // alert(e.selectedRows[0].noAju)
-            navigate('/k11/' + base64_encode(base64_encode(e.selectedRows[0].noAju) + 'm0R3N0r1R' + base64_encode(e.selectedRows[0].idPtk) + "m0R3N0r1R"  + base64_encode(e.selectedRows[0].noDokumen)))
+            Cookies.set("idPtkPage", base64_encode(base64_encode(e.selectedRows[0].noAju) + 'm0R3N0r1R' + base64_encode(e.selectedRows[0].idPtk) + "m0R3N0r1R"  + base64_encode(e.selectedRows[0].noDokumen)), {
+                expires: 1,
+            });
+            Cookies.set("tglPtk", e.selectedRows[0].tglDokumen, {
+                expires: 1
+            });
+            Cookies.set("jenisKarantina", (e.selectedRows[0].karantina === "Tumbuhan" ? "T" : (e.selectedRows[0].karantina === "Hewan" ? "H" : "I")), {
+                expires: 1
+            });
+            Cookies.set("jenisForm", "PTK", {
+                expires: 1
+            });
+            navigate('/k11')
+            // navigate('/k11/' + base64_encode(base64_encode(e.selectedRows[0].noAju) + 'm0R3N0r1R' + base64_encode(e.selectedRows[0].idPtk) + "m0R3N0r1R"  + base64_encode(e.selectedRows[0].noDokumen)))
         }
         console.log(e)
     }
