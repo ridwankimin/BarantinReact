@@ -2,6 +2,7 @@
 import React, {useState} from 'react'
 import DataMasukTable from '../component/tabel/DataMasukTable'
 import { useForm } from 'react-hook-form'
+import Cookies from 'js-cookie';
 
 function datenow() {
   var today = new Date();
@@ -35,7 +36,14 @@ const onSubmitPtk = (data) => {
   const dataMasuk = <DataMasukTable dataIn={data}/>;
   // console.log(dataMasuk)
   setTabel(values => ({...values, "ptk": dataMasuk }));
-  };
+};
+
+function removeCookie() {
+  Cookies.remove("idPtkPage");
+  Cookies.remove("tglPtk");
+  Cookies.remove("jenisKarantina");
+  Cookies.remove("jenisForm");
+}
 
   return (
     <div className="container-xxl flex-grow-1 container-p-y">
@@ -107,7 +115,7 @@ const onSubmitPtk = (data) => {
                     </div>
                     <div className="tab-content">
                       <div className="tab-pane fade show active" id="navs-justified-ppk-active" role="tabpanel">
-                        <a href='/k11' className='btn btn-sm btn-primary mb-3'>Tambah Baru</a>
+                        <a href='/k11' onClick={removeCookie} className='btn btn-sm btn-primary mb-3'>Tambah Baru</a>
                         <form onSubmit={handleFormPtk(onSubmitPtk)}>
                           <div className='row'>
                               <div className='col-2'>

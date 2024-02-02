@@ -28,6 +28,10 @@ import Master from '../../model/Master'
 import Cookies from 'js-cookie'
 import PtkHistory from '../../model/PtkHistory'
 // import $ from 'jquery';
+// import './assets/vendor/libs/popper/popper.js'
+// import '../../assets/vendor/libs/popper/popper.js'
+import '../../assets/vendor/libs/bs-stepper/bs-stepper.css'
+import '../../assets/vendor/libs/bs-stepper/bs-stepper.js'
 
 function DocK11() {
     let navigate = useNavigate();
@@ -368,11 +372,11 @@ function DocK11() {
                     if(response.data.data.ptk.negara_tujuan_id === 99) {
                         handleKota(null, "daerahTujuanMP")
                     }
-                    console.log(response.data.data)
+                    // console.log(response.data.data)
                     setdataSelect(values => ({...values, "jenisKemasan": <MasterKemasan/>}));
                     setdataSelect(values => ({...values, "satuanNilai": <MasterMataUang/>}));
-                    setdataSelect(values => ({...values, "daerahAsalMP": {value: response.data.data.ptk.kota_kab_asal_id, label: response.data.data.ptk.kota_asal}}))
-                    setdataSelect(values => ({...values, "daerahTujuanMP": {value: response.data.data.ptk.kota_kab_tujuan_id, label: response.data.data.ptk.kota_tujuan}}))
+                    // setdataSelect(values => ({...values, "daerahAsalMP": {value: response.data.data.ptk.kota_kab_asal_id, label: response.data.data.ptk.kota_asal}}))
+                    // setdataSelect(values => ({...values, "daerahTujuanMP": {value: response.data.data.ptk.kota_kab_tujuan_id, label: response.data.data.ptk.kota_tujuan}}))
                     setdataSelect(values => ({...values, "pelMuat": {value: response.data.data.ptk.pelabuhan_muat_id, label: response.data.data.ptk.kd_pelabuhan_muat + " - " + response.data.data.ptk.pelabuhan_muat}}))
                     setdataSelect(values => ({...values, "pelBongkar": {value: response.data.data.ptk.pelabuhan_bongkar_id, label: response.data.data.ptk.kd_pelabuhan_bongkar + " - " + response.data.data.ptk.pelabuhan_bongkar}}))
                     if(response.data.data.ptk.is_transit === 1) {
@@ -496,7 +500,7 @@ function DocK11() {
             setValueMP("mediaPembawa", response.data.data.ptk.jenis_karantina);
             setValueMP("jenisMp", response.data.data.ptk.jenis_media_pembawa_id ? response.data.data.ptk.jenis_media_pembawa_id.toString() : "");
             setValueMP("jenisKemasan", response.data.data.ptk.kemasan_id);
-            setValueMP("jenisAngkut", response.data.data.ptk.is_curah ? response.data.data.ptk.is_curah.toString() : "");
+            setValueMP("jenisAngkut", response.data.data.ptk.is_curah.toString());
             setValueMP("peruntukan", response.data.data.ptk.peruntukan_id ? response.data.data.ptk.peruntukan_id.toString() : "");
             setValueMP("merkKemasan", response.data.data.ptk.merk_kemasan);
             setValueMP("jumlahKemasan", response.data.data.ptk.jumlah_kemasan);
@@ -510,6 +514,7 @@ function DocK11() {
             setValueMP("negaraTujuanMP", response.data.data.ptk.negara_tujuan_id);
             setValueMP("negaraTujuanMPView", response.data.data.ptk.kd_negara_tujuan + " - " + response.data.data.ptk.negara_tujuan);
             setValueMP("daerahTujuanMP", response.data.data.ptk.kota_kab_tujuan_id);
+            setValueMP("daerahTujuanMPView", response.data.data.ptk.kota_tujuan);
             setValueMP("tingkatOlah", response.data.data.ptk.tingkat_pengolahan ? response.data.data.ptk.tingkat_pengolahan.toString() : "");
             setValueMP("infoTambahan", response.data.data.ptk.informasi_tambahan);
             setKomoditiPtk(response.data.data.ptk_komoditi);
@@ -540,7 +545,7 @@ function DocK11() {
         const response = modelPemohon.pushDetilDokumen(data);
             response
             .then((response) => {
-                // console.log(response.data)
+                console.log(response)
                 alert(response.data.status + " - " + response.data.message)
                 
                 // setFormTab(values => ({...values, tab4: false}))
@@ -553,7 +558,7 @@ function DocK11() {
                 }
             })
             .catch((error) => {
-                console.log(error.response);
+                console.log(error);
             });
     }
 
@@ -623,7 +628,7 @@ function DocK11() {
                 alert(response.data.status + " - " + response.data.message)
                 // Cookies.set("idPtkPage", base64_encode(base64_encode(response.data.data.no_aju) + 'm0R3N0r1R' + base64_encode(response.data.data.id) + "m0R3N0r1R" ), { expires: 1,});
                 // response.data.status === '201' ? navigate('/k11/' + base64_encode(base64_encode(response.data.data.no_aju) + 'm0R3N0r1R' + base64_encode(response.data.data.id) + "m0R3N0r1R")) : alert(response.data.message)
-                response.data.status === '201' ? Cookies.set("idPtkPage", base64_encode(base64_encode(response.data.data.no_aju) + 'm0R3N0r1R' + base64_encode(response.data.data.id) + "m0R3N0r1R" ), { expires: 1,}) : alert(response.data.message)
+                response.data.status === '201' ? Cookies.set("idPtkPage", base64_encode(base64_encode(response.data.data.no_aju) + 'm0R3N0r1R' + base64_encode(response.data.data.id) + "m0R3N0r1R" ), { expires: 3,}) : alert(response.data.message)
                 setDataIdPage(values => ({...values,
                     noAju: response.data.data.no_aju,
                     noIdPtk: response.data.data.id,
@@ -774,19 +779,19 @@ function DocK11() {
                         base64_encode(cekdataDiri.idPtk) + "m0R3N0r1R" + 
                         base64_encode(response.data.data.no_dok_permohonan)
                         ), { 
-                            expires: 1,
+                            expires: 3,
                         }
                     )
                     Cookies.set("tglPtk", cekdataVerify.tglTerimaVerif, { 
-                            expires: 1,
+                            expires: 3,
                         }
                     )
                     Cookies.set("jenisKarantina", cekdataMP.mediaPembawa, { 
-                            expires: 1,
+                            expires: 3,
                         }
                     )
                     Cookies.set("jenisForm", cekdataDiri.jenisForm, { 
-                            expires: 1,
+                            expires: 3,
                         }
                     )
                     setDataIdPage(values => ({...values,
@@ -1795,7 +1800,7 @@ function DocK11() {
                                             rules={{ required: false }}
                                             render={({ field: { value, ...field } }) => (
                                                 // <Select value={{id: cekdataDiri.provPenerima, label: cekdataDiri.provPenerimaView }} {...field} options={dataSelect.provPenerima} onChange={(e) => handleSelectPemohon(e, "provPenerima") & handleKota(e.value, "kotaPenerima")} />
-                                                <Select value={{id: cekdataDiri.provPenerima, label: cekdataDiri.provPenerimaView }} {...field} options={dataSelect.provPenerima} onChange={(e) => handleSelectPemohon(e, "provPenerima")} />
+                                                <Select value={{id: cekdataDiri.provPenerima, label: cekdataDiri.provPenerimaView }} {...field} options={dataSelect.provPenerima} onChange={(e) => handleSelectPemohon(e, "provPenerima") & handleKota(e.value, "kotaPenerima")} />
                                             )}
                                         />
                                         {/* <select id="provPenerima" name="provPenerima" onClick={dataSelect.provPenerima ? null : handleProv} {...registerPemohon("provPenerima")} className="form-control form-control-sm" placeholder="Kota Penerima">
@@ -2403,33 +2408,33 @@ function DocK11() {
                                                                                 <input className="form-check-input" type="radio" name="jenisMp" id="benih" value="4" {...registerMP("jenisMp")} />
                                                                                 <label className="form-check-label" htmlFor="benih">Benih</label>
                                                                             </div>
-                                                                            <div className="form-check form-check-inline">
+                                                                            <div className="form-check form-check-inline mb-3">
                                                                                 <input className="form-check-input" type="radio" name="jenisMp" id="nonbenih" value="5" {...registerMP("jenisMp")} />
                                                                                 <label className="form-check-label" htmlFor="nonbenih">Non Benih</label>
                                                                             </div>
                                                                         </div>
-                                                                    </div>
-                                                                    {errorsMP.jenisMp && <div className="offset-3 col-sm-9"><small className="text-danger">{errorsMP.jenisMp.message}</small></div>}
-                                                                </div>
-                                                                {/* <!-- Khusus Tumbuhan --> */}
-                                                                <div className="row mb-3">
-                                                                    <label className="col-sm-3 col-form-label" htmlFor="jenisAngkut">Jenis Angkut <span className='text-danger'>*</span></label>
-                                                                    <div className="col-sm-9">
                                                                         <div className="form-check form-check-inline">
-                                                                            <input className="form-check-input" type="radio" name="jenisAngkut" id="curah" value="1" {...registerMP("jenisAngkut", { required: "Mohon pilih jenis angkut."})} />
+                                                                            <input className="form-check-input" type="radio" name="jenisAngkut" id="curah" value={1} {...registerMP("jenisAngkut", { required: "Mohon pilih apakah komoditas curah atau tidak."})} />
                                                                             <label className="form-check-label" htmlFor="curah">Curah</label>
                                                                         </div>
                                                                         <div className="form-check form-check-inline">
-                                                                            <input className="form-check-input" type="radio" name="jenisAngkut" id="noncurah" value="0" {...registerMP("jenisAngkut")} />
+                                                                            <input className="form-check-input" type="radio" name="jenisAngkut" id="noncurah" value={0} {...registerMP("jenisAngkut")} />
                                                                             <label className="form-check-label" htmlFor="noncurah">Non Curah</label>
                                                                         </div>
                                                                     </div>
+                                                                    {errorsMP.jenisMp && <div className="offset-3 col-sm-9"><small className="text-danger">{errorsMP.jenisMp.message}</small></div>}
                                                                     {errorsMP.jenisAngkut && <div className="offset-3 col-sm-9"><small className="text-danger">{errorsMP.jenisAngkut.message}</small></div>}
                                                                 </div>
+                                                                {/* <!-- Khusus Tumbuhan --> */}
+                                                                {/* <div className="row mb-3">
+                                                                    <label className="col-sm-3 col-form-label" htmlFor="jenisAngkut">Jenis Angkut <span className='text-danger'>*</span></label>
+                                                                    <div className="col-sm-9">
+                                                                    </div>
+                                                                </div> */}
                                                                 <div className="row mb-3">
                                                                     <label className="col-sm-3 col-form-label" htmlFor="peruntukan">Peruntukan</label>
                                                                     <div className="col-sm-4">
-                                                                        <select name="peruntukan" id="peruntukan" {...registerMP("peruntukan", { required: cekdataMP.mediaPembawa === "T" ? "Mohon pilih jenis angkut." : false})} className={errorsMP.peruntukan ? "form-control form-control-sm is-invalid" : "form-control form-control-sm"}>
+                                                                        <select name="peruntukan" id="peruntukan" {...registerMP("peruntukan", { required: cekdataMP.mediaPembawa === "T" ? "Mohon pilih jenis angkut." : false})} className={errorsMP.peruntukan ? "form-select form-select-sm is-invalid" : "form-select form-select-sm"}>
                                                                             <option value="">--</option>
                                                                             <option value="1">Ditanam/Budidaya/Peningkatan Mutu Genetik</option>
                                                                             <option value="2">Konsumsi</option>
@@ -2525,10 +2530,6 @@ function DocK11() {
                                                                                 <Select value={{id: cekdataMP.daerahTujuanMP, label: cekdataMP.daerahTujuanMPView }} {...field} options={dataSelect.daerahTujuanMP} onChange={(e) => handleSelectNegKomoditas(e, "daerahTujuanMP")} />
                                                                             )}
                                                                         />
-                                                                        {/* <select name="daerahTujuanMP" id="daerahTujuanMP"  {...registerMP("daerahTujuanMP")} className="form-control form-control-sm">
-                                                                        <option value="">--</option>
-                                                                        {cekdataMP.negaraTujuanMP === '99' ? dataSelect.daerahTujuanMP : null}
-                                                                        </select> */}
                                                                         {errorsMP.daerahTujuanMP && <small className="text-danger">{errorsMP.daerahTujuanMP.message}</small>}
                                                                     </div>
                                                                 </div>
@@ -2925,12 +2926,12 @@ function DocK11() {
                                             <input type="hidden" name="mediaPembawaVerif" {...registerVerify("mediaPembawaVerif")} />
                                             <div className="col-sm-6">
                                                 <div className="form-check form-check-inline">
-                                                    <input className="form-check-input" type="radio" name="opsiVerif" id="ya" value="1" onClick={() => setOpsiVerif(true) & setValueVerify("alasanTolak", "")} {...registerVerify("opsiVerif", { required: "Mohon pilih verifikasi."})} />
-                                                    <label className="form-check-label" htmlFor="ya">Setujui PTK</label>
+                                                    <input className="form-check-input" type="radio" name="opsiVerif" id="opsiVerif1" value="1" onClick={() => setOpsiVerif(true) & setValueVerify("alasanTolak", "")} {...registerVerify("opsiVerif", { required: "Mohon pilih verifikasi."})} />
+                                                    <label className="form-check-label" htmlFor="opsiVerif1">Setujui PTK</label>
                                                 </div>
                                                 <div className="form-check form-check-inline">
-                                                    <input className="form-check-input" type="radio" name="opsiVerif" id="tidak" value="2" onClick={() => setOpsiVerif(false) & setValueVerify("tglTerimaVerif", "") & setValueVerify("petugasVerif", "")} {...registerVerify("opsiVerif")}/>
-                                                    <label className="form-check-label" htmlFor="tidak">Tolak PTK</label>
+                                                    <input className="form-check-input" type="radio" name="opsiVerif" id="opsiVerif2" value="2" onClick={() => setOpsiVerif(false) & setValueVerify("tglTerimaVerif", "") & setValueVerify("petugasVerif", "")} {...registerVerify("opsiVerif")}/>
+                                                    <label className="form-check-label" htmlFor="opsiVerif2">Tolak PTK</label>
                                                 </div>
                                                 {errorsVerify.opsiVerif && <small className="text-danger">{errorsVerify.opsiVerif.message}</small>}
                                             </div>
@@ -3106,7 +3107,7 @@ function DocK11() {
                                         control={controlDokumen}
                                         name={"jenisDokumen"}
                                         className="form-control form-control-sm"
-                                        rules={{ required: false }}
+                                        rules={{ required: "Mohon pilih jenis dokumen." }}
                                         render={({ field: { value, ...field } }) => (
                                             <Select value={{id: cekdataDokumen.jenisDokumen, label: cekdataDokumen.jenisDokumenView }} {...field} options={dataSelect.jenisDokumen} onChange={(e) => setValueDokumen("jenisDokumen", e.value) & setValueDokumen("jenisDokumenView", e.label)} />
                                         )}

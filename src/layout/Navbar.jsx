@@ -48,19 +48,22 @@ function Navbar() {
                 <ul className="menu-inner py-1 overflow-auto">
                     <li className="menu-item">
                         <a href="/" className="menu-link">
-                            <i className="menu-icon tf-icons bx bx-home-circle"></i>
+                        <i className="menu-icon tf-icons fa-solid fa-house"></i>
+                        
+                        {/* <i className="menu-icon tf-icons fa-solid fa-hands-holding-circle"></i> */}
+                            {/* <i className="menu-icon tf-icons bx bx-home-circle"></i> */}
                             <div data-i18n="Dashboards">Dashboards</div>
                         </a>
                     </li>
                     <li className="menu-item">
                         <a href={'/datam'} className="menu-link">
-                            <i className="menu-icon tf-icons bx bx-grid"></i>
+                            <i className="menu-icon tf-icons fa-solid fa-list-alt"></i>
                             <div data-i18n="Data Masuk">Data Masuk</div>
                         </a>
                     </li>
                     <li className="menu-item">
                         <a href={'/datam'} className="menu-link">
-                            <i className="menu-icon tf-icons bx bx-credit-card"></i>
+                            <i className="menu-icon tf-icons fa-solid fa-money-bill-wave"></i>
                             <div data-i18n="Kwitansi">Kwitansi</div>
                         </a>
                     </li>
@@ -69,7 +72,7 @@ function Navbar() {
                     {/* <li menu="0" className={menuOpen ? "menu-item open menu-item-animating open" : "menu-item menu-item-animating menu-item-closing"} onClick={handleMenuOpen(0)}> */}
                     <li className={(ketMenu === 'Informasi Pre Border' && menuOpen === true) || window.location.pathname.split("/")[1] === 'k11' || window.location.pathname.split("/")[1] === 'k12' || window.location.pathname.split("/")[1] === 'k13' || window.location.pathname.split("/")[1] === 'k14' || window.location.pathname.split("/")[1] === 'k15' || window.location.pathname.split("/")[1] === 'k16' ? 'menu-item open menu-item-animating open' : 'menu-item menu-item-animating menu-item-closing'}>
                         <a style={{backgroundColor: "#123138"}} href="#" className="menu-link menu-toggle text-lightest" data-i18n="Informasi Pre Border" onClick={handleMenuOpen}>
-                            <i className="menu-icon tf-icons bx bx-food-menu"></i>
+                            <i className="menu-icon tf-icons fa-solid fa-bar-chart"></i>
                             <div data-i18n="Informasi Pre Border">Informasi Pre Border</div>
                         </a>
                         <ul className="menu-sub">
@@ -107,7 +110,7 @@ function Navbar() {
                     </li>
                     <li className={(ketMenu === 'Analisa Awal & Penugasan' && menuOpen === true) || window.location.pathname.split("/")[1] === 'k21' || window.location.pathname.split("/")[1] === 'k22' ? 'menu-item open menu-item-animating open' : 'menu-item menu-item-animating menu-item-closing'}>
                         <a style={{backgroundColor: "#123138"}} href="#" className="menu-link menu-toggle text-lightest" data-i18n="Analisa Awal & Penugasan" onClick={handleMenuOpen}>
-                            <i className="menu-icon tf-icons bx bx-user"></i>
+                            <i className="menu-icon tf-icons fa-solid fa-user-clock"></i>
                             <div data-i18n="Analisa Awal & Penugasan">Analisa Awal & Penugasan</div>
                         </a>
                         <ul className="menu-sub">
@@ -125,7 +128,7 @@ function Navbar() {
                     </li>
                     <li className={(ketMenu === 'Pemeriksaan' && menuOpen === true) || window.location.pathname.split("/")[1] === 'k31' || window.location.pathname.split("/")[1] === 'k32' || window.location.pathname.split("/")[1] === 'k33' || window.location.pathname.split("/")[1] === 'k34' || window.location.pathname.split("/")[1] === 'k35' || window.location.pathname.split("/")[1] === 'k36' || window.location.pathname.split("/")[1] === 'k37' || window.location.pathname.split("/")[1] === 'k37a' || window.location.pathname.split("/")[1] === 'k38' || window.location.pathname.split("/")[1] === 'k39' || window.location.pathname.split("/")[1] === 'k310' ? 'menu-item open menu-item-animating open' : 'menu-item menu-item-animating menu-item-closing'}>
                         <a style={{backgroundColor: "#123138"}} href="#" className="menu-link menu-toggle text-lightest" data-i18n="Pemeriksaan" onClick={handleMenuOpen}>
-                            <i className="menu-icon tf-icons bx bx-check-shield"></i>
+                            <i className="menu-icon tf-icons fa-solid fa-magnifying-glass"></i>
                             <div data-i18n="Pemeriksaan">Pemeriksaan</div>
                         </a>
                         <ul className="menu-sub">
@@ -188,7 +191,7 @@ function Navbar() {
                     </li>
                     <li className={(ketMenu === 'SingMat' && menuOpen === true) || window.location.pathname.split("/")[1] === 'k41' || window.location.pathname.split("/")[1] === 'k42' ? 'menu-item open menu-item-animating open' : 'menu-item menu-item-animating menu-item-closing'}>
                         <a style={{backgroundColor: "#123138"}} href="#" className="menu-link menu-toggle text-lightest" data-i18n="SingMat" onClick={handleMenuOpen}>
-                            <i className="menu-icon tf-icons fa-solid fa-hands-holding-circle"></i>
+                            <i className="menu-icon tf-icons fa-solid fa-tower-observation"></i>
                             <div data-i18n="SingMat">SingMat</div>
                         </a>
                         <ul className="menu-sub">
@@ -300,7 +303,7 @@ function Navbar() {
                     </li>
                     <li className={(ketMenu === 'Pemusnahan' && menuOpen === true) || window.location.pathname.split("/")[1] === 'k81' || window.location.pathname.split("/")[1] === 'k82' ? 'menu-item open menu-item-animating open' : 'menu-item menu-item-animating menu-item-closing'}>
                         <a style={{backgroundColor: "#123138"}} href="#" className="menu-link menu-toggle text-lightest" data-i18n="Pemusnahan" onClick={handleMenuOpen}>
-                            <i className="menu-icon tf-icons fa-solid fa-skull-crossbones"></i>
+                            <i className="menu-icon tf-icons fa-solid fa-explosion"></i>
                             <div data-i18n="Pemusnahan">Pemusnahan</div>
                         </a>
                         <ul className="menu-sub">
@@ -318,7 +321,7 @@ function Navbar() {
                     </li>
                     <li className={(ketMenu === 'Pembebasan' && menuOpen === true) || window.location.pathname.split("/")[1] === 'k91' || window.location.pathname.split("/")[1] === 'k92h' || window.location.pathname.split("/")[1] === 'k92i' || window.location.pathname.split("/")[1] === 'k92t' || window.location.pathname.split("/")[1] === 'k93' || window.location.pathname.split("/")[1] === 'k94' || window.location.pathname.split("/")[1] === 'kh1' || window.location.pathname.split("/")[1] === 'kh2' || window.location.pathname.split("/")[1] === 'ki1' || window.location.pathname.split("/")[1] === 'ki2' || window.location.pathname.split("/")[1] === 'kt1' || window.location.pathname.split("/")[1] === 'kt2' || window.location.pathname.split("/")[1] === 'kt3' || window.location.pathname.split("/")[1] === 'kt4' ? 'menu-item open menu-item-animating open' : 'menu-item menu-item-animating menu-item-closing'}>
                         <a style={{backgroundColor: "#123138"}} href="#" className="menu-link menu-toggle text-lightest" data-i18n="Pembebasan" onClick={handleMenuOpen}>
-                            <i className="menu-icon tf-icons bx bx-file"></i>
+                            <i className="menu-icon tf-icons fa-solid fa-file-archive"></i>
                             <div data-i18n="Pembebasan">Pembebasan</div>
                         </a>
                         <ul className="menu-sub">

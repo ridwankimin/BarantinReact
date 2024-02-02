@@ -63,7 +63,7 @@ function DocK51() {
                 alert(error.response.status + " - " + error.response.data.message)
             });
     }
-
+    
     useEffect(()=>{
         if(idPtk) {
             const tglPtk = Cookies.get("tglPtk");
@@ -115,10 +115,10 @@ function DocK51() {
                         console.log(response.data.data)
                         if(response.data.status === '200') {
                             // alert(response.data.message);
-                            setValue("idDok51", response.data.data[0].id)
-                            setValue("noDok51", response.data.data[0].nomor)
-                            setValue("noDokumen", response.data.data[0].nomor)
-                            setValue("tglDok51", response.data.data[0].tanggal)
+                            setValue("idDok53", response.data.data[0].id)
+                            setValue("noDok53", response.data.data[0].nomor)
+                            // setValue("noDokumen", response.data.data[0].nomor)
+                            setValue("tglDok53", response.data.data[0].tanggal)
                             setValue("idSurtug", response.data.data[0].ptk_surat_tugas_id)
                             setValue("namaIlmiahMP", response.data.data[0].nama_ilmiah_mp)
                             setValue("namaUmumMP", response.data.data[0].nama_dagang_mp)
@@ -173,7 +173,7 @@ function DocK51() {
                         noIdPtk: idPtk ? base64_decode(ptkNomor[1]) : "",
                         noDokumen: idPtk ? base64_decode(ptkNomor[2]) : "",
                         tglDokumen: tglPtk,
-                        kegiatan: response.data.data.ptk,
+                        // kegiatan: response.data.data.ptk,
                         listPtk: response.data.data.ptk,
                         listKomoditas: response.data.data.ptk_komoditi,
                         listDokumen: response.data.data.ptk_dokumen
@@ -196,6 +196,9 @@ function DocK51() {
         } else {
             alert("Mohon pilih Nomor Aju di menu data masuk.")
         }
+        setValue("idDok51","")
+        setValue("noDok51","")
+        setValue("tglDok51","")
     },[idPtk, setValue, navigate])
 
   return (

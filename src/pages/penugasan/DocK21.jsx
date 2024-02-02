@@ -3,9 +3,12 @@ import React, { useEffect, useState } from 'react';
 import {decode as base64_decode} from 'base-64';
 import { useForm } from 'react-hook-form';
 import PtkSurtug from '../../model/PtkSurtug';
+import PtkModel from '../../model/PtkModel';
 
 function DocK21() {
-    const idPtk = Cookies.get("idPtkPage");
+    const idPtk = Cookies.get("idPtkPage")
+    const jenisKar = Cookies.get("jenisKarantina")
+    let [komoditiPtk, setKomoditiPtk] = useState([])
 
     const {
         register,
@@ -13,9 +16,9 @@ function DocK21() {
         handleSubmit,
         watch,
         formState: { errors },
-      } = useForm();
+    } = useForm();
 
-      const dataWatch = watch()
+    const dataWatch = watch()
 
     const onSubmit = (data) => {
         console.log(data)
@@ -64,6 +67,20 @@ function DocK21() {
             setValue("idPtk",base64_decode(ptkNomor[1]))
             setValue("noDokumen",base64_decode(ptkNomor[2]))
             setValue("jenisKarantina", Cookies.get("jenisKarantina"))
+
+            const modelPemohon = new PtkModel();
+            const resKom = modelPemohon.getKomoditiPtkId(base64_decode(ptkNomor[1]), Cookies.get("jenisKarantina"));
+            resKom
+            .then((res) => {
+                if(res.data.status === '200') {
+                    console.log(res.data.data)
+                    // setKomoditiPtk(res.data.data)
+                    setKomoditiPtk(res.data.data)
+                }
+            })
+            .catch((error) => {
+                console.log(error.response.data);
+            });
         }
     }, [idPtk, setValue])
 
@@ -85,7 +102,7 @@ function DocK21() {
                             </div>
                             <label className="col-sm-1 col-form-label" htmlFor="tglDok"><b>TANGGAL</b></label>
                             <div className="col-sm-2">
-                                <input type="text" id='tglDok' value={data.tglDokumen} className='form-control form-control-sm' disabled/>
+                                <input type="datetime-local" id='tglDok' value={data.tglDokumen} className='form-control form-control-sm' disabled/>
                             </div>
                         </div>
                     </div>
@@ -110,10 +127,10 @@ function DocK21() {
                                 <div className="col-sm-3">
                                     <input type="text" id="noDok21" {...register("noDok21")} className='form-control form-control-sm' placeholder="Nomor" disabled />
                                 </div>
-                                <label className="col-sm-2 col-form-label text-sm-center" htmlFor="tglDok21">Tanggal</label>
+                                <label className="col-sm-2 col-form-label text-sm-center" htmlFor="tglDok21">Tanggal <span className='text-danger'>*</span></label>
                                 <div className="col-sm-2">
                                     <input type="datetime-local" id="tglDok21" name='tglDok21' {...register("tglDok21", {required: "Mohon isi tanggal dokumen."})} className={errors.tglDok37 ? "form-control form-control-sm is-invalid" : "form-control form-control-sm"} />
-                                    {errors.tglDok21 && <><br/><small className="text-danger">{errors.tglDok21.message}</small></>}
+                                    {errors.tglDok21 && <small className="text-danger">{errors.tglDok21.message}</small>}
                                 </div>
                             </div>
                         </div>
@@ -121,15 +138,74 @@ function DocK21() {
                             <div className="col">
                                 <div className="accordion" id="collapseSection">
                                     <div className="card">
-                                        <h2 className="accordion-header" id="headerCountry">
-                                            <button className="accordion-button" type="button" style={{backgroundColor: '#123138'}} data-bs-toggle="collapse" data-bs-target="#collapseCountry" aria-expanded="true" aria-controls="collapseCountry">
+                                        <h2 className="accordion-header" id="headerInfoMP">
+                                            <button className="accordion-button" type="button" style={{backgroundColor: '#123138'}} data-bs-toggle="collapse" data-bs-target="#collapseInfoMP" aria-expanded="true" aria-controls="collapseInfoMP">
+                                                <h5 className='text-lightest mb-0'>Informasi Media Pembawa</h5>
+                                            </button>
+                                        </h2>
+                                        <div id="collapseInfoMP">
+                                            <div className="accordion-body">
+                                                <div className="table-responsive text-nowrap">
+                                                    <table className="table table-sm table-bordered table-hover table-striped dataTable">
+                                                        <thead>
+                                                            <tr>
+                                                                <th>No</th>
+                                                                <th>Kode HS</th>
+                                                                <th>Klasifikasi</th>
+                                                                <th>Komoditas Umum</th>
+                                                                <th>Komoditas En/Latin</th>
+                                                                <th>Netto</th>
+                                                                <th>Satuan</th>
+                                                                <th>Bruto</th>
+                                                                <th>Satuan</th>
+                                                                <th>Jumlah</th>
+                                                                <th>Satuan</th>
+                                                                <th>Jantan</th>
+                                                                <th>Betina</th>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody>
+                                                            {komoditiPtk ? (komoditiPtk?.map((data, index) => (
+                                                                        <tr key={index}>
+                                                                            <td>{index + 1}</td>
+                                                                            <td>{data.kode_hs}</td>
+                                                                            <td>{data.klasifikasi}</td>
+                                                                            <td>{data.nama_umum_tercetak}</td>
+                                                                            <td>{data.nama_latin_tercetak}</td>
+                                                                            <td>{data.volume_netto}</td>
+                                                                            <td>{data.sat_netto}</td>
+                                                                            <td>{data.volume_bruto}</td>
+                                                                            <td>{data.sat_bruto}</td>
+                                                                            <td>{data.volume_lain}</td>
+                                                                            <td>{data.sat_lain}</td>
+                                                                            <td>{data.jantan}</td>
+                                                                            <td>{data.betina}</td>
+                                                                        </tr>
+                                                                    ))
+                                                                ) : null
+                                                            }
+                                                        </tbody>
+                                                    </table>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div className="row my-4">
+                            <div className="col">
+                                <div className="accordion" id="collapseSection">
+                                    <div className="card">
+                                        <h2 className="accordion-header" id="headerAnalisa">
+                                            <button className="accordion-button" type="button" style={{backgroundColor: '#123138'}} data-bs-toggle="collapse" data-bs-target="#collapseAnalisa" aria-expanded="true" aria-controls="collapseAnalisa">
                                                 <h5 className='text-lightest mb-0'>Hasil Analisa Permohonan</h5>
                                             </button>
                                         </h2>
-                                        <div id="collapseCountry">
+                                        <div id="collapseAnalisa">
                                             <div className="accordion-body">
                                                 {/* <div className="row g-3 mb-3"> */}
-                                                <div className="col-md-12">
+                                                <div className="col-md-12" style={{display: (jenisKar === "H" ? "block" : "none")}}>
                                                     <label className="col-form-label" htmlFor="mpHPHK">A. Media Pembawa HPHK</label>
                                                     <div className="row">
                                                         <div className="col-sm-3">
@@ -185,12 +261,12 @@ function DocK21() {
                                                                 <input style={{display: (dataWatch.opsiKH ? (dataWatch.opsiKH.indexOf('11') >= 0 ? 'block' : 'none') : 'none')}} type="text" name='opsiKHLainnya' id='opsiKHLainnya' {...register("opsiKHLainnya")} className='form-control form-control-sm' />
                                                             </div>
                                                         </div>
-                                                        {errors.opsiOlah2H && <><br/><small className="text-danger">{errors.opsiOlah2H.message}</small></>}
-                                                        {errors.opsiKH && <><br/><small className="text-danger">{errors.opsiKH.message}</small></>}
+                                                        {errors.opsiOlah2H && <small className="text-danger">{errors.opsiOlah2H.message}</small>}
+                                                        {errors.opsiKH && <small className="text-danger">{errors.opsiKH.message}</small>}
                                                     </div>
                                                 </div>
-                                                <div className="col-md-12">
-                                                    <label className="col-form-label" htmlFor="mpHPHK">B. Media Pembawa HPIK</label>
+                                                <div className="col-md-12" style={{display: (jenisKar === "I" ? "block" : "none")}}>
+                                                    <label className="col-form-label" htmlFor="mpHPIK">B. Media Pembawa HPIK</label>
                                                     <div className="row">
                                                         <div className="col-sm-3">
                                                             <div className="form-check">
@@ -245,11 +321,11 @@ function DocK21() {
                                                                 <input style={{display: (dataWatch.opsiKI ? (dataWatch.opsiKI.indexOf('22') >= 0 ? 'block' : 'none') : 'none')}} type="text" name='opsiKILainnya' id='opsiKILainnya' {...register("opsiKILainnya")} className='form-control form-control-sm' />
                                                             </div>
                                                         </div>
-                                                        {errors.opsiOlahI && <><br/><small className="text-danger">{errors.opsiOlahI.message}</small></>}
-                                                        {errors.opsiKI && <><br/><small className="text-danger">{errors.opsiKI.message}</small></>}
+                                                        {errors.opsiOlahI && <small className="text-danger">{errors.opsiOlahI.message}</small>}
+                                                        {errors.opsiKI && <small className="text-danger">{errors.opsiKI.message}</small>}
                                                     </div>
                                                 </div>
-                                                <div className="col-md-12">
+                                                <div className="col-md-12" style={{display: (jenisKar === "T" ? "block" : "none")}}>
                                                     <label className="col-form-label" htmlFor="mpHPHK">C. Media Pembawa OPTK</label>
                                                     <div className="row">
                                                         <div className="col-sm-4">
@@ -269,7 +345,7 @@ function DocK21() {
                                                         <div className="col-sm-3">
                                                             <div className="form-check">
                                                                 <label className="form-check-label" htmlFor="opsiKT25">Termasuk Pangan</label>
-                                                                <input name="opsiKT" value={25} {...register("opsiKT", { required: (data.jenisKarantina === "T" ? "Mohon isi analisa minimal 1 pilihan." : false)})} className={errors.opsiKT ? "form-check-input is-invalid" : "form-check-input"} type="checkbox" id="opsiKI15" />
+                                                                <input name="opsiKT" value={25} {...register("opsiKT", { required: (data.jenisKarantina === "T" ? "Mohon isi analisa minimal 1 pilihan." : false)})} className={errors.opsiKT ? "form-check-input is-invalid" : "form-check-input"} type="checkbox" id="opsiKT25" />
                                                             </div>
                                                             <div className="form-check">
                                                                 <label className="form-check-label" htmlFor="opsiKT26">Termasuk Pakan</label>
@@ -280,7 +356,7 @@ function DocK21() {
                                                                 <input name="opsiKT" value={27} {...register("opsiKT")} className={errors.opsiKT ? "form-check-input is-invalid" : "form-check-input"} type="checkbox" id="opsiKT27" />
                                                             </div>
                                                             <div className="form-check">
-                                                                <label className="form-check-label" htmlFor="opsiKT18">Sumber Daya Genetik</label>
+                                                                <label className="form-check-label" htmlFor="opsiKT28">Sumber Daya Genetik</label>
                                                                 <input name="opsiKT" value={28} {...register("opsiKT")} className={errors.opsiKT ? "form-check-input is-invalid" : "form-check-input"} type="checkbox" id="opsiKT28" />
                                                             </div>
                                                             <div className="form-check">
@@ -321,12 +397,13 @@ function DocK21() {
                                                                 </div>
                                                             </div>
                                                         </div>
-                                                        {errors.opsiOlahT && <><br/><small className="text-danger">{errors.opsiOlahT.message}</small></>}
-                                                        {errors.opsiDilarangOPTK && <><br/><small className="text-danger">{errors.opsiDilarangOPTK.message}</small></>}
-                                                        {errors.opsiKT && <><br/><small className="text-danger">{errors.opsiKT.message}</small></>}
+                                                        {errors.opsiOlahT && <small className="text-danger">{errors.opsiOlahT.message}</small>}
+                                                        {errors.opsiDilarangOPTK && <small className="text-danger">{errors.opsiDilarangOPTK.message}</small>}
+                                                        {errors.opsiKT && <small className="text-danger">{errors.opsiKT.message}</small>}
                                                     </div>
                                                 </div>
                                                 {/* </div> */}
+                                                <hr />
                                                 <div className="col-md-12 mb-4">
                                                     <label className="col-form-label text-sm-start" htmlFor="collapse-country-origin">D. Laporan Intelijen dan Serah Terima Media Pembawa</label>
                                                     <div className="row">
@@ -372,7 +449,7 @@ function DocK21() {
                                                     </div>
                                                 </div>
                                                 <div className="row g-3 mb-3">
-                                                    <div className='form-control-label'><b>Rekomendasi</b></div>
+                                                    <div className='form-control-label'><b>Rekomendasi <span className='text-danger'>*</span></b></div>
                                                     <div className="col-sm-5 mt-0 mb-2">
                                                         <select className={errors.rekomAnalis === '' ? 'form-select form-select-sm is-invalid' : 'form-select form-select-sm'} {...register("rekomAnalis", { required: "Mohon pilih rekomendasi yang sesuai."})}>
                                                             <option value=''>--</option>
@@ -382,9 +459,9 @@ function DocK21() {
                                                             <option value={4}>Media Pembawa tidak dikenai tindakan karantina dan pengawasan</option>
                                                             <option value={5}>Wasmalitrik</option>
                                                         </select>
-                                                        {errors.rekomAnalis && <><br/><small className="text-danger">{errors.rekomAnalis.message}</small></>}
+                                                        {errors.rekomAnalis && <small className="text-danger">{errors.rekomAnalis.message}</small>}
                                                     </div>
-                                                    <div className='form-control-label'><b>Penandatangan</b></div>
+                                                    <div className='form-control-label'><b>Penandatangan <span className='text-danger'>*</span></b></div>
                                                     <div className="col-sm-5 mt-0">
                                                         <input type="text" className={errors.ttdAnalis === '' ? 'form-control form-control-sm is-invalid' : 'form-control form-control-sm'} {...register("ttdAnalis", { required: "Mohon pilih nama penandatangan."})}/>
                                                         {/* <select className={dataWatch.ttdAdminidtratif === '' ? 'form-select form-select-sm is-invalid' : 'form-select form-select-sm'} {...registerAdministratif("ttdAdminidtratif", { required: "Mohon pilih nama penandatangan."})}>
@@ -394,7 +471,7 @@ function DocK21() {
                                                             <option value='3'>Ditolak</option>
                                                             <option value='4'>Dilanjutkan pemeriksaan kesehatan</option>
                                                         </select> */}
-                                                        {errors.ttdAnalis && <><br/><small className="text-danger">{errors.ttdAnalis.message}</small></>}
+                                                        {errors.ttdAnalis && <small className="text-danger">{errors.ttdAnalis.message}</small>}
                                                     </div>
                                                 </div>
                                             </div>

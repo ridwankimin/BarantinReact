@@ -122,10 +122,10 @@ function DocK52() {
                         console.log(response.data.data)
                         if(response.data.status === '200') {
                             // alert(response.data.message);
-                            setValue("idDok52", response.data.data[0].id)
-                            setValue("noDok52", response.data.data[0].nomor)
-                            setValue("noDokumen", response.data.data[0].nomor)
-                            setValue("tglDok52", response.data.data[0].tanggal)
+                            setValue("idDok53", response.data.data[0].id)
+                            setValue("noDok53", response.data.data[0].nomor)
+                            // setValue("noDokumen", response.data.data[0].nomor)
+                            setValue("tglDok53", response.data.data[0].tanggal)
                             setValue("idSurtug", response.data.data[0].ptk_surat_tugas_id)
                             setValue("namaIlmiahMP", response.data.data[0].nama_ilmiah_mp)
                             setValue("namaUmumMP", response.data.data[0].nama_dagang_mp)
@@ -222,9 +222,9 @@ function DocK52() {
                             <div className="col-sm-3">
                                 <input type="text" id="noDok" value={data.noDokumen || ""} className="form-control form-control-sm" placeholder="Nomor PTK" disabled />
                             </div>
-                            <label className="col-sm-1 col-form-label" htmlFor="tglSurtug"><b>{data.kegiatan === 'EX' ? "Date" : "Tanggal"}</b></label>
+                            <label className="col-sm-1 col-form-label" htmlFor="tglDokumen"><b>Tanggal</b></label>
                             <div className="col-sm-2">
-                                <input type="text" id='tglSurtug' value={data.tglDokumen || ""} className='form-control form-control-sm' disabled/>
+                                <input type="text" id='tglDokumen' value={data.tglDokumen || ""} className='form-control form-control-sm' disabled/>
                             </div>
                         </div>
                     </div>
@@ -252,7 +252,7 @@ function DocK52() {
                                 </div>
                                 <label className="col-sm-2 col-form-label text-sm-end" htmlFor="tglDok52">{data.kegiatan === 'EX' ? "Date" : "Tanggal"} <span className='text-danger'>*</span></label>
                                 <div className="col-sm-2">
-                                    <input type="datetime-local" id="tglDok52" name='tglDok52' {...register("tglDok52", {require: "Mohon isi tanggal dokumen."})} className={errors.tglDok52 ? "form-control form-control-sm is-invalid" : "form-control form-control-sm"} />
+                                    <input type="datetime-local" id="tglDok52" name='tglDok52' {...register("tglDok52", {required: "Mohon isi tanggal dokumen."})} className={errors.tglDok52 ? "form-control form-control-sm is-invalid" : "form-control form-control-sm"} />
                                     {errors.tglDok52 && <small className="text-danger">{errors.tglDok52.message}</small>}
                                 </div>
                             </div>
@@ -368,7 +368,7 @@ function DocK52() {
                                                         <div className="row">
                                                             <label className="col-sm-4 col-form-label" htmlFor="namaIlmiahMP">Nama Ilmiah MP <span className='text-danger'>*</span></label>
                                                             <div className="col-sm-8">
-                                                                <input type="text" id="namaIlmiahMP" name='namaIlmiahMP' {...register("namaIlmiahMP", {require: "Mohon isi nama ilmiah media pembawa."})} className={errors.namaIlmiahMP ? "form-control form-control-sm is-invalid" : "form-control form-control-sm"} />
+                                                                <input type="text" id="namaIlmiahMP" name='namaIlmiahMP' {...register("namaIlmiahMP", {required: "Mohon isi nama ilmiah media pembawa."})} className={errors.namaIlmiahMP ? "form-control form-control-sm is-invalid" : "form-control form-control-sm"} />
                                                                 {errors.namaIlmiahMP && <small className="text-danger">{errors.namaIlmiahMP.message}</small>}
                                                             </div>
                                                         </div>
@@ -377,7 +377,7 @@ function DocK52() {
                                                         <div className="row">
                                                             <label className="col-sm-4 col-form-label" htmlFor="namaUmumMP">Nama Umum MP <span className='text-danger'>*</span></label>
                                                             <div className="col-sm-8">
-                                                                <input type="text" id="namaUmumMP" name='namaUmumMP' {...register("namaUmumMP", {require: "Mohon isi nama umum/dagang media pembawa."})} className={errors.namaUmumMP ? "form-control form-control-sm is-invalid" : "form-control form-control-sm"} />
+                                                                <input type="text" id="namaUmumMP" name='namaUmumMP' {...register("namaUmumMP", {required: "Mohon isi nama umum/dagang media pembawa."})} className={errors.namaUmumMP ? "form-control form-control-sm is-invalid" : "form-control form-control-sm"} />
                                                                 {errors.namaUmumMP && <small className="text-danger">{errors.namaUmumMP.message}</small>}
                                                             </div>
                                                         </div>
@@ -386,7 +386,7 @@ function DocK52() {
                                                         <div className="row">
                                                             <label className="col-sm-4 col-form-label" htmlFor="bentukJmlMP">Bentuk dan Jumlah MP <span className='text-danger'>*</span></label>
                                                             <div className="col-sm-8">
-                                                                <input type="text" id="bentukJmlMP" name='bentukJmlMP' {...register("bentukJmlMP", {require: "Mohon isi nama jumlah media pembawa."})} className={errors.bentukJmlMP ? "form-control form-control-sm is-invalid" : "form-control form-control-sm"} />
+                                                                <input type="text" id="bentukJmlMP" name='bentukJmlMP' {...register("bentukJmlMP", {required: "Mohon isi nama jumlah media pembawa."})} className={errors.bentukJmlMP ? "form-control form-control-sm is-invalid" : "form-control form-control-sm"} />
                                                                 {errors.bentukJmlMP && <small className="text-danger">{errors.bentukJmlMP.message}</small>}
                                                             </div>
                                                         </div>
@@ -403,7 +403,7 @@ function DocK52() {
                                                         <div className="row">
                                                             <label className="col-sm-4 col-form-label" htmlFor="targetPerlakuan">Target Fumigasi <span className='text-danger'>*</span></label>
                                                             <div className="col-sm-4">
-                                                                <select name="targetPerlakuan" id="targetPerlakuan" {...register("targetPerlakuan", {require: "Mohon isi nama jumlah media pembawa."})} className={errors.bentukJmlMP ? "form-select form-select-sm is-invalid" : "form-select form-select-sm"}>
+                                                                <select name="targetPerlakuan" id="targetPerlakuan" {...register("targetPerlakuan", {required: "Mohon isi nama jumlah media pembawa."})} className={errors.bentukJmlMP ? "form-select form-select-sm is-invalid" : "form-select form-select-sm"}>
                                                                     <option value="">--</option>
                                                                     <option value="CMDT">Media Pembawa</option>
                                                                     <option value="PACK">Kemasan</option>

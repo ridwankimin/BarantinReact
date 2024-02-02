@@ -19,7 +19,7 @@ export default class PtkSurtug {
             'id': data.idHeader === '' ? uuid : data.idHeader,
             'ptk_id': data.idPtk,
             'no_dok_permohonan': data.noDok,
-            'ptk_analisis_id': "1", //soon
+            'ptk_analisis_id': data.idAnalis, //soon
             'nomor': data.noSurtug, //balikan
             'tanggal': data.tglSurtug,
             'perihal': data.perihalSurtug,
@@ -105,7 +105,7 @@ export default class PtkSurtug {
             hasil_analisis_id: data.opsiOlahI,
             lainnya: ""
           }
-          arrayAnalisa = [...arrayAnalisa, ...olahKI1]
+          arrayAnalisa = [...arrayAnalisa, olahKI1]
         }
         if(data.opsiKT) {
           arrayAnalisa = data.opsiKT?.map(item => {
@@ -120,13 +120,13 @@ export default class PtkSurtug {
             hasil_analisis_id: data.opsiOlahT,
             lainnya: ""
           }
-          arrayAnalisa = [...arrayAnalisa, ...olahKT1]
+          arrayAnalisa = [...arrayAnalisa, olahKT1]
           const olahKT2 = {
             id: uuidv4(),
-            hasil_analisis_id: data.opsiDilarangOPTK33,
+            hasil_analisis_id: data.opsiDilarangOPTK,
             lainnya: ""
           }
-          arrayAnalisa = [...arrayAnalisa, ...olahKT2]
+          arrayAnalisa = [...arrayAnalisa, olahKT2]
         }
         if(data.opsiNHI) {
           arrayAnalisa =  {
@@ -160,24 +160,20 @@ export default class PtkSurtug {
         return axios.request(config)
     }
 
-    getHeaderByPtk(id) {
+    getAnalisByPtk(id) {
       let config = {
-        method: 'post',
+        method: 'get',
         maxBodyLength: Infinity,
-        url: url + 'surtug/ptk',
+        url: url + 'ptk-analis/' + id,
         headers: { 
           'Content-Type': 'application/json', 
         },
-        data: {
-          ptk_id: id,
-          penugasan_id: ""
-        }
       };
       // console.log(JSON.stringify(config))
       
       return axios.request(config)
     }
-    
+
     getDetilByHeader(id) {
       let config = {
         method: 'post',

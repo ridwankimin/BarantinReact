@@ -1,8 +1,8 @@
 import Cookies from 'js-cookie';
-import React, { useCallback, useEffect } from 'react'
+import React, { useEffect } from 'react'
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom';
-import {decode as base64_decode, encode as base64_encode} from 'base-64';
+import {decode as base64_decode} from 'base-64';
 import { useForm } from 'react-hook-form';
 import PtkSurtug from '../../model/PtkSurtug';
 
@@ -32,6 +32,7 @@ function DocK22() {
                     if(response.data.status === '201') {
                         alert(response.data.status + " - " + response.data.message)
                         setValueDetilSurtug("idHeader", response.data.data.id)
+                        setValueHeader("idHeader", response.data.data.id)
                         setValueHeader("noSurtug", response.data.data.nomor)
                         setData(values => (
                             {...values, 
@@ -95,32 +96,43 @@ function DocK22() {
                 noAju: idPtk ? base64_decode(ptkNomor[0]) : "",
                 idPtk: idPtk ? base64_decode(ptkNomor[1]) : "",
                 noDokumen: idPtk ? base64_decode(ptkNomor[2]): "",
-                noAnalisa: "",
-                tglAnalisa: "",
-                nomorSurtug: "",
-                tglSurtug: "",
             }));
             setValueHeader("idPtk", base64_decode(ptkNomor[1]));
             setValueHeader("noDok", base64_decode(ptkNomor[2]));
             setValueDetilSurtug("idPtk", base64_decode(ptkNomor[1]));
             const modelSurtug = new PtkSurtug();
-            const response = modelSurtug.getHeaderByPtk(base64_decode(ptkNomor[1]));
-            // console.log(noIdPtk)
-        
+
+            const resAnalis = modelSurtug.getAnalisByPtk(base64_decode(ptkNomor[1]));
+            resAnalis
+            .then((res) => {
+                if(res.data) {
+                    if(res.data.status === '200') {
+                        setValueHeader("idAnalis", res.data.data[0].id);
+                        setData(values => ({...values,
+                            noAnalisa: res.data.data[0].nomor,
+                            tglAnalisa: res.data.data[0].tanggal,
+                        }));
+                    }
+                }
+            })
+            .catch((error) => {
+                console.log(error);
+            });
+
+            const response = modelSurtug.getDetilSurtugPenugasan(base64_decode(ptkNomor[1]), "");
             response
             .then((res) => {
                 console.log(res)
                 if(res.data) {
                     if(res.data.status === '200') {
-                    //    const tableGrup = groupBy(res.data.data, 'id');
-                    //    console.log(tableGrup)
+                        console.log(res.data.data[0])
                         setListDataHeader(res.data.data)
                     }
                 }
             })
             .catch((error) => {
-                console.log(error.response);
-                setListDataHeader()
+                console.log(error);
+                setListDataHeader() 
             });
         }
         // dataSurtugHeader()
@@ -128,7 +140,7 @@ function DocK22() {
 
     function dataSurtugHeader() {
         const modelSurtug = new PtkSurtug();
-        const response = modelSurtug.getHeaderByPtk(data.idPtk);
+        const response = modelSurtug.getDetilSurtugPenugasan(data.idPtk, "");
         // console.log(noIdPtk)
     
         response
@@ -177,6 +189,7 @@ function DocK22() {
             }));
         dataSurtugDetil(e.target.dataset.key)
         setValueHeader("idHeader", e.target.dataset.key)
+        setValueDetilSurtug("idHeader", e.target.dataset.key)
         setValueHeader("perihalSurtug", cell.cells[2].innerHTML.replace("</div>", "").replace("<div>", ""))
         setValueHeader("tglSurtug", cell.cells[1].innerHTML)
         setValueHeader("noSurtug", cell.cells[0].innerHTML)
@@ -184,7 +197,7 @@ function DocK22() {
         setAddSurtug(true);
     }
     
-    function handleHeaderBaru() {
+    function handleHeaderBaru() { 
         setData(values => (
             {...values, 
                 nomorSurtug: "",
@@ -199,7 +212,7 @@ function DocK22() {
         setAddSurtug(true);
     }
 
-    let cekSurtug = "";
+    // let cekSurtug = "";
 
     function stringSimbol(e) {
         return <div dangerouslySetInnerHTML={{__html: e}} />;
@@ -222,19 +235,19 @@ function DocK22() {
                                 </div>
                                 <label className="col-sm-1 col-form-label" htmlFor="noAju">NOMOR AJU</label>
                                 <div className="col-sm-3">
-                                    <input type="text" id='noAju' value={data.noAju} className='form-control form-control-sm' disabled/>
+                                    <input type="text" id='noAju' value={data.noAju || ""} className='form-control form-control-sm' disabled/>
                                 </div>
                                 <label className="col-sm-2 col-form-label" htmlFor="noDok">NOMOR DOKUMEN</label>
                                 <div className="col-sm-3">
-                                    <input type="text" id='noDok' value={data.noDokumen} className='form-control form-control-sm' disabled/>
+                                    <input type="text" id='noDok' value={data.noDokumen || ""} className='form-control form-control-sm' disabled/>
                                 </div>
                                 <label className="offset-sm-3 col-sm-1 col-form-label" htmlFor="noAnalisa">NO ANALISA</label>
                                 <div className="col-sm-3">
-                                    <input type="text" id='noAnalisa' value={data.noAnalisa} className='form-control form-control-sm' disabled/>
+                                    <input type="text" id='noAnalisa' value={data.noAnalisa || ""} className='form-control form-control-sm' disabled/>
                                 </div>
                                 <label className="col-sm-2 col-form-label" htmlFor="tglAnalisa">TANGGAL ANALISA</label>
-                                <div className="col-sm-3">
-                                    <input type="text" id='tglAnalisa' value={data.tglAnalisa} className='form-control form-control-sm' disabled/>
+                                <div className="col-sm-2">
+                                    <input type="text" id='tglAnalisa' value={data.tglAnalisa || ""} className='form-control form-control-sm' disabled/>
                                 </div>
                             </div>
                         </div>
@@ -247,7 +260,7 @@ function DocK22() {
                         </div>
                     </div>
                     <div className="card-body pt-0">
-                            <button className='btn btn-sm btn-primary' onClick={handleHeaderBaru}><i className="bx bx-plus bx-xs"></i> Buat Surat Tugas Baru</button>
+                        <button className='btn btn-sm btn-primary' onClick={handleHeaderBaru}><i className="bx bx-plus bx-xs"></i> Buat Surat Tugas Baru</button>
                         <div className="row p-2">
                         <table className="table table-sm table-bordered table-hover table-striped mt-2">
                             <thead>
@@ -274,16 +287,15 @@ function DocK22() {
                                         <td>
                                             <div className="dropdown">
                                                 <button type="button" className="btn p-0 dropdown-toggle hide-arrow" data-bs-toggle="dropdown">
-                                                    <i className="bx bx-dots-vertical-rounded"></i>
+                                                    <i className="fa-solid fa-ellipsis-vertical"></i>
                                                 </button>
                                                 <div className="dropdown-menu">
-                                                    <button className="dropdown-item" data-key={data.id} data-ttd={data.penanda_tangan_id} type="button" onClick={handleEditHeader}><i className="bx bx-edit-alt me-1"></i> Edit</button>
-                                                    <button className="dropdown-item" href="#"><i className="bx bx-trash me-1"></i> Delete</button>
+                                                    <button className="dropdown-item" data-key={data.id} data-ttd={data.penanda_tangan_id} type="button" onClick={handleEditHeader}><i className="fa-solid fa-pen-to-square me-1"></i> Edit</button>
+                                                    <button className="dropdown-item" href="#"><i className="fa-solid fa-trash me-1"></i> Delete</button>
                                                 </div>
                                             </div>
                                         </td>
                                     </tr>
-                                    // cekSurtug = data.nomor
                                 ))
                             ) : null}
                             </tbody>
@@ -295,13 +307,13 @@ function DocK22() {
                     <div className="card-body pt-0" style={{display: (addSurtug ? 'block' : 'none')}}>
                         <div className="col-md-12 mt-3">
                             <div className="row mb-3">
-                                <label className="col-sm-1 col-form-label" htmlFor="nomor_k12">Nomor</label>
+                                <label className="col-sm-1 col-form-label" htmlFor="noDok22">Nomor</label>
                                 <div className="col-sm-3">
-                                    <input type="text" value={data.nomorSurtug} id="nomor_k12" className="form-control form-control-sm" placeholder="Nomor" disabled />
+                                    <input type="text" value={data.nomorSurtug || ""} id="noDok22" className="form-control form-control-sm" placeholder="Nomor" disabled />
                                 </div>
-                                <label className="col-sm-1 col-form-label" htmlFor="nomor_k12">Tanggal</label>
+                                <label className="col-sm-1 col-form-label" htmlFor="tglDok22">Tanggal</label>
                                 <div className="col-sm-3">
-                                    <input type="date" value={data.tglSurtug} id="nomor_k12" className="form-control form-control-sm" placeholder="Tanggal" disabled />
+                                    <input type="date" value={data.tglSurtug || ""} id="tglDok22" className="form-control form-control-sm" placeholder="Tanggal" disabled />
                                 </div>
                                 <div className="col-sm-4">
                                     <a href={require("../../dok/k22.pdf")} rel="noopener noreferrer" target='_blank' className='btn btn-info pb-1 float-end'>
@@ -315,6 +327,7 @@ function DocK22() {
                         <form className="row mb-3" onSubmit={handleFormHeader(onSubmitHeader)}>
                         <input type="hidden" name='idPtk' {...registerHeader("idPtk")} />
                         <input type="hidden" name='idHeader' {...registerHeader("idHeader")} />
+                        <input type="hidden" name='idAnalis' {...registerHeader("idAnalis")} />
                         <input type="hidden" name='noDok' {...registerHeader("noDok")} />
                         <input type="hidden" name='noSurtug' {...registerHeader("noSurtug")} />
                             {/* <div className="row mb-3"> */}
@@ -336,12 +349,10 @@ function DocK22() {
                                 <div className="col-sm-2">
                                     <button type="submit" className="btn btn-sm btn-primary">{dataHeader.idHeader === '' ? 'Buat Nomor Surtug' : 'Edit Surat Tugas'}</button>
                                 </div>
-                                {/* <div className="row">
-                                </div> */}
                             {/* </div> */}
                         </form>
                         {/* muncul setelah disimpan headernya */}
-                        <div className="card card-action mb-4">
+                        <div className="card card-action mb-4" style={{display: (dataHeader.idHeader ?  "block" : "none")}}>
                         {/* <div className="card card-action mb-4" style={{display: (isNomor ? 'block' : 'none')}}> */}
                             <div className="card-header mb-3 p-2" style={{backgroundColor: '#123138'}}>
                                 <div className="card-action-title">
@@ -380,12 +391,13 @@ function DocK22() {
                                                     <td>
                                                         <div className="dropdown">
                                                             <button type="button" className="btn p-0 dropdown-toggle hide-arrow" data-bs-toggle="dropdown">
-                                                                <i className="bx bx-dots-vertical-rounded"></i>
+                                                                {/* <i className="fa-solid fa-ellipsis-vertical"></i> */}
+                                                                <i className="fa-solid fa-trash me-1 text-danger"></i>
                                                             </button>
-                                                            <div className="dropdown-menu">
-                                                                <button className="dropdown-item" type="button" data-bs-toggle="modal" data-bs-target="#modKontainer"><i className="bx bx-edit-alt me-1"></i> Edit</button>
-                                                                <button className="dropdown-item" href="#"><i className="bx bx-trash me-1"></i> Delete</button>
-                                                            </div>
+                                                            {/* <div className="dropdown-menu">
+                                                                <button className="dropdown-item" type="button" data-bs-toggle="modal" data-bs-target="#modKontainer"><i className="fa-solid fa-pen-to-square me-1"></i> Edit</button>
+                                                                <button className="dropdown-item" href="#"> Delete</button>
+                                                            </div> */}
                                                         </div>
                                                     </td>
                                                 </tr>

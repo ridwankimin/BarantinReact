@@ -13,14 +13,14 @@ export default class PtkHistory {
     let config = {
       method: stat,
       maxBodyLength: Infinity,
-      url: url + 'ptk-history' + (stat === 'put' ? "/" + idPtk : null),
+      url: url + (stat === 'put' ? 'ptk-history/' + idPtk : 'ptk-history'),
       // url: url + 'pn-adm',
       headers: { 
         'Content-Type': 'application/json', 
       },
       data: datasend
     };
-    // console.log("dok k53: " + JSON.stringify(config))
+    console.log("history: " + JSON.stringify(config))
     return axios.request(config)
   }
 }

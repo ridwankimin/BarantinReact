@@ -16,27 +16,15 @@ function Footer() {
     <div className="layout-page">
                 <nav className="layout-navbar navbar navbar-expand-xl align-items-center" style={{background: '#123138'}} id="layout-navbar">
                     <div className="container-fluid">
-                        <div className="layout-menu-toggle navbar-nav align-items-xl-center me-3 me-xl-0 d-xl-none">
-                            <a className="nav-item nav-link px-0 me-xl-4" href="#">
-                                <i className="bx bx-menu bx-sm"></i>
-                            </a>
-                        </div>
-
+                        
                         <div className="navbar-nav-right d-flex align-items-center" id="navbar-collapse">
 
                             <ul className="navbar-nav flex-row align-items-center ms-auto">
-                                <li className="nav-item me-2 me-xl-0">
-                                    <a className="nav-link style-switcher-toggle hide-arrow" href="#">
-                                        <i className="bx bx-sm"></i>
-                                    </a>
-                                </li>
-
+                                
                                 <li className="nav-item navbar-dropdown dropdown-user dropdown">
                                     <a className="nav-link dropdown-toggle" href="#" data-bs-toggle="dropdown" style={{color: 'white'}}>
                                         {/* <div className="avatar avatar-online"> */}
-                                        <i className="menu-icon tf-icons bx bx-user-circle"></i>
-                                            {/* <img src="assets/img/avatars/1.png" className="rounded-circle" /> */}
-                                        {/* </div> */}
+                                        <i className="menu-icon tf-icons fa-regular fa-circle-user"></i>
                                     </a>
                                     <ul className="dropdown-menu dropdown-menu-end">
                                         <li>

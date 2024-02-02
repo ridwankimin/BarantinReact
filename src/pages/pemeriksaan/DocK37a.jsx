@@ -152,7 +152,7 @@ function DocK37a() {
                                 <label className="col-sm-2 col-form-label text-sm-end" htmlFor="tglDok37a">Tanggal</label>
                                 <div className="col-sm-2">
                                     <input type="datetime-local" id="tglDok37a" name='tglDok37a' {...registerAdministratif("tglDok37a", {required: "Mohon isi tanggal dokumen."})} className={errorsAdministratif.tglDok37a ? "form-control form-control-sm is-invalid" : "form-control form-control-sm"} />
-                                    {errorsAdministratif.tglDok37a && <><br/><small className="text-danger">{errorsAdministratif.tglDok37a.message}</small></>}
+                                    {errorsAdministratif.tglDok37a && <small className="text-danger">{errorsAdministratif.tglDok37a.message}</small>}
                                 </div>
                             </div>
                         </div>
@@ -193,7 +193,7 @@ function DocK37a() {
                                                         <div className="form-check">
                                                             <label className="form-check-label" style={{backgroundColor: (dataWatch.opsiAdministratif === '6' ? '#5A8DEE' : 'transparent'), color: (dataWatch.opsiAdministratif === '6' ? 'whitesmoke' : '#677788')}} htmlFor="opsi6">Semua persyaratan yang diperlukan bagi pemasukan/pengeluaran media pembawa tersebut telah lengkap dan tidak diragukan keabsahan dan kebenaran isinya</label>
                                                             <input name="opsiAdministratif" className={errorsAdministratif.opsiAdministratif ? "form-check-input is-invalid" : "form-check-input"} value={6} {...registerAdministratif("opsiAdministratif")} type="radio" id="opsi6" />
-                                                            {errorsAdministratif.opsiAdministratif && <><br/><small className="text-danger">{errorsAdministratif.opsiAdministratif.message}</small></>}
+                                                            {errorsAdministratif.opsiAdministratif && <small className="text-danger">{errorsAdministratif.opsiAdministratif.message}</small>}
                                                         </div>
                                                     </div>
                                                     <div className="row">
@@ -207,7 +207,7 @@ function DocK37a() {
                                                                 <option value={14}>Dilanjutkan pemeriksaan kesehatan dan/atau uji Keamanan Pangan, uji Keamanan Pakan, uji Mutu Pangan, dan/atau uji Mutu Pakan</option>
                                                                 <option value={15}>Diterbitkan surat keterangan karantina</option>
                                                             </select>
-                                                            {errorsAdministratif.rekomAdmin && <><br/><small className="text-danger">{errorsAdministratif.rekomAdmin.message}</small></>}
+                                                            {errorsAdministratif.rekomAdmin && <small className="text-danger">{errorsAdministratif.rekomAdmin.message}</small>}
                                                         </div>
                                                         <div className='form-control-label'><b>Penandatangan</b></div>
                                                         <div className="col-sm-5">
@@ -219,7 +219,7 @@ function DocK37a() {
                                                                 <option value='3'>Ditolak</option>
                                                                 <option value='4'>Dilanjutkan pemeriksaan kesehatan</option>
                                                             </select> */}
-                                                            {errorsAdministratif.ttdAdminidtratif && <><br/><small className="text-danger">{errorsAdministratif.ttdAdminidtratif.message}</small></>}
+                                                            {errorsAdministratif.ttdAdminidtratif && <small className="text-danger">{errorsAdministratif.ttdAdminidtratif.message}</small>}
                                                         </div>
                                                     </div>
                                                 </div>

@@ -16,6 +16,20 @@ export default class PtkPemeriksaan {
         
         return axios.request(config)
     }
+    
+    getFisikByPtkId(id) {
+      let config = {
+          method: 'get',
+          maxBodyLength: Infinity,
+          url: url + 'pn-fisik/' + id,
+          headers: { 
+            'Content-Type': 'application/json', 
+          },
+        };
+        // console.log(JSON.stringify(datasend))
+        
+        return axios.request(config)
+    }
 
     ptkAdmin(data) {
         const uuid = uuidv4();
@@ -42,6 +56,80 @@ export default class PtkPemeriksaan {
           data: datasend
         };
         // console.log(JSON.stringify(datasend))
+        
+        return axios.request(config)
+    }
+    
+    ptkFisikKesehatan(data, listKesehatan) {
+        const uuid = uuidv4();
+        const periksaDetil = listKesehatan.map(item => {
+          return {
+              id: uuidv4(),
+              ptk_komoditas_id: item.ptk_komoditas_id,
+              target_sasaran1: item.target_sasaran1,
+              metode1: item.metode1,
+              temuan_hasil1: item.temuan_hasil1,
+              catatan1: item.catatan1,
+              target_sasaran2: item.target_sasaran2,
+              metode2: item.metode2,
+              temuan_hasil2: item.temuan_hasil2,
+              catatan2: item.catatan2,
+          }
+        })
+        
+        let datasend = {
+            'id': data.idDok37b === '' ? uuid : data.idDok37b,
+            'ptk_id': data.idPtk,
+            'pn_administrasi_id': data.idDok37a,
+            'nomor': data.noDok.replace("K.1.1", "K.3.7b"),
+            'tanggal': data.idDok37b === '' ? '' : data.tglDok37b,
+            'kesimpulan': data.kesimpulan37b,
+            // 'tanggal_periksa': data.idDok37b === '' ? data.tglDok37b : '',
+            'is_ujilab': data.isUjiLab,
+            'rekomendasi_id': data.rekom37b,
+            'user_ttd1_id': data.ttd1,
+            'user_ttd2_id': data.ttd2,
+            'user_id': "1", // session
+            'periksa_detil': periksaDetil
+        }       
+      let config = {
+          // method: 'post',
+          method: data.idDok37b === '' ? 'post' : 'put',
+          maxBodyLength: Infinity,
+          url: url + (data.idDok37b === '' ? 'pn-fisik' : 'pn-fisik/' + data.idDok37b),
+          // url: url + 'pn-adm',
+          headers: { 
+            'Content-Type': 'application/json', 
+          },
+          data: datasend
+        };
+        console.log(JSON.stringify(datasend))
+        
+        return axios.request(config)
+    }
+    
+    ptkFisikKesehatanHeader(data) {
+        let datasend = {
+            'id': data.idDok37b,
+            'tanggal': data.tglDok37b,
+            'kesimpulan': data.kesimpulan37b,
+            // 'tanggal_periksa': data.idDok37b === '' ? data.tglDok37b : '',
+            'rekomendasi_id': data.rekom37b,
+            'user_ttd2_id': data.ttd2,
+            'user_id': "1", // session
+        }       
+      let config = {
+          // method: 'post',
+          method: 'put',
+          maxBodyLength: Infinity,
+          url: url + 'pn-fisik/header/' + data.idDok37b,
+          // url: url + 'pn-adm',
+          headers: { 
+            'Content-Type': 'application/json', 
+          },
+          data: datasend
+        };
+        console.log(JSON.stringify(config))
         
         return axios.request(config)
     }

@@ -282,9 +282,8 @@ export default class PtkModel {
           'informasi_tambahan': data.infoTambahan,
           'updated_at': dateNow()
         }
-        console.log(JSON.stringify(datasend))
-      let config = {
-        method: 'put',
+        let config = {
+          method: 'put',
         maxBodyLength: Infinity,
         url: url + 'ptk/' + data.idPtk,
         headers: { 
@@ -292,6 +291,7 @@ export default class PtkModel {
         },
         data : datasend
       };
+      console.log(JSON.stringify(config))
   
       return axios.request(config)
     }
@@ -523,7 +523,7 @@ export default class PtkModel {
         'kota_kab_asal_id': data.kotaAsalDokumen,
         'keterangan': data.ketDokumen,
         'efile': data.fileDokumen,
-        // 'created_at': dateNow(),
+        'created_at': dateNow(),
       };
       // console.log(JSON.stringify(datasend))
       let config = {
