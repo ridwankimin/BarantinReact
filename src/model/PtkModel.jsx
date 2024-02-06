@@ -426,35 +426,37 @@ export default class PtkModel {
     pushKomoditi(data) {
       const uuid = uuidv4();
       let datasend = {
-            'id': uuid,
+            'id': data.idDetilMP ? data.idDetilMP : uuid,
             'ptk_id': data.idPtk,
-            'klasifikasi_id': data.peruntukanMP,
-            'komoditas_id': data.komoditasMP,
-            'nama_umum_tercetak': data.namaUmum,
-            'nama_latin_tercetak': data.namaLatin,
-            'kode_hs': data.kodeHSMp,
-            'jantan': 0,
-            'betina': 0,
-            'volume_bruto': data.volumeBrutto,
-            'satuan_bruto_id': data.satuanBrutto,
-            'volume_netto': data.volumeNetto,
-            'satuan_netto_id': data.satuanNetto,
-            'volume_lain': data.volumeLain,
-            'satuan_lain_id': data.satuanLain,
+            'klasifikasi_id': (data.jenisKar === "T" ? data.peruntukanMP : (data.jenisKar === "H" ? "1" : (data.jenisKar === "I" ? "" : ""))),
+            // 'klasifikasi_id': (data.jenisKar === "T" ? data.peruntukanMP : (data.jenisKar === "H" ? data.klasifikasiMPKHid : (data.jenisKar === "I" ? "" : ""))),
+            'komoditas_id': (data.jenisKar === "T" ? data.komoditasMP : (data.jenisKar === "H" ? data.komoditasMPKHid : (data.jenisKar === "I" ? "" : ""))),
+            'nama_umum_tercetak': (data.jenisKar === "T" ? data.namaUmum : (data.jenisKar === "H" ? data.namaUmumKH : (data.jenisKar === "I" ? "" : ""))),
+            'nama_latin_tercetak': (data.jenisKar === "T" ? data.namaLatin : (data.jenisKar === "H" ? data.namaLatinKH : (data.jenisKar === "I" ? "" : ""))),
+            'kode_hs': (data.jenisKar === "T" ? data.kodeHSMp : (data.jenisKar === "H" ? data.kodeHSMpKH : (data.jenisKar === "I" ? "" : ""))),
+            'jantan': data.jantan,
+            'betina': data.betina,
+            'volume_bruto': (data.jenisKar === "T" ? data.volumeBrutto : (data.jenisKar === "H" ? data.brutoMP : (data.jenisKar === "I" ? "" : ""))),
+            'satuan_bruto_id': 1356,
+            'volume_netto': (data.jenisKar === "T" ? data.volumeNetto : (data.jenisKar === "H" ? data.nettoMP : (data.jenisKar === "I" ? "" : ""))),
+            'satuan_netto_id': 1356,
+            'volume_lain': (data.jenisKar === "T" ? data.volumeLain : (data.jenisKar === "H" ? data.jumlahMP : (data.jenisKar === "I" ? "" : ""))),
+            'satuan_lain_id': (data.jenisKar === "T" ? data.satuanLain : (data.jenisKar === "H" ? data.satJumlahMP : (data.jenisKar === "I" ? "" : ""))),
             'kemasan_id': data.satuanKemasanDetil,
-            'merk_kemasan': "merk",
+            'keterangan': data.breedMP,
             'jumlah_kemasan': data.jumlahKemasanDetil,
-            'harga': data.nilaiBarangMP,
-            'mata_uang': data.satuanNilaiMP,
-            'kurs': "1", // dari API curs
-            'harga_rp': "1000000", // konversi inputan ke RP (Jika mata_uang <> 'IDR'>)
+            'harga': (data.jenisKar === "T" ? data.nilaiBarangMP : (data.jenisKar === "H" ? data.nilaiBarangMPKH : (data.jenisKar === "I" ? "" : ""))),
+            'mata_uang': (data.jenisKar === "T" ? data.satuanNilaiMP : (data.jenisKar === "H" ? data.satuanNilaiMPKH : (data.jenisKar === "I" ? "" : ""))),
+            'kurs': "14500", // dari API curs
+            'harga_rp': (data.jenisKar === "T" ? (data.satuanNilaiMP === "IDR" ? data.nilaiBarangMP : (data.nilaiBarangMP *14500)) : (data.jenisKar === "H" ? (data.satuanNilaiMPKH === "IDR" ? data.nilaiBarangMPKH : (data.nilaiBarangMPKH * 14500)) : (data.jenisKar === "I" ? "" : ""))), // konversi inputan ke RP (Jika mata_uang <> 'IDR'>)
             'created_at': dateNow(),
+            'tindakan': ""
       };
       console.log(JSON.stringify(datasend))
       let config = {
-        method: 'post',
+        method: (data.idDetilMP ? 'put' : 'post'),
         maxBodyLength: Infinity,
-        url: url + 'ptk-kmdt',
+        url: url + (data.idDetilMP ? 'ptk-kmdt/' + data.idDetilMP : 'ptk-kmdt'),
         headers: { 
           'Content-Type': 'application/json', 
         },

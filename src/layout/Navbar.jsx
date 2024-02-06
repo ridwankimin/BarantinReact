@@ -23,9 +23,9 @@ function Navbar() {
             setSubMenuOpen(!subMenuOpen);
         }
         setKetSubMenu(e.target.dataset.i18n);
-        // console.log(ketMenu)
-        // console.log(subMenuOpen)
-        // console.log(e.target.dataset.i18n);
+        console.log(ketMenu)
+        console.log(subMenuOpen)
+        console.log(e.target.dataset.i18n);
     } 
     // console.log((window.location.pathname.split("/")[1]) === 'k11' ? "ok" : "tidak")
   return (

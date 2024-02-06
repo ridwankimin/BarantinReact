@@ -61,7 +61,7 @@ function DocK53() {
                 alert(error.response.status + " - " + error.response.data.message)
             });
     }
-    console.log("idptk : " + idPtk)
+    // console.log("idptk : " + idPtk)
     useEffect(() => {
         if(idPtk) {
             // alert(idPtk)

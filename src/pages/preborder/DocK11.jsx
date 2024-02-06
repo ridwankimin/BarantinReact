@@ -10,17 +10,17 @@ import ConfirmSvg from '../../logo/svg/ConfirmSvg'
 // import MasterPelabuhan from '../../model/master/MasterPelabuhan'
 import MasterKemasan from '../../model/master/MasterKemasan'
 import MasterMataUang from '../../model/master/MasterMataUang'
-import MasterKlasKT from '../../model/master/MasterKlasKT'
-import MasterKomKT from '../../model/master/MasterKomKT'
+// import MasterKlasKT from '../../model/master/MasterKlasKT'
+// import MasterKomKT from '../../model/master/MasterKomKT'
 import MasterSatuan from '../../model/master/MasterSatuan'
-import MasterHS from '../../model/master/MasterHS'
+// import MasterHS from '../../model/master/MasterHS'
 import { Controller, useForm } from 'react-hook-form'
 // import { motion } from "framer-motion";
 // import MasterProv from '../../model/master/MasterProv'
 import {decode as base64_decode, encode as base64_encode} from 'base-64';
 import PtkModel from '../../model/PtkModel'
-import { useNavigate, useParams } from 'react-router-dom'
-import MasterKomKH from '../../model/master/MasterKomKH'
+import { useNavigate } from 'react-router-dom'
+// import MasterKomKH from '../../model/master/MasterKomKH'
 // import MasterDokumen from '../../model/master/MasterDokumen'
 import moment from 'moment/moment'
 import Select from 'react-select'
@@ -39,7 +39,37 @@ function DocK11() {
     // Cookies.remove("idPtkPage");
     const idPtk = Cookies.get("idPtkPage");
     let [dataIdPage, setDataIdPage] = useState({});
-    let [opsiVerif, setOpsiVerif] = useState();
+    // let [opsiVerif, setOpsiVerif] = useState();
+
+    const customStyles = {
+        control: (provided, state) => ({
+          ...provided,
+          background: '#fff',
+          borderColor: '#D4D8DD',
+          cursor: 'text',
+          minHeight: '30px',
+          height: '30px',
+          boxShadow: state.isFocused ? null : null,
+        }),
+        
+        valueContainer: (provided, state) => ({
+            ...provided,
+            height: '30px',
+            padding: '0 6px'
+        }),
+        
+        input: (provided, state) => ({
+            ...provided,
+            margin: '0px',
+        }),
+        indicatorSeparator: state => ({
+            display: 'none',
+        }),
+        indicatorsContainer: (provided, state) => ({
+            ...provided,
+            height: '30px',
+        }),
+      };
 
     let [dataSelect, setdataSelect] = useState({});
     let [ptkLengkap, setPtkLengkap] = useState(false);
@@ -94,76 +124,176 @@ function DocK11() {
         // setdataSelect(values => ({...values, [e.target.name]: <MasterKlasKT gol={e.target.dataset.gol}/>}))
     }
     
-    function handlePeruntukanKT(e) {
-        setdataSelect(values => ({...values, [e.target.name]: <MasterKlasKT gol={e.target.dataset.gol}/>}))
-    }
+    // function handlePeruntukanKT(e) {
+    //     setdataSelect(values => ({...values, [e.target.name]: <MasterKlasKT gol={e.target.dataset.gol}/>}))
+    // }
     
     function handleSetKomoditasSelect(e) {
-        const dataKomKT = e.target.value;
+        console.log(e)
+        const dataKomKT = e.value;
         const dataPisahKT = dataKomKT.split(";");
-        setValueDetilMP("komoditasMP", dataPisahKT[0])
-        setValueDetilMP("namaUmum", dataPisahKT[1])
-        setValueDetilMP("namaLatin", dataPisahKT[2])
-    }
-    
-    // function handleSelectNegPengirim(e) {
-    //     console.log(e);
-    //     console.log("select")
-    // }
-
-    // function handleNegara(e) {
-    //     setdataSelect(values => ({...values, [e.target.name]: <MasterNegara/>}))
-    // }
-
-    function handleRef() {
-        setValuePemohon("provPemohon", cekdataDiri.provPemohon)
-        setValuePemohon("kotaPemohon", cekdataDiri.kotaPemohon)
-        setValuePemohon("negaraPengirim", cekdataDiri.negaraPengirim)
-        setValuePemohon("provPengirim", cekdataDiri.provPengirim)
-        setValuePemohon("kotaPengirim", cekdataDiri.kotaPengirim)
-        setValuePemohon("negaraPenerima", cekdataDiri.negaraPenerima)
-        setValuePemohon("provPenerima", cekdataDiri.provPenerima)
-        setValuePemohon("kotaPenerima", cekdataDiri.kotaPenerima)
-        alert(cekdataPelabuhan.pelMuat)
-        setValuePelabuhan("tglBerangkatAkhir", cekdataPelabuhan.tglBerangkatAkhir);
-        setValuePelabuhan("negaraAsal", cekdataPelabuhan.negaraAsal);
-        setValuePelabuhan("negaraTujuan", cekdataPelabuhan.negaraTujuan);
-        setValuePelabuhan("negaraTransit", cekdataPelabuhan.negaraTransit);
-        setValuePelabuhan("pelMuat", cekdataPelabuhan.pelMuat);
-        setValuePelabuhan("pelBongkar", cekdataPelabuhan.pelBongkar);
-        setValuePelabuhan("pelTransit", cekdataPelabuhan.pelTransit);
-        setValuePelabuhan("modaTransit", cekdataPelabuhan.modaTransit);
-        setValuePelabuhan("tipeTransit", cekdataPelabuhan.tipeTransit);
-        setValuePelabuhan("namaAlatAngkutTransit", cekdataPelabuhan.namaAlatAngkutTransit);
-        setValuePelabuhan("benderaTransit", cekdataPelabuhan.benderaTransit);
-        setValuePelabuhan("nomorAlatAngkutTransit", cekdataPelabuhan.nomorAlatAngkutTransit);
-        setValuePelabuhan("callSignTransit", cekdataPelabuhan.callSignTransit);
-        setValuePelabuhan("tglTibaTransit", cekdataPelabuhan.tglTibaTransit);
-        setValuePelabuhan("tglBerangkatTransit", cekdataPelabuhan.tglBerangkatTransit);
-        setValuePelabuhan("modaAkhir", cekdataPelabuhan.modaAkhir);
-        setValuePelabuhan("modaAkhirLainnya", cekdataPelabuhan.modaAkhirLainnya);
-        setValuePelabuhan("tipeAkhir", cekdataPelabuhan.tipeAkhir);
-        setValuePelabuhan("namaAlatAngkutAkhir", cekdataPelabuhan.namaAlatAngkutAkhir);
-        setValuePelabuhan("benderaAkhir", cekdataPelabuhan.benderaAkhir);
-        setValuePelabuhan("nomorAlatAngkutAkhir", cekdataPelabuhan.nomorAlatAngkutAkhir);
-        setValuePelabuhan("callSignAkhir", cekdataPelabuhan.callSignAkhir);
-        setValuePelabuhan("tglTibaAkhir", cekdataPelabuhan.tglTibaAkhir);
-        setValuePelabuhan("tglBerangkatAkhir", cekdataPelabuhan.tglBerangkatAkhir);
-        setValuePelabuhan("transitOpsi", cekdataPelabuhan.transitOpsi);
-        setValuePelabuhan("cekKontainer", cekdataPelabuhan.cekKontainer);
-        setValuePelabuhan("sandar", cekdataPelabuhan.sandar);
+        if(cekdataMP.mediaPembawa === "T") {
+            setValueDetilMP("komoditasMP", dataPisahKT[0])
+            setValueDetilMP("namaUmum", dataPisahKT[1])
+            setValueDetilMP("namaLatin", (dataPisahKT[2] | dataPisahKT[2] === null ? dataPisahKT[2] : "-"))
+        } else if(cekdataMP.mediaPembawa === "H") {
+            setValueDetilMP("komoditasMPKHid", dataPisahKT[0])
+            setValueDetilMP("namaUmumKH", dataPisahKT[1])
+            setValueDetilMP("namaLatinKH", (dataPisahKT[2] | dataPisahKT[2] === null ? dataPisahKT[2] : "-"))
+            // setValueDetilMP("klasifikasiMPKHid", dataPisahKT[3]) //klasifikasi KH
+        }
     }
     
     function handleMPDetil(e) {
-        console.log(e.label)
+        // console.log(e.label)
         setValueMP("mediaPembawa", e.target.value);
         setValueDetilMP("jenisKar", e.target.value);
         handleJenisDokumen(e.target.value);
+        if(e.target.value === "T") {
+            handleKomKTDetil()
+        }
     }
     
-    // function handleJenisDokumen(e) {
-    //     setdataSelect(values => ({...values, [e.target.name]: <MasterDokumen kar={e.target.dataset.kar}/>}))
-    // }
+    function handleKomKTDetil() {
+        const modelMaster = new Master()
+        
+        const resKomKT = modelMaster.masterKomKT()
+        resKomKT
+        .then((response) => {
+            let dataKomKT = response.data.data;
+            var arrayKomKT = dataKomKT.map(item => {
+                return {
+                    value: item.id + ";" + item.nama + ";" + item.nama_latin,
+                    label: item.nama + " - " + item.nama_en
+                }
+            })
+            setdataSelect(values => ({...values, "selectKomoditasMP": arrayKomKT}));
+        })
+        .catch((error) => {
+            console.log(error);
+        });
+    }
+    
+    function handleKomKHIDetil(e) {
+        //hidup 1/6 | produk 2/7 | mpl 3/8
+        const modelMaster = new Master()
+        const resKomKT = modelMaster.masterHS(cekdataMP.mediaPembawa)
+        resKomKT
+        .then((response) => {
+            let dataKomKT = response.data.data;
+            var arrayKomKT = dataKomKT.map(item => {
+                return {
+                    value: item.kode,
+                    label: item.kode + " - " + item.nama_en
+                }
+            })
+            setdataSelect(values => ({...values, "kodeHSMp": arrayKomKT}));
+        })
+        .catch((error) => {
+            console.log(error);
+        });
+
+        if(cekdataMP.mediaPembawa === "H") {
+            const resKomKH = modelMaster.masterKomKH(e.target.value)
+            resKomKH
+            .then((response) => {
+                let dataKomKH = response.data.data;
+                var arrayKomKH = dataKomKH.map(item => {
+                    return {
+                        value: item.id + ";" + item.nama + ";" + item.nama_latin + ";" + item.kode,
+                        label: item.nama + " - " + item.nama_en
+                    }
+                })
+                setdataSelect(values => ({...values, "komoditasMPKH": arrayKomKH}));
+            })
+            .catch((error) => {
+                console.log(error);
+            });
+        } else if(cekdataMP.mediaPembawa === "T") {
+            const resKomKT = modelMaster.masterKomKT()
+            resKomKT
+            .then((response) => {
+                let dataKomKT = response.data.data;
+                var arrayKomKT = dataKomKT.map(item => {
+                    return {
+                        value: item.id + ";" + item.nama + ";" + item.nama_latin,
+                        label: item.nama + " - " + item.nama_en
+                    }
+                })
+                setdataSelect(values => ({...values, "selectKomoditasMP": arrayKomKT}));
+            })
+            .catch((error) => {
+                console.log(error);
+            });
+
+            if(e.target.value === "4") {
+                const resPeruntukan = modelMaster.masterKlasKT("A")
+                resPeruntukan
+                .then((response) => {
+                    console.log(response.data)
+                    let dataPeruntukanKT = response.data.data;
+                    const arraySelectKota = dataPeruntukanKT.map(item => {
+                        return {
+                            value: item.id.toString(),
+                            label: item.peruntukan + " - " + item.bentuk + " - " + item.golongan
+                        }
+                    })
+                    setdataSelect(values => ({...values, "peruntukanMP": arraySelectKota}))
+                })
+                .catch((error) => {
+                    console.log(error);
+                });
+            } else {
+                const resPeruntukanB = modelMaster.masterKlasKT("B")
+                resPeruntukanB
+                .then((response) => {
+                    let dataPeruntukanKTB = response.data.data;
+                    var arrayPeruntukanKTB = dataPeruntukanKTB.map(item => {
+                        return {
+                            value: item.id.toString(),
+                            label: item.peruntukan + " - " + item.bentuk + " - " + item.golongan
+                        }
+                    })
+                    setDataKlasKT(arrayPeruntukanKTB)
+                })
+                .catch((error) => {
+                    console.log(error);
+                });
+                const resPeruntukanC = modelMaster.masterKlasKT("C")
+                resPeruntukanC
+                .then((response) => {
+                    let dataPeruntukanKTC = response.data.data;
+                    var arrayPeruntukanKTC = dataPeruntukanKTC.map(item => {
+                        return {
+                            value: item.id.toString(),
+                            label: item.peruntukan + " - " + item.bentuk + " - " + item.golongan
+                        }
+                    })
+                    setDataKlasKT(dataKlasKT => dataKlasKT.concat(arrayPeruntukanKTC))
+                })
+                .catch((error) => {
+                    console.log(error);
+                });
+                const resPeruntukanD = modelMaster.masterKlasKT("D")
+                resPeruntukanD
+                .then((response) => {
+                    let dataPeruntukanKTD = response.data.data;
+                    var arrayPeruntukanKTD = dataPeruntukanKTD.map(item => {
+                        return {
+                            value: item.id.toString(),
+                            label: item.peruntukan + " - " + item.bentuk + " - " + item.golongan
+                        }
+                    })
+                    setDataKlasKT(dataKlasKT => dataKlasKT.concat(arrayPeruntukanKTD))
+                })
+                .catch((error) => {
+                    console.log(error);
+                });
+                setdataSelect(values => ({...values, "peruntukanMP": dataKlasKT}))
+            }
+        } else if(cekdataMP.mediaPembawa === "I") {
+        }
+    }
     
     function handleKemasan(e) {
         setdataSelect(values => ({...values, [e.target.name]: <MasterKemasan/>}))
@@ -173,9 +303,9 @@ function DocK11() {
         setdataSelect(values => ({...values, [e.target.name]: <MasterSatuan kar={e.target.dataset.kar} />}))
     }
     
-    function handleMasterHS(e) {
-        setdataSelect(values => ({...values, [e.target.name]: <MasterHS kar={e.target.dataset.kar} />}))
-    }
+    // function handleMasterHS(e) {
+    //     setdataSelect(values => ({...values, [e.target.name]: <MasterHS kar={e.target.dataset.kar} />}))
+    // }
     
     // function handleProv(e) {
     //     setdataSelect(values => ({...values, [e.target.name]: <MasterProv/>}))
@@ -201,26 +331,27 @@ function DocK11() {
     //     setdataSelect(values => ({...values, [e.target.name]: <MasterKota iddata={e.target.dataset.input}/>}))
     // }
     
-    function handleKomoditasKT(e) {
-        setdataSelect(values => ({...values, [e.target.name]: <MasterKomKT />}))
-    }
+    // function handleKomoditasKT(e) {
+    //     setdataSelect(values => ({...values, [e.target.name]: <MasterKomKT />}))
+    // }
     
-    function handleKomoditasKH(e) {
-        setdataSelect(values => ({...values, [e.target.name]: <MasterKomKH gol={e.target.dataset.gol} />}))
-    }
+    // function handleKomoditasKH(e) {
+    //     setdataSelect(values => ({...values, [e.target.name]: <MasterKomKH gol={e.target.dataset.gol} />}))
+    // }
     
     let [formTab, setFormTab] = useState({
         tab1: false,
-        tab2: false,
-        tab3: false,
-        tab4: false,
+        tab2: true,
+        tab3: true,
+        tab4: true,
+        tab5: true,
+        // tab2: false,
+        // tab3: false,
+        // tab4: false,
         // tab1: true,
-        // tab2: true,
-        // tab3: true,
-        // tab4: true,
     });
     // let [komoditas, setKomoditas] = useState({});
-    let [komMP, setKomMP] = useState({});
+    // let [komMP, setKomMP] = useState({});
     // let [arrKontainer, setArrKontainer] = useState([]);
     // let [kontainer, setKontainer] = useState({
     //     noKontainer: "",
@@ -251,7 +382,7 @@ function DocK11() {
     const {
         register: registerDokPeriksa,
         setValue: setValueDokPeriksa,
-        watch: watchDokPeriksa,
+        // watch: watchDokPeriksa,
 		handleSubmit: handleFormDokPeriksa,
 	} = useForm()
 	
@@ -287,17 +418,38 @@ function DocK11() {
     const {
         register: registerDetilMP,
         setValue: setValueDetilMP,
+        control: controlDetilMP,
+        watch: watchDetilMP,
         handleSubmit: handleFormDetilMP,
         reset: resetFormKomoditi,
         formState: { errors: errorsDetilMP },
     } = useForm({
         defaultValues: {
-            idDataKontainer: "",
-            noKontainer: "",
-            tipeKontainer: "",
-            ukuranKontainer: "",
-            stuffKontainer: "",
-            segel: "",
+            idDetilMP: "",
+            peruntukanMP: "",
+            volumeNetto: "",
+            komoditasMP: "",
+            volumeBrutto: "",
+            kodeHSMp: "",
+            volumeLain: "",
+            satuanLain: "",
+            namaUmum: "",
+            namaLatin: "",
+            nilaiBarangMP: "",
+            satuanNilaiMP: "",
+            jumlahKemasanDetil: "",
+            satuanKemasanDetil: "",
+            kodeHSMpKH: "",
+            komoditasMPKHid: "",
+            namaUmumKH: "",
+            namaLatinKH: "",
+            klasifikasiMPKHid: "",
+            jumlahMP: "",
+            satJumlahMP: "",
+            nettoMP: "",
+            brutoMP: "",
+            nilaiBarangMPKH: "",
+            satuanNilaiMPKH: "",
           }
         })
         
@@ -327,7 +479,7 @@ function DocK11() {
     const {
         register: registerKonfirmasi,
         setValue: setValueKonfirmasi,
-        watch: watchKonfirmasi,
+        // watch: watchKonfirmasi,
         handleSubmit: handleFormKonfirmasi,
         // formState: { errors: errorsDokumen },
     } = useForm()
@@ -344,11 +496,158 @@ function DocK11() {
     const cekdataDiri = watchPemohon()
     const cekdataPelabuhan = watchPelabuhan()
     const cekdataMP = watchMP()
+    const cekdataDetilMP = watchDetilMP()
     const cekdataDokumen = watchDokumen()
-    const cekdataDokPeriksa = watchDokPeriksa()
-    const cekdataKonfirmasi = watchKonfirmasi()
+    // const cekdataDokPeriksa = watchDokPeriksa()
+    // const cekdataKonfirmasi = watchKonfirmasi()
     const cekdataVerify = watchVerify()
+
+    let master = useMemo(() => new Master(), [])
+
+    const getListNegara = useCallback(async () => {
+        try {
+        const response = await master.masterNegara();
+        if(response.data.status === '200') {
+            let dataneg = response.data.data;
+            const arraySelectNegara = dataneg.map(item => {
+                return {
+                    value: item.id.toString(),
+                    label: item.kode + " - " + item.nama
+                }
+            })
+            // setSelect2Negara(arraySelectNegara)
+            setdataSelect(values => ({...values, "negaraPengirim": arraySelectNegara }));
+            setdataSelect(values => ({...values, "negaraPenerima": arraySelectNegara }));
+            setdataSelect(values => ({...values, "negaraAsal": arraySelectNegara }));
+            setdataSelect(values => ({...values, "negaraTujuan": arraySelectNegara }));
+            setdataSelect(values => ({...values, "negaraTransit": arraySelectNegara }));
+            setdataSelect(values => ({...values, "negaraAsalMP": arraySelectNegara }));
+            setdataSelect(values => ({...values, "negaraTujuanMP": arraySelectNegara }));
+            setdataSelect(values => ({...values, "negaraAsalDokumen": arraySelectNegara }));
+            setdataSelect(values => ({...values, "benderaTransit": arraySelectNegara }));
+            setdataSelect(values => ({...values, "benderaAkhir": arraySelectNegara }));
+        }
+    } catch (error) {
+        console.log(error)
+        setdataSelect(values => ({...values, "negaraPengirim": [] }));
+        setdataSelect(values => ({...values, "negaraPenerima": [] }));
+        setdataSelect(values => ({...values, "negaraAsal": [] }));
+        setdataSelect(values => ({...values, "negaraTujuan": [] }));
+        setdataSelect(values => ({...values, "negaraTransit": [] }));
+        setdataSelect(values => ({...values, "negaraAsalMP": [] }));
+        setdataSelect(values => ({...values, "negaraTujuanMP": [] }));
+        setdataSelect(values => ({...values, "negaraAsalDokumen": [] }));
+    }
+    }, [master])
+
+    useEffect(() => {
+        getListNegara()
+    }, [getListNegara])
+
+    const getListProv = useCallback(async () => {
+        try {
+            const response = await master.masterProv()
+            if(response.data.status === '200') {
+                let dataProv = response.data.data;
+                const arraySelectProv = dataProv.map(item => {
+                    return {
+                        value: item.id.toString(),
+                        label: item.nama
+                    }
+                })
+                setdataSelect(values => ({...values, provPemohon: arraySelectProv }))
+                setdataSelect(values => ({...values, provPengirim: arraySelectProv }))
+                setdataSelect(values => ({...values, provPenerima: arraySelectProv }))
+            }
+        } catch (error) {
+            console.log(error)
+            setdataSelect(values => ({...values, provPemohon: [] }))
+            setdataSelect(values => ({...values, provPengirim: [] }))
+            setdataSelect(values => ({...values, provPenerima: [] }))
+        }
+    }, [master])
+    
+    useEffect(() => {
+      getListProv()
+    }, [getListProv])
+
+    const handleKota = useCallback(async (e, pel) => {
+            try {
+                const response = await master.masterKota(e)
+                if(response.data.status === '200') {
+                    let dataKota = response.data.data;
+                    const arraySelectKota = dataKota.map(item => {
+                    return {
+                        value: item.id.toString(),
+                        label: item.nama
+                    }
+                    })
+                    setdataSelect(values => ({...values, [pel]: arraySelectKota}))
+                }
+                // console.log(dataSelect.pelMuat)
+            } catch (error) {
+            console.log(error)
+            setdataSelect(values => ({...values, [pel]: []}))
+            }
+        // }
+    }, [master])
+
+    useEffect(() => {
+        handleKota()
+    }, [handleKota])
+
+    const handlePelabuhan = useCallback(async (e, pel) => {
+        if(e && pel) {
+            try {
+                const response = await master.masterPelabuhanID(e)
+                if(response.data.status === '200') {
+                    let dataPel = response.data.data;
+                    const arraySelectPelabuhan = dataPel.map(item => {
+                    return {
+                        value: item.id.toString(),
+                        label: item.kode + " - " + item.nama
+                    }
+                    })
+                    setdataSelect(values => ({...values, [pel]: arraySelectPelabuhan}))
+                }
+                // console.log(dataSelect.pelMuat)
+            } catch (error) {
+            console.log(error)
+            setdataSelect(values => ({...values, [pel]: []}))
+            }
+        }
+    }, [master])
+
+    useEffect(() => {
+        handlePelabuhan()
+    }, [handlePelabuhan])
+
+    const handleJenisDokumen = useCallback(async (e) => {
+        if(e) {
+            try {
+                const response = await master.masterDok(e)
+                if(response.data.status === '200') {
+                    let jenisDok = response.data.data;
+                    const arraySelectJenisDok = jenisDok.map(item => {
+                    return {
+                        value: item.id,
+                        label: item.kode + " - " + item.nama
+                    }
+                    })
+                    setdataSelect(values => ({...values, "jenisDokumen": arraySelectJenisDok}))
+                }
+            } catch (error) {
+                console.log(error)
+                setdataSelect(values => ({...values, "jenisDokumen": []}))
+            }
+        }
+    }, [master])
+    
+    useEffect(() => {
+        handleJenisDokumen()
+    }, [handleJenisDokumen])
   
+    let [dataKlasKT,setDataKlasKT] = useState([]);
 
     useEffect(()=>{
         let ptkDecode = idPtk ? base64_decode(idPtk) : "";
@@ -363,6 +662,8 @@ function DocK11() {
             const response = modelPemohon.getPtkId(base64_decode(ptkNomor[1]));
             response
             .then((response) => {
+                console.log("dataTPK")
+                console.log(response.data)
                 if(response.data.status === '200') {
                     handlePelabuhan(response.data.data.ptk.negara_muat_id, "pelMuat")
                     handlePelabuhan(response.data.data.ptk.negara_bongkar_id, "pelBongkar")
@@ -372,174 +673,274 @@ function DocK11() {
                     if(response.data.data.ptk.negara_tujuan_id === 99) {
                         handleKota(null, "daerahTujuanMP")
                     }
-                    // console.log(response.data.data)
+
+                    // const modelMaster = new Master()
+                    const resKomKT = master.masterHS(response.data.data.ptk.jenis_karantina)
+                    resKomKT
+                    .then((response) => {
+                        let dataKomKT = response.data.data;
+                        var arrayKomKT = dataKomKT.map(item => {
+                            return {
+                                value: item.kode,
+                                label: item.kode + " - " + item.nama_en
+                            }
+                        })
+                        setdataSelect(values => ({...values, "kodeHSMp": arrayKomKT}));
+                    })
+                    .catch((error) => {
+                        console.log(error);
+                    });
+
+                    if(response.data.data.ptk.jenis_karantina === "T") {
+                        const resKomKT = master.masterKomKT()
+                        resKomKT
+                        .then((response) => {
+                            let dataKomKT = response.data.data;
+                            var arrayKomKT = dataKomKT.map(item => {
+                                return {
+                                    value: item.id + ";" + item.nama + ";" + item.nama_latin,
+                                    label: item.nama + " - " + item.nama_en
+                                }
+                            })
+                            setdataSelect(values => ({...values, "selectKomoditasMP": arrayKomKT}));
+                        })
+                        .catch((error) => {
+                            console.log(error);
+                        });
+                        
+                        if(response.data.data.ptk.jenis_media_pembawa_id === 4) {
+                            const resPeruntukan = master.masterKlasKT("A")
+                            resPeruntukan
+                            .then((response) => {
+                                console.log(response.data)
+                                let dataPeruntukanKT = response.data.data;
+                                const arraySelectKota = dataPeruntukanKT.map(item => {
+                                    return {
+                                        value: item.id.toString(),
+                                        label: item.peruntukan + " - " + item.bentuk + " - " + item.golongan
+                                    }
+                                })
+                                setdataSelect(values => ({...values, "peruntukanMP": arraySelectKota}))
+                            })
+                            .catch((error) => {
+                                console.log(error);
+                            });
+                        } else {
+                            const resPeruntukanB = master.masterKlasKT("B")
+                            resPeruntukanB
+                            .then((response) => {
+                                let dataPeruntukanKTB = response.data.data;
+                                var arrayPeruntukanKTB = dataPeruntukanKTB.map(item => {
+                                    return {
+                                        value: item.id.toString(),
+                                        label: item.peruntukan + " - " + item.bentuk + " - " + item.golongan
+                                    }
+                                })
+                                setDataKlasKT(arrayPeruntukanKTB)
+                            })
+                            .catch((error) => {
+                                console.log(error);
+                            });
+                            const resPeruntukanC = master.masterKlasKT("C")
+                            resPeruntukanC
+                            .then((response) => {
+                                let dataPeruntukanKTC = response.data.data;
+                                var arrayPeruntukanKTC = dataPeruntukanKTC.map(item => {
+                                    return {
+                                        value: item.id.toString(),
+                                        label: item.peruntukan + " - " + item.bentuk + " - " + item.golongan
+                                    }
+                                })
+                                setDataKlasKT(dataKlasKT => dataKlasKT.concat(arrayPeruntukanKTC))
+                            })
+                            .catch((error) => {
+                                console.log(error);
+                            });
+                            const resPeruntukanD = master.masterKlasKT("D")
+                            resPeruntukanD
+                            .then((response) => {
+                                let dataPeruntukanKTD = response.data.data;
+                                var arrayPeruntukanKTD = dataPeruntukanKTD.map(item => {
+                                    return {
+                                        value: item.id.toString(),
+                                        label: item.peruntukan + " - " + item.bentuk + " - " + item.golongan
+                                    }
+                                })
+                                setDataKlasKT(dataKlasKT => dataKlasKT.concat(arrayPeruntukanKTD))
+                            })
+                            .catch((error) => {
+                                console.log(error);
+                            });
+                            setdataSelect(values => ({...values, "peruntukanMP": dataKlasKT}))
+                        }
+                    }
                     setdataSelect(values => ({...values, "jenisKemasan": <MasterKemasan/>}));
                     setdataSelect(values => ({...values, "satuanNilai": <MasterMataUang/>}));
-                    // setdataSelect(values => ({...values, "daerahAsalMP": {value: response.data.data.ptk.kota_kab_asal_id, label: response.data.data.ptk.kota_asal}}))
-                    // setdataSelect(values => ({...values, "daerahTujuanMP": {value: response.data.data.ptk.kota_kab_tujuan_id, label: response.data.data.ptk.kota_tujuan}}))
                     setdataSelect(values => ({...values, "pelMuat": {value: response.data.data.ptk.pelabuhan_muat_id, label: response.data.data.ptk.kd_pelabuhan_muat + " - " + response.data.data.ptk.pelabuhan_muat}}))
                     setdataSelect(values => ({...values, "pelBongkar": {value: response.data.data.ptk.pelabuhan_bongkar_id, label: response.data.data.ptk.kd_pelabuhan_bongkar + " - " + response.data.data.ptk.pelabuhan_bongkar}}))
                     if(response.data.data.ptk.is_transit === 1) {
                         setdataSelect(values => ({...values, "pelTransit": {value: response.data.data.ptk.pelabuhan_transit_id, label: response.data.data.ptk.kd_pelabuhan_transit + " - " + response.data.data.ptk.pelabuhan_transit}}))
                     }
                     handleJenisDokumen(response.data.data.ptk.jenis_karantina);
-                    // handleKota(null, "daerahAsalMP");
-                    // handleKota(null, "daerahTujuanMP");
-                    alert(response.data.message);
-                    isiDataPtk(response)
+                    setTimeout(() => {
+                        setValuePemohon("idPtk", response.data.data.ptk.id);
+                        setValuePemohon("noAju", response.data.data.ptk.no_aju)
+                        setValueKontainer("idPtk", response.data.data.ptk.id);
+                        setValuePelabuhan("idPtk", response.data.data.ptk.id);
+                        setValuePelabuhan("noAju", response.data.data.ptk.no_aju);
+                        setValueMP("idPtk", response.data.data.ptk.id);
+                        setValueMP("noAju", response.data.data.ptk.no_aju);
+                        setValueDetilMP("idPtk", response.data.data.ptk.id);
+                        setValueDokPeriksa("idPtk", response.data.data.ptk.id);
+                        setValueDokPeriksa("noAju", response.data.data.ptk.no_aju);
+                        setValueDokumen("idPtk",response.data.data.ptk.id);
+                        setValueDokumen("noAju", response.data.data.ptk.no_aju);
+                        setValueKonfirmasi("idPtk", response.data.data.ptk.id);
+                        setValueKonfirmasi("noAju", response.data.data.ptk.no_aju);
+                        setValueVerify("idPtk", response.data.data.ptk.id); // delete soon
+                        setValueVerify("noAju", response.data.data.ptk.no_aju); // delete soon
+                        setValueVerify("mediaPembawaVerif", response.data.data.ptk.jenis_karantina); // delete soon
+            
+                        setValuePemohon("jenisForm", response.data.data.ptk.jenis_dokumen);
+                        setValuePemohon("pJRutin", response.data.data.ptk.is_guest ? response.data.data.ptk.is_guest.toString() : "");
+                        setValuePemohon("namaPemohon", response.data.data.ptk.nama_pemohon);
+                        setValuePemohon("permohonan", response.data.data.ptk.jenis_permohonan);
+                        setValuePemohon("jenisIdentitasPemohon", response.data.data.ptk.jenis_identitas_pemohon);
+                        setValuePemohon("noIdentitasPemohon", response.data.data.ptk.nomor_identitas_pemohon);
+                        setValuePemohon("alamatPemohon", response.data.data.ptk.alamat_pemohon);
+                        setValuePemohon("nomorTlp", response.data.data.ptk.telepon_pemohon);
+                        setValuePemohon("nomorFax", response.data.data.ptk.fax_pemohon);
+                        setValuePemohon("provPemohon", response.data.data.ptk.provinsi_pemohon_id);
+                        setValuePemohon("provPemohonView", response.data.data.ptk.provinsi_pemohon);
+                        setValuePemohon("kotaPemohon", response.data.data.ptk.kota_kab_pemohon_id);
+                        setValuePemohon("kotaPemohonView", response.data.data.ptk.kota_pemohon);
+                        setValuePemohon("namaCp", response.data.data.ptk.nama_cp);
+                        setValuePemohon("alamatCp", response.data.data.ptk.alamat_cp);
+                        setValuePemohon("teleponCp", response.data.data.ptk.telepon_cp);
+                        setValuePemohon("namaTtd", response.data.data.ptk.nama_ttd);
+                        setValuePemohon("jenisIdentitasTtd", response.data.data.ptk.jenis_identitas_ttd);
+                        setValuePemohon("noIdentitasTtd", response.data.data.ptk.nomor_identitas_ttd);
+                        setValuePemohon("jabatanTtd", response.data.data.ptk.jabatan_ttd);
+                        setValuePemohon("alamatTtd", response.data.data.ptk.alamat_ttd);
+                        setValuePemohon("namaPengirim", response.data.data.ptk.nama_pengirim);
+                        setValuePemohon("alamatPengirim", response.data.data.ptk.alamat_pengirim);
+                        setValuePemohon("nomorTlpPengirim", response.data.data.ptk.telepon_pengirim);
+                        setValuePemohon("jenisIdentitasPengirim", response.data.data.ptk.jenis_identitas_pengirim);
+                        setValuePemohon("noIdentitasPengirim", response.data.data.ptk.nomor_identitas_pengirim);
+                        setValuePemohon("provPengirim", response.data.data.ptk.provinsi_pengirim_id);
+                        setValuePemohon("provPengirimView", response.data.data.ptk.provinsi_pengirim);
+                        setValuePemohon("kotaPengirim", response.data.data.ptk.kota_kab_pengirim_id);
+                        setValuePemohon("kotaPengirimView", response.data.data.ptk.kota_pengirim);
+                        setValuePemohon("negaraPengirim", response.data.data.ptk.negara_pengirim_id);
+                        setValuePemohon("negaraPengirimView", response.data.data.ptk.kd_negara_pengirim + " - " + response.data.data.ptk.negara_pengirim);
+                        setValuePemohon("namaPenerima", response.data.data.ptk.nama_penerima);
+                        setValuePemohon("alamatPenerima", response.data.data.ptk.alamat_penerima);
+                        setValuePemohon("nomorTlpPenerima", response.data.data.ptk.telepon_penerima);
+                        setValuePemohon("jenisIdentitasPenerima", response.data.data.ptk.jenis_identitas_penerima);
+                        setValuePemohon("noIdentitasPenerima", response.data.data.ptk.nomor_identitas_penerima);
+                        setValuePemohon("provPenerima", response.data.data.ptk.provinsi_penerima_id);
+                        setValuePemohon("provPenerimaView", response.data.data.ptk.provinsi_penerima);
+                        setValuePemohon("kotaPenerima", response.data.data.ptk.kota_kab_penerima_id);
+                        setValuePemohon("kotaPenerimaView", response.data.data.ptk.kota_penerima);
+                        setValuePemohon("negaraPenerima", response.data.data.ptk.negara_penerima_id);
+                        setValuePemohon("negaraPenerimaView", response.data.data.ptk.kd_negara_penerima + " - " + response.data.data.ptk.negara_penerima);
+                        
+                        setValuePelabuhan("tglBerangkatAkhir", response.data.data.ptk.tanggal_rencana_masuk);
+                        setValuePelabuhan("negaraAsal", response.data.data.ptk.negara_muat_id);
+                        setValuePelabuhan("negaraAsalView", response.data.data.ptk.kd_negara_muat + " - " + response.data.data.ptk.negara_muat);
+                        setValuePelabuhan("negaraTujuan", response.data.data.ptk.negara_bongkar_id);
+                        setValuePelabuhan("negaraTujuanView", response.data.data.ptk.kd_negara_bongkar + " - " + response.data.data.ptk.negara_bongkar);
+                        setValuePelabuhan("negaraTransit", response.data.data.ptk.negara_transit_id);
+                        setValuePelabuhan("negaraTransitView", response.data.data.ptk.kd_negara_transit + " - " + response.data.data.ptk.negara_transit);
+                        setValuePelabuhan("modaTransit", response.data.data.ptk.moda_alat_angkut_transit_id);
+                        setValuePelabuhan("tipeTransit", response.data.data.ptk.tipe_alat_angkut_transit_id);
+                        setValuePelabuhan("namaAlatAngkutTransit", response.data.data.ptk.nama_alat_angkut_transit);
+                        setValuePelabuhan("benderaTransit", response.data.data.ptk.bendera_alat_angkut_transit_id);
+                        setValuePelabuhan("benderaTransitView", response.data.data.ptk.kd_bendera_alat_angkut_transit + " - " + response.data.data.ptk.bendera_alat_angkut_transit);
+                        setValuePelabuhan("nomorAlatAngkutTransit", response.data.data.ptk.no_voyage_transit);
+                        setValuePelabuhan("callSignTransit", response.data.data.ptk.call_sign_transit);
+                        setValuePelabuhan("tglTibaTransit", response.data.data.ptk.tanggal_rencana_tiba_transit);
+                        setValuePelabuhan("tglBerangkatTransit", response.data.data.ptk.tanggal_rencana_berangkat_transit);
+                        setValuePelabuhan("modaAkhir", response.data.data.ptk.moda_alat_angkut_terakhir_id);
+                        setValuePelabuhan("modaAkhirLainnya", response.data.data.ptk.moda_alat_angkut_lainnya);
+                        setValuePelabuhan("tipeAkhir", response.data.data.ptk.tipe_alat_angkut_terakhir_id);
+                        setValuePelabuhan("namaAlatAngkutAkhir", response.data.data.ptk.nama_alat_angkut_terakhir);
+                        setValuePelabuhan("benderaAkhir", response.data.data.ptk.bendera_alat_angkut_terakhir_id);
+                        setValuePelabuhan("benderaAkhirView", response.data.data.ptk.kd_bendera_alat_angkut_terakhir + " - " + response.data.data.ptk.bendera_alat_angkut_terakhir);
+                        setValuePelabuhan("nomorAlatAngkutAkhir", response.data.data.ptk.no_voyage_terakhir);
+                        setValuePelabuhan("callSignAkhir", response.data.data.ptk.call_sign_terakhir);
+                        setValuePelabuhan("tglTibaAkhir", response.data.data.ptk.tanggal_rencana_tiba_terakhir);
+                        setValuePelabuhan("tglBerangkatAkhir", response.data.data.ptk.tanggal_rencana_berangkat_terakhir);
+                        setValuePelabuhan("transitOpsi", response.data.data.ptk.is_transit === null ? "" :response.data.data.ptk.is_transit.toString());
+                        setValuePelabuhan("cekKontainer", response.data.data.ptk.is_kontainer === null ? "" : response.data.data.ptk.is_kontainer.toString());
+                        if(response.data.data.ptk.is_kontainer !== null) {
+                            setFormTab(values => ({...values, tab2: false}))
+                        }
+                        setValuePelabuhan("sandar", response.data.data.ptk.gudang_id);
+                        setValuePelabuhan("pelMuat", response.data.data.ptk.pelabuhan_muat_id);
+                        setValuePelabuhan("pelMuatView", response.data.data.ptk.kd_pelabuhan_muat + " - " + response.data.data.ptk.pelabuhan_muat);
+                        setValuePelabuhan("pelBongkar", response.data.data.ptk.pelabuhan_bongkar_id);
+                        setValuePelabuhan("pelBongkarView", response.data.data.ptk.kd_pelabuhan_bongkar + " - " + response.data.data.ptk.pelabuhan_bongkar);
+                        setValuePelabuhan("pelTransit", response.data.data.ptk.pelabuhan_transit_id);
+                        setValuePelabuhan("pelTransitView", response.data.data.ptk.kd_pelabuhan_transit + " - " + response.data.data.ptk.pelabuhan_transit);
+                        setKontainerPtk(response.data.data.ptk_kontainer)
+                        
+                        setValueMP("mediaPembawa", response.data.data.ptk.jenis_karantina);
+                        if(response.data.data.ptk.jenis_karantina !== null || response.data.data.ptk_kontainer.length > 0) {
+                            setFormTab(values => ({...values, tab3: false}))
+                        }
+                        setValueMP("jenisMp", response.data.data.ptk.jenis_media_pembawa_id === null ? "" : response.data.data.ptk.jenis_media_pembawa_id.toString());
+                        setValueMP("jenisKemasan", response.data.data.ptk.kemasan_id === null ? "" : response.data.data.ptk.kemasan_id.toString());
+                        setValueMP("jenisAngkut", response.data.data.ptk.is_curah === null ? "" : response.data.data.ptk.is_curah.toString());
+                        setValueMP("peruntukan", response.data.data.ptk.peruntukan_id ? response.data.data.ptk.peruntukan_id.toString() : "");
+                        setValueMP("merkKemasan", response.data.data.ptk.merk_kemasan);
+                        setValueMP("jumlahKemasan", response.data.data.ptk.jumlah_kemasan);
+                        setValueMP("tandaKemasan", response.data.data.ptk.tanda_khusus);
+                        setValueMP("nilaiBarang", response.data.data.ptk.nilai_barang);
+                        setValueMP("satuanNilai", response.data.data.ptk.mata_uang);
+                        setValueMP("negaraAsalMP", response.data.data.ptk.negara_asal_id);
+                        setValueMP("negaraAsalMPView", response.data.data.ptk.kd_negara_asal + " - " + response.data.data.ptk.negara_asal);
+                        setValueMP("daerahAsalMP", response.data.data.ptk.kota_kab_asal_id);
+                        setValueMP("daerahAsalMPView", response.data.data.ptk.kota_asal);
+                        setValueMP("negaraTujuanMP", response.data.data.ptk.negara_tujuan_id);
+                        setValueMP("negaraTujuanMPView", response.data.data.ptk.kd_negara_tujuan + " - " + response.data.data.ptk.negara_tujuan);
+                        setValueMP("daerahTujuanMP", response.data.data.ptk.kota_kab_tujuan_id);
+                        setValueMP("daerahTujuanMPView", response.data.data.ptk.kota_tujuan);
+                        setValueMP("tingkatOlah", response.data.data.ptk.tingkat_pengolahan ? response.data.data.ptk.tingkat_pengolahan.toString() : "");
+                        setValueMP("infoTambahan", response.data.data.ptk.informasi_tambahan);
+                        setKomoditiPtk(response.data.data.ptk_komoditi);
+            
+                        setValueDokPeriksa("tempatPeriksaPtk", response.data.data.ptk.tempat_pemeriksaan);
+                        setValueDokPeriksa("namaTempatPeriksaPtk", response.data.data.ptk.nama_tempat_pemeriksaan);
+                        setValueDokPeriksa("alamatTempatPeriksaPtk", response.data.data.ptk.alamat_tempat_pemeriksaan);
+            
+                        setValueVerify("opsiVerif", response.data.data.ptk.is_verifikasi);
+                        setValueVerify("tglTerimaVerif", response.data.data.ptk.tgl_dok_permohonan);
+                        setValueVerify("alasanTolak", response.data.data.ptk.alasan_penolakan);
+                        setValueVerify("petugasVerif", response.data.data.ptk.alasan_penolakan);
+            
+                        setDokumenPtk(response.data.data.ptk_dokumen);
+                        if(response.data.data.ptk_dokumen.length > 0) {
+                            setFormTab(values => ({...values, tab4: false}))
+                        }
+                        if(response.data.data.ptk.tgl_aju) {
+                            setPtkLengkap(true);
+                        }
+                    }, 400) //400
                 }
             })
             .catch((error) => {
-                console.log(error.response);
+                console.log(error);
             });
         }
-    },[]) 
+    },[dataKlasKT, handleJenisDokumen, handleKota, handlePelabuhan, idPtk, setValueDetilMP, setValueDokPeriksa, setValueDokumen, setValueKonfirmasi, setValueKontainer, setValueMP, setValuePelabuhan, setValuePemohon, setValueVerify, master])
 
     
-    function isiDataPtk(response) {
-        setTimeout(() => {
-            setValuePemohon("idPtk", response.data.data.ptk.id);
-            setValuePemohon("noAju", response.data.data.ptk.no_aju)
-            setValueKontainer("idPtk", response.data.data.ptk.id);
-            setValuePelabuhan("idPtk", response.data.data.ptk.id);
-            setValuePelabuhan("noAju", response.data.data.ptk.no_aju);
-            setValueMP("idPtk", response.data.data.ptk.id);
-            setValueMP("noAju", response.data.data.ptk.no_aju);
-            setValueDetilMP("idPtk", response.data.data.ptk.id);
-            setValueDokPeriksa("idPtk", response.data.data.ptk.id);
-            setValueDokPeriksa("noAju", response.data.data.ptk.no_aju);
-            setValueDokumen("idPtk",response.data.data.ptk.id);
-            setValueDokumen("noAju", response.data.data.ptk.no_aju);
-            setValueKonfirmasi("idPtk", response.data.data.ptk.id);
-            setValueKonfirmasi("noAju", response.data.data.ptk.no_aju);
-            setValueVerify("idPtk", response.data.data.ptk.id); // delete soon
-            setValueVerify("noAju", response.data.data.ptk.no_aju); // delete soon
-            setValueVerify("mediaPembawaVerif", response.data.data.ptk.jenis_karantina); // delete soon
-
-            setValuePemohon("jenisForm", response.data.data.ptk.jenis_dokumen);
-            setValuePemohon("pJRutin", response.data.data.ptk.is_guest ? response.data.data.ptk.is_guest.toString() : "");
-            setValuePemohon("namaPemohon", response.data.data.ptk.nama_pemohon);
-            setValuePemohon("permohonan", response.data.data.ptk.jenis_permohonan);
-            setValuePemohon("jenisIdentitasPemohon", response.data.data.ptk.jenis_identitas_pemohon);
-            setValuePemohon("noIdentitasPemohon", response.data.data.ptk.nomor_identitas_pemohon);
-            setValuePemohon("alamatPemohon", response.data.data.ptk.alamat_pemohon);
-            setValuePemohon("nomorTlp", response.data.data.ptk.telepon_pemohon);
-            setValuePemohon("nomorFax", response.data.data.ptk.fax_pemohon);
-            setValuePemohon("provPemohon", response.data.data.ptk.provinsi_pemohon_id);
-            setValuePemohon("provPemohonView", response.data.data.ptk.provinsi_pemohon);
-            setValuePemohon("kotaPemohon", response.data.data.ptk.kota_kab_pemohon_id);
-            setValuePemohon("kotaPemohonView", response.data.data.ptk.kota_pemohon);
-            setValuePemohon("namaCp", response.data.data.ptk.nama_cp);
-            setValuePemohon("alamatCp", response.data.data.ptk.alamat_cp);
-            setValuePemohon("teleponCp", response.data.data.ptk.telepon_cp);
-            setValuePemohon("namaTtd", response.data.data.ptk.nama_ttd);
-            setValuePemohon("jenisIdentitasTtd", response.data.data.ptk.jenis_identitas_ttd);
-            setValuePemohon("noIdentitasTtd", response.data.data.ptk.nomor_identitas_ttd);
-            setValuePemohon("jabatanTtd", response.data.data.ptk.jabatan_ttd);
-            setValuePemohon("alamatTtd", response.data.data.ptk.alamat_ttd);
-            setValuePemohon("namaPengirim", response.data.data.ptk.nama_pengirim);
-            setValuePemohon("alamatPengirim", response.data.data.ptk.alamat_pengirim);
-            setValuePemohon("nomorTlpPengirim", response.data.data.ptk.telepon_pengirim);
-            setValuePemohon("jenisIdentitasPengirim", response.data.data.ptk.jenis_identitas_pengirim);
-            setValuePemohon("noIdentitasPengirim", response.data.data.ptk.nomor_identitas_pengirim);
-            setValuePemohon("provPengirim", response.data.data.ptk.provinsi_pengirim_id);
-            setValuePemohon("provPengirimView", response.data.data.ptk.provinsi_pengirim);
-            setValuePemohon("kotaPengirim", response.data.data.ptk.kota_kab_pengirim_id);
-            setValuePemohon("kotaPengirimView", response.data.data.ptk.kota_pengirim);
-            setValuePemohon("negaraPengirim", response.data.data.ptk.negara_pengirim_id);
-            setValuePemohon("negaraPengirimView", response.data.data.ptk.kd_negara_pengirim + " - " + response.data.data.ptk.negara_pengirim);
-            setValuePemohon("namaPenerima", response.data.data.ptk.nama_penerima);
-            setValuePemohon("alamatPenerima", response.data.data.ptk.alamat_penerima);
-            setValuePemohon("nomorTlpPenerima", response.data.data.ptk.telepon_penerima);
-            setValuePemohon("jenisIdentitasPenerima", response.data.data.ptk.jenis_identitas_penerima);
-            setValuePemohon("noIdentitasPenerima", response.data.data.ptk.nomor_identitas_penerima);
-            setValuePemohon("provPenerima", response.data.data.ptk.provinsi_penerima_id);
-            setValuePemohon("provPenerimaView", response.data.data.ptk.provinsi_penerima);
-            setValuePemohon("kotaPenerima", response.data.data.ptk.kota_kab_penerima_id);
-            setValuePemohon("kotaPenerimaView", response.data.data.ptk.kota_penerima);
-            setValuePemohon("negaraPenerima", response.data.data.ptk.negara_penerima_id);
-            setValuePemohon("negaraPenerimaView", response.data.data.ptk.kd_negara_penerima + " - " + response.data.data.ptk.negara_penerima);
-            
-            setValuePelabuhan("tglBerangkatAkhir", response.data.data.ptk.tanggal_rencana_masuk);
-            setValuePelabuhan("negaraAsal", response.data.data.ptk.negara_muat_id);
-            setValuePelabuhan("negaraAsalView", response.data.data.ptk.kd_negara_muat + " - " + response.data.data.ptk.negara_muat);
-            setValuePelabuhan("negaraTujuan", response.data.data.ptk.negara_bongkar_id);
-            setValuePelabuhan("negaraTujuanView", response.data.data.ptk.kd_negara_bongkar + " - " + response.data.data.ptk.negara_bongkar);
-            setValuePelabuhan("negaraTransit", response.data.data.ptk.negara_transit_id);
-            setValuePelabuhan("negaraTransitView", response.data.data.ptk.kd_negara_transit + " - " + response.data.data.ptk.negara_transit);
-            setValuePelabuhan("modaTransit", response.data.data.ptk.moda_alat_angkut_transit_id);
-            setValuePelabuhan("tipeTransit", response.data.data.ptk.tipe_alat_angkut_transit_id);
-            setValuePelabuhan("namaAlatAngkutTransit", response.data.data.ptk.nama_alat_angkut_transit);
-            setValuePelabuhan("benderaTransit", response.data.data.ptk.bendera_alat_angkut_transit_id);
-            setValuePelabuhan("benderaTransitView", response.data.data.ptk.kd_bendera_alat_angkut_transit + " - " + response.data.data.ptk.bendera_alat_angkut_transit);
-            setValuePelabuhan("nomorAlatAngkutTransit", response.data.data.ptk.no_voyage_transit);
-            setValuePelabuhan("callSignTransit", response.data.data.ptk.call_sign_transit);
-            setValuePelabuhan("tglTibaTransit", response.data.data.ptk.tanggal_rencana_tiba_transit);
-            setValuePelabuhan("tglBerangkatTransit", response.data.data.ptk.tanggal_rencana_berangkat_transit);
-            setValuePelabuhan("modaAkhir", response.data.data.ptk.moda_alat_angkut_terakhir_id);
-            setValuePelabuhan("modaAkhirLainnya", response.data.data.ptk.moda_alat_angkut_lainnya);
-            setValuePelabuhan("tipeAkhir", response.data.data.ptk.tipe_alat_angkut_terakhir_id);
-            setValuePelabuhan("namaAlatAngkutAkhir", response.data.data.ptk.nama_alat_angkut_terakhir);
-            setValuePelabuhan("benderaAkhir", response.data.data.ptk.bendera_alat_angkut_terakhir_id);
-            setValuePelabuhan("benderaAkhirView", response.data.data.ptk.kd_bendera_alat_angkut_terakhir + " - " + response.data.data.ptk.bendera_alat_angkut_terakhir);
-            setValuePelabuhan("nomorAlatAngkutAkhir", response.data.data.ptk.no_voyage_terakhir);
-            setValuePelabuhan("callSignAkhir", response.data.data.ptk.call_sign_terakhir);
-            setValuePelabuhan("tglTibaAkhir", response.data.data.ptk.tanggal_rencana_tiba_terakhir);
-            setValuePelabuhan("tglBerangkatAkhir", response.data.data.ptk.tanggal_rencana_berangkat_terakhir);
-            setValuePelabuhan("transitOpsi", response.data.data.ptk.is_transit === null ? "" :response.data.data.ptk.is_transit.toString());
-            setValuePelabuhan("cekKontainer", response.data.data.ptk.is_kontainer ? response.data.data.ptk.is_kontainer.toString() : "");
-            setValuePelabuhan("sandar", response.data.data.ptk.gudang_id);
-            setValuePelabuhan("pelMuat", response.data.data.ptk.pelabuhan_muat_id);
-            setValuePelabuhan("pelMuatView", response.data.data.ptk.kd_pelabuhan_muat + " - " + response.data.data.ptk.pelabuhan_muat);
-            setValuePelabuhan("pelBongkar", response.data.data.ptk.pelabuhan_bongkar_id);
-            setValuePelabuhan("pelBongkarView", response.data.data.ptk.kd_pelabuhan_bongkar + " - " + response.data.data.ptk.pelabuhan_bongkar);
-            setValuePelabuhan("pelTransit", response.data.data.ptk.pelabuhan_transit_id);
-            setValuePelabuhan("pelTransitView", response.data.data.ptk.kd_pelabuhan_transit + " - " + response.data.data.ptk.pelabuhan_transit);
-            setKontainerPtk(response.data.data.ptk_kontainer)
-            
-            setValueMP("mediaPembawa", response.data.data.ptk.jenis_karantina);
-            setValueMP("jenisMp", response.data.data.ptk.jenis_media_pembawa_id ? response.data.data.ptk.jenis_media_pembawa_id.toString() : "");
-            setValueMP("jenisKemasan", response.data.data.ptk.kemasan_id);
-            setValueMP("jenisAngkut", response.data.data.ptk.is_curah.toString());
-            setValueMP("peruntukan", response.data.data.ptk.peruntukan_id ? response.data.data.ptk.peruntukan_id.toString() : "");
-            setValueMP("merkKemasan", response.data.data.ptk.merk_kemasan);
-            setValueMP("jumlahKemasan", response.data.data.ptk.jumlah_kemasan);
-            setValueMP("tandaKemasan", response.data.data.ptk.tanda_khusus);
-            setValueMP("nilaiBarang", response.data.data.ptk.nilai_barang);
-            setValueMP("satuanNilai", response.data.data.ptk.mata_uang);
-            setValueMP("negaraAsalMP", response.data.data.ptk.negara_asal_id);
-            setValueMP("negaraAsalMPView", response.data.data.ptk.kd_negara_asal + " - " + response.data.data.ptk.negara_asal);
-            setValueMP("daerahAsalMP", response.data.data.ptk.kota_kab_asal_id);
-            setValueMP("daerahAsalMPView", response.data.data.ptk.kota_asal);
-            setValueMP("negaraTujuanMP", response.data.data.ptk.negara_tujuan_id);
-            setValueMP("negaraTujuanMPView", response.data.data.ptk.kd_negara_tujuan + " - " + response.data.data.ptk.negara_tujuan);
-            setValueMP("daerahTujuanMP", response.data.data.ptk.kota_kab_tujuan_id);
-            setValueMP("daerahTujuanMPView", response.data.data.ptk.kota_tujuan);
-            setValueMP("tingkatOlah", response.data.data.ptk.tingkat_pengolahan ? response.data.data.ptk.tingkat_pengolahan.toString() : "");
-            setValueMP("infoTambahan", response.data.data.ptk.informasi_tambahan);
-            setKomoditiPtk(response.data.data.ptk_komoditi);
-
-            setValueDokPeriksa("tempatPeriksaPtk", response.data.data.ptk.tempat_pemeriksaan);
-            setValueDokPeriksa("namaTempatPeriksaPtk", response.data.data.ptk.nama_tempat_pemeriksaan);
-            setValueDokPeriksa("alamatTempatPeriksaPtk", response.data.data.ptk.alamat_tempat_pemeriksaan);
-
-            setValueVerify("opsiVerif", response.data.data.ptk.is_verifikasi);
-            setValueVerify("tglTerimaVerif", response.data.data.ptk.tgl_dok_permohonan);
-            setValueVerify("alasanTolak", response.data.data.ptk.alasan_penolakan);
-            setValueVerify("petugasVerif", response.data.data.ptk.alasan_penolakan);
-
-            setDokumenPtk(response.data.data.ptk_dokumen);
-            if(response.data.data.ptk.tgl_aju) {
-                setPtkLengkap(true);
-            }
-        }, 400
-        )
-    }
+    // function isiDataPtk(response) {
+        
+    // }
     
     const onSubmitDokumen = (data) => {
-        // setValueDokumen("idPtk", dataIdPage.noIdPtk)
-        // setValueDokumen("datenow", dateNow())
-        // console.log(data.fileDokumen)
         const modelPemohon = new PtkModel();
 
         const response = modelPemohon.pushDetilDokumen(data);
@@ -565,12 +966,13 @@ function DocK11() {
     const onSubmitDetilMP = (data) => {
         // setValueDetilMP("idPtk", dataIdPage.noIdPtk)
         // setValueDetilMP("datenow", dateNow())
+        console.log(data.jenisKar)
         const modelPemohon = new PtkModel();
 
         const response = modelPemohon.pushKomoditi(data);
             response
             .then((response) => {
-                // console.log(response.data)
+                console.log(response)
                 alert(response.data.status + " - " + response.data.message)
                 // setFormTab(values => ({...values, tab4: false}))
                 // setWizardPage(wizardPage + 1)
@@ -580,14 +982,8 @@ function DocK11() {
                 }
             })
             .catch((error) => {
-                console.log(error.response);
+                console.log(error);
             });
-        // console.log(data);
-        // setValueKontainer("noKontainer", "");
-        // setValueKontainer("tipeKontainer", "");
-        // setValueKontainer("ukuranKontainer", "");
-        // setValueKontainer("stuffKontainer", "");
-        // setValueKontainer("segel", "");
     };
     // const date = new Date();
     // function addZero(i) {
@@ -595,7 +991,7 @@ function DocK11() {
     //     return i;
     // }
 
-    console.count()
+    // console.count()
 
     const onSubmitPemohon = (data) => {
     const modelPemohon = new PtkModel();
@@ -968,7 +1364,7 @@ function DocK11() {
     let [kontainerPtk, setKontainerPtk] = useState();
     let [komoditiPtk, setKomoditiPtk] = useState();
     let [dokumenPtk, setDokumenPtk] = useState();
-    let [kontainerById, setKontainerById] = useState({});
+    // let [kontainerById, setKontainerById] = useState({});
     // useEffect(()=>{
         function dataKontainerPtk() {
             if(wizardPage === 2) {
@@ -1067,158 +1463,6 @@ function DocK11() {
     //     }
     // }
 
-    let master = useMemo(() => new Master(), [])
-    const getListNegara = useCallback(async () => {
-        try {
-        const response = await master.masterNegara();
-        if(response.data.status === '200') {
-            let dataneg = response.data.data;
-            const arraySelectNegara = dataneg.map(item => {
-                return {
-                    value: item.id.toString(),
-                    label: item.kode + " - " + item.nama
-                }
-            })
-            // setSelect2Negara(arraySelectNegara)
-            setdataSelect(values => ({...values, "negaraPengirim": arraySelectNegara }));
-            setdataSelect(values => ({...values, "negaraPenerima": arraySelectNegara }));
-            setdataSelect(values => ({...values, "negaraAsal": arraySelectNegara }));
-            setdataSelect(values => ({...values, "negaraTujuan": arraySelectNegara }));
-            setdataSelect(values => ({...values, "negaraTransit": arraySelectNegara }));
-            setdataSelect(values => ({...values, "negaraAsalMP": arraySelectNegara }));
-            setdataSelect(values => ({...values, "negaraTujuanMP": arraySelectNegara }));
-            setdataSelect(values => ({...values, "negaraAsalDokumen": arraySelectNegara }));
-            setdataSelect(values => ({...values, "benderaTransit": arraySelectNegara }));
-            setdataSelect(values => ({...values, "benderaAkhir": arraySelectNegara }));
-        }
-    } catch (error) {
-        console.log(error)
-        setdataSelect(values => ({...values, "negaraPengirim": [] }));
-        setdataSelect(values => ({...values, "negaraPenerima": [] }));
-        setdataSelect(values => ({...values, "negaraAsal": [] }));
-        setdataSelect(values => ({...values, "negaraTujuan": [] }));
-        setdataSelect(values => ({...values, "negaraTransit": [] }));
-        setdataSelect(values => ({...values, "negaraAsalMP": [] }));
-        setdataSelect(values => ({...values, "negaraTujuanMP": [] }));
-        setdataSelect(values => ({...values, "negaraAsalDokumen": [] }));
-    }
-    }, [master])
-
-    useEffect(() => {
-        getListNegara()
-    }, [getListNegara])
-
-    const getListProv = useCallback(async () => {
-        try {
-            const response = await master.masterProv()
-            if(response.data.status === '200') {
-                let dataProv = response.data.data;
-                const arraySelectProv = dataProv.map(item => {
-                    return {
-                        value: item.id.toString(),
-                        label: item.nama
-                    }
-                })
-                setdataSelect(values => ({...values, provPemohon: arraySelectProv }))
-                setdataSelect(values => ({...values, provPengirim: arraySelectProv }))
-                setdataSelect(values => ({...values, provPenerima: arraySelectProv }))
-            }
-        } catch (error) {
-            console.log(error)
-            setdataSelect(values => ({...values, provPemohon: [] }))
-            setdataSelect(values => ({...values, provPengirim: [] }))
-            setdataSelect(values => ({...values, provPenerima: [] }))
-        }
-    }, [master])
-    
-    useEffect(() => {
-      getListProv()
-    }, [getListProv])
-
-    const handleKota = useCallback(async (e, pel) => {
-        // if(e && pel) {
-            // let dataid = '';
-            // if(e === '') {
-            //     dataid = null
-            // } else {
-            //     dataid = e;
-            // }
-            // console.log(dataid)
-            try {
-                const response = await master.masterKota(e)
-                if(response.data.status === '200') {
-                    let dataKota = response.data.data;
-                    const arraySelectKota = dataKota.map(item => {
-                    return {
-                        value: item.id.toString(),
-                        label: item.nama
-                    }
-                    })
-                    setdataSelect(values => ({...values, [pel]: arraySelectKota}))
-                }
-                // console.log(dataSelect.pelMuat)
-            } catch (error) {
-            console.log(error)
-            setdataSelect(values => ({...values, [pel]: []}))
-            }
-        // }
-    }, [master])
-
-    useEffect(() => {
-        handleKota()
-    }, [handleKota])
-
-    const handlePelabuhan = useCallback(async (e, pel) => {
-        if(e && pel) {
-            try {
-                const response = await master.masterPelabuhanID(e)
-                if(response.data.status === '200') {
-                    let dataPel = response.data.data;
-                    const arraySelectPelabuhan = dataPel.map(item => {
-                    return {
-                        value: item.id.toString(),
-                        label: item.kode + " - " + item.nama
-                    }
-                    })
-                    setdataSelect(values => ({...values, [pel]: arraySelectPelabuhan}))
-                }
-                // console.log(dataSelect.pelMuat)
-            } catch (error) {
-            console.log(error)
-            setdataSelect(values => ({...values, [pel]: []}))
-            }
-        }
-    }, [master])
-
-    useEffect(() => {
-        handlePelabuhan()
-    }, [handlePelabuhan])
-
-    const handleJenisDokumen = useCallback(async (e) => {
-        if(e) {
-            try {
-                const response = await master.masterDok(e)
-                if(response.data.status === '200') {
-                    let jenisDok = response.data.data;
-                    const arraySelectJenisDok = jenisDok.map(item => {
-                    return {
-                        value: item.id,
-                        label: item.kode + " - " + item.nama
-                    }
-                    })
-                    setdataSelect(values => ({...values, "jenisDokumen": arraySelectJenisDok}))
-                }
-            } catch (error) {
-                console.log(error)
-                setdataSelect(values => ({...values, "jenisDokumen": []}))
-            }
-        }
-    }, [master])
-    
-    useEffect(() => {
-        handleJenisDokumen()
-    }, [handleJenisDokumen])
-
     function handleSelectPemohon(e, pel) {
         // console.log(e)
         if(e) {
@@ -1246,6 +1490,75 @@ function DocK11() {
         .catch((error) => {
             console.log(error.response.data);
         });
+    }
+
+    const addCommas = num => num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+    const removeNonNumeric = num => num.toString().replace(/[^0-9.]/g, "");
+    
+    function handleEditKomoditas(e) {
+        setValueDetilMP("idDetilMP", e.target.dataset.header)
+        setValueDetilMP("idPtk", e.target.dataset.ptk)
+        setValueDetilMP("jenisKar", cekdataMP.mediaPembawa)
+        const cell = e.target.closest('tr')
+        if(cekdataMP.mediaPembawa === "H") {
+            setdataSelect(values => ({...values, "satJumlahMP": <MasterSatuan kar="kh" />}))
+            setdataSelect(values => ({...values, "satuanNilaiMPKH": <MasterMataUang/>}))
+            setTimeout(() => {
+                setValueDetilMP("kodeHSMpKH", cell.cells[1].innerHTML)
+                setValueDetilMP("komoditasMPKHid", e.target.dataset.kom)
+                setValueDetilMP("namaUmumKH", cell.cells[3].innerHTML)
+                setValueDetilMP("namaLatinKH", cell.cells[4].innerHTML)
+                setValueDetilMP("klasifikasiMPKHid", e.target.dataset.klas)
+                setValueDetilMP("jumlahMP", cell.cells[9].innerHTML)
+                setValueDetilMP("satJumlahMP", e.target.dataset.satuanlain)
+                setValueDetilMP("breedMP", e.target.dataset.ket)
+                setValueDetilMP("jantan", cell.cells[11].innerHTML)
+                setValueDetilMP("betina", cell.cells[12].innerHTML)
+                setValueDetilMP("nettoMP", cell.cells[5].innerHTML)
+                setValueDetilMP("brutoMP", cell.cells[7].innerHTML)
+                setValueDetilMP("nilaiBarangMPKH", cell.cells[13].innerHTML)
+                setValueDetilMP("satuanNilaiMPKH", cell.cells[14].innerHTML)
+            }, 300)
+        } else if(cekdataMP.mediaPembawa === "T") {
+            setdataSelect(values => ({...values, "satuanLain": <MasterSatuan kar="kt" />}))
+            setdataSelect(values => ({...values, "satuanNilaiMP": <MasterMataUang/>}))
+            setdataSelect(values => ({...values, "satuanKemasanDetil": <MasterKemasan/>}))
+            setTimeout(() => {
+                setValueDetilMP("peruntukanMP", e.target.dataset.klas)
+                setValueDetilMP("volumeNetto", cell.cells[5].innerHTML)
+                setValueDetilMP("komoditasMP", e.target.dataset.kom)
+                setValueDetilMP("volumeBrutto", cell.cells[7].innerHTML)
+                setValueDetilMP("kodeHSMp", cell.cells[1].innerHTML)
+                setValueDetilMP("volumeLain", cell.cells[9].innerHTML)
+                setValueDetilMP("satuanLain", e.target.dataset.satuanlain)
+                setValueDetilMP("namaUmum", cell.cells[3].innerHTML)
+                setValueDetilMP("namaLatin", cell.cells[4].innerHTML)
+                setValueDetilMP("nilaiBarangMP", cell.cells[13].innerHTML)
+                setValueDetilMP("satuanNilaiMP", cell.cells[14].innerHTML)
+                setValueDetilMP("jumlahKemasanDetil", e.target.dataset.kemasan)
+                setValueDetilMP("satuanKemasanDetil", e.target.dataset.kemasansat)
+            },300)
+        } else if(cekdataMP.mediaPembawa === "I") {
+
+        }
+        // const modelPemohon = new PtkModel();
+        // const response = modelPemohon.detilKontainerId(e.target.dataset.header);
+        // response
+        // .then((res) => {
+        //     // console.log(res.data)
+        //     if(res.data.status === '200') {
+        //         setValueKontainer("idDataKontainer", res.data.data.id)
+        //         setValueKontainer("idPtk", res.data.data.ptk_id)
+        //         setValueKontainer("noKontainer", res.data.data.nomor)
+        //         setValueKontainer("tipeKontainer", res.data.data.tipe_kontainer_id.toString())
+        //         setValueKontainer("ukuranKontainer", res.data.data.ukuran_kontainer_id.toString())
+        //         setValueKontainer("stuffKontainer", res.data.data.stuff_kontainer_id.toString())
+        //         setValueKontainer("segel", res.data.data.segel)
+        //     }
+        // })
+        // .catch((error) => {
+        //     console.log(error.response.data);
+        // });
     }
     
     function handleEditDokumen(e) {
@@ -1295,11 +1608,7 @@ function DocK11() {
   return (
     <div className="container-xxl flex-grow-1 container-p-y">
         <h4 className="py-3 breadcrumb-wrapper mb-4">
-            K-1.1 <span style={{color: "blue"}}>PERMOHONAN TINDAKAN KARANTINA
-            {/* DAN PENGAWASAN DAN/ATAU PENGENDALIAN
-                SERTA BERITA ACARA SERAH TERIMA MEDIA PEMBAWA DI TEMPAT PEMASUKAN,
-                PENGELUARAN DAN/ATAU TRANSIT */}
-                </span>
+            K-1.1 <span style={{color: "blue"}}>PERMOHONAN TINDAKAN KARANTINA</span>
         </h4>
 
         <div className="row">
@@ -1317,7 +1626,7 @@ function DocK11() {
                     </div>
                     <hr className='m-1' />
                     <div className="bs-stepper-header m-auto border-0">
-                        <div className={wizardPage === 1 ? "step active" : "step"} onClick={() => setWizardPage(1)}>
+                        <div className={wizardPage === 1 ? "step active" : "step"} onClick={() => setWizardPage(1)} disabled={formTab.tab1}>
                             <button type="button" className="step-trigger">
                                 <span className="bs-stepper-icon">
                                 <PersonSvg/>
@@ -1326,10 +1635,10 @@ function DocK11() {
                             </button>
                         </div>
                         <div className="line">
-                            <i className="bx bx-chevron-right"></i>
+                            <i className="fa-solid fa-angle-right"></i>
                         </div>
                         <div className={wizardPage === 2 ? "step active" : "step"}>
-                            <button type="button" className="step-trigger" onClick={() => setWizardPage(2)} disabled={formTab.tab1}>
+                            <button type="button" className="step-trigger" onClick={() => setWizardPage(2)} disabled={formTab.tab2}>
                                 <span className="bs-stepper-icon">
                                 <ShipSvg/>
                                 </span>
@@ -1337,10 +1646,10 @@ function DocK11() {
                             </button>
                         </div>
                         <div className="line">
-                            <i className="bx bx-chevron-right"></i>
+                            <i className="fa-solid fa-angle-right"></i>
                         </div>
                         <div className={wizardPage === 3 ? "step active" : "step"}>
-                            <button type="button" className="step-trigger" onClick={() => setWizardPage(3)} disabled={formTab.tab2}>
+                            <button type="button" className="step-trigger" onClick={() => setWizardPage(3)} disabled={formTab.tab3}>
                                 <span className="bs-stepper-icon">
                                 <PackageSvg/>
                                 </span>
@@ -1348,10 +1657,10 @@ function DocK11() {
                             </button>
                         </div>
                         <div className="line">
-                            <i className="bx bx-chevron-right"></i>
+                            <i className="fa-solid fa-angle-right"></i>
                         </div>
                         <div className={wizardPage === 4 ? "step active" : "step"}>
-                            <button type="button" className="step-trigger" onClick={() => setWizardPage(4)} disabled={formTab.tab3}>
+                            <button type="button" className="step-trigger" onClick={() => setWizardPage(4)} disabled={formTab.tab4}>
                                 <span className="bs-stepper-icon">
                                 <DokumenSvg/>
                                 </span>
@@ -1359,10 +1668,10 @@ function DocK11() {
                             </button>
                         </div>
                         <div className="line">
-                            <i className="bx bx-chevron-right"></i>
+                            <i className="fa-solid fa-angle-right"></i>
                         </div>
                         <div className={wizardPage === 5 ? "step active" : "step"}>
-                            <button type="button" className="step-trigger" onClick={() => setWizardPage(5)} disabled={formTab.tab4}>
+                            <button type="button" className="step-trigger" onClick={() => setWizardPage(5)} disabled={formTab.tab5}>
                                 <span className="bs-stepper-icon">
                                 <ConfirmSvg/>
                                 </span>
@@ -1388,11 +1697,10 @@ function DocK11() {
                         <div className="card-action-title">
                             <h5 className="mb-0 text-lightest">Pemohon</h5>
                         </div>
-                        <button className='col-sm-1 btn btn-sm btn-success' type='button' onClick={handleRef}><center><i className="menu-icon tf-icons bx bx-sync"></i></center></button>
                         <div className="card-action-element">
                             <ul className="list-inline mb-0">
                                 <li className="list-inline-item">
-                                    <a href="#" className="card-collapsible"><i className="tf-icons bx bx-chevron-up"></i></a>
+                                    <a href="#" className="card-collapsible"><i className="tf-icons fa-solid fa-chevron-up"></i></a>
                                 </li>
                             </ul>
                         </div>
@@ -1461,7 +1769,7 @@ function DocK11() {
                                             className="form-control form-control-sm"
                                             rules={{ required: "Mohon pilih provinsi pemohon." }}
                                             render={({ field: { value, ...field } }) => (
-                                                <Select value={{id: cekdataDiri.provPemohon, label: cekdataDiri.provPemohonView }} {...field} options={dataSelect.provPemohon} onChange={(e) => handleSelectPemohon(e, "provPemohon") & handleKota(e.value, "kotaPemohon")} />
+                                                <Select styles={customStyles} placeholder={"Pilih provinsi pemohon.."} value={value ? {id: cekdataDiri.provPemohon, label: cekdataDiri.provPemohonView } : ""} {...field} options={dataSelect.provPemohon} onChange={(e) => handleSelectPemohon(e, "provPemohon") & handleKota(e.value, "kotaPemohon")} />
                                             )}
                                         />
                                         {errorsPemohon.provPemohon && <small className="text-danger">{errorsPemohon.provPemohon.message}</small>}
@@ -1476,7 +1784,7 @@ function DocK11() {
                                             className="form-control form-control-sm"
                                             rules={{ required: false }}
                                             render={({ field: { value, ...field } }) => (
-                                                <Select value={{id: cekdataDiri.kotaPemohon, label: cekdataDiri.kotaPemohonView }} {...field} options={dataSelect.kotaPemohon} onChange={(e) => handleSelectPemohon(e, "kotaPemohon")} />
+                                                <Select styles={customStyles} placeholder={"Pilih kota/kab asal pemohon.."} value={value ? {id: cekdataDiri.kotaPemohon, label: cekdataDiri.kotaPemohonView} : ""} {...field} options={dataSelect.kotaPemohon} onChange={(e) => handleSelectPemohon(e, "kotaPemohon")} />
                                             )}
                                         />
                                         {errorsPemohon.kotaPemohon && <small className="text-danger">{errorsPemohon.kotaPemohon.message}</small>}
@@ -1511,7 +1819,7 @@ function DocK11() {
                                 </div>
                             </div>
                             <div className="form-check mt-3">
-                            <input className="form-check-input" value="" type="checkbox" name='samaTTD' id="samaTTD" onChange={handleCekSameTTD} />
+                            <input className="form-check-input" type="checkbox" name='samaTTD' id="samaTTD" onChange={handleCekSameTTD} />
                             <label className="form-check-label" htmlFor="samaTTD"> Pemohon sama dengan penandatangan dokumen. </label>
                             </div>
                         </div>
@@ -1527,7 +1835,7 @@ function DocK11() {
                         <div className="card-action-element">
                             <ul className="list-inline mb-0">
                                 <li className="list-inline-item">
-                                    <a href="#" className="card-collapsible"><i className="tf-icons bx bx-chevron-up"></i></a>
+                                    <a href="#" className="card-collapsible"><i className="tf-icons fa-solid fa-chevron-up"></i></a>
                                 </li>
                             </ul>
                         </div>
@@ -1581,7 +1889,7 @@ function DocK11() {
                         <div className="card-action-element">
                             <ul className="list-inline mb-0">
                                 <li className="list-inline-item">
-                                    <a href="#" className="card-collapsible"><i className="tf-icons bx bx-chevron-up"></i></a>
+                                    <a href="#" className="card-collapsible"><i className="tf-icons fa-solid fa-chevron-up"></i></a>
                                 </li>
                             </ul>
                         </div>
@@ -1619,7 +1927,7 @@ function DocK11() {
                         <div className="card-action-element">
                             <ul className="list-inline mb-0">
                                 <li className="list-inline-item">
-                                    <a href="#" className="card-collapsible"><i className="tf-icons bx bx-chevron-up"></i></a>
+                                    <a href="#" className="card-collapsible"><i className="tf-icons fa-solid fa-chevron-up"></i></a>
                                 </li>
                             </ul>
                         </div>
@@ -1631,7 +1939,6 @@ function DocK11() {
                                 <div className="col-sm-9">
                                     <input type="text" id="namaPengirim" name="namaPengirim" {...registerPemohon("namaPengirim", { required: "Mohon isi nama pengirim."})} className={errorsPemohon.namaPengirim ? "form-control form-control-sm is-invalid" : "form-control form-control-sm"} placeholder="Nama Pengirim" />
                                     {errorsPemohon.namaPengirim && <small className="text-danger">{errorsPemohon.namaPengirim.message}</small>}
-                                    {/* {errorsPemohon.namaPengirim?.type === "required" && ( <small className="text-danger">{errorsPemohon.namaPengirim.message}</small> )} */}
                                 </div>
                             </div>
                             <div className="row mb-3">
@@ -1672,7 +1979,7 @@ function DocK11() {
                                         className="form-control form-control-sm"
                                         rules={{ required: "Mohon pilih negara pengirim." }}
                                         render={({ field: { value, ...field } }) => (
-                                            <Select value={{id: cekdataDiri.negaraPengirim, label: cekdataDiri.negaraPengirimView }} {...field} options={dataSelect.negaraPengirim} onChange={(e) => handleSelectPemohon(e, "negaraPengirim")} />
+                                            <Select styles={customStyles} placeholder={"Pilih negara pengirim.."} value={value ? {id: cekdataDiri.negaraPengirim, label: cekdataDiri.negaraPengirimView} : ""} {...field} options={dataSelect.negaraPengirim} onChange={(e) => handleSelectPemohon(e, "negaraPengirim")} />
                                         )}
                                     />
                                     {errorsPemohon.negaraPengirim && <small className="text-danger">{errorsPemohon.negaraPengirim.message}</small>}
@@ -1688,8 +1995,7 @@ function DocK11() {
                                             className="form-control form-control-sm"
                                             rules={{ required: false }}
                                             render={({ field: { value, ...field } }) => (
-                                                // <Select value={{id: cekdataDiri.provPengirim, label: cekdataDiri.provPengirimView }} {...field} options={dataSelect.provPengirim} onChange={(e) => handleSelectPemohon(e, "provPengirim") & handleKota(e.value, "kotaPengirim")} />
-                                                <Select value={{id: cekdataDiri.provPengirim, label: cekdataDiri.provPengirimView }} {...field} options={dataSelect.provPengirim} onChange={(e) => handleSelectPemohon(e, "provPengirim")} />
+                                                <Select styles={customStyles} placeholder={"Pilih provinsi pengirim.."} value={value ? {id: cekdataDiri.provPengirim, label: cekdataDiri.provPengirimView} : ""} {...field} options={dataSelect.provPengirim} onChange={(e) => handleSelectPemohon(e, "provPengirim")} />
                                             )}
                                         />
                                     </div>
@@ -1703,14 +2009,14 @@ function DocK11() {
                                             className="form-control form-control-sm"
                                             rules={{ required: false }}
                                             render={({ field: { value, ...field } }) => (
-                                                <Select value={{id: cekdataDiri.kotaPengirim, label: cekdataDiri.kotaPengirimView }} {...field} options={dataSelect.kotaPengirim} onChange={(e) => handleSelectPemohon(e, "kotaPengirim")} />
+                                                <Select styles={customStyles} placeholder={"Pilih kota/kab asal pengirim.."} value={value ? {id: cekdataDiri.kotaPengirim, label: cekdataDiri.kotaPengirimView} : ""} {...field} options={dataSelect.kotaPengirim} onChange={(e) => handleSelectPemohon(e, "kotaPengirim")} />
                                             )}
                                         />
                                     </div>
                                 </div>
                             </div>
                             <div className="form-check mt-3">
-                            <input className="form-check-input" type="checkbox" value="" name='samaPengirim' id="samaPengirim" onChange={handleCekSamePengirim} />
+                            <input className="form-check-input" type="checkbox" name='samaPengirim' id="samaPengirim" onChange={handleCekSamePengirim} />
                             <label className="form-check-label" htmlFor="samaPengirim"> Sama dengan pemohon. </label>
                             </div>
                         </div>
@@ -1726,7 +2032,7 @@ function DocK11() {
                         <div className="card-action-element">
                             <ul className="list-inline mb-0">
                                 <li className="list-inline-item">
-                                    <a href="#" className="card-collapsible"><i className="tf-icons bx bx-chevron-up"></i></a>
+                                    <a href="#" className="card-collapsible"><i className="tf-icons fa-solid fa-chevron-up"></i></a>
                                 </li>
                             </ul>
                         </div>
@@ -1778,14 +2084,9 @@ function DocK11() {
                                         className="form-control form-control-sm"
                                         rules={{ required: "Mohon pilih negara penerima." }}
                                         render={({ field: { value, ...field } }) => (
-                                            <Select value={{id: cekdataDiri.negaraPenerima, label: cekdataDiri.negaraPenerimaView }} {...field} options={dataSelect.negaraPenerima ? dataSelect.negaraPenerima : []} onChange={(e) => handleSelectPemohon(e, "negaraPenerima")} />
+                                            <Select styles={customStyles} placeholder={"Pilih negara penerima.."} value={ value ? {id: cekdataDiri.negaraPenerima, label: cekdataDiri.negaraPenerimaView} : ""} {...field} options={dataSelect.negaraPenerima ? dataSelect.negaraPenerima : []} onChange={(e) => handleSelectPemohon(e, "negaraPenerima")} />
                                         )}
                                     />
-                                    {/* <select id="negaraPenerima" onClick={dataSelect.negaraPenerima ? null :handleNegara} name="negaraPenerima" className={errorsPemohon.negaraPenerima ? "form-control form-control-sm is-invalid" : "form-control form-control-sm"} {...registerPemohon("negaraPenerima", { required: "Mohon pilih negara penerima."})}>
-                                        <option value="">--</option>
-                                        <option value="99">ID - INDONESIA</option>
-                                        {cekdataDiri.permohonan === 'EX' || cekdataDiri.permohonan === 'IM' ? dataSelect.negaraPenerima : null}
-                                    </select> */}
                                     {errorsPemohon.negaraPenerima && <small className="text-danger">{errorsPemohon.negaraPenerima.message}</small>}
                                 </div>
                             </div>
@@ -1799,14 +2100,9 @@ function DocK11() {
                                             className="form-control form-control-sm"
                                             rules={{ required: false }}
                                             render={({ field: { value, ...field } }) => (
-                                                // <Select value={{id: cekdataDiri.provPenerima, label: cekdataDiri.provPenerimaView }} {...field} options={dataSelect.provPenerima} onChange={(e) => handleSelectPemohon(e, "provPenerima") & handleKota(e.value, "kotaPenerima")} />
-                                                <Select value={{id: cekdataDiri.provPenerima, label: cekdataDiri.provPenerimaView }} {...field} options={dataSelect.provPenerima} onChange={(e) => handleSelectPemohon(e, "provPenerima") & handleKota(e.value, "kotaPenerima")} />
+                                                <Select styles={customStyles} placeholder={"Pilih provinsi penerima.."} value={value ? {id: cekdataDiri.provPenerima, label: cekdataDiri.provPenerimaView} : ""} {...field} options={dataSelect.provPenerima} onChange={(e) => handleSelectPemohon(e, "provPenerima") & handleKota(e.value, "kotaPenerima")} />
                                             )}
                                         />
-                                        {/* <select id="provPenerima" name="provPenerima" onClick={dataSelect.provPenerima ? null : handleProv} {...registerPemohon("provPenerima")} className="form-control form-control-sm" placeholder="Kota Penerima">
-                                            <option value="">--</option>
-                                            {dataSelect.provPenerima}
-                                        </select> */}
                                     </div>
                                 </div>
                                 <div className="row mb-3">
@@ -1818,18 +2114,14 @@ function DocK11() {
                                             className="form-control form-control-sm"
                                             rules={{ required: false }}
                                             render={({ field: { value, ...field } }) => (
-                                                <Select value={{id: cekdataDiri.kotaPenerima, label: cekdataDiri.kotaPenerimaView }} {...field} options={dataSelect.kotaPenerima} onChange={(e) => handleSelectPemohon(e, "kotaPenerima")} />
+                                                <Select styles={customStyles} placeholder={"Pilih kota/kab penerima.."} value={value ? {id: cekdataDiri.kotaPenerima, label: cekdataDiri.kotaPenerimaView} : ""} {...field} options={dataSelect.kotaPenerima} onChange={(e) => handleSelectPemohon(e, "kotaPenerima")} />
                                             )}
                                         />
-                                        {/* <select id="kotaPenerima" name="kotaPenerima" data-input={cekdataDiri.provPenerima} onClick={handleKota} {...registerPemohon("kotaPenerima")} className="form-control form-control-sm" placeholder="Kota Penerima">
-                                            <option value="">--</option>
-                                            {cekdataDiri.provPenerima === "" ? <option value="" disabled>Mohon pilih provinsi penerima terlebih dahulu</option> : dataSelect.kotaPenerima }
-                                        </select> */}
                                     </div>
                                 </div>
                             </div>
                             <div className="form-check mt-3">
-                                <input className="form-check-input" type="checkbox" value="" name='samaPenerima' id="samaPenerima" onChange={handleCekSamePenerima} />
+                                <input className="form-check-input" type="checkbox" name='samaPenerima' id="samaPenerima" onChange={handleCekSamePenerima} />
                                 <label className="form-check-label" htmlFor="samaPenerima"> Sama dengan pemohon. </label>
                             </div>
                         </div>
@@ -1838,12 +2130,12 @@ function DocK11() {
             </div>
             <div className="col-12 d-flex justify-content-between">
                 <button type="button" className="btn btn-label-secondary" disabled>
-                    <i className="bx bx-chevron-left bx-sm ms-sm-n2"></i>
+                    <i className="fa-solid fa-chevron-left fa-sm ms-sm-n2"></i>
                     <span className="d-sm-inline-block d-none">Sebelumnya</span>
                 </button>
                 <button type="submit" className="btn btn-primary">
                     <span className="d-sm-inline-block d-none me-sm-1">Simpan & Lanjutkan</span>
-                    <i className="bx bx-chevron-right bx-sm me-sm-n2"></i>
+                    <i className="fa-solid fa-angle-right fa-sm me-sm-n2"></i>
                 </button>
             </div>
         </div>
@@ -1854,8 +2146,7 @@ function DocK11() {
                             <form className="input-form" onSubmit={handleFormPelabuhan(onSubmitPelabuhan)}>
                                 <input type="hidden" name='idPtk' {...registerPelabuhan("idPtk")} />
                                 <input type="hidden" name='noAju' {...registerPelabuhan("noAju")} />
-                                {/* <input type="hidden" name='datenow' value={dateNow || ""} {...registerPelabuhan("datenow")} /> */}
-
+                                
                                 <div className="row">
                                     <div className="col-sm-6">
                                         <div className="card card-action mb-4">
@@ -1863,11 +2154,10 @@ function DocK11() {
                                                 <div className="card-action-title">
                                                     <h5 className="mb-0 text-lightest">Pengirim - Penerima</h5>
                                                 </div>
-                                                <button className='col-sm-1 btn btn-sm btn-success' type='button' onClick={handleRef}><center><i className="menu-icon tf-icons bx bx-sync"></i></center></button>
                                                 <div className="card-action-element">
                                                     <ul className="list-inline mb-0">
                                                         <li className="list-inline-item">
-                                                            <a href="#" className="card-collapsible"><i className="tf-icons bx bx-chevron-up"></i></a>
+                                                            <a href="#" className="card-collapsible"><i className="tf-icons fa-solid fa-chevron-up"></i></a>
                                                         </li>
                                                     </ul>
                                                 </div>
@@ -1875,7 +2165,7 @@ function DocK11() {
                                             <div className="collapse show">
                                                 <div className="card-body pt-0">
                                                     <div className="row mb-3">
-                                                        <label className="col-sm-3 col-form-label" htmlFor="negaraAsal">Negara Pengirim <span className='text-danger'>*</span></label>
+                                                        <label className="col-sm-3 col-form-label" htmlFor="negaraAsal">Negara Muat <span className='text-danger'>*</span></label>
                                                         <div className="col-sm-9">
                                                             <Controller
                                                                 control={controlPelabuhan}
@@ -1883,19 +2173,14 @@ function DocK11() {
                                                                 className="form-control form-control-sm"
                                                                 rules={{ required: "Mohon pilih negara pelabuhan pengirim." }}
                                                                 render={({ field: { value, ...field } }) => (
-                                                                    <Select value={{id: cekdataPelabuhan.negaraAsal, label: cekdataPelabuhan.negaraAsalView }} {...field} options={dataSelect.negaraAsal ? dataSelect.negaraAsal : []} onChange={(e) => e ? setValuePelabuhan("negaraAsal", e.value) & setValuePelabuhan("negaraAsalView", e.label) & handlePelabuhan(e.value, "pelMuat") : null} />
+                                                                    <Select styles={customStyles} placeholder={"Pilih negara muat.."} value={value ? {id: cekdataPelabuhan.negaraAsal, label: cekdataPelabuhan.negaraAsalView} : ""} {...field} options={dataSelect.negaraAsal ? dataSelect.negaraAsal : []} onChange={(e) => e ? setValuePelabuhan("negaraAsal", e.value) & setValuePelabuhan("negaraAsalView", e.label) & handlePelabuhan(e.value, "pelMuat") : null} />
                                                                 )}
                                                             />
-                                                            {/* <select id="negaraAsal" name="negaraAsal" onClick={dataSelect.negaraAsal ? null : handleNegara} {...registerPelabuhan("negaraAsal", { required: "Mohon pilih negara asal."})} className={errorsPelabuhan.negaraAsal ? "form-control form-control-sm is-invalid" : "form-control form-control-sm"} >
-                                                                <option value="">--</option>
-                                                                <option value="99">ID - INDONESIA</option>
-                                                                {cekdataDiri.permohonan === 'EX' || cekdataDiri.permohonan === 'IM' ? dataSelect.negaraAsal : null}
-                                                            </select> */}
                                                             {errorsPelabuhan.negaraAsal && <small className="text-danger">{errorsPelabuhan.negaraAsal.message}</small>}
                                                         </div>
                                                     </div>
                                                     <div className="row mb-3">
-                                                        <label className="col-sm-3 col-form-label" htmlFor="negaraTujuan">Negara penerima <span className='text-danger'>*</span></label>
+                                                        <label className="col-sm-3 col-form-label" htmlFor="negaraTujuan">Negara Bongkar <span className='text-danger'>*</span></label>
                                                         <div className="col-sm-9">
                                                             <Controller
                                                                 control={controlPelabuhan}
@@ -1903,14 +2188,9 @@ function DocK11() {
                                                                 className="form-control form-control-sm"
                                                                 rules={{ required: "Mohon pilih negara pelabuhan pengirim." }}
                                                                 render={({ field: { value, ...field } }) => (
-                                                                    <Select value={{id: cekdataPelabuhan.negaraTujuan, label: cekdataPelabuhan.negaraTujuanView }} {...field} options={dataSelect.negaraTujuan} onChange={(e) => e ? setValuePelabuhan("negaraTujuan", e.value) & setValuePelabuhan("negaraTujuanView", e.label) & handlePelabuhan(e.value, "pelBongkar") : null} />
+                                                                    <Select styles={customStyles} placeholder={"Pilih negara bongkar.."} value={value ? {id: cekdataPelabuhan.negaraTujuan, label: cekdataPelabuhan.negaraTujuanView} : ""} {...field} options={dataSelect.negaraTujuan} onChange={(e) => e ? setValuePelabuhan("negaraTujuan", e.value) & setValuePelabuhan("negaraTujuanView", e.label) & handlePelabuhan(e.value, "pelBongkar") : null} />
                                                                 )}
                                                             />
-                                                            {/* <select name="negaraTujuan" id="negaraTujuan" onClick={dataSelect.negaraTujuan ? null : handleNegara} {...registerPelabuhan("negaraTujuan", { required: "Mohon pilih negara tujuan."})} className={errorsPelabuhan.negaraTujuan ? "form-control form-control-sm is-invalid" : "form-control form-control-sm"}>
-                                                                <option value="">--</option>
-                                                                <option value="99">ID - INDONESIA</option>
-                                                                {cekdataDiri.permohonan === 'EX' || cekdataDiri.permohonan === 'IM' ? dataSelect.negaraTujuan : null}
-                                                            </select> */}
                                                             {errorsPelabuhan.negaraTujuan && <small className="text-danger">{errorsPelabuhan.negaraTujuan.message}</small>}
                                                         </div>
                                                     </div>
@@ -1938,15 +2218,9 @@ function DocK11() {
                                                                 className="form-control form-control-sm"
                                                                 rules={{ required: false }}
                                                                 render={({ field: { value, ...field } }) => (
-                                                                    <Select value={{id: cekdataPelabuhan.negaraTransit, label: cekdataPelabuhan.negaraTransitView }} {...field} options={dataSelect.negaraTransit} onChange={(e) => e ? setValuePelabuhan("negaraTransit", e.value) & setValuePelabuhan("negaraTransitView", e.label) & handlePelabuhan(e.value, "pelTransit") : null} />
+                                                                    <Select styles={customStyles} placeholder={"Pilih negara transit.."} value={value ? {id: cekdataPelabuhan.negaraTransit, label: cekdataPelabuhan.negaraTransitView} : ""} {...field} options={dataSelect.negaraTransit} onChange={(e) => e ? setValuePelabuhan("negaraTransit", e.value) & setValuePelabuhan("negaraTransitView", e.label) & handlePelabuhan(e.value, "pelTransit") : null} />
                                                                 )}
                                                             />
-                                                        {/* <select type="text" id="negaraTransit" onClick={dataSelect.negaraTransit ? null : handleNegara} name='negaraTransit' {...registerPelabuhan("negaraTransit")} className="form-control form-control-sm">
-                                                            <option value="">--</option>
-                                                            <option value="99">ID - INDONESIA</option>
-                                                            {dataSelect.negaraTransit}
-                                                        </select> */}
-                                                            {/* <input type="text" id="negara_transit" className="form-control form-control-sm" placeholder="Negara Transit" /> */}
                                                         </div>
                                                     </div>
                                                     </div>
@@ -1963,7 +2237,7 @@ function DocK11() {
                                                 <div className="card-action-element">
                                                     <ul className="list-inline mb-0">
                                                         <li className="list-inline-item">
-                                                            <a href="#" className="card-collapsible"><i className="tf-icons bx bx-chevron-up"></i></a>
+                                                            <a href="#" className="card-collapsible"><i className="tf-icons fa-solid fa-chevron-up"></i></a>
                                                         </li>
                                                     </ul>
                                                 </div>
@@ -1979,13 +2253,9 @@ function DocK11() {
                                                                 className="form-control form-control-sm"
                                                                 rules={{ required: "Mohon pilih pelabuhan muat/asal." }}
                                                                 render={({ field: { value,placeholder, ...field } }) => (
-                                                                    <Select placeholder={<div>Mohon pilih Negara Asal</div>} value={{id: cekdataPelabuhan.pelMuat, label: cekdataPelabuhan.pelMuatView }} {...field} options={dataSelect.pelMuat} onChange={(e) => e ? setValuePelabuhan("pelMuat", e.value) & setValuePelabuhan("pelMuatView", e.label) : null} />
+                                                                    <Select styles={customStyles} placeholder={"Pilih pelabuhan muat/asal.."} value={value ? {id: cekdataPelabuhan.pelMuat, label: cekdataPelabuhan.pelMuatView} : ""} {...field} options={dataSelect.pelMuat} onChange={(e) => e ? setValuePelabuhan("pelMuat", e.value) & setValuePelabuhan("pelMuatView", e.label) : null} />
                                                                 )}
                                                             />
-                                                            {/* <select name="pelMuat" id="pelMuat" data-input={cekdataPelabuhan.negaraAsal} onClick={handlePelabuhan} {...registerPelabuhan("pelMuat", { required: "Mohon pilih pelabuhan muat/asal."})} className={errorsPelabuhan.pelMuat ? "form-control form-control-sm is-invalid" : "form-control form-control-sm"}>
-                                                                <option value="">--</option>
-                                                                {cekdataPelabuhan.negaraAsal === "" ? <option value="" disabled>Mohon pilih negara asal</option> : dataSelect.pelMuat }
-                                                            </select> */}
                                                             {errorsPelabuhan.pelMuat && <small className="text-danger">{errorsPelabuhan.pelMuat.message}</small>}
                                                         </div>
                                                     </div>
@@ -1998,15 +2268,10 @@ function DocK11() {
                                                                 className="form-control form-control-sm"
                                                                 rules={{ required: "Mohon pilih pelabuhan bongkar." }}
                                                                 render={({ field: { value, ...field } }) => (
-                                                                    <Select value={{id: cekdataPelabuhan.pelBongkar, label: cekdataPelabuhan.pelBongkarView }} {...field} options={dataSelect.pelBongkar} onChange={(e) => e ? setValuePelabuhan("pelBongkar", e.value) & setValuePelabuhan("pelBongkarView", e.label) : null} />
+                                                                    <Select styles={customStyles} placeholder={"Pilih pelabuhan bongkar.."} value={value ? {id: cekdataPelabuhan.pelBongkar, label: cekdataPelabuhan.pelBongkarView} : ""} {...field} options={dataSelect.pelBongkar} onChange={(e) => e ? setValuePelabuhan("pelBongkar", e.value) & setValuePelabuhan("pelBongkarView", e.label) : null} />
                                                                 )}
                                                             />
-                                                            {/* <select name="pelBongkar" id="pelBongkar" data-input={cekdataPelabuhan.negaraTujuan} onClick={handlePelabuhan} {...registerPelabuhan("pelBongkar", { required: "Mohon pilih pelabuhan bongkar."})} className={errorsPelabuhan.pelBongkar ? "form-control form-control-sm is-invalid" : "form-control form-control-sm"}>
-                                                                <option value="">--</option>
-                                                                {cekdataPelabuhan.negaraTujuan === "" ? <option value="" disabled>Mohon pilih negara tujuan</option> : dataSelect.pelBongkar }
-                                                            </select> */}
                                                             {errorsPelabuhan.pelBongkar && <small className="text-danger">{errorsPelabuhan.pelBongkar.message}</small>}
-                                                            {/* <input type="text" id="pel_bongkar" className="form-control form-control-sm" placeholder="Pelabuhan Bongkar / Tujuan" /> */}
                                                         </div>
                                                     </div>
                                                     <div className="row mb-3">
@@ -2016,24 +2281,20 @@ function DocK11() {
                                                         </div>
                                                     </div>
                                                     <div style={{display: cekdataPelabuhan.transitOpsi === '1' ? 'block' : 'none' }}>
-                                                    <div className="row mb-3">
-                                                        <label className="col-sm-3 col-form-label" htmlFor="pelTransit">Pelabuhan Transit</label>
-                                                        <div className="col-sm-9">
-                                                            <Controller
-                                                                control={controlPelabuhan}
-                                                                name={"pelTransit"}
-                                                                className="form-control form-control-sm"
-                                                                rules={{ required: false }}
-                                                                render={({ field: { value, ...field } }) => (
-                                                                    <Select value={{id: cekdataPelabuhan.pelTransit, label: cekdataPelabuhan.pelTransitView }} {...field} options={dataSelect.pelTransit} onChange={(e) => e ? setValuePelabuhan("pelTransit", e.value) & setValuePelabuhan("pelTransitView", e.label) : null} />
-                                                                )}
-                                                            />
-                                                            {/* <select name="pelTransit" id="pelTransit" data-input={cekdataPelabuhan.negaraTransit} onClick={handlePelabuhan} {...registerPelabuhan("pelTransit")} className="form-control form-control-sm">
-                                                                <option value="">--</option>
-                                                                {cekdataPelabuhan.negaraTransit === "" ? <option value="" disabled>Mohon pilih negara tujuan</option> : dataSelect.pelTransit }
-                                                            </select> */}
+                                                        <div className="row mb-3">
+                                                            <label className="col-sm-3 col-form-label" htmlFor="pelTransit">Pelabuhan Transit</label>
+                                                            <div className="col-sm-9">
+                                                                <Controller
+                                                                    control={controlPelabuhan}
+                                                                    name={"pelTransit"}
+                                                                    className="form-control form-control-sm"
+                                                                    rules={{ required: false }}
+                                                                    render={({ field: { value, ...field } }) => (
+                                                                        <Select styles={customStyles} placeholder={"Pilih pelabuhan transit.."} value={value ? {id: cekdataPelabuhan.pelTransit, label: cekdataPelabuhan.pelTransitView} : ""} {...field} options={dataSelect.pelTransit} onChange={(e) => e ? setValuePelabuhan("pelTransit", e.value) & setValuePelabuhan("pelTransitView", e.label) : null} />
+                                                                    )}
+                                                                />
+                                                            </div>
                                                         </div>
-                                                    </div>
                                                     </div>
                                                 </div>
                                             </div>
@@ -2049,7 +2310,7 @@ function DocK11() {
                                                 <div className="card-action-element">
                                                     <ul className="list-inline mb-0">
                                                         <li className="list-inline-item">
-                                                            <a href="#" className="card-collapsible"><i className="tf-icons bx bx-chevron-up"></i></a>
+                                                            <a href="#" className="card-collapsible"><i className="tf-icons fa-solid fa-chevron-up"></i></a>
                                                         </li>
                                                     </ul>
                                                 </div>
@@ -2111,14 +2372,9 @@ function DocK11() {
                                                                 className="form-control form-control-sm"
                                                                 rules={{ required: false }}
                                                                 render={({ field: { value, ...field } }) => (
-                                                                    <Select value={{id: cekdataPelabuhan.benderaTransit, label: cekdataPelabuhan.benderaTransitView }} {...field} options={dataSelect.benderaTransit} onChange={(e) => e ? setValuePelabuhan("benderaTransit", e.value) & setValuePelabuhan("benderaTransitView", e.label) : null} />
+                                                                    <Select styles={customStyles} placeholder={"Pilih bendera kapal transit.."} value={value ? {id: cekdataPelabuhan.benderaTransit, label: cekdataPelabuhan.benderaTransitView} : ""} {...field} options={dataSelect.benderaTransit} onChange={(e) => e ? setValuePelabuhan("benderaTransit", e.value) & setValuePelabuhan("benderaTransitView", e.label) : null} />
                                                                 )}
                                                             />
-                                                            {/* <select id="benderaTransit" name="benderaTransit" onClick={dataSelect.benderaTransit ? null : handleNegara} {...registerPelabuhan("benderaTransit")} className="form-control form-control-sm">
-                                                                <option value="">--</option>
-                                                                <option value="99">ID - INDONESIA</option>
-                                                                {dataSelect.benderaTransit}
-                                                            </select> */}
                                                         </div>
                                                     </div>
                                                     <div className="row mb-3">
@@ -2147,7 +2403,7 @@ function DocK11() {
                                                 <div className="card-action-element">
                                                     <ul className="list-inline mb-0">
                                                         <li className="list-inline-item">
-                                                            <a href="#" className="card-collapsible"><i className="tf-icons bx bx-chevron-up"></i></a>
+                                                            <a href="#" className="card-collapsible"><i className="tf-icons fa-solid fa-chevron-up"></i></a>
                                                         </li>
                                                     </ul>
                                                 </div>
@@ -2216,14 +2472,9 @@ function DocK11() {
                                                                 className="form-control form-control-sm"
                                                                 rules={{ required: false }}
                                                                 render={({ field: { value, ...field } }) => (
-                                                                    <Select value={{id: cekdataPelabuhan.benderaAkhir, label: cekdataPelabuhan.benderaAkhirView }} {...field} options={dataSelect.benderaAkhir} onChange={(e) => e ? setValuePelabuhan("benderaAkhir", e.value) & setValuePelabuhan("benderaAkhirView", e.label) : null} />
+                                                                    <Select styles={customStyles} placeholder={"Pilih bendera kapal akhir.."} value={value ? {id: cekdataPelabuhan.benderaAkhir, label: cekdataPelabuhan.benderaAkhirView} : ""} {...field} options={dataSelect.benderaAkhir} onChange={(e) => e ? setValuePelabuhan("benderaAkhir", e.value) & setValuePelabuhan("benderaAkhirView", e.label) : null} />
                                                                 )}
                                                             />
-                                                            {/* <select id="benderaAkhir" name="benderaAkhir" onClick={dataSelect.benderaAkhir ? null : handleNegara} {...registerPelabuhan("benderaAkhir")} className="form-control form-control-sm">
-                                                                <option value="">--</option>
-                                                                <option value="99">ID - INDONESIA</option>
-                                                                {dataSelect.benderaAkhir}
-                                                            </select> */}
                                                         </div>
                                                     </div>
                                                     <div className="row mb-3">
@@ -2262,7 +2513,7 @@ function DocK11() {
                                                 <div className="card-action-element">
                                                     <ul className="list-inline mb-0">
                                                         <li className="list-inline-item">
-                                                            <a href="#" className="card-collapsible"><i className="tf-icons bx bx-chevron-up"></i></a>
+                                                            <a href="#" className="card-collapsible"><i className="tf-icons fa-solid fa-chevron-up"></i></a>
                                                         </li>
                                                     </ul>
                                                 </div>
@@ -2272,7 +2523,7 @@ function DocK11() {
                                                     <div className="row g-3 mb-3">
                                                         <div className="pb-2">
                                                             <button type="button" className="btn btn-xs btn-primary" data-bs-toggle="modal" data-bs-target="#modKontainer">Tambah Kontainer</button>
-                                                            <button type="button" onClick={dataKontainerPtk} className="btn btn-xs btn-info float-end"><i className="menu-icon tf-icons bx bx-sync"></i> Refresh Data</button>
+                                                            <button type="button" onClick={dataKontainerPtk} className="btn btn-xs btn-info float-end"><i className="menu-icon tf-icons fa-solid fa-sync"></i> Refresh Data</button>
                                                         </div>
                                                         <table className="table table-sm table-bordered table-hover table-striped dataTable">
                                                             <thead style={{backgroundColor: '#123138' }}>
@@ -2299,11 +2550,11 @@ function DocK11() {
                                                                             <td>
                                                                                 <div className="dropdown">
                                                                                     <button type="button" className="btn p-0 dropdown-toggle hide-arrow" data-bs-toggle="dropdown">
-                                                                                        <i className="bx bx-dots-vertical-rounded"></i>
+                                                                                        <i className="fa-solid fa-ellipsis-vertical"></i>
                                                                                     </button>
                                                                                     <div className="dropdown-menu">
-                                                                                        <a className="dropdown-item" type="button" data-header={data.id} onClick={handleEditKontainer} data-bs-toggle="modal" data-bs-target="#modKontainer"><i className="bx bx-edit-alt me-1"></i> Edit</a>
-                                                                                        <a className="dropdown-item" href="#"><i className="bx bx-trash me-1"></i> Delete</a>
+                                                                                        <a className="dropdown-item" type="button" data-ptk={data.ptk_id} data-header={data.id} onClick={handleEditKontainer} data-bs-toggle="modal" data-bs-target="#modKontainer"><i className="fa-solid fa-pen-to-square me-1"></i> Edit</a>
+                                                                                        <a className="dropdown-item" href="#"><i className="fa-solid fa-trash me-1"></i> Delete</a>
                                                                                     </div>
                                                                                 </div>
                                                                             </td>
@@ -2319,25 +2570,23 @@ function DocK11() {
                                     </div>
                                     <div className="col-12 d-flex justify-content-between">
                                         <button type="button" className="btn btn-label-secondary" onClick={() => setWizardPage(wizardPage - 1)}>
-                                            <i className="bx bx-chevron-left bx-sm ms-sm-n2"></i>
+                                            <i className="fa-solid fa-chevron-left fa-sm ms-sm-n2"></i>
                                             <span className="d-sm-inline-block d-none">Sebelumnya</span>
                                         </button>
                                         <button type="submit" className="btn btn-primary">
                                             <span className="d-sm-inline-block d-none me-sm-1">Simpan & Lanjutkan</span>
-                                            <i className="bx bx-chevron-right bx-sm me-sm-n2"></i>
+                                            <i className="fa-solid fa-angle-right fa-sm me-sm-n2"></i>
                                         </button>
                                     </div>
                                 </div>
                             </form>
                             </div>
 
-                            {/* <!-- Payment --> */}
                             <div id="cardKomoditas" className={wizardPage === 3 ? "content active dstepper-block" : "content"}>
                                 <form className="input-form" onSubmit={handleFormMP(onSubmitKomoditas)}>
                                 <input type="hidden" name='idPtk' {...registerMP("idPtk")} />
                                 <input type="hidden" name='noAju' {...registerMP("noAju")} />
-                                {/* <input type="hidden" name='datenow' value={dateNow || ""} {...registerMP("datenow")} /> */}
-
+                                
                                     <div className="row">
                                     <div className="col-sm-12">
                                         <div className="card card-action mb-4">
@@ -2348,7 +2597,7 @@ function DocK11() {
                                                 <div className="card-action-element">
                                                     <ul className="list-inline mb-0">
                                                         <li className="list-inline-item">
-                                                            <a href="#" className="card-collapsible"><i className="tf-icons bx bx-chevron-up"></i></a>
+                                                            <a href="#" className="card-collapsible"><i className="tf-icons fa-solid fa-chevron-up"></i></a>
                                                         </li>
                                                     </ul>
                                                 </div>
@@ -2360,27 +2609,12 @@ function DocK11() {
                                                                 <div className="row mb-3">
                                                                     <label className="col-sm-3 col-form-label" htmlFor="mediaPembawa">Media Pembawa <span className='text-danger'>*</span></label>
                                                                     <div className="col-sm-4">
-                                                                    {/* <Controller
-                                                                            control={controlMP}
-                                                                            name={"mediaPembawa"}
-                                                                            className="form-control form-control-sm"
-                                                                            rules={{ required: "Mohon pilih media pembawa." }}
-                                                                            render={({ field: { value, ...field } }) => (
-                                                                                <select {...field} value={{id: cekdataMP.mediaPembawa, label: cekdataMP.mediaPembawaView }} name="mediaPembawa" id="mediaPembawa" onChange={handleMPDetil } className={errorsMP.mediaPembawa ? "form-control form-control-sm is-invalid" : "form-control form-control-sm"}>
-                                                                                    <option value="">--</option>
-                                                                                    <option value="H" selected>Hewan</option>
-                                                                                    <option value="I">Ikan</option>
-                                                                                    <option value="T">Tumbuhan</option>
-                                                                                </select>
-                                                                                // <Select value={{id: cekdataMP.negaraAsalMP, label: cekdataMP.negaraAsalMPView }} {...field} options={dataSelect.negaraAsalMP} onChange={(e) => handleSelectNegKomoditas(e, "negaraAsalMP") & (e.value === '99' ? handleKota(null, "daerahAsalMP") : null)} />
-                                                                                )}
-                                                                            /> */}
-                                                                            <select name="mediaPembawa" id="mediaPembawa" {...registerMP("mediaPembawa", { required: "Mohon pilih media pembawa."})} onChange={handleMPDetil} className={errorsMP.mediaPembawa ? "form-control form-control-sm is-invalid" : "form-control form-control-sm"}>
-                                                                                <option value="">--</option>
-                                                                                <option value="H">Hewan</option>
-                                                                                <option value="I">Ikan</option>
-                                                                                <option value="T">Tumbuhan</option>
-                                                                            </select>
+                                                                        <select name="mediaPembawa" id="mediaPembawa" {...registerMP("mediaPembawa", { required: "Mohon pilih media pembawa."})} onChange={handleMPDetil} className={errorsMP.mediaPembawa ? "form-select form-select-sm is-invalid" : "form-select form-select-sm"}>
+                                                                            <option value="">--</option>
+                                                                            <option value="H">Hewan</option>
+                                                                            <option value="I">Ikan</option>
+                                                                            <option value="T">Tumbuhan</option>
+                                                                        </select>
                                                                     </div>
                                                                     {errorsMP.mediaPembawa && <div className="offset-3 col-sm-9"><small className="text-danger">{errorsMP.mediaPembawa.message}</small></div>}
                                                                 </div>
@@ -2388,28 +2622,43 @@ function DocK11() {
                                                                     <label className="col-sm-3 col-form-label" htmlFor="jenisMp">Jenis Media Pembawa <span className='text-danger'>*</span></label>
                                                                     <div className="col-sm-9">
                                                                         {/* <!-- Hewan --> */}
-                                                                        <div style={{display: cekdataMP.mediaPembawa === 'H' || cekdataMP.mediaPembawa === 'I' ? 'block' : 'none'}}>
+                                                                        <div style={{display: cekdataMP.mediaPembawa === 'H' ? 'block' : 'none'}}>
                                                                             <div className="form-check form-check-inline">
-                                                                                <input className="form-check-input" type="radio" name="jenisMp" id="hidup" value={cekdataMP.mediaPembawa === 'H' ? '1' : '6'} {...registerMP("jenisMp", { required: "Mohon pilih jenis media pembawa."})} />
-                                                                                <label className="form-check-label" htmlFor="hidup">{cekdataMP.mediaPembawa === 'H' ? 'Hewan' : 'Ikan'} Hidup</label>
+                                                                                <input className="form-check-input" type="radio" onInput={(e) => handleKomKHIDetil(e)} name="jenisMp" id="hidup" value={1} {...registerMP("jenisMp", { required: "Mohon pilih jenis media pembawa."})} />
+                                                                                <label className="form-check-label" htmlFor="hidup">Hewan Hidup</label>
                                                                             </div>
                                                                             <div className="form-check form-check-inline">
-                                                                                <input className="form-check-input" type="radio" name="jenisMp" id="produk" value={cekdataMP.mediaPembawa === 'H' ? '2' : '7'} {...registerMP("jenisMp")} />
-                                                                                <label className="form-check-label" htmlFor="produk">{cekdataMP.mediaPembawa === 'H' ? 'Produk Hewan' : 'Non Hidup'}</label>
+                                                                                <input className="form-check-input" type="radio" onInput={(e) => handleKomKHIDetil(e)} name="jenisMp" id="produk" value={2} {...registerMP("jenisMp")} />
+                                                                                <label className="form-check-label" htmlFor="produk">Produk Hewan</label>
                                                                             </div>
                                                                             <div className="form-check form-check-inline">
-                                                                                <input className="form-check-input" type="radio" name="jenisMp" id="mpl" value={cekdataMP.mediaPembawa === 'H' ? '3' : '8'} {...registerMP("jenisMp")} />
+                                                                                <input className="form-check-input" type="radio" onInput={(e) => handleKomKHIDetil(e)} name="jenisMp" id="mpl" value={3} {...registerMP("jenisMp")} />
+                                                                                <label className="form-check-label" htmlFor="mpl">Media Pembawa Lain</label>
+                                                                            </div>
+                                                                        </div>
+                                                                        {/* <!-- Ikan --> */}
+                                                                        <div style={{display: cekdataMP.mediaPembawa === 'I' ? 'block' : 'none'}}>
+                                                                            <div className="form-check form-check-inline">
+                                                                                <input className="form-check-input" type="radio" onInput={(e) => handleKomKHIDetil(e)} name="jenisMp" id="hidup" value={6} {...registerMP("jenisMp", { required: "Mohon pilih jenis media pembawa."})} />
+                                                                                <label className="form-check-label" htmlFor="hidup">Ikan Hidup</label>
+                                                                            </div>
+                                                                            <div className="form-check form-check-inline">
+                                                                                <input className="form-check-input" type="radio" onInput={(e) => handleKomKHIDetil(e)} name="jenisMp" id="produk" value={7} {...registerMP("jenisMp")} />
+                                                                                <label className="form-check-label" htmlFor="produk">Produk Ikan</label>
+                                                                            </div>
+                                                                            <div className="form-check form-check-inline">
+                                                                                <input className="form-check-input" type="radio" onInput={(e) => handleKomKHIDetil(e)} name="jenisMp" id="mpl" value={8} {...registerMP("jenisMp")} />
                                                                                 <label className="form-check-label" htmlFor="mpl">Media Pembawa Lain</label>
                                                                             </div>
                                                                         </div>
                                                                         {/* <!-- Tumbuhan --> */}
                                                                         <div style={{display: cekdataMP.mediaPembawa === 'T' ? 'block' : 'none'}}>
                                                                             <div className="form-check form-check-inline">
-                                                                                <input className="form-check-input" type="radio" name="jenisMp" id="benih" value="4" {...registerMP("jenisMp")} />
+                                                                                <input className="form-check-input" type="radio" name="jenisMp" id="benih" onInput={(e) => handleKomKHIDetil(e)} value={4} {...registerMP("jenisMp")} />
                                                                                 <label className="form-check-label" htmlFor="benih">Benih</label>
                                                                             </div>
                                                                             <div className="form-check form-check-inline mb-3">
-                                                                                <input className="form-check-input" type="radio" name="jenisMp" id="nonbenih" value="5" {...registerMP("jenisMp")} />
+                                                                                <input className="form-check-input" type="radio" name="jenisMp" id="nonbenih" onInput={(e) => handleKomKHIDetil(e)} value={5} {...registerMP("jenisMp")} />
                                                                                 <label className="form-check-label" htmlFor="nonbenih">Non Benih</label>
                                                                             </div>
                                                                         </div>
@@ -2426,11 +2675,6 @@ function DocK11() {
                                                                     {errorsMP.jenisAngkut && <div className="offset-3 col-sm-9"><small className="text-danger">{errorsMP.jenisAngkut.message}</small></div>}
                                                                 </div>
                                                                 {/* <!-- Khusus Tumbuhan --> */}
-                                                                {/* <div className="row mb-3">
-                                                                    <label className="col-sm-3 col-form-label" htmlFor="jenisAngkut">Jenis Angkut <span className='text-danger'>*</span></label>
-                                                                    <div className="col-sm-9">
-                                                                    </div>
-                                                                </div> */}
                                                                 <div className="row mb-3">
                                                                     <label className="col-sm-3 col-form-label" htmlFor="peruntukan">Peruntukan</label>
                                                                     <div className="col-sm-4">
@@ -2461,21 +2705,11 @@ function DocK11() {
                                                                             className="form-control form-control-sm"
                                                                             rules={{ required: "Mohon pilih negara asal komoditas." }}
                                                                             render={({ field: { value, name, ...field } }) => (
-                                                                                <Select 
-                                                                                value={{id: cekdataMP.negaraAsalMP, label: cekdataMP.negaraAsalMPView}}
-                                                                                // value={value ? ({id: cekdataMP.negaraAsalMP, label: cekdataMP.negaraAsalMPView}).join(", ") : []}
-                                                                                // renderValue={(e) =>
-                                                                                    // e.map(u => u).join(", ")
-                                                                                //   } 
+                                                                                <Select styles={customStyles} placeholder={"Pilih negara.."}
+                                                                                value={value ? {id: cekdataMP.negaraAsalMP, label: cekdataMP.negaraAsalMPView} : ""}
                                                                                 {...field} options={dataSelect.negaraAsalMP} onChange={(e) => handleSelectNegKomoditas(e, "negaraAsalMP") & (e.value === '99' ? handleKota(null, "daerahAsalMP") : null)} />
                                                                             )}
                                                                         />
-                                                                        {/* <select name="negaraAsalMP" id="negaraAsalMP" onClick={handleNegara} {...registerMP("negaraAsalMP", { required: "Mohon pilih negara asal komoditas."})} className={errorsMP.negaraAsalMP ? "form-control form-control-sm is-invalid" : "form-control form-control-sm"}>
-                                                                            <option value="">--</option>
-                                                                            <option value="99">ID - INDONESIA</option>
-                                                                            {cekdataDiri.permohonan === 'EX' || cekdataDiri.permohonan === 'IM' ? dataSelect.negaraAsalMP : null}
-                                                                        </select> */}
-                                                                        {/* {cekdataMP.negaraAsalMP} */}
                                                                     </div>
                                                                     {errorsMP.negaraAsalMP && <div className="offset-3 col-sm-9"><small className="text-danger">{errorsMP.negaraAsalMP.message}</small></div>}
                                                                 </div>
@@ -2488,13 +2722,9 @@ function DocK11() {
                                                                             className="form-control form-control-sm"
                                                                             rules={{ required: false }}
                                                                             render={({ field: { value, ...field } }) => (
-                                                                                <Select value={{id: cekdataMP.daerahAsalMP, label: cekdataMP.daerahAsalMPView }} {...field} options={dataSelect.daerahAsalMP} onChange={(e) => handleSelectNegKomoditas(e, "daerahAsalMP")} />
+                                                                                <Select styles={customStyles} placeholder={"Pilih daerah asal.."} value={value ? {id: cekdataMP.daerahAsalMP, label: cekdataMP.daerahAsalMPView} : ""} {...field} options={dataSelect.daerahAsalMP} onChange={(e) => handleSelectNegKomoditas(e, "daerahAsalMP")} />
                                                                             )}
                                                                         />
-                                                                        {/* <select name="daerahAsalMP" id="daerahAsalMP"  {...registerMP("daerahAsalMP")} className="form-control form-control-sm">
-                                                                        <option value="">--</option>
-                                                                        {cekdataMP.negaraAsalMP === '99' ? dataSelect.daerahAsalMP : null}
-                                                                        </select> */}
                                                                         {errorsMP.daerahAsal && <small className="text-danger">{errorsMP.daerahAsalMP.message}</small>}
                                                                     </div>
                                                                 </div>
@@ -2507,14 +2737,9 @@ function DocK11() {
                                                                             className="form-control form-control-sm"
                                                                             rules={{ required: "Mohon pilih negara tujuan komoditas." }}
                                                                             render={({ field: { value, ...field } }) => (
-                                                                                <Select value={{id: cekdataMP.negaraTujuanMP, label: cekdataMP.negaraTujuanMPView }} {...field} options={dataSelect.negaraTujuanMP} onChange={(e) => handleSelectNegKomoditas(e, "negaraTujuanMP") & (e.value === '99' ? handleKota(e.value, "daerahTujuanMP") : null)} />
+                                                                                <Select styles={customStyles} placeholder={"Pilih negara.."} value={value ? {id: cekdataMP.negaraTujuanMP, label: cekdataMP.negaraTujuanMPView} : ""} {...field} options={dataSelect.negaraTujuanMP} onChange={(e) => handleSelectNegKomoditas(e, "negaraTujuanMP") & (e.value === '99' ? handleKota(null, "daerahTujuanMP") : null)} />
                                                                             )}
                                                                         />
-                                                                        {/* <select name="negaraTujuanMP" id="negaraTujuanMP" onClick={handleNegara} {...registerMP("negaraTujuanMP", { required: "Mohon pilih negara tujuan komoditas."})} className={errorsMP.negaraTujuanMP ? "form-control form-control-sm is-invalid" : "form-control form-control-sm"}>
-                                                                            <option value="">--</option>
-                                                                            <option value="99">ID - INDONESIA</option>
-                                                                            {cekdataDiri.permohonan === 'EX' || cekdataDiri.permohonan === 'IM' ? dataSelect.negaraTujuanMP : null}
-                                                                        </select> */}
                                                                     </div>
                                                                     {errorsMP.negaraTujuanMP && <div className="offset-3 col-sm-9"><small className="text-danger">{errorsMP.negaraTujuanMP.message}</small></div>}
                                                                 </div>
@@ -2527,7 +2752,7 @@ function DocK11() {
                                                                             className="form-control form-control-sm"
                                                                             rules={{ required: false }}
                                                                             render={({ field: { value, ...field } }) => (
-                                                                                <Select value={{id: cekdataMP.daerahTujuanMP, label: cekdataMP.daerahTujuanMPView }} {...field} options={dataSelect.daerahTujuanMP} onChange={(e) => handleSelectNegKomoditas(e, "daerahTujuanMP")} />
+                                                                                <Select styles={customStyles} placeholder={"Pilih daerah tujuan.."} value={value ? {id: cekdataMP.daerahTujuanMP, label: cekdataMP.daerahTujuanMPView} : ""} {...field} options={dataSelect.daerahTujuanMP} onChange={(e) => handleSelectNegKomoditas(e, "daerahTujuanMP")} />
                                                                             )}
                                                                         />
                                                                         {errorsMP.daerahTujuanMP && <small className="text-danger">{errorsMP.daerahTujuanMP.message}</small>}
@@ -2556,7 +2781,7 @@ function DocK11() {
                                                                 <div className="row mb-3">
                                                                     <label className="col-sm-3 col-form-label" htmlFor="jenisKemasan">Jenis Kemasan</label>
                                                                     <div className="col-sm-5">
-                                                                        <select name="jenisKemasan" id="jenisKemasan" onClick={handleKemasan} {...registerMP("jenisKemasan")} className="form-control form-control-sm">
+                                                                        <select name="jenisKemasan" id="jenisKemasan" onClick={handleKemasan} {...registerMP("jenisKemasan")} className="form-select form-select-sm">
                                                                             <option value="">--</option>
                                                                             {dataSelect.jenisKemasan}
                                                                         </select>
@@ -2585,23 +2810,21 @@ function DocK11() {
                                                                     <div className="col-sm-9">
                                                                         <div className='row'>
                                                                             <div className="col-4" style={{paddingRight: '2px'}}>
-                                                                                <input type="text" className='form-control form-control-sm' {...registerMP("nilaiBarang")} name='nilaiBarang' id='nilaiBarang' />
+                                                                                <input type="text" className='form-control form-control-sm' value={cekdataMP.nilaiBarang ? addCommas(removeNonNumeric(cekdataMP.nilaiBarang)) : ""} {...registerMP("nilaiBarang")} name='nilaiBarang' id='nilaiBarang' />
                                                                             </div>
-                                                                            <div className="col-2" style={{paddingLeft: '2px'}}>
-                                                                                <select name="satuanNilai" id="satuanNilai" onClick={handleMataUang} className='form-control form-control-sm' {...registerMP("satuanNilai")}>
+                                                                            <div className="col-4" style={{paddingLeft: '2px'}}>
+                                                                                <select name="satuanNilai" id="satuanNilai" onClick={handleMataUang} className='form-select form-select-sm' {...registerMP("satuanNilai")}>
                                                                                     <option value="">--</option>
                                                                                     {dataSelect.satuanNilai}
                                                                                 </select>
                                                                             </div>
                                                                         </div>
-                                                                        {/* <input type="text" id="nilaiBarang" name="nilaiBarang" value={komoditas.nilaiBarang || ""} onChange={handleKomoditas} className="form-control form-control-sm" placeholder="Nilai Barang" /> */}
                                                                     </div>
                                                                 </div>
                                                                 <div className="row mb-3">
                                                                     <label className="col-sm-3 col-form-label" htmlFor="infoTambahan">Informasi Tambahan</label>
                                                                     <div className="col-sm-9">
                                                                         <textarea className='form-control' name="infoTambahan" id="infoTambahan" rows="2" {...registerMP("infoTambahan")}></textarea>
-                                                                        {/* <input type="text" id="infoTambahan" name="infoTambahan" {...registerMP("infoTambahan")} className="form-control form-control-sm" placeholder="Tanda Kemasan" /> */}
                                                                     </div>
                                                                 </div>
                                                             </div>
@@ -2617,7 +2840,7 @@ function DocK11() {
                                                 <div className="card-action-element">
                                                     <ul className="list-inline mb-0">
                                                         <li className="list-inline-item">
-                                                            <a href="#" className="card-collapsible"><i className="tf-icons bx bx-chevron-up"></i></a>
+                                                            <a href="#" className="card-collapsible"><i className="tf-icons fa-solid fa-chevron-up"></i></a>
                                                         </li>
                                                     </ul>
                                                 </div>
@@ -2628,10 +2851,10 @@ function DocK11() {
                                                         <div className="card-body pt-0">
                                                             <div className="row g-3 mb-3">
                                                                 <div className="col-md-12">
-                                                                    <button type="button" className="btn btn-xs btn-primary" data-bs-toggle={cekdataMP.jenisMp ? "modal" : ""} data-bs-target={cekdataMP.jenisMp ? "#modKomoditas" : ""} onClick={cekdataMP.jenisMp ? null : () => {alert("Mohon Pilih Jenis Media Pembawa")}}>Tambah Komoditas</button>
-                                                                    <button type="button" className="btn btn-xs btn-info float-end"  onClick={dataKomoditiPtk}><i className="menu-icon tf-icons bx bx-sync"></i> Refresh Data</button>
+                                                                    <button type="button" className="btn btn-xs btn-primary" data-bs-toggle={cekdataMP.jenisMp ? "modal" : ""} data-bs-target={cekdataMP.jenisMp ? "#modKomoditas" : ""} onClick={() => cekdataMP.jenisMp ? resetFormKomoditi() : alert("Mohon Pilih Jenis Media Pembawa")}>Tambah Komoditas</button>
+                                                                    <button type="button" className="btn btn-xs btn-info float-end"  onClick={dataKomoditiPtk}><i className="menu-icon tf-icons fa-solid fa-sync"></i> Refresh Data</button>
                                                                 </div>
-                                                                <div className="table-responsive text-nowrap">
+                                                                <div className="table-responsive text-nowrap" style={{height: "300px"}}>
                                                                     <table className="table table-sm table-bordered table-hover table-striped dataTable">
                                                                         <thead>
                                                                             <tr>
@@ -2648,11 +2871,8 @@ function DocK11() {
                                                                                 <th>Satuan</th>
                                                                                 <th>Jantan</th>
                                                                                 <th>Betina</th>
-                                                                                {/* <th>Breed</th>
-                                                                                <th>Asal</th>
-                                                                                <th>Keterangan</th> */}
-                                                                                {/* <th>Harga</th>
-                                                                                <th>Mata Uang</th> */}
+                                                                                <th>Harga</th>
+                                                                                <th>Mata Uang</th>
                                                                                 <th>Act</th>
                                                                             </tr>
                                                                         </thead>
@@ -2664,22 +2884,24 @@ function DocK11() {
                                                                                             <td>{data.klasifikasi}</td>
                                                                                             <td>{data.nama_umum_tercetak}</td>
                                                                                             <td>{data.nama_latin_tercetak}</td>
-                                                                                            <td>{data.volume_netto}</td>
+                                                                                            <td>{data.volume_netto ? data.volume_netto.toLocaleString() : ""}</td>
                                                                                             <td>{data.sat_netto}</td>
-                                                                                            <td>{data.volume_bruto}</td>
+                                                                                            <td>{data.volume_bruto ? data.volume_bruto.toLocaleString() : ""}</td>
                                                                                             <td>{data.sat_bruto}</td>
-                                                                                            <td>{data.volume_lain}</td>
+                                                                                            <td>{data.volume_lain ? data.volume_lain.toLocaleString() : ""}</td>
                                                                                             <td>{data.sat_lain}</td>
                                                                                             <td>{data.jantan}</td>
                                                                                             <td>{data.betina}</td>
+                                                                                            <td>{data.harga ? data.harga.toLocaleString() : ""}</td>
+                                                                                            <td>{data.mata_uang}</td>
                                                                                             <td>
                                                                                                 <div className="dropdown">
                                                                                                     <button type="button" className="btn p-0 dropdown-toggle hide-arrow" data-bs-toggle="dropdown">
-                                                                                                        <i className="bx bx-dots-vertical-rounded"></i>
+                                                                                                        <i className="fa-solid fa-ellipsis-vertical"></i>
                                                                                                     </button>
                                                                                                     <div className="dropdown-menu">
-                                                                                                        <a className="dropdown-item" type="button" onClick={() => {setEditKontainer(index)}} data-bs-toggle="modal" data-bs-target="#modKontainer"><i className="bx bx-edit-alt me-1"></i> Edit</a>
-                                                                                                        <a className="dropdown-item" href="#"><i className="bx bx-trash me-1"></i> Delete</a>
+                                                                                                        <a className="dropdown-item" type="button" data-ptk={data.ptk_id} data-kemasan={data.jumlah_kemasan} data-kemasansat={data.kemasan_id} data-satuanlain={data.satuan_lain_id} data-kom={data.komoditas_id} data-klas={data.klasifikasi_id} data-header={data.id} data-ket={data.keterangan} onClick={handleEditKomoditas} data-bs-toggle="modal" data-bs-target="#modKomoditas"><i className="fa-solid fa-pen-to-square me-1"></i> Edit</a>
+                                                                                                        <a className="dropdown-item" href="#"><i className="fa-solid fa-trash me-1"></i> Delete</a>
                                                                                                     </div>
                                                                                                 </div>
                                                                                             </td>
@@ -2690,6 +2912,7 @@ function DocK11() {
                                                                         </tbody>
                                                                     </table>
                                                                 </div>
+                                                                <small>*Format penulisan desimal menggunakan titik ( . )</small>
                                                             </div>
                                                         </div>
                                                     </div>
@@ -2699,19 +2922,18 @@ function DocK11() {
                                     </div>
                                     <div className="col-12 d-flex justify-content-between">
                                         <button type="button" className="btn btn-label-secondary" onClick={() => setWizardPage(wizardPage - 1)}>
-                                            <i className="bx bx-chevron-left bx-sm ms-sm-n2"></i>
+                                            <i className="fa-solid fa-chevron-left fa-sm ms-sm-n2"></i>
                                             <span className="d-sm-inline-block d-none">Sebelumnya</span>
                                         </button>
                                         <button type="submit" className="btn btn-primary">
                                             <span className="d-sm-inline-block d-none me-sm-1">Simpan & Lanjutkan</span>
-                                            <i className="bx bx-chevron-right bx-sm me-sm-n2"></i>
+                                            <i className="fa-solid fa-angle-right fa-sm me-sm-n2"></i>
                                         </button>
                                     </div>
                                     </div>
                                 </form>
                             </div>
 
-                            {/* <!-- Confirmation --> */}
                             <div id="cardDokumen" className={wizardPage === 4 ? "content active dstepper-block" : "content"}>
                                 <div className="row mb-3">
                                     <form onSubmit={handleFormDokPeriksa(onSubmitDokPeriksa)}>
@@ -2726,7 +2948,7 @@ function DocK11() {
                                                     <div className="card-action-element">
                                                         <ul className="list-inline mb-0">
                                                             <li className="list-inline-item">
-                                                                <a href="#" className="card-collapsible"><i className="tf-icons bx bx-chevron-up"></i></a>
+                                                                <a href="#" className="card-collapsible"><i className="tf-icons fa-solid fa-chevron-up"></i></a>
                                                             </li>
                                                         </ul>
                                                     </div>
@@ -2738,7 +2960,7 @@ function DocK11() {
                                                                 <div className="row g-3 mb-3">
                                                                     <div className="col-md-12">
                                                                         <button type="button" className="btn btn-xs btn-primary" data-bs-toggle={cekdataMP.mediaPembawa ? "modal" : ""} data-bs-target={cekdataMP.mediaPembawa ? "#modDokumen" : ""} onClick={cekdataMP.mediaPembawa ? null : () => {alert('Mohon pilih media pembawa terlebih dahulu!')}}>Tambah Dokumen</button>
-                                                                        <button type="button" className="btn btn-xs btn-info float-end"  onClick={dataDokumenPtk}><i className="menu-icon tf-icons bx bx-sync"></i> Refresh Data</button>
+                                                                        <button type="button" className="btn btn-xs btn-info float-end"  onClick={dataDokumenPtk}><i className="menu-icon tf-icons fa-solid fa-sync"></i> Refresh Data</button>
                                                                     </div>
                                                                     <div className="text-nowrap">
                                                                         <table className="table table-sm table-bordered table-hover table-striped dataTable">
@@ -2767,11 +2989,11 @@ function DocK11() {
                                                                                             <td>
                                                                                                 <div className="dropdown">
                                                                                                     <button type="button" className="btn p-0 dropdown-toggle hide-arrow" data-bs-toggle="dropdown">
-                                                                                                        <i className="bx bx-dots-vertical-rounded"></i>
+                                                                                                        <i className="fa-solid fa-ellipsis-vertical"></i>
                                                                                                     </button>
                                                                                                     <div className="dropdown-menu">
-                                                                                                        <a className="dropdown-item" type="button" data-header={data.id} onClick={handleEditDokumen} data-bs-toggle="modal" data-bs-target="#modDokumen"><i className="bx bx-edit-alt me-1"></i> Edit</a>
-                                                                                                        <a className="dropdown-item" href="#"><i className="bx bx-trash me-1"></i> Delete</a>
+                                                                                                        <a className="dropdown-item" type="button" data-header={data.id} onClick={handleEditDokumen} data-bs-toggle="modal" data-bs-target="#modDokumen"><i className="fa-solid fa-pen-to-square me-1"></i> Edit</a>
+                                                                                                        <a className="dropdown-item" href="#"><i className="fa-solid fa-trash me-1"></i> Delete</a>
                                                                                                     </div>
                                                                                                 </div>
                                                                                             </td>
@@ -2795,7 +3017,7 @@ function DocK11() {
                                                     <div className="card-action-element">
                                                         <ul className="list-inline mb-0">
                                                             <li className="list-inline-item">
-                                                                <a href="#" className="card-collapsible"><i className="tf-icons bx bx-chevron-up"></i></a>
+                                                                <a href="#" className="card-collapsible"><i className="tf-icons fa-solid fa-chevron-up"></i></a>
                                                             </li>
                                                         </ul>
                                                     </div>
@@ -2810,30 +3032,14 @@ function DocK11() {
                                                                             <label className="col-sm-2 col-form-label" htmlFor="tempatPeriksaPtk">Tempat Pemeriksaan</label>
                                                                             <div className="col-sm-4">
                                                                                 <select name="tempatPeriksaPtk" id="tempatPeriksaPtk" {...registerDokPeriksa("tempatPeriksaPtk")} className="form-control form-control-sm">
-                                                                                <option value="">--</option>
-                                                                                <option value="IK">Instalasi Karantina</option>
-                                                                                <option value="TL">Tempat Lain</option>
-                                                                                <option value="DL">Depo / Lainnya</option>
+                                                                                    <option value="">--</option>
+                                                                                    <option value="IK">Instalasi Karantina</option>
+                                                                                    <option value="TL">Tempat Lain</option>
+                                                                                    <option value="DL">Depo / Lainnya</option>
                                                                                 </select>
                                                                             </div>
                                                                         </div>
                                                                     </div>
-                                                                    {/* <div className="col-sm-6">
-                                                                        <div className="row">
-                                                                            <label className="col-sm-4 col-form-label" htmlFor="ketLainPeriksaPtk">Keterangan Lainnya</label>
-                                                                            <div className="col-sm-8">
-                                                                            <input type="text" name='ketLainPeriksaPtk' id='ketLainPeriksaPtk' {...registerDokPeriksa("ketLainPeriksaPtk")} className='form-control form-control-sm' />
-                                                                            </div>
-                                                                        </div>
-                                                                    </div> */}
-                                                                    {/* <div className="col-sm-6">
-                                                                        <div className="row">
-                                                                            <label className="col-sm-4 col-form-label" htmlFor="waktuPeriksaPtk">Waktu Pelaksanaan</label>
-                                                                            <div className="col-sm-8">
-                                                                            <input type="datetime-local" name='waktuPeriksaPtk' id='waktuPeriksaPtk' {...registerDokPeriksa("waktuPeriksaPtk")} className='form-control form-control-sm' />
-                                                                            </div>
-                                                                        </div>
-                                                                    </div> */}
                                                                     <div className="col-sm-6">
                                                                         <div className="row">
                                                                             <label className="col-sm-4 col-form-label" htmlFor="namaTempatPeriksaPtk">Nama Tempat</label>
@@ -2850,22 +3056,6 @@ function DocK11() {
                                                                             </div>
                                                                         </div>
                                                                     </div>
-                                                                    {/* <div className="col-sm-6">
-                                                                        <div className="row">
-                                                                            <label className="col-sm-4 col-form-label" htmlFor="lokasiMPPeriksaPtk">Lokasi MP</label>
-                                                                            <div className="col-sm-8">
-                                                                            <input type="text" name='lokasiMPPeriksaPtk' id='lokasiMPPeriksaPtk' {...registerDokPeriksa("lokasiMPPeriksaPtk")} className='form-control form-control-sm' />
-                                                                            </div>
-                                                                        </div>
-                                                                    </div>
-                                                                    <div className="col-sm-6">
-                                                                        <div className="row">
-                                                                            <label className="col-sm-4 col-form-label" htmlFor="tempatProduksiPeriksaPtk">Tempat Produksi</label>
-                                                                            <div className="col-sm-8">
-                                                                            <input type="text" name='tempatProduksiPeriksaPtk' id='tempatProduksiPeriksaPtk' {...registerDokPeriksa("tempatProduksiPeriksaPtk")} className='form-control form-control-sm' />
-                                                                            </div>
-                                                                        </div>
-                                                                    </div> */}
                                                                 </div>
                                                             </div>
                                                         </div>
@@ -2875,12 +3065,12 @@ function DocK11() {
                                         </div>
                                         <div className="col-12 d-flex justify-content-between">
                                             <button type="button" className="btn btn-label-secondary" onClick={() => setWizardPage(wizardPage - 1)}>
-                                                <i className="bx bx-chevron-left bx-sm ms-sm-n2"></i>
+                                                <i className="fa-solid fa-chevron-left fa-sm ms-sm-n2"></i>
                                                 <span className="d-sm-inline-block d-none">Sebelumnya</span>
                                             </button>
                                             <button type="submit" className="btn btn-primary">
                                                 <span className="d-sm-inline-block d-none me-sm-1">Konfirmasi</span>
-                                                <i className="bx bx-chevron-right bx-sm me-sm-n2"></i>
+                                                <i className="fa-solid fa-angle-right fa-sm me-sm-n2"></i>
                                             </button>
                                         </div>
                                     </form>
@@ -2898,14 +3088,13 @@ function DocK11() {
                                     <form onSubmit={handleFormKonfirmasi(onSubmitKonfirmasi)}>
                                         <input type="hidden" name='idPtk' {...registerKonfirmasi("idPtk")} />
                                         <input type="hidden" name='noAju' {...registerKonfirmasi("noAju")} />
-                                        {/* <input type="hidden" name='datenow' value={dateNow || ""} {...registerKonfirmasi("datenow")} /> */}
                                         <div className="col-12 d-flex justify-content-between">
                                             <button type="button" className="btn btn-primary btn-prev" onClick={() => setWizardPage(wizardPage - 1)}>
-                                                <i className="bx bx-chevron-left bx-sm ms-sm-n2"></i>
+                                                <i className="fa-solid fa-chevron-left fa-sm ms-sm-n2"></i>
                                                 <span className="d-sm-inline-block d-none">Cek Kembali</span>
                                             </button>
                                             <button type="submit" className="btn btn-success">
-                                                <i className="bx bx-save bx-sm"></i>
+                                                <i className="fa-solid fa-save fa-sm"></i>
                                                 <span className="d-sm-inline-block d-none me-sm-1">Simpan & Kirim</span>
                                             </button>
                                         </div>
@@ -2926,11 +3115,11 @@ function DocK11() {
                                             <input type="hidden" name="mediaPembawaVerif" {...registerVerify("mediaPembawaVerif")} />
                                             <div className="col-sm-6">
                                                 <div className="form-check form-check-inline">
-                                                    <input className="form-check-input" type="radio" name="opsiVerif" id="opsiVerif1" value="1" onClick={() => setOpsiVerif(true) & setValueVerify("alasanTolak", "")} {...registerVerify("opsiVerif", { required: "Mohon pilih verifikasi."})} />
+                                                    <input className="form-check-input" type="radio" name="opsiVerif" id="opsiVerif1" value="1" onClick={() => setValueVerify("alasanTolak", "")} {...registerVerify("opsiVerif", { required: "Mohon pilih verifikasi."})} />
                                                     <label className="form-check-label" htmlFor="opsiVerif1">Setujui PTK</label>
                                                 </div>
                                                 <div className="form-check form-check-inline">
-                                                    <input className="form-check-input" type="radio" name="opsiVerif" id="opsiVerif2" value="2" onClick={() => setOpsiVerif(false) & setValueVerify("tglTerimaVerif", "") & setValueVerify("petugasVerif", "")} {...registerVerify("opsiVerif")}/>
+                                                    <input className="form-check-input" type="radio" name="opsiVerif" id="opsiVerif2" value="2" onClick={() => setValueVerify("tglTerimaVerif", "") & setValueVerify("petugasVerif", "")} {...registerVerify("opsiVerif")}/>
                                                     <label className="form-check-label" htmlFor="opsiVerif2">Tolak PTK</label>
                                                 </div>
                                                 {errorsVerify.opsiVerif && <small className="text-danger">{errorsVerify.opsiVerif.message}</small>}
@@ -2966,21 +3155,18 @@ function DocK11() {
                                                 </div>
                                                 <div className='col-sm-2'>
                                                     <a className='btn btn-warning pb-1' href={require("../../dok/k11.pdf")} rel="noopener noreferrer" target='_blank'>
-                                                        <i className="bx bx-printer bx-sm"></i>
+                                                        <i className="fa-solid fa-printer fa-sm"></i>
                                                         print
                                                     </a>
                                                 </div>
                                                 <div className='col-sm-8'>
                                                     <button style={{display: (dataIdPage.noPermohonan ? 'block' : 'none')}} type='button' onClick={() => navigate("/k22")} className='btn btn-info pb-1 float-end'>
-                                                    <i className="bx bx-send bx-sm"></i>
+                                                    <i className="fa-solid fa-send fa-sm"></i>
                                                         Buat Surat Tugas
                                                     </button>
                                                 </div>
                                             </div>
-                                            {/* <div> */}
-                                            {/* </div> */}
                                         </form>
-
                                     </div>
                                 </div>
                             </div>
@@ -2989,80 +3175,183 @@ function DocK11() {
             </div>
         </div>
         <div className="modal fade" id="modKontainer" tabIndex="-1" aria-hidden="true">
-                    <div className="modal-dialog modal-dialog-centered1 modal-simple">
-                    <div className="modal-content p-1">
-                        <div className="modal-body">
-                        <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                        <div className="text-center mb-4">
-                            <h3>Tambah Kontainer Baru</h3>
-                            <p>{editKontainer}</p>
+            <div className="modal-dialog modal-dialog-centered1 modal-simple">
+                <div className="modal-content p-1">
+                    <div className="modal-body">
+                    <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    <div className="text-center mb-4">
+                        <h3>Tambah Kontainer Baru</h3>
+                        <p>{editKontainer}</p>
+                    </div>
+                    <form className="row" onSubmit={handleFormKontainer(onSubmitKontainer)}>
+                            <input type="hidden" name='idDataKontainer' {...registerKontainer("idDataKontainer")} />
+                            <input type="hidden" name='idPtk' {...registerKontainer("idPtk")} />
+                        <div className="col-6">
+                        <label className="form-label" htmlFor="noKontainer">No Kontainer <span className='text-danger'>*</span></label>
+                        <div className="input-group input-group-merge">
+                            <input
+                            id="noKontainer"
+                            name="noKontainer"
+                            type="text"
+                            placeholder="AAAA9999999"
+                            {...registerKontainer("noKontainer", { required: "Mohon isi nomor kontainer."})} className={errorsKontainer.noKontainer ? "form-control form-control-sm is-invalid" : "form-control form-control-sm"}
+                            />
                         </div>
-                        <form className="row" onSubmit={handleFormKontainer(onSubmitKontainer)}>
-                                <input type="hidden" name='idDataKontainer' {...registerKontainer("idDataKontainer")} />
-                                <input type="hidden" name='idPtk' {...registerKontainer("idPtk")} />
-                            <div className="col-6">
-                            <label className="form-label" htmlFor="noKontainer">No Kontainer <span className='text-danger'>*</span></label>
+                        {errorsKontainer.noKontainer && <small className="text-danger">{errorsKontainer.noKontainer.message}</small>}
+                        </div>
+                        <div className="col-6 col-md-6">
+                        <label className="form-label" htmlFor="tipeKontainer">Tipe Kontainer <span className='text-danger'>*</span></label>
+                        <div className="input-group input-group-merge">
+                            <select name="tipeKontainer" id="tipeKontainer" {...registerKontainer("tipeKontainer", { required: "Mohon pilih tipe kontainer."})} className={errorsKontainer.tipeKontainer ? "form-control form-control-sm is-invalid" : "form-control form-control-sm"}>
+                                <option value="">--</option>
+                                <option value="1">General/Dry cargo</option>
+                                <option value="2">Tunnel type</option>
+                                <option value="3">Open Top Steel</option>
+                                <option value="4">Flat Rack</option>
+                                <option value="5">Reefer / Refrigerate</option>
+                                <option value="6">Barge Container</option>
+                                <option value="7">Bulk Container</option>
+                            </select>
+                        </div>
+                        {errorsKontainer.tipeKontainer && <small className="text-danger">{errorsKontainer.tipeKontainer.message}</small>}
+                        </div>
+                        <div className="col-6 col-md-6">
+                        <label className="form-label" htmlFor="ukuranKontainer">Ukuran Kontainer <span className='text-danger'>*</span></label>
+                        <div className="input-group input-group-merge">
+                            <select name="ukuranKontainer" id="ukuranKontainer" {...registerKontainer("ukuranKontainer", { required: "Mohon pilih ukuran kontainer."})} className={errorsKontainer.ukuranKontainer ? "form-control form-control-sm is-invalid" : "form-control form-control-sm"}>
+                                <option value="">--</option>
+                                <option value="1">20 feet</option>
+                                <option value="2">40 feet</option>
+                                <option value="3">42 feet</option>
+                                <option value="4">43 feet</option>
+                                <option value="5">45 feet</option>
+                                <option value="6">50 feet</option>
+                                <option value="7">Lainnya</option>
+                            </select>
+                        </div>
+                        {errorsKontainer.ukuranKontainer && <small className="text-danger">{errorsKontainer.ukuranKontainer.message}</small>}
+                        </div>
+                        <div className="col-6 col-md-6">
+                        <label className="form-label" htmlFor="stuffKontainer">Stuff Kontainer</label>
+                        <div className="input-group input-group-merge">
+                            <select name="stuffKontainer" id="stuffKontainer" {...registerKontainer("stuffKontainer")} className="form-control form-control-sm">
+                                <option value="">--</option>
+                                <option value="1">FCL</option>
+                                <option value="2">LCL</option>
+                            </select>
+                        </div>
+                        </div>
+                        <div className="col-6 col-md-6">
+                        <label className="form-label" htmlFor="segel">Segel</label>
+                        <div className="input-group input-group-merge">
+                            <input type="text" className="form-control form-control-sm" name="segel" id="segel" {...registerKontainer("segel")}/>
+                        </div>
+                        </div>
+                        <div className="col-6 text-center mt-4">
+                        <button type="submit" className="btn btn-sm btn-primary me-sm-3 me-1">{cekDataKontainer.idDataKontainer ? "Edit" : "Tambah"}</button>
+                        <button
+                            type="reset"
+                            className="btn btn-sm btn-label-secondary btn-reset"
+                            data-bs-dismiss="modal"
+                            aria-label="Close">
+                            Tutup
+                        </button>
+                        </div>
+                    </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div className="modal fade" id="modDokumen" tabIndex="-1" aria-hidden="true">
+            <div className="modal-dialog modal-dialog-centered1 modal-simple">
+                <div className="modal-content p-1">
+                    <div className="modal-body">
+                    <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    <div className="text-center mb-4">
+                        <h3>{cekdataDokumen.idDataDokumen === '' ? "Tambah Dokumen Baru" : "Edit Dokumen"}</h3>
+                    </div>
+                    <form className="row" onSubmit={handleFormDokumen(onSubmitDokumen)}>
+                            <input type="hidden" name='idDataDokumen' {...registerDokumen("idDataDokumen")} />
+                            <input type="hidden" name='idPtk' {...registerDokumen("idPtk")} />
+                            <input type="hidden" name='noAju' {...registerDokumen("noAju")} />
+                        <div className="col-6">
+                        <label className="form-label" htmlFor="kategoriDokumen">Kategori Dokumen <span className='text-danger'>*</span></label>
+                        <div className="input-group input-group-merge">
+                            <select name="kategoriDokumen" id="kategoriDokumen"{...registerDokumen("kategoriDokumen", { required: "Mohon pilih kategori dokumen."})} className={errorsDokumen.kategoriDokumen ? "form-control form-control-sm is-invalid" : "form-control form-control-sm"}>
+                                <option value="">--</option>
+                                <option value="S">Dokumen Persyaratan</option>
+                                <option value="P">Dokumen Pendukung</option>
+                            </select>
+                        </div>
+                        {errorsDokumen.kategoriDokumen && <small className="text-danger">{errorsDokumen.kategoriDokumen.message}</small>}
+                        </div>
+                        <div className="col-6">
+                            <label className="form-label" htmlFor="jenisDokumen">Jenis Dokumen <span className='text-danger'>*</span></label>
+                            <Controller
+                                control={controlDokumen}
+                                name={"jenisDokumen"}
+                                className="form-control form-control-sm"
+                                rules={{ required: "Mohon pilih jenis dokumen." }}
+                                render={({ field: { value, ...field } }) => (
+                                    <Select styles={customStyles} placeholder={"Pilih jenis dokumen.."} value={value ? {id: cekdataDokumen.jenisDokumen, label: cekdataDokumen.jenisDokumenView} : ""} {...field} options={dataSelect.jenisDokumen} onChange={(e) => setValueDokumen("jenisDokumen", e.value) & setValueDokumen("jenisDokumenView", e.label)} />
+                                )}
+                            />
+                            {errorsDokumen.jenisDokumen && <small className="text-danger">{errorsDokumen.jenisDokumen.message}</small>}
+                        </div>
+                        <div className="col-6">
+                            <label className="form-label" htmlFor="noDokumen">No Dokumen <span className='text-danger'>*</span></label>
                             <div className="input-group input-group-merge">
-                                <input
-                                id="noKontainer"
-                                name="noKontainer"
-                                type="text"
-                                placeholder="AAAA9999999"
-                                {...registerKontainer("noKontainer", { required: "Mohon isi nomor kontainer."})} className={errorsKontainer.noKontainer ? "form-control form-control-sm is-invalid" : "form-control form-control-sm"}
-                                />
+                                <input type='text' name="noDokumen" id="noDokumen" {...registerDokumen("noDokumen", { required: "Mohon isi nomor dokumen."})} className={errorsDokumen.noDokumen ? "form-control form-control-sm is-invalid" : "form-control form-control-sm"} />
                             </div>
-                            {errorsKontainer.noKontainer && <small className="text-danger">{errorsKontainer.noKontainer.message}</small>}
-                            </div>
-                            <div className="col-6 col-md-6">
-                            <label className="form-label" htmlFor="tipeKontainer">Tipe Kontainer <span className='text-danger'>*</span></label>
+                            {errorsDokumen.noDokumen && <small className="text-danger">{errorsDokumen.noDokumen.message}</small>}
+                        </div>
+                        <div className="col-6">
+                            <label className="form-label" htmlFor="negaraAsalDokumen">Negara Penerbit <span className='text-danger'>*</span></label>
+                            <Controller
+                                control={controlDokumen}
+                                name={"negaraAsalDokumen"}
+                                className="form-control form-control-sm"
+                                rules={{ required: "Mohon pilih negara penerbit dokumen." }}
+                                render={({ field: { value, ...field } }) => (
+                                    <Select styles={customStyles} placeholder={"Pilih negara penerbit dokumen.."} value={value ? {id: cekdataDokumen.negaraAsalDokumen, label: cekdataDokumen.negaraAsalDokumenView} : ""} {...field} options={dataSelect.negaraAsalDokumen} onChange={(e) => setValueDokumen("negaraAsalDokumen", e.value) & setValueDokumen("negaraAsalDokumenView", e.label) & (e.value === '99' ? handleKota(null, "kotaAsalDokumen") : null)} />
+                                )}
+                            />
+                            {errorsDokumen.negaraAsalDokumen && <small className="text-danger">{errorsDokumen.negaraAsalDokumen.message}</small>}
+                        </div>
+                        <div className="col-6">
+                            <label className="form-label" htmlFor="tglDokumen">Tgl Dokumen <span className='text-danger'>*</span></label>
                             <div className="input-group input-group-merge">
-                                <select name="tipeKontainer" id="tipeKontainer" {...registerKontainer("tipeKontainer", { required: "Mohon pilih tipe kontainer."})} className={errorsKontainer.tipeKontainer ? "form-control form-control-sm is-invalid" : "form-control form-control-sm"}>
-                                    <option value="">--</option>
-                                    <option value="1">General/Dry cargo</option>
-                                    <option value="2">Tunnel type</option>
-                                    <option value="3">Open Top Steel</option>
-                                    <option value="4">Flat Rack</option>
-                                    <option value="5">Reefer / Refrigerate</option>
-                                    <option value="6">Barge Container</option>
-                                    <option value="7">Bulk Container</option>
-                                </select>
+                                <input type='date' name="tglDokumen" id="tglDokumen" {...registerDokumen("tglDokumen", { required: "Mohon isi tanggal dokumen."})} className={errorsDokumen.tglDokumen ? "form-control form-control-sm is-invalid" : "form-control form-control-sm"} />
                             </div>
-                            {errorsKontainer.tipeKontainer && <small className="text-danger">{errorsKontainer.tipeKontainer.message}</small>}
-                            </div>
-                            <div className="col-6 col-md-6">
-                            <label className="form-label" htmlFor="ukuranKontainer">Ukuran Kontainer <span className='text-danger'>*</span></label>
+                            {errorsDokumen.tglDokumen && <small className="text-danger">{errorsDokumen.tglDokumen.message}</small>}
+                        </div>
+                        <div className="col-6" style={{visibility: (cekdataDokumen.negaraAsalDokumen === '99' ? 'visible' : 'hidden')}}>
+                            <label className="form-label" htmlFor="kotaAsalDokumen">Kota Penerbit</label>
+                            <Controller
+                                control={controlDokumen}
+                                name={"kotaAsalDokumen"}
+                                className="form-control form-control-sm"
+                                rules={{ required: false }}
+                                render={({ field: { value, ...field } }) => (
+                                    <Select styles={customStyles} placeholder={"Pilih kota penerbit dokumen.."} value={value ? {id: cekdataDokumen.kotaAsalDokumen, label: cekdataDokumen.kotaAsalDokumenView} : ""} {...field} options={dataSelect.kotaAsalDokumen} onChange={(e) => setValueDokumen("kotaAsalDokumen", e.value) & setValueDokumen("kotaAsalDokumenView", e.label)} />
+                                )}
+                            />
+                        </div>
+                        <div className="col-6">
+                            <label className="form-label" htmlFor="ketDokumen">Keterangan</label>
                             <div className="input-group input-group-merge">
-                                <select name="ukuranKontainer" id="ukuranKontainer" {...registerKontainer("ukuranKontainer", { required: "Mohon pilih ukuran kontainer."})} className={errorsKontainer.ukuranKontainer ? "form-control form-control-sm is-invalid" : "form-control form-control-sm"}>
-                                    <option value="">--</option>
-                                    <option value="1">20 feet</option>
-                                    <option value="2">40 feet</option>
-                                    <option value="3">42 feet</option>
-                                    <option value="4">43 feet</option>
-                                    <option value="5">45 feet</option>
-                                    <option value="6">50 feet</option>
-                                    <option value="7">Lainnya</option>
-                                </select>
+                                <input type='text' name="ketDokumen" id="ketDokumen" {...registerDokumen("ketDokumen")} className="form-control form-control-sm" />
                             </div>
-                            {errorsKontainer.ukuranKontainer && <small className="text-danger">{errorsKontainer.ukuranKontainer.message}</small>}
-                            </div>
-                            <div className="col-6 col-md-6">
-                            <label className="form-label" htmlFor="stuffKontainer">Stuff Kontainer</label>
+                        </div>
+                        <div className="col-6">
+                            <label className="form-label" htmlFor="fileDokumen">Upload</label>
                             <div className="input-group input-group-merge">
-                                <select name="stuffKontainer" id="stuffKontainer" {...registerKontainer("stuffKontainer")} className="form-control form-control-sm">
-                                    <option value="">--</option>
-                                    <option value="1">FCL</option>
-                                    <option value="2">LCL</option>
-                                </select>
+                            <input type="hidden" name='fileDokumen' {...registerDokumen("fileDokumen")} />
+                                <input type='file' name="fileDokumenUpload" id="fileDokumenUpload" onChange={handleBase64Upload} className="form-control form-control-sm" />
                             </div>
-                            </div>
-                            <div className="col-6 col-md-6">
-                            <label className="form-label" htmlFor="segel">Segel</label>
-                            <div className="input-group input-group-merge">
-                                <input type="text" className="form-control form-control-sm" name="segel" id="segel" {...registerKontainer("segel")}/>
-                            </div>
-                            </div>
-                            <div className="col-6 text-center mt-4">
-                            <button type="submit" className="btn btn-sm btn-primary me-sm-3 me-1">{cekDataKontainer.idDataKontainer ? "Edit" : "Tambah"}</button>
+                        </div>
+                        <div className="col-6 text-center mt-4">
+                            <button type="submit" className="btn btn-sm btn-primary me-sm-3 me-1">{cekdataDokumen.idDataDokumen === '' ? "Tambah" : "Edit"}</button>
                             <button
                                 type="reset"
                                 className="btn btn-sm btn-label-secondary btn-reset"
@@ -3070,354 +3359,293 @@ function DocK11() {
                                 aria-label="Close">
                                 Tutup
                             </button>
-                            </div>
-                        </form>
                         </div>
+                    </form>
                     </div>
-                    </div>
-        </div>
-        <div className="modal fade" id="modDokumen" tabIndex="-1" aria-hidden="true">
-                    <div className="modal-dialog modal-dialog-centered1 modal-simple">
-                    <div className="modal-content p-1">
-                        <div className="modal-body">
-                        <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                        <div className="text-center mb-4">
-                            <h3>{cekdataDokumen.idDataDokumen === '' ? "Tambah Dokumen Baru" : "Edit Dokumen"}</h3>
-                        </div>
-                        <form className="row" onSubmit={handleFormDokumen(onSubmitDokumen)}>
-                                <input type="hidden" name='idDataDokumen' {...registerDokumen("idDataDokumen")} />
-                                <input type="hidden" name='idPtk' {...registerDokumen("idPtk")} />
-                                <input type="hidden" name='noAju' {...registerDokumen("noAju")} />
-                                {/* <input type="hidden" name='datenow' value={dateNow || ""} {...registerDokumen("datenow")} /> */}
-                            <div className="col-6">
-                            <label className="form-label" htmlFor="kategoriDokumen">Kategori Dokumen <span className='text-danger'>*</span></label>
-                            <div className="input-group input-group-merge">
-                                <select name="kategoriDokumen" id="kategoriDokumen"{...registerDokumen("kategoriDokumen", { required: "Mohon pilih kategori dokumen."})} className={errorsDokumen.kategoriDokumen ? "form-control form-control-sm is-invalid" : "form-control form-control-sm"}>
-                                    <option value="">--</option>
-                                    <option value="S">Dokumen Persyaratan</option>
-                                    <option value="P">Dokumen Pendukung</option>
-                                </select>
-                            </div>
-                            {errorsDokumen.kategoriDokumen && <small className="text-danger">{errorsDokumen.kategoriDokumen.message}</small>}
-                            </div>
-                            <div className="col-6">
-                            <label className="form-label" htmlFor="jenisDokumen">Jenis Dokumen <span className='text-danger'>*</span></label>
-                            {/* <div className="input-group input-group-merge"> */}
-                                    <Controller
-                                        control={controlDokumen}
-                                        name={"jenisDokumen"}
-                                        className="form-control form-control-sm"
-                                        rules={{ required: "Mohon pilih jenis dokumen." }}
-                                        render={({ field: { value, ...field } }) => (
-                                            <Select value={{id: cekdataDokumen.jenisDokumen, label: cekdataDokumen.jenisDokumenView }} {...field} options={dataSelect.jenisDokumen} onChange={(e) => setValueDokumen("jenisDokumen", e.value) & setValueDokumen("jenisDokumenView", e.label)} />
-                                        )}
-                                    />
-                                {/* <select name="jenisDokumen" id="jenisDokumen" data-kar={cekdataMP.mediaPembawa} onClick={handleJenisDokumen}{...registerDokumen("jenisDokumen", { required: "Mohon pilih jenis dokumen."})} className={errorsDokumen.jenisDokumen ? "form-control form-control-sm is-invalid" : "form-control form-control-sm"}>
-                                    <option value="">--</option>
-                                    {dataSelect.jenisDokumen}
-                                </select> */}
-                            {/* </div> */}
-                            {errorsDokumen.jenisDokumen && <small className="text-danger">{errorsDokumen.jenisDokumen.message}</small>}
-                            </div>
-                            <div className="col-6">
-                            <label className="form-label" htmlFor="noDokumen">No Dokumen <span className='text-danger'>*</span></label>
-                            <div className="input-group input-group-merge">
-                                <input type='text' name="noDokumen" id="noDokumen" {...registerDokumen("noDokumen", { required: "Mohon isi nomor dokumen."})} className={errorsDokumen.noDokumen ? "form-control form-control-sm is-invalid" : "form-control form-control-sm"} />
-                            </div>
-                            {errorsDokumen.noDokumen && <small className="text-danger">{errorsDokumen.noDokumen.message}</small>}
-                            </div>
-                            <div className="col-6">
-                            <label className="form-label" htmlFor="negaraAsalDokumen">Negara Penerbit <span className='text-danger'>*</span></label>
-                            {/* <div className="input-group input-group-merge"> */}
-                                    <Controller
-                                        control={controlDokumen}
-                                        name={"negaraAsalDokumen"}
-                                        className="form-control form-control-sm"
-                                        rules={{ required: "Mohon pilih negara penerbit dokumen." }}
-                                        render={({ field: { value, ...field } }) => (
-                                            <Select value={{id: cekdataDokumen.negaraAsalDokumen, label: cekdataDokumen.negaraAsalDokumenView }} {...field} options={dataSelect.negaraAsalDokumen} onChange={(e) => setValueDokumen("negaraAsalDokumen", e.value) & setValueDokumen("negaraAsalDokumenView", e.label) & (e.value === '99' ? handleKota(null, "kotaAsalDokumen") : null)} />
-                                        )}
-                                    />
-                                {/* <select name="negaraAsalDokumen" id="negaraAsalDokumen" onClick={handleNegara}{...registerDokumen("negaraAsalDokumen", { required: "Mohon pilih negara penerbit dokumen."})} className={errorsDokumen.negaraAsalDokumen ? "form-control form-control-sm is-invalid" : "form-control form-control-sm"}>
-                                    <option value="">--</option>
-                                    <option value="99">ID - INDONESIA</option>
-                                    {dataSelect.negaraAsalDokumen}
-                                </select> */}
-                            {/* </div> */}
-                            {errorsDokumen.negaraAsalDokumen && <small className="text-danger">{errorsDokumen.negaraAsalDokumen.message}</small>}
-                            </div>
-                            <div className="col-6">
-                            <label className="form-label" htmlFor="tglDokumen">Tgl Dokumen <span className='text-danger'>*</span></label>
-                            <div className="input-group input-group-merge">
-                                <input type='date' name="tglDokumen" id="tglDokumen" {...registerDokumen("tglDokumen", { required: "Mohon isi tanggal dokumen."})} className={errorsDokumen.tglDokumen ? "form-control form-control-sm is-invalid" : "form-control form-control-sm"} />
-                            </div>
-                            {errorsDokumen.tglDokumen && <small className="text-danger">{errorsDokumen.tglDokumen.message}</small>}
-                            </div>
-                            <div className="col-6" style={{visibility: (cekdataDokumen.negaraAsalDokumen === '99' ? 'visible' : 'hidden')}}>
-                                <label className="form-label" htmlFor="kotaAsalDokumen">Kota Penerbit</label>
-                                {/* <div className="input-group input-group-merge"> */}
-                                    <Controller
-                                        control={controlDokumen}
-                                        name={"kotaAsalDokumen"}
-                                        className="form-control form-control-sm"
-                                        rules={{ required: false }}
-                                        render={({ field: { value, ...field } }) => (
-                                            <Select value={{id: cekdataDokumen.kotaAsalDokumen, label: cekdataDokumen.kotaAsalDokumenView }} {...field} options={dataSelect.kotaAsalDokumen} onChange={(e) => setValueDokumen("kotaAsalDokumen", e.value) & setValueDokumen("kotaAsalDokumenView", e.label)} />
-                                        )}
-                                    />
-                                    {/* <select name="kotaAsalDokumen" id="kotaAsalDokumen" onClick={cekdataDokumen.negaraAsalDokumen === '99' ? null : null} {...registerDokumen("kotaAsalDokumen")} className="form-control form-control-sm">
-                                        <option value="">--</option>
-                                        {dataSelect.kotaAsalDokumen}
-                                    </select> */}
-                                {/* </div> */}
-                            {/* {errorsDokumen.kotaAsalDokumen && <small className="text-danger">{errorsDokumen.kotaAsalDokumen.message}</small>} */}
-                            </div>
-                            <div className="col-6">
-                                <label className="form-label" htmlFor="ketDokumen">Keterangan</label>
-                                <div className="input-group input-group-merge">
-                                    <input type='text' name="ketDokumen" id="ketDokumen" {...registerDokumen("ketDokumen")} className="form-control form-control-sm" />
-                                </div>
-                            </div>
-                            <div className="col-6">
-                                <label className="form-label" htmlFor="fileDokumen">Upload</label>
-                                <div className="input-group input-group-merge">
-                                <input type="hidden" name='fileDokumen' {...registerDokumen("fileDokumen")} />
-                                    <input type='file' name="fileDokumenUpload" id="fileDokumenUpload" onChange={handleBase64Upload} className="form-control form-control-sm" />
-                                </div>
-                            </div>
-                            <div className="col-6 text-center mt-4">
-                                <button type="submit" className="btn btn-sm btn-primary me-sm-3 me-1">{cekdataDokumen.idDataDokumen === '' ? "Tambah" : "Edit"}</button>
-                                <button
-                                    type="reset"
-                                    className="btn btn-sm btn-label-secondary btn-reset"
-                                    data-bs-dismiss="modal"
-                                    aria-label="Close">
-                                    Tutup
-                                </button>
-                            </div>
-                        </form>
-                        </div>
-                    </div>
-                    </div>
+                </div>
+            </div>
         </div>
         <div className="modal fade" id="modKomoditas" tabIndex="-1" aria-hidden="true">
-        <div className="modal-dialog modal-lg modal-simple">
-            <div className="modal-content p-3 pb-1">
-            <div className="modal-body">
-                <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                <div className="text-center mb-4">
-                <h3 className="address-title">Tambah Media Pembawa {cekdataMP.mediaPembawa === 'H' ? 'Hewan' : (cekdataMP.mediaPembawa === 'I' ? 'Ikan' : 'Tumbuhan')}</h3>
-                </div>
-                <form onSubmit={handleFormDetilMP(onSubmitDetilMP)} className="row g-3">
-                <input type="hidden" name='idPtk' {...registerDetilMP("idPtk")} />
-                {/* <input type="hidden" name='datenow' value={dateNow || ""} {...registerDetilMP("datenow")} /> */}
-                <input type="hidden" name='jenisKar' {...registerDetilMP("jenisKar")} />
+            <div className="modal-dialog modal-lg modal-simple">
+                <div className="modal-content p-3 pb-1">
+                    <div className="modal-body">
+                        <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        <div className="text-center mb-4">
+                            <h3 className="address-title">{cekdataDetilMP.idDetilMP ? "Edit" : "Tambah"} Media Pembawa {cekdataMP.mediaPembawa === 'H' ? 'Hewan' : (cekdataMP.mediaPembawa === 'I' ? 'Ikan' : 'Tumbuhan')}</h3>
+                        </div>
+                        <form onSubmit={handleFormDetilMP(onSubmitDetilMP)} className="row g-3">
+                        <input type="hidden" name='idDetilMP' {...registerDetilMP("idDetilMP")} />
+                        <input type="hidden" name='idPtk' {...registerDetilMP("idPtk")} />
+                        <input type="hidden" name='jenisKar' {...registerDetilMP("jenisKar")} />
                         {cekdataMP.mediaPembawa === 'T' ?
-                <>
-                <div className="col-6">
-                    <label className="form-label" htmlFor="peruntukanMP">Klasifikasi</label>
-                    <select name="peruntukanMP" id="peruntukanMP" data-gol={(cekdataMP.jenisMp === '4' ? 'A' : '!=A')} onClick={handlePeruntukanKT} {...registerDetilMP("peruntukanMP")} className="form-control form-control-sm">
-                    <option value="">--</option>
-                    {dataSelect.peruntukanMP}
-                    {/* <MasterKlasKT gol={cekdataMP.jenisMp === 'Benih' ? 'A' : 'BCD'}/> */}
-                    </select>
-                </div>
-                <div className="col-6">
-                    <label className="form-label" htmlFor="volumeNetto">Volume Netto<span className='text-danger'>*</span></label>
-                    <div className='row'>
-                        <div className="col-5" style={{paddingRight: '2px'}}>
-                            <input type="text" name='volumeNetto' id='volumeNetto' {...registerDetilMP("volumeNetto", {required: "Mohon isi volume netto."})} className={errorsMP.volumeNetto ? "form-control form-control-sm is-invalid" : "form-control form-control-sm"} />
-                        </div>
-                        <div className="col-7" style={{paddingLeft: '2px'}}>
-                            <select name="satuanNetto" id="satuanNetto" onClick={handleMasterSatuan} data-kar={cekdataMP.mediaPembawa === 'T' ? 'kt' : (cekdataMP.mediaPembawa === 'H' ? 'kh' : 'ki')} {...registerDetilMP("satuanNetto", {required: "Mohon isi satuan netto."})} className={errorsKontainer.satuanNetto ? "form-control form-control-sm is-invalid" : "form-control form-control-sm"}>
+                        <>
+                            <div className="col-6">
+                                <label className="form-label" htmlFor="peruntukanMP">Klasifikasi</label>
+                                <Controller
+                                    control={controlDetilMP}
+                                    name={"peruntukanMP"}
+                                    className="form-control form-control-sm"
+                                    rules={{ required: false }}
+                                    render={({ field: { value, onChange, ...field } }) => (
+                                        <Select styles={customStyles} placeholder={"Pilih klasifikasi tumbuhan.."} value={value ? {id: cekdataDetilMP.peruntukanMP, label: cekdataDetilMP.peruntukanMPView} : ""} {...field} onChange={(e) => setValueDetilMP("peruntukanMP", e.value) & setValueDetilMP("peruntukanMPView", e.label)} options={dataSelect.peruntukanMP} />
+                                    )}
+                                />
+                                <small className='text-danger'>{cekdataDetilMP.idDetilMP ? "*Tidak perlu dipilih ulang jika tidak ubah klasifikasi" : null}</small>
+                            </div>
+                            <div className="col-6">
+                                <label className="form-label" htmlFor="volumeNetto">Volume Netto<span className='text-danger'>*</span></label>
+                                <div className='row'>
+                                    <div className="col-5" style={{paddingRight: '2px'}}>
+                                        <input type="text" name='volumeNetto' id='volumeNetto' value={cekdataDetilMP.volumeNetto ? addCommas(removeNonNumeric(cekdataDetilMP.volumeNetto)) : ""} {...registerDetilMP("volumeNetto", {required: "Mohon isi volume netto."})} className={errorsMP.volumeNetto ? "form-control form-control-sm is-invalid" : "form-control form-control-sm"} />
+                                    </div>
+                                    <div className="col-7" style={{paddingLeft: '2px'}}>
+                                        <input type="hidden" name='satuanNetto' id='satuanNetto' {...registerDetilMP("satuanNetto")} value={1356} />
+                                        <input type="text" className='form-control form-control-sm' value={'KILOGRAM'} readOnly />
+                                        {/* <select name="satuanNetto" id="satuanNetto" onClick={handleMasterSatuan} data-kar={cekdataMP.mediaPembawa === 'T' ? 'kt' : (cekdataMP.mediaPembawa === 'H' ? 'kh' : 'ki')} {...registerDetilMP("satuanNetto", {required: "Mohon isi satuan netto."})} className={errorsKontainer.satuanNetto ? "form-control form-control-sm is-invalid" : "form-control form-control-sm"}>
+                                            <option value="">--</option>
+                                            {dataSelect.satuanNetto}
+                                        </select> */}
+                                    </div>
+                                </div>
+                                {errorsDetilMP.volumeNetto && <small className="text-danger">{errorsDetilMP.volumeNetto.message}</small>}
+                                {errorsDetilMP.satuanNetto && <small className="text-danger">{errorsDetilMP.satuanNetto.message}</small>}
+                            </div>
+                            <div className="col-6">
+                                <label className="form-label" htmlFor="komoditasMP">Komoditas<span className='text-danger'>*</span></label>
+                                <input type="hidden" name="komoditasMP" id="komoditasMP" {...registerDetilMP("komoditasMP", {required: "Mohon isi Komoditas."})} />
+                                <Controller
+                                    control={controlDetilMP}
+                                    name={"selectKomoditasMP"}
+                                    className="form-control form-control-sm"
+                                    rules={{ required: false }}
+                                    render={({ field: { value, onChange, ...field } }) => (
+                                        <Select styles={customStyles} placeholder={"Pilih komoditas.."} value={value ? {id: cekdataDetilMP.selectKomoditasMP, label: cekdataDetilMP.selectKomoditasMPView} : ""} onChange={(e) => setValueDetilMP("selectKomoditasMP", e.value) & setValueDetilMP("selectKomoditasMPView", e.label) & handleSetKomoditasSelect(e)} {...field} options={dataSelect.selectKomoditasMP} />
+                                    )}
+                                />
+                                <small className='text-danger'>{cekdataDetilMP.idDetilMP ? "*Tidak perlu dipilih ulang jika tidak ubah komoditas" : null}</small>
+                                {errorsDetilMP.komoditasMP && <small className="text-danger">{errorsDetilMP.komoditasMP.message}</small>}
+                            </div>
+                            <div className="col-6">
+                                <label className="form-label" htmlFor="volumeBrutto">Volume Brutto</label>
+                                <div className='row'>
+                                    <div className="col-5" style={{paddingRight: '2px'}}>
+                                        <input type="text" value={cekdataDetilMP.volumeBrutto ? addCommas(removeNonNumeric(cekdataDetilMP.volumeBrutto)) : ""} {...registerDetilMP("volumeBrutto", {required: "Mohon isi volume brutto."})} className={errorsMP.volumeBrutto ? "form-control form-control-sm is-invalid" : "form-control form-control-sm"} name='volumeBrutto' id='volumeBrutto' />
+                                    </div>
+                                    <div className="col-7" style={{paddingLeft: '2px'}}>
+                                        <input type="hidden" name='satuanBrutto' id='satuanBrutto' {...registerDetilMP("satuanBrutto")} value={1356} />
+                                        <input type="text" className='form-control form-control-sm' value={'KILOGRAM'} readOnly />
+                                        {/* <select name="satuanBrutto" id="satuanBrutto" data-kar={cekdataMP.mediaPembawa === 'T' ? 'kt' : (cekdataMP.mediaPembawa === 'H' ? 'kh' : 'ki')} onClick={handleMasterSatuan} {...registerDetilMP("satuanBrutto", {required: "Mohon isi satuan brutto."})} className={errorsMP.satuanBrutto ? "form-control form-control-sm is-invalid" : "form-control form-control-sm"}>
+                                            <option value="">--</option>
+                                            {dataSelect.satuanBrutto}
+                                        </select> */}
+                                    </div>
+                                </div>
+                                {errorsDetilMP.volumeBrutto && <small className="text-danger">{errorsDetilMP.volumeBrutto.message}</small>}
+                                {errorsDetilMP.satuanBrutto && <small className="text-danger">{errorsDetilMP.satuanBrutto.message}</small>}
+                            </div>
+                            <div className="col-6">
+                                <label className="form-label" htmlFor="kodeHSMp">Kode HS</label>
+                                <Controller
+                                    control={controlDetilMP}
+                                    name={"kodeHSMp"}
+                                    className="form-control form-control-sm"
+                                    rules={{ required: false }}
+                                    render={({ field: { value,onChange, ...field } }) => (
+                                        <Select styles={customStyles} placeholder={"Pilih kode HS.."} value={value ? {id: cekdataDetilMP.kodeHSMp, label: cekdataDetilMP.kodeHSMpView} : ""} onChange={(e) => setValueDetilMP("kodeHSMp", e.value) & setValueDetilMP("kodeHSMpView", e.label)} {...field} options={dataSelect.kodeHSMp} />
+                                    )}
+                                />
+                                <small className='text-danger'>{cekdataDetilMP.idDetilMP ? "*Tidak perlu dipilih ulang jika tidak ubah kode HS" : null}</small>
+                            </div>
+                            <div className="col-6">
+                                <label className="form-label" htmlFor="volumeLain">Volume Lain</label>
+                                <div className='row'>
+                                    <div className="col-5" style={{paddingRight: '2px'}}>
+                                        <input type="text" className='form-control form-control-sm' name='volumeLain' id='volumeLain' value={cekdataDetilMP.volumeLain ? addCommas(removeNonNumeric(cekdataDetilMP.volumeLain)) : ""} {...registerDetilMP("volumeLain")} />
+                                    </div>
+                                    <div className="col-7" style={{paddingLeft: '2px'}}>
+                                        <select name="satuanLain" id="satuanLain" data-kar={cekdataMP.mediaPembawa === 'T' ? 'kt' : (cekdataMP.mediaPembawa === 'H' ? 'kh' : 'ki')} onClick={handleMasterSatuan} className='form-control form-control-sm' {...registerDetilMP("satuanLain")}>
+                                            <option value="">--</option>
+                                            {dataSelect.satuanLain}
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                            <div className="col-6">
+                                <label className="form-label" htmlFor="namaUmum">Nama Umum</label>
+                                <input type='text' name="namaUmum" id="namaUmum" {...registerDetilMP("namaUmum")} className="form-control form-control-sm" />
+                            </div>
+                            <div className="col-6">
+                                <label className="form-label" htmlFor="nilaiBarangMP">Nilai Barang</label>
+                                <div className='row'>
+                                    <div className="col-7" style={{paddingRight: '2px'}}>
+                                        <input type="text" className='form-control form-control-sm' {...registerDetilMP("nilaiBarangMP")} name='nilaiBarangMP' id='nilaiBarangMP' />
+                                    </div>
+                                    <div className="col-5" style={{paddingLeft: '2px'}}>
+                                        <select name="satuanNilaiMP" id="satuanNilaiMP" className='form-control form-control-sm' {...registerDetilMP("satuanNilaiMP")} onClick={handleMataUang}>
+                                            <option value="">--</option>
+                                            {dataSelect.satuanNilaiMP}
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                            <div className="col-6">
+                                <label className="form-label" htmlFor="namaLatin">Nama Latin</label>
+                                <input type='text' name="namaLatin" id="namaLatin" {...registerDetilMP("namaLatin")} className="form-control form-control-sm" />
+                            </div>
+                            <div className="col-6">
+                            <label className="form-label" htmlFor="jumlahKemasanDetil">Jumlah Kemasan</label>
+                                <div className='row'>
+                                <div className='col-4' style={{paddingRight: '2px'}}>
+                                    <input type="number" className='form-control form-control-sm' {...registerDetilMP("jumlahKemasanDetil")} name='jumlahKemasanDetil' id='jumlahKemasanDetil' />
+                                </div>
+                                <div className='col-8' style={{paddingLeft: '2px'}}>
+                                    <select name="satuanKemasanDetil" id="satuanKemasanDetil" {...registerDetilMP("satuanKemasanDetil")} onClick={handleKemasan} className="form-control form-control-sm">
+                                        <option value="">--</option>
+                                        {dataSelect.satuanKemasanDetil}
+                                    </select>
+                                </div>
+                                </div>
+                            </div>
+                        </> : (cekdataMP.mediaPembawa === 'H' ?
+                        <>
+                            <div className="col-6">
+                                <label className="form-label" htmlFor="komoditasMPKH">Komoditas<span className='text-danger'>*</span></label>
+                                <input type="hidden" name='komoditasMPKHid' {...registerDetilMP("komoditasMPKHid")} />
+                                <input type="hidden" name='klasifikasiMPKHid' {...registerDetilMP("klasifikasiMPKHid")} />
+                                <Controller
+                                    control={controlDetilMP}
+                                    name={"komoditasMPKH"}
+                                    placeholder= 'Status'
+                                    className="form-control form-control-sm"
+                                    rules={{ required: false }}
+                                    render={({ field: { value,onChange, ...field } }) => (
+                                        <Select placeholder= 'Pilih Komoditas..' styles={customStyles}
+                                         value={value ? {id: cekdataDetilMP.komoditasMPKH, label: cekdataDetilMP.komoditasMPKHView } : ""} onChange={(e) => setValueDetilMP("komoditasMPKH", e.value) & setValueDetilMP("komoditasMPKHView", e.label) & handleSetKomoditasSelect(e)} {...field} options={dataSelect.komoditasMPKH} />
+                                    )}
+                                />
+                                <small className='text-danger'>{cekdataDetilMP.idDetilMP ? "*Tidak perlu dipilih ulang jika tidak ubah komoditas" : null}</small>
+                                {/* <select name="komoditasMP" id="komoditasMP" data-gol={cekdataMP.jenisMp} onClick={handleKomoditasKH} {...registerDetilMP("komoditasMP", {required: "Mohon isi Komoditas."})} className={errorsMP.komoditasMP ? "form-control form-control-sm is-invalid" : "form-control form-control-sm"} >
+                                        <option value="">--</option>
+                                        {dataSelect.komoditasMP}
+                                </select> */}
+                                {errorsDetilMP.komoditasMPKH && <small className="text-danger">{errorsDetilMP.komoditasMPKH.message}</small>}
+                            </div>
+                            <div className="col-6">
+                                <label className="form-label" htmlFor="kodeHSMpKH">Kode HS</label>
+                                <Controller
+                                    control={controlDetilMP}
+                                    name={"kodeHSMpKH"}
+                                    className="form-control form-control-sm"
+                                    rules={{ required: false }}
+                                    render={({ field: { value,onChange, ...field } }) => (
+                                        <Select styles={customStyles} placeholder={"Pilih kode HS.."} value={value ? {id: cekdataDetilMP.kodeHSMpKH, label: cekdataDetilMP.kodeHSMpKHView} : ""} onChange={(e) => setValueDetilMP("kodeHSMpKH", e.value) & setValueDetilMP("kodeHSMpKHView", e.label)} {...field} options={dataSelect.kodeHSMp} />
+                                    )}
+                                />
+                                <small className='text-danger'>{cekdataDetilMP.idDetilMP ? "*Tidak perlu dipilih ulang jika tidak ubah kode HS" : null}</small>
+                                {/* <select name="kodeHSMp" id="kodeHSMp" data-kar={cekdataMP.mediaPembawa} className="form-control form-control-sm" {...registerDetilMP("kodeHSMp")} onClick={handleMasterHS}>
                                 <option value="">--</option>
-                                {dataSelect.satuanNetto}
-                            </select>
+                                {dataSelect.kodeHSMp}
+                                </select> */}
+                            </div>
+                            <div className="col-6">
+                                <label className="form-label" htmlFor="namaUmumKH">Nama Umum</label>
+                                <input type='text' name="namaUmumKH" id="namaUmumKH" {...registerDetilMP("namaUmumKH")} className="form-control form-control-sm" />
+                            </div>
+                            <div className="col-6">
+                                <label className="form-label" htmlFor="namaLatinKH">Nama Latin</label>
+                                <input type='text' name="namaLatinKH" id="namaLatinKH" {...registerDetilMP("namaLatinKH")} className="form-control form-control-sm" />
+                            </div>
+                           <div className="col-6">
+                                <label className="form-label" htmlFor="jumlahMP">Jumlah</label>
+                                <div className='row'>
+                                <div className='col-7' style={{paddingRight: '2px'}}>
+                                    <input type="text" value={cekdataDetilMP.jumlahMP ? addCommas(removeNonNumeric(cekdataDetilMP.jumlahMP)) : ""} {...registerDetilMP("jumlahMP", {required: "Mohon isi satuan brutto."})} className={errorsMP.jumlahMP ? "form-control form-control-sm is-invalid" : "form-control form-control-sm"} name='jumlahMP' id='jumlahMP' />
+                                </div>
+                                <div className='col-5' style={{paddingLeft: '2px'}}>
+                                    <select name="satJumlahMP" id="satJumlahMP" data-kar={cekdataMP.mediaPembawa === 'T' ? 'kt' : (cekdataMP.mediaPembawa === 'H' ? 'kh' : 'ki')} onClick={handleMasterSatuan} {...registerDetilMP("satJumlahMP")} className="form-control form-control-sm">
+                                    <option value="">--</option>
+                                        {dataSelect.satJumlahMP}
+                                    </select>
+                                </div>
+                                </div>
+                            </div>
+                            <div className="col-6" style={{visibility: (cekdataMP.jenisMp === '1' ? "visible" : "hidden")}}>
+                                <label className="form-label" htmlFor="breedMP">Breed</label>
+                                <input type='text' name="breedMP" id="breedMP" {...registerDetilMP("breedMP")} className="form-control form-control-sm" />
+                            </div>
+                            <div className="col-6">
+                                <label className="form-label" htmlFor="nettoMP">Netto</label>
+                                <div className='row'>
+                                <div className='col-7' style={{paddingRight: '2px'}}>
+                                    <input type="text" className='form-control form-control-sm' value={cekdataDetilMP.nettoMP ? addCommas(removeNonNumeric(cekdataDetilMP.nettoMP)) : ""} {...registerDetilMP("nettoMP")} name='nettoMP' id='nettoMP' />
+                                </div>
+                                {/* ekor: 1122 || KG: 1356  */}
+                                <div className='col-5' style={{paddingLeft: '2px'}}>
+                                    {/* <input type="hidden" name='satNettoMP' id='satNettoMP' {...registerDetilMP("satNettoMP")} value={cekdataMP.jenisMp === '1' || cekdataMP.jenisMp === '6' ? '1122' : '1356'} />
+                                    <input type="text" className='form-control form-control-sm' value={cekdataMP.jenisMp === '1' || cekdataMP.jenisMp === '6' ? 'EKOR' : 'KILOGRAM'} readOnly /> */}
+                                    <input type="hidden" name='satNettoMP' id='satNettoMP' {...registerDetilMP("satNettoMP")} value={1356} />
+                                    <input type="text" className='form-control form-control-sm' value={'KILOGRAM'} readOnly />
+                                </div>
+                                </div>
+                            </div>
+                            <div className="col-6">
+                                <label className="form-label" htmlFor="nilaiBarangMPKH">Nilai Barang</label>
+                                <div className='row'>
+                                    <div className="col-7" style={{paddingRight: '2px'}}>
+                                        <input type="text" className='form-control form-control-sm' value={cekdataDetilMP.nilaiBarangMPKH ? addCommas(removeNonNumeric(cekdataDetilMP.nilaiBarangMPKH)) : ""} name='nilaiBarangMPKH' id='nilaiBarangMPKH' {...registerDetilMP("nilaiBarangMPKH")} />
+                                    </div>
+                                    <div className="col-5" style={{paddingLeft: '2px'}}>
+                                        <select name="satuanNilaiMPKH" id="satuanNilaiMPKH" onClick={handleMataUang} {...registerDetilMP("satuanNilaiMPKH")} className='form-control form-control-sm'>
+                                        <option value="">--</option>
+                                            {dataSelect.satuanNilaiMPKH}
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                            <div className="col-6">
+                                <label className="form-label" htmlFor="brutoMP">Bruto</label>
+                                <div className='row'>
+                                <div className='col-7' style={{paddingRight: '2px'}}>
+                                    <input type="text" value={cekdataDetilMP.brutoMP ? addCommas(removeNonNumeric(cekdataDetilMP.brutoMP)) : ""} {...registerDetilMP("brutoMP")} className='form-control form-control-sm' name='brutoMP' id='brutoMP' />
+                                </div>
+                                {/* ekor: 1122 || KG: 1356  */}
+                                <div className='col-5' style={{paddingLeft: '2px'}}>
+                                    {/* <input type="hidden" name='satBrutoMP' id='satBrutoMP' {...registerDetilMP("satBrutoMP")} value={cekdataMP.jenisMp === '1' || cekdataMP.jenisMp === '6' ? '1122' : '1356'} /> */}
+                                    {/* <input type="text" className='form-control form-control-sm' value={cekdataMP.jenisMp === '1' || cekdataMP.jenisMp === '6' ? 'EKOR' : 'KILOGRAM'} readOnly  /> */}
+                                    <input type="hidden" name='satBrutoMP' id='satBrutoMP' {...registerDetilMP("satBrutoMP")} value={1356} />
+                                    <input type="text" className='form-control form-control-sm' value={"KILOGRAM"} readOnly  />
+                                </div>
+                                </div>
+                            </div>
+                            <div className="col-6" style={{display: (cekdataMP.jenisMp === '1' ? "block" : "none")}}>
+                                <div className='row'>
+                                    <div className="col-4">
+                                        <label className="form-label" htmlFor="jantan">Jantan (Ekor)</label>
+                                        <input type="text" id="jantan" name="jantan" value={cekdataDetilMP.jantan ? addCommas(removeNonNumeric(cekdataDetilMP.jantan)) : ""} {...registerDetilMP("jantan")} className='form-control form-control-sm' />
+                                        </div>
+                                    <div className="col-4">
+                                        <label className="form-label" htmlFor="betina">Betina (Ekor)</label>
+                                        <input type="text" name='betina' id='betina' value={cekdataDetilMP.betina ? addCommas(removeNonNumeric(cekdataDetilMP.betina)) : ""} {...registerDetilMP("betina")} className='form-control form-control-sm' />
+                                    </div>
+                                </div>
+                            </div>
+                        </> : <p>Komoditas Ikan</p>)
+                        }
+                        <small className='text-danger'>*Format penulisan desimal menggunakan titik ( . )</small>
+                        <div className="col-12 text-center">
+                            <button type="submit" className="btn btn-primary me-sm-3 me-1">{cekdataDetilMP.idDetilMP ? "Edit" : "Tambah"}</button>
+                            <button
+                            type="reset"
+                            className="btn btn-label-secondary"
+                            data-bs-dismiss="modal"
+                            aria-label="Close">
+                            Tutup
+                            </button>
                         </div>
-                    </div>
-                    {errorsDetilMP.volumeNetto && <small className="text-danger">{errorsDetilMP.volumeNetto.message}</small>}
-                    {errorsDetilMP.satuanNetto && <small className="text-danger">{errorsDetilMP.satuanNetto.message}</small>}
-                </div>
-                <div className="col-6">
-                    <label className="form-label" htmlFor="komoditasMP">Komoditas<span className='text-danger'>*</span></label>
-                    <input type="hidden" name="komoditasMP" id="komoditasMP" {...registerDetilMP("komoditasMP", {required: "Mohon isi Komoditas."})} />
-                    <select name="selectKomoditasMP" id="selectKomoditasMP" onChange={handleSetKomoditasSelect} onClick={handleKomoditasKT} className={errorsMP.komoditasMP ? "form-control form-control-sm is-invalid" : "form-control form-control-sm"} >
-                            <option value="">--</option>
-                            {dataSelect.selectKomoditasMP}
-                            {/* <MasterKomKT/> */}
-                    </select>
-                    {errorsDetilMP.komoditasMP && <small className="text-danger">{errorsDetilMP.komoditasMP.message}</small>}
-                </div>
-                <div className="col-6">
-                    <label className="form-label" htmlFor="volumeBrutto">Volume Brutto</label>
-                    <div className='row'>
-                        <div className="col-5" style={{paddingRight: '2px'}}>
-                            <input type="text" {...registerDetilMP("volumeBrutto", {required: "Mohon isi volume brutto."})} className={errorsMP.volumeBrutto ? "form-control form-control-sm is-invalid" : "form-control form-control-sm"} name='volumeBrutto' id='volumeBrutto' />
-                        </div>
-                        <div className="col-7" style={{paddingLeft: '2px'}}>
-                            <select name="satuanBrutto" id="satuanBrutto" data-kar={cekdataMP.mediaPembawa === 'T' ? 'kt' : (cekdataMP.mediaPembawa === 'H' ? 'kh' : 'ki')} onClick={handleMasterSatuan} {...registerDetilMP("satuanBrutto", {required: "Mohon isi satuan brutto."})} className={errorsMP.satuanBrutto ? "form-control form-control-sm is-invalid" : "form-control form-control-sm"}>
-                                <option value="">--</option>
-                                {dataSelect.satuanBrutto}
-                            </select>
-                        </div>
-                    </div>
-                    {errorsDetilMP.volumeBrutto && <small className="text-danger">{errorsDetilMP.volumeBrutto.message}</small>}
-                    {errorsDetilMP.satuanBrutto && <small className="text-danger">{errorsDetilMP.satuanBrutto.message}</small>}
-                </div>
-                <div className="col-6">
-                    <label className="form-label" htmlFor="kodeHSMp">Kode HS</label>
-                    <select name="kodeHSMp" id="kodeHSMp" data-kar={cekdataMP.mediaPembawa} className="form-control form-control-sm" {...registerDetilMP("kodeHSMp")} onClick={handleMasterHS}>
-                    <option value="">--</option>
-                    {dataSelect.kodeHSMp}
-                    </select>
-                </div>
-                <div className="col-6">
-                    <label className="form-label" htmlFor="volumeLain">Volume Lain</label>
-                    <div className='row'>
-                        <div className="col-5" style={{paddingRight: '2px'}}>
-                            <input type="text" className='form-control form-control-sm' name='volumeLain' id='volumeLain' {...registerDetilMP("volumeLain")} />
-                        </div>
-                        <div className="col-7" style={{paddingLeft: '2px'}}>
-                            <select name="satuanLain" id="satuanLain" data-kar={cekdataMP.mediaPembawa === 'T' ? 'kt' : (cekdataMP.mediaPembawa === 'H' ? 'kh' : 'ki')} onClick={handleMasterSatuan} className='form-control form-control-sm' {...registerDetilMP("satuanLain")}>
-                                <option value="">--</option>
-                                {dataSelect.satuanLain}
-                            </select>
-                        </div>
+                        </form>
                     </div>
                 </div>
-                <div className="col-6">
-                    <label className="form-label" htmlFor="namaUmum">Nama Umum</label>
-                    <input type='text' name="namaUmum" id="namaUmum" {...registerDetilMP("namaUmum")} className="form-control form-control-sm" />
-                </div>
-                <div className="col-6">
-                    <label className="form-label" htmlFor="nilaiBarangMP">Nilai Barang</label>
-                    <div className='row'>
-                        <div className="col-7" style={{paddingRight: '2px'}}>
-                            <input type="text" className='form-control form-control-sm' {...registerDetilMP("nilaiBarangMP")} name='nilaiBarangMP' id='nilaiBarangMP' />
-                        </div>
-                        <div className="col-5" style={{paddingLeft: '2px'}}>
-                            <select name="satuanNilaiMP" id="satuanNilaiMP" className='form-control form-control-sm' {...registerDetilMP("satuanNilaiMP")} onClick={handleMataUang}>
-                                <option value="">--</option>
-                                {dataSelect.satuanNilaiMP}
-                            </select>
-                        </div>
-                    </div>
-                </div>
-                <div className="col-6">
-                    <label className="form-label" htmlFor="namaLatin">Nama Latin</label>
-                    <input type='text' name="namaLatin" id="namaLatin" {...registerDetilMP("namaLatin")} className="form-control form-control-sm" />
-                </div>
-                <div className="col-6">
-                <label className="form-label" htmlFor="jumlahKemasanDetil">Jumlah Kemasan</label>
-                    <div className='row'>
-                    <div className='col-4' style={{paddingRight: '2px'}}>
-                        <input type="number" className='form-control form-control-sm' {...registerDetilMP("jumlahKemasanDetil")} name='jumlahKemasanDetil' id='jumlahKemasanDetil' />
-                    </div>
-                    <div className='col-8' style={{paddingLeft: '2px'}}>
-                        <select name="satuanKemasanDetil" id="satuanKemasanDetil" {...registerDetilMP("satuanKemasanDetil")} onClick={handleKemasan} className="form-control form-control-sm">
-                            <option value="">--</option>
-                            {dataSelect.satuanKemasanDetil}
-                        </select>
-                    </div>
-                    </div>
-                </div>
-                </> :
-                <>
-                <div className="col-6">
-                    <label className="form-label" htmlFor="komoditasMP">Komoditas<span className='text-danger'>*</span></label>
-                    <select name="komoditasMP" id="komoditasMP" data-gol={cekdataMP.jenisMp} onClick={handleKomoditasKH} {...registerDetilMP("komoditasMP", {required: "Mohon isi Komoditas."})} className={errorsMP.komoditasMP ? "form-control form-control-sm is-invalid" : "form-control form-control-sm"} >
-                            <option value="">--</option>
-                            {dataSelect.komoditasMP}
-                            {/* <MasterKomKT/> */}
-                    </select>
-                    {errorsDetilMP.komoditasMP && <small className="text-danger">{errorsDetilMP.komoditasMP.message}</small>}
-                </div>
-                <div className="col-6">
-                    <label className="form-label" htmlFor="kodeHSMp">Kode HS</label>
-                    <select name="kodeHSMp" id="kodeHSMp" data-kar={cekdataMP.mediaPembawa} className="form-control form-control-sm" {...registerDetilMP("kodeHSMp")} onClick={handleMasterHS}>
-                    <option value="">--</option>
-                    {dataSelect.kodeHSMp}
-                    </select>
-                </div>
-                <div className="col-6">
-                    <label className="form-label" htmlFor="jumlahMP">Jumlah</label>
-                    <div className='row'>
-                    <div className='col-7' style={{paddingRight: '2px'}}>
-                        <input type="number" {...registerDetilMP("jumlahMP", {required: "Mohon isi satuan brutto."})} className={errorsMP.jumlahMP ? "form-control form-control-sm is-invalid" : "form-control form-control-sm"} name='jumlahMP' id='jumlahMP' />
-                    </div>
-                    <div className='col-5' style={{paddingLeft: '2px'}}>
-                        <select name="satJumlahMP" id="satJumlahMP" data-kar={cekdataMP.mediaPembawa === 'T' ? 'kt' : (cekdataMP.mediaPembawa === 'H' ? 'kh' : 'ki')} onClick={handleMasterSatuan} {...registerDetilMP("satJumlahMP")} className="form-control form-control-sm">
-                        <option value="">--</option>
-                            {dataSelect.satJumlahMP}
-                        </select>
-                    </div>
-                    </div>
-                </div>
-                <div className="col-6">
-                    <label className="form-label" htmlFor="breedMP">Breed</label>
-                    <input type='text' name="breedMP" id="breedMP" {...registerDetilMP("breedMP")} className="form-control form-control-sm" />
-                </div>
-                <div className="col-6">
-                    <label className="form-label" htmlFor="nettoMP">Netto</label>
-                    <div className='row'>
-                    <div className='col-7' style={{paddingRight: '2px'}}>
-                        <input type="text" className='form-control form-control-sm' {...registerDetilMP("nettoMP")} name='nettoMP' id='nettoMP' />
-                    </div>
-                    {/* ekor: 1122 || KG: 1356  */}
-                    <div className='col-5' style={{paddingLeft: '2px'}}>
-                        <input type="hidden" name='satNettoMP' id='satNettoMP' {...registerDetilMP("satNettoMP")} value={cekdataMP.jenisMp === '1' || cekdataMP.jenisMp === '6' ? '1122' : '1356'} />
-                        <input type="text" className='form-control form-control-sm' value={cekdataMP.jenisMp === '1' || cekdataMP.jenisMp === '6' ? 'EKOR' : 'KILOGRAM'} readOnly />
-                    </div>
-                    </div>
-                </div>
-                <div className="col-6">
-                    <label className="form-label" htmlFor="nilaiBarangMP">Nilai Barang</label>
-                    <div className='row'>
-                        <div className="col-7" style={{paddingRight: '2px'}}>
-                            <input type="text" className='form-control form-control-sm' name='nilaiBarangMP' id='nilaiBarangMP' {...registerDetilMP("nilaiBarangMP")} />
-                        </div>
-                        <div className="col-5" style={{paddingLeft: '2px'}}>
-                            <select name="satuanNilaiMP" id="satuanNilaiMP" onClick={handleMataUang} {...registerDetilMP("satuanNilaiMP")} className='form-control form-control-sm'>
-                            <option value="">--</option>
-                                {dataSelect.satuanNilaiMP}
-                            </select>
-                        </div>
-                    </div>
-                </div>
-                <div className="col-6">
-                    <label className="form-label" htmlFor="brutoMP">Bruto</label>
-                    <div className='row'>
-                    <div className='col-7' style={{paddingRight: '2px'}}>
-                        <input type="text" {...registerDetilMP("brutoMP")} className='form-control form-control-sm' name='brutoMP' id='brutoMP' />
-                    </div>
-                    {/* ekor: 1122 || KG: 1356  */}
-                    <div className='col-5' style={{paddingLeft: '2px'}}>
-                        <input type="hidden" name='satBrutoMP' id='satBrutoMP' {...registerDetilMP("satBrutoMP")} value={cekdataMP.jenisMp === '1' || cekdataMP.jenisMp === '6' ? '1122' : '1356'} />
-                        <input type="text" className='form-control form-control-sm' value={cekdataMP.jenisMp === '1' || cekdataMP.jenisMp === '6' ? 'EKOR' : 'KILOGRAM'} readOnly  />
-                    </div>
-                    </div>
-                </div>
-                </>
-                }
-                {/* <div className="col-6">
-                    <label className="form-label" htmlFor="ketTambahan">Keterangan Tambahan</label>
-                    <input type='text' name="ketTambahan" id="ketTambahan" {...registerDetilMP("ketTambahan")} className="form-control form-control-sm" />
-                </div> */}
-                
-                <div className="col-12 text-center">
-                    <button type="submit" className="btn btn-primary me-sm-3 me-1">Tambah</button>
-                    <button
-                    type="reset"
-                    className="btn btn-label-secondary"
-                    data-bs-dismiss="modal"
-                    aria-label="Close">
-                    Tutup
-                    </button>
-                </div>
-                </form>
             </div>
-            </div>
-        </div>
         </div>
     </div>
   )
