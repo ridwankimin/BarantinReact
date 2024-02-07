@@ -30,10 +30,16 @@ import PtkHistory from '../../model/PtkHistory'
 // import $ from 'jquery';
 // import './assets/vendor/libs/popper/popper.js'
 // import '../../assets/vendor/libs/popper/popper.js'
-import '../../assets/vendor/libs/bs-stepper/bs-stepper.css'
-import '../../assets/vendor/libs/bs-stepper/bs-stepper.js'
+// import '../../assets/vendor/libs/bs-stepper/bs-stepper.css'
+// import '../../assets/vendor/libs/bs-stepper/bs-stepper.js'
+const modelPemohon = new PtkModel()
+const modelMaster = new Master()
+const log = new PtkHistory()
 
 function DocK11() {
+    require("../../assets/vendor/libs/bs-stepper/bs-stepper.css")
+    require("../../assets/vendor/libs/bs-stepper/bs-stepper.js")
+    
     let navigate = useNavigate();
     // const { idPtk } = useParams()
     // Cookies.remove("idPtkPage");
@@ -155,7 +161,7 @@ function DocK11() {
     }
     
     function handleKomKTDetil() {
-        const modelMaster = new Master()
+        // const modelMaster = new Master()
         
         const resKomKT = modelMaster.masterKomKT()
         resKomKT
@@ -176,7 +182,7 @@ function DocK11() {
     
     function handleKomKHIDetil(e) {
         //hidup 1/6 | produk 2/7 | mpl 3/8
-        const modelMaster = new Master()
+        // const modelMaster = new Master()
         const resKomKT = modelMaster.masterHS(cekdataMP.mediaPembawa)
         resKomKT
         .then((response) => {
@@ -502,7 +508,7 @@ function DocK11() {
     // const cekdataKonfirmasi = watchKonfirmasi()
     const cekdataVerify = watchVerify()
 
-    let master = useMemo(() => new Master(), [])
+    let master = useMemo(() => modelMaster, [])
 
     const getListNegara = useCallback(async () => {
         try {
@@ -658,7 +664,7 @@ function DocK11() {
             noPermohonan: idPtk ? base64_decode(ptkNomor[2]) : "",
         }));
         if(idPtk) {
-            const modelPemohon = new PtkModel();
+            // const modelPemohon = new PtkModel();
             const response = modelPemohon.getPtkId(base64_decode(ptkNomor[1]));
             response
             .then((response) => {
@@ -941,7 +947,7 @@ function DocK11() {
     // }
     
     const onSubmitDokumen = (data) => {
-        const modelPemohon = new PtkModel();
+        // const modelPemohon = new PtkModel();
 
         const response = modelPemohon.pushDetilDokumen(data);
             response
@@ -967,7 +973,7 @@ function DocK11() {
         // setValueDetilMP("idPtk", dataIdPage.noIdPtk)
         // setValueDetilMP("datenow", dateNow())
         console.log(data.jenisKar)
-        const modelPemohon = new PtkModel();
+        // const modelPemohon = new PtkModel();
 
         const response = modelPemohon.pushKomoditi(data);
             response
@@ -994,7 +1000,7 @@ function DocK11() {
     // console.count()
 
     const onSubmitPemohon = (data) => {
-    const modelPemohon = new PtkModel();
+    // const modelPemohon = new PtkModel();
 
         if(idPtk) {
             // setValuePemohon("idPtk", dataIdPage.noIdPtk)
@@ -1060,7 +1066,7 @@ function DocK11() {
 
     const onSubmitPelabuhan = (data) => {
         // setValuePelabuhan("idPtk", noIdPtk)
-        const modelPemohon = new PtkModel();
+        // const modelPemohon = new PtkModel();
         
         if(idPtk) {
             // setValuePelabuhan("idPtk", dataIdPage.noIdPtk)
@@ -1084,7 +1090,7 @@ function DocK11() {
     };
     
     const onSubmitKomoditas = (data) => {
-        const modelPemohon = new PtkModel();
+        // const modelPemohon = new PtkModel();
 
         if(idPtk) {
             // setValueMP("idPtk", dataIdPage.noIdPtk)
@@ -1111,7 +1117,7 @@ function DocK11() {
         console.log(data)
         setFormTab(values => ({...values, tab5: false}))
         setWizardPage(wizardPage + 1)
-        const modelPemohon = new PtkModel();
+        // const modelPemohon = new PtkModel();
 
         if(idPtk) {
             const response = modelPemohon.tabTempatPeriksa(data);
@@ -1132,7 +1138,7 @@ function DocK11() {
     };
     
     const onSubmitKonfirmasi = (data) => {
-        const modelPemohon = new PtkModel();
+        // const modelPemohon = new PtkModel();
 
         if(idPtk) {
             const response = modelPemohon.tabKonfirmasi(data);
@@ -1161,7 +1167,7 @@ function DocK11() {
     };
     
     const onSubmitVerify = (data) => {
-        const modelPemohon = new PtkModel();
+        // const modelPemohon = new PtkModel();
 
         if(idPtk) {
             const response = modelPemohon.ptkVerify(data);
@@ -1196,8 +1202,8 @@ function DocK11() {
                     setValueVerify("noDokumen", response.data.data.no_dok_permohonan);
                     
                     //start save history
-                    const log = new PtkHistory();
-                    const resHsy = log.pushHistory(cekdataDiri.idPtk, "p0", "K-1.1", (dataIdPage.noPermohonan ? 'put' : 'post'));
+                    // const log = new PtkHistory();
+                    const resHsy = log.pushHistory(cekdataDiri.idPtk, "p0", "K-1.1", (dataIdPage.noPermohonan ? 'UPDATE' : 'NEW'));
                     resHsy
                     .then((response) => {
                         if(response.data.status === '201') {
@@ -1227,7 +1233,7 @@ function DocK11() {
     
       const onSubmitKontainer = (data) => {
         // setValueKontainer("idPtk", noIdPtk);
-        const modelPemohon = new PtkModel();
+        // const modelPemohon = new PtkModel();
         // setValueKontainer("idPtk", dataIdPage.noIdPtk)
         // setValueKontainer("datenow", dateNow())
         
@@ -1368,7 +1374,7 @@ function DocK11() {
     // useEffect(()=>{
         function dataKontainerPtk() {
             if(wizardPage === 2) {
-                const modelPemohon = new PtkModel();
+                // const modelPemohon = new PtkModel();
                 const response = modelPemohon.detilKontainerPtk(dataIdPage.noIdPtk);
                 // console.log(noIdPtk)
     
@@ -1388,7 +1394,7 @@ function DocK11() {
         
         function dataDokumenPtk() {
             if(wizardPage === 4) {
-                const modelPemohon = new PtkModel();
+                // const modelPemohon = new PtkModel();
                 // console.log(wizardPage)
                 // console.log(dataIdPage.noIdPtk)
                 const response = modelPemohon.getDokumenPtkId(dataIdPage.noIdPtk);
@@ -1410,7 +1416,7 @@ function DocK11() {
         
         function dataKomoditiPtk() {
             if(wizardPage === 3) {
-                const modelPemohon = new PtkModel();
+                // const modelPemohon = new PtkModel();
                 const response = modelPemohon.getKomoditiPtkId(dataIdPage.noIdPtk, cekdataMP.mediaPembawa);
                 // console.log(dataIdPage.noIdPtk)
                 // console.log(cekdataMP.mediaPembawa)
@@ -1472,7 +1478,7 @@ function DocK11() {
     }
     
     function handleEditKontainer(e) {
-        const modelPemohon = new PtkModel();
+        // const modelPemohon = new PtkModel();
         const response = modelPemohon.detilKontainerId(e.target.dataset.header);
         response
         .then((res) => {
@@ -1563,7 +1569,7 @@ function DocK11() {
     
     function handleEditDokumen(e) {
         // console.log(e.target.dataset.header)
-        const modelPemohon = new PtkModel();
+        // const modelPemohon = new PtkModel();
         const response = modelPemohon.getDokumenId(e.target.dataset.header);
         response
         .then((res) => {

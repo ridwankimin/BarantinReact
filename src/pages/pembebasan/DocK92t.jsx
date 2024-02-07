@@ -35,7 +35,7 @@ function DocK92t() {
                 if(response.data.status === '201') {
                     //start save history
                     const log = new PtkHistory();
-                    const resHsy = log.pushHistory(data.idPtk, "p8", "K-9.2t", (data.idDok92t ? 'put' : 'post'));
+                    const resHsy = log.pushHistory(data.idPtk, "p8", "K-9.2t", (data.idDok92t ? 'UPDATE' : 'NEW'));
                     resHsy
                     .then((response) => {
                         if(response.data.status === '201') {
