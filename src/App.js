@@ -4,6 +4,8 @@ import Login from './layout/Login';
 import Wrapper from './layout/Wrapper';
 
 function App() {
+  // console.log(Cookies.get("masterNegara"))
+  // Cookies.remove("masterNegara");
   // Cookies.remove("token");
   // Cookies.remove("isLogin");
   // const SetCookie = () => {

@@ -1,3 +1,4 @@
+/* eslint-disable jsx-a11y/anchor-is-valid */
 import Cookies from 'js-cookie';
 import React, { useEffect, useState } from 'react';
 import {decode as base64_decode} from 'base-64';
@@ -6,9 +7,51 @@ import PtkModel from '../../../model/PtkModel';
 import PtkSurtug from '../../../model/PtkSurtug';
 import PnPelepasan from '../../../model/PnPelepasan';
 import PtkHistory from '../../../model/PtkHistory';
+// import Select from 'react-select';
+import SpinnerDot from '../../../component/loading/SpinnerDot';
+import PnPerlakuan from '../../../model/PnPerlakuan';
+const log = new PtkHistory()
+const modelPerlakuan = new PnPerlakuan();
+const modelPemohon = new PtkModel();
+// const customStyles = {
+//     control: (provided, state) => ({
+//       ...provided,
+//       background: '#fff',
+//       borderColor: '#D4D8DD',
+//       cursor: 'text',
+//       minHeight: '30px',
+//       height: '30px',
+//       boxShadow: state.isFocused ? null : null,
+//     }),
+    
+//     valueContainer: (provided, state) => ({
+//         ...provided,
+//         height: '30px',
+//         padding: '0 6px'
+//     }),
+    
+//     input: (provided, state) => ({
+//         ...provided,
+//         margin: '0px',
+//     }),
+//     indicatorSeparator: state => ({
+//         display: 'none',
+//     }),
+//     indicatorsContainer: (provided, state) => ({
+//         ...provided,
+//         height: '30px',
+//     }),
+//   };
+
+const addCommas = num => num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+const removeNonNumeric = num => num.toString().replace(/[^0-9.]/g, "");
 
 function DocKT1() {
     const idPtk = Cookies.get("idPtkPage");
+    let [loadKomoditi, setLoadKomoditi] = useState(false)
+    let [loadKomoditiPesan, setLoadKomoditiPesan] = useState("")
+    let [datasend, setDataSend] = useState([])
+    
     let [data, setData] = useState({
         noAju: "",
         noIdPtk: "",
@@ -16,56 +59,169 @@ function DocKT1() {
         tglDokumen: "",
     })
 
+    function addZero(i) {
+        if (i < 10) {i = "0" + i}
+        return i;
+    }
+
+    // const date = new Date();
+    // function dateNow() {
+    //     let n = date.getFullYear() + '-' + addZero(date.getMonth() + 1) + '-' + addZero(date.getDate()) + ' ' + addZero(date.getHours()) + ':' + addZero(date.getMinutes()) + ":" + addZero(date.getSeconds());
+    //     return n;
+    // }
+
     const {
         register,
         setValue,
         handleSubmit,
-        watch,
+        // watch,
         formState: { errors },
     } = useForm();
 
+    const {
+        register: registerMPKT1,
+        setValue: setValueMPKT1,
+        // control: controlMPKT1,
+        watch: watchMPKT1,
+        handleSubmit: handleFormMPKT1,
+        // reset: resetFormKomoditi,
+        formState: { errors: errorsMPKT1 },
+    } = useForm({
+        defaultValues: {
+            idMPKT1: "",
+            volumeNetto: "",
+            volumeLain: "",
+            satuanLain: "",
+            namaUmum: "",
+            namaLatin: "",
+          }
+        })
+
+    const cekdataMPKT1 = watchMPKT1()
+
     const onSubmit = (data) => {
         console.log(data)
-        const model = new PnPelepasan();
-        const response = model.eksporKT(data);
-        response
-        .then((response) => {
-            console.log(response.data)
-            if(response.data) {
-                if(response.data.status === '201') {
-                    //start save history
-                    const log = new PtkHistory();
-                    const resHsy = log.pushHistory(data.idPtk, "p8", "K-T.1", (data.idDokKT1 ? 'UPDATE' : 'NEW'));
-                    resHsy
-                    .then((response) => {
-                        if(response.data.status === '201') {
-                            console.log("history saved")
-                        }
-                    })
-                    .catch((error) => {
-                        console.log(error.response.data);
-                    });
-                    //end save history
+        // const model = new PnPelepasan();
+        // const response = model.eksporKT(data);
+        // response
+        // .then((response) => {
+        //     console.log(response.data)
+        //     if(response.data) {
+        //         if(response.data.status === '201') {
+        //             //start save history
+        //             // const log = new PtkHistory();
+        //             const resHsy = log.pushHistory(data.idPtk, "p8", "K-T.1", (data.idDokKT1 ? 'UPDATE' : 'NEW'));
+        //             resHsy
+        //             .then((response) => {
+        //                 if(response.data.status === '201') {
+        //                     console.log("history saved")
+        //                 }
+        //             })
+        //             .catch((error) => {
+        //                 console.log(error.response.data);
+        //             });
+        //             //end save history
 
-                    alert(response.data.status + " - " + response.data.message)
-                    setValue("idDokKT1", response.data.data.id)
-                    setValue("noDokKT1", response.data.data.nomor)
+        //             alert(response.data.status + " - " + response.data.message)
+        //             setValue("idDokKT1", response.data.data.id)
+        //             setValue("noDokKT1", response.data.data.nomor)
+        //         }
+        //     }
+        // })
+        // .catch((error) => {
+        //     console.log(error);
+        //     alert(error.response.status + " - " + error.response.data.message)
+        // });
+    }
+
+    function onSubmitMPKT1(data) {
+        console.log(data)
+    }
+
+    function handleEditKomoditas(e) {
+        setValueMPKT1("idMPKT1", e.target.dataset.header)
+        setValueMPKT1("idPtk", e.target.dataset.ptk)
+        setValueMPKT1("jenisKar", "T")
+        const cell = e.target.closest('tr')
+        setValueMPKT1("volumeNetto", cell.cells[5].innerHTML)
+        setValueMPKT1("satuanNetto", cell.cells[6].innerHTML)
+        setValueMPKT1("volumeLain", cell.cells[7].innerHTML)
+        setValueMPKT1("satuanLain", cell.cells[8].innerHTML)
+        setValueMPKT1("namaUmum", cell.cells[3].innerHTML)
+        setValueMPKT1("namaLatin", cell.cells[4].innerHTML)
+    }
+    
+    function handleEditKomoditasAll() {
+        setLoadKomoditi(true)
+        data.listKomoditas?.map((item, index) => (
+            // console.log(datasend[index])
+            log.updateKomoditiP8(item.id, datasend[index])
+                .then((response) => {
+                    if(response.data.status === '201') {
+                        console.log("history saved")
+                    }
+                })
+                .catch((error) => {
+                    setLoadKomoditi(true)
+                    setLoadKomoditiPesan("Terjadi error pada saat simpan, mohon refresh halaman dan coba lagi.")
+                    console.log(error.response.data);
+                })
+            )
+        )
+        setLoadKomoditi(true)
+    }
+
+    function handleGetDokumenPerlakuan(e) {
+        const resLaporan = modelPerlakuan.getPtkByDokumen(data.noIdPtk, e.target.value)
+        resLaporan
+        .then((response) => {
+            if(typeof response.data != "string") {
+                setData(values => ({...values,
+                    errorData5: false
+                }))
+                if(response.data.status === '200') {
+                    setValue("idPerlakuan", response.data.data[0].id)
+                    setValue("tipePerlakuan", response.data.data[0].tipe_perlakuan_id)
+                    setValue("tglPerlakuan", response.data.data[0].tgl_perlakuan_mulai)
+                    setValue("bahanKimia", response.data.data[0].pestisida_id)
+                    setValue("konsentrasi", response.data.data[0].dosis_aplikasi)
+                    setValue("durasiPerlakuan", response.data.data[0].lama_papar)
+                    setValue("temperatur", response.data.data[0].suhu_komoditi)
+                    setValue("adInfo", response.data.data[0].ket_perlakuan_lain)
                 }
+            } else {
+                setData(values => ({...values,
+                    errorData5: true
+                }))
             }
         })
         .catch((error) => {
-            console.log(error);
+            console.log(error.response);
             alert(error.response.status + " - " + error.response.data.message)
         });
     }
 
+    function getContainerPtk() {
+        if(data.listKontainer) {
+            let noKontainerPtk = data.listKontainer?.map(item => {
+                return item.nomor + "/" + item.segel
+            })
+            setValue("tandaKhusus", "CONT/SEAL NO: " + noKontainerPtk.join("; "))
+        } else {
+            alert("Gagal tarik data kontainer, silahkan refresh halaman dan coba lagi")
+        }
+    }
+
     useEffect(()=>{
         if(idPtk) {
+            const date = new Date();
+            setValue("tglDokKT1",  date.getFullYear() + '-' + addZero(date.getMonth() + 1) + '-' + addZero(date.getDate()) + ' ' + addZero(date.getHours()) + ':' + addZero(date.getMinutes()) + ":" + addZero(date.getSeconds()))
+                    
             const tglPtk = Cookies.get("tglPtk");
             let ptkDecode = idPtk ? base64_decode(idPtk) : "";
             let ptkNomor = idPtk ? ptkDecode.split('m0R3N0r1R') : "";
             
-            const modelPemohon = new PtkModel();
+            // const modelPemohon = new PtkModel();
             const response = modelPemohon.getPtkId(base64_decode(ptkNomor[1]));
             response
             .then((response) => {
@@ -94,12 +250,27 @@ function DocKT1() {
                         // mpTercetak: namaUmumMP.join(";"),
                         listPtk: response.data.data.ptk,
                         listKomoditas: response.data.data.ptk_komoditi,
+                        listKontainer: response.data.data.ptk_kontainer,
                         listDokumen: response.data.data.ptk_dokumen
                     }));
+
+                    var arrayKomKT = response.data.data.ptk_komoditi?.map(item => {
+                        return {
+                            namaUmum: item.nama_umum_tercetak,
+                            namaLatin: item.nama_latin_tercetak,
+                            jantan: null,
+                            betina: null,
+                            volumeP8: item.volume_lain,
+                            nettoP8: item.volume_netto
+                        }
+                    })
+                    setDataSend(arrayKomKT)
+                    // console.log(arrayKomKT)
                     
                     setValue("tandaKhusus", response.data.data.ptk.tanda_khusus)
                     setValue("namaUmum", namaUmumMP.join(";"))
                     setValue("namaIlmiah", namaIlmiahMP.join(";"))
+                    setValue("bentukTercetak", response.data.data.ptk.merk_kemasan)
                     setValue("jmlTercetak", VolumeMP.join(";"))
                     setValue("karantinaTujuan", response.data.data.ptk.negara_penerima)
                     setValue("entryPoint", response.data.data.ptk.pelabuhan_bongkar + ", " + response.data.data.ptk.negara_bongkar)
@@ -110,6 +281,7 @@ function DocKT1() {
             .catch((error) => {
                 console.log(error.response);
             });
+            
 
             const modelSurtug = new PtkSurtug();
                 // 1: penugasan periksa administratif
@@ -133,7 +305,11 @@ function DocKT1() {
                 // alert(error.response.status + " - " + error.response.data.message)
             });
         }
+        // console.log(datasend[0])
+        
     },[idPtk, setValue])
+
+    // setValue("tglDokKT1", dateNow())
 
   return (
     <div className="container-xxl flex-grow-1 container-p-y">
@@ -147,15 +323,15 @@ function DocKT1() {
                     <div className="card-header mb-2 p-2" style={{backgroundColor: '#123138'}}>
                         <div className="card-action-title">
                             <div className='row'>
-                                <label className="col-sm-1 col-form-label text-sm-end" htmlFor="noDok"><b>No PTK</b></label>
+                                <label className="col-sm-1 col-form-label text-sm-end text-lightest" htmlFor="noDok"><b>No PTK</b></label>
                                 <div className="col-sm-3">
                                     <input type="text" id="noDok" value={data.noDokumen || ""} className="form-control form-control-sm" placeholder="Nomor PTK" disabled />
                                 </div>
-                                <label className="col-sm-2 col-form-label text-sm-end" htmlFor="noSurtug"><b>No Surat Tugas</b></label>
+                                <label className="col-sm-2 col-form-label text-sm-end text-lightest" htmlFor="noSurtug"><b>No Surat Tugas</b></label>
                                 <div className="col-sm-3">
                                     <input type="text" id="noSurtug" value={data.noSurtug || ""} className="form-control form-control-sm" placeholder="Nomor Surat Tugas" disabled />
                                 </div>
-                                <label className="col-sm-1 col-form-label" htmlFor="tglSurtug"><b>Tanggal</b></label>
+                                <label className="col-sm-1 col-form-label text-lightest" htmlFor="tglSurtug"><b>Tanggal</b></label>
                                 <div className="col-sm-2">
                                     <input type="text" id='tglSurtug' value={data.tglSurtug || ""} className='form-control form-control-sm' disabled/>
                                 </div>
@@ -164,7 +340,7 @@ function DocKT1() {
                         <div className="card-action-element">
                             <ul className="list-inline mb-0">
                                 <li className="list-inline-item">
-                                    <a href="#" className="card-collapsible"><i className="tf-icons bx bx-chevron-up"></i></a>
+                                    <a href="#" className="card-collapsible"><i className="tf-icons fa-solid fa-angle-top"></i></a>
                                 </li>
                             </ul>
                         </div>
@@ -207,13 +383,13 @@ function DocKT1() {
                                 <div className="row mb-3">
                                         <label className="col-sm-2 col-form-label text-sm-start" htmlFor="karantinaTujuan">To NPPO <span className='text-danger'>*</span></label>
                                         <div className='col-sm-1' style={{paddingRight:0}}>
-                                            <input type="text" id="karantinaTujuanDepan" name='karantinaTujuanDepan' {...register("karantinaTujuanDepan")} class="form-control form-control-sm" />
+                                            <input type="text" id="karantinaTujuanDepan" name='karantinaTujuanDepan' {...register("karantinaTujuanDepan")} className="form-control form-control-sm" />
                                         </div>
                                         <div className='col-sm-2' style={{paddingLeft: 0, paddingRight:0}}>
                                             <input type="text" id="karantinaTujuan" name='karantinaTujuan' {...register("karantinaTujuan")} className="form-control form-control-sm" placeholder="To NPPO.." disabled />
                                         </div>
                                         <div className='col-sm-1' style={{paddingLeft:0}}>
-                                            <input type="text" id="karantinaTujuanBeakang" name='karantinaTujuanBeakang' {...register("karantinaTujuanBeakang")} class="form-control form-control-sm" />
+                                            <input type="text" id="karantinaTujuanBeakang" name='karantinaTujuanBeakang' {...register("karantinaTujuanBeakang")} className="form-control form-control-sm" />
                                         </div>
 
                                         <label className="col-sm-2 col-form-label text-sm-end" htmlFor="noSeri">No Seri <span className='text-danger'>*</span></label>
@@ -304,9 +480,14 @@ function DocKT1() {
                                             </div>
                                             <hr />
                                             <div className='row'>
-                                                <h5 className='mb-1'><b><u>Description of Comodities</u></b></h5>
+                                                <h5 className='mb-1'><b><u>Description of Comodities</u></b>
+                                                {loadKomoditi ? <SpinnerDot/> : null}
+                                                {data.listKomoditas ? 
+                                                (loadKomoditi ? null : <button className='btn btn-sm btn-outline-secondary' onClick={handleEditKomoditasAll} style={{marginLeft: "15px"}}><i className='fa-solid fa-check-square text-success'></i> Tidak ada perubahan</button>) : null }
+                                                <span className='text-danger'>{loadKomoditiPesan}</span>
+                                                </h5>
                                                 <div className='col-md-12 mb-3'>
-                                                    <div className="table-responsive text-nowrap">
+                                                    <div className="table-responsive text-nowrap" style={{height: "300px"}}>
                                                         <table className="table table-sm table-bordered table-hover table-striped dataTable">
                                                             <thead>
                                                                 <tr>
@@ -317,12 +498,10 @@ function DocKT1() {
                                                                     <th>Komoditas En/Latin</th>
                                                                     <th>Netto</th>
                                                                     <th>Satuan</th>
-                                                                    <th>Bruto</th>
-                                                                    <th>Satuan</th>
                                                                     <th>Jumlah</th>
                                                                     <th>Satuan</th>
-                                                                    <th>Jantan</th>
-                                                                    <th>Betina</th>
+                                                                    <th>Volume P8</th>
+                                                                    <th>Netto P8</th>
                                                                     <th>Act</th>
                                                                 </tr>
                                                             </thead>
@@ -336,22 +515,12 @@ function DocKT1() {
                                                                                 <td>{data.nama_latin_tercetak}</td>
                                                                                 <td>{data.volume_netto}</td>
                                                                                 <td>{data.sat_netto}</td>
-                                                                                <td>{data.volume_bruto}</td>
-                                                                                <td>{data.sat_bruto}</td>
                                                                                 <td>{data.volume_lain}</td>
                                                                                 <td>{data.sat_lain}</td>
-                                                                                <td>{data.jantan}</td>
-                                                                                <td>{data.betina}</td>
+                                                                                <td>{data.volumeP8}</td>
+                                                                                <td>{data.nettoP8}</td>
                                                                                 <td>
-                                                                                    <div className="dropdown">
-                                                                                        <button type="button" className="btn p-0 dropdown-toggle hide-arrow" data-bs-toggle="dropdown">
-                                                                                            <i className="bx bx-dots-vertical-rounded"></i>
-                                                                                        </button>
-                                                                                        <div className="dropdown-menu">
-                                                                                            <a className="dropdown-item" type="button" data-bs-toggle="modal" data-bs-target="#modKontainer"><i className="bx bx-edit-alt me-1"></i> Edit</a>
-                                                                                            <a className="dropdown-item" href="#"><i className="bx bx-trash me-1"></i> Delete</a>
-                                                                                        </div>
-                                                                                    </div>
+                                                                                    <a className="dropdown-item" href="#" type="button" onClick={handleEditKomoditas} data-header={data.id} data-ptk={data.ptk_id} data-bs-toggle="modal" data-bs-target="#modKomoditas"><i className="fa-solid fa-pen-to-square me-1"></i> Edit</a>
                                                                                 </td>
                                                                             </tr>
                                                                         ))
@@ -366,7 +535,7 @@ function DocKT1() {
                                                         <label className="col-sm-3 col-form-label" htmlFor="tandaKhusus">Distinguishing marks:</label>
                                                         <div className="col-sm-9">
                                                             <textarea name="tandaKhusus" id="tandaKhusus" rows="2" {...register("tandaKhusus", { required: "Mohon isi keterangan tanda yang membedakan"})} className={errors.tandaKhusus ? "form-control form-control-sm is-invalid" : "form-control form-control-sm"} placeholder='Distinguishing marks..'></textarea>
-                                                        <button type='button' className='btn btn-xs btn-info'>Masukan No Container</button>
+                                                            <button type='button' onClick={getContainerPtk} className='btn btn-xs btn-info'>Masukan No Container</button>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -409,17 +578,20 @@ function DocKT1() {
                                     <div id="collapsePerlakuan">
                                         <div className="accordion-body">
                                             <div className="row">
-                                                <div className="col-md-6">
+                                                <div className="col-md-12">
                                                     <div className="row">
-                                                        <label className="col-sm-4 col-form-label" htmlFor="selectPerlakuan">Ambil data dari dokumen :</label>
-                                                        <div className="col-sm-3">
-                                                            <select name="selectPerlakuan" id="selectPerlakuan" className='form-select form-select-sm'>
+                                                        <label className="col-sm-2 col-form-label" htmlFor="selectPerlakuan">Ambil data dari dokumen :</label>
+                                                        <div className="col-sm-2">
+                                                            <select name="selectPerlakuan" id="selectPerlakuan" onChange={handleGetDokumenPerlakuan} className='form-select form-select-sm'>
                                                                 <option value="">--</option>
                                                                 <option value={21}>K-5.1</option>
                                                                 <option value={22}>K-5.2</option>
                                                                 <option value={23}>K-5.3</option>
                                                             </select>
                                                             <input type="hidden" id='idPerlakuan' {...register("idPerlakuan")} />
+                                                        </div>
+                                                        <div className="col-sm-5">
+                                                            <span className='text-danger'>{data.errorData5 ? "Gagal tarik data perlakuan, silahkan coba lagi" : ""}</span>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -430,15 +602,15 @@ function DocKT1() {
                                                     <div className="row">
                                                         <label className="col-sm-4 col-form-label" htmlFor="tipePerlakuan">Treatment type</label>
                                                         <div className="col-sm-8">
-                                                            <input type="text" id="tipePerlakuan" placeholder='Tipe Perlakuan' className="form-control form-control-sm" />
+                                                            <input type="text" id="tipePerlakuan" placeholder='Tipe Perlakuan' {...register("tipePerlakuan")} className="form-control form-control-sm" />
                                                         </div>
                                                     </div>
                                                 </div>
                                                 <div className="col-md-6">
                                                     <div className="row">
                                                         <label className="col-sm-4 col-form-label" htmlFor="tglPerlakuan">Date of Treatment</label>
-                                                        <div className="col-sm-8">
-                                                            <input type="text" id="tglPerlakuan" placeholder="Tanggal Perlakuan" className="form-control form-control-sm" />
+                                                        <div className="col-sm-3">
+                                                            <input type="text" id="tglPerlakuan" placeholder="Tanggal Perlakuan" {...register("tglPerlakuan")} className="form-control form-control-sm" />
                                                         </div>
                                                     </div>
                                                 </div>
@@ -446,7 +618,7 @@ function DocKT1() {
                                                     <div className="row">
                                                         <label className="col-sm-4 col-form-label" htmlFor="bahanKimia">Chemical (active ingredient)</label>
                                                         <div className="col-sm-8">
-                                                            <input type="text" id="bahanKimia" placeholder="Bahan Kimia yang dipakai" className="form-control form-control-sm" />
+                                                            <input type="text" id="bahanKimia" placeholder="Bahan Kimia yang dipakai" {...register("bahanKimia")} className="form-control form-control-sm" />
                                                         </div>
                                                     </div>
                                                 </div>
@@ -454,7 +626,12 @@ function DocKT1() {
                                                     <div className="row">
                                                         <label className="col-sm-4 col-form-label" htmlFor="konsentrasi">Concentration</label>
                                                         <div className="col-sm-8">
-                                                            <input type="text" id="konsentrasi" placeholder="Konsentrasi" className="form-control form-control-sm" />
+                                                            <div className="col-sm-3">
+                                                                <div className='input-group input-group-sm input-group-merge'>
+                                                                    <input type="text" id="konsentrasi" {...register("konsentrasi")} className="form-control form-control-sm" />
+                                                                    <span className='input-group-text'>g/m&sup3;</span>
+                                                                </div>
+                                                            </div>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -462,7 +639,12 @@ function DocKT1() {
                                                     <div className="row">
                                                         <label className="col-sm-4 col-form-label" htmlFor="durasiPerlakuan">Duration</label>
                                                         <div className="col-sm-8">
-                                                            <input type="text" id="durasiPerlakuan" placeholder="Durasi Perlakuan" className="form-control form-control-sm" />
+                                                            <div className="col-sm-3">
+                                                                <div className='input-group input-group-sm input-group-merge'>
+                                                                    <input type="text" id="durasiPerlakuan" {...register("durasiPerlakuan")} className="form-control form-control-sm" />
+                                                                    <span className='input-group-text'>jam</span>
+                                                                </div>
+                                                            </div>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -470,14 +652,19 @@ function DocKT1() {
                                                     <div className="row">
                                                         <label className="col-sm-4 col-form-label" htmlFor="temperatur">Temperature</label>
                                                         <div className="col-sm-8">
-                                                            <input type="text" id="temperatur" placeholder="Temperature" className="form-control form-control-sm" />
+                                                            <div className="col-sm-3">
+                                                                <div className='input-group input-group-sm input-group-merge'>
+                                                                    <input type="text" id="temperatur" {...register("temperatur")} className="form-control form-control-sm" />
+                                                                    <span className='input-group-text'>&deg;C</span>
+                                                                </div>
+                                                            </div>
                                                         </div>
                                                     </div>
                                                 </div>
                                                 <div className="col-md-12">
                                                     <div className="row">
                                                         <label className="col-sm-2 col-form-label" htmlFor="adInfo">Additional information</label>
-                                                        <div className="col-sm-9">
+                                                        <div className="col-sm-8">
                                                             <textarea name="adInfo" id="adInfo" rows="2" {...register("adInfo")} placeholder='Additional information..' className='form-control form-control-sm'></textarea>
                                                         </div>
                                                     </div>
@@ -508,6 +695,66 @@ function DocKT1() {
                                     </div>
                                 </div>
                             </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div className="modal fade" id="modKomoditas" tabIndex="-1">
+            <div className="modal-dialog modal-lg">
+                <div className="modal-content p-3 pb-1">
+                    <div className="modal-body">
+                        <button type="button" className="btn-close float-end" data-bs-dismiss="modal" aria-label="Close"></button>
+                        <div className="text-center mb-4">
+                            <h3 className="address-title">Perubahan Media Pembawa {Cookies.get("jenisKarantina") === 'H' ? 'Hewan' : (Cookies.get("jenisKarantina") === 'I' ? 'Ikan' : 'Tumbuhan')}</h3>
+                        </div>
+                        <form onSubmit={handleFormMPKT1(onSubmitMPKT1)} className="row g-3">
+                        <input type="hidden" name='idMPKT1' {...registerMPKT1("idMPKT1")} />
+                        <input type="hidden" name='idPtk' {...registerMPKT1("idPtk")} />
+                        <input type="hidden" name='jenisKar' {...registerMPKT1("jenisKar")} />
+                            <div className="col-6">
+                                <label className="form-label" htmlFor="namaUmum">Nama Umum Tercetak</label>
+                                <input type='text' name="namaUmum" id="namaUmum" {...registerMPKT1("namaUmum")} className="form-control form-control-sm" />
+                            </div>
+                            <div className="col-6">
+                                <label className="form-label" htmlFor="namaLatin">Nama Latin Tercetak</label>
+                                <input type='text' name="namaLatin" id="namaLatin" {...registerMPKT1("namaLatin")} className="form-control form-control-sm" />
+                            </div>
+                            <div className="col-6">
+                                <label className="form-label" htmlFor="volumeNetto">Volume Netto Akhir-P8<span className='text-danger'>*</span></label>
+                                <div className='row'>
+                                    <div className="col-5" style={{paddingRight: '2px'}}>
+                                        <input type="text" name='volumeNetto' id='volumeNetto' value={cekdataMPKT1.volumeNetto ? addCommas(removeNonNumeric(cekdataMPKT1.volumeNetto)) : ""} {...registerMPKT1("volumeNetto", {required: "Mohon isi volume netto."})} className={errorsMPKT1.volumeNetto ? "form-control form-control-sm is-invalid" : "form-control form-control-sm"} />
+                                    </div>
+                                    <div className="col-3" style={{paddingLeft: '2px'}}>
+                                        <input type="text" className='form-control form-control-sm' name='satuanNetto' id='satuanNetto' {...registerMPKT1("satuanNetto")} disabled />
+                                    </div>
+                                </div>
+                                {errorsMPKT1.volumeNetto && <small className="text-danger">{errorsMPKT1.volumeNetto.message}</small>}
+                            </div>
+                            <div className="col-6">
+                                <label className="form-label" htmlFor="volumeLain">Volume Lain Akhir-P8</label>
+                                <div className='row'>
+                                    <div className="col-5" style={{paddingRight: '2px'}}>
+                                        <input type="text" className='form-control form-control-sm' name='volumeLain' id='volumeLain' value={cekdataMPKT1.volumeLain ? addCommas(removeNonNumeric(cekdataMPKT1.volumeLain)) : ""} {...registerMPKT1("volumeLain")} />
+                                    </div>
+                                    <div className="col-3" style={{paddingLeft: '2px'}}>
+                                        <input type="text" className='form-control form-control-sm' name='satuanLain' id='satuanLain' {...registerMPKT1("satuanLain")} disabled />
+                                    </div>
+                                </div>
+                            </div>
+                        <small className='text-danger'>*Format penulisan desimal menggunakan titik ( . )</small>
+                        <div className="col-12 text-center">
+                            <button type="submit" className="btn btn-primary me-sm-3 me-1">Simpan</button>
+                            <button
+                            type="reset"
+                            className="btn btn-label-secondary"
+                            data-bs-dismiss="modal"
+                            aria-label="Close">
+                            Tutup
+                            </button>
+                        </div>
                         </form>
                     </div>
                 </div>

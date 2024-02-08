@@ -80,7 +80,7 @@ function DocK37b() {
         const response = model.ptkFisikKesehatan(data, listKesehatan);
             response
             .then((response) => {
-                // console.log(response.data)
+                console.log(response)
                 if(response.data) {
                     if(response.data.status === '201') {
                         //start save history
@@ -106,7 +106,7 @@ function DocK37b() {
             })
             .catch((error) => {
                 console.log(error);
-                alert(error.response.status + " - " + error.response.data.message)
+                // alert(error.response.status + " - " + error.response.data.message)
             });
     }
     

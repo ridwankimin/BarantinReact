@@ -68,7 +68,7 @@ export default class PtkHistory {
     return axios.request(config)
   }
   
-  updateKomoditi3(id,data) {
+  updateKomoditiP3(id,data) {
     let datasend = {
       'id': "",
       'tindakan': "p3",
@@ -90,7 +90,7 @@ export default class PtkHistory {
     return axios.request(config)
   }
   
-  updateKomoditi4(id,data) {
+  updateKomoditiP4(id,data) {
     let datasend = {
       'id': "",
       'tindakan': "p4",
@@ -112,7 +112,7 @@ export default class PtkHistory {
     return axios.request(config)
   }
   
-  updateKomoditi5(id, data) {
+  updateKomoditiP5(id, data) {
     let datasend = {
       'id': "",
       'tindakan': "p5",
@@ -134,7 +134,7 @@ export default class PtkHistory {
     return axios.request(config)
   }
   
-  updateKomoditi6(id, data) {
+  updateKomoditiP6(id, data) {
     let datasend = {
       'id': "",
       'tindakan': "p6",
@@ -156,7 +156,7 @@ export default class PtkHistory {
     return axios.request(config)
   }
   
-  updateKomoditi7(id,data) {
+  updateKomoditiP7(id,data) {
     let datasend = {
       'id': "",
       'tindakan': "p7",
@@ -178,14 +178,17 @@ export default class PtkHistory {
     return axios.request(config)
   }
   
-  updateKomoditi8(id,data) {
+  updateKomoditiP8(id,data) {
     let datasend = {
-      'id': "",
+      'id': id,
       'tindakan': "p8",
+      'nama_umum_tercetak': data.namaUmum,
+      'nama_ilmiah_tercetak': data.namaLatin,
+      // 'bentuk_tercetak':
       'jantanP8': data.jantan,
       'betinaP8': data.betina,
-      'volumeP8': data.volume,
-      'nettoP8': data.netto
+      'volumeP8': data.volumeLain,
+      'nettoP8': data.volumeNetto
     }
     let config = {
       method: 'put',

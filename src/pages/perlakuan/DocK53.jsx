@@ -146,6 +146,7 @@ function DocK53() {
 
             const modelPerlakuan = new PnPerlakuan();
             const resLaporan = modelPerlakuan.getPtkByDokumen(base64_decode(ptkNomor[1]), 23);
+            console.log(base64_decode(ptkNomor[1]))
             resLaporan
             .then((response) => {
                 if(typeof response.data != "string") {
@@ -153,7 +154,7 @@ function DocK53() {
                         errorData53: false
                     }))
                     if(response.data.status === '200') {
-                        alert(response.data.message);
+                        // alert(response.data.message);
                         setValue("noDok53", response.data.data[0].nomor)
                         setValue("tglDok53", response.data.data[0].tanggal)
                         setValue("jenisTugas", response.data.data[0].jenis_tugas)
@@ -321,7 +322,7 @@ function DocK53() {
                         errorData53: false
                     }))
                     if(response.data.status === '200') {
-                        alert(response.data.message);
+                        // alert(response.data.message);
                         setValue("noDok53", response.data.data[0].nomor)
                         setValue("tglDok53", response.data.data[0].tanggal)
                         setValue("jenisTugas", response.data.data[0].jenis_tugas)

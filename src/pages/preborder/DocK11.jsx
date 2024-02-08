@@ -1578,14 +1578,14 @@ function DocK11() {
                 setValueDokumen("idDataDokumen", res.data.data.id)
                 setValueDokumen("idPtk", res.data.data.ptk_id)
                 setValueDokumen("noAju", dataIdPage.noAju)
-                // setValueDokumen("kategoriDokumen", res.data.data.kategori_dokumen)
-                // setValueDokumen("jenisDokumen", res.data.data.jenis_dokumen_id)
-                // setValueDokumen("jenisDokumenView", res.data.data.jenis_dokumen)
+                setValueDokumen("kategoriDokumen", res.data.data.kategori_dokumen)
+                setValueDokumen("jenisDokumen", res.data.data.kode_dokumen)
+                setValueDokumen("jenisDokumenView", res.data.data.kode_dokumen + " - " + res.data.data.nama_dokumen)
                 setValueDokumen("noDokumen", res.data.data.no_dokumen)
-                // setValueDokumen("negaraAsalDokumen", res.data.data.negara_asal_id.toString())
-                // setValueDokumen("negaraAsalDokumenView", res.data.data.negara_asal)
-                // setValueDokumen("kotaAsalDokumen", res.data.data.kota_kab_asal_id.toString())
-                // setValueDokumen("kotaAsalDokumenView", res.data.data.kota_kab_asal)
+                setValueDokumen("negaraAsalDokumen", res.data.data.negara_asal_id === null ? "" : res.data.data.negara_asal_id.toString())
+                setValueDokumen("negaraAsalDokumenView", res.data.data.negara_asal)
+                setValueDokumen("kotaAsalDokumen", res.data.data.kota_kab_asal_id === null ? "" : res.data.data.kota_kab_asal_id.toString())
+                setValueDokumen("kotaAsalDokumenView", res.data.data.kota_kab_asal)
                 setValueDokumen("ketDokumen", res.data.data.keterangan)
                 setValueDokumen("tglDokumen", res.data.data.tanggal_dokumen)
             }
@@ -3307,7 +3307,7 @@ function DocK11() {
                         <div className="col-6">
                             <label className="form-label" htmlFor="noDokumen">No Dokumen <span className='text-danger'>*</span></label>
                             <div className="input-group input-group-merge">
-                                <input type='text' name="noDokumen" id="noDokumen" {...registerDokumen("noDokumen", { required: "Mohon isi nomor dokumen."})} className={errorsDokumen.noDokumen ? "form-control form-control-sm is-invalid" : "form-control form-control-sm"} />
+                                <input type='text' name="noDokumen" id="noDokumen" placeholder='No Dokumen..' {...registerDokumen("noDokumen", { required: "Mohon isi nomor dokumen."})} className={errorsDokumen.noDokumen ? "form-control form-control-sm is-invalid" : "form-control form-control-sm"} />
                             </div>
                             {errorsDokumen.noDokumen && <small className="text-danger">{errorsDokumen.noDokumen.message}</small>}
                         </div>
@@ -3319,7 +3319,7 @@ function DocK11() {
                                 className="form-control form-control-sm"
                                 rules={{ required: "Mohon pilih negara penerbit dokumen." }}
                                 render={({ field: { value, ...field } }) => (
-                                    <Select styles={customStyles} placeholder={"Pilih negara penerbit dokumen.."} value={value ? {id: cekdataDokumen.negaraAsalDokumen, label: cekdataDokumen.negaraAsalDokumenView} : ""} {...field} options={dataSelect.negaraAsalDokumen} onChange={(e) => setValueDokumen("negaraAsalDokumen", e.value) & setValueDokumen("negaraAsalDokumenView", e.label) & (e.value === '99' ? handleKota(null, "kotaAsalDokumen") : null)} />
+                                    <Select styles={customStyles} placeholder={"Pilih negara penerbit.."} value={value ? {id: cekdataDokumen.negaraAsalDokumen, label: cekdataDokumen.negaraAsalDokumenView} : ""} {...field} options={dataSelect.negaraAsalDokumen} onChange={(e) => setValueDokumen("negaraAsalDokumen", e.value) & setValueDokumen("negaraAsalDokumenView", e.label) & (e.value === '99' ? handleKota(null, "kotaAsalDokumen") : null)} />
                                 )}
                             />
                             {errorsDokumen.negaraAsalDokumen && <small className="text-danger">{errorsDokumen.negaraAsalDokumen.message}</small>}
@@ -3339,14 +3339,14 @@ function DocK11() {
                                 className="form-control form-control-sm"
                                 rules={{ required: false }}
                                 render={({ field: { value, ...field } }) => (
-                                    <Select styles={customStyles} placeholder={"Pilih kota penerbit dokumen.."} value={value ? {id: cekdataDokumen.kotaAsalDokumen, label: cekdataDokumen.kotaAsalDokumenView} : ""} {...field} options={dataSelect.kotaAsalDokumen} onChange={(e) => setValueDokumen("kotaAsalDokumen", e.value) & setValueDokumen("kotaAsalDokumenView", e.label)} />
+                                    <Select styles={customStyles} placeholder={"Pilih kota penerbit.."} value={value ? {id: cekdataDokumen.kotaAsalDokumen, label: cekdataDokumen.kotaAsalDokumenView} : ""} {...field} options={dataSelect.kotaAsalDokumen} onChange={(e) => setValueDokumen("kotaAsalDokumen", e.value) & setValueDokumen("kotaAsalDokumenView", e.label)} />
                                 )}
                             />
                         </div>
                         <div className="col-6">
                             <label className="form-label" htmlFor="ketDokumen">Keterangan</label>
                             <div className="input-group input-group-merge">
-                                <input type='text' name="ketDokumen" id="ketDokumen" {...registerDokumen("ketDokumen")} className="form-control form-control-sm" />
+                                <input type='text' name="ketDokumen" id="ketDokumen" placeholder='Keterangan..' {...registerDokumen("ketDokumen")} className="form-control form-control-sm" />
                             </div>
                         </div>
                         <div className="col-6">
@@ -3402,7 +3402,7 @@ function DocK11() {
                                 <label className="form-label" htmlFor="volumeNetto">Volume Netto<span className='text-danger'>*</span></label>
                                 <div className='row'>
                                     <div className="col-5" style={{paddingRight: '2px'}}>
-                                        <input type="text" name='volumeNetto' id='volumeNetto' value={cekdataDetilMP.volumeNetto ? addCommas(removeNonNumeric(cekdataDetilMP.volumeNetto)) : ""} {...registerDetilMP("volumeNetto", {required: "Mohon isi volume netto."})} className={errorsMP.volumeNetto ? "form-control form-control-sm is-invalid" : "form-control form-control-sm"} />
+                                        <input type="text" name='volumeNetto' id='volumeNetto' value={cekdataDetilMP.volumeNetto ? addCommas(removeNonNumeric(cekdataDetilMP.volumeNetto)) : ""} {...registerDetilMP("volumeNetto", {required: "Mohon isi volume netto."})} className={errorsDetilMP.volumeNetto ? "form-control form-control-sm is-invalid" : "form-control form-control-sm"} />
                                     </div>
                                     <div className="col-7" style={{paddingLeft: '2px'}}>
                                         <input type="hidden" name='satuanNetto' id='satuanNetto' {...registerDetilMP("satuanNetto")} value={1356} />
@@ -3435,12 +3435,12 @@ function DocK11() {
                                 <label className="form-label" htmlFor="volumeBrutto">Volume Brutto</label>
                                 <div className='row'>
                                     <div className="col-5" style={{paddingRight: '2px'}}>
-                                        <input type="text" value={cekdataDetilMP.volumeBrutto ? addCommas(removeNonNumeric(cekdataDetilMP.volumeBrutto)) : ""} {...registerDetilMP("volumeBrutto", {required: "Mohon isi volume brutto."})} className={errorsMP.volumeBrutto ? "form-control form-control-sm is-invalid" : "form-control form-control-sm"} name='volumeBrutto' id='volumeBrutto' />
+                                        <input type="text" value={cekdataDetilMP.volumeBrutto ? addCommas(removeNonNumeric(cekdataDetilMP.volumeBrutto)) : ""} {...registerDetilMP("volumeBrutto", {required: "Mohon isi volume brutto."})} className={errorsDetilMP.volumeBrutto ? "form-control form-control-sm is-invalid" : "form-control form-control-sm"} name='volumeBrutto' id='volumeBrutto' />
                                     </div>
                                     <div className="col-7" style={{paddingLeft: '2px'}}>
                                         <input type="hidden" name='satuanBrutto' id='satuanBrutto' {...registerDetilMP("satuanBrutto")} value={1356} />
                                         <input type="text" className='form-control form-control-sm' value={'KILOGRAM'} readOnly />
-                                        {/* <select name="satuanBrutto" id="satuanBrutto" data-kar={cekdataMP.mediaPembawa === 'T' ? 'kt' : (cekdataMP.mediaPembawa === 'H' ? 'kh' : 'ki')} onClick={handleMasterSatuan} {...registerDetilMP("satuanBrutto", {required: "Mohon isi satuan brutto."})} className={errorsMP.satuanBrutto ? "form-control form-control-sm is-invalid" : "form-control form-control-sm"}>
+                                        {/* <select name="satuanBrutto" id="satuanBrutto" data-kar={cekdataMP.mediaPembawa === 'T' ? 'kt' : (cekdataMP.mediaPembawa === 'H' ? 'kh' : 'ki')} onClick={handleMasterSatuan} {...registerDetilMP("satuanBrutto", {required: "Mohon isi satuan brutto."})} className={errorsDetilMP.satuanBrutto ? "form-control form-control-sm is-invalid" : "form-control form-control-sm"}>
                                             <option value="">--</option>
                                             {dataSelect.satuanBrutto}
                                         </select> */}
@@ -3530,7 +3530,7 @@ function DocK11() {
                                     )}
                                 />
                                 <small className='text-danger'>{cekdataDetilMP.idDetilMP ? "*Tidak perlu dipilih ulang jika tidak ubah komoditas" : null}</small>
-                                {/* <select name="komoditasMP" id="komoditasMP" data-gol={cekdataMP.jenisMp} onClick={handleKomoditasKH} {...registerDetilMP("komoditasMP", {required: "Mohon isi Komoditas."})} className={errorsMP.komoditasMP ? "form-control form-control-sm is-invalid" : "form-control form-control-sm"} >
+                                {/* <select name="komoditasMP" id="komoditasMP" data-gol={cekdataMP.jenisMp} onClick={handleKomoditasKH} {...registerDetilMP("komoditasMP", {required: "Mohon isi Komoditas."})} className={errorsDetilMP.komoditasMP ? "form-control form-control-sm is-invalid" : "form-control form-control-sm"} >
                                         <option value="">--</option>
                                         {dataSelect.komoditasMP}
                                 </select> */}
@@ -3565,7 +3565,7 @@ function DocK11() {
                                 <label className="form-label" htmlFor="jumlahMP">Jumlah</label>
                                 <div className='row'>
                                 <div className='col-7' style={{paddingRight: '2px'}}>
-                                    <input type="text" value={cekdataDetilMP.jumlahMP ? addCommas(removeNonNumeric(cekdataDetilMP.jumlahMP)) : ""} {...registerDetilMP("jumlahMP", {required: "Mohon isi satuan brutto."})} className={errorsMP.jumlahMP ? "form-control form-control-sm is-invalid" : "form-control form-control-sm"} name='jumlahMP' id='jumlahMP' />
+                                    <input type="text" value={cekdataDetilMP.jumlahMP ? addCommas(removeNonNumeric(cekdataDetilMP.jumlahMP)) : ""} {...registerDetilMP("jumlahMP", {required: "Mohon isi satuan brutto."})} className={errorsDetilMP.jumlahMP ? "form-control form-control-sm is-invalid" : "form-control form-control-sm"} name='jumlahMP' id='jumlahMP' />
                                 </div>
                                 <div className='col-5' style={{paddingLeft: '2px'}}>
                                     <select name="satJumlahMP" id="satJumlahMP" data-kar={cekdataMP.mediaPembawa === 'T' ? 'kt' : (cekdataMP.mediaPembawa === 'H' ? 'kh' : 'ki')} onClick={handleMasterSatuan} {...registerDetilMP("satJumlahMP")} className="form-control form-control-sm">

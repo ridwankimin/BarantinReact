@@ -216,7 +216,7 @@ function DocK22() {
 
     function stringSimbol(e) {
         return <div dangerouslySetInnerHTML={{__html: e}} />;
-      }
+    }
 
     return (
     <div className="container-xxl flex-grow-1 container-p-y">
