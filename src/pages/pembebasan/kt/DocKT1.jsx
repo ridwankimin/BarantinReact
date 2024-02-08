@@ -100,38 +100,39 @@ function DocKT1() {
     const cekdataMPKT1 = watchMPKT1()
 
     const onSubmit = (data) => {
-        console.log(data)
-        // const model = new PnPelepasan();
-        // const response = model.eksporKT(data);
-        // response
-        // .then((response) => {
-        //     console.log(response.data)
-        //     if(response.data) {
-        //         if(response.data.status === '201') {
-        //             //start save history
-        //             // const log = new PtkHistory();
-        //             const resHsy = log.pushHistory(data.idPtk, "p8", "K-T.1", (data.idDokKT1 ? 'UPDATE' : 'NEW'));
-        //             resHsy
-        //             .then((response) => {
-        //                 if(response.data.status === '201') {
-        //                     console.log("history saved")
-        //                 }
-        //             })
-        //             .catch((error) => {
-        //                 console.log(error.response.data);
-        //             });
-        //             //end save history
+        // alert("Submit")
+        // console.log(data)
+        const model = new PnPelepasan();
+        const response = model.eksporKT(data);
+        response
+        .then((response) => {
+            console.log(response.data)
+            if(response.data) {
+                if(response.data.status === '201') {
+                    //start save history
+                    // const log = new PtkHistory();
+                    const resHsy = log.pushHistory(data.idPtk, "p8", "K-T.1", (data.idDokKT1 ? 'UPDATE' : 'NEW'));
+                    resHsy
+                    .then((response) => {
+                        if(response.data.status === '201') {
+                            console.log("history saved")
+                        }
+                    })
+                    .catch((error) => {
+                        console.log(error.response.data);
+                    });
+                    //end save history
 
-        //             alert(response.data.status + " - " + response.data.message)
-        //             setValue("idDokKT1", response.data.data.id)
-        //             setValue("noDokKT1", response.data.data.nomor)
-        //         }
-        //     }
-        // })
-        // .catch((error) => {
-        //     console.log(error);
-        //     alert(error.response.status + " - " + error.response.data.message)
-        // });
+                    alert(response.data.status + " - " + response.data.message)
+                    setValue("idDokKT1", response.data.data.id)
+                    setValue("noDokKT1", response.data.data.nomor)
+                }
+            }
+        })
+        .catch((error) => {
+            console.log(error);
+            alert(error.response.status + " - " + error.response.data.message)
+        });
     }
 
     function onSubmitMPKT1(data) {
@@ -215,7 +216,7 @@ function DocKT1() {
     useEffect(()=>{
         if(idPtk) {
             const date = new Date();
-            setValue("tglDokKT1",  date.getFullYear() + '-' + addZero(date.getMonth() + 1) + '-' + addZero(date.getDate()) + ' ' + addZero(date.getHours()) + ':' + addZero(date.getMinutes()) + ":" + addZero(date.getSeconds()))
+            setValue("tglDokKT1",  date.getFullYear() + '-' + addZero(date.getMonth() + 1) + '-' + addZero(date.getDate()) + ' ' + addZero(date.getHours()) + ':' + addZero(date.getMinutes()))
                     
             const tglPtk = Cookies.get("tglPtk");
             let ptkDecode = idPtk ? base64_decode(idPtk) : "";
@@ -305,11 +306,8 @@ function DocKT1() {
                 // alert(error.response.status + " - " + error.response.data.message)
             });
         }
-        // console.log(datasend[0])
         
     },[idPtk, setValue])
-
-    // setValue("tglDokKT1", dateNow())
 
   return (
     <div className="container-xxl flex-grow-1 container-p-y">
@@ -690,7 +688,7 @@ function DocKT1() {
                                 <div className="row">
                                     <div className="offset-sm-2 col-sm-9">
                                         <button type="submit" className="btn btn-primary me-sm-2 me-1">Simpan</button>
-                                        <button type="reset" className="btn btn-danger btn-label-secondary me-sm-2 me-1">Batal</button>
+                                        <button type="button" className="btn btn-danger btn-label-secondary me-sm-2 me-1">Batal</button>
                                         <a href={require("../../../dok/kt1.pdf")} rel="noopener noreferrer" target='_blank' className="btn btn-warning"><i className="bx bx-printer bx-xs"></i>&nbsp; Print</a>
                                     </div>
                                 </div>

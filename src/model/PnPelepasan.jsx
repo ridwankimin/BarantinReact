@@ -45,7 +45,7 @@ export default class PnPerlakuan {
       },
       data: datasend
     };
-    // console.log("dok kt1: " + JSON.stringify(config))
+    console.log("dok kt1: " + JSON.stringify(config))
     return axios.request(config)
   }
   
