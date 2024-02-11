@@ -1,0 +1,111 @@
+[ 
+{ 
+"id":1,
+"nama":"Pemeriksaan Administrasi & Kesesuaian",
+"kategori":"TK"
+},
+{ 
+"id":2,
+"nama":"Pemeriksaan Kesehatan",
+"kategori":"TK"
+},
+{ 
+"id":3,
+"nama":"Pengasingan & Pengamatan",
+"kategori":"TK"
+},
+{ 
+"id":4,
+"nama":"Pemeriksaan diatas Alat Angkut",
+"kategori":"TK"
+},
+{ 
+"id":5,
+"nama":"Pemeriksaan Alat Angkut",
+"kategori":"TK"
+},
+{ 
+"id":6,
+"nama":"Pengawasan Pihak Lain",
+"kategori":"TK"
+},
+{ 
+"id":7,
+"nama":"Pengawalan MP",
+"kategori":"TK"
+},
+{ 
+"id":8,
+"nama":"Perlakuan",
+"kategori":"TK"
+},
+{ 
+"id":9,
+"nama":"Penahanan",
+"kategori":"TK"
+},
+{ 
+"id":10,
+"nama":"Penolakan",
+"kategori":"TK"
+},
+{ 
+"id":11,
+"nama":"Pemusnahan",
+"kategori":"TK"
+},
+{ 
+"id":12,
+"nama":"Penerbitan Surat Keterangan",
+"kategori":"TK"
+},
+{ 
+"id":13,
+"nama":"Pembebasan Sebagian",
+"kategori":"TK"
+},
+{ 
+"id":14,
+"nama":"Pembebasan Seluruh",
+"kategori":"TK"
+},
+{ 
+"id":15,
+"nama":"Serah Terima",
+"kategori":"TK"
+},
+{ 
+"id":16,
+"nama":"Monitoring",
+"kategori":"TK"
+},
+{ 
+"id":17,
+"nama":"Lainnya",
+"kategori":"TK"
+},
+{ 
+"id":18,
+"nama":"Wasmalitirik",
+"kategori":"HK"
+},
+{ 
+"id":19,
+"nama":"Gelar Perkara",
+"kategori":"HK"
+},
+{ 
+"id":20,
+"nama":"Penyidikan",
+"kategori":"HK"
+},
+{ 
+"id":21,
+"nama":"Melengkapi Pemberkasan",
+"kategori":"HK"
+},
+{ 
+"id":22,
+"nama":"Lainnya",
+"kategori":"HK"
+}]

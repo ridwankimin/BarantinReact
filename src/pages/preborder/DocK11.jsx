@@ -1,5 +1,5 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
-import React, { useCallback, useEffect, useMemo, useState } from 'react'
+import React, { useCallback, useEffect, useState } from 'react'
 import PersonSvg from '../../logo/svg/PersonSvg'
 import ShipSvg from '../../logo/svg/ShipSvg'
 import PackageSvg from '../../logo/svg/PackageSvg'
@@ -178,127 +178,6 @@ function DocK11() {
         .catch((error) => {
             console.log(error);
         });
-    }
-    
-    function handleKomKHIDetil(e) {
-        //hidup 1/6 | produk 2/7 | mpl 3/8
-        // const modelMaster = new Master()
-        const resKomKT = modelMaster.masterHS(cekdataMP.mediaPembawa)
-        resKomKT
-        .then((response) => {
-            let dataKomKT = response.data.data;
-            var arrayKomKT = dataKomKT.map(item => {
-                return {
-                    value: item.kode,
-                    label: item.kode + " - " + item.nama_en
-                }
-            })
-            setdataSelect(values => ({...values, "kodeHSMp": arrayKomKT}));
-        })
-        .catch((error) => {
-            console.log(error);
-        });
-
-        if(cekdataMP.mediaPembawa === "H") {
-            const resKomKH = modelMaster.masterKomKH(e.target.value)
-            resKomKH
-            .then((response) => {
-                let dataKomKH = response.data.data;
-                var arrayKomKH = dataKomKH.map(item => {
-                    return {
-                        value: item.id + ";" + item.nama + ";" + item.nama_latin + ";" + item.kode,
-                        label: item.nama + " - " + item.nama_en
-                    }
-                })
-                setdataSelect(values => ({...values, "komoditasMPKH": arrayKomKH}));
-            })
-            .catch((error) => {
-                console.log(error);
-            });
-        } else if(cekdataMP.mediaPembawa === "T") {
-            const resKomKT = modelMaster.masterKomKT()
-            resKomKT
-            .then((response) => {
-                let dataKomKT = response.data.data;
-                var arrayKomKT = dataKomKT.map(item => {
-                    return {
-                        value: item.id + ";" + item.nama + ";" + item.nama_latin,
-                        label: item.nama + " - " + item.nama_en
-                    }
-                })
-                setdataSelect(values => ({...values, "selectKomoditasMP": arrayKomKT}));
-            })
-            .catch((error) => {
-                console.log(error);
-            });
-
-            if(e.target.value === "4") {
-                const resPeruntukan = modelMaster.masterKlasKT("A")
-                resPeruntukan
-                .then((response) => {
-                    console.log(response.data)
-                    let dataPeruntukanKT = response.data.data;
-                    const arraySelectKota = dataPeruntukanKT.map(item => {
-                        return {
-                            value: item.id.toString(),
-                            label: item.peruntukan + " - " + item.bentuk + " - " + item.golongan
-                        }
-                    })
-                    setdataSelect(values => ({...values, "peruntukanMP": arraySelectKota}))
-                })
-                .catch((error) => {
-                    console.log(error);
-                });
-            } else {
-                const resPeruntukanB = modelMaster.masterKlasKT("B")
-                resPeruntukanB
-                .then((response) => {
-                    let dataPeruntukanKTB = response.data.data;
-                    var arrayPeruntukanKTB = dataPeruntukanKTB.map(item => {
-                        return {
-                            value: item.id.toString(),
-                            label: item.peruntukan + " - " + item.bentuk + " - " + item.golongan
-                        }
-                    })
-                    setDataKlasKT(arrayPeruntukanKTB)
-                })
-                .catch((error) => {
-                    console.log(error);
-                });
-                const resPeruntukanC = modelMaster.masterKlasKT("C")
-                resPeruntukanC
-                .then((response) => {
-                    let dataPeruntukanKTC = response.data.data;
-                    var arrayPeruntukanKTC = dataPeruntukanKTC.map(item => {
-                        return {
-                            value: item.id.toString(),
-                            label: item.peruntukan + " - " + item.bentuk + " - " + item.golongan
-                        }
-                    })
-                    setDataKlasKT(dataKlasKT => dataKlasKT.concat(arrayPeruntukanKTC))
-                })
-                .catch((error) => {
-                    console.log(error);
-                });
-                const resPeruntukanD = modelMaster.masterKlasKT("D")
-                resPeruntukanD
-                .then((response) => {
-                    let dataPeruntukanKTD = response.data.data;
-                    var arrayPeruntukanKTD = dataPeruntukanKTD.map(item => {
-                        return {
-                            value: item.id.toString(),
-                            label: item.peruntukan + " - " + item.bentuk + " - " + item.golongan
-                        }
-                    })
-                    setDataKlasKT(dataKlasKT => dataKlasKT.concat(arrayPeruntukanKTD))
-                })
-                .catch((error) => {
-                    console.log(error);
-                });
-                setdataSelect(values => ({...values, "peruntukanMP": dataKlasKT}))
-            }
-        } else if(cekdataMP.mediaPembawa === "I") {
-        }
     }
     
     function handleKemasan(e) {
@@ -508,11 +387,11 @@ function DocK11() {
     // const cekdataKonfirmasi = watchKonfirmasi()
     const cekdataVerify = watchVerify()
 
-    let master = useMemo(() => modelMaster, [])
+    // let master = useMemo(() => modelMaster, [])
 
     const getListNegara = useCallback(async () => {
         try {
-        const response = await master.masterNegara();
+        const response = await modelMaster.masterNegara();
         if(response.data.status === '200') {
             let dataneg = response.data.data;
             const arraySelectNegara = dataneg.map(item => {
@@ -544,7 +423,7 @@ function DocK11() {
         setdataSelect(values => ({...values, "negaraTujuanMP": [] }));
         setdataSelect(values => ({...values, "negaraAsalDokumen": [] }));
     }
-    }, [master])
+    }, [])
 
     useEffect(() => {
         getListNegara()
@@ -552,7 +431,7 @@ function DocK11() {
 
     const getListProv = useCallback(async () => {
         try {
-            const response = await master.masterProv()
+            const response = await modelMaster.masterProv()
             if(response.data.status === '200') {
                 let dataProv = response.data.data;
                 const arraySelectProv = dataProv.map(item => {
@@ -571,7 +450,7 @@ function DocK11() {
             setdataSelect(values => ({...values, provPengirim: [] }))
             setdataSelect(values => ({...values, provPenerima: [] }))
         }
-    }, [master])
+    }, [])
     
     useEffect(() => {
       getListProv()
@@ -579,7 +458,7 @@ function DocK11() {
 
     const handleKota = useCallback(async (e, pel) => {
             try {
-                const response = await master.masterKota(e)
+                const response = await modelMaster.masterKota(e)
                 if(response.data.status === '200') {
                     let dataKota = response.data.data;
                     const arraySelectKota = dataKota.map(item => {
@@ -596,7 +475,7 @@ function DocK11() {
             setdataSelect(values => ({...values, [pel]: []}))
             }
         // }
-    }, [master])
+    }, [])
 
     useEffect(() => {
         handleKota()
@@ -605,7 +484,7 @@ function DocK11() {
     const handlePelabuhan = useCallback(async (e, pel) => {
         if(e && pel) {
             try {
-                const response = await master.masterPelabuhanID(e)
+                const response = await modelMaster.masterPelabuhanID(e)
                 if(response.data.status === '200') {
                     let dataPel = response.data.data;
                     const arraySelectPelabuhan = dataPel.map(item => {
@@ -622,7 +501,7 @@ function DocK11() {
             setdataSelect(values => ({...values, [pel]: []}))
             }
         }
-    }, [master])
+    },[])
 
     useEffect(() => {
         handlePelabuhan()
@@ -631,7 +510,7 @@ function DocK11() {
     const handleJenisDokumen = useCallback(async (e) => {
         if(e) {
             try {
-                const response = await master.masterDok(e)
+                const response = await modelMaster.masterDok(e)
                 if(response.data.status === '200') {
                     let jenisDok = response.data.data;
                     const arraySelectJenisDok = jenisDok.map(item => {
@@ -647,7 +526,7 @@ function DocK11() {
                 setdataSelect(values => ({...values, "jenisDokumen": []}))
             }
         }
-    }, [master])
+    }, [])
     
     useEffect(() => {
         handleJenisDokumen()
@@ -681,7 +560,7 @@ function DocK11() {
                     }
 
                     // const modelMaster = new Master()
-                    const resKomKT = master.masterHS(response.data.data.ptk.jenis_karantina)
+                    const resKomKT = modelMaster.masterHS(response.data.data.ptk.jenis_karantina)
                     resKomKT
                     .then((response) => {
                         let dataKomKT = response.data.data;
@@ -698,7 +577,7 @@ function DocK11() {
                     });
 
                     if(response.data.data.ptk.jenis_karantina === "T") {
-                        const resKomKT = master.masterKomKT()
+                        const resKomKT = modelMaster.masterKomKT()
                         resKomKT
                         .then((response) => {
                             let dataKomKT = response.data.data;
@@ -715,7 +594,7 @@ function DocK11() {
                         });
                         
                         if(response.data.data.ptk.jenis_media_pembawa_id === 4) {
-                            const resPeruntukan = master.masterKlasKT("A")
+                            const resPeruntukan = modelMaster.masterKlasKT("A")
                             resPeruntukan
                             .then((response) => {
                                 console.log(response.data)
@@ -732,7 +611,7 @@ function DocK11() {
                                 console.log(error);
                             });
                         } else {
-                            const resPeruntukanB = master.masterKlasKT("B")
+                            const resPeruntukanB = modelMaster.masterKlasKT("B")
                             resPeruntukanB
                             .then((response) => {
                                 let dataPeruntukanKTB = response.data.data;
@@ -747,7 +626,7 @@ function DocK11() {
                             .catch((error) => {
                                 console.log(error);
                             });
-                            const resPeruntukanC = master.masterKlasKT("C")
+                            const resPeruntukanC = modelMaster.masterKlasKT("C")
                             resPeruntukanC
                             .then((response) => {
                                 let dataPeruntukanKTC = response.data.data;
@@ -762,7 +641,7 @@ function DocK11() {
                             .catch((error) => {
                                 console.log(error);
                             });
-                            const resPeruntukanD = master.masterKlasKT("D")
+                            const resPeruntukanD = modelMaster.masterKlasKT("D")
                             resPeruntukanD
                             .then((response) => {
                                 let dataPeruntukanKTD = response.data.data;
@@ -939,12 +818,134 @@ function DocK11() {
                 console.log(error);
             });
         }
-    },[dataKlasKT, handleJenisDokumen, handleKota, handlePelabuhan, idPtk, setValueDetilMP, setValueDokPeriksa, setValueDokumen, setValueKonfirmasi, setValueKontainer, setValueMP, setValuePelabuhan, setValuePemohon, setValueVerify, master])
+    },[dataKlasKT, handleJenisDokumen, handleKota, handlePelabuhan, idPtk, setValueDetilMP, setValueDokPeriksa, setValueDokumen, setValueKonfirmasi, setValueKontainer, setValueMP, setValuePelabuhan, setValuePemohon, setValueVerify])
 
     
     // function isiDataPtk(response) {
         
     // }
+
+    const handleKomKHIDetil = useCallback(async (e) => {
+            const resKodeHS = modelMaster.masterHS(cekdataMP.mediaPembawa)
+            resKodeHS
+            .then((response) => {
+                let resKodeHS = response.data.data;
+                var arrayKodeHS = resKodeHS.map(item => {
+                    return {
+                        value: item.kode,
+                        label: item.kode + " - " + item.nama_en
+                    }
+                })
+                setdataSelect(values => ({...values, "kodeHSMp": arrayKodeHS}));
+            })
+            .catch((error) => {
+                console.log(error);
+            });
+    
+            if(cekdataMP.mediaPembawa === "H") {
+                const resKomKH = modelMaster.masterKomKH(e)
+                resKomKH
+                .then((response) => {
+                    let dataKomKH = response.data.data;
+                    var arrayKomKH = dataKomKH.map(item => {
+                        return {
+                            value: item.id + ";" + item.nama + ";" + item.nama_latin + ";" + item.kode,
+                            label: item.nama + " - " + item.nama_en
+                        }
+                    })
+                    setdataSelect(values => ({...values, "komoditasMPKH": arrayKomKH}));
+                })
+                .catch((error) => {
+                    console.log(error);
+                });
+            } else if(cekdataMP.mediaPembawa === "T") {
+                const resKomKT = modelMaster.masterKomKT()
+                resKomKT
+                .then((response) => {
+                    let dataKomKT = response.data.data;
+                    var arrayKomKT = dataKomKT.map(item => {
+                        return {
+                            value: item.id + ";" + item.nama + ";" + item.nama_latin,
+                            label: item.nama + " - " + item.nama_en
+                        }
+                    })
+                    setdataSelect(values => ({...values, "selectKomoditasMP": arrayKomKT}));
+                })
+                .catch((error) => {
+                    console.log(error);
+                });
+    
+                if(e === "4") {
+                    const resPeruntukan = modelMaster.masterKlasKT("A")
+                    resPeruntukan
+                    .then((response) => {
+                        console.log(response.data)
+                        let dataPeruntukanKT = response.data.data;
+                        const arraySelectKota = dataPeruntukanKT.map(item => {
+                            return {
+                                value: item.id.toString(),
+                                label: item.peruntukan + " - " + item.bentuk + " - " + item.golongan
+                            }
+                        })
+                        setdataSelect(values => ({...values, "peruntukanMP": arraySelectKota}))
+                    })
+                    .catch((error) => {
+                        console.log(error);
+                    });
+                } else {
+                    const resPeruntukanB = modelMaster.masterKlasKT("B")
+                    resPeruntukanB
+                    .then((response) => {
+                        let dataPeruntukanKTB = response.data.data;
+                        var arrayPeruntukanKTB = dataPeruntukanKTB.map(item => {
+                            return {
+                                value: item.id.toString(),
+                                label: item.peruntukan + " - " + item.bentuk + " - " + item.golongan
+                            }
+                        })
+                        const resPeruntukanC = modelMaster.masterKlasKT("C")
+                        resPeruntukanC
+                        .then((response) => {
+                            let dataPeruntukanKTC = response.data.data;
+                            var arrayPeruntukanKTC = dataPeruntukanKTC.map(item => {
+                                return {
+                                    value: item.id.toString(),
+                                    label: item.peruntukan + " - " + item.bentuk + " - " + item.golongan
+                                }
+                            })
+                            const resPeruntukanD = modelMaster.masterKlasKT("D")
+                            resPeruntukanD
+                            .then((response) => {
+                                let dataPeruntukanKTD = response.data.data;
+                                var arrayPeruntukanKTD = dataPeruntukanKTD.map(item => {
+                                    return {
+                                        value: item.id.toString(),
+                                        label: item.peruntukan + " - " + item.bentuk + " - " + item.golongan
+                                    }
+                                })
+                                setdataSelect(values => ({...values, "peruntukanMP": [...arrayPeruntukanKTB, ...arrayPeruntukanKTC, ...arrayPeruntukanKTD]}))
+                            })
+                            .catch((error) => {
+                                console.log(error);
+                            });
+                        })
+                        .catch((error) => {
+                            console.log(error);
+                        });
+                        setdataSelect(values => ({...values, "peruntukanMP": arrayPeruntukanKTB}))
+                    })
+                    .catch((error) => {
+                        console.log(error);
+                    });
+                }
+            } else if(cekdataMP.mediaPembawa === "I") {
+                // komoditas ikan
+            }
+        },[cekdataMP.mediaPembawa])
+    
+    useEffect(() => {
+        handleKomKHIDetil()
+    }, [handleKomKHIDetil])
     
     const onSubmitDokumen = (data) => {
         // const modelPemohon = new PtkModel();
@@ -1348,7 +1349,7 @@ function DocK11() {
     // }
 
     let [wizardPage, setWizardPage] = useState(1);
-    let [editKontainer, setEditKontainer] = useState();
+    // let [editKontainer, setEditKontainer] = useState();
 
     // const handleAddKontainer = (e) => {
     //     e.preventDefault();
@@ -2630,41 +2631,41 @@ function DocK11() {
                                                                         {/* <!-- Hewan --> */}
                                                                         <div style={{display: cekdataMP.mediaPembawa === 'H' ? 'block' : 'none'}}>
                                                                             <div className="form-check form-check-inline">
-                                                                                <input className="form-check-input" type="radio" onInput={(e) => handleKomKHIDetil(e)} name="jenisMp" id="hidup" value={1} {...registerMP("jenisMp", { required: "Mohon pilih jenis media pembawa."})} />
+                                                                                <input className="form-check-input" type="radio" onInput={(e) => handleKomKHIDetil(e.target.value)} name="jenisMp" id="hidup" value={1} {...registerMP("jenisMp", { required: "Mohon pilih jenis media pembawa."})} />
                                                                                 <label className="form-check-label" htmlFor="hidup">Hewan Hidup</label>
                                                                             </div>
                                                                             <div className="form-check form-check-inline">
-                                                                                <input className="form-check-input" type="radio" onInput={(e) => handleKomKHIDetil(e)} name="jenisMp" id="produk" value={2} {...registerMP("jenisMp")} />
+                                                                                <input className="form-check-input" type="radio" onInput={(e) => handleKomKHIDetil(e.target.value)} name="jenisMp" id="produk" value={2} {...registerMP("jenisMp")} />
                                                                                 <label className="form-check-label" htmlFor="produk">Produk Hewan</label>
                                                                             </div>
                                                                             <div className="form-check form-check-inline">
-                                                                                <input className="form-check-input" type="radio" onInput={(e) => handleKomKHIDetil(e)} name="jenisMp" id="mpl" value={3} {...registerMP("jenisMp")} />
+                                                                                <input className="form-check-input" type="radio" onInput={(e) => handleKomKHIDetil(e.target.value)} name="jenisMp" id="mpl" value={3} {...registerMP("jenisMp")} />
                                                                                 <label className="form-check-label" htmlFor="mpl">Media Pembawa Lain</label>
                                                                             </div>
                                                                         </div>
                                                                         {/* <!-- Ikan --> */}
                                                                         <div style={{display: cekdataMP.mediaPembawa === 'I' ? 'block' : 'none'}}>
                                                                             <div className="form-check form-check-inline">
-                                                                                <input className="form-check-input" type="radio" onInput={(e) => handleKomKHIDetil(e)} name="jenisMp" id="hidup" value={6} {...registerMP("jenisMp", { required: "Mohon pilih jenis media pembawa."})} />
+                                                                                <input className="form-check-input" type="radio" onInput={(e) => handleKomKHIDetil(e.target.value)} name="jenisMp" id="hidup" value={6} {...registerMP("jenisMp", { required: "Mohon pilih jenis media pembawa."})} />
                                                                                 <label className="form-check-label" htmlFor="hidup">Ikan Hidup</label>
                                                                             </div>
                                                                             <div className="form-check form-check-inline">
-                                                                                <input className="form-check-input" type="radio" onInput={(e) => handleKomKHIDetil(e)} name="jenisMp" id="produk" value={7} {...registerMP("jenisMp")} />
+                                                                                <input className="form-check-input" type="radio" onInput={(e) => handleKomKHIDetil(e.target.value)} name="jenisMp" id="produk" value={7} {...registerMP("jenisMp")} />
                                                                                 <label className="form-check-label" htmlFor="produk">Produk Ikan</label>
                                                                             </div>
                                                                             <div className="form-check form-check-inline">
-                                                                                <input className="form-check-input" type="radio" onInput={(e) => handleKomKHIDetil(e)} name="jenisMp" id="mpl" value={8} {...registerMP("jenisMp")} />
+                                                                                <input className="form-check-input" type="radio" onInput={(e) => handleKomKHIDetil(e.target.value)} name="jenisMp" id="mpl" value={8} {...registerMP("jenisMp")} />
                                                                                 <label className="form-check-label" htmlFor="mpl">Media Pembawa Lain</label>
                                                                             </div>
                                                                         </div>
                                                                         {/* <!-- Tumbuhan --> */}
                                                                         <div style={{display: cekdataMP.mediaPembawa === 'T' ? 'block' : 'none'}}>
                                                                             <div className="form-check form-check-inline">
-                                                                                <input className="form-check-input" type="radio" name="jenisMp" id="benih" onInput={(e) => handleKomKHIDetil(e)} value={4} {...registerMP("jenisMp")} />
+                                                                                <input className="form-check-input" type="radio" name="jenisMp" id="benih" onInput={(e) => handleKomKHIDetil(e.target.value)} value={4} {...registerMP("jenisMp")} />
                                                                                 <label className="form-check-label" htmlFor="benih">Benih</label>
                                                                             </div>
                                                                             <div className="form-check form-check-inline mb-3">
-                                                                                <input className="form-check-input" type="radio" name="jenisMp" id="nonbenih" onInput={(e) => handleKomKHIDetil(e)} value={5} {...registerMP("jenisMp")} />
+                                                                                <input className="form-check-input" type="radio" name="jenisMp" id="nonbenih" onInput={(e) => handleKomKHIDetil(e.target.value)} value={5} {...registerMP("jenisMp")} />
                                                                                 <label className="form-check-label" htmlFor="nonbenih">Non Benih</label>
                                                                             </div>
                                                                         </div>
@@ -3187,7 +3188,7 @@ function DocK11() {
                     <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     <div className="text-center mb-4">
                         <h3>Tambah Kontainer Baru</h3>
-                        <p>{editKontainer}</p>
+                        {/* <p>{editKontainer}</p> */}
                     </div>
                     <form className="row" onSubmit={handleFormKontainer(onSubmitKontainer)}>
                             <input type="hidden" name='idDataKontainer' {...registerKontainer("idDataKontainer")} />

@@ -28,10 +28,10 @@ export default class PtkHistory {
     let datasend = {
       'id': "",
       'tindakan': "p1",
-      'jantanP1': data.jantan,
-      'betinaP1': data.betina,
-      'volumeP1': data.volume,
-      'nettoP1': data.netto 
+      'jantanP1': data.jantanP1,
+      'betinaP1': data.betinaP1,
+      'volumeP1': data.volumeP1,
+      'nettoP1': data.nettoP1
     }
     let config = {
       method: 'put',
@@ -50,10 +50,10 @@ export default class PtkHistory {
     let datasend = {
       'id': "",
       'tindakan': "p2",
-      'jantanP2': data.jantan,
-      'betinaP2': data.betina,
-      'volumeP2': data.volume,
-      'nettoP2': data.netto
+      'jantanP2': data.jantanP2,
+      'betinaP2': data.betinaP2,
+      'volumeP2': data.volumeP2,
+      'nettoP2': data.nettoP2
     }
     let config = {
       method: 'put',
@@ -72,10 +72,10 @@ export default class PtkHistory {
     let datasend = {
       'id': "",
       'tindakan': "p3",
-      'jantanP3': data.jantan,
-      'betinaP3': data.betina,
-      'volumeP3': data.volume,
-      'nettoP3': data.netto
+      'jantanP3': data.jantanP3,
+      'betinaP3': data.betinaP3,
+      'volumeP3': data.volumeP3,
+      'nettoP3': data.nettoP3
     }
     let config = {
       method: 'put',
@@ -94,10 +94,10 @@ export default class PtkHistory {
     let datasend = {
       'id': "",
       'tindakan': "p4",
-      'jantanP4': data.jantan,
-      'betinaP4': data.betina,
-      'volumeP4': data.volume,
-      'nettoP4': data.netto
+      'jantanP4': data.jantanP4,
+      'betinaP4': data.betinaP4,
+      'volumeP4': data.volumeP4,
+      'nettoP4': data.nettoP4
     }
     let config = {
       method: 'put',
@@ -116,10 +116,10 @@ export default class PtkHistory {
     let datasend = {
       'id': "",
       'tindakan': "p5",
-      'jantanP5': data.jantan,
-      'betinaP5': data.betina,
-      'volumeP5': data.volume,
-      'nettoP5': data.netto
+      'jantanP5': data.jantanP5,
+      'betinaP5': data.betinaP5,
+      'volumeP5': data.volumeP5,
+      'nettoP5': data.nettoP5
     }
     let config = {
       method: 'put',
@@ -138,10 +138,10 @@ export default class PtkHistory {
     let datasend = {
       'id': "",
       'tindakan': "p6",
-      'jantanP6': data.jantan,
-      'betinaP6': data.betina,
-      'volumeP6': data.volume,
-      'nettoP6': data.netto
+      'jantanP6': data.jantanP6,
+      'betinaP6': data.betinaP6,
+      'volumeP6': data.volumeP6,
+      'nettoP6': data.nettoP6
     }
     let config = {
       method: 'put',
@@ -160,10 +160,10 @@ export default class PtkHistory {
     let datasend = {
       'id': "",
       'tindakan': "p7",
-      'jantanP7': data.jantan,
-      'betinaP7': data.betina,
-      'volumeP7': data.volume,
-      'nettoP7': data.netto
+      'jantanP7': data.jantanP7,
+      'betinaP7': data.betinaP7,
+      'volumeP7': data.volumeP7,
+      'nettoP7': data.nettoP7
     }
     let config = {
       method: 'put',
@@ -183,12 +183,12 @@ export default class PtkHistory {
       'id': id,
       'tindakan': "p8",
       'nama_umum_tercetak': data.namaUmum,
-      'nama_ilmiah_tercetak': data.namaLatin,
+      'nama_latin_tercetak': data.namaLatin,
       // 'bentuk_tercetak':
-      'jantanP8': data.jantan,
-      'betinaP8': data.betina,
-      'volumeP8': data.volumeLain,
-      'nettoP8': data.volumeNetto
+      'jantanP8': data.jantanP8,
+      'betinaP8': data.betinaP8,
+      'volumeP8': data.volumeP8,
+      'nettoP8': data.nettoP8
     }
     let config = {
       method: 'put',

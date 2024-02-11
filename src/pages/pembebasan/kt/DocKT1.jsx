@@ -59,17 +59,6 @@ function DocKT1() {
         tglDokumen: "",
     })
 
-    function addZero(i) {
-        if (i < 10) {i = "0" + i}
-        return i;
-    }
-
-    // const date = new Date();
-    // function dateNow() {
-    //     let n = date.getFullYear() + '-' + addZero(date.getMonth() + 1) + '-' + addZero(date.getDate()) + ' ' + addZero(date.getHours()) + ':' + addZero(date.getMinutes()) + ":" + addZero(date.getSeconds());
-    //     return n;
-    // }
-
     const {
         register,
         setValue,
@@ -136,7 +125,16 @@ function DocKT1() {
     }
 
     function onSubmitMPKT1(data) {
-        console.log(data)
+        // console.log(data)
+        log.updateKomoditiP8(data.id, data)
+        .then((response) => {
+            if(response.data.status === '201') {
+                alert(response.data.status + " - " + response.data.message)
+            }
+        })
+        .catch((error) => {
+            console.log(error);
+        })
     }
 
     function handleEditKomoditas(e) {
@@ -215,8 +213,7 @@ function DocKT1() {
 
     useEffect(()=>{
         if(idPtk) {
-            const date = new Date();
-            setValue("tglDokKT1",  date.getFullYear() + '-' + addZero(date.getMonth() + 1) + '-' + addZero(date.getDate()) + ' ' + addZero(date.getHours()) + ':' + addZero(date.getMinutes()))
+            setValue("tglDokKT1", (new Date()).toLocaleString('en-CA', { hourCycle: 'h24' }).replace(',', '').slice(0,16))
                     
             const tglPtk = Cookies.get("tglPtk");
             let ptkDecode = idPtk ? base64_decode(idPtk) : "";

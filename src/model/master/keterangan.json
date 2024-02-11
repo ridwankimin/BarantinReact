@@ -1,0 +1,121 @@
+[ 
+{ 
+"id":1,
+"deskripsi":"Telah memenuhi seluruh dokumen karantina hewan yang dipersyaratkan;",
+"deskripsi_en":"Has fulfilled all required animal quarantine documents",
+"flag":"KETERANGAN",
+"karantina":"H",
+"dokumen":"K-9.2.H"
+},
+{ 
+"id":2,
+"deskripsi":"Dalam keadaan sehat dan baik serta telah memenuhi persyaratan sanitasi;",
+"deskripsi_en":"Is (are) healthy and in good condition and has (have) fulfilled the sanitary requirements",
+"flag":"KETERANGAN",
+"karantina":"H",
+"dokumen":"K-9.2.H"
+},
+{ 
+"id":3,
+"deskripsi":"Telah memenuhi seluruh dokumen lain yang dipersyaratkan;",
+"deskripsi_en":"Has fulfilled all required others documents",
+"flag":"KETERANGAN",
+"karantina":"H",
+"dokumen":"K-9.2.H"
+},
+{ 
+"id":4,
+"deskripsi":"Lainnya",
+"deskripsi_en":"Others",
+"flag":"KETERANGAN",
+"karantina":"H",
+"dokumen":"K-9.2.H"
+},
+{ 
+"id":5,
+"deskripsi":"Hewan tersebut di atas telah dilakukan tindakan, tidak tertular dan bebas gejala HPHK serta bebas dari ektoparasit.",
+"deskripsi_en":"The animal(s) as stated above has (have) been conducted with quaratine measures, is (are) not infected and show(s) no clinical signs of animal quarantine pets and diseases as well as free from ectopar",
+"flag":"KETERANGAN",
+"karantina":"H",
+"dokumen":"KH-1"
+},
+{ 
+"id":6,
+"deskripsi":"Hewan dalam keadaan sehat dan layak untuk diberangkatkan.",
+"deskripsi_en":"The animal(s) is (are) heathly and feasible to be dispatched.",
+"flag":"KETERANGAN",
+"karantina":"H",
+"dokumen":"KH-1"
+},
+{ 
+"id":7,
+"deskripsi":"Hewan sudah memenuhi persyaratan dokumen lain.",
+"deskripsi_en":"The animal(s) have met the requirements of other documents.",
+"flag":"KETERANGAN",
+"karantina":"H",
+"dokumen":"KH-1"
+},
+{ 
+"id":8,
+"deskripsi":"Lainnya",
+"deskripsi_en":"Others",
+"flag":"KETERANGAN",
+"karantina":"H",
+"dokumen":"KH-1"
+},
+{ 
+"id":9,
+"deskripsi":"Produk hewan tersebut di atas telah dilakukan tindakan, tidak ditemukan HPHK.",
+"deskripsi_en":"The animal product as stated above has (have) been conducted with quaratine measures, is (are) not infected of animal quarantine pets and diseases",
+"flag":"KETERANGAN",
+"karantina":"H",
+"dokumen":"KH-2"
+},
+{ 
+"id":10,
+"deskripsi":"Produk Hewan tersebut di atas dalam keadaan sanitasi baik, kemasan utuh, tidak terjadi perubahan sifat, tidak terkontaminasi, dan dinilai tidak membahayakan kesehatan hewan dan/atau manusia.",
+"deskripsi_en":"The animal product as stated above is (are) in good sanitation, intact in packaging, no change in characteristics, not contaminated, and is (are) considered not endangering animal and/or human health",
+"flag":"KETERANGAN",
+"karantina":"H",
+"dokumen":"KH-2"
+},
+{ 
+"id":11,
+"deskripsi":"Produk Hewan tersebut di atas telah memenuhi persyaratan dokumen lain.",
+"deskripsi_en":"The animal products mentioned above have met the requirements of other documents",
+"flag":"KETERANGAN",
+"karantina":"H",
+"dokumen":"KH-2"
+},
+{ 
+"id":12,
+"deskripsi":"Lainnya",
+"deskripsi_en":"Others",
+"flag":"KETERANGAN",
+"karantina":"H",
+"dokumen":"KH-2"
+},
+{ 
+"id":13,
+"deskripsi":"Pemenuhan persyaratan teknis negara tujuan (Untuk Media Pembawa Ekspor)",
+"deskripsi_en":"The fulfillment of technical requirements of the country of destination (for the export carrier)",
+"flag":"PERNYATAAN",
+"karantina":"H",
+"dokumen":""
+},
+{ 
+"id":14,
+"deskripsi":"Hasil Pemeriksaan Laboratorium (dilampirkan hasil pengujian)",
+"deskripsi_en":"Result(s) of Laboratory Testing (the result (s) is/are attached)",
+"flag":"PERNYATAAN",
+"karantina":"H",
+"dokumen":""
+},
+{ 
+"id":15,
+"deskripsi":"Lainnya",
+"deskripsi_en":"Others",
+"flag":"PERNYATAAN",
+"karantina":"H",
+"dokumen":""
+}]

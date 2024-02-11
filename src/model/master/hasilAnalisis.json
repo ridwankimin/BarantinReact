@@ -1,0 +1,216 @@
+[ 
+{ 
+"id":1,
+"karantina":"H",
+"deskripsi":"Dilarang pemasukan/pengeluarannya"
+},
+{ 
+"id":2,
+"karantina":"H",
+"deskripsi":"Belum diolah"
+},
+{ 
+"id":3,
+"karantina":"H",
+"deskripsi":"Sudah diolah"
+},
+{ 
+"id":4,
+"karantina":"H",
+"deskripsi":"Pangan"
+},
+{ 
+"id":5,
+"karantina":"H",
+"deskripsi":"Pakan"
+},
+{ 
+"id":6,
+"karantina":"H",
+"deskripsi":"Produk Rekayasa Genetik"
+},
+{ 
+"id":7,
+"karantina":"H",
+"deskripsi":"Sumber Daya Genetik"
+},
+{ 
+"id":8,
+"karantina":"H",
+"deskripsi":"Agensia Hayati"
+},
+{ 
+"id":9,
+"karantina":"H",
+"deskripsi":"Jenis Asing Invasif"
+},
+{ 
+"id":10,
+"karantina":"H",
+"deskripsi":"Satwa Liar dan Satwa Langka"
+},
+{ 
+"id":11,
+"karantina":"H",
+"deskripsi":"Lainnya"
+},
+{ 
+"id":12,
+"karantina":"I",
+"deskripsi":"Dilarang pemasukan/pengeluarannya"
+},
+{ 
+"id":13,
+"karantina":"I",
+"deskripsi":"Belum diolah"
+},
+{ 
+"id":14,
+"karantina":"I",
+"deskripsi":"Sudah diolah"
+},
+{ 
+"id":15,
+"karantina":"I",
+"deskripsi":"Pangan"
+},
+{ 
+"id":16,
+"karantina":"I",
+"deskripsi":"Pakan"
+},
+{ 
+"id":17,
+"karantina":"I",
+"deskripsi":"Produk Rekayasa Genetik"
+},
+{ 
+"id":18,
+"karantina":"I",
+"deskripsi":"Sumber Daya Genetik"
+},
+{ 
+"id":19,
+"karantina":"I",
+"deskripsi":"Agensia Hayati"
+},
+{ 
+"id":20,
+"karantina":"I",
+"deskripsi":"Jenis Asing Invasif"
+},
+{ 
+"id":21,
+"karantina":"I",
+"deskripsi":"Jenis Ikan Dilindungi"
+},
+{ 
+"id":22,
+"karantina":"I",
+"deskripsi":"Lainnya"
+},
+{ 
+"id":23,
+"karantina":"T",
+"deskripsi":"Dilarang pemasukan/pengeluarannya"
+},
+{ 
+"id":24,
+"karantina":"T",
+"deskripsi":"Belum diolah"
+},
+{ 
+"id":25,
+"karantina":"T",
+"deskripsi":"Pangan"
+},
+{ 
+"id":26,
+"karantina":"T",
+"deskripsi":"Pakan"
+},
+{ 
+"id":27,
+"karantina":"T",
+"deskripsi":"Produk Rekayasa Genetik"
+},
+{ 
+"id":28,
+"karantina":"T",
+"deskripsi":"Sumber Daya Genetik"
+},
+{ 
+"id":29,
+"karantina":"T",
+"deskripsi":"Agensia Hayati"
+},
+{ 
+"id":30,
+"karantina":"T",
+"deskripsi":"Jenis Asing Invasif"
+},
+{ 
+"id":31,
+"karantina":"T",
+"deskripsi":"Tumbuhan Liar dan Tumbuhan Langka"
+},
+{ 
+"id":32,
+"karantina":"T",
+"deskripsi":"Dimasukkan/dikeluarkan untuk ditanam"
+},
+{ 
+"id":33,
+"karantina":"T",
+"deskripsi":"Dimasukkan/dikeluarkan selain untuk ditanam, antara lain untuk konsumsi atau pengolahan lebih lanjut"
+},
+{ 
+"id":34,
+"karantina":"T",
+"deskripsi":"Sudah diolah sampai tingkat yang tidak dapat lagi terinfestasi OPTK/OPT"
+},
+{ 
+"id":35,
+"karantina":"T",
+"deskripsi":"Sudah diolah sampai tingkat yang masih dapat terinfestasi OPTK/OPT"
+},
+{ 
+"id":36,
+"karantina":"T",
+"deskripsi":"Lainnya"
+},
+{ 
+"id":37,
+"karantina":"S",
+"deskripsi":"Media Pembawa tidak dilaporkan ke Pejabat Karantina"
+},
+{ 
+"id":38,
+"karantina":"S",
+"deskripsi":"Media Pembawa tidak diserahkan ke Pejabat Karantina"
+},
+{ 
+"id":39,
+"karantina":"S",
+"deskripsi":"Media Pembawa tidak dilalulintaskan melalui Tempat Pemasukan/Pengeluaran yang ditetapkan"
+},
+{ 
+"id":40,
+"karantina":"S",
+"deskripsi":"Tidak Ditemukan Pemilik"
+},
+{ 
+"id":41,
+"karantina":"S",
+"deskripsi":"Profilling Pemilik"
+},
+{ 
+"id":42,
+"karantina":"S",
+"deskripsi":"Hasil penyerahan Media Pembawa dari Instansi/Aparat Penegak Hukum Lain/Masyarakat"
+},
+{ 
+"id":43,
+"karantina":"S",
+"deskripsi":"Lainnya"
+}]

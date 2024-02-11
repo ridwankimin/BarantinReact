@@ -6,9 +6,18 @@ import PnPelepasan from '../../model/PnPelepasan';
 import PtkHistory from '../../model/PtkHistory';
 import PtkModel from '../../model/PtkModel';
 import PtkSurtug from '../../model/PtkSurtug';
+import SpinnerDot from '../../component/loading/SpinnerDot';
+const log = new PtkHistory()
+
+const addCommas = num => num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+const removeNonNumeric = num => num.toString().replace(/[^0-9.]/g, "");
 
 function DocK92t() {
     const idPtk = Cookies.get("idPtkPage");
+    let [loadKomoditi, setLoadKomoditi] = useState(false)
+    let [loadKomoditiPesan, setLoadKomoditiPesan] = useState("")
+    let [datasend, setDataSend] = useState([])
+
     let [data, setData] = useState({
         noAju: "",
         noIdPtk: "",
@@ -24,8 +33,33 @@ function DocK92t() {
         formState: { errors },
     } = useForm();
 
-    const onSubmit = (data) => {
+    const {
+        register: registerMPK92t,
+        setValue: setValueMPK92t,
+        // control: controlMPK92t,
+        watch: watchMPK92t,
+        handleSubmit: handleFormMPK92t,
+        // reset: resetFormKomoditi,
+        formState: { errors: errorsMPK92t },
+    } = useForm({
+        defaultValues: {
+            idMPK92t: "",
+            volumeNetto: "",
+            volumeLain: "",
+            satuanLain: "",
+            namaUmum: "",
+            namaLatin: "",
+          }
+        })
+
+    const cekdataMPK92t = watchMPK92t()
+
+    function onSubmitMPK92t(data) {
         console.log(data)
+    }
+
+    const onSubmit = (data) => {
+        // console.log(data)
         const model = new PnPelepasan();
         const response = model.eksporKT(data);
         response
@@ -57,6 +91,39 @@ function DocK92t() {
             console.log(error);
             alert(error.response.status + " - " + error.response.data.message)
         });
+    }
+
+    function handleEditKomoditas(e) {
+        setValueMPK92t("idMPK92t", e.target.dataset.header)
+        setValueMPK92t("idPtk", e.target.dataset.ptk)
+        setValueMPK92t("jenisKar", "T")
+        const cell = e.target.closest('tr')
+        setValueMPK92t("volumeNetto", cell.cells[5].innerHTML)
+        setValueMPK92t("satuanNetto", cell.cells[6].innerHTML)
+        setValueMPK92t("volumeLain", cell.cells[7].innerHTML)
+        setValueMPK92t("satuanLain", cell.cells[8].innerHTML)
+        setValueMPK92t("namaUmum", cell.cells[3].innerHTML)
+        setValueMPK92t("namaLatin", cell.cells[4].innerHTML)
+    }
+
+    function handleEditKomoditasAll() {
+        setLoadKomoditi(true)
+        data.listKomoditas?.map((item, index) => (
+            // console.log(datasend[index])
+            log.updateKomoditiP8(item.id, datasend[index])
+                .then((response) => {
+                    if(response.data.status === '201') {
+                        console.log("history saved")
+                    }
+                })
+                .catch((error) => {
+                    setLoadKomoditi(true)
+                    setLoadKomoditiPesan("Terjadi error pada saat simpan, mohon refresh halaman dan coba lagi.")
+                    console.log(error.response.data);
+                })
+            )
+        )
+        setLoadKomoditi(true)
     }
 
     useEffect(()=>{
@@ -96,6 +163,18 @@ function DocK92t() {
                         listKomoditas: response.data.data.ptk_komoditi,
                         listDokumen: response.data.data.ptk_dokumen
                     }));
+
+                    var arrayKomKT = response.data.data.ptk_komoditi?.map(item => {
+                        return {
+                            namaUmum: item.nama_umum_tercetak,
+                            namaLatin: item.nama_latin_tercetak,
+                            jantan: null,
+                            betina: null,
+                            volumeP8: item.volume_lain,
+                            nettoP8: item.volume_netto
+                        }
+                    })
+                    setDataSend(arrayKomKT)
                     
                     setValue("tandaKhusus", response.data.data.ptk.tanda_khusus)
                     setValue("namaUmum", namaUmumMP.join(";"))
@@ -137,7 +216,7 @@ function DocK92t() {
   return (
     <div className="container-xxl flex-grow-1 container-p-y">
         <h4 className="py-3 breadcrumb-wrapper mb-4">
-            K-9.2.T <span className="text-muted fw-light">(Sertifikat Pelepasan Karantina Tumbuhan/Pengawasan)</span>
+            K-9.2.T <span className="fw-light" style={{color: 'blue'}}>Sertifikat Pelepasan Karantina Tumbuhan/Pengawasan</span>
         </h4>
 
         <div className="row">
@@ -274,8 +353,57 @@ function DocK92t() {
                                             </div>
                                             <hr />
                                             <div className="row">
-                                                <h5 className='mb-1'><b><u>Identitas Media Pembawa</u></b></h5>
-                                                <div className="col-md-6">
+                                                <h5 className='mb-1'><b><u>Identitas Media Pembawa</u></b>
+                                                {loadKomoditi ? <SpinnerDot/> : null}
+                                                {data.listKomoditas ? 
+                                                (loadKomoditi ? null : <button className='btn btn-sm btn-outline-secondary' onClick={handleEditKomoditasAll} style={{marginLeft: "15px"}}><i className='fa-solid fa-check-square text-success'></i> Tidak ada perubahan</button>) : null }
+                                                <span className='text-danger'>{loadKomoditiPesan}</span>
+                                                </h5>
+                                                <div className='col-md-12 mb-3'>
+                                                    <div className="table-responsive text-nowrap" style={{height: "300px"}}>
+                                                        <table className="table table-sm table-bordered table-hover table-striped dataTable">
+                                                            <thead>
+                                                                <tr>
+                                                                    <th>No</th>
+                                                                    <th>Kode HS</th>
+                                                                    <th>Klasifikasi</th>
+                                                                    <th>Komoditas Umum</th>
+                                                                    <th>Komoditas En/Latin</th>
+                                                                    <th>Netto</th>
+                                                                    <th>Satuan</th>
+                                                                    <th>Jumlah</th>
+                                                                    <th>Satuan</th>
+                                                                    <th>Volume P8</th>
+                                                                    <th>Netto P8</th>
+                                                                    <th>Act</th>
+                                                                </tr>
+                                                            </thead>
+                                                            <tbody>
+                                                                {data.listKomoditas ? (data.listKomoditas?.map((data, index) => (
+                                                                            <tr key={index}>
+                                                                                <td>{index + 1}</td>
+                                                                                <td>{data.kode_hs}</td>
+                                                                                <td>{data.klasifikasi}</td>
+                                                                                <td>{data.nama_umum_tercetak}</td>
+                                                                                <td>{data.nama_latin_tercetak}</td>
+                                                                                <td>{data.volume_netto}</td>
+                                                                                <td>{data.sat_netto}</td>
+                                                                                <td>{data.volume_lain}</td>
+                                                                                <td>{data.sat_lain}</td>
+                                                                                <td>{data.volumeP8}</td>
+                                                                                <td>{data.nettoP8}</td>
+                                                                                <td>
+                                                                                    <a className="dropdown-item" href="#" type="button" onClick={handleEditKomoditas} data-header={data.id} data-ptk={data.ptk_id} data-bs-toggle="modal" data-bs-target="#modKomoditas"><i className="fa-solid fa-pen-to-square me-1"></i> Edit</a>
+                                                                                </td>
+                                                                            </tr>
+                                                                        ))
+                                                                    ) : null
+                                                                }
+                                                            </tbody>
+                                                        </table>
+                                                    </div>
+                                                </div>
+                                                {/* <div className="col-md-6">
                                                     <div className="row">
                                                         <label className="col-sm-4 col-form-label" htmlFor="namaUmum">Nama Umum</label>
                                                         <div className="col-sm-8">
@@ -306,7 +434,7 @@ function DocK92t() {
                                                             <input type="text" id="jmlTercetak" {...register("jmlTercetak")} className="form-control form-control-sm" placeholder="Jumlah Tercetak.." />
                                                         </div>
                                                     </div>
-                                                </div>
+                                                </div> */}
                                                 <div className="col-md-6">
                                                     <div className="row">
                                                         <label className="col-sm-4 col-form-label" htmlFor="bahanKemasan">Bahan pembungkus/kemasan</label>
@@ -505,10 +633,70 @@ function DocK92t() {
                                     <div className="offset-sm-2 col-sm-9">
                                         <button type="submit" className="btn btn-primary me-sm-2 me-1">Simpan</button>
                                         <button type="reset" className="btn btn-danger btn-label-secondary me-sm-2 me-1">Batal</button>
-                                        {/* <a href={require("../dok/kt1.pdf")} rel="noopener noreferrer" target='_blank' className="btn btn-warning"><i className="bx bx-printer bx-xs"></i>&nbsp; Print</a> */}
+                                        {/* <a href={require("../dok/K92t.pdf")} rel="noopener noreferrer" target='_blank' className="btn btn-warning"><i className="bx bx-printer bx-xs"></i>&nbsp; Print</a> */}
                                     </div>
                                 </div>
                             </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div className="modal fade" id="modKomoditas" tabIndex="-1">
+            <div className="modal-dialog modal-lg">
+                <div className="modal-content p-3 pb-1">
+                    <div className="modal-body">
+                        <button type="button" className="btn-close float-end" data-bs-dismiss="modal" aria-label="Close"></button>
+                        <div className="text-center mb-4">
+                            <h3 className="address-title">Perubahan Media Pembawa {Cookies.get("jenisKarantina") === 'H' ? 'Hewan' : (Cookies.get("jenisKarantina") === 'I' ? 'Ikan' : 'Tumbuhan')}</h3>
+                        </div>
+                        <form onSubmit={handleFormMPK92t(onSubmitMPK92t)} className="row g-3">
+                        <input type="hidden" name='idMPK92t' {...registerMPK92t("idMPK92t")} />
+                        <input type="hidden" name='idPtk' {...registerMPK92t("idPtk")} />
+                        <input type="hidden" name='jenisKar' {...registerMPK92t("jenisKar")} />
+                            <div className="col-6">
+                                <label className="form-label" htmlFor="namaUmum">Nama Umum Tercetak</label>
+                                <input type='text' name="namaUmum" id="namaUmum" {...registerMPK92t("namaUmum")} className="form-control form-control-sm" />
+                            </div>
+                            <div className="col-6">
+                                <label className="form-label" htmlFor="namaLatin">Nama Latin Tercetak</label>
+                                <input type='text' name="namaLatin" id="namaLatin" {...registerMPK92t("namaLatin")} className="form-control form-control-sm" />
+                            </div>
+                            <div className="col-6">
+                                <label className="form-label" htmlFor="volumeNetto">Volume Netto Akhir-P8<span className='text-danger'>*</span></label>
+                                <div className='row'>
+                                    <div className="col-5" style={{paddingRight: '2px'}}>
+                                        <input type="text" name='volumeNetto' id='volumeNetto' value={cekdataMPK92t.volumeNetto ? addCommas(removeNonNumeric(cekdataMPK92t.volumeNetto)) : ""} {...registerMPK92t("volumeNetto", {required: "Mohon isi volume netto."})} className={errorsMPK92t.volumeNetto ? "form-control form-control-sm is-invalid" : "form-control form-control-sm"} />
+                                    </div>
+                                    <div className="col-3" style={{paddingLeft: '2px'}}>
+                                        <input type="text" className='form-control form-control-sm' name='satuanNetto' id='satuanNetto' {...registerMPK92t("satuanNetto")} disabled />
+                                    </div>
+                                </div>
+                                {errorsMPK92t.volumeNetto && <small className="text-danger">{errorsMPK92t.volumeNetto.message}</small>}
+                            </div>
+                            <div className="col-6">
+                                <label className="form-label" htmlFor="volumeLain">Volume Lain Akhir-P8</label>
+                                <div className='row'>
+                                    <div className="col-5" style={{paddingRight: '2px'}}>
+                                        <input type="text" className='form-control form-control-sm' name='volumeLain' id='volumeLain' value={cekdataMPK92t.volumeLain ? addCommas(removeNonNumeric(cekdataMPK92t.volumeLain)) : ""} {...registerMPK92t("volumeLain")} />
+                                    </div>
+                                    <div className="col-3" style={{paddingLeft: '2px'}}>
+                                        <input type="text" className='form-control form-control-sm' name='satuanLain' id='satuanLain' {...registerMPK92t("satuanLain")} disabled />
+                                    </div>
+                                </div>
+                            </div>
+                        <small className='text-danger'>*Format penulisan desimal menggunakan titik ( . )</small>
+                        <div className="col-12 text-center">
+                            <button type="submit" className="btn btn-primary me-sm-3 me-1">Simpan</button>
+                            <button
+                            type="reset"
+                            className="btn btn-label-secondary"
+                            data-bs-dismiss="modal"
+                            aria-label="Close">
+                            Tutup
+                            </button>
+                        </div>
                         </form>
                     </div>
                 </div>

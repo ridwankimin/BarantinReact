@@ -1,0 +1,29 @@
+[ 
+{ 
+"id":1,
+"nama":"General/Dry cargo"
+},
+{ 
+"id":2,
+"nama":"Tunnel type"
+},
+{ 
+"id":3,
+"nama":"Open Top Steel"
+},
+{ 
+"id":4,
+"nama":"Flat Rack"
+},
+{ 
+"id":5,
+"nama":"Reefer / Refrigerate"
+},
+{ 
+"id":6,
+"nama":"Barge Container"
+},
+{ 
+"id":7,
+"nama":"Bulk Container"
+}]

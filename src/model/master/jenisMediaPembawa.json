@@ -1,0 +1,41 @@
+[ 
+{ 
+"id":1,
+"nama":"Hewan Hidup",
+"jenis_karantina":"Hewan"
+},
+{ 
+"id":2,
+"nama":"Produk Hewan",
+"jenis_karantina":"Hewan"
+},
+{ 
+"id":3,
+"nama":"Media Pembawa Lain",
+"jenis_karantina":"Hewan"
+},
+{ 
+"id":4,
+"nama":"Benih",
+"jenis_karantina":"Tumbuhan"
+},
+{ 
+"id":5,
+"nama":"Non Benih",
+"jenis_karantina":"Tumbuhan"
+},
+{ 
+"id":6,
+"nama":"Ikan Hidup",
+"jenis_karantina":"Ikan"
+},
+{ 
+"id":7,
+"nama":"Produk Ikan",
+"jenis_karantina":"Ikan"
+},
+{ 
+"id":8,
+"nama":"Media Pembawa Lain",
+"jenis_karantina":"Ikan"
+}]

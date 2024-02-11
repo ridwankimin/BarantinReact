@@ -1,0 +1,46 @@
+[ 
+{ 
+"id":1,
+"nama":"Laut",
+"nama_en":"Maritime transport"
+},
+{ 
+"id":2,
+"nama":"Kereta Api",
+"nama_en":"Rail transport"
+},
+{ 
+"id":3,
+"nama":"Jalan Raya",
+"nama_en":"Road transport"
+},
+{ 
+"id":4,
+"nama":"Udara",
+"nama_en":"Air transport"
+},
+{ 
+"id":5,
+"nama":"POS",
+"nama_en":"Mail"
+},
+{ 
+"id":6,
+"nama":"Multimoda",
+"nama_en":"Multimodal transport"
+},
+{ 
+"id":7,
+"nama":"Instalansi",
+"nama_en":"Installation"
+},
+{ 
+"id":8,
+"nama":"Perairan",
+"nama_en":"Inland water transport"
+},
+{ 
+"id":9,
+"nama":"Lainnya",
+"nama_en":"Not applicable"
+}]
