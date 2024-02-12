@@ -700,12 +700,12 @@ function DocKT3() {
                             <div className='col-sm-2 col-form-label'>Penandatangan</div>
                             <div className="col-sm-3 mb-3 pr-2">
                                 <input type="text" {...register("ttdPutusan", { required: "Mohon pilih nama penandatangan."})} className={errors.ttdPutusan ? "form-control form-control-sm is-invalid" : "form-control form-control-sm"} />
-                                {errors.ttdPutusan && <><br/><small className="text-danger">{errors.ttdPutusan.message}</small></>}
+                                {errors.ttdPutusan && <small className="text-danger">{errors.ttdPutusan.message}</small>}
                             </div>
                             <div className='col-sm-2 col-form-label text-sm-end'>Diterbitkan di</div>
                             <div className="col-sm-3 mb-3 pr-2">
                                 <input type="text" {...register("diterbitkan", { required: "Mohon isi tempat terbit dokumen."})} className={errors.diterbitkan ? "form-control form-control-sm is-invalid" : "form-control form-control-sm"} />
-                                {errors.diterbitkan && <><br/><small className="text-danger">{errors.diterbitkan.message}</small></>}
+                                {errors.diterbitkan && <small className="text-danger">{errors.diterbitkan.message}</small>}
                             </div>
                         </div>
                         <div className="pt-2">

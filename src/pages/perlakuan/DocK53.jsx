@@ -64,6 +64,7 @@ function DocK53() {
     // console.log("idptk : " + idPtk)
     useEffect(() => {
         if(idPtk) {
+            setValue("tglDok53", (new Date()).toLocaleString('en-CA', { hourCycle: 'h24' }).replace(',', '').slice(0,16))
             // alert(idPtk)
             const tglPtk = Cookies.get("tglPtk");
             let ptkDecode = idPtk ? base64_decode(idPtk) : "";
@@ -455,7 +456,7 @@ function DocK53() {
                                 </div>
                                 <label className="col-sm-2 col-form-label text-sm-end" htmlFor="tglDok53">Tanggal <span className='text-danger'>*</span></label>
                                 <div className="col-sm-2">
-                                    <input type="date" id="tglDok53" name='tglDok53' {...register("tglDok53", {required: "Mohon isi tanggal dokumen."})} className={errors.tglDok53 ? "form-control form-control-sm is-invalid" : "form-control form-control-sm"} />
+                                    <input type="datetime-local" id="tglDok53" name='tglDok53' {...register("tglDok53", {required: "Mohon isi tanggal dokumen."})} className={errors.tglDok53 ? "form-control form-control-sm is-invalid" : "form-control form-control-sm"} />
                                     {errors.tglDok53 && <small className="text-danger">{errors.tglDok53.message}</small>}
                                 </div>
                             </div>

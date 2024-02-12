@@ -180,7 +180,7 @@ function DocKH2() {
 
     useEffect(()=>{
         if(idPtk) {
-            setValue("tglDokh2", (new Date()).toLocaleString('en-CA', { hourCycle: 'h24' }).replace(',', '').slice(0,10))
+            setValue("tglDokh2", (new Date()).toLocaleString('en-CA', { hourCycle: 'h24' }).replace(',', '').slice(0,16))
             const tglPtk = Cookies.get("tglPtk");
             let ptkDecode = idPtk ? base64_decode(idPtk) : "";
             let ptkNomor = idPtk ? ptkDecode.split('m0R3N0r1R') : "";
@@ -375,7 +375,7 @@ function DocKH2() {
                                 </div>
                                 <label className="col-sm-3 col-form-label text-sm-end" htmlFor="tglDokh2">Tanggal <span className='text-danger'>*</span></label>
                                 <div className="col-sm-2">
-                                    <input type="date" id="tglDokh2" name='tglDokh2' {...register("tglDokh2", {required: "Mohon isi tanggal dokumen."})} className={errors.tglDokh2 ? "form-control form-control-sm is-invalid" : "form-control form-control-sm"} />
+                                    <input type="datetime-local" id="tglDokh2" name='tglDokh2' {...register("tglDokh2", {required: "Mohon isi tanggal dokumen."})} className={errors.tglDokh2 ? "form-control form-control-sm is-invalid" : "form-control form-control-sm"} />
                                     {errors.tglDokh2 && <small className="text-danger">{errors.tglDokh2.message}</small>}
                                 </div>
                             </div>
@@ -594,7 +594,7 @@ function DocKH2() {
                                                         {index === 3 ?
                                                         <div className='col-md-4' style={{display: (cekWatch.m4 === '1' ? 'block' : 'none')}}>
                                                             <input type="text" placeholder='Lainnya..' className={errors.m4Lain ? "form-control form-control-sm is-invalid ml-2" : "form-control form-control-sm ml-2"} {...register("m4Lain", {required: (cekWatch.m4 === '1' ? "Mohon isi keterangan lainnya.." : false)})} />
-                                                            {errors.m4Lain && <><br/><small className="text-danger">{errors.m4Lain.message}</small></>}
+                                                            {errors.m4Lain && <small className="text-danger">{errors.m4Lain.message}</small>}
                                                         </div>
                                                         : null}
                                                     </div>
@@ -640,12 +640,12 @@ function DocKH2() {
                             <div className='col-sm-2 col-form-label'>Penandatangan</div>
                             <div className="col-sm-3 mb-3 pr-2">
                                 <input type="text" {...register("ttdPutusan", { required: "Mohon pilih nama penandatangan."})} className={errors.ttdPutusan ? "form-control form-control-sm is-invalid" : "form-control form-control-sm"} />
-                                {errors.ttdPutusan && <><br/><small className="text-danger">{errors.ttdPutusan.message}</small></>}
+                                {errors.ttdPutusan && <small className="text-danger">{errors.ttdPutusan.message}</small>}
                             </div>
                             <div className='col-sm-2 col-form-label text-sm-end'>Diterbitkan di</div>
                             <div className="col-sm-3 mb-3 pr-2">
                                 <input type="text" {...register("diterbitkan", { required: "Mohon isi tempat terbit dokumen."})} className={errors.diterbitkan ? "form-control form-control-sm is-invalid" : "form-control form-control-sm"} />
-                                {errors.diterbitkan && <><br/><small className="text-danger">{errors.diterbitkan.message}</small></>}
+                                {errors.diterbitkan && <small className="text-danger">{errors.diterbitkan.message}</small>}
                             </div>
                         </div>
                         <div className="pt-2">

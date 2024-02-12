@@ -147,6 +147,7 @@ function DocK37b() {
     let [data,setData] = useState({})
     useEffect(() => {
         if(idPtk) {
+            setValue("tglDok37b", (new Date()).toLocaleString('en-CA', { hourCycle: 'h24' }).replace(',', '').slice(0,16))
             let ptkDecode = idPtk ? base64_decode(idPtk) : "";
             let ptkNomor = idPtk ? ptkDecode.split('m0R3N0r1R') : "";
             setData(values => ({...values,
@@ -428,7 +429,7 @@ function DocK37b() {
                                 </div>
                                 <label className="col-sm-2 col-form-label text-sm-center" htmlFor="tglDok37b">Tanggal<span className='text-danger'>*</span></label>
                                 <div className="col-sm-2">
-                                    <input type="date" id="tglDok37b" name='tglDok37b' onInput={(e) => setvalueHeader("tglDok37b", e.target.value)} {...register("tglDok37b", {required: (dataWatch.tglDok37b ? "Mohon isi tanggal dokumen." : false)})} className={errors.tglDok37b ? "form-control form-control-sm is-invalid" : "form-control form-control-sm"} />
+                                    <input type="datetime-local" id="tglDok37b" name='tglDok37b' onInput={(e) => setvalueHeader("tglDok37b", e.target.value)} {...register("tglDok37b", {required: (dataWatch.tglDok37b ? "Mohon isi tanggal dokumen." : false)})} className={errors.tglDok37b ? "form-control form-control-sm is-invalid" : "form-control form-control-sm"} />
                                     {errors.tglDok37b && <small className="text-danger">{errors.tglDok37b.message}</small>}
                                 </div>
                             </div>

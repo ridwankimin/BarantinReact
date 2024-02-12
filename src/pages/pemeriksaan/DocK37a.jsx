@@ -63,6 +63,7 @@ function DocK37a() {
     let [data,setData] = useState({})
     useEffect(() => {
         if(idPtk) {
+            setValueAdministratif("tglDok37a", (new Date()).toLocaleString('en-CA', { hourCycle: 'h24' }).replace(',', '').slice(0,16))
             let ptkDecode = idPtk ? base64_decode(idPtk) : "";
             let ptkNomor = idPtk ? ptkDecode.split('m0R3N0r1R') : "";
             setData(values => ({...values,
