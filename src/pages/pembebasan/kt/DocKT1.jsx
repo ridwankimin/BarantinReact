@@ -376,22 +376,22 @@ function DocKT1() {
                             </div>
                             <div className="col-md-12">
                                 <div className="row mb-3">
-                                        <label className="col-sm-2 col-form-label text-sm-start" htmlFor="karantinaTujuan">To NPPO <span className='text-danger'>*</span></label>
-                                        <div className='col-sm-1' style={{paddingRight:0}}>
-                                            <input type="text" id="karantinaTujuanDepan" name='karantinaTujuanDepan' {...register("karantinaTujuanDepan")} className="form-control form-control-sm" />
-                                        </div>
-                                        <div className='col-sm-2' style={{paddingLeft: 0, paddingRight:0}}>
-                                            <input type="text" id="karantinaTujuan" name='karantinaTujuan' {...register("karantinaTujuan")} className="form-control form-control-sm" placeholder="To NPPO.." disabled />
-                                        </div>
-                                        <div className='col-sm-1' style={{paddingLeft:0}}>
-                                            <input type="text" id="karantinaTujuanBeakang" name='karantinaTujuanBeakang' {...register("karantinaTujuanBeakang")} className="form-control form-control-sm" />
-                                        </div>
+                                    <label className="col-sm-2 col-form-label text-sm-start" htmlFor="karantinaTujuan">To NPPO <span className='text-danger'>*</span></label>
+                                    <div className='col-sm-1' style={{paddingRight:0}}>
+                                        <input type="text" id="karantinaTujuanDepan" name='karantinaTujuanDepan' {...register("karantinaTujuanDepan")} className="form-control form-control-sm" />
+                                    </div>
+                                    <div className='col-sm-2' style={{paddingLeft: 0, paddingRight:0}}>
+                                        <input type="text" id="karantinaTujuan" name='karantinaTujuan' {...register("karantinaTujuan")} className="form-control form-control-sm" placeholder="To NPPO.." disabled />
+                                    </div>
+                                    <div className='col-sm-1' style={{paddingLeft:0}}>
+                                        <input type="text" id="karantinaTujuanBeakang" name='karantinaTujuanBeakang' {...register("karantinaTujuanBeakang")} className="form-control form-control-sm" />
+                                    </div>
 
-                                        <label className="col-sm-2 col-form-label text-sm-end" htmlFor="noSeri">No Seri <span className='text-danger'>*</span></label>
-                                        <div className="col-sm-2">
-                                            <input type="text" id="noSeri" name='noSeri' {...register("noSeri", {required: "Mohon isi Nomor seru."})} className={errors.noSeri ? "form-control form-control-sm is-invalid" : "form-control form-control-sm"} />
-                                            {errors.noSeri && <small className="text-danger">{errors.noSeri.message}</small>}
-                                        </div>
+                                    <label className="col-sm-2 col-form-label text-sm-end" htmlFor="noSeri">No Seri <span className='text-danger'>*</span></label>
+                                    <div className="col-sm-2">
+                                        <input type="text" id="noSeri" name='noSeri' {...register("noSeri", {required: "Mohon isi Nomor seru."})} className={errors.noSeri ? "form-control form-control-sm is-invalid" : "form-control form-control-sm"} />
+                                        {errors.noSeri && <small className="text-danger">{errors.noSeri.message}</small>}
+                                    </div>
                                 </div>
                             </div>
                             <div className="accordion mb-4" id="collapseSection">

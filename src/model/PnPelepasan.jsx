@@ -3,6 +3,55 @@ import { v4 as uuidv4 } from 'uuid';
 const url = 'http://localhost/api-barantin/';
 
 export default class PnPerlakuan {
+  imporAreaKI(data) {
+    const uuid = uuidv4()
+    let datasend = {
+        id: data.idDok92i === '' ? uuid : data.idDok92i,
+        ptk_id: data.idPtk,
+        dokumen_karantina_id: "39",
+        nomor: data.noDokumen.replace("K.1.1", "K.9.2I"),
+        tanggal: data.tglDok92i,
+        nomor_seri: data.noSeri,
+        karantina_tujuan: "",
+        upt_tujuan_id: "",
+        tipe_usaha: data.tipeUsaha,
+        temperatur_mp: data.temperaturMP,
+        hasil_periksa: data.hasilPemeriksaan,
+        p1: data.hasilPemeriksaanKet1,
+        p2: data.hasilPemeriksaanKet2,
+        p3: data.hasilPemeriksaanKet3,
+        p4: data.hasilPemeriksaanKet4,
+        nama_labuji: "",
+        alamat_labuji: "",
+        attestation_a: "",
+        attestation_b: "",
+        attestation_c: "",
+        attestation_d: "",
+        attestation_lain: "",
+        attestation_free_from: "",
+        attestation_nosign: "",
+        add_information: "",
+        status_dok: data.jenisDokumen,
+        replaced_dok_id: data.idDokReplaced,
+        is_attachment: data.isAttach,
+        diterbitkan_di: data.diterbitkan,
+        user_ttd_id: data.ttdPutusan,
+        user_id: "1" //session
+    }
+    let config = {
+      method: data.idDok92i === '' ? 'post' : 'put',
+      maxBodyLength: Infinity,
+      url: url + (data.idDok92i === '' ? 'pn-pelepasan-ki' : 'pn-pelepasan-ki/' + data.idDok92i),
+      // url: url + 'pn-adm',
+      headers: { 
+        'Content-Type': 'application/json', 
+      },
+      data: datasend
+    };
+    console.log("dok k921: " + JSON.stringify(config))
+    return axios.request(config)
+  }
+
   eksporKT(data) {
     const uuid = uuidv4()
     let datasend = {
@@ -14,6 +63,7 @@ export default class PnPerlakuan {
         'nomor_seri': data.noSeri,
         'karantina_tujuan': (data.karantinaTujuanDepan ? data.karantinaTujuanDepan + " " : "") + data.karantinaTujuan + (data.karantinaTujuanBelakang ? " " + data.karantinaTujuanBelakang : ""),
         'entry_point': data.entryPoint,
+        'upt_tujuan_id': "",
         'nama_umum_tercetak': data.namaUmum,
         'nama_ilmiah_tercetak': data.namaIlmiah,
         'bentuk_tercetak': data.bentukTercetak, //description of packages / kemasan
@@ -60,6 +110,7 @@ export default class PnPerlakuan {
         'nomor_seri': data.noSeri,
         'karantina_tujuan': (data.karantinaTujuanDepan ? data.karantinaTujuanDepan + " " : "") + data.karantinaTujuan + data.karantinaTujuanBelakang,
         'entry_point': "",
+        'upt_tujuan_id': "",
         'nama_umum_tercetak': data.namaUmum,
         'nama_ilmiah_tercetak': data.namaIlmiah,
         'bentuk_tercetak': data.bentukTercetak, //description of packages / kemasan
@@ -106,6 +157,7 @@ export default class PnPerlakuan {
         'nomor_seri': data.noSeri,
         'karantina_tujuan': data.karantinaTujuanDepan,
         'entry_point': "",
+        'upt_tujuan_id': data.uptTujuan,
         'nama_umum_tercetak': "",
         'nama_ilmiah_tercetak': "",
         'bentuk_tercetak': data.bentukTercetak, //description of packages / kemasan
@@ -180,12 +232,51 @@ export default class PnPerlakuan {
   eksporDokelHewanHidup(data) {
     const uuid = uuidv4()
     let datasend = {
-      'id': data.idDokh2 === '' ? uuid : data.idDokh2,
+      'id': data.idDokh1 === '' ? uuid : data.idDokh1,
       'ptk_id': data.idPtk,
       'dokumen_karantina_id': "43",
       'nomor': data.noDokumen.replace("K.1.1", "K.H.1"),
+      'tanggal': data.tglDokh1,
+      'nomor_seri': data.noSeri,
+      'upt_tujuan_id': data.uptTujuan ? data.uptTujuan : "",
+      'm1': data.m1,
+      'm2': data.m2,
+      'm3': data.m3,
+      'm_lain': data.m4 === "1" ? data.m4Lain : null,
+      'p_teknis': data.p1,
+      'p_lab': data.p2,
+      'p_lain': data.p3,
+      'status_dok': data.jenisDokumen, // 'WITHDRAWN','REPLACEMENT','ISSUED'
+      'replaced_dok_id': "",
+      'is_attachment': data.isAttach,
+      'diterbitkan_di': data.diterbitkan,
+      'user_ttd_id': data.ttdPutusan,
+      'user_id': "1" //session
+    }
+
+    let config = {
+      method: data.idDokh1 === '' ? 'post' : 'put',
+      maxBodyLength: Infinity,
+      url: url + (data.idDokh1 === '' ? 'pn-pelepasan-kh' : 'pn-pelepasan-kh/' + data.idDokh1),
+      headers: { 
+        'Content-Type': 'application/json', 
+      },
+      data: datasend
+    };
+    // console.log("dok kt1: " + JSON.stringify(config))
+    return axios.request(config)
+  }
+  
+  eksporDokelProdukHewan(data) {
+    const uuid = uuidv4()
+    let datasend = {
+      'id': data.idDokh2 === '' ? uuid : data.idDokh2,
+      'ptk_id': data.idPtk,
+      'dokumen_karantina_id': "44",
+      'nomor': data.noDokumen.replace("K.1.1", "K.H.2"),
       'tanggal': data.tglDokh2,
       'nomor_seri': data.noSeri,
+      'upt_tujuan_id': data.uptTujuan ? data.uptTujuan : "",
       'm1': data.m1,
       'm2': data.m2,
       'm3': data.m3,

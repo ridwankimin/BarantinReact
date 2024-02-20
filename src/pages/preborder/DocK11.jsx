@@ -1,3 +1,4 @@
+/* eslint-disable eqeqeq */
 /* eslint-disable jsx-a11y/anchor-is-valid */
 import React, { useCallback, useEffect, useState } from 'react'
 import PersonSvg from '../../logo/svg/PersonSvg'
@@ -10,9 +11,15 @@ import ConfirmSvg from '../../logo/svg/ConfirmSvg'
 // import MasterPelabuhan from '../../model/master/MasterPelabuhan'
 import MasterKemasan from '../../model/master/MasterKemasan'
 import MasterMataUang from '../../model/master/MasterMataUang'
+import NegaraJson from '../../model/master/negara.json'
+import PelabuhanJson from '../../model/master/pelabuhan.json'
+import KlasifikasiKTJson from '../../model/master/klasifikasiKT.json'
+import JenisDokumenJson from '../../model/master/jenisDokumen.json'
+import KomoditasKTJson from '../../model/master/komoditasKT.json'
 // import MasterKlasKT from '../../model/master/MasterKlasKT'
 // import MasterKomKT from '../../model/master/MasterKomKT'
-import MasterSatuan from '../../model/master/MasterSatuan'
+// import MasterSatuan from '../../model/master/MasterSatuan'
+import MasterSatuanJson from '../../model/master/satuan.json'
 // import MasterHS from '../../model/master/MasterHS'
 import { Controller, useForm } from 'react-hook-form'
 // import { motion } from "framer-motion";
@@ -35,6 +42,29 @@ import PtkHistory from '../../model/PtkHistory'
 const modelPemohon = new PtkModel()
 const modelMaster = new Master()
 const log = new PtkHistory()
+
+function masterSatuanJson(e) {
+    const dataSatuan = MasterSatuanJson.filter((element) => (e == "H" ? element.sat_kh == "Y" : (e == "T" ? element.sat_kt == "Y" : (e == "I" ? element.sat_ki == "Y" : (element.id != null)))))
+        
+    var arraySelectSatuan = dataSatuan.map(item => {
+        return {
+            value: item.id,
+            label: item.kode + " - " + item.nama,
+        }
+    })
+    return arraySelectSatuan
+}
+
+function masterKomKT() {
+        
+    var arraySelect = KomoditasKTJson.map(item => {
+        return {
+            value: item.id + ";" + item.nama + ";" + item.nama_latin,
+            label: item.nama + " - " + item.nama_en,
+        }
+    })
+    return arraySelect
+}
 
 function DocK11() {
     require("../../assets/vendor/libs/bs-stepper/bs-stepper.css")
@@ -150,43 +180,49 @@ function DocK11() {
         }
     }
     
-    function handleMPDetil(e) {
-        // console.log(e.label)
-        setValueMP("mediaPembawa", e.target.value);
-        setValueDetilMP("jenisKar", e.target.value);
-        handleJenisDokumen(e.target.value);
-        if(e.target.value === "T") {
-            handleKomKTDetil()
-        }
-    }
+    // function handleMPDetil(e) {
+    //     // console.log(e.label)
+    //     setValueMP("mediaPembawa", e.target.value);
+    //     setValueDetilMP("jenisKar", e.target.value);
+    //     handleJenisDokumen(e.target.value);
+    //     if(e.target.value === "T") {
+    //         handleKomKTDetil()
+    //     }
+    // }
     
-    function handleKomKTDetil() {
-        // const modelMaster = new Master()
-        
-        const resKomKT = modelMaster.masterKomKT()
-        resKomKT
-        .then((response) => {
-            let dataKomKT = response.data.data;
-            var arrayKomKT = dataKomKT.map(item => {
-                return {
-                    value: item.id + ";" + item.nama + ";" + item.nama_latin,
-                    label: item.nama + " - " + item.nama_en
-                }
-            })
-            setdataSelect(values => ({...values, "selectKomoditasMP": arrayKomKT}));
-        })
-        .catch((error) => {
-            console.log(error);
-        });
-    }
+    // function handleKomKTDetil() {
+    //     // const modelMaster = new Master()
+    //     // var arrayKomKT = MasterKomKT.map(item => {
+    //     //     return {
+    //     //         value: item.id,
+    //     //         label: item.nama,
+    //     //     }
+    //     // })
+    //     // setdataSelect(values => ({...values, "selectKomoditasMP": arrayKomKT}));
+    //     const resKomKT = modelMaster.masterKomKT()
+    //     resKomKT
+    //     .then((response) => {
+    //         let dataKomKT = response.data.data;
+    //         var arrayKomKT = dataKomKT.map(item => {
+    //             return {
+    //                 value: item.id + ";" + item.nama + ";" + item.nama_latin,
+    //                 label: item.nama + " - " + item.nama_en
+    //             }
+    //         })
+    //         setdataSelect(values => ({...values, "selectKomoditasMP": arrayKomKT}));
+    //     })
+    //     .catch((error) => {
+    //         console.log(error);
+    //     });
+    // }
     
     function handleKemasan(e) {
         setdataSelect(values => ({...values, [e.target.name]: <MasterKemasan/>}))
     }
     
-    function handleMasterSatuan(e) {
-        setdataSelect(values => ({...values, [e.target.name]: <MasterSatuan kar={e.target.dataset.kar} />}))
-    }
+    // function handleMasterSatuan(e) {
+    //     setdataSelect(values => ({...values, [e.target.name]: <MasterSatuan kar={e.target.dataset.kar} />}))
+    // }
     
     // function handleMasterHS(e) {
     //     setdataSelect(values => ({...values, [e.target.name]: <MasterHS kar={e.target.dataset.kar} />}))
@@ -199,12 +235,16 @@ function DocK11() {
     function handleBase64Upload(e) {
         let fileReader = new FileReader();
         let files = e.target.files;
-      fileReader.readAsDataURL(files[0]);
- 
-      fileReader.onload = (event) => {
-        setValueDokumen("fileDokumen", event.target.result);
-        // console.log(event.target.result);
-      }
+        setDataIdPage(values => ({...values,
+            fileDokumenUpload: e.target.value,
+        }));
+        fileReader.readAsDataURL(files[0]);
+    
+        fileReader.onload = (event) => {
+            
+            setValueDokumen("fileDokumen", event.target.result);
+            // console.log(event.target.result);
+        }
     //   console.log(cekdataDokumen.fileDokumen)
     }
     
@@ -390,17 +430,12 @@ function DocK11() {
     // let master = useMemo(() => modelMaster, [])
 
     const getListNegara = useCallback(async () => {
-        try {
-        const response = await modelMaster.masterNegara();
-        if(response.data.status === '200') {
-            let dataneg = response.data.data;
-            const arraySelectNegara = dataneg.map(item => {
+            const arraySelectNegara = NegaraJson.map(item => {
                 return {
-                    value: item.id.toString(),
+                    value: item.id,
                     label: item.kode + " - " + item.nama
                 }
             })
-            // setSelect2Negara(arraySelectNegara)
             setdataSelect(values => ({...values, "negaraPengirim": arraySelectNegara }));
             setdataSelect(values => ({...values, "negaraPenerima": arraySelectNegara }));
             setdataSelect(values => ({...values, "negaraAsal": arraySelectNegara }));
@@ -411,18 +446,39 @@ function DocK11() {
             setdataSelect(values => ({...values, "negaraAsalDokumen": arraySelectNegara }));
             setdataSelect(values => ({...values, "benderaTransit": arraySelectNegara }));
             setdataSelect(values => ({...values, "benderaAkhir": arraySelectNegara }));
-        }
-    } catch (error) {
-        console.log(error)
-        setdataSelect(values => ({...values, "negaraPengirim": [] }));
-        setdataSelect(values => ({...values, "negaraPenerima": [] }));
-        setdataSelect(values => ({...values, "negaraAsal": [] }));
-        setdataSelect(values => ({...values, "negaraTujuan": [] }));
-        setdataSelect(values => ({...values, "negaraTransit": [] }));
-        setdataSelect(values => ({...values, "negaraAsalMP": [] }));
-        setdataSelect(values => ({...values, "negaraTujuanMP": [] }));
-        setdataSelect(values => ({...values, "negaraAsalDokumen": [] }));
-    }
+    //     try {
+    //     const response = await modelMaster.masterNegara();
+    //     if(response.data.status === '200') {
+    //         let dataneg = response.data.data;
+    //         const arraySelectNegara = dataneg.map(item => {
+    //             return {
+    //                 value: item.id.toString(),
+    //                 label: item.kode + " - " + item.nama
+    //             }
+    //         })
+    //         // setSelect2Negara(arraySelectNegara)
+    //         setdataSelect(values => ({...values, "negaraPengirim": arraySelectNegara }));
+    //         setdataSelect(values => ({...values, "negaraPenerima": arraySelectNegara }));
+    //         setdataSelect(values => ({...values, "negaraAsal": arraySelectNegara }));
+    //         setdataSelect(values => ({...values, "negaraTujuan": arraySelectNegara }));
+    //         setdataSelect(values => ({...values, "negaraTransit": arraySelectNegara }));
+    //         setdataSelect(values => ({...values, "negaraAsalMP": arraySelectNegara }));
+    //         setdataSelect(values => ({...values, "negaraTujuanMP": arraySelectNegara }));
+    //         setdataSelect(values => ({...values, "negaraAsalDokumen": arraySelectNegara }));
+    //         setdataSelect(values => ({...values, "benderaTransit": arraySelectNegara }));
+    //         setdataSelect(values => ({...values, "benderaAkhir": arraySelectNegara }));
+    //     }
+    // } catch (error) {
+    //     console.log(error)
+    //     setdataSelect(values => ({...values, "negaraPengirim": [] }));
+    //     setdataSelect(values => ({...values, "negaraPenerima": [] }));
+    //     setdataSelect(values => ({...values, "negaraAsal": [] }));
+    //     setdataSelect(values => ({...values, "negaraTujuan": [] }));
+    //     setdataSelect(values => ({...values, "negaraTransit": [] }));
+    //     setdataSelect(values => ({...values, "negaraAsalMP": [] }));
+    //     setdataSelect(values => ({...values, "negaraTujuanMP": [] }));
+    //     setdataSelect(values => ({...values, "negaraAsalDokumen": [] }));
+    // }
     }, [])
 
     useEffect(() => {
@@ -483,23 +539,32 @@ function DocK11() {
 
     const handlePelabuhan = useCallback(async (e, pel) => {
         if(e && pel) {
-            try {
-                const response = await modelMaster.masterPelabuhanID(e)
-                if(response.data.status === '200') {
-                    let dataPel = response.data.data;
-                    const arraySelectPelabuhan = dataPel.map(item => {
-                    return {
-                        value: item.id.toString(),
-                        label: item.kode + " - " + item.nama
-                    }
-                    })
-                    setdataSelect(values => ({...values, [pel]: arraySelectPelabuhan}))
+            const dataPelabuhan = PelabuhanJson.filter((element) => element.negara_id === parseInt(e))
+        
+            var arraySelectPelabuhan = dataPelabuhan.map(item => {
+                return {
+                    value: item.id,
+                    label: item.kode + " - " + item.nama,
                 }
-                // console.log(dataSelect.pelMuat)
-            } catch (error) {
-            console.log(error)
-            setdataSelect(values => ({...values, [pel]: []}))
-            }
+            })
+            setdataSelect(values => ({...values, [pel]: arraySelectPelabuhan}))
+            // try {
+            //     const response = await modelMaster.masterPelabuhanID(e)
+            //     if(response.data.status === '200') {
+            //         let dataPel = response.data.data;
+            //         const arraySelectPelabuhan = dataPel.map(item => {
+            //         return {
+            //             value: item.id.toString(),
+            //             label: item.kode + " - " + item.nama
+            //         }
+            //         })
+            //         setdataSelect(values => ({...values, [pel]: arraySelectPelabuhan}))
+            //     }
+            //     // console.log(dataSelect.pelMuat)
+            // } catch (error) {
+            // console.log(error)
+            // setdataSelect(values => ({...values, [pel]: []}))
+            // }
         }
     },[])
 
@@ -509,22 +574,31 @@ function DocK11() {
 
     const handleJenisDokumen = useCallback(async (e) => {
         if(e) {
-            try {
-                const response = await modelMaster.masterDok(e)
-                if(response.data.status === '200') {
-                    let jenisDok = response.data.data;
-                    const arraySelectJenisDok = jenisDok.map(item => {
-                    return {
-                        value: item.id,
-                        label: item.kode + " - " + item.nama
-                    }
-                    })
-                    setdataSelect(values => ({...values, "jenisDokumen": arraySelectJenisDok}))
+            const dataJenisDokumen = JenisDokumenJson.filter((element) => (e === "H" ? element.komoditas_hewan === 1 : (e === "T" ? element.komoditas_tumbuhan === 1 : element.komoditas_ikan === 1)))
+        
+            var arraySelectJenisDok = dataJenisDokumen.map(item => {
+                return {
+                    value: item.id,
+                    label: item.kode + " - " + item.nama,
                 }
-            } catch (error) {
-                console.log(error)
-                setdataSelect(values => ({...values, "jenisDokumen": []}))
-            }
+            })
+            setdataSelect(values => ({...values, "jenisDokumen": arraySelectJenisDok}))
+            // try {
+            //     const response = await modelMaster.masterDok(e)
+            //     if(response.data.status === '200') {
+            //         let jenisDok = response.data.data;
+            //         const arraySelectJenisDok = jenisDok.map(item => {
+            //         return {
+            //             value: item.id,
+            //             label: item.kode + " - " + item.nama
+            //         }
+            //         })
+            //         setdataSelect(values => ({...values, "jenisDokumen": arraySelectJenisDok}))
+            //     }
+            // } catch (error) {
+            //     console.log(error)
+            //     setdataSelect(values => ({...values, "jenisDokumen": []}))
+            // }
         }
     }, [])
     
@@ -532,7 +606,7 @@ function DocK11() {
         handleJenisDokumen()
     }, [handleJenisDokumen])
   
-    let [dataKlasKT,setDataKlasKT] = useState([]);
+    // let [dataKlasKT,setDataKlasKT] = useState([]);
 
     useEffect(()=>{
         let ptkDecode = idPtk ? base64_decode(idPtk) : "";
@@ -560,21 +634,23 @@ function DocK11() {
                     }
 
                     // const modelMaster = new Master()
-                    const resKomKT = modelMaster.masterHS(response.data.data.ptk.jenis_karantina)
-                    resKomKT
-                    .then((response) => {
-                        let dataKomKT = response.data.data;
-                        var arrayKomKT = dataKomKT.map(item => {
-                            return {
-                                value: item.kode,
-                                label: item.kode + " - " + item.nama_en
-                            }
+                    if(response.data.data.ptk.jenis_karantina != null) {
+                        const resKomKT = modelMaster.masterHS(response.data.data.ptk.jenis_karantina)
+                        resKomKT
+                        .then((response) => {
+                            let dataKomKT = response.data.data;
+                            var arrayKomKT = dataKomKT.map(item => {
+                                return {
+                                    value: item.kode,
+                                    label: item.kode + " - " + item.nama_en
+                                }
+                            })
+                            setdataSelect(values => ({...values, "kodeHSMp": arrayKomKT}));
                         })
-                        setdataSelect(values => ({...values, "kodeHSMp": arrayKomKT}));
-                    })
-                    .catch((error) => {
-                        console.log(error);
-                    });
+                        .catch((error) => {
+                            console.log(error);
+                        });
+                    }
 
                     if(response.data.data.ptk.jenis_karantina === "T") {
                         const resKomKT = modelMaster.masterKomKT()
@@ -594,69 +670,87 @@ function DocK11() {
                         });
                         
                         if(response.data.data.ptk.jenis_media_pembawa_id === 4) {
-                            const resPeruntukan = modelMaster.masterKlasKT("A")
-                            resPeruntukan
-                            .then((response) => {
-                                console.log(response.data)
-                                let dataPeruntukanKT = response.data.data;
-                                const arraySelectKota = dataPeruntukanKT.map(item => {
-                                    return {
-                                        value: item.id.toString(),
-                                        label: item.peruntukan + " - " + item.bentuk + " - " + item.golongan
-                                    }
-                                })
-                                setdataSelect(values => ({...values, "peruntukanMP": arraySelectKota}))
+                            const dataKlasKT = KlasifikasiKTJson.filter((element) => element.kode_golongan === "A")
+        
+                            var arrayKlasKTBenih = dataKlasKT.map(item => {
+                                return {
+                                    value: item.id,
+                                    label: item.peruntukan + " - " + item.bentuk + " - " + item.golongan
+                                }
                             })
-                            .catch((error) => {
-                                console.log(error);
-                            });
+                            setdataSelect(values => ({...values, "peruntukanMP": arrayKlasKTBenih}))
+                            // const resPeruntukan = modelMaster.masterKlasKT("A")
+                            // resPeruntukan
+                            // .then((response) => {
+                            //     console.log(response.data)
+                            //     let dataPeruntukanKT = response.data.data;
+                            //     const arraySelectKota = dataPeruntukanKT.map(item => {
+                            //         return {
+                            //             value: item.id.toString(),
+                            //             label: item.peruntukan + " - " + item.bentuk + " - " + item.golongan
+                            //         }
+                            //     })
+                            //     setdataSelect(values => ({...values, "peruntukanMP": arraySelectKota}))
+                            // })
+                            // .catch((error) => {
+                            //     console.log(error);
+                            // });
                         } else {
-                            const resPeruntukanB = modelMaster.masterKlasKT("B")
-                            resPeruntukanB
-                            .then((response) => {
-                                let dataPeruntukanKTB = response.data.data;
-                                var arrayPeruntukanKTB = dataPeruntukanKTB.map(item => {
-                                    return {
-                                        value: item.id.toString(),
-                                        label: item.peruntukan + " - " + item.bentuk + " - " + item.golongan
-                                    }
-                                })
-                                setDataKlasKT(arrayPeruntukanKTB)
+                            const dataKlasKT = KlasifikasiKTJson.filter((element) => element.kode_golongan === "B" || element.kode_golongan === "C" || element.kode_golongan === "D")
+        
+                            var arrayKlasKTNonBenih = dataKlasKT.map(item => {
+                                return {
+                                    value: item.id,
+                                    label: item.peruntukan + " - " + item.bentuk + " - " + item.golongan
+                                }
                             })
-                            .catch((error) => {
-                                console.log(error);
-                            });
-                            const resPeruntukanC = modelMaster.masterKlasKT("C")
-                            resPeruntukanC
-                            .then((response) => {
-                                let dataPeruntukanKTC = response.data.data;
-                                var arrayPeruntukanKTC = dataPeruntukanKTC.map(item => {
-                                    return {
-                                        value: item.id.toString(),
-                                        label: item.peruntukan + " - " + item.bentuk + " - " + item.golongan
-                                    }
-                                })
-                                setDataKlasKT(dataKlasKT => dataKlasKT.concat(arrayPeruntukanKTC))
-                            })
-                            .catch((error) => {
-                                console.log(error);
-                            });
-                            const resPeruntukanD = modelMaster.masterKlasKT("D")
-                            resPeruntukanD
-                            .then((response) => {
-                                let dataPeruntukanKTD = response.data.data;
-                                var arrayPeruntukanKTD = dataPeruntukanKTD.map(item => {
-                                    return {
-                                        value: item.id.toString(),
-                                        label: item.peruntukan + " - " + item.bentuk + " - " + item.golongan
-                                    }
-                                })
-                                setDataKlasKT(dataKlasKT => dataKlasKT.concat(arrayPeruntukanKTD))
-                            })
-                            .catch((error) => {
-                                console.log(error);
-                            });
-                            setdataSelect(values => ({...values, "peruntukanMP": dataKlasKT}))
+                            setdataSelect(values => ({...values, "peruntukanMP": arrayKlasKTNonBenih}))
+                            // const resPeruntukanB = modelMaster.masterKlasKT("B")
+                            // resPeruntukanB
+                            // .then((response) => {
+                            //     let dataPeruntukanKTB = response.data.data;
+                            //     var arrayPeruntukanKTB = dataPeruntukanKTB.map(item => {
+                            //         return {
+                            //             value: item.id.toString(),
+                            //             label: item.peruntukan + " - " + item.bentuk + " - " + item.golongan
+                            //         }
+                            //     })
+                            //     setDataKlasKT(arrayPeruntukanKTB)
+                            // })
+                            // .catch((error) => {
+                            //     console.log(error);
+                            // });
+                            // const resPeruntukanC = modelMaster.masterKlasKT("C")
+                            // resPeruntukanC
+                            // .then((response) => {
+                            //     let dataPeruntukanKTC = response.data.data;
+                            //     var arrayPeruntukanKTC = dataPeruntukanKTC.map(item => {
+                            //         return {
+                            //             value: item.id.toString(),
+                            //             label: item.peruntukan + " - " + item.bentuk + " - " + item.golongan
+                            //         }
+                            //     })
+                            //     setDataKlasKT(dataKlasKT => dataKlasKT.concat(arrayPeruntukanKTC))
+                            // })
+                            // .catch((error) => {
+                            //     console.log(error);
+                            // });
+                            // const resPeruntukanD = modelMaster.masterKlasKT("D")
+                            // resPeruntukanD
+                            // .then((response) => {
+                            //     let dataPeruntukanKTD = response.data.data;
+                            //     var arrayPeruntukanKTD = dataPeruntukanKTD.map(item => {
+                            //         return {
+                            //             value: item.id.toString(),
+                            //             label: item.peruntukan + " - " + item.bentuk + " - " + item.golongan
+                            //         }
+                            //     })
+                            //     setDataKlasKT(dataKlasKT => dataKlasKT.concat(arrayPeruntukanKTD))
+                            // })
+                            // .catch((error) => {
+                            //     console.log(error);
+                            // });
+                            // setdataSelect(values => ({...values, "peruntukanMP": dataKlasKT}))
                         }
                     }
                     setdataSelect(values => ({...values, "jenisKemasan": <MasterKemasan/>}));
@@ -731,17 +825,21 @@ function DocK11() {
                         setValuePemohon("negaraPenerimaView", response.data.data.ptk.kd_negara_penerima + " - " + response.data.data.ptk.negara_penerima);
                         
                         setValuePelabuhan("tglBerangkatAkhir", response.data.data.ptk.tanggal_rencana_masuk);
-                        setValuePelabuhan("negaraAsal", response.data.data.ptk.negara_muat_id);
-                        setValuePelabuhan("negaraAsalView", response.data.data.ptk.kd_negara_muat + " - " + response.data.data.ptk.negara_muat);
-                        setValuePelabuhan("negaraTujuan", response.data.data.ptk.negara_bongkar_id);
-                        setValuePelabuhan("negaraTujuanView", response.data.data.ptk.kd_negara_bongkar + " - " + response.data.data.ptk.negara_bongkar);
-                        setValuePelabuhan("negaraTransit", response.data.data.ptk.negara_transit_id);
-                        setValuePelabuhan("negaraTransitView", response.data.data.ptk.kd_negara_transit + " - " + response.data.data.ptk.negara_transit);
+                        // setValuePelabuhan("negaraAsal", response.data.data.ptk.negara_muat_id == null ? (response.data.data.ptk.jenis_permohonan != "IM" ? "99" : "") : response.data.data.ptk.negara_muat_id);
+                        // setValuePelabuhan("negaraAsalView", response.data.data.ptk.kd_negara_muat == null ? (response.data.data.ptk.jenis_permohonan != "IM" ? "ID - INDONESIA" : "") : response.data.data.ptk.kd_negara_muat + " - " + response.data.data.ptk.negara_muat);
+                        // setValuePelabuhan("negaraTujuan", response.data.data.ptk.negara_bongkar_id == null ? (response.data.data.ptk.jenis_permohonan != "EX" ? "99" : "") : response.data.data.ptk.negara_bongkar_id);
+                        // setValuePelabuhan("negaraTujuanView", response.data.data.ptk.kd_negara_bongkar == null ? (response.data.data.ptk.jenis_permohonan != "EX" ? "ID - INDONESIA" : "") : response.data.data.ptk.kd_negara_bongkar + " - " + response.data.data.ptk.negara_bongkar);
+                        setValuePelabuhan("negaraAsal", response.data.data.ptk.negara_muat_id == null ? "" : response.data.data.ptk.negara_muat_id);
+                        setValuePelabuhan("negaraAsalView", response.data.data.ptk.kd_negara_muat == null ? "" : response.data.data.ptk.kd_negara_muat + " - " + response.data.data.ptk.negara_muat);
+                        setValuePelabuhan("negaraTujuan", response.data.data.ptk.negara_bongkar_id == null ? "" : response.data.data.ptk.negara_bongkar_id);
+                        setValuePelabuhan("negaraTujuanView", response.data.data.ptk.kd_negara_bongkar == null ? "" : response.data.data.ptk.kd_negara_bongkar + " - " + response.data.data.ptk.negara_bongkar);
+                        setValuePelabuhan("negaraTransit", response.data.data.ptk.negara_transit_id == null ? "" : response.data.data.ptk.negara_transit_id);
+                        setValuePelabuhan("negaraTransitView", response.data.data.ptk.kd_negara_transit == null ? "" : response.data.data.ptk.kd_negara_transit + " - " + response.data.data.ptk.negara_transit);
                         setValuePelabuhan("modaTransit", response.data.data.ptk.moda_alat_angkut_transit_id);
                         setValuePelabuhan("tipeTransit", response.data.data.ptk.tipe_alat_angkut_transit_id);
                         setValuePelabuhan("namaAlatAngkutTransit", response.data.data.ptk.nama_alat_angkut_transit);
-                        setValuePelabuhan("benderaTransit", response.data.data.ptk.bendera_alat_angkut_transit_id);
-                        setValuePelabuhan("benderaTransitView", response.data.data.ptk.kd_bendera_alat_angkut_transit + " - " + response.data.data.ptk.bendera_alat_angkut_transit);
+                        setValuePelabuhan("benderaTransit", response.data.data.ptk.bendera_alat_angkut_transit_id == null ? "" : response.data.data.ptk.bendera_alat_angkut_transit_id);
+                        setValuePelabuhan("benderaTransitView", response.data.data.ptk.kd_bendera_alat_angkut_transit == null ? "" : response.data.data.ptk.kd_bendera_alat_angkut_transit + " - " + response.data.data.ptk.bendera_alat_angkut_transit);
                         setValuePelabuhan("nomorAlatAngkutTransit", response.data.data.ptk.no_voyage_transit);
                         setValuePelabuhan("callSignTransit", response.data.data.ptk.call_sign_transit);
                         setValuePelabuhan("tglTibaTransit", response.data.data.ptk.tanggal_rencana_tiba_transit);
@@ -750,8 +848,8 @@ function DocK11() {
                         setValuePelabuhan("modaAkhirLainnya", response.data.data.ptk.moda_alat_angkut_lainnya);
                         setValuePelabuhan("tipeAkhir", response.data.data.ptk.tipe_alat_angkut_terakhir_id);
                         setValuePelabuhan("namaAlatAngkutAkhir", response.data.data.ptk.nama_alat_angkut_terakhir);
-                        setValuePelabuhan("benderaAkhir", response.data.data.ptk.bendera_alat_angkut_terakhir_id);
-                        setValuePelabuhan("benderaAkhirView", response.data.data.ptk.kd_bendera_alat_angkut_terakhir + " - " + response.data.data.ptk.bendera_alat_angkut_terakhir);
+                        setValuePelabuhan("benderaAkhir", response.data.data.ptk.bendera_alat_angkut_terakhir_id == null ? "" : response.data.data.ptk.bendera_alat_angkut_terakhir_id);
+                        setValuePelabuhan("benderaAkhirView", response.data.data.ptk.kd_bendera_alat_angkut_terakhir == null ? "" : response.data.data.ptk.kd_bendera_alat_angkut_terakhir + " - " + response.data.data.ptk.bendera_alat_angkut_terakhir);
                         setValuePelabuhan("nomorAlatAngkutAkhir", response.data.data.ptk.no_voyage_terakhir);
                         setValuePelabuhan("callSignAkhir", response.data.data.ptk.call_sign_terakhir);
                         setValuePelabuhan("tglTibaAkhir", response.data.data.ptk.tanggal_rencana_tiba_terakhir);
@@ -762,12 +860,12 @@ function DocK11() {
                             setFormTab(values => ({...values, tab2: false}))
                         }
                         setValuePelabuhan("sandar", response.data.data.ptk.gudang_id);
-                        setValuePelabuhan("pelMuat", response.data.data.ptk.pelabuhan_muat_id);
-                        setValuePelabuhan("pelMuatView", response.data.data.ptk.kd_pelabuhan_muat + " - " + response.data.data.ptk.pelabuhan_muat);
-                        setValuePelabuhan("pelBongkar", response.data.data.ptk.pelabuhan_bongkar_id);
-                        setValuePelabuhan("pelBongkarView", response.data.data.ptk.kd_pelabuhan_bongkar + " - " + response.data.data.ptk.pelabuhan_bongkar);
-                        setValuePelabuhan("pelTransit", response.data.data.ptk.pelabuhan_transit_id);
-                        setValuePelabuhan("pelTransitView", response.data.data.ptk.kd_pelabuhan_transit + " - " + response.data.data.ptk.pelabuhan_transit);
+                        setValuePelabuhan("pelMuat", response.data.data.ptk.pelabuhan_muat_id == null ? "" : response.data.data.ptk.pelabuhan_muat_id);
+                        setValuePelabuhan("pelMuatView", response.data.data.ptk.kd_pelabuhan_muat == null ? "" : response.data.data.ptk.kd_pelabuhan_muat + " - " + response.data.data.ptk.pelabuhan_muat);
+                        setValuePelabuhan("pelBongkar", response.data.data.ptk.pelabuhan_bongkar_id == null ? "" : response.data.data.ptk.pelabuhan_bongkar_id);
+                        setValuePelabuhan("pelBongkarView", response.data.data.ptk.kd_pelabuhan_bongkar == null ? "" : response.data.data.ptk.kd_pelabuhan_bongkar + " - " + response.data.data.ptk.pelabuhan_bongkar);
+                        setValuePelabuhan("pelTransit", response.data.data.ptk.pelabuhan_transit_id == null ? "" : response.data.data.ptk.pelabuhan_transit_id);
+                        setValuePelabuhan("pelTransitView", response.data.data.ptk.kd_pelabuhan_transit == null ? "" : response.data.data.ptk.kd_pelabuhan_transit + " - " + response.data.data.ptk.pelabuhan_transit);
                         setKontainerPtk(response.data.data.ptk_kontainer)
                         
                         setValueMP("mediaPembawa", response.data.data.ptk.jenis_karantina);
@@ -783,12 +881,12 @@ function DocK11() {
                         setValueMP("tandaKemasan", response.data.data.ptk.tanda_khusus);
                         setValueMP("nilaiBarang", response.data.data.ptk.nilai_barang);
                         setValueMP("satuanNilai", response.data.data.ptk.mata_uang);
-                        setValueMP("negaraAsalMP", response.data.data.ptk.negara_asal_id);
-                        setValueMP("negaraAsalMPView", response.data.data.ptk.kd_negara_asal + " - " + response.data.data.ptk.negara_asal);
+                        setValueMP("negaraAsalMP", response.data.data.ptk.negara_asal_id == null ? "" : response.data.data.ptk.negara_asal_id);
+                        setValueMP("negaraAsalMPView", response.data.data.ptk.kd_negara_asal == null ? "" : response.data.data.ptk.kd_negara_asal + " - " + response.data.data.ptk.negara_asal);
                         setValueMP("daerahAsalMP", response.data.data.ptk.kota_kab_asal_id);
                         setValueMP("daerahAsalMPView", response.data.data.ptk.kota_asal);
-                        setValueMP("negaraTujuanMP", response.data.data.ptk.negara_tujuan_id);
-                        setValueMP("negaraTujuanMPView", response.data.data.ptk.kd_negara_tujuan + " - " + response.data.data.ptk.negara_tujuan);
+                        setValueMP("negaraTujuanMP", response.data.data.ptk.negara_tujuan_id == null ? "" : response.data.data.ptk.negara_tujuan_id);
+                        setValueMP("negaraTujuanMPView", response.data.data.ptk.kd_negara_tujuan == null ? "" : response.data.data.ptk.kd_negara_tujuan + " - " + response.data.data.ptk.negara_tujuan);
                         setValueMP("daerahTujuanMP", response.data.data.ptk.kota_kab_tujuan_id);
                         setValueMP("daerahTujuanMPView", response.data.data.ptk.kota_tujuan);
                         setValueMP("tingkatOlah", response.data.data.ptk.tingkat_pengolahan ? response.data.data.ptk.tingkat_pengolahan.toString() : "");
@@ -818,7 +916,7 @@ function DocK11() {
                 console.log(error);
             });
         }
-    },[dataKlasKT, handleJenisDokumen, handleKota, handlePelabuhan, idPtk, setValueDetilMP, setValueDokPeriksa, setValueDokumen, setValueKonfirmasi, setValueKontainer, setValueMP, setValuePelabuhan, setValuePemohon, setValueVerify])
+    },[handleJenisDokumen, handleKota, handlePelabuhan, idPtk, setValueDetilMP, setValueDokPeriksa, setValueDokumen, setValueKonfirmasi, setValueKontainer, setValueMP, setValuePelabuhan, setValuePemohon, setValueVerify])
 
     
     // function isiDataPtk(response) {
@@ -826,6 +924,7 @@ function DocK11() {
     // }
 
     const handleKomKHIDetil = useCallback(async (e) => {
+        if(cekdataMP.mediaPembawa) {
             const resKodeHS = modelMaster.masterHS(cekdataMP.mediaPembawa)
             resKodeHS
             .then((response) => {
@@ -859,88 +958,107 @@ function DocK11() {
                     console.log(error);
                 });
             } else if(cekdataMP.mediaPembawa === "T") {
-                const resKomKT = modelMaster.masterKomKT()
-                resKomKT
-                .then((response) => {
-                    let dataKomKT = response.data.data;
-                    var arrayKomKT = dataKomKT.map(item => {
-                        return {
-                            value: item.id + ";" + item.nama + ";" + item.nama_latin,
-                            label: item.nama + " - " + item.nama_en
-                        }
-                    })
-                    setdataSelect(values => ({...values, "selectKomoditasMP": arrayKomKT}));
-                })
-                .catch((error) => {
-                    console.log(error);
-                });
+                // const resKomKT = modelMaster.masterKomKT()
+                // resKomKT
+                // .then((response) => {
+                //     let dataKomKT = response.data.data;
+                //     var arrayKomKT = dataKomKT.map(item => {
+                //         return {
+                //             value: item.id + ";" + item.nama + ";" + item.nama_latin,
+                //             label: item.nama + " - " + item.nama_en
+                //         }
+                //     })
+                //     setdataSelect(values => ({...values, "selectKomoditasMP": arrayKomKT}));
+                // })
+                // .catch((error) => {
+                //     console.log(error);
+                // });
     
                 if(e === "4") {
-                    const resPeruntukan = modelMaster.masterKlasKT("A")
-                    resPeruntukan
-                    .then((response) => {
-                        console.log(response.data)
-                        let dataPeruntukanKT = response.data.data;
-                        const arraySelectKota = dataPeruntukanKT.map(item => {
-                            return {
-                                value: item.id.toString(),
-                                label: item.peruntukan + " - " + item.bentuk + " - " + item.golongan
-                            }
-                        })
-                        setdataSelect(values => ({...values, "peruntukanMP": arraySelectKota}))
+                    const dataKlasKT = KlasifikasiKTJson.filter((element) => element.kode_golongan === "A")
+        
+                    var arrayKlasKTBenih = dataKlasKT.map(item => {
+                        return {
+                            value: item.id,
+                            label: item.peruntukan + " - " + item.bentuk + " - " + item.golongan
+                        }
                     })
-                    .catch((error) => {
-                        console.log(error);
-                    });
+                    setdataSelect(values => ({...values, "peruntukanMP": arrayKlasKTBenih}))
+                    // const resPeruntukan = modelMaster.masterKlasKT("A")
+                    // resPeruntukan
+                    // .then((response) => {
+                    //     console.log(response.data)
+                    //     let dataPeruntukanKT = response.data.data;
+                    //     const arraySelectKota = dataPeruntukanKT.map(item => {
+                    //         return {
+                    //             value: item.id.toString(),
+                    //             label: item.peruntukan + " - " + item.bentuk + " - " + item.golongan
+                    //         }
+                    //     })
+                    //     setdataSelect(values => ({...values, "peruntukanMP": arraySelectKota}))
+                    // })
+                    // .catch((error) => {
+                    //     console.log(error);
+                    // });
                 } else {
-                    const resPeruntukanB = modelMaster.masterKlasKT("B")
-                    resPeruntukanB
-                    .then((response) => {
-                        let dataPeruntukanKTB = response.data.data;
-                        var arrayPeruntukanKTB = dataPeruntukanKTB.map(item => {
-                            return {
-                                value: item.id.toString(),
-                                label: item.peruntukan + " - " + item.bentuk + " - " + item.golongan
-                            }
-                        })
-                        const resPeruntukanC = modelMaster.masterKlasKT("C")
-                        resPeruntukanC
-                        .then((response) => {
-                            let dataPeruntukanKTC = response.data.data;
-                            var arrayPeruntukanKTC = dataPeruntukanKTC.map(item => {
-                                return {
-                                    value: item.id.toString(),
-                                    label: item.peruntukan + " - " + item.bentuk + " - " + item.golongan
-                                }
-                            })
-                            const resPeruntukanD = modelMaster.masterKlasKT("D")
-                            resPeruntukanD
-                            .then((response) => {
-                                let dataPeruntukanKTD = response.data.data;
-                                var arrayPeruntukanKTD = dataPeruntukanKTD.map(item => {
-                                    return {
-                                        value: item.id.toString(),
-                                        label: item.peruntukan + " - " + item.bentuk + " - " + item.golongan
-                                    }
-                                })
-                                setdataSelect(values => ({...values, "peruntukanMP": [...arrayPeruntukanKTB, ...arrayPeruntukanKTC, ...arrayPeruntukanKTD]}))
-                            })
-                            .catch((error) => {
-                                console.log(error);
-                            });
-                        })
-                        .catch((error) => {
-                            console.log(error);
-                        });
-                        setdataSelect(values => ({...values, "peruntukanMP": arrayPeruntukanKTB}))
+                    const dataKlasKT = KlasifikasiKTJson.filter((element) => element.kode_golongan === "B" || element.kode_golongan === "C" || element.kode_golongan === "D")
+        
+                    var arrayKlasKTNonBenih = dataKlasKT.map(item => {
+                        return {
+                            value: item.id,
+                            label: item.peruntukan + " - " + item.bentuk + " - " + item.golongan
+                        }
                     })
-                    .catch((error) => {
-                        console.log(error);
-                    });
+                    setdataSelect(values => ({...values, "peruntukanMP": arrayKlasKTNonBenih}))
+                    // const resPeruntukanB = modelMaster.masterKlasKT("B")
+                    // resPeruntukanB
+                    // .then((response) => {
+                    //     let dataPeruntukanKTB = response.data.data;
+                    //     var arrayPeruntukanKTB = dataPeruntukanKTB.map(item => {
+                    //         return {
+                    //             value: item.id.toString(),
+                    //             label: item.peruntukan + " - " + item.bentuk + " - " + item.golongan
+                    //         }
+                    //     })
+                    //     const resPeruntukanC = modelMaster.masterKlasKT("C")
+                    //     resPeruntukanC
+                    //     .then((response) => {
+                    //         let dataPeruntukanKTC = response.data.data;
+                    //         var arrayPeruntukanKTC = dataPeruntukanKTC.map(item => {
+                    //             return {
+                    //                 value: item.id.toString(),
+                    //                 label: item.peruntukan + " - " + item.bentuk + " - " + item.golongan
+                    //             }
+                    //         })
+                    //         const resPeruntukanD = modelMaster.masterKlasKT("D")
+                    //         resPeruntukanD
+                    //         .then((response) => {
+                    //             let dataPeruntukanKTD = response.data.data;
+                    //             var arrayPeruntukanKTD = dataPeruntukanKTD.map(item => {
+                    //                 return {
+                    //                     value: item.id.toString(),
+                    //                     label: item.peruntukan + " - " + item.bentuk + " - " + item.golongan
+                    //                 }
+                    //             })
+                    //             setdataSelect(values => ({...values, "peruntukanMP": [...arrayPeruntukanKTB, ...arrayPeruntukanKTC, ...arrayPeruntukanKTD]}))
+                    //         })
+                    //         .catch((error) => {
+                    //             console.log(error);
+                    //         });
+                    //     })
+                    //     .catch((error) => {
+                    //         console.log(error);
+                    //     });
+                    //     setdataSelect(values => ({...values, "peruntukanMP": arrayPeruntukanKTB}))
+                    // })
+                    // .catch((error) => {
+                    //     console.log(error);
+                    // });
                 }
             } else if(cekdataMP.mediaPembawa === "I") {
                 // komoditas ikan
             }
+        }
         },[cekdataMP.mediaPembawa])
     
     useEffect(() => {
@@ -962,7 +1080,10 @@ function DocK11() {
                     resetFormDokumen();
                     // setSelectedFile(null)
                     dataDokumenPtk();
-                    "fileDokumenUpload".target.value = "";
+                    setDataIdPage(values => ({...values,
+                        fileDokumenUpload: "",
+                    }));
+                    // "fileDokumenUpload".target.value = "";
                 }
             })
             .catch((error) => {
@@ -1508,7 +1629,7 @@ function DocK11() {
         setValueDetilMP("jenisKar", cekdataMP.mediaPembawa)
         const cell = e.target.closest('tr')
         if(cekdataMP.mediaPembawa === "H") {
-            setdataSelect(values => ({...values, "satJumlahMP": <MasterSatuan kar="kh" />}))
+            // setdataSelect(values => ({...values, "satJumlahMP": <MasterSatuan kar="kh" />}))
             setdataSelect(values => ({...values, "satuanNilaiMPKH": <MasterMataUang/>}))
             setTimeout(() => {
                 setValueDetilMP("kodeHSMpKH", cell.cells[1].innerHTML)
@@ -1527,7 +1648,7 @@ function DocK11() {
                 setValueDetilMP("satuanNilaiMPKH", cell.cells[14].innerHTML)
             }, 300)
         } else if(cekdataMP.mediaPembawa === "T") {
-            setdataSelect(values => ({...values, "satuanLain": <MasterSatuan kar="kt" />}))
+            // setdataSelect(values => ({...values, "satuanLain": <MasterSatuan kar="kt" />}))
             setdataSelect(values => ({...values, "satuanNilaiMP": <MasterMataUang/>}))
             setdataSelect(values => ({...values, "satuanKemasanDetil": <MasterKemasan/>}))
             setTimeout(() => {
@@ -1729,7 +1850,7 @@ function DocK11() {
                             <div className="row mb-3">
                                 <label className="col-sm-3 col-form-label" htmlFor="permohonan">Jenis Permohonan <span className='text-danger'>*</span></label>
                                 <div className="col-sm-9">
-                                        <select className={errorsPemohon.permohonan ? "form-control form-control-sm is-invalid" : "form-control form-control-sm"} name="permohonan" id="permohonan" {...registerPemohon("permohonan", { required: "Mohon pilih jenis permohonan."})} onChange={handlePermohonan}>
+                                        <select className={errorsPemohon.permohonan ? "form-control form-control-sm is-invalid" : "form-control form-control-sm"} name="permohonan" id="permohonan" {...registerPemohon("permohonan", { required: "Mohon pilih jenis permohonan."})} onChange={(e) => handlePermohonan(e)}>
                                             <option value="">--</option>
                                             <option value="EX">Ekspor</option>
                                             <option value="IM">Impor</option>
@@ -1773,10 +1894,11 @@ function DocK11() {
                                         <Controller
                                             control={controlPemohon}
                                             name={"provPemohon"}
+                                            defaultValue={""}
                                             className="form-control form-control-sm"
                                             rules={{ required: "Mohon pilih provinsi pemohon." }}
-                                            render={({ field: { value, ...field } }) => (
-                                                <Select styles={customStyles} placeholder={"Pilih provinsi pemohon.."} value={value ? {id: cekdataDiri.provPemohon, label: cekdataDiri.provPemohonView } : ""} {...field} options={dataSelect.provPemohon} onChange={(e) => handleSelectPemohon(e, "provPemohon") & handleKota(e.value, "kotaPemohon")} />
+                                            render={({ field: { value,onChange, ...field } }) => (
+                                                <Select styles={customStyles} placeholder={"Pilih provinsi pemohon.."} value={{id: cekdataDiri.provPemohon, label: cekdataDiri.provPemohonView}} {...field} options={dataSelect.provPemohon} onChange={(e) => handleSelectPemohon(e, "provPemohon") & handleKota(e.value, "kotaPemohon")} />
                                             )}
                                         />
                                         {errorsPemohon.provPemohon && <small className="text-danger">{errorsPemohon.provPemohon.message}</small>}
@@ -1788,10 +1910,11 @@ function DocK11() {
                                         <Controller
                                             control={controlPemohon}
                                             name={"kotaPemohon"}
+                                            defaultValue={""}
                                             className="form-control form-control-sm"
                                             rules={{ required: false }}
-                                            render={({ field: { value, ...field } }) => (
-                                                <Select styles={customStyles} placeholder={"Pilih kota/kab asal pemohon.."} value={value ? {id: cekdataDiri.kotaPemohon, label: cekdataDiri.kotaPemohonView} : ""} {...field} options={dataSelect.kotaPemohon} onChange={(e) => handleSelectPemohon(e, "kotaPemohon")} />
+                                            render={({ field: { value,onChange, ...field } }) => (
+                                                <Select styles={customStyles} placeholder={"Pilih kota/kab asal pemohon.."} value={{id: cekdataDiri.kotaPemohon, label: cekdataDiri.kotaPemohonView}} {...field} options={dataSelect.kotaPemohon} onChange={(e) => handleSelectPemohon(e, "kotaPemohon")} />
                                             )}
                                         />
                                         {errorsPemohon.kotaPemohon && <small className="text-danger">{errorsPemohon.kotaPemohon.message}</small>}
@@ -1826,8 +1949,8 @@ function DocK11() {
                                 </div>
                             </div>
                             <div className="form-check mt-3">
-                            <input className="form-check-input" type="checkbox" name='samaTTD' id="samaTTD" onChange={handleCekSameTTD} />
-                            <label className="form-check-label" htmlFor="samaTTD"> Pemohon sama dengan penandatangan dokumen. </label>
+                                <input className="form-check-input" type="checkbox" name='samaTTD' id="samaTTD" value="1" onChange={handleCekSameTTD} />
+                                <label className="form-check-label" htmlFor="samaTTD"> Pemohon sama dengan penandatangan dokumen. </label>
                             </div>
                         </div>
                     </div>
@@ -1983,10 +2106,11 @@ function DocK11() {
                                     <Controller
                                         control={controlPemohon}
                                         name={"negaraPengirim"}
+                                        defaultValue={""}
                                         className="form-control form-control-sm"
                                         rules={{ required: "Mohon pilih negara pengirim." }}
-                                        render={({ field: { value, ...field } }) => (
-                                            <Select styles={customStyles} placeholder={"Pilih negara pengirim.."} value={value ? {id: cekdataDiri.negaraPengirim, label: cekdataDiri.negaraPengirimView} : ""} {...field} options={dataSelect.negaraPengirim} onChange={(e) => handleSelectPemohon(e, "negaraPengirim")} />
+                                        render={({ field: { value,onChange, ...field } }) => (
+                                            <Select styles={customStyles} placeholder={"Pilih negara pengirim.."} value={{id: cekdataDiri.negaraPengirim, label: cekdataDiri.negaraPengirimView}} {...field} options={cekdataDiri.permohonan != 'IM' ? [{value: "99", label: "ID - INDONESIA"}] : dataSelect.negaraPengirim} onChange={(e) => handleSelectPemohon(e, "negaraPengirim")} />
                                         )}
                                     />
                                     {errorsPemohon.negaraPengirim && <small className="text-danger">{errorsPemohon.negaraPengirim.message}</small>}
@@ -1999,10 +2123,11 @@ function DocK11() {
                                         <Controller
                                             control={controlPemohon}
                                             name={"provPengirim"}
+                                            defaultValue={""}
                                             className="form-control form-control-sm"
                                             rules={{ required: false }}
-                                            render={({ field: { value, ...field } }) => (
-                                                <Select styles={customStyles} placeholder={"Pilih provinsi pengirim.."} value={value ? {id: cekdataDiri.provPengirim, label: cekdataDiri.provPengirimView} : ""} {...field} options={dataSelect.provPengirim} onChange={(e) => handleSelectPemohon(e, "provPengirim")} />
+                                            render={({ field: { value,onChange, ...field } }) => (
+                                                <Select styles={customStyles} placeholder={"Pilih provinsi pengirim.."} value={{id: cekdataDiri.provPengirim, label: cekdataDiri.provPengirimView}} {...field} options={dataSelect.provPengirim} onChange={(e) => handleSelectPemohon(e, "provPengirim")} />
                                             )}
                                         />
                                     </div>
@@ -2013,17 +2138,18 @@ function DocK11() {
                                         <Controller
                                             control={controlPemohon}
                                             name={"kotaPengirim"}
+                                            defaultValue={""}
                                             className="form-control form-control-sm"
                                             rules={{ required: false }}
-                                            render={({ field: { value, ...field } }) => (
-                                                <Select styles={customStyles} placeholder={"Pilih kota/kab asal pengirim.."} value={value ? {id: cekdataDiri.kotaPengirim, label: cekdataDiri.kotaPengirimView} : ""} {...field} options={dataSelect.kotaPengirim} onChange={(e) => handleSelectPemohon(e, "kotaPengirim")} />
+                                            render={({ field: { value,onChange, ...field } }) => (
+                                                <Select styles={customStyles} placeholder={"Pilih kota/kab asal pengirim.."} value={{id: cekdataDiri.kotaPengirim, label: cekdataDiri.kotaPengirimView}} {...field} options={dataSelect.kotaPengirim} onChange={(e) => handleSelectPemohon(e, "kotaPengirim")} />
                                             )}
                                         />
                                     </div>
                                 </div>
                             </div>
                             <div className="form-check mt-3">
-                            <input className="form-check-input" type="checkbox" name='samaPengirim' id="samaPengirim" onChange={handleCekSamePengirim} />
+                            <input className="form-check-input" type="checkbox" name='samaPengirim' id="samaPengirim" value="1" onChange={handleCekSamePengirim} />
                             <label className="form-check-label" htmlFor="samaPengirim"> Sama dengan pemohon. </label>
                             </div>
                         </div>
@@ -2088,10 +2214,11 @@ function DocK11() {
                                 <Controller
                                         control={controlPemohon}
                                         name={"negaraPenerima"}
+                                        defaultValue={""}
                                         className="form-control form-control-sm"
                                         rules={{ required: "Mohon pilih negara penerima." }}
-                                        render={({ field: { value, ...field } }) => (
-                                            <Select styles={customStyles} placeholder={"Pilih negara penerima.."} value={ value ? {id: cekdataDiri.negaraPenerima, label: cekdataDiri.negaraPenerimaView} : ""} {...field} options={dataSelect.negaraPenerima ? dataSelect.negaraPenerima : []} onChange={(e) => handleSelectPemohon(e, "negaraPenerima")} />
+                                        render={({ field: { value,onChange, ...field } }) => (
+                                            <Select styles={customStyles} placeholder={"Pilih negara penerima.."} value={{id: cekdataDiri.negaraPenerima, label: cekdataDiri.negaraPenerimaView}} {...field} options={cekdataDiri.permohonan != 'EX' ? [{value: "99", label: "ID - INDONESIA"}] : dataSelect.negaraPenerima} onChange={(e) => handleSelectPemohon(e, "negaraPenerima")} />
                                         )}
                                     />
                                     {errorsPemohon.negaraPenerima && <small className="text-danger">{errorsPemohon.negaraPenerima.message}</small>}
@@ -2104,10 +2231,11 @@ function DocK11() {
                                         <Controller
                                             control={controlPemohon}
                                             name={"provPenerima"}
+                                            defaultValue={""}
                                             className="form-control form-control-sm"
                                             rules={{ required: false }}
-                                            render={({ field: { value, ...field } }) => (
-                                                <Select styles={customStyles} placeholder={"Pilih provinsi penerima.."} value={value ? {id: cekdataDiri.provPenerima, label: cekdataDiri.provPenerimaView} : ""} {...field} options={dataSelect.provPenerima} onChange={(e) => handleSelectPemohon(e, "provPenerima") & handleKota(e.value, "kotaPenerima")} />
+                                            render={({ field: { value,onChange, ...field } }) => (
+                                                <Select styles={customStyles} placeholder={"Pilih provinsi penerima.."} value={{id: cekdataDiri.provPenerima, label: cekdataDiri.provPenerimaView}} {...field} options={dataSelect.provPenerima} onChange={(e) => handleSelectPemohon(e, "provPenerima") & handleKota(e.value, "kotaPenerima")} />
                                             )}
                                         />
                                     </div>
@@ -2118,17 +2246,18 @@ function DocK11() {
                                         <Controller
                                             control={controlPemohon}
                                             name={"kotaPenerima"}
+                                            defaultValue={""}
                                             className="form-control form-control-sm"
                                             rules={{ required: false }}
-                                            render={({ field: { value, ...field } }) => (
-                                                <Select styles={customStyles} placeholder={"Pilih kota/kab penerima.."} value={value ? {id: cekdataDiri.kotaPenerima, label: cekdataDiri.kotaPenerimaView} : ""} {...field} options={dataSelect.kotaPenerima} onChange={(e) => handleSelectPemohon(e, "kotaPenerima")} />
+                                            render={({ field: { value,onChange, ...field } }) => (
+                                                <Select styles={customStyles} placeholder={"Pilih kota/kab penerima.."} value={{id: cekdataDiri.kotaPenerima, label: cekdataDiri.kotaPenerimaView}} {...field} options={dataSelect.kotaPenerima} onChange={(e) => handleSelectPemohon(e, "kotaPenerima")} />
                                             )}
                                         />
                                     </div>
                                 </div>
                             </div>
                             <div className="form-check mt-3">
-                                <input className="form-check-input" type="checkbox" name='samaPenerima' id="samaPenerima" onChange={handleCekSamePenerima} />
+                                <input className="form-check-input" type="checkbox" name='samaPenerima' id="samaPenerima" value="1" onChange={handleCekSamePenerima} />
                                 <label className="form-check-label" htmlFor="samaPenerima"> Sama dengan pemohon. </label>
                             </div>
                         </div>
@@ -2177,10 +2306,11 @@ function DocK11() {
                                                             <Controller
                                                                 control={controlPelabuhan}
                                                                 name={"negaraAsal"}
+                                                                defaultValue={""}
                                                                 className="form-control form-control-sm"
                                                                 rules={{ required: "Mohon pilih negara pelabuhan pengirim." }}
-                                                                render={({ field: { value, ...field } }) => (
-                                                                    <Select styles={customStyles} placeholder={"Pilih negara muat.."} value={value ? {id: cekdataPelabuhan.negaraAsal, label: cekdataPelabuhan.negaraAsalView} : ""} {...field} options={dataSelect.negaraAsal ? dataSelect.negaraAsal : []} onChange={(e) => e ? setValuePelabuhan("negaraAsal", e.value) & setValuePelabuhan("negaraAsalView", e.label) & handlePelabuhan(e.value, "pelMuat") : null} />
+                                                                render={({ field: { value,onChange, ...field } }) => (
+                                                                    <Select styles={customStyles} placeholder={"Pilih negara muat.."} value={{id: cekdataPelabuhan.negaraAsal, label: cekdataPelabuhan.negaraAsalView}} {...field} options={cekdataDiri.permohonan != "IM" ? [{label: "ID - INDONESIA", value: 99}] : dataSelect.negaraAsal} onChange={(e) => e ? setValuePelabuhan("negaraAsal", e.value) & setValuePelabuhan("negaraAsalView", e.label) & handlePelabuhan(e.value, "pelMuat") : null} />
                                                                 )}
                                                             />
                                                             {errorsPelabuhan.negaraAsal && <small className="text-danger">{errorsPelabuhan.negaraAsal.message}</small>}
@@ -2192,10 +2322,11 @@ function DocK11() {
                                                             <Controller
                                                                 control={controlPelabuhan}
                                                                 name={"negaraTujuan"}
+                                                                defaultValue={""}
                                                                 className="form-control form-control-sm"
                                                                 rules={{ required: "Mohon pilih negara pelabuhan pengirim." }}
-                                                                render={({ field: { value, ...field } }) => (
-                                                                    <Select styles={customStyles} placeholder={"Pilih negara bongkar.."} value={value ? {id: cekdataPelabuhan.negaraTujuan, label: cekdataPelabuhan.negaraTujuanView} : ""} {...field} options={dataSelect.negaraTujuan} onChange={(e) => e ? setValuePelabuhan("negaraTujuan", e.value) & setValuePelabuhan("negaraTujuanView", e.label) & handlePelabuhan(e.value, "pelBongkar") : null} />
+                                                                render={({ field: { value,onChange, ...field } }) => (
+                                                                    <Select styles={customStyles} placeholder={"Pilih negara bongkar.."} value={{id: cekdataPelabuhan.negaraTujuan, label: cekdataPelabuhan.negaraTujuanView}} {...field} options={cekdataDiri.permohonan != "EX" ? [{value: "99", label: "ID - INDONESIA"}] : dataSelect.negaraTujuan} onChange={(e) => e ? setValuePelabuhan("negaraTujuan", e.value) & setValuePelabuhan("negaraTujuanView", e.label) & handlePelabuhan(e.value, "pelBongkar") : null} />
                                                                 )}
                                                             />
                                                             {errorsPelabuhan.negaraTujuan && <small className="text-danger">{errorsPelabuhan.negaraTujuan.message}</small>}
@@ -2222,10 +2353,11 @@ function DocK11() {
                                                             <Controller
                                                                 control={controlPelabuhan}
                                                                 name={"negaraTransit"}
+                                                                defaultValue={""}
                                                                 className="form-control form-control-sm"
                                                                 rules={{ required: false }}
-                                                                render={({ field: { value, ...field } }) => (
-                                                                    <Select styles={customStyles} placeholder={"Pilih negara transit.."} value={value ? {id: cekdataPelabuhan.negaraTransit, label: cekdataPelabuhan.negaraTransitView} : ""} {...field} options={dataSelect.negaraTransit} onChange={(e) => e ? setValuePelabuhan("negaraTransit", e.value) & setValuePelabuhan("negaraTransitView", e.label) & handlePelabuhan(e.value, "pelTransit") : null} />
+                                                                render={({ field: { value,onChange, ...field } }) => (
+                                                                    <Select styles={customStyles} placeholder={"Pilih negara transit.."} value={{id: cekdataPelabuhan.negaraTransit, label: cekdataPelabuhan.negaraTransitView}} {...field} options={dataSelect.negaraTransit} onChange={(e) => e ? setValuePelabuhan("negaraTransit", e.value) & setValuePelabuhan("negaraTransitView", e.label) & handlePelabuhan(e.value, "pelTransit") : null} />
                                                                 )}
                                                             />
                                                         </div>
@@ -2257,10 +2389,11 @@ function DocK11() {
                                                             <Controller
                                                                 control={controlPelabuhan}
                                                                 name={"pelMuat"}
+                                                                defaultValue={""}
                                                                 className="form-control form-control-sm"
                                                                 rules={{ required: "Mohon pilih pelabuhan muat/asal." }}
-                                                                render={({ field: { value,placeholder, ...field } }) => (
-                                                                    <Select styles={customStyles} placeholder={"Pilih pelabuhan muat/asal.."} value={value ? {id: cekdataPelabuhan.pelMuat, label: cekdataPelabuhan.pelMuatView} : ""} {...field} options={dataSelect.pelMuat} onChange={(e) => e ? setValuePelabuhan("pelMuat", e.value) & setValuePelabuhan("pelMuatView", e.label) : null} />
+                                                                render={({ field: { value,onChange, ...field } }) => (
+                                                                    <Select styles={customStyles} placeholder={"Pilih pelabuhan muat/asal.."} value={{id: cekdataPelabuhan.pelMuat, label: cekdataPelabuhan.pelMuatView}} {...field} options={dataSelect.pelMuat} onChange={(e) => e ? setValuePelabuhan("pelMuat", e.value) & setValuePelabuhan("pelMuatView", e.label) : null} />
                                                                 )}
                                                             />
                                                             {errorsPelabuhan.pelMuat && <small className="text-danger">{errorsPelabuhan.pelMuat.message}</small>}
@@ -2272,10 +2405,11 @@ function DocK11() {
                                                             <Controller
                                                                 control={controlPelabuhan}
                                                                 name={"pelBongkar"}
+                                                                defaultValue={""}
                                                                 className="form-control form-control-sm"
                                                                 rules={{ required: "Mohon pilih pelabuhan bongkar." }}
-                                                                render={({ field: { value, ...field } }) => (
-                                                                    <Select styles={customStyles} placeholder={"Pilih pelabuhan bongkar.."} value={value ? {id: cekdataPelabuhan.pelBongkar, label: cekdataPelabuhan.pelBongkarView} : ""} {...field} options={dataSelect.pelBongkar} onChange={(e) => e ? setValuePelabuhan("pelBongkar", e.value) & setValuePelabuhan("pelBongkarView", e.label) : null} />
+                                                                render={({ field: { value,onChange, ...field } }) => (
+                                                                    <Select styles={customStyles} placeholder={"Pilih pelabuhan bongkar.."} value={{id: cekdataPelabuhan.pelBongkar, label: cekdataPelabuhan.pelBongkarView}} {...field} options={dataSelect.pelBongkar} onChange={(e) => e ? setValuePelabuhan("pelBongkar", e.value) & setValuePelabuhan("pelBongkarView", e.label) : null} />
                                                                 )}
                                                             />
                                                             {errorsPelabuhan.pelBongkar && <small className="text-danger">{errorsPelabuhan.pelBongkar.message}</small>}
@@ -2294,10 +2428,11 @@ function DocK11() {
                                                                 <Controller
                                                                     control={controlPelabuhan}
                                                                     name={"pelTransit"}
+                                                                    defaultValue={""}
                                                                     className="form-control form-control-sm"
                                                                     rules={{ required: false }}
-                                                                    render={({ field: { value, ...field } }) => (
-                                                                        <Select styles={customStyles} placeholder={"Pilih pelabuhan transit.."} value={value ? {id: cekdataPelabuhan.pelTransit, label: cekdataPelabuhan.pelTransitView} : ""} {...field} options={dataSelect.pelTransit} onChange={(e) => e ? setValuePelabuhan("pelTransit", e.value) & setValuePelabuhan("pelTransitView", e.label) : null} />
+                                                                    render={({ field: { value,onChange, ...field } }) => (
+                                                                        <Select styles={customStyles} placeholder={"Pilih pelabuhan transit.."} value={{id: cekdataPelabuhan.pelTransit, label: cekdataPelabuhan.pelTransitView}} {...field} options={dataSelect.pelTransit} onChange={(e) => e ? setValuePelabuhan("pelTransit", e.value) & setValuePelabuhan("pelTransitView", e.label) : null} />
                                                                     )}
                                                                 />
                                                             </div>
@@ -2376,10 +2511,11 @@ function DocK11() {
                                                             <Controller
                                                                 control={controlPelabuhan}
                                                                 name={"benderaTransit"}
+                                                                defaultValue={""}
                                                                 className="form-control form-control-sm"
                                                                 rules={{ required: false }}
-                                                                render={({ field: { value, ...field } }) => (
-                                                                    <Select styles={customStyles} placeholder={"Pilih bendera kapal transit.."} value={value ? {id: cekdataPelabuhan.benderaTransit, label: cekdataPelabuhan.benderaTransitView} : ""} {...field} options={dataSelect.benderaTransit} onChange={(e) => e ? setValuePelabuhan("benderaTransit", e.value) & setValuePelabuhan("benderaTransitView", e.label) : null} />
+                                                                render={({ field: { value,onChange, ...field } }) => (
+                                                                    <Select styles={customStyles} placeholder={"Pilih bendera kapal transit.."} value={{id: cekdataPelabuhan.benderaTransit, label: cekdataPelabuhan.benderaTransitView}} {...field} options={dataSelect.benderaTransit} onChange={(e) => e ? setValuePelabuhan("benderaTransit", e.value) & setValuePelabuhan("benderaTransitView", e.label) : null} />
                                                                 )}
                                                             />
                                                         </div>
@@ -2476,10 +2612,11 @@ function DocK11() {
                                                             <Controller
                                                                 control={controlPelabuhan}
                                                                 name={"benderaAkhir"}
+                                                                defaultValue={""}
                                                                 className="form-control form-control-sm"
                                                                 rules={{ required: false }}
-                                                                render={({ field: { value, ...field } }) => (
-                                                                    <Select styles={customStyles} placeholder={"Pilih bendera kapal akhir.."} value={value ? {id: cekdataPelabuhan.benderaAkhir, label: cekdataPelabuhan.benderaAkhirView} : ""} {...field} options={dataSelect.benderaAkhir} onChange={(e) => e ? setValuePelabuhan("benderaAkhir", e.value) & setValuePelabuhan("benderaAkhirView", e.label) : null} />
+                                                                render={({ field: { value,onChange, ...field } }) => (
+                                                                    <Select styles={customStyles} placeholder={"Pilih bendera kapal akhir.."} value={{id: cekdataPelabuhan.benderaAkhir, label: cekdataPelabuhan.benderaAkhirView}} {...field} options={dataSelect.benderaAkhir} onChange={(e) => e ? setValuePelabuhan("benderaAkhir", e.value) & setValuePelabuhan("benderaAkhirView", e.label) : null} />
                                                                 )}
                                                             />
                                                         </div>
@@ -2616,7 +2753,7 @@ function DocK11() {
                                                                 <div className="row mb-3">
                                                                     <label className="col-sm-3 col-form-label" htmlFor="mediaPembawa">Media Pembawa <span className='text-danger'>*</span></label>
                                                                     <div className="col-sm-4">
-                                                                        <select name="mediaPembawa" id="mediaPembawa" {...registerMP("mediaPembawa", { required: "Mohon pilih media pembawa."})} onChange={handleMPDetil} className={errorsMP.mediaPembawa ? "form-select form-select-sm is-invalid" : "form-select form-select-sm"}>
+                                                                        <select name="mediaPembawa" id="mediaPembawa" {...registerMP("mediaPembawa", { required: "Mohon pilih media pembawa."})} className={errorsMP.mediaPembawa ? "form-select form-select-sm is-invalid" : "form-select form-select-sm"}>
                                                                             <option value="">--</option>
                                                                             <option value="H">Hewan</option>
                                                                             <option value="I">Ikan</option>
@@ -2631,50 +2768,50 @@ function DocK11() {
                                                                         {/* <!-- Hewan --> */}
                                                                         <div style={{display: cekdataMP.mediaPembawa === 'H' ? 'block' : 'none'}}>
                                                                             <div className="form-check form-check-inline">
-                                                                                <input className="form-check-input" type="radio" onInput={(e) => handleKomKHIDetil(e.target.value)} name="jenisMp" id="hidup" value={1} {...registerMP("jenisMp", { required: "Mohon pilih jenis media pembawa."})} />
+                                                                                <input className="form-check-input" type="radio" onInput={(e) => handleKomKHIDetil(e.target.value)} name="jenisMp" id="hidup" value="1" {...registerMP("jenisMp", { required: "Mohon pilih jenis media pembawa."})} />
                                                                                 <label className="form-check-label" htmlFor="hidup">Hewan Hidup</label>
                                                                             </div>
                                                                             <div className="form-check form-check-inline">
-                                                                                <input className="form-check-input" type="radio" onInput={(e) => handleKomKHIDetil(e.target.value)} name="jenisMp" id="produk" value={2} {...registerMP("jenisMp")} />
+                                                                                <input className="form-check-input" type="radio" onInput={(e) => handleKomKHIDetil(e.target.value)} name="jenisMp" id="produk" value="2" {...registerMP("jenisMp")} />
                                                                                 <label className="form-check-label" htmlFor="produk">Produk Hewan</label>
                                                                             </div>
                                                                             <div className="form-check form-check-inline">
-                                                                                <input className="form-check-input" type="radio" onInput={(e) => handleKomKHIDetil(e.target.value)} name="jenisMp" id="mpl" value={3} {...registerMP("jenisMp")} />
+                                                                                <input className="form-check-input" type="radio" onInput={(e) => handleKomKHIDetil(e.target.value)} name="jenisMp" id="mpl" value="3" {...registerMP("jenisMp")} />
                                                                                 <label className="form-check-label" htmlFor="mpl">Media Pembawa Lain</label>
                                                                             </div>
                                                                         </div>
                                                                         {/* <!-- Ikan --> */}
                                                                         <div style={{display: cekdataMP.mediaPembawa === 'I' ? 'block' : 'none'}}>
                                                                             <div className="form-check form-check-inline">
-                                                                                <input className="form-check-input" type="radio" onInput={(e) => handleKomKHIDetil(e.target.value)} name="jenisMp" id="hidup" value={6} {...registerMP("jenisMp", { required: "Mohon pilih jenis media pembawa."})} />
+                                                                                <input className="form-check-input" type="radio" onInput={(e) => handleKomKHIDetil(e.target.value)} name="jenisMp" id="hidup" value="6" {...registerMP("jenisMp", { required: "Mohon pilih jenis media pembawa."})} />
                                                                                 <label className="form-check-label" htmlFor="hidup">Ikan Hidup</label>
                                                                             </div>
                                                                             <div className="form-check form-check-inline">
-                                                                                <input className="form-check-input" type="radio" onInput={(e) => handleKomKHIDetil(e.target.value)} name="jenisMp" id="produk" value={7} {...registerMP("jenisMp")} />
+                                                                                <input className="form-check-input" type="radio" onInput={(e) => handleKomKHIDetil(e.target.value)} name="jenisMp" id="produk" value="7" {...registerMP("jenisMp")} />
                                                                                 <label className="form-check-label" htmlFor="produk">Produk Ikan</label>
                                                                             </div>
                                                                             <div className="form-check form-check-inline">
-                                                                                <input className="form-check-input" type="radio" onInput={(e) => handleKomKHIDetil(e.target.value)} name="jenisMp" id="mpl" value={8} {...registerMP("jenisMp")} />
+                                                                                <input className="form-check-input" type="radio" onInput={(e) => handleKomKHIDetil(e.target.value)} name="jenisMp" id="mpl" value="8" {...registerMP("jenisMp")} />
                                                                                 <label className="form-check-label" htmlFor="mpl">Media Pembawa Lain</label>
                                                                             </div>
                                                                         </div>
                                                                         {/* <!-- Tumbuhan --> */}
                                                                         <div style={{display: cekdataMP.mediaPembawa === 'T' ? 'block' : 'none'}}>
                                                                             <div className="form-check form-check-inline">
-                                                                                <input className="form-check-input" type="radio" name="jenisMp" id="benih" onInput={(e) => handleKomKHIDetil(e.target.value)} value={4} {...registerMP("jenisMp")} />
+                                                                                <input className="form-check-input" type="radio" name="jenisMp" id="benih" onInput={(e) => handleKomKHIDetil(e.target.value)} value="4" {...registerMP("jenisMp")} />
                                                                                 <label className="form-check-label" htmlFor="benih">Benih</label>
                                                                             </div>
                                                                             <div className="form-check form-check-inline mb-3">
-                                                                                <input className="form-check-input" type="radio" name="jenisMp" id="nonbenih" onInput={(e) => handleKomKHIDetil(e.target.value)} value={5} {...registerMP("jenisMp")} />
+                                                                                <input className="form-check-input" type="radio" name="jenisMp" id="nonbenih" onInput={(e) => handleKomKHIDetil(e.target.value)} value="5" {...registerMP("jenisMp")} />
                                                                                 <label className="form-check-label" htmlFor="nonbenih">Non Benih</label>
                                                                             </div>
                                                                         </div>
                                                                         <div className="form-check form-check-inline">
-                                                                            <input className="form-check-input" type="radio" name="jenisAngkut" id="curah" value={1} {...registerMP("jenisAngkut", { required: "Mohon pilih apakah komoditas curah atau tidak."})} />
+                                                                            <input className="form-check-input" type="radio" name="jenisAngkut" id="curah" value="1" {...registerMP("jenisAngkut", { required: "Mohon pilih apakah komoditas curah atau tidak."})} />
                                                                             <label className="form-check-label" htmlFor="curah">Curah</label>
                                                                         </div>
                                                                         <div className="form-check form-check-inline">
-                                                                            <input className="form-check-input" type="radio" name="jenisAngkut" id="noncurah" value={0} {...registerMP("jenisAngkut")} />
+                                                                            <input className="form-check-input" type="radio" name="jenisAngkut" id="noncurah" value="0" {...registerMP("jenisAngkut")} />
                                                                             <label className="form-check-label" htmlFor="noncurah">Non Curah</label>
                                                                         </div>
                                                                     </div>
@@ -2709,27 +2846,29 @@ function DocK11() {
                                                                         <Controller
                                                                             control={controlMP}
                                                                             name={"negaraAsalMP"}
+                                                                            defaultValue={""}
                                                                             className="form-control form-control-sm"
                                                                             rules={{ required: "Mohon pilih negara asal komoditas." }}
-                                                                            render={({ field: { value, name, ...field } }) => (
+                                                                            render={({ field: { value,onChange, ...field } }) => (
                                                                                 <Select styles={customStyles} placeholder={"Pilih negara.."}
-                                                                                value={value ? {id: cekdataMP.negaraAsalMP, label: cekdataMP.negaraAsalMPView} : ""}
-                                                                                {...field} options={dataSelect.negaraAsalMP} onChange={(e) => handleSelectNegKomoditas(e, "negaraAsalMP") & (e.value === '99' ? handleKota(null, "daerahAsalMP") : null)} />
+                                                                                value={{id: cekdataMP.negaraAsalMP, label: cekdataMP.negaraAsalMPView}}
+                                                                                {...field} options={cekdataDiri.permohonan != "IM" ? [{value: "99", label: "ID - INDONESIA"}] : dataSelect.negaraAsalMP} onChange={(e) => handleSelectNegKomoditas(e, "negaraAsalMP") & (e.value === '99' ? handleKota(null, "daerahAsalMP") : null)} />
                                                                             )}
                                                                         />
                                                                     </div>
                                                                     {errorsMP.negaraAsalMP && <div className="offset-3 col-sm-9"><small className="text-danger">{errorsMP.negaraAsalMP.message}</small></div>}
                                                                 </div>
-                                                                <div className="row mb-3" style={{visibility: (cekdataMP.negaraAsalMP === 99 | cekdataMP.negaraAsalMP === '99' ? "visible" : "hidden")}}>
+                                                                <div className="row mb-3" style={{visibility: (cekdataMP.negaraAsalMP == 99 ? "visible" : "hidden")}}>
                                                                     <label className="col-sm-3 col-form-label" htmlFor="daerahAsalMP">Daerah Asal</label>
                                                                     <div className="col-sm-6">
                                                                         <Controller
                                                                             control={controlMP}
                                                                             name={"daerahAsalMP"}
+                                                                            defaultValue={""}
                                                                             className="form-control form-control-sm"
                                                                             rules={{ required: false }}
-                                                                            render={({ field: { value, ...field } }) => (
-                                                                                <Select styles={customStyles} placeholder={"Pilih daerah asal.."} value={value ? {id: cekdataMP.daerahAsalMP, label: cekdataMP.daerahAsalMPView} : ""} {...field} options={dataSelect.daerahAsalMP} onChange={(e) => handleSelectNegKomoditas(e, "daerahAsalMP")} />
+                                                                            render={({ field: { value,onChange, ...field } }) => (
+                                                                                <Select styles={customStyles} placeholder={"Pilih daerah asal.."} value={{id: cekdataMP.daerahAsalMP, label: cekdataMP.daerahAsalMPView}} {...field} options={dataSelect.daerahAsalMP} onChange={(e) => handleSelectNegKomoditas(e, "daerahAsalMP")} />
                                                                             )}
                                                                         />
                                                                         {errorsMP.daerahAsal && <small className="text-danger">{errorsMP.daerahAsalMP.message}</small>}
@@ -2740,26 +2879,28 @@ function DocK11() {
                                                                     <div className="col-sm-6">
                                                                         <Controller
                                                                             control={controlMP}
+                                                                            defaultValue={""}
                                                                             name={"negaraTujuanMP"}
                                                                             className="form-control form-control-sm"
                                                                             rules={{ required: "Mohon pilih negara tujuan komoditas." }}
-                                                                            render={({ field: { value, ...field } }) => (
-                                                                                <Select styles={customStyles} placeholder={"Pilih negara.."} value={value ? {id: cekdataMP.negaraTujuanMP, label: cekdataMP.negaraTujuanMPView} : ""} {...field} options={dataSelect.negaraTujuanMP} onChange={(e) => handleSelectNegKomoditas(e, "negaraTujuanMP") & (e.value === '99' ? handleKota(null, "daerahTujuanMP") : null)} />
+                                                                            render={({ field: { value,onChange, ...field } }) => (
+                                                                                <Select styles={customStyles} placeholder={"Pilih negara.."} value={{id: cekdataMP.negaraTujuanMP, label: cekdataMP.negaraTujuanMPView}} {...field} options={cekdataDiri.permohonan != "EX" ? [{value: "99", label: "ID - INDONESIA"}] :dataSelect.negaraTujuanMP} onChange={(e) => handleSelectNegKomoditas(e, "negaraTujuanMP") & (e.value === '99' ? handleKota(null, "daerahTujuanMP") : null)} />
                                                                             )}
                                                                         />
                                                                     </div>
                                                                     {errorsMP.negaraTujuanMP && <div className="offset-3 col-sm-9"><small className="text-danger">{errorsMP.negaraTujuanMP.message}</small></div>}
                                                                 </div>
-                                                                <div className="row mb-3" style={{visibility: (cekdataMP.negaraTujuanMP === 99 | cekdataMP.negaraTujuanMP === '99' ? "visible" : "hidden")}}>
+                                                                <div className="row mb-3" style={{visibility: (cekdataMP.negaraTujuanMP == 99 ? "visible" : "hidden")}}>
                                                                     <label className="col-sm-3 col-form-label" htmlFor="daerahTujuanMP">Daerah Tujuan</label>
                                                                     <div className="col-sm-6">
                                                                         <Controller
                                                                             control={controlMP}
                                                                             name={"daerahTujuanMP"}
+                                                                            defaultValue={""}
                                                                             className="form-control form-control-sm"
                                                                             rules={{ required: false }}
-                                                                            render={({ field: { value, ...field } }) => (
-                                                                                <Select styles={customStyles} placeholder={"Pilih daerah tujuan.."} value={value ? {id: cekdataMP.daerahTujuanMP, label: cekdataMP.daerahTujuanMPView} : ""} {...field} options={dataSelect.daerahTujuanMP} onChange={(e) => handleSelectNegKomoditas(e, "daerahTujuanMP")} />
+                                                                            render={({ field: { value,onChange, ...field } }) => (
+                                                                                <Select styles={customStyles} placeholder={"Pilih daerah tujuan.."} value={{id: cekdataMP.daerahTujuanMP, label: cekdataMP.daerahTujuanMPView}} {...field} options={dataSelect.daerahTujuanMP} onChange={(e) => handleSelectNegKomoditas(e, "daerahTujuanMP")} />
                                                                             )}
                                                                         />
                                                                         {errorsMP.daerahTujuanMP && <small className="text-danger">{errorsMP.daerahTujuanMP.message}</small>}
@@ -3297,10 +3438,11 @@ function DocK11() {
                             <Controller
                                 control={controlDokumen}
                                 name={"jenisDokumen"}
+                                defaultValue={""}
                                 className="form-control form-control-sm"
                                 rules={{ required: "Mohon pilih jenis dokumen." }}
-                                render={({ field: { value, ...field } }) => (
-                                    <Select styles={customStyles} placeholder={"Pilih jenis dokumen.."} value={value ? {id: cekdataDokumen.jenisDokumen, label: cekdataDokumen.jenisDokumenView} : ""} {...field} options={dataSelect.jenisDokumen} onChange={(e) => setValueDokumen("jenisDokumen", e.value) & setValueDokumen("jenisDokumenView", e.label)} />
+                                render={({ field: { value,onChange, ...field } }) => (
+                                    <Select styles={customStyles} placeholder={"Pilih jenis dokumen.."} value={{id: cekdataDokumen.jenisDokumen, label: cekdataDokumen.jenisDokumenView}} {...field} options={dataSelect.jenisDokumen} onChange={(e) => setValueDokumen("jenisDokumen", e.value) & setValueDokumen("jenisDokumenView", e.label)} />
                                 )}
                             />
                             {errorsDokumen.jenisDokumen && <small className="text-danger">{errorsDokumen.jenisDokumen.message}</small>}
@@ -3317,10 +3459,11 @@ function DocK11() {
                             <Controller
                                 control={controlDokumen}
                                 name={"negaraAsalDokumen"}
+                                defaultValue={""}
                                 className="form-control form-control-sm"
                                 rules={{ required: "Mohon pilih negara penerbit dokumen." }}
-                                render={({ field: { value, ...field } }) => (
-                                    <Select styles={customStyles} placeholder={"Pilih negara penerbit.."} value={value ? {id: cekdataDokumen.negaraAsalDokumen, label: cekdataDokumen.negaraAsalDokumenView} : ""} {...field} options={dataSelect.negaraAsalDokumen} onChange={(e) => setValueDokumen("negaraAsalDokumen", e.value) & setValueDokumen("negaraAsalDokumenView", e.label) & (e.value === '99' ? handleKota(null, "kotaAsalDokumen") : null)} />
+                                render={({ field: { value,onChange, ...field } }) => (
+                                    <Select styles={customStyles} placeholder={"Pilih negara penerbit.."} value={{id: cekdataDokumen.negaraAsalDokumen, label: cekdataDokumen.negaraAsalDokumenView}} {...field} options={dataSelect.negaraAsalDokumen} onChange={(e) => setValueDokumen("negaraAsalDokumen", e.value) & setValueDokumen("negaraAsalDokumenView", e.label) & (e.value === '99' ? handleKota(null, "kotaAsalDokumen") : null)} />
                                 )}
                             />
                             {errorsDokumen.negaraAsalDokumen && <small className="text-danger">{errorsDokumen.negaraAsalDokumen.message}</small>}
@@ -3337,10 +3480,11 @@ function DocK11() {
                             <Controller
                                 control={controlDokumen}
                                 name={"kotaAsalDokumen"}
+                                defaultValue={""}
                                 className="form-control form-control-sm"
                                 rules={{ required: false }}
-                                render={({ field: { value, ...field } }) => (
-                                    <Select styles={customStyles} placeholder={"Pilih kota penerbit.."} value={value ? {id: cekdataDokumen.kotaAsalDokumen, label: cekdataDokumen.kotaAsalDokumenView} : ""} {...field} options={dataSelect.kotaAsalDokumen} onChange={(e) => setValueDokumen("kotaAsalDokumen", e.value) & setValueDokumen("kotaAsalDokumenView", e.label)} />
+                                render={({ field: { value,onChange, ...field } }) => (
+                                    <Select styles={customStyles} placeholder={"Pilih kota penerbit.."} value={{id: cekdataDokumen.kotaAsalDokumen, label: cekdataDokumen.kotaAsalDokumenView}} {...field} options={dataSelect.kotaAsalDokumen} onChange={(e) => setValueDokumen("kotaAsalDokumen", e.value) & setValueDokumen("kotaAsalDokumenView", e.label)} />
                                 )}
                             />
                         </div>
@@ -3353,8 +3497,8 @@ function DocK11() {
                         <div className="col-6">
                             <label className="form-label" htmlFor="fileDokumen">Upload</label>
                             <div className="input-group input-group-merge">
-                            <input type="hidden" name='fileDokumen' {...registerDokumen("fileDokumen")} />
-                                <input type='file' name="fileDokumenUpload" id="fileDokumenUpload" onChange={handleBase64Upload} className="form-control form-control-sm" />
+                                <input type="hidden" name='fileDokumen' {...registerDokumen("fileDokumen")} />
+                                <input type='file' name="fileDokumenUpload" id="fileDokumenUpload" value={dataIdPage ? (dataIdPage.fileDokumenUpload) : ""} onChange={handleBase64Upload} className="form-control form-control-sm" />
                             </div>
                         </div>
                         <div className="col-6 text-center mt-4">
@@ -3391,10 +3535,11 @@ function DocK11() {
                                 <Controller
                                     control={controlDetilMP}
                                     name={"peruntukanMP"}
+                                    defaultValue={""}
                                     className="form-control form-control-sm"
                                     rules={{ required: false }}
-                                    render={({ field: { value, onChange, ...field } }) => (
-                                        <Select styles={customStyles} placeholder={"Pilih klasifikasi tumbuhan.."} value={value ? {id: cekdataDetilMP.peruntukanMP, label: cekdataDetilMP.peruntukanMPView} : ""} {...field} onChange={(e) => setValueDetilMP("peruntukanMP", e.value) & setValueDetilMP("peruntukanMPView", e.label)} options={dataSelect.peruntukanMP} />
+                                    render={({ field: { value,onChange, ...field } }) => (
+                                        <Select styles={customStyles} placeholder={"Pilih klasifikasi tumbuhan.."} value={{id: cekdataDetilMP.peruntukanMP, label: cekdataDetilMP.peruntukanMPView}} {...field} onChange={(e) => setValueDetilMP("peruntukanMP", e.value) & setValueDetilMP("peruntukanMPView", e.label)} options={dataSelect.peruntukanMP} />
                                     )}
                                 />
                                 <small className='text-danger'>{cekdataDetilMP.idDetilMP ? "*Tidak perlu dipilih ulang jika tidak ubah klasifikasi" : null}</small>
@@ -3406,8 +3551,8 @@ function DocK11() {
                                         <input type="text" name='volumeNetto' id='volumeNetto' value={cekdataDetilMP.volumeNetto ? addCommas(removeNonNumeric(cekdataDetilMP.volumeNetto)) : ""} {...registerDetilMP("volumeNetto", {required: "Mohon isi volume netto."})} className={errorsDetilMP.volumeNetto ? "form-control form-control-sm is-invalid" : "form-control form-control-sm"} />
                                     </div>
                                     <div className="col-7" style={{paddingLeft: '2px'}}>
-                                        <input type="hidden" name='satuanNetto' id='satuanNetto' {...registerDetilMP("satuanNetto")} value={1356} />
-                                        <input type="text" className='form-control form-control-sm' value={'KILOGRAM'} readOnly />
+                                        <input type="hidden" name='satuanNetto' id='satuanNetto' {...registerDetilMP("satuanNetto")} value="1356" />
+                                        <input type="text" className='form-control form-control-sm' value='KILOGRAM' readOnly />
                                         {/* <select name="satuanNetto" id="satuanNetto" onClick={handleMasterSatuan} data-kar={cekdataMP.mediaPembawa === 'T' ? 'kt' : (cekdataMP.mediaPembawa === 'H' ? 'kh' : 'ki')} {...registerDetilMP("satuanNetto", {required: "Mohon isi satuan netto."})} className={errorsKontainer.satuanNetto ? "form-control form-control-sm is-invalid" : "form-control form-control-sm"}>
                                             <option value="">--</option>
                                             {dataSelect.satuanNetto}
@@ -3423,10 +3568,11 @@ function DocK11() {
                                 <Controller
                                     control={controlDetilMP}
                                     name={"selectKomoditasMP"}
+                                    defaultValue={""}
                                     className="form-control form-control-sm"
                                     rules={{ required: false }}
-                                    render={({ field: { value, onChange, ...field } }) => (
-                                        <Select styles={customStyles} placeholder={"Pilih komoditas.."} value={value ? {id: cekdataDetilMP.selectKomoditasMP, label: cekdataDetilMP.selectKomoditasMPView} : ""} onChange={(e) => setValueDetilMP("selectKomoditasMP", e.value) & setValueDetilMP("selectKomoditasMPView", e.label) & handleSetKomoditasSelect(e)} {...field} options={dataSelect.selectKomoditasMP} />
+                                    render={({ field: { value,onChange, ...field } }) => (
+                                        <Select styles={customStyles} placeholder={"Pilih komoditas.."} value={{id: cekdataDetilMP.selectKomoditasMP, label: cekdataDetilMP.selectKomoditasMPView}} onChange={(e) => setValueDetilMP("selectKomoditasMP", e.value) & setValueDetilMP("selectKomoditasMPView", e.label) & handleSetKomoditasSelect(e)} {...field} options={masterKomKT()} />
                                     )}
                                 />
                                 <small className='text-danger'>{cekdataDetilMP.idDetilMP ? "*Tidak perlu dipilih ulang jika tidak ubah komoditas" : null}</small>
@@ -3439,8 +3585,8 @@ function DocK11() {
                                         <input type="text" value={cekdataDetilMP.volumeBrutto ? addCommas(removeNonNumeric(cekdataDetilMP.volumeBrutto)) : ""} {...registerDetilMP("volumeBrutto", {required: "Mohon isi volume brutto."})} className={errorsDetilMP.volumeBrutto ? "form-control form-control-sm is-invalid" : "form-control form-control-sm"} name='volumeBrutto' id='volumeBrutto' />
                                     </div>
                                     <div className="col-7" style={{paddingLeft: '2px'}}>
-                                        <input type="hidden" name='satuanBrutto' id='satuanBrutto' {...registerDetilMP("satuanBrutto")} value={1356} />
-                                        <input type="text" className='form-control form-control-sm' value={'KILOGRAM'} readOnly />
+                                        <input type="hidden" name='satuanBrutto' id='satuanBrutto' {...registerDetilMP("satuanBrutto")} value="1356" />
+                                        <input type="text" className='form-control form-control-sm' value='KILOGRAM' readOnly />
                                         {/* <select name="satuanBrutto" id="satuanBrutto" data-kar={cekdataMP.mediaPembawa === 'T' ? 'kt' : (cekdataMP.mediaPembawa === 'H' ? 'kh' : 'ki')} onClick={handleMasterSatuan} {...registerDetilMP("satuanBrutto", {required: "Mohon isi satuan brutto."})} className={errorsDetilMP.satuanBrutto ? "form-control form-control-sm is-invalid" : "form-control form-control-sm"}>
                                             <option value="">--</option>
                                             {dataSelect.satuanBrutto}
@@ -3455,10 +3601,11 @@ function DocK11() {
                                 <Controller
                                     control={controlDetilMP}
                                     name={"kodeHSMp"}
+                                    defaultValue={""}
                                     className="form-control form-control-sm"
                                     rules={{ required: false }}
                                     render={({ field: { value,onChange, ...field } }) => (
-                                        <Select styles={customStyles} placeholder={"Pilih kode HS.."} value={value ? {id: cekdataDetilMP.kodeHSMp, label: cekdataDetilMP.kodeHSMpView} : ""} onChange={(e) => setValueDetilMP("kodeHSMp", e.value) & setValueDetilMP("kodeHSMpView", e.label)} {...field} options={dataSelect.kodeHSMp} />
+                                        <Select styles={customStyles} placeholder={"Pilih kode HS.."} value={{id: cekdataDetilMP.kodeHSMp, label: cekdataDetilMP.kodeHSMpView}} onChange={(e) => setValueDetilMP("kodeHSMp", e.value) & setValueDetilMP("kodeHSMpView", e.label)} {...field} options={dataSelect.kodeHSMp} />
                                     )}
                                 />
                                 <small className='text-danger'>{cekdataDetilMP.idDetilMP ? "*Tidak perlu dipilih ulang jika tidak ubah kode HS" : null}</small>
@@ -3470,10 +3617,20 @@ function DocK11() {
                                         <input type="text" className='form-control form-control-sm' name='volumeLain' id='volumeLain' value={cekdataDetilMP.volumeLain ? addCommas(removeNonNumeric(cekdataDetilMP.volumeLain)) : ""} {...registerDetilMP("volumeLain")} />
                                     </div>
                                     <div className="col-7" style={{paddingLeft: '2px'}}>
-                                        <select name="satuanLain" id="satuanLain" data-kar={cekdataMP.mediaPembawa === 'T' ? 'kt' : (cekdataMP.mediaPembawa === 'H' ? 'kh' : 'ki')} onClick={handleMasterSatuan} className='form-control form-control-sm' {...registerDetilMP("satuanLain")}>
+                                        <Controller
+                                            control={controlDetilMP}
+                                            name={"satuanLain"}
+                                            defaultValue={""}
+                                            className="form-control form-control-sm"
+                                            rules={{ required: false }}
+                                            render={({ field: { value,onChange, ...field } }) => (
+                                                <Select styles={customStyles} placeholder={"Pilih Satuan.."} value={{id: cekdataDetilMP.satuanLain, label: cekdataDetilMP.satuanLainView}} onChange={(e) => setValueDetilMP("satuanLain", e.value) & setValueDetilMP("satuanLainView", e.label)} {...field} options={masterSatuanJson(cekdataMP.mediaPembawa)} />
+                                            )}
+                                        />
+                                        {/* <select name="satuanLain" id="satuanLain" data-kar={cekdataMP.mediaPembawa === 'T' ? 'kt' : (cekdataMP.mediaPembawa === 'H' ? 'kh' : 'ki')} onClick={handleMasterSatuan} className='form-control form-control-sm' {...registerDetilMP("satuanLain")}>
                                             <option value="">--</option>
                                             {dataSelect.satuanLain}
-                                        </select>
+                                        </select> */}
                                     </div>
                                 </div>
                             </div>
@@ -3522,12 +3679,12 @@ function DocK11() {
                                 <Controller
                                     control={controlDetilMP}
                                     name={"komoditasMPKH"}
-                                    placeholder= 'Status'
+                                    defaultValue={""}
                                     className="form-control form-control-sm"
                                     rules={{ required: false }}
                                     render={({ field: { value,onChange, ...field } }) => (
                                         <Select placeholder= 'Pilih Komoditas..' styles={customStyles}
-                                         value={value ? {id: cekdataDetilMP.komoditasMPKH, label: cekdataDetilMP.komoditasMPKHView } : ""} onChange={(e) => setValueDetilMP("komoditasMPKH", e.value) & setValueDetilMP("komoditasMPKHView", e.label) & handleSetKomoditasSelect(e)} {...field} options={dataSelect.komoditasMPKH} />
+                                         value={{id: cekdataDetilMP.komoditasMPKH, label: cekdataDetilMP.komoditasMPKHView}} onChange={(e) => setValueDetilMP("komoditasMPKH", e.value) & setValueDetilMP("komoditasMPKHView", e.label) & handleSetKomoditasSelect(e)} {...field} options={dataSelect.komoditasMPKH} />
                                     )}
                                 />
                                 <small className='text-danger'>{cekdataDetilMP.idDetilMP ? "*Tidak perlu dipilih ulang jika tidak ubah komoditas" : null}</small>
@@ -3542,10 +3699,11 @@ function DocK11() {
                                 <Controller
                                     control={controlDetilMP}
                                     name={"kodeHSMpKH"}
+                                    defaultValue={""}
                                     className="form-control form-control-sm"
                                     rules={{ required: false }}
                                     render={({ field: { value,onChange, ...field } }) => (
-                                        <Select styles={customStyles} placeholder={"Pilih kode HS.."} value={value ? {id: cekdataDetilMP.kodeHSMpKH, label: cekdataDetilMP.kodeHSMpKHView} : ""} onChange={(e) => setValueDetilMP("kodeHSMpKH", e.value) & setValueDetilMP("kodeHSMpKHView", e.label)} {...field} options={dataSelect.kodeHSMp} />
+                                        <Select styles={customStyles} placeholder={"Pilih kode HS.."} value={{id: cekdataDetilMP.kodeHSMpKH, label: cekdataDetilMP.kodeHSMpKHView}} onChange={(e) => setValueDetilMP("kodeHSMpKH", e.value) & setValueDetilMP("kodeHSMpKHView", e.label)} {...field} options={dataSelect.kodeHSMp} />
                                     )}
                                 />
                                 <small className='text-danger'>{cekdataDetilMP.idDetilMP ? "*Tidak perlu dipilih ulang jika tidak ubah kode HS" : null}</small>
@@ -3569,10 +3727,20 @@ function DocK11() {
                                     <input type="text" value={cekdataDetilMP.jumlahMP ? addCommas(removeNonNumeric(cekdataDetilMP.jumlahMP)) : ""} {...registerDetilMP("jumlahMP", {required: "Mohon isi satuan brutto."})} className={errorsDetilMP.jumlahMP ? "form-control form-control-sm is-invalid" : "form-control form-control-sm"} name='jumlahMP' id='jumlahMP' />
                                 </div>
                                 <div className='col-5' style={{paddingLeft: '2px'}}>
-                                    <select name="satJumlahMP" id="satJumlahMP" data-kar={cekdataMP.mediaPembawa === 'T' ? 'kt' : (cekdataMP.mediaPembawa === 'H' ? 'kh' : 'ki')} onClick={handleMasterSatuan} {...registerDetilMP("satJumlahMP")} className="form-control form-control-sm">
+                                    <Controller
+                                        control={controlDetilMP}
+                                        name={"satJumlahMP"}
+                                        defaultValue={""}
+                                        className="form-control form-control-sm"
+                                        rules={{ required: false }}
+                                        render={({ field: { value,onChange, ...field } }) => (
+                                            <Select styles={customStyles} placeholder={"Pilih Satuan.."} value={{id: cekdataDetilMP.satJumlahMP, label: cekdataDetilMP.satJumlahMPView}} onChange={(e) => setValueDetilMP("satJumlahMP", e.value) & setValueDetilMP("satJumlahMPView", e.label)} {...field} options={masterSatuanJson(cekdataMP.mediaPembawa)} />
+                                        )}
+                                    />
+                                    {/* <select name="satJumlahMP" id="satJumlahMP" data-kar={cekdataMP.mediaPembawa === 'T' ? 'kt' : (cekdataMP.mediaPembawa === 'H' ? 'kh' : 'ki')} onClick={handleMasterSatuan} {...registerDetilMP("satJumlahMP")} className="form-control form-control-sm">
                                     <option value="">--</option>
                                         {dataSelect.satJumlahMP}
-                                    </select>
+                                    </select> */}
                                 </div>
                                 </div>
                             </div>
@@ -3590,8 +3758,8 @@ function DocK11() {
                                 <div className='col-5' style={{paddingLeft: '2px'}}>
                                     {/* <input type="hidden" name='satNettoMP' id='satNettoMP' {...registerDetilMP("satNettoMP")} value={cekdataMP.jenisMp === '1' || cekdataMP.jenisMp === '6' ? '1122' : '1356'} />
                                     <input type="text" className='form-control form-control-sm' value={cekdataMP.jenisMp === '1' || cekdataMP.jenisMp === '6' ? 'EKOR' : 'KILOGRAM'} readOnly /> */}
-                                    <input type="hidden" name='satNettoMP' id='satNettoMP' {...registerDetilMP("satNettoMP")} value={1356} />
-                                    <input type="text" className='form-control form-control-sm' value={'KILOGRAM'} readOnly />
+                                    <input type="hidden" name='satNettoMP' id='satNettoMP' {...registerDetilMP("satNettoMP")} value="1356" />
+                                    <input type="text" className='form-control form-control-sm' value='KILOGRAM' readOnly />
                                 </div>
                                 </div>
                             </div>
@@ -3619,8 +3787,8 @@ function DocK11() {
                                 <div className='col-5' style={{paddingLeft: '2px'}}>
                                     {/* <input type="hidden" name='satBrutoMP' id='satBrutoMP' {...registerDetilMP("satBrutoMP")} value={cekdataMP.jenisMp === '1' || cekdataMP.jenisMp === '6' ? '1122' : '1356'} /> */}
                                     {/* <input type="text" className='form-control form-control-sm' value={cekdataMP.jenisMp === '1' || cekdataMP.jenisMp === '6' ? 'EKOR' : 'KILOGRAM'} readOnly  /> */}
-                                    <input type="hidden" name='satBrutoMP' id='satBrutoMP' {...registerDetilMP("satBrutoMP")} value={1356} />
-                                    <input type="text" className='form-control form-control-sm' value={"KILOGRAM"} readOnly  />
+                                    <input type="hidden" name='satBrutoMP' id='satBrutoMP' {...registerDetilMP("satBrutoMP")} value="1356" />
+                                    <input type="text" className='form-control form-control-sm' value="KILOGRAM" readOnly  />
                                 </div>
                                 </div>
                             </div>

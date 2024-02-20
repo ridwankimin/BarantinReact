@@ -34,38 +34,39 @@ function DocK37b() {
     const dataWatchHeader = watchHeader()
 
     const onSubmitHeader = (data) => {
+        // console.log(data.rekom37b[1])
         const model = new PtkPemeriksaan();
         const response = model.ptkFisikKesehatanHeader(data);
-            response
-            .then((response) => {
-                // console.log(response.data)
-                if(response.data) {
-                    if(response.data.status === '201') {
-                        //start save history
-                        const log = new PtkHistory();
-                        const resHsy = log.pushHistory(data.idPtk, "p1b", "K-3.7b", (data.idDok37b ? 'UPDATE' : 'NEW'));
-                        resHsy
-                        .then((response) => {
-                            if(response.data.status === '201') {
-                                console.log("history saved")
-                            }
-                        })
-                        .catch((error) => {
-                            console.log(error.response.data);
-                        });
-                        //end save history
+        response
+        .then((response) => {
+            // console.log(response.data)
+            if(response.data) {
+                if(response.data.status === '201') {
+                    //start save history
+                    const log = new PtkHistory();
+                    const resHsy = log.pushHistory(data.idPtk, "p1b", "K-3.7b", (data.idDok37b ? 'UPDATE' : 'NEW'));
+                    resHsy
+                    .then((response) => {
+                        if(response.data.status === '201') {
+                            console.log("history saved")
+                        }
+                    })
+                    .catch((error) => {
+                        console.log(error.response.data);
+                    });
+                    //end save history
 
-                        alert(response.data.status + " - " + response.data.message)
-                        setValue("idDok37b", response.data.data.id)
-                        setvalueHeader("idDok37b", response.data.data.id)
-                        setValue("noDok37b", response.data.data.nomor)
-                    }
+                    alert(response.data.status + " - " + response.data.message)
+                    setValue("idDok37b", response.data.data.id)
+                    setvalueHeader("idDok37b", response.data.data.id)
+                    setValue("noDok37b", response.data.data.nomor)
                 }
-            })
-            .catch((error) => {
-                console.log(error);
-                alert(error.response.status + " - " + error.response.data.message)
-            });
+            }
+        })
+        .catch((error) => {
+            console.log(error);
+            alert(error.response.status + " - " + error.response.data.message)
+        });
     }
 
     let [dataSelect, setDataSelect] = useState({})
@@ -285,8 +286,9 @@ function DocK37b() {
     }, [idPtk, setValue, setvalueHeader])
 
     function refreshData() {
-        const modelPeriksa = new PtkPemeriksaan();
-        const response = modelPeriksa.getAdminByPtkId(data.idPtk)
+        if(data.errorAdmin) {
+            const modelPeriksa = new PtkPemeriksaan();
+            const response = modelPeriksa.getAdminByPtkId(data.idPtk)
             response
             .then((response) => {
                 // // console.log(response)
@@ -314,7 +316,9 @@ function DocK37b() {
                     errorAdmin: true
                 }));
             });
-
+        }
+        
+        if(data.errorKomoditi) {
             const modelPemohon = new PtkModel();
             const resKom = modelPemohon.getKomoditiPtkId(data.idPtk, Cookies.get("jenisKarantina"));
             resKom
@@ -345,7 +349,9 @@ function DocK37b() {
                     errorKomoditi: true
                 }));
             });
+        }
             
+        if(data.errorOptk) {
             const modelOPTK = new Master();
             const resOPTK = modelOPTK.masterOPTK();
             resOPTK
@@ -377,6 +383,7 @@ function DocK37b() {
                     errorOptk: true
                 }));
             });
+        }
     }
   return (
     <div className="container-xxl flex-grow-1 container-p-y">
@@ -578,14 +585,23 @@ function DocK37b() {
                         </div>
                         <div className="row">
                             <div className='col-sm-2 form-control-label'><b>Rekomendasi <span className='text-danger'>*</span></b></div>
-                            <div className="col-sm-3 mb-3">
-                                <select name='rekom37b' id='rekom37b' {...registerHeader("rekom37b", {required: (dataWatchHeader.idDok37b ? "Mohon pilih rekomendasi yang sesuai." : false)})} className={errorsHeader.rekom37b ? "form-select form-select-sm is-invalid" : "form-select form-select-sm"}>
-                                    <option value="">--</option>
-                                    <option value={16}>Diberi Perlakuan</option>
-                                    <option value={17}>Ditolak</option>
-                                    <option value={18}>Dimusnahkan</option>
-                                    <option value={19}>Dibebaskan</option>
-                                </select>
+                            <div className="col-sm-8 mb-3">
+                                <div className="form-check form-check-inline">
+                                    <input className="form-check-input" type="checkbox" name="rekom37b" id="rekom37b16" value={16} disabled={dataWatchHeader.rekom37b ? (dataWatchHeader.rekom37b.length === 2 && dataWatchHeader.rekom37b.indexOf('16') < 0 ? true : false) : false} {...registerHeader("rekom37b", { required: "Mohon pilih rekomendasi yang sesuai."})} />
+                                    <label className="form-check-label" htmlFor="rekom37b16">Diberi Perlakuan</label>
+                                </div>
+                                <div className="form-check form-check-inline">
+                                    <input className="form-check-input" type="checkbox" name="rekom37b" id="rekom37b17" disabled={dataWatchHeader.rekom37b ? (dataWatchHeader.rekom37b.length === 2 && dataWatchHeader.rekom37b.indexOf('17') < 0 ? true : false) : false} value={17} {...registerHeader("rekom37b")} />
+                                    <label className="form-check-label" htmlFor="rekom37b17">Ditolak</label>
+                                </div>
+                                <div className="form-check form-check-inline">
+                                    <input className="form-check-input" type="checkbox" name="rekom37b" id="rekom37b18" disabled={dataWatchHeader.rekom37b ? (dataWatchHeader.rekom37b.length === 2 && dataWatchHeader.rekom37b.indexOf('18') < 0 ? true : false) : false} value={18} {...registerHeader("rekom37b")} />
+                                    <label className="form-check-label" htmlFor="rekom37b18">Dimusnahkan</label>
+                                </div>
+                                <div className="form-check form-check-inline">
+                                    <input className="form-check-input" type="checkbox" name="rekom37b" id="rekom37b19" value={19} disabled={dataWatchHeader.rekom37b ? (dataWatchHeader.rekom37b.length === 2 && dataWatchHeader.rekom37b.indexOf('19') < 0 ? true : false) : false} {...registerHeader("rekom37b")} />
+                                    <label className="form-check-label" htmlFor="rekom37b19">Dibebaskan</label>
+                                </div>
                                 {errorsHeader.rekom37b && <small className="text-danger">{errorsHeader.rekom37b.message}</small>}
                             </div>
                         </div>

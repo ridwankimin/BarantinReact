@@ -1,24 +1,25 @@
-import { useCallback, useEffect, useMemo, useState } from 'react';
-import Master from '../Master';
+import { useState } from 'react';
+import MataUangJson from './mataUang.json'
+// import Master from '../Master';
 
 function MasterMataUang() {
-   let [dataMataUang,setDataMataUang] = useState([]);
+   let [dataMataUang] = useState(MataUangJson);
 
-   let master = useMemo(() => new Master(), [])
+//    let master = useMemo(() => new Master(), [])
 
-   const getListMataUang = useCallback(async () => {
-    try {
-        const response = await master.masterMataUang()
-        setDataMataUang(response.data.data)
-    } catch (error) {
-        console.log(error)
-        setDataMataUang([])
-    }
-}, [master])
+//    const getListMataUang = useCallback(async () => {
+//     try {
+//         const response = await master.masterMataUang()
+//         setDataMataUang(response.data.data)
+//     } catch (error) {
+//         console.log(error)
+//         setDataMataUang([])
+//     }
+// }, [master])
 
-useEffect(() => {
-  getListMataUang()
-}, [getListMataUang])
+// useEffect(() => {
+//   getListMataUang()
+// }, [getListMataUang])
 
   return (
     <>

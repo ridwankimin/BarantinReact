@@ -488,7 +488,7 @@ function DocK81() {
                                                 <div className="row">
                                                     <label className="col-sm-4 col-form-label" htmlFor="lokasiMP">Lokasi MP</label>
                                                     <div className="col-sm-8">
-                                                        <input type='text' name="lokasiMP" className="form-control form-control-sm" id="lokasiMP" placeholder='Lokasi Media Pembawa..' />
+                                                        <input type='text' name="lokasiMP" className="form-control form-control-sm" id="lokasiMP" {...register("lokasiMp")} placeholder='Lokasi Media Pembawa..' />
                                                     </div>
                                                 </div>
                                             </div>

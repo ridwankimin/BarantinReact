@@ -12,6 +12,7 @@ function Navbar() {
     function handleMenuOpen(e) {
         if(e.target.dataset.i18n === ketMenu || ketMenu === "") {
             setMenuOpen(!menuOpen);
+            // setMenuOpen(menuOpen => ({show: !menuOpen.show}));
         }
         setKetMenu(e.target.dataset.i18n);
         // console.log(menuOpen)
@@ -256,9 +257,9 @@ function Navbar() {
                                     <div data-i18n="K-6.2">K-6.2</div>
                                 </a>
                             </li>
-                            <li className={window.location.pathname.split("/")[1] === 'k64' ? "menu-item active" : "menu-item"}>
-                                <a href={'/k64'} className="menu-link" title='Laporan Hasil Penahanan'>
-                                    <div data-i18n="K-6.4">K-6.4</div>
+                            <li className={window.location.pathname.split("/")[1] === 'k63' ? "menu-item active" : "menu-item"}>
+                                <a href={'/k63'} className="menu-link" title='Laporan Hasil Penahanan'>
+                                    <div data-i18n="K-6.3">K-6.3</div>
                                 </a>
                             </li>
                         </ul>
@@ -285,11 +286,12 @@ function Navbar() {
                                 </a>
                             </li>
                             <li className={window.location.pathname.split("/")[1] === 'k74' ? "menu-item active" : "menu-item"}>
-                                <a href={'/k74'} className="menu-link" title='SURAT PERMOHONAN PERPANJANGAN BATAS WAKTU PENGELUARAN MEDIA PEMBAWA YANG DITOLAK'>
+                                {/* <a href={'/k74'} className="menu-link" title='SURAT PERMOHONAN PERPANJANGAN BATAS WAKTU PENGELUARAN MEDIA PEMBAWA YANG DITOLAK'> */}
+                                <a href={'/k74'} className="menu-link" title='NOTIFICATION OF NON-COMPLIANCE'>
                                     <div data-i18n="K-7.4">K-7.4</div>
                                 </a>
                             </li>
-                            <li className={window.location.pathname.split("/")[1] === 'k75' ? "menu-item active" : "menu-item"}>
+                            {/* <li className={window.location.pathname.split("/")[1] === 'k75' ? "menu-item active" : "menu-item"}>
                                 <a href={'/k75'} className="menu-link" title='SURAT PERPANJANGAN BATAS WAKTU PENGELUARAN MEDIA PEMBAWA YANG DITOLAK'>
                                     <div data-i18n="K-7.5">K-7.5</div>
                                 </a>
@@ -298,7 +300,7 @@ function Navbar() {
                                 <a href={'/k76'} className="menu-link" title='NOTIFICATION OF NON-COMPLIANCE'>
                                     <div data-i18n="K-7.6">K-7.6</div>
                                 </a>
-                            </li>
+                            </li> */}
                         </ul>
                     </li>
                     <li className={(ketMenu === 'Pemusnahan' && menuOpen === true) || window.location.pathname.split("/")[1] === 'k81' || window.location.pathname.split("/")[1] === 'k82' ? 'menu-item open menu-item-animating open' : 'menu-item menu-item-animating menu-item-closing'}>

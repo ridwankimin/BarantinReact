@@ -1,0 +1,44 @@
+[
+    {
+        "id": 1,
+        "dok_kode": "K-6.1",
+        "dok_id": 26,
+        "deskripsi": "Melengkapi dokumen karantina dan/atau dokumen lain yang dipersyaratkan dalam waktu 3 (tiga) hari kerja sejak diterimanya Surat Pemberitahuan Penahanan ini"
+    },
+    {
+        "id": 2,
+        "dok_kode": "K-6.1",
+        "dok_id": 26,
+        "deskripsi": "Tidak memindah-tempatkan media pembawa tanpa seizin Pejabat Karantina"
+    },
+    {
+        "id": 3,
+        "dok_kode": "K-6.1",
+        "dok_id": 26,
+        "deskripsi": "Lainnya"
+    },
+    {
+        "id": 4,
+        "dok_kode": "K-7.1",
+        "dok_id": 29,
+        "deskripsi": "mengeluarkan media pembawa tersebut dari wilayah Negara Republik Indonesia dan apabila dalam jangka waktu 3 (tiga) hari kerja sejak diterimanya Surat Penolakan ini kewajiban tersebut tidak dilaksanakan, terhadap media pembawa dimaksud akan dilakukan pemusnahan."
+    },
+    {
+        "id": 5,
+        "dok_kode": "K-7.1",
+        "dok_id": 29,
+        "deskripsi": "mengeluarkan media pembawa tersebut dari area tujuan ke area asal dan apabila dalam jangka waktu 3 (tiga) hari kerja sejak diterimanya Surat Penolakan ini kewajiban tersebut tidak dilaksanakan, terhadap media pembawa dimaksud akan dilakukan pemusnahan."
+    },
+    {
+        "id": 6,
+        "dok_kode": "K-7.1",
+        "dok_id": 29,
+        "deskripsi": "mengeluarkan media pembawa tersebut dari tempat pengeluaran dan apabila dalam jangka waktu 3 (tiga) hari kerja sejak diterimanya Surat Penolakan ini kewajiban tersebut tidak dilaksanakan, terhadap media pembawa dimaksud akan dilakukan pemusnahan."
+    },
+    {
+        "id": 7,
+        "dok_kode": "K-7.1",
+        "dok_id": 29,
+        "deskripsi": "tidak mengirim media pembawa tersebut ke negara/area tujuan."
+    }
+]

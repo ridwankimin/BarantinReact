@@ -3,7 +3,7 @@ import {
     BrowserRouter ,
     Routes,
     Route,
-    useLocation 
+    // useLocation 
   } from "react-router-dom";
 import Beranda from '../pages/Beranda';
 // import DataDiri1 from '../component/DocK11/DataDiri1';
@@ -12,13 +12,13 @@ import DocK12 from '../pages/preborder/DocK12';
 import DocK13 from '../pages/preborder/DocK13';
 import DocK61 from '../pages/penahanan/DocK61';
 import DocK62 from '../pages/penahanan/DocK62';
-import DocK64 from '../pages/penahanan/DocK64';
+import DocK63 from '../pages/penahanan/DocK63';
 import DocK71 from '../pages/penolakan/DocK71';
 import DocK72 from '../pages/penolakan/DocK72';
 import DocK73 from '../pages/penolakan/DocK73';
-import DocK74 from '../pages/penolakan/DocK74';
-import DocK75 from '../pages/penolakan/DocK75';
-import DocK76 from '../pages/penolakan/DocK76';
+import DocK74 from '../pages/penolakan/DocK76';
+// import DocK75 from '../pages/penolakan/DocK75';
+// import DocK76 from '../pages/penolakan/DocK76';
 import DocK81 from '../pages/pemusnahan/DocK81';
 import DocK82 from '../pages/pemusnahan/DocK82';
 import DocK91 from '../pages/pembebasan/DocK91';
@@ -94,13 +94,13 @@ function Content() {
           <Route path="/k55" element={<DocK55 />} />
           <Route path="/k61" element={<DocK61 />} />
           <Route path="/k62" element={<DocK62 />} />
-          <Route path="/k64" element={<DocK64 />} />
+          <Route path="/k63" element={<DocK63 />} />
           <Route path="/k71" element={<DocK71 />} />
           <Route path="/k72" element={<DocK72 />} />
           <Route path="/k73" element={<DocK73 />} />
           <Route path="/k74" element={<DocK74 />} />
-          <Route path="/k75" element={<DocK75 />} />
-          <Route path="/k76" element={<DocK76 />} />
+          {/* <Route path="/k75" element={<DocK75 />} />
+          <Route path="/k76" element={<DocK76 />} /> */}
           <Route path="/k81" element={<DocK81 />} />
           <Route path="/k82" element={<DocK82 />} />
           <Route path="/k91" element={<DocK91 />} />

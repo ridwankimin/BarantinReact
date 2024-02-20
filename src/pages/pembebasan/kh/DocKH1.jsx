@@ -4,18 +4,49 @@ import PtkHistory from '../../../model/PtkHistory';
 import PtkModel from '../../../model/PtkModel';
 import PnPelepasan from '../../../model/PnPelepasan';
 import Cookies from 'js-cookie';
-import { useForm } from 'react-hook-form';
+import { Controller, useForm } from 'react-hook-form';
 import {decode as base64_decode} from 'base-64';
 import PtkSurtug from '../../../model/PtkSurtug';
 import ModaAlatAngkut from '../../../model/master/modaAlatAngkut.json';
 import Keterangan from '../../../model/master/keterangan.json';
+import UptNew from '../../../model/master/uptNewGrouping.json';
 import SpinnerDot from '../../../component/loading/SpinnerDot';
+import Select from 'react-select';
 
 const log = new PtkHistory()
 const modelPemohon = new PtkModel()
 const modelPelepasan = new PnPelepasan()
 const addCommas = num => num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
 const removeNonNumeric = num => num.toString().replace(/[^0-9.]/g, "");
+const customStyles = {
+    control: (provided, state) => ({
+      ...provided,
+      background: '#fff',
+      borderColor: '#D4D8DD',
+      cursor: 'text',
+      minHeight: '30px',
+      height: '30px',
+      boxShadow: state.isFocused ? null : null,
+    }),
+    
+    valueContainer: (provided, state) => ({
+        ...provided,
+        height: '30px',
+        padding: '0 6px'
+    }),
+    
+    input: (provided, state) => ({
+        ...provided,
+        margin: '0px',
+    }),
+    indicatorSeparator: state => ({
+        display: 'none',
+    }),
+    indicatorsContainer: (provided, state) => ({
+        ...provided,
+        height: '30px',
+    }),
+  };
 
 function DocKH1() {
     const idPtk = Cookies.get("idPtkPage");
@@ -32,6 +63,18 @@ function DocKH1() {
 
     function keterangankh1() {
         return Keterangan.filter((element) => element.dokumen === "KH-1")
+    }
+
+    function listUptNew() {
+        const dataUpt = UptNew.filter((element) => element.id !== 1 & element.id !== 77 & element.id !== 78)
+        
+        var arrayUpt = dataUpt.map(item => {
+            return {
+                value: item.id,
+                label: item.nama,
+            }
+        })
+        return arrayUpt
     }
     
     function pernyataankh1() {
@@ -84,6 +127,7 @@ function DocKH1() {
     const {
         register,
         setValue,
+        control,
         handleSubmit,
         watch,
         formState: { errors },
@@ -382,7 +426,7 @@ function DocKH1() {
                             </div>
                         </div>
                         <div className="accordion mb-4" id="collapseSection">
-                        <div className="card">
+                            <div className="card">
                                 <h2 className="accordion-header" id="headerKeterangan">
                                     <button className="accordion-button" type="button" style={{backgroundColor: '#123138'}} data-bs-toggle="collapse" data-bs-target="#collapseKeterangan" aria-expanded="true" aria-controls="collapseImporter">
                                     <h5 className='text-lightest mb-0'>I. Rincian Keterangan</h5>
@@ -396,7 +440,7 @@ function DocKH1() {
                                                 <div className="row">
                                                     <label className="col-sm-4 col-form-label" htmlFor="namaPengirim">Nama</label>
                                                     <div className="col-sm-8">
-                                                        <input type="text" id="namaPengirim" value={data.listPtk && (data.listPtk.nama_pengirim || "")} disabled className="form-control form-control-sm" placeholder="Nama Pengirim" />
+                                                        <input type="text" id="namaPengirim" value={(data.listPtk ? data.listPtk.nama_pengirim : "") || ""} disabled className="form-control form-control-sm" placeholder="Nama Pengirim" />
                                                     </div>
                                                 </div>
                                             </div>
@@ -405,7 +449,7 @@ function DocKH1() {
                                                 <div className="row">
                                                     <label className="col-sm-4 col-form-label" htmlFor="namaPenerima">Nama</label>
                                                     <div className="col-sm-8">
-                                                        <input type="text" id="namaPenerima" value={data.listPtk && (data.listPtk.nama_penerima || "")} disabled className="form-control form-control-sm" placeholder="Nama Penerima" />
+                                                        <input type="text" id="namaPenerima" value={(data.listPtk ? data.listPtk.nama_penerima : "") || ""} disabled className="form-control form-control-sm" placeholder="Nama Penerima" />
                                                     </div>
                                                 </div>
                                             </div>
@@ -415,7 +459,7 @@ function DocKH1() {
                                                 <div className="row">
                                                     <label className="col-sm-4 col-form-label" htmlFor="alamatPengirim">Alamat</label>
                                                     <div className="col-sm-8">
-                                                        <textarea name="alamatPengirim" className="form-control form-control-sm" disabled value={data.listPtk && (data.listPtk.alamat_pengirim || "")} id="alamatPengirim" rows="2" placeholder=""></textarea>
+                                                        <textarea name="alamatPengirim" className="form-control form-control-sm" disabled value={(data.listPtk ? data.listPtk.alamat_pengirim : "") || ""} id="alamatPengirim" rows="2" placeholder=""></textarea>
                                                     </div>
                                                 </div>
                                             </div>
@@ -423,7 +467,7 @@ function DocKH1() {
                                                 <div className="row">
                                                     <label className="col-sm-4 col-form-label" htmlFor="alamatPenerima">Alamat</label>
                                                     <div className="col-sm-8">
-                                                        <textarea name="alamatPenerima" className="form-control form-control-sm" disabled value={data.listPtk && (data.listPtk.alamat_penerima || "")} id="alamatPenerima" rows="2" placeholder=""></textarea>
+                                                        <textarea name="alamatPenerima" className="form-control form-control-sm" disabled value={(data.listPtk ? data.listPtk.alamat_penerima : "") || ""} id="alamatPenerima" rows="2" placeholder=""></textarea>
                                                     </div>
                                                 </div>
                                             </div>
@@ -433,7 +477,7 @@ function DocKH1() {
                                                 <div className="row">
                                                     <label className="col-sm-4 col-form-label" htmlFor="identitasPengirim">Identitas</label>
                                                     <div className="col-sm-8">
-                                                        <input name="identitastPengirim" className="form-control form-control-sm" disabled value={data.listPtk && ((data.listPtk.jenis_identitas_pengirim + " - " + data.listPtk.nomor_identitas_pengirim) || "")} id="identitasPengirim" placeholder="" />
+                                                        <input name="identitastPengirim" className="form-control form-control-sm" disabled value={(data.listPtk ? (data.listPtk.jenis_identitas_pengirim + " - " + data.listPtk.nomor_identitas_pengirim) : "") || ""} id="identitasPengirim" placeholder="" />
                                                     </div>
                                                 </div>
                                             </div>
@@ -441,7 +485,7 @@ function DocKH1() {
                                                 <div className="row">
                                                     <label className="col-sm-4 col-form-label" htmlFor="identitasPenerima">Identitas</label>
                                                     <div className="col-sm-8">
-                                                        <input name="identitasPenerima" className="form-control form-control-sm" disabled value={data.listPtk && ((data.listPtk.jenis_identitas_penerima + " - " + data.listPtk.nomor_identitas_penerima) || "")} id="identitasPenerima" placeholder="" />
+                                                        <input name="identitasPenerima" className="form-control form-control-sm" disabled value={(data.listPtk ? (data.listPtk.jenis_identitas_penerima + " - " + data.listPtk.nomor_identitas_penerima) : "") || ""} id="identitasPenerima" placeholder="" />
                                                     </div>
                                                 </div>
                                             </div>
@@ -452,7 +496,7 @@ function DocKH1() {
                                                 <div className="row">
                                                     <label className="col-sm-4 col-form-label" htmlFor="daerahAsal">{data.listPtk ? (data.listPtk.permohonan === "DK" ? "Daerah" : "Negara") : ""} Asal</label>
                                                     <div className="col-sm-8">
-                                                        <input name="daerahAsal" className="form-control form-control-sm" disabled value={data.listPtk && ((data.listPtk.permohonan === "DK" ? data.listPtk.kota_asal : data.listPtk.negara_asal) || "")} id="daerahAsal" />
+                                                        <input name="daerahAsal" className="form-control form-control-sm" disabled value={(data.listPtk ? (data.listPtk.permohonan === "DK" ? data.listPtk.kota_asal : data.listPtk.negara_asal) : "") || ""} id="daerahAsal" />
                                                     </div>
                                                 </div>
                                             </div>
@@ -460,7 +504,7 @@ function DocKH1() {
                                                 <div className="row">
                                                     <label className="col-sm-4 col-form-label" htmlFor="daerahTujuan">{data.listPtk ? (data.listPtk.permohonan === "DK" ? "Daerah" : "Negara") : ""} Tujuan</label>
                                                     <div className="col-sm-8">
-                                                        <input name="daerahTujuan" className="form-control form-control-sm" disabled value={data.listPtk && ((data.listPtk.permohonan === "DK" ? data.listPtk.kota_tujuan : data.listPtk.negara_tujuan) || "")} id="daerahTujuan" />
+                                                        <input name="daerahTujuan" className="form-control form-control-sm" disabled value={(data.listPtk ? (data.listPtk.permohonan === "DK" ? data.listPtk.kota_tujuan : data.listPtk.negara_tujuan) : "") || ""} id="daerahTujuan" />
                                                     </div>
                                                 </div>
                                             </div>
@@ -470,7 +514,7 @@ function DocKH1() {
                                                 <div className="row">
                                                     <label className="col-sm-4 col-form-label" htmlFor="tempatKeluar">Tempat Pengeluaran / Tgl Muat</label>
                                                     <div className="col-sm-8">
-                                                        <input name="tempatKeluar" className="form-control form-control-sm" disabled value={data.listPtk && ((data.listPtk.pelabuhan_muat + " / " + data.listPtk.tanggal_rencana_berangkat_terakhir) || "")} id="tempatKeluar" />
+                                                        <input name="tempatKeluar" className="form-control form-control-sm" disabled value={(data.listPtk ? (data.listPtk.pelabuhan_muat + " / " + data.listPtk.tanggal_rencana_berangkat_terakhir) : "") || ""} id="tempatKeluar" />
                                                     </div>
                                                 </div>
                                             </div>
@@ -478,7 +522,7 @@ function DocKH1() {
                                                 <div className="row">
                                                     <label className="col-sm-4 col-form-label" htmlFor="tempatMasuk">Tempat Pemasukan / Tgl Bongkar</label>
                                                     <div className="col-sm-8">
-                                                        <input name="tempatMasuk" className="form-control form-control-sm" disabled value={data.listPtk && ((data.listPtk.pelabuhan_bongkar + " / " + data.listPtk.tanggal_rencana_tiba_terakhir) || "")} id="tempatMasuk" />
+                                                        <input name="tempatMasuk" className="form-control form-control-sm" disabled value={(data.listPtk ? (data.listPtk.pelabuhan_bongkar + " / " + data.listPtk.tanggal_rencana_tiba_terakhir) : "") || ""} id="tempatMasuk" />
                                                     </div>
                                                 </div>
                                             </div>
@@ -488,7 +532,7 @@ function DocKH1() {
                                                 <div className="row">
                                                     <label className="col-sm-4 col-form-label" htmlFor="tempatTransit">Tempat Transit</label>
                                                     <div className="col-sm-8">
-                                                        <input name="tempatTransit" className="form-control form-control-sm" disabled value={data.listPtk && ((data.listPtk.pelabuhan_transit === null ? "-" : data.listPtk.pelabuhan_transit + ", " + data.listPtk.negara_transit) || "")} id="tempatTransit" />
+                                                        <input name="tempatTransit" className="form-control form-control-sm" disabled value={(data.listPtk ? (data.listPtk.pelabuhan_transit === null ? "-" : data.listPtk.pelabuhan_transit + ", " + data.listPtk.negara_transit) : "") || ""} id="tempatTransit" />
                                                     </div>
                                                 </div>
                                             </div>
@@ -496,7 +540,26 @@ function DocKH1() {
                                                 <div className="row">
                                                     <label className="col-sm-4 col-form-label" htmlFor="identitasAngkut">Jenis, Nama Alat Angkut</label>
                                                     <div className="col-sm-8">
-                                                        <input name="identitasAngkut" className="form-control form-control-sm" disabled value={data.listPtk && (modaAlatAngkut(data.listPtk.tipe_alat_angkut_terakhir_id).nama + ", " + data.listPtk.nama_alat_angkut_terakhir || "")} id="identitasAngkut" />
+                                                        <input name="identitasAngkut" className="form-control form-control-sm" disabled value={(data.listPtk ? (modaAlatAngkut(data.listPtk.tipe_alat_angkut_terakhir_id).nama + ", " + data.listPtk.nama_alat_angkut_terakhir) : "") || "" } id="identitasAngkut" />
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div className="row mb-4" style={{display: (data.listPtk ? (data.listPtk.jenis_permohonan === "DK" ? "block" : "none") : "none")}}>
+                                            <div className="col-md-6">
+                                                <div className="row">
+                                                    <label className="col-sm-4 col-form-label" htmlFor="tempatTransit">Upt Tujuan</label>
+                                                    <div className="col-sm-8">
+                                                        <Controller
+                                                            control={control}
+                                                            name={"uptTujuan"}
+                                                            className="form-control form-control-sm"
+                                                            rules={{ required: (data.listPtk ? (data.listPtk.jenis_permohonan === "DK" ? "Mohon pilih UPT Tujuan." : false) : false)}}
+                                                            render={({ field: {value, ...field } }) => (
+                                                                <Select styles={customStyles} value={value ? {id: cekWatch.uptTujuan, label: cekWatch.uptTujuanView} : ""} onChange={(e) => setValue("uptTujuan", e.value) & setValue("uptTujuanView", e.label)} placeholder={"Pilih upt tujuan.."} {...field} options={listUptNew()} />
+                                                            )}
+                                                        />
+                                                        {errors.uptTujuan && <small className="text-danger">{errors.uptTujuan.message}</small>}
                                                     </div>
                                                 </div>
                                             </div>
@@ -587,7 +650,7 @@ function DocKH1() {
                                         <div className="row">
                                             <div className="col-md-12">
                                                 {keterangankh1().map((data, index) => (
-                                                    <div className="form-check">
+                                                    <div className="form-check" key={index}>
                                                         <input className="form-check-input" type="checkbox" {...register("m" + (index+1))} value={1} id={"m" + (index+1)} />
                                                         <label className="form-check-label" htmlFor={"m" + (index+1)}>
                                                             {data.deskripsi}
@@ -686,7 +749,7 @@ function DocKH1() {
                                 <label className="form-label" htmlFor="nettoP8">Volume Netto Akhir-P8<span className='text-danger'>*</span></label>
                                 <div className='row'>
                                     <div className="col-5" style={{paddingRight: '2px'}}>
-                                        <input type="text" name='nettoP8' id='nettoP8' value={cekdataMPkh1.nettoP8 ? addCommas(removeNonNumeric(cekdataMPkh1.nettoP8)) : ""} {...registerMPkh1("nettoP8", {required: "Mohon isi volume netto."})} className={errorsMPkh1.nettoP8 ? "form-control form-control-sm is-invalid" : "form-control form-control-sm"} />
+                                        <input type="text" name='nettoP8' id='nettoP8' value={(cekdataMPkh1.nettoP8 ? addCommas(removeNonNumeric(cekdataMPkh1.nettoP8)) : "") || ""} {...registerMPkh1("nettoP8", {required: "Mohon isi volume netto."})} className={errorsMPkh1.nettoP8 ? "form-control form-control-sm is-invalid" : "form-control form-control-sm"} />
                                     </div>
                                     <div className="col-3" style={{paddingLeft: '2px'}}>
                                         <input type="text" className='form-control form-control-sm' name='satuanNetto' id='satuanNetto' {...registerMPkh1("satuanNetto")} disabled />
@@ -698,7 +761,7 @@ function DocKH1() {
                                 <label className="form-label" htmlFor="volumeP8">Volume Lain Akhir-P8</label>
                                 <div className='row'>
                                     <div className="col-5" style={{paddingRight: '2px'}}>
-                                        <input type="text" className='form-control form-control-sm' name='volumeP8' id='volumeP8' value={cekdataMPkh1.volumeP8 ? addCommas(removeNonNumeric(cekdataMPkh1.volumeP8)) : ""} {...registerMPkh1("volumeP8")} />
+                                        <input type="text" className='form-control form-control-sm' name='volumeP8' id='volumeP8' value={(cekdataMPkh1.volumeP8 ? addCommas(removeNonNumeric(cekdataMPkh1.volumeP8)) : "") || ""} {...registerMPkh1("volumeP8")} />
                                     </div>
                                     <div className="col-3" style={{paddingLeft: '2px'}}>
                                         <input type="text" className='form-control form-control-sm' name='satuanLain' id='satuanLain' {...registerMPkh1("satuanLain")} disabled />
@@ -709,7 +772,7 @@ function DocKH1() {
                                 <label className="form-label" htmlFor="jantanP8">Jumlah Jantan Akhir-P8<span className='text-danger'>*</span></label>
                                 <div className='row'>
                                     <div className="col-3" style={{paddingRight: '2px'}}>
-                                        <input type="text" name='jantanP8' id='jantanP8' value={cekdataMPkh1.jantanP8 ? addCommas(removeNonNumeric(cekdataMPkh1.jantanP8)) : ""} {...registerMPkh1("jantanP8", {required: (data.listPtk ? (data.listPtkjenis_media_pembawa_id === 1 ? "Mohon isi jumlah akhir Jantan." : false) : false)})} className={errorsMPkh1.jantanP8 ? "form-control form-control-sm is-invalid" : "form-control form-control-sm"} />
+                                        <input type="text" name='jantanP8' id='jantanP8' value={(cekdataMPkh1.jantanP8 ? addCommas(removeNonNumeric(cekdataMPkh1.jantanP8)) : "") || ""} {...registerMPkh1("jantanP8", {required: (data.listPtk ? (data.listPtkjenis_media_pembawa_id === 1 ? "Mohon isi jumlah akhir Jantan." : false) : false)})} className={errorsMPkh1.jantanP8 ? "form-control form-control-sm is-invalid" : "form-control form-control-sm"} />
                                     </div>
                                     <div className="col-2" style={{paddingLeft: '2px'}}>
                                         <input type="text" className='form-control form-control-sm' name='satuanjantanP8' id='satuanjantanP8' value={"EKR"} disabled />
@@ -721,7 +784,7 @@ function DocKH1() {
                                 <label className="form-label" htmlFor="betinaP8">Jumlah Betina Akhir-P8<span className='text-danger'>*</span></label>
                                 <div className='row'>
                                     <div className="col-3" style={{paddingRight: '2px'}}>
-                                        <input type="text" name='betinaP8' id='betinaP8' value={cekdataMPkh1.betinaP8 ? addCommas(removeNonNumeric(cekdataMPkh1.betinaP8)) : ""} {...registerMPkh1("betinaP8", {required: (data.listPtk ? (data.listPtkjenis_media_pembawa_id === 1 ? "Mohon isi jumlah akhir Betina." : false) : false)})} className={errorsMPkh1.betinaP8 ? "form-control form-control-sm is-invalid" : "form-control form-control-sm"} />
+                                        <input type="text" name='betinaP8' id='betinaP8' value={(cekdataMPkh1.betinaP8 ? addCommas(removeNonNumeric(cekdataMPkh1.betinaP8)) : "") || ""} {...registerMPkh1("betinaP8", {required: (data.listPtk ? (data.listPtkjenis_media_pembawa_id === 1 ? "Mohon isi jumlah akhir Betina." : false) : false)})} className={errorsMPkh1.betinaP8 ? "form-control form-control-sm is-invalid" : "form-control form-control-sm"} />
                                     </div>
                                     <div className="col-2" style={{paddingLeft: '2px'}}>
                                         <input type="text" className='form-control form-control-sm' name='satuanbetinaP8' id='satuanbetinaP8' value={"EKR"} disabled />

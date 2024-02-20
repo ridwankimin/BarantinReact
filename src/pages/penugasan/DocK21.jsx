@@ -48,6 +48,7 @@ function DocK21() {
     })
     useEffect(() => {
         if(idPtk) {
+            setValue("tglDok21", (new Date()).toLocaleString('en-CA', { hourCycle: 'h24' }).replace(',', '').slice(0,16))
             const tglPtk = Cookies.get("tglPtk");
             const jenisForm = Cookies.get("jenisForm");
             let ptkDecode = idPtk ? base64_decode(idPtk) : "";

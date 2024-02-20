@@ -1,6 +1,6 @@
 import Cookies from 'js-cookie';
 import React, { useEffect, useState } from 'react';
-import { useForm } from 'react-hook-form';
+import { Controller, useForm } from 'react-hook-form';
 import {decode as base64_decode} from 'base-64';
 import PtkModel from '../../../model/PtkModel';
 import PtkSurtug from '../../../model/PtkSurtug';
@@ -10,9 +10,40 @@ import PnPerlakuan from '../../../model/PnPerlakuan';
 import PnPelepasan from '../../../model/PnPelepasan';
 import ModaAlatAngkut from '../../../model/master/modaAlatAngkut.json';
 import Peruntukan from '../../../model/master/peruntukan.json';
+import UptNew from '../../../model/master/uptNewGrouping.json';
+import Select from 'react-select';
 const modelPemohon = new PtkModel();
 const log = new PtkHistory()
 const modelPerlakuan = new PnPerlakuan();
+const customStyles = {
+    control: (provided, state) => ({
+      ...provided,
+      background: '#fff',
+      borderColor: '#D4D8DD',
+      cursor: 'text',
+      minHeight: '30px',
+      height: '30px',
+      boxShadow: state.isFocused ? null : null,
+    }),
+    
+    valueContainer: (provided, state) => ({
+        ...provided,
+        height: '30px',
+        padding: '0 6px'
+    }),
+    
+    input: (provided, state) => ({
+        ...provided,
+        margin: '0px',
+    }),
+    indicatorSeparator: state => ({
+        display: 'none',
+    }),
+    indicatorsContainer: (provided, state) => ({
+        ...provided,
+        height: '30px',
+    }),
+  };
 
 function DocKT3() {
     const idPtk = Cookies.get("idPtkPage")
@@ -27,13 +58,28 @@ function DocKT3() {
         tglDokumen: "",
     })
 
+    function listUptNew() {
+        const dataUpt = UptNew.filter((element) => element.id !== 1 & element.id !== 77 & element.id !== 78)
+        
+        var arrayUpt = dataUpt.map(item => {
+            return {
+                value: item.id,
+                label: item.nama,
+            }
+        })
+        return arrayUpt
+    }
+
     const {
         register,
         setValue,
+        control,
         handleSubmit,
         watch,
         formState: { errors },
     } = useForm();
+
+    const cekWatch = watch()
 
     const {
         register: registerMPKT1,
@@ -174,6 +220,7 @@ function DocKT3() {
         if(idPtk) {
             // setValue("tglDokKT3", (new Date()).toLocaleString('en-CA', { timeZone: 'Asia/Jakarta', hourCycle: 'h24' }).replace(',', '').slice(0,16))
             setValue("tglDokKT3", (new Date()).toLocaleString('en-CA', { hourCycle: 'h24' }).replace(',', '').slice(0,16))
+            setValue("tglBerangkat", (new Date()).toLocaleString('en-CA', { hourCycle: 'h24' }).replace(',', '').slice(0,10))
                     
             const tglPtk = Cookies.get("tglPtk");
             let ptkDecode = idPtk ? base64_decode(idPtk) : "";
@@ -353,13 +400,13 @@ function DocKT3() {
                                                 <div className="row">
                                                     <label className="col-sm-3 col-form-label" htmlFor="namaPengirim">Nama </label>
                                                     <div className="col-sm-9">
-                                                        <input type="text" id="namaPengirim" value={data.listPtk && (data.listPtk.nama_pengirim || "")} disabled className="form-control form-control-sm" placeholder="Nama Pengirim" />
+                                                        <input type="text" id="namaPengirim" value={(data.listPtk ? data.listPtk.nama_pengirim : "") || ""} disabled className="form-control form-control-sm" placeholder="Nama Pengirim" />
                                                     </div>
                                                 </div>
                                                 <div className="row">
                                                     <label className="col-sm-3 col-form-label" htmlFor="alamatPengirim">Alamat </label>
                                                     <div className="col-sm-9">
-                                                        <input type="text" id="alamatPengirim" value={data.listPtk && (data.listPtk.alamat_pengirim || "")} disabled className="form-control form-control-sm" placeholder="Alamat Pengirim" />
+                                                        <input type="text" id="alamatPengirim" value={(data.listPtk ? data.listPtk.alamat_pengirim : "") || ""} disabled className="form-control form-control-sm" placeholder="Alamat Pengirim" />
                                                     </div>
                                                 </div>
                                                 <div className="row">
@@ -367,10 +414,10 @@ function DocKT3() {
                                                     <div className="col-sm-9">
                                                         <div className='row'>
                                                             <div className='col-sm-4'>
-                                                                <input type="text" id='jenisIdentitasPengirim' value={data.listPtk && (data.listPtk.jenis_identitas_penerima || "")} disabled className="form-control form-control-sm" />
+                                                                <input type="text" id='jenisIdentitasPengirim' value={(data.listPtk ? data.listPtk.jenis_identitas_penerima : "") || ""} disabled className="form-control form-control-sm" />
                                                             </div>
                                                             <div className='col-sm-8'>
-                                                                <input type="text" id="identitasPengirim" value={data.listPtk && (data.listPtk.nomor_identitas_penerima || "")} disabled className="form-control form-control-sm" placeholder="Alamat Pengirim" />
+                                                                <input type="text" id="identitasPengirim" value={(data.listPtk ? data.listPtk.nomor_identitas_penerima : "") || ""} disabled className="form-control form-control-sm" placeholder="Alamat Pengirim" />
                                                             </div>
                                                         </div>
                                                     </div>
@@ -381,13 +428,13 @@ function DocKT3() {
                                                 <div className="row">
                                                     <label className="col-sm-3 col-form-label" htmlFor="namaPenerima">Nama </label>
                                                     <div className="col-sm-9">
-                                                        <input type="text" id="namaPenerima" value={data.listPtk && (data.listPtk.nama_penerima || "")} disabled className="form-control form-control-sm" placeholder="Nama Penerima" />
+                                                        <input type="text" id="namaPenerima" value={(data.listPtk ? data.listPtk.nama_penerima : "") || ""} disabled className="form-control form-control-sm" placeholder="Nama Penerima" />
                                                     </div>
                                                 </div>
                                                 <div className="row">
                                                     <label className="col-sm-3 col-form-label" htmlFor="alamatPenerima">Alamat</label>
                                                     <div className="col-sm-9">
-                                                        <input type="text" id="alamatPenerima" value={data.listPtk && (data.listPtk.alamat_penerima || "")} disabled className="form-control form-control-sm" placeholder="Alamat Penerima" />
+                                                        <input type="text" id="alamatPenerima" value={(data.listPtk ? data.listPtk.alamat_penerima : "") || ""} disabled className="form-control form-control-sm" placeholder="Alamat Penerima" />
                                                     </div>
                                                 </div>
                                                 <div className="row">
@@ -395,10 +442,10 @@ function DocKT3() {
                                                     <div className="col-sm-9">
                                                         <div className='row'>
                                                             <div className='col-sm-4'>
-                                                                <input type="text" id='jenisIdentitasPenerima' value={data.listPtk && (data.listPtk.jenis_identitas_penerima || "")} disabled className="form-control form-control-sm" />
+                                                                <input type="text" id='jenisIdentitasPenerima' value={(data.listPtk ? data.listPtk.jenis_identitas_penerima : "") || ""} disabled className="form-control form-control-sm" />
                                                             </div>
                                                             <div className='col-sm-8'>
-                                                                <input type="text" id="identitasPenerima" value={data.listPtk && (data.listPtk.nomor_identitas_penerima || "")} disabled className="form-control form-control-sm" />
+                                                                <input type="text" id="identitasPenerima" value={(data.listPtk ? data.listPtk.nomor_identitas_penerima : "") || ""} disabled className="form-control form-control-sm" />
                                                             </div>
                                                         </div>
                                                     </div>
@@ -411,7 +458,7 @@ function DocKT3() {
                                                 <div className="row">
                                                     <label className="col-sm-3 col-form-label" htmlFor="jenisAlatAngkut">Jenis Alat Angkut</label>
                                                     <div className="col-sm-9">
-                                                        <input type="text" id="jenisAlatAngkut" value={data.listPtk && (modaAlatAngkut(data.listPtk.moda_alat_angkut_terakhir_id).nama || "")} disabled className="form-control form-control-sm" placeholder="Nama Alat Angkut" />
+                                                        <input type="text" id="jenisAlatAngkut" value={(data.listPtk ? modaAlatAngkut(data.listPtk.moda_alat_angkut_terakhir_id).nama : "") || ""} disabled className="form-control form-control-sm" placeholder="Nama Alat Angkut" />
                                                     </div>
                                                 </div>
                                             </div>
@@ -419,7 +466,7 @@ function DocKT3() {
                                                 <div className="row">
                                                     <label className="col-sm-3 col-form-label" htmlFor="namaAlatAngkut">Nama Alat Angkut</label>
                                                     <div className="col-sm-9">
-                                                        <input type="text" id="namaAlatAngkut" value={data.listPtk && (data.listPtk.nama_alat_angkut_terakhir || "")} disabled className="form-control form-control-sm" placeholder="Nama Alat Angkut" />
+                                                        <input type="text" id="namaAlatAngkut" value={(data.listPtk ? data.listPtk.nama_alat_angkut_terakhir : "") || ""} disabled className="form-control form-control-sm" placeholder="Nama Alat Angkut" />
                                                     </div>
                                                 </div>
                                             </div>
@@ -428,7 +475,7 @@ function DocKT3() {
                                                     <div className="row">
                                                         <label className="col-sm-3 col-form-label" htmlFor="daerahAsal">Daerah Asal</label>
                                                         <div className="col-sm-6">
-                                                            <input type="text" id="daerahAsal" value={data.listPtk && (data.listPtk.kota_asal || "")} disabled className="form-control form-control-sm" placeholder="Daerah Asal" />
+                                                            <input type="text" id="daerahAsal" value={(data.listPtk ? data.listPtk.kota_asal : "") || ""} disabled className="form-control form-control-sm" placeholder="Daerah Asal" />
                                                         </div>
                                                     </div>
                                                 </div>
@@ -438,7 +485,7 @@ function DocKT3() {
                                                     <div className="row">
                                                         <label className="col-sm-3 col-form-label" htmlFor="placeOrigin">Daerah Tujuan</label>
                                                         <div className="col-sm-6">
-                                                            <input type="text" id="daerahTujuan" value={data.listPtk && (data.listPtk.kota_tujuan || "")} disabled className="form-control form-control-sm" placeholder="Daerah Tujuan" />
+                                                            <input type="text" id="daerahTujuan" value={(data.listPtk ? data.listPtk.kota_tujuan : "") || ""} disabled className="form-control form-control-sm" placeholder="Daerah Tujuan" />
                                                         </div>
                                                     </div>
                                                 </div>
@@ -447,7 +494,7 @@ function DocKT3() {
                                                 <div className="row">
                                                     <label className="col-sm-3 col-form-label" htmlFor="tempatKeluar">Tempat Pengeluaran</label>
                                                     <div className="col-sm-6">
-                                                        <input type="text" id="tempatKeluar"  value={data.listPtk && (data.listPtk.pelabuhan_bongkar || "")} disabled className="form-control form-control-sm" />
+                                                        <input type="text" id="tempatKeluar"  value={(data.listPtk ? data.listPtk.pelabuhan_bongkar : "") || ""} disabled className="form-control form-control-sm" />
                                                     </div>
                                                 </div>
                                             </div>
@@ -455,7 +502,7 @@ function DocKT3() {
                                                 <div className="row">
                                                     <label className="col-sm-3 col-form-label" htmlFor="tempatMasuk">Tempat Pemasukan</label>
                                                     <div className="col-sm-6">
-                                                        <input type="text" id="tempatMasuk" value={data.listPtk && (data.listPtk.pelabuhan_muat || "")} disabled className="form-control form-control-sm" />
+                                                        <input type="text" id="tempatMasuk" value={(data.listPtk ? data.listPtk.pelabuhan_muat : "") || ""} disabled className="form-control form-control-sm" />
                                                     </div>
                                                 </div>
                                             </div>
@@ -463,15 +510,24 @@ function DocKT3() {
                                                 <div className="row">
                                                     <label className="col-sm-3 col-form-label" htmlFor="tempatMasuk">UPT Asal</label>
                                                     <div className="col-sm-9">
-                                                        <input type="text" id="tempatMasuk" value={data.listPtk && (data.listPtk.pelabuhan_muat || "")} disabled className="form-control form-control-sm" />
+                                                        <input type="text" id="tempatMasuk" value={(data.listPtk ? data.listPtk.pelabuhan_muat : "") || ""} disabled className="form-control form-control-sm" />
                                                     </div>
                                                 </div>
                                             </div>
                                             <div className="col-md-6">
                                                 <div className="row">
-                                                    <label className="col-sm-3 col-form-label" htmlFor="tempatMasuk">UPT Tujuan</label>
+                                                    <label className="col-sm-3 col-form-label" htmlFor="tempatMasuk">UPT Tujuan <span className='text-danger'>*</span></label>
                                                     <div className="col-sm-9">
-                                                        <input type="text" id="tempatMasuk" placeholder='UPT Tujuan' className="form-control form-control-sm" />
+                                                    <Controller
+                                                            control={control}
+                                                            name={"uptTujuan"}
+                                                            className="form-control form-control-sm"
+                                                            rules={{ required: (data.listPtk ? (data.listPtk.jenis_permohonan === "DK" ? "Mohon pilih UPT Tujuan." : false) : false)}}
+                                                            render={({ field: {value, ...field } }) => (
+                                                                <Select styles={customStyles} value={value ? {id: cekWatch.uptTujuan, label: cekWatch.uptTujuanView} : ""} onChange={(e) => setValue("uptTujuan", e.value) & setValue("uptTujuanView", e.label)} placeholder={"Pilih upt tujuan.."} {...field} options={listUptNew()} />
+                                                            )}
+                                                        />
+                                                        {errors.uptTujuan && <small className="text-danger">{errors.uptTujuan.message}</small>}
                                                     </div>
                                                 </div>
                                             </div>
@@ -479,24 +535,16 @@ function DocKT3() {
                                                 <div className="row">
                                                     <label className="col-sm-3 col-form-label" htmlFor="tempatMasuk">Wilker Asal</label>
                                                     <div className="col-sm-9">
-                                                        <input type="text" id="tempatMasuk" value={data.listPtk && (data.listPtk.pelabuhan_muat || "")} disabled className="form-control form-control-sm" />
+                                                        <input type="text" id="tempatMasuk" value={(data.listPtk ? data.listPtk.pelabuhan_muat : "") || ""} disabled className="form-control form-control-sm" />
                                                     </div>
                                                 </div>
                                             </div>
-                                            <div className="col-md-6">
-                                                <div className="row">
-                                                    <label className="col-sm-3 col-form-label" htmlFor="tempatMasuk">Wilker Tujuan</label>
-                                                    <div className="col-sm-9">
-                                                        <input type="hidden" id='karantinaTujuan' {...register("karantinaTujuan")} />
-                                                        <input type="text" id="tempatMasuk" placeholder='Wilker Tujuan' className="form-control form-control-sm" />
-                                                    </div>
-                                                </div>
-                                            </div>
+                                            
                                             <div className="col-md-6">
                                                 <div className="row">
                                                     <label className="col-sm-3 col-form-label" htmlFor="peruntukan">Tujuan Pengeluaran</label>
                                                     <div className="col-sm-6">
-                                                        <input type="text" id="peruntukan" value={data.listPtk && (peruntukan(data.listPtk.peruntukan_id).deksripsi || "")} disabled className="form-control form-control-sm" />
+                                                        <input type="text" id="peruntukan" value={(data.listPtk ? peruntukan(data.listPtk.peruntukan_id).deksripsi : "") || ""} disabled className="form-control form-control-sm" />
                                                     </div>
                                                 </div>
                                             </div>
@@ -504,7 +552,7 @@ function DocKT3() {
                                                 <div className="row">
                                                     <label className="col-sm-3 col-form-label" htmlFor="tglBerangkat">Tgl Berangkat</label>
                                                     <div className="col-sm-4">
-                                                        <input type="date" id="tglBerangkat" value={(new Date()).toLocaleDateString('en-CA', { timeZone: 'Asia/Jakarta' }).replace(',', '').slice(0,10)} className="form-control form-control-sm" />
+                                                        <input type="date" id="tglBerangkat" {...register("tglBerangkat")} className="form-control form-control-sm" />
                                                     </div>
                                                 </div>
                                             </div>

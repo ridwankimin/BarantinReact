@@ -1,0 +1,2113 @@
+[ 
+{ 
+"id":1,
+"kode":"AD",
+"nama":"ANDORRA",
+"nama_en":"ANDORRA",
+"created_at":"2017-01-25 19:22:40",
+"updated_at":"2019-12-14 23:59:44"
+},
+{ 
+"id":2,
+"kode":"AE",
+"nama":"UNI EMIRAT ARAB",
+"nama_en":"UNITED ARAB EMIRATES",
+"created_at":"2017-01-25 19:22:40",
+"updated_at":"2019-12-14 23:59:44"
+},
+{ 
+"id":3,
+"kode":"AF",
+"nama":"AFGANISTAN",
+"nama_en":"AFGHANISTAN",
+"created_at":"2017-01-25 19:22:40",
+"updated_at":"2019-12-14 23:59:44"
+},
+{ 
+"id":4,
+"kode":"AG",
+"nama":"ANTIGUA AND BARBUDA",
+"nama_en":"ANTIGUA AND BARBUDA",
+"created_at":"2017-01-25 19:22:40",
+"updated_at":"2019-12-14 23:59:44"
+},
+{ 
+"id":5,
+"kode":"AI",
+"nama":"ANGUILLA",
+"nama_en":"ANGUILLA",
+"created_at":"2017-01-25 19:22:40",
+"updated_at":"2019-12-14 23:59:44"
+},
+{ 
+"id":6,
+"kode":"AL",
+"nama":"ALBANIA",
+"nama_en":"ALBANIA",
+"created_at":"2017-01-25 19:22:40",
+"updated_at":"2019-12-14 23:59:44"
+},
+{ 
+"id":7,
+"kode":"AM",
+"nama":"ARMENIA",
+"nama_en":"ARMENIA",
+"created_at":"2017-01-25 19:22:40",
+"updated_at":"2019-12-14 23:59:44"
+},
+{ 
+"id":8,
+"kode":"AN",
+"nama":"NETHERLANDS ANTILLES",
+"nama_en":"NETHERLANDS ANTILLES",
+"created_at":"2017-01-25 19:22:40",
+"updated_at":"2019-12-14 23:59:44"
+},
+{ 
+"id":9,
+"kode":"AO",
+"nama":"ANGOLA",
+"nama_en":"ANGOLA",
+"created_at":"2017-01-25 19:22:40",
+"updated_at":"2019-12-14 23:59:44"
+},
+{ 
+"id":10,
+"kode":"AQ",
+"nama":"ANTARTIKA",
+"nama_en":"ANTARCTICA",
+"created_at":"2017-01-25 19:22:40",
+"updated_at":"2019-12-14 23:59:44"
+},
+{ 
+"id":11,
+"kode":"AR",
+"nama":"ARGENTINA",
+"nama_en":"ARGENTINA",
+"created_at":"2017-01-25 19:22:40",
+"updated_at":"2019-12-14 23:59:44"
+},
+{ 
+"id":12,
+"kode":"AS",
+"nama":"AMERICAN SAMOA",
+"nama_en":"AMERICAN SAMOA",
+"created_at":"2017-01-25 19:22:40",
+"updated_at":"2019-12-14 23:59:44"
+},
+{ 
+"id":13,
+"kode":"AT",
+"nama":"AUSTRIA",
+"nama_en":"AUSTRIA",
+"created_at":"2017-01-25 19:22:40",
+"updated_at":"2019-12-14 23:59:44"
+},
+{ 
+"id":14,
+"kode":"AU",
+"nama":"AUSTRALIA",
+"nama_en":"AUSTRALIA",
+"created_at":"2017-01-25 19:22:41",
+"updated_at":"2019-12-14 23:59:44"
+},
+{ 
+"id":15,
+"kode":"AW",
+"nama":"ARUBA",
+"nama_en":"ARUBA",
+"created_at":"2017-01-25 19:22:41",
+"updated_at":"2019-12-14 23:59:44"
+},
+{ 
+"id":16,
+"kode":"AX",
+"nama":"KEP. ALAND",
+"nama_en":"ALAND ISLANDS",
+"created_at":"2017-01-25 19:22:41",
+"updated_at":"2019-12-14 23:59:44"
+},
+{ 
+"id":17,
+"kode":"AZ",
+"nama":"AZERBAIJAN",
+"nama_en":"AZERBAIJAN",
+"created_at":"2017-01-25 19:22:41",
+"updated_at":"2019-12-14 23:59:44"
+},
+{ 
+"id":18,
+"kode":"BA",
+"nama":"BOSNIA DAN HERZEGOVINA",
+"nama_en":"BOSNIA AND HERZEGOVINA",
+"created_at":"2017-01-25 19:22:41",
+"updated_at":"2019-12-14 23:59:44"
+},
+{ 
+"id":19,
+"kode":"BB",
+"nama":"BARBADOS",
+"nama_en":"BARBADOS",
+"created_at":"2017-01-25 19:22:41",
+"updated_at":"2019-12-14 23:59:44"
+},
+{ 
+"id":20,
+"kode":"BD",
+"nama":"BANGLADESH",
+"nama_en":"BANGLADESH",
+"created_at":"2017-01-25 19:22:41",
+"updated_at":"2019-12-14 23:59:44"
+},
+{ 
+"id":21,
+"kode":"BE",
+"nama":"BELGIA",
+"nama_en":"BELGIUM",
+"created_at":"2017-01-25 19:22:41",
+"updated_at":"2019-12-14 23:59:44"
+},
+{ 
+"id":22,
+"kode":"BF",
+"nama":"BURKINA FASO",
+"nama_en":"BURKINA FASO",
+"created_at":"2017-01-25 19:22:41",
+"updated_at":"2019-12-14 23:59:44"
+},
+{ 
+"id":23,
+"kode":"BG",
+"nama":"BULGARIA",
+"nama_en":"BULGARIA",
+"created_at":"2017-01-25 19:22:41",
+"updated_at":"2019-12-14 23:59:44"
+},
+{ 
+"id":24,
+"kode":"BH",
+"nama":"BAHRAIN",
+"nama_en":"BAHRAIN",
+"created_at":"2017-01-25 19:22:41",
+"updated_at":"2019-12-14 23:59:44"
+},
+{ 
+"id":25,
+"kode":"BI",
+"nama":"BURUNDI",
+"nama_en":"BURUNDI",
+"created_at":"2017-01-25 19:22:41",
+"updated_at":"2019-12-14 23:59:44"
+},
+{ 
+"id":26,
+"kode":"BJ",
+"nama":"BENIN",
+"nama_en":"BENIN",
+"created_at":"2017-01-25 19:22:41",
+"updated_at":"2019-12-14 23:59:44"
+},
+{ 
+"id":27,
+"kode":"BM",
+"nama":"BERMUDA",
+"nama_en":"BERMUDA",
+"created_at":"2017-01-25 19:22:41",
+"updated_at":"2019-12-14 23:59:44"
+},
+{ 
+"id":28,
+"kode":"BN",
+"nama":"BRUNEI DARUSSALAM",
+"nama_en":"BRUNEI DARUSSALAM",
+"created_at":"2017-01-25 19:22:41",
+"updated_at":"2019-12-14 23:59:44"
+},
+{ 
+"id":29,
+"kode":"BO",
+"nama":"BOLIVIA",
+"nama_en":"BOLIVIA",
+"created_at":"2017-01-25 19:22:41",
+"updated_at":"2019-12-14 23:59:44"
+},
+{ 
+"id":30,
+"kode":"BR",
+"nama":"BRASIL",
+"nama_en":"BRAZIL",
+"created_at":"2017-01-25 19:22:41",
+"updated_at":"2019-12-14 23:59:44"
+},
+{ 
+"id":31,
+"kode":"BS",
+"nama":"BAHAMAS",
+"nama_en":"BAHAMAS",
+"created_at":"2017-01-25 19:22:41",
+"updated_at":"2019-12-14 23:59:44"
+},
+{ 
+"id":32,
+"kode":"BT",
+"nama":"BHUTAN",
+"nama_en":"BHUTAN",
+"created_at":"2017-01-25 19:22:41",
+"updated_at":"2019-12-14 23:59:44"
+},
+{ 
+"id":33,
+"kode":"BV",
+"nama":"PULAU BOUVET",
+"nama_en":"BOUVET ISLAND",
+"created_at":"2017-01-25 19:22:41",
+"updated_at":"2019-12-14 23:59:44"
+},
+{ 
+"id":34,
+"kode":"BW",
+"nama":"BOTSWANA",
+"nama_en":"BOTSWANA",
+"created_at":"2017-01-25 19:22:41",
+"updated_at":"2019-12-14 23:59:44"
+},
+{ 
+"id":35,
+"kode":"BY",
+"nama":"BELARUS",
+"nama_en":"BELARUS",
+"created_at":"2017-01-25 19:22:41",
+"updated_at":"2019-12-14 23:59:44"
+},
+{ 
+"id":36,
+"kode":"BZ",
+"nama":"BELIZE",
+"nama_en":"BELIZE",
+"created_at":"2017-01-25 19:22:41",
+"updated_at":"2019-12-14 23:59:44"
+},
+{ 
+"id":37,
+"kode":"CA",
+"nama":"KANADA",
+"nama_en":"CANADA",
+"created_at":"2017-01-25 19:22:41",
+"updated_at":"2019-12-14 23:59:44"
+},
+{ 
+"id":38,
+"kode":"CC",
+"nama":"KEP. COCOS (KEELING)",
+"nama_en":"COCOS (KEELING) ISLANDS",
+"created_at":"2017-01-25 19:22:42",
+"updated_at":"2019-12-14 23:59:44"
+},
+{ 
+"id":39,
+"kode":"CD",
+"nama":"REPUBLIK DEMOKRATIK KONGO",
+"nama_en":"DEMOCRATIC REPUBLIC OF THE CONGO",
+"created_at":"2017-01-25 19:22:42",
+"updated_at":"2019-12-14 23:59:44"
+},
+{ 
+"id":40,
+"kode":"CF",
+"nama":"REPUBLIK AFRIKA TENGAH",
+"nama_en":"CENTRAL AFRICAN REPUBLIC",
+"created_at":"2017-01-25 19:22:42",
+"updated_at":"2019-12-14 23:59:44"
+},
+{ 
+"id":41,
+"kode":"CG",
+"nama":"KONGO",
+"nama_en":"CONGO",
+"created_at":"2017-01-25 19:22:42",
+"updated_at":"2019-12-14 23:59:44"
+},
+{ 
+"id":42,
+"kode":"CH",
+"nama":"SWISS",
+"nama_en":"SWITZERLAND",
+"created_at":"2017-01-25 19:22:42",
+"updated_at":"2019-12-14 23:59:44"
+},
+{ 
+"id":43,
+"kode":"CI",
+"nama":"PANTAI GADING",
+"nama_en":"COTE D`IVOIRE (IVORY COAST)",
+"created_at":"2017-01-25 19:22:42",
+"updated_at":"2019-12-14 23:59:44"
+},
+{ 
+"id":44,
+"kode":"CK",
+"nama":"KEP. COOK",
+"nama_en":"COOK ISLANDS",
+"created_at":"2017-01-25 19:22:42",
+"updated_at":"2019-12-14 23:59:44"
+},
+{ 
+"id":45,
+"kode":"CL",
+"nama":"CILE",
+"nama_en":"CHILE",
+"created_at":"2017-01-25 19:22:42",
+"updated_at":"2019-12-14 23:59:44"
+},
+{ 
+"id":46,
+"kode":"CM",
+"nama":"KAMERUN",
+"nama_en":"CAMEROON",
+"created_at":"2017-01-25 19:22:42",
+"updated_at":"2019-12-14 23:59:44"
+},
+{ 
+"id":47,
+"kode":"CN",
+"nama":"CHINA",
+"nama_en":"CHINA",
+"created_at":"2017-01-25 19:22:42",
+"updated_at":"2019-12-14 23:59:44"
+},
+{ 
+"id":48,
+"kode":"CO",
+"nama":"KOLOMBIA",
+"nama_en":"COLOMBIA",
+"created_at":"2017-01-25 19:22:42",
+"updated_at":"2019-12-14 23:59:44"
+},
+{ 
+"id":49,
+"kode":"CR",
+"nama":"KOSTA RICA",
+"nama_en":"COSTA RICA",
+"created_at":"2017-01-25 19:22:42",
+"updated_at":"2019-12-14 23:59:44"
+},
+{ 
+"id":50,
+"kode":"RS",
+"nama":"SERBIA",
+"nama_en":"SERBIA",
+"created_at":"2017-01-25 19:22:42",
+"updated_at":"2019-12-14 23:59:44"
+},
+{ 
+"id":51,
+"kode":"CU",
+"nama":"KUBA",
+"nama_en":"CUBA",
+"created_at":"2017-01-25 19:22:42",
+"updated_at":"2019-12-14 23:59:44"
+},
+{ 
+"id":52,
+"kode":"CV",
+"nama":"CAPE VERDE",
+"nama_en":"CAPE VERDE",
+"created_at":"2017-01-25 19:22:42",
+"updated_at":"2019-12-14 23:59:44"
+},
+{ 
+"id":53,
+"kode":"CX",
+"nama":"KEP. CHRISMAST",
+"nama_en":"CHRISTMAS ISLAND",
+"created_at":"2017-01-25 19:22:42",
+"updated_at":"2019-12-14 23:59:44"
+},
+{ 
+"id":54,
+"kode":"CY",
+"nama":"SIPRUS",
+"nama_en":"CYPRUS",
+"created_at":"2017-01-25 19:22:42",
+"updated_at":"2019-12-14 23:59:44"
+},
+{ 
+"id":55,
+"kode":"CZ",
+"nama":"REPUBLIK CEKO",
+"nama_en":"CZECH REPUBLIC",
+"created_at":"2017-01-25 19:22:42",
+"updated_at":"2019-12-14 23:59:44"
+},
+{ 
+"id":56,
+"kode":"DE",
+"nama":"JERMAN",
+"nama_en":"GERMANY",
+"created_at":"2017-01-25 19:22:42",
+"updated_at":"2019-12-14 23:59:44"
+},
+{ 
+"id":57,
+"kode":"DJ",
+"nama":"DJIBOUTI",
+"nama_en":"DJIBOUTI",
+"created_at":"2017-01-25 19:22:42",
+"updated_at":"2019-12-14 23:59:44"
+},
+{ 
+"id":58,
+"kode":"DK",
+"nama":"DENMARK",
+"nama_en":"DENMARK",
+"created_at":"2017-01-25 19:22:42",
+"updated_at":"2019-12-14 23:59:44"
+},
+{ 
+"id":59,
+"kode":"DM",
+"nama":"DOMINIKA",
+"nama_en":"DOMINICA",
+"created_at":"2017-01-25 19:22:42",
+"updated_at":"2019-12-14 23:59:44"
+},
+{ 
+"id":60,
+"kode":"DO",
+"nama":"REPUBLIK DOMINIKA",
+"nama_en":"DOMINICAN REPUBLIC",
+"created_at":"2017-01-25 19:22:42",
+"updated_at":"2019-12-14 23:59:44"
+},
+{ 
+"id":61,
+"kode":"DZ",
+"nama":"ALGERIA",
+"nama_en":"ALGERIA",
+"created_at":"2017-01-25 19:22:43",
+"updated_at":"2019-12-14 23:59:44"
+},
+{ 
+"id":62,
+"kode":"EC",
+"nama":"EKUADOR",
+"nama_en":"ECUADOR",
+"created_at":"2017-01-25 19:22:43",
+"updated_at":"2019-12-14 23:59:44"
+},
+{ 
+"id":63,
+"kode":"EE",
+"nama":"ESTONIA",
+"nama_en":"ESTONIA",
+"created_at":"2017-01-25 19:22:43",
+"updated_at":"2019-12-14 23:59:44"
+},
+{ 
+"id":64,
+"kode":"EG",
+"nama":"MESIR",
+"nama_en":"EGYPT",
+"created_at":"2017-01-25 19:22:43",
+"updated_at":"2019-12-14 23:59:44"
+},
+{ 
+"id":65,
+"kode":"EH",
+"nama":"SAHARA BARAT",
+"nama_en":"WESTERN SAHARA",
+"created_at":"2017-01-25 19:22:43",
+"updated_at":"2019-12-14 23:59:44"
+},
+{ 
+"id":66,
+"kode":"ER",
+"nama":"ERITREA",
+"nama_en":"ERITREA",
+"created_at":"2017-01-25 19:22:43",
+"updated_at":"2019-12-14 23:59:44"
+},
+{ 
+"id":67,
+"kode":"ES",
+"nama":"SPAIN",
+"nama_en":"SPAIN",
+"created_at":"2017-01-25 19:22:43",
+"updated_at":"2019-12-14 23:59:44"
+},
+{ 
+"id":68,
+"kode":"ET",
+"nama":"ETIOPIA",
+"nama_en":"ETHIOPIA",
+"created_at":"2017-01-25 19:22:43",
+"updated_at":"2019-12-14 23:59:44"
+},
+{ 
+"id":69,
+"kode":"FI",
+"nama":"FINLANDIA",
+"nama_en":"FINLAND",
+"created_at":"2017-01-25 19:22:43",
+"updated_at":"2019-12-14 23:59:44"
+},
+{ 
+"id":70,
+"kode":"FJ",
+"nama":"FIJI",
+"nama_en":"FIJI",
+"created_at":"2017-01-25 19:22:43",
+"updated_at":"2019-12-14 23:59:44"
+},
+{ 
+"id":71,
+"kode":"FK",
+"nama":"KEP. FALKLAND (MALVINAS)",
+"nama_en":"FALKLAND ISLANDS (MALVINAS)",
+"created_at":"2017-01-25 19:22:43",
+"updated_at":"2019-12-14 23:59:44"
+},
+{ 
+"id":72,
+"kode":"FM",
+"nama":"PERSERIKATAN MIKRONESIA",
+"nama_en":"FEDERATED STATES OF MICRONESIA",
+"created_at":"2017-01-25 19:22:43",
+"updated_at":"2019-12-14 23:59:44"
+},
+{ 
+"id":73,
+"kode":"FO",
+"nama":"KEP. FAROE",
+"nama_en":"FAROE ISLANDS",
+"created_at":"2017-01-25 19:22:43",
+"updated_at":"2019-12-14 23:59:44"
+},
+{ 
+"id":74,
+"kode":"FR",
+"nama":"PRANCIS",
+"nama_en":"FRANCE",
+"created_at":"2017-01-25 19:22:43",
+"updated_at":"2019-12-14 23:59:44"
+},
+{ 
+"id":75,
+"kode":"FX",
+"nama":"METRO PRANCIS",
+"nama_en":"FRANCE, METROPOLITAN",
+"created_at":"2017-01-25 19:22:43",
+"updated_at":"2019-12-14 23:59:44"
+},
+{ 
+"id":76,
+"kode":"GA",
+"nama":"GABON",
+"nama_en":"GABON",
+"created_at":"2017-01-25 19:22:43",
+"updated_at":"2019-12-14 23:59:44"
+},
+{ 
+"id":77,
+"kode":"GD",
+"nama":"GRENADA",
+"nama_en":"GRENADA",
+"created_at":"2017-01-25 19:22:43",
+"updated_at":"2019-12-14 23:59:44"
+},
+{ 
+"id":78,
+"kode":"GE",
+"nama":"GEORGIA",
+"nama_en":"GEORGIA",
+"created_at":"2017-01-25 19:22:43",
+"updated_at":"2019-12-14 23:59:44"
+},
+{ 
+"id":79,
+"kode":"GF",
+"nama":"GUIANA PRANCIS",
+"nama_en":"FRENCH GUIANA",
+"created_at":"2017-01-25 19:22:43",
+"updated_at":"2019-12-14 23:59:44"
+},
+{ 
+"id":80,
+"kode":"GH",
+"nama":"GANA",
+"nama_en":"GHANA",
+"created_at":"2017-01-25 19:22:43",
+"updated_at":"2019-12-14 23:59:44"
+},
+{ 
+"id":81,
+"kode":"GI",
+"nama":"GIBRALTAR",
+"nama_en":"GIBRALTAR",
+"created_at":"2017-01-25 19:22:43",
+"updated_at":"2019-12-14 23:59:44"
+},
+{ 
+"id":82,
+"kode":"GL",
+"nama":"GREENLAND",
+"nama_en":"GREENLAND",
+"created_at":"2017-01-25 19:22:43",
+"updated_at":"2019-12-14 23:59:44"
+},
+{ 
+"id":83,
+"kode":"GM",
+"nama":"GAMBIA",
+"nama_en":"GAMBIA",
+"created_at":"2017-01-25 19:22:43",
+"updated_at":"2019-12-14 23:59:44"
+},
+{ 
+"id":84,
+"kode":"GN",
+"nama":"GUINI",
+"nama_en":"GUINEA",
+"created_at":"2017-01-25 19:22:44",
+"updated_at":"2019-12-14 23:59:44"
+},
+{ 
+"id":85,
+"kode":"GP",
+"nama":"GUADELOUPE",
+"nama_en":"GUADELOUPE",
+"created_at":"2017-01-25 19:22:44",
+"updated_at":"2019-12-14 23:59:44"
+},
+{ 
+"id":86,
+"kode":"GQ",
+"nama":"EQUATORIAL GUINEA",
+"nama_en":"EQUATORIAL GUINEA",
+"created_at":"2017-01-25 19:22:44",
+"updated_at":"2019-12-14 23:59:44"
+},
+{ 
+"id":87,
+"kode":"GR",
+"nama":"YUNANI",
+"nama_en":"GREECE",
+"created_at":"2017-01-25 19:22:44",
+"updated_at":"2019-12-14 23:59:44"
+},
+{ 
+"id":88,
+"kode":"GS",
+"nama":"KEP. S. GEORGIA DAN S. SANDWICH",
+"nama_en":"S. GEORGIA AND S. SANDWICH ISLANDS",
+"created_at":"2017-01-25 19:22:44",
+"updated_at":"2019-12-14 23:59:44"
+},
+{ 
+"id":89,
+"kode":"GT",
+"nama":"GUATEMALA",
+"nama_en":"GUATEMALA",
+"created_at":"2017-01-25 19:22:44",
+"updated_at":"2019-12-14 23:59:44"
+},
+{ 
+"id":90,
+"kode":"GU",
+"nama":"GUAM",
+"nama_en":"GUAM",
+"created_at":"2017-01-25 19:22:44",
+"updated_at":"2019-12-14 23:59:44"
+},
+{ 
+"id":91,
+"kode":"GW",
+"nama":"GUINEA-BISSAU",
+"nama_en":"GUINEA-BISSAU",
+"created_at":"2017-01-25 19:22:44",
+"updated_at":"2019-12-14 23:59:44"
+},
+{ 
+"id":92,
+"kode":"GY",
+"nama":"GUYANA",
+"nama_en":"GUYANA",
+"created_at":"2017-01-25 19:22:44",
+"updated_at":"2019-12-14 23:59:44"
+},
+{ 
+"id":93,
+"kode":"HK",
+"nama":"HONG KONG",
+"nama_en":"HONG KONG",
+"created_at":"2017-01-25 19:22:44",
+"updated_at":"2019-12-14 23:59:44"
+},
+{ 
+"id":94,
+"kode":"HM",
+"nama":"KEP. MCDONALD DAN PULAU HEARD",
+"nama_en":"HEARD ISLAND AND MCDONALD ISLANDS",
+"created_at":"2017-01-25 19:22:44",
+"updated_at":"2019-12-14 23:59:44"
+},
+{ 
+"id":95,
+"kode":"HN",
+"nama":"HONDURAS",
+"nama_en":"HONDURAS",
+"created_at":"2017-01-25 19:22:44",
+"updated_at":"2019-12-14 23:59:44"
+},
+{ 
+"id":96,
+"kode":"HR",
+"nama":"KROASIA ",
+"nama_en":"CROATIA ",
+"created_at":"2017-01-25 19:22:44",
+"updated_at":"2019-12-14 23:59:44"
+},
+{ 
+"id":97,
+"kode":"HT",
+"nama":"HAITI",
+"nama_en":"HAITI",
+"created_at":"2017-01-25 19:22:44",
+"updated_at":"2019-12-14 23:59:44"
+},
+{ 
+"id":98,
+"kode":"HU",
+"nama":"HUNGARIA",
+"nama_en":"HUNGARY",
+"created_at":"2017-01-25 19:22:44",
+"updated_at":"2019-12-14 23:59:44"
+},
+{ 
+"id":99,
+"kode":"ID",
+"nama":"INDONESIA",
+"nama_en":"INDONESIA",
+"created_at":"2017-01-25 19:22:44",
+"updated_at":"2019-12-14 23:59:44"
+},
+{ 
+"id":100,
+"kode":"IE",
+"nama":"IRLANDIA",
+"nama_en":"IRELAND",
+"created_at":"2017-01-25 19:22:44",
+"updated_at":"2019-12-14 23:59:44"
+},
+{ 
+"id":101,
+"kode":"IL",
+"nama":"ISRAEL",
+"nama_en":"ISRAEL",
+"created_at":"2017-01-25 19:22:44",
+"updated_at":"2019-12-14 23:59:44"
+},
+{ 
+"id":102,
+"kode":"IN",
+"nama":"INDIA",
+"nama_en":"INDIA",
+"created_at":"2017-01-25 19:22:44",
+"updated_at":"2019-12-14 23:59:44"
+},
+{ 
+"id":103,
+"kode":"IO",
+"nama":"BRITISH INDIAN OCEAN TERRITORY",
+"nama_en":"BRITISH INDIAN OCEAN TERRITORY",
+"created_at":"2017-01-25 19:22:44",
+"updated_at":"2019-12-14 23:59:44"
+},
+{ 
+"id":104,
+"kode":"IQ",
+"nama":"IRAK",
+"nama_en":"IRAQ",
+"created_at":"2017-01-25 19:22:44",
+"updated_at":"2019-12-14 23:59:44"
+},
+{ 
+"id":105,
+"kode":"IR",
+"nama":"IRAN",
+"nama_en":"IRAN",
+"created_at":"2017-01-25 19:22:45",
+"updated_at":"2019-12-14 23:59:44"
+},
+{ 
+"id":106,
+"kode":"IS",
+"nama":"ISLANDIA",
+"nama_en":"ICELAND",
+"created_at":"2017-01-25 19:22:45",
+"updated_at":"2019-12-14 23:59:44"
+},
+{ 
+"id":107,
+"kode":"IT",
+"nama":"ITALI",
+"nama_en":"ITALY",
+"created_at":"2017-01-25 19:22:45",
+"updated_at":"2019-12-14 23:59:44"
+},
+{ 
+"id":108,
+"kode":"JM",
+"nama":"JAMAIKA",
+"nama_en":"JAMAICA",
+"created_at":"2017-01-25 19:22:45",
+"updated_at":"2019-12-14 23:59:44"
+},
+{ 
+"id":109,
+"kode":"JO",
+"nama":"YORDANIA",
+"nama_en":"JORDAN",
+"created_at":"2017-01-25 19:22:45",
+"updated_at":"2019-12-14 23:59:44"
+},
+{ 
+"id":110,
+"kode":"JP",
+"nama":"JEPANG",
+"nama_en":"JAPAN",
+"created_at":"2017-01-25 19:22:45",
+"updated_at":"2019-12-14 23:59:44"
+},
+{ 
+"id":111,
+"kode":"KE",
+"nama":"KENYA",
+"nama_en":"KENYA",
+"created_at":"2017-01-25 19:22:45",
+"updated_at":"2019-12-14 23:59:44"
+},
+{ 
+"id":112,
+"kode":"KG",
+"nama":"KYRGYZSTAN",
+"nama_en":"KYRGYZSTAN",
+"created_at":"2017-01-25 19:22:45",
+"updated_at":"2019-12-14 23:59:44"
+},
+{ 
+"id":113,
+"kode":"KH",
+"nama":"KAMBOJA",
+"nama_en":"CAMBODIA",
+"created_at":"2017-01-25 19:22:45",
+"updated_at":"2019-12-14 23:59:44"
+},
+{ 
+"id":114,
+"kode":"KI",
+"nama":"KIRIBATI",
+"nama_en":"KIRIBATI",
+"created_at":"2017-01-25 19:22:45",
+"updated_at":"2019-12-14 23:59:44"
+},
+{ 
+"id":115,
+"kode":"KM",
+"nama":"KOMOROS",
+"nama_en":"COMOROS",
+"created_at":"2017-01-25 19:22:45",
+"updated_at":"2019-12-14 23:59:44"
+},
+{ 
+"id":116,
+"kode":"KN",
+"nama":"SAINT KITTS AND NEVIS",
+"nama_en":"SAINT KITTS AND NEVIS",
+"created_at":"2017-01-25 19:22:45",
+"updated_at":"2019-12-14 23:59:44"
+},
+{ 
+"id":117,
+"kode":"KP",
+"nama":"KOREA UTARA",
+"nama_en":"NORTH KOREA",
+"created_at":"2017-01-25 19:22:45",
+"updated_at":"2019-12-14 23:59:44"
+},
+{ 
+"id":118,
+"kode":"KR",
+"nama":"KOREA SELATAN",
+"nama_en":"SOUTH KOREA",
+"created_at":"2017-01-25 19:22:45",
+"updated_at":"2019-12-14 23:59:44"
+},
+{ 
+"id":119,
+"kode":"KW",
+"nama":"KUWAIT",
+"nama_en":"KUWAIT",
+"created_at":"2017-01-25 19:22:45",
+"updated_at":"2019-12-14 23:59:44"
+},
+{ 
+"id":120,
+"kode":"KY",
+"nama":"KEP. CAYMAN",
+"nama_en":"CAYMAN ISLANDS",
+"created_at":"2017-01-25 19:22:45",
+"updated_at":"2019-12-14 23:59:44"
+},
+{ 
+"id":121,
+"kode":"KZ",
+"nama":"KAZAKISTAN",
+"nama_en":"KAZAKHSTAN",
+"created_at":"2017-01-25 19:22:45",
+"updated_at":"2019-12-14 23:59:44"
+},
+{ 
+"id":122,
+"kode":"LA",
+"nama":"LAOS",
+"nama_en":"LAOS",
+"created_at":"2017-01-25 19:22:45",
+"updated_at":"2019-12-14 23:59:44"
+},
+{ 
+"id":123,
+"kode":"LB",
+"nama":"LIBANON",
+"nama_en":"LEBANON",
+"created_at":"2017-01-25 19:22:45",
+"updated_at":"2019-12-14 23:59:44"
+},
+{ 
+"id":124,
+"kode":"LC",
+"nama":"SAINT LUCIA",
+"nama_en":"SAINT LUCIA",
+"created_at":"2017-01-25 19:22:45",
+"updated_at":"2019-12-14 23:59:44"
+},
+{ 
+"id":125,
+"kode":"LI",
+"nama":"LIECHTENSTEIN",
+"nama_en":"LIECHTENSTEIN",
+"created_at":"2017-01-25 19:22:45",
+"updated_at":"2019-12-14 23:59:44"
+},
+{ 
+"id":126,
+"kode":"LK",
+"nama":"SRI LANKA",
+"nama_en":"SRI LANKA",
+"created_at":"2017-01-25 19:22:45",
+"updated_at":"2019-12-14 23:59:44"
+},
+{ 
+"id":127,
+"kode":"LR",
+"nama":"LIBERIA",
+"nama_en":"LIBERIA",
+"created_at":"2017-01-25 19:22:45",
+"updated_at":"2019-12-14 23:59:44"
+},
+{ 
+"id":128,
+"kode":"LS",
+"nama":"LESOTHO",
+"nama_en":"LESOTHO",
+"created_at":"2017-01-25 19:22:45",
+"updated_at":"2019-12-14 23:59:44"
+},
+{ 
+"id":129,
+"kode":"LT",
+"nama":"LITHUANIA",
+"nama_en":"LITHUANIA",
+"created_at":"2017-01-25 19:22:45",
+"updated_at":"2019-12-14 23:59:44"
+},
+{ 
+"id":130,
+"kode":"LU",
+"nama":"LUKSEMBURG",
+"nama_en":"LUXEMBOURG",
+"created_at":"2017-01-25 19:22:45",
+"updated_at":"2019-12-14 23:59:44"
+},
+{ 
+"id":131,
+"kode":"LV",
+"nama":"LATVIA",
+"nama_en":"LATVIA",
+"created_at":"2017-01-25 19:22:46",
+"updated_at":"2019-12-14 23:59:44"
+},
+{ 
+"id":132,
+"kode":"LY",
+"nama":"LIBYA",
+"nama_en":"LIBYA",
+"created_at":"2017-01-25 19:22:46",
+"updated_at":"2019-12-14 23:59:44"
+},
+{ 
+"id":133,
+"kode":"MA",
+"nama":"MAROKO",
+"nama_en":"MOROCCO",
+"created_at":"2017-01-25 19:22:46",
+"updated_at":"2020-07-03 09:55:03"
+},
+{ 
+"id":134,
+"kode":"MC",
+"nama":"MONAKO",
+"nama_en":"MONACO",
+"created_at":"2017-01-25 19:22:46",
+"updated_at":"2019-12-14 23:59:44"
+},
+{ 
+"id":135,
+"kode":"MD",
+"nama":"MOLDOVA",
+"nama_en":"MOLDOVA",
+"created_at":"2017-01-25 19:22:46",
+"updated_at":"2019-12-14 23:59:44"
+},
+{ 
+"id":136,
+"kode":"MG",
+"nama":"MADAGASKAR",
+"nama_en":"MADAGASCAR",
+"created_at":"2017-01-25 19:22:46",
+"updated_at":"2019-12-14 23:59:44"
+},
+{ 
+"id":137,
+"kode":"MH",
+"nama":"KEP. MARSHALL",
+"nama_en":"MARSHALL ISLANDS",
+"created_at":"2017-01-25 19:22:46",
+"updated_at":"2019-12-14 23:59:44"
+},
+{ 
+"id":138,
+"kode":"MK",
+"nama":"MACEDONIA",
+"nama_en":"MACEDONIA",
+"created_at":"2017-01-25 19:22:46",
+"updated_at":"2019-12-14 23:59:44"
+},
+{ 
+"id":139,
+"kode":"ML",
+"nama":"MALI",
+"nama_en":"MALI",
+"created_at":"2017-01-25 19:22:46",
+"updated_at":"2019-12-14 23:59:44"
+},
+{ 
+"id":140,
+"kode":"MM",
+"nama":"MYANMAR",
+"nama_en":"MYANMAR",
+"created_at":"2017-01-25 19:22:46",
+"updated_at":"2019-12-14 23:59:44"
+},
+{ 
+"id":141,
+"kode":"MN",
+"nama":"MONGOLIA",
+"nama_en":"MONGOLIA",
+"created_at":"2017-01-25 19:22:46",
+"updated_at":"2019-12-14 23:59:44"
+},
+{ 
+"id":142,
+"kode":"MO",
+"nama":"MAKAO",
+"nama_en":"MACAO",
+"created_at":"2017-01-25 19:22:46",
+"updated_at":"2019-12-14 23:59:44"
+},
+{ 
+"id":143,
+"kode":"MP",
+"nama":"KEP. MARIANA UTARA",
+"nama_en":"NORTHERN MARIANA ISLANDS",
+"created_at":"2017-01-25 19:22:46",
+"updated_at":"2019-12-14 23:59:44"
+},
+{ 
+"id":144,
+"kode":"MQ",
+"nama":"MARTINIQUE",
+"nama_en":"MARTINIQUE",
+"created_at":"2017-01-25 19:22:46",
+"updated_at":"2019-12-14 23:59:44"
+},
+{ 
+"id":145,
+"kode":"MR",
+"nama":"MAURITANIA",
+"nama_en":"MAURITANIA",
+"created_at":"2017-01-25 19:22:46",
+"updated_at":"2019-12-14 23:59:44"
+},
+{ 
+"id":146,
+"kode":"MS",
+"nama":"MONTSERRAT",
+"nama_en":"MONTSERRAT",
+"created_at":"2017-01-25 19:22:46",
+"updated_at":"2019-12-14 23:59:44"
+},
+{ 
+"id":147,
+"kode":"MT",
+"nama":"MALTA",
+"nama_en":"MALTA",
+"created_at":"2017-01-25 19:22:46",
+"updated_at":"2019-12-14 23:59:44"
+},
+{ 
+"id":148,
+"kode":"MU",
+"nama":"MAURITIUS",
+"nama_en":"MAURITIUS",
+"created_at":"2017-01-25 19:22:46",
+"updated_at":"2019-12-14 23:59:44"
+},
+{ 
+"id":149,
+"kode":"MV",
+"nama":"MALDIVES",
+"nama_en":"MALDIVES",
+"created_at":"2017-01-25 19:22:46",
+"updated_at":"2019-12-14 23:59:44"
+},
+{ 
+"id":150,
+"kode":"MW",
+"nama":"MALAWI",
+"nama_en":"MALAWI",
+"created_at":"2017-01-25 19:22:46",
+"updated_at":"2019-12-14 23:59:44"
+},
+{ 
+"id":151,
+"kode":"MX",
+"nama":"MEKSIKO",
+"nama_en":"MEXICO",
+"created_at":"2017-01-25 19:22:46",
+"updated_at":"2019-12-14 23:59:44"
+},
+{ 
+"id":152,
+"kode":"MY",
+"nama":"MALAYSIA",
+"nama_en":"MALAYSIA",
+"created_at":"2017-01-25 19:22:46",
+"updated_at":"2019-12-14 23:59:44"
+},
+{ 
+"id":153,
+"kode":"MZ",
+"nama":"MOZAMBIK",
+"nama_en":"MOZAMBIQUE",
+"created_at":"2017-01-25 19:22:46",
+"updated_at":"2019-12-14 23:59:44"
+},
+{ 
+"id":154,
+"kode":"NA",
+"nama":"NAMIBIA",
+"nama_en":"NAMIBIA",
+"created_at":"2017-01-25 19:22:46",
+"updated_at":"2019-12-14 23:59:44"
+},
+{ 
+"id":155,
+"kode":"NC",
+"nama":"KALEDONIA BARU",
+"nama_en":"NEW CALEDONIA",
+"created_at":"2017-01-25 19:22:46",
+"updated_at":"2019-12-14 23:59:44"
+},
+{ 
+"id":156,
+"kode":"NE",
+"nama":"NIGER",
+"nama_en":"NIGER",
+"created_at":"2017-01-25 19:22:46",
+"updated_at":"2019-12-14 23:59:44"
+},
+{ 
+"id":157,
+"kode":"NF",
+"nama":"PULAU NORFOLK",
+"nama_en":"NORFOLK ISLAND",
+"created_at":"2017-01-25 19:22:46",
+"updated_at":"2019-12-14 23:59:44"
+},
+{ 
+"id":158,
+"kode":"NG",
+"nama":"NIGERIA",
+"nama_en":"NIGERIA",
+"created_at":"2017-01-25 19:22:47",
+"updated_at":"2019-12-14 23:59:44"
+},
+{ 
+"id":159,
+"kode":"NI",
+"nama":"NIKARAGUA",
+"nama_en":"NICARAGUA",
+"created_at":"2017-01-25 19:22:47",
+"updated_at":"2019-12-14 23:59:44"
+},
+{ 
+"id":160,
+"kode":"NL",
+"nama":"BELANDA",
+"nama_en":"NETHERLANDS",
+"created_at":"2017-01-25 19:22:47",
+"updated_at":"2019-12-14 23:59:44"
+},
+{ 
+"id":161,
+"kode":"NO",
+"nama":"NORWEGIA",
+"nama_en":"NORWAY",
+"created_at":"2017-01-25 19:22:47",
+"updated_at":"2019-12-14 23:59:44"
+},
+{ 
+"id":162,
+"kode":"NP",
+"nama":"NEPAL",
+"nama_en":"NEPAL",
+"created_at":"2017-01-25 19:22:47",
+"updated_at":"2019-12-14 23:59:44"
+},
+{ 
+"id":163,
+"kode":"NR",
+"nama":"NAURU",
+"nama_en":"NAURU",
+"created_at":"2017-01-25 19:22:47",
+"updated_at":"2019-12-14 23:59:44"
+},
+{ 
+"id":164,
+"kode":"NU",
+"nama":"NIUE",
+"nama_en":"NIUE",
+"created_at":"2017-01-25 19:22:47",
+"updated_at":"2019-12-14 23:59:44"
+},
+{ 
+"id":165,
+"kode":"NZ",
+"nama":"SELANDIA BARU",
+"nama_en":"NEW ZEALAND",
+"created_at":"2017-01-25 19:22:47",
+"updated_at":"2019-12-14 23:59:44"
+},
+{ 
+"id":166,
+"kode":"OM",
+"nama":"OMAN",
+"nama_en":"OMAN",
+"created_at":"2017-01-25 19:22:47",
+"updated_at":"2019-12-14 23:59:44"
+},
+{ 
+"id":167,
+"kode":"PA",
+"nama":"PANAMA",
+"nama_en":"PANAMA",
+"created_at":"2017-01-25 19:22:47",
+"updated_at":"2019-12-14 23:59:44"
+},
+{ 
+"id":168,
+"kode":"PE",
+"nama":"PERU",
+"nama_en":"PERU",
+"created_at":"2017-01-25 19:22:47",
+"updated_at":"2019-12-14 23:59:44"
+},
+{ 
+"id":169,
+"kode":"PF",
+"nama":"POLYNESIA PRANCIS",
+"nama_en":"FRENCH POLYNESIA",
+"created_at":"2017-01-25 19:22:47",
+"updated_at":"2019-12-14 23:59:44"
+},
+{ 
+"id":170,
+"kode":"PG",
+"nama":"PAPUA NUGINI",
+"nama_en":"PAPUA NEW GUINEA",
+"created_at":"2017-01-25 19:22:47",
+"updated_at":"2019-12-14 23:59:44"
+},
+{ 
+"id":171,
+"kode":"PH",
+"nama":"PHILIPINA",
+"nama_en":"PHILIPPINES",
+"created_at":"2017-01-25 19:22:47",
+"updated_at":"2019-12-14 23:59:44"
+},
+{ 
+"id":172,
+"kode":"PK",
+"nama":"PAKISTAN",
+"nama_en":"PAKISTAN",
+"created_at":"2017-01-25 19:22:47",
+"updated_at":"2019-12-14 23:59:44"
+},
+{ 
+"id":173,
+"kode":"PL",
+"nama":"POLANDIA",
+"nama_en":"POLAND",
+"created_at":"2017-01-25 19:22:47",
+"updated_at":"2019-12-14 23:59:44"
+},
+{ 
+"id":174,
+"kode":"PM",
+"nama":"SAINT PIERRE DAN MIQUELON",
+"nama_en":"SAINT PIERRE AND MIQUELON",
+"created_at":"2017-01-25 19:22:47",
+"updated_at":"2019-12-14 23:59:44"
+},
+{ 
+"id":175,
+"kode":"PN",
+"nama":"PITCAIRN",
+"nama_en":"PITCAIRN",
+"created_at":"2017-01-25 19:22:47",
+"updated_at":"2019-12-14 23:59:44"
+},
+{ 
+"id":176,
+"kode":"PR",
+"nama":"PUERTO RICO",
+"nama_en":"PUERTO RICO",
+"created_at":"2017-01-25 19:22:47",
+"updated_at":"2019-12-14 23:59:44"
+},
+{ 
+"id":177,
+"kode":"PS",
+"nama":"PALESTINA",
+"nama_en":"PALESTINIAN TERRITORY",
+"created_at":"2017-01-25 19:22:47",
+"updated_at":"2019-12-14 23:59:44"
+},
+{ 
+"id":178,
+"kode":"PT",
+"nama":"PORTUGAL",
+"nama_en":"PORTUGAL",
+"created_at":"2017-01-25 19:22:47",
+"updated_at":"2019-12-14 23:59:44"
+},
+{ 
+"id":179,
+"kode":"PW",
+"nama":"PALAU",
+"nama_en":"PALAU",
+"created_at":"2017-01-25 19:22:48",
+"updated_at":"2019-12-14 23:59:44"
+},
+{ 
+"id":180,
+"kode":"PY",
+"nama":"PARAGUAY",
+"nama_en":"PARAGUAY",
+"created_at":"2017-01-25 19:22:48",
+"updated_at":"2019-12-14 23:59:44"
+},
+{ 
+"id":181,
+"kode":"QA",
+"nama":"QATAR",
+"nama_en":"QATAR",
+"created_at":"2017-01-25 19:22:48",
+"updated_at":"2019-12-14 23:59:44"
+},
+{ 
+"id":182,
+"kode":"RE",
+"nama":"REUNION",
+"nama_en":"REUNION",
+"created_at":"2017-01-25 19:22:48",
+"updated_at":"2019-12-14 23:59:44"
+},
+{ 
+"id":183,
+"kode":"RO",
+"nama":"RUMANIA",
+"nama_en":"ROMANIA",
+"created_at":"2017-01-25 19:22:48",
+"updated_at":"2019-12-14 23:59:44"
+},
+{ 
+"id":184,
+"kode":"RU",
+"nama":"RUSSIA",
+"nama_en":"RUSSIAN FEDERATION",
+"created_at":"2017-01-25 19:22:48",
+"updated_at":"2019-12-14 23:59:44"
+},
+{ 
+"id":185,
+"kode":"RW",
+"nama":"RWANDA",
+"nama_en":"RWANDA",
+"created_at":"2017-01-25 19:22:48",
+"updated_at":"2019-12-14 23:59:44"
+},
+{ 
+"id":186,
+"kode":"SA",
+"nama":"SAUDI ARABIA",
+"nama_en":"SAUDI ARABIA",
+"created_at":"2017-01-25 19:22:48",
+"updated_at":"2019-12-14 23:59:44"
+},
+{ 
+"id":187,
+"kode":"SB",
+"nama":"KEP. SOLOMON",
+"nama_en":"SOLOMON ISLANDS",
+"created_at":"2017-01-25 19:22:48",
+"updated_at":"2019-12-14 23:59:44"
+},
+{ 
+"id":188,
+"kode":"SC",
+"nama":"SEYCHELLES",
+"nama_en":"SEYCHELLES",
+"created_at":"2017-01-25 19:22:48",
+"updated_at":"2019-12-14 23:59:44"
+},
+{ 
+"id":189,
+"kode":"SD",
+"nama":"SUDAN",
+"nama_en":"SUDAN",
+"created_at":"2017-01-25 19:22:48",
+"updated_at":"2019-12-14 23:59:44"
+},
+{ 
+"id":190,
+"kode":"SE",
+"nama":"SWEDIA",
+"nama_en":"SWEDEN",
+"created_at":"2017-01-25 19:22:48",
+"updated_at":"2019-12-14 23:59:44"
+},
+{ 
+"id":191,
+"kode":"SG",
+"nama":"SINGAPURA",
+"nama_en":"SINGAPORE",
+"created_at":"2017-01-25 19:22:48",
+"updated_at":"2019-12-14 23:59:44"
+},
+{ 
+"id":192,
+"kode":"SH",
+"nama":"SAINT HELENA",
+"nama_en":"SAINT HELENA",
+"created_at":"2017-01-25 19:22:48",
+"updated_at":"2019-12-14 23:59:44"
+},
+{ 
+"id":193,
+"kode":"SI",
+"nama":"SLOVENIA",
+"nama_en":"SLOVENIA",
+"created_at":"2017-01-25 19:22:48",
+"updated_at":"2019-12-14 23:59:44"
+},
+{ 
+"id":194,
+"kode":"SJ",
+"nama":"SVALBARD DAN JAN MAYEN",
+"nama_en":"SVALBARD AND JAN MAYEN",
+"created_at":"2017-01-25 19:22:48",
+"updated_at":"2019-12-14 23:59:44"
+},
+{ 
+"id":195,
+"kode":"SK",
+"nama":"SLOVAKIA",
+"nama_en":"SLOVAKIA",
+"created_at":"2017-01-25 19:22:48",
+"updated_at":"2019-12-14 23:59:44"
+},
+{ 
+"id":196,
+"kode":"SL",
+"nama":"SIERRA LEONE",
+"nama_en":"SIERRA LEONE",
+"created_at":"2017-01-25 19:22:48",
+"updated_at":"2019-12-14 23:59:44"
+},
+{ 
+"id":197,
+"kode":"SM",
+"nama":"SAN MARINO",
+"nama_en":"SAN MARINO",
+"created_at":"2017-01-25 19:22:48",
+"updated_at":"2019-12-14 23:59:44"
+},
+{ 
+"id":198,
+"kode":"SN",
+"nama":"SENEGAL",
+"nama_en":"SENEGAL",
+"created_at":"2017-01-25 19:22:48",
+"updated_at":"2019-12-14 23:59:44"
+},
+{ 
+"id":199,
+"kode":"SO",
+"nama":"SOMALIA",
+"nama_en":"SOMALIA",
+"created_at":"2017-01-25 19:22:48",
+"updated_at":"2019-12-14 23:59:44"
+},
+{ 
+"id":200,
+"kode":"SR",
+"nama":"SURINAME",
+"nama_en":"SURINAME",
+"created_at":"2017-01-25 19:22:48",
+"updated_at":"2019-12-14 23:59:44"
+},
+{ 
+"id":201,
+"kode":"ST",
+"nama":"SAO TOME AND PRINCIPE",
+"nama_en":"SAO TOME AND PRINCIPE",
+"created_at":"2017-01-25 19:22:49",
+"updated_at":"2019-12-14 23:59:44"
+},
+{ 
+"id":202,
+"kode":"SU",
+"nama":"UNI SOVIET (DAHULU)",
+"nama_en":"USSR (FORMER)",
+"created_at":"2017-01-25 19:22:49",
+"updated_at":"2019-12-14 23:59:44"
+},
+{ 
+"id":203,
+"kode":"SV",
+"nama":"EL SALVADOR",
+"nama_en":"EL SALVADOR",
+"created_at":"2017-01-25 19:22:49",
+"updated_at":"2019-12-14 23:59:44"
+},
+{ 
+"id":204,
+"kode":"SY",
+"nama":"SIRIA",
+"nama_en":"SYRIA",
+"created_at":"2017-01-25 19:22:49",
+"updated_at":"2019-12-14 23:59:44"
+},
+{ 
+"id":205,
+"kode":"SZ",
+"nama":"SWAZILAND",
+"nama_en":"SWAZILAND",
+"created_at":"2017-01-25 19:22:49",
+"updated_at":"2019-12-14 23:59:44"
+},
+{ 
+"id":206,
+"kode":"TC",
+"nama":"KEP. TURKS DAN CAICOS",
+"nama_en":"TURKS AND CAICOS ISLANDS",
+"created_at":"2017-01-25 19:22:49",
+"updated_at":"2019-12-14 23:59:44"
+},
+{ 
+"id":207,
+"kode":"TD",
+"nama":"CHAD",
+"nama_en":"CHAD",
+"created_at":"2017-01-25 19:22:49",
+"updated_at":"2019-12-14 23:59:44"
+},
+{ 
+"id":208,
+"kode":"TF",
+"nama":"WILAYAH PRANCIS SELATAN",
+"nama_en":"FRENCH SOUTHERN TERRITORIES",
+"created_at":"2017-01-25 19:22:49",
+"updated_at":"2019-12-14 23:59:44"
+},
+{ 
+"id":209,
+"kode":"TG",
+"nama":"TOGO",
+"nama_en":"TOGO",
+"created_at":"2017-01-25 19:22:49",
+"updated_at":"2019-12-14 23:59:44"
+},
+{ 
+"id":210,
+"kode":"TH",
+"nama":"THAILAND",
+"nama_en":"THAILAND",
+"created_at":"2017-01-25 19:22:49",
+"updated_at":"2019-12-14 23:59:44"
+},
+{ 
+"id":211,
+"kode":"TJ",
+"nama":"TAJIKISTAN",
+"nama_en":"TAJIKISTAN",
+"created_at":"2017-01-25 19:22:49",
+"updated_at":"2019-12-14 23:59:44"
+},
+{ 
+"id":212,
+"kode":"TK",
+"nama":"TOKELAU",
+"nama_en":"TOKELAU",
+"created_at":"2017-01-25 19:22:49",
+"updated_at":"2019-12-14 23:59:44"
+},
+{ 
+"id":213,
+"kode":"TL",
+"nama":"TIMOR-LESTE",
+"nama_en":"TIMOR-LESTE",
+"created_at":"2017-01-25 19:22:49",
+"updated_at":"2019-12-14 23:59:44"
+},
+{ 
+"id":214,
+"kode":"TM",
+"nama":"TURKMENISTAN",
+"nama_en":"TURKMENISTAN",
+"created_at":"2017-01-25 19:22:49",
+"updated_at":"2019-12-14 23:59:44"
+},
+{ 
+"id":215,
+"kode":"TN",
+"nama":"TUNISIA",
+"nama_en":"TUNISIA",
+"created_at":"2017-01-25 19:22:49",
+"updated_at":"2019-12-14 23:59:44"
+},
+{ 
+"id":216,
+"kode":"TO",
+"nama":"TONGA",
+"nama_en":"TONGA",
+"created_at":"2017-01-25 19:22:49",
+"updated_at":"2019-12-14 23:59:44"
+},
+{ 
+"id":217,
+"kode":"TP",
+"nama":"TIMOR TIMUR",
+"nama_en":"EAST TIMOR",
+"created_at":"2017-01-25 19:22:49",
+"updated_at":"2019-12-14 23:59:44"
+},
+{ 
+"id":218,
+"kode":"TR",
+"nama":"TURKI",
+"nama_en":"TURKEY",
+"created_at":"2017-01-25 19:22:49",
+"updated_at":"2019-12-14 23:59:44"
+},
+{ 
+"id":219,
+"kode":"TT",
+"nama":"TRINIDAD DAN TOBAGO",
+"nama_en":"TRINIDAD AND TOBAGO",
+"created_at":"2017-01-25 19:22:49",
+"updated_at":"2019-12-14 23:59:44"
+},
+{ 
+"id":220,
+"kode":"TV",
+"nama":"TUVALU",
+"nama_en":"TUVALU",
+"created_at":"2017-01-25 19:22:49",
+"updated_at":"2019-12-14 23:59:44"
+},
+{ 
+"id":221,
+"kode":"TW",
+"nama":"TAIWAN",
+"nama_en":"TAIWAN",
+"created_at":"2017-01-25 19:22:49",
+"updated_at":"2019-12-14 23:59:44"
+},
+{ 
+"id":222,
+"kode":"TZ",
+"nama":"TANZANIA",
+"nama_en":"TANZANIA",
+"created_at":"2017-01-25 19:22:49",
+"updated_at":"2019-12-14 23:59:44"
+},
+{ 
+"id":223,
+"kode":"UA",
+"nama":"UKRAINA",
+"nama_en":"UKRAINE",
+"created_at":"2017-01-25 19:22:49",
+"updated_at":"2019-12-14 23:59:44"
+},
+{ 
+"id":224,
+"kode":"UG",
+"nama":"UGANDA",
+"nama_en":"UGANDA",
+"created_at":"2017-01-25 19:22:50",
+"updated_at":"2019-12-14 23:59:44"
+},
+{ 
+"id":225,
+"kode":"GB",
+"nama":"INGGRIS",
+"nama_en":"UNITED KINGDOM",
+"created_at":"2017-01-25 19:22:50",
+"updated_at":"2019-12-14 23:59:44"
+},
+{ 
+"id":226,
+"kode":"UM",
+"nama":"KEP. KECIL SEKITAR AMERIKA SERIKAT",
+"nama_en":"UNITED STATES MINOR OUTLYING ISLANDS",
+"created_at":"2017-01-25 19:22:50",
+"updated_at":"2019-12-14 23:59:44"
+},
+{ 
+"id":227,
+"kode":"US",
+"nama":"AMERIKA SERIKAT",
+"nama_en":"UNITED STATES",
+"created_at":"2017-01-25 19:22:50",
+"updated_at":"2019-12-14 23:59:44"
+},
+{ 
+"id":228,
+"kode":"UY",
+"nama":"URUGUAY",
+"nama_en":"URUGUAY",
+"created_at":"2017-01-25 19:22:50",
+"updated_at":"2019-12-14 23:59:44"
+},
+{ 
+"id":229,
+"kode":"UZ",
+"nama":"UZBEKISTAN",
+"nama_en":"UZBEKISTAN",
+"created_at":"2017-01-25 19:22:50",
+"updated_at":"2019-12-14 23:59:44"
+},
+{ 
+"id":230,
+"kode":"VA",
+"nama":"VATIKAN",
+"nama_en":"VATICAN CITY STATE (HOLY SEE)",
+"created_at":"2017-01-25 19:22:50",
+"updated_at":"2019-12-14 23:59:44"
+},
+{ 
+"id":231,
+"kode":"VC",
+"nama":"SAINT VINCENT DAN THE GRENADINES",
+"nama_en":"SAINT VINCENT AND THE GRENADINES",
+"created_at":"2017-01-25 19:22:50",
+"updated_at":"2019-12-14 23:59:44"
+},
+{ 
+"id":232,
+"kode":"VE",
+"nama":"VENEZUELA",
+"nama_en":"VENEZUELA",
+"created_at":"2017-01-25 19:22:50",
+"updated_at":"2019-12-14 23:59:44"
+},
+{ 
+"id":233,
+"kode":"VG",
+"nama":"KEP. VIRGIN ISLANDS (INGGRIS)",
+"nama_en":"VIRGIN ISLANDS (BRITISH)",
+"created_at":"2017-01-25 19:22:50",
+"updated_at":"2019-12-14 23:59:44"
+},
+{ 
+"id":234,
+"kode":"VI",
+"nama":"KEP. VIRGIN ISLANDS (AS)",
+"nama_en":"VIRGIN ISLANDS (U.S.)",
+"created_at":"2017-01-25 19:22:50",
+"updated_at":"2019-12-14 23:59:44"
+},
+{ 
+"id":235,
+"kode":"VN",
+"nama":"VIETNAM",
+"nama_en":"VIETNAM",
+"created_at":"2017-01-25 19:22:50",
+"updated_at":"2019-12-14 23:59:44"
+},
+{ 
+"id":236,
+"kode":"VU",
+"nama":"VANUATU",
+"nama_en":"VANUATU",
+"created_at":"2017-01-25 19:22:50",
+"updated_at":"2019-12-14 23:59:44"
+},
+{ 
+"id":237,
+"kode":"WF",
+"nama":"WALLIS AND FUTUNA",
+"nama_en":"WALLIS AND FUTUNA",
+"created_at":"2017-01-25 19:22:50",
+"updated_at":"2019-12-14 23:59:44"
+},
+{ 
+"id":238,
+"kode":"WS",
+"nama":"SAMOA",
+"nama_en":"SAMOA",
+"created_at":"2017-01-25 19:22:50",
+"updated_at":"2019-12-14 23:59:44"
+},
+{ 
+"id":239,
+"kode":"YE",
+"nama":"YAMAN",
+"nama_en":"YEMEN",
+"created_at":"2017-01-25 19:22:51",
+"updated_at":"2019-12-14 23:59:44"
+},
+{ 
+"id":240,
+"kode":"YT",
+"nama":"MAYOTTE",
+"nama_en":"MAYOTTE",
+"created_at":"2017-01-25 19:22:51",
+"updated_at":"2019-12-14 23:59:44"
+},
+{ 
+"id":241,
+"kode":"YU",
+"nama":"YUGOSLAVIA (DAHULU)",
+"nama_en":"YUGOSLAVIA (FORMER)",
+"created_at":"2017-01-25 19:22:51",
+"updated_at":"2019-12-14 23:59:44"
+},
+{ 
+"id":242,
+"kode":"ZA",
+"nama":"AFRIKA SELATAN",
+"nama_en":"SOUTH AFRICA",
+"created_at":"2017-01-25 19:22:51",
+"updated_at":"2019-12-14 23:59:44"
+},
+{ 
+"id":243,
+"kode":"ZM",
+"nama":"ZAMBIA",
+"nama_en":"ZAMBIA",
+"created_at":"2017-01-25 19:22:51",
+"updated_at":"2019-12-14 23:59:44"
+},
+{ 
+"id":244,
+"kode":"ZR",
+"nama":"ZAIRE (DAHULU)",
+"nama_en":"ZAIRE (FORMER)",
+"created_at":"2017-01-25 19:22:51",
+"updated_at":"2019-12-14 23:59:44"
+},
+{ 
+"id":245,
+"kode":"ZW",
+"nama":"ZIMBABWE",
+"nama_en":"ZIMBABWE",
+"created_at":"2017-01-25 19:22:51",
+"updated_at":"2019-12-14 23:59:44"
+},
+{ 
+"id":246,
+"kode":"SC",
+"nama":"SKOTLANDIA",
+"nama_en":"SCOTLAND",
+"created_at":"2017-01-25 19:22:51",
+"updated_at":"2019-12-14 23:59:44"
+},
+{ 
+"id":247,
+"kode":"ME",
+"nama":"MONTENEGRO",
+"nama_en":"MONTENEGRO",
+"created_at":"2019-09-24 13:44:13",
+"updated_at":"2019-12-14 23:59:44"
+},
+{ 
+"id":248,
+"kode":"XK",
+"nama":"KOSOVO",
+"nama_en":"KOSOVO",
+"created_at":"2019-11-26 17:10:01",
+"updated_at":"2019-12-14 23:59:44"
+},
+{ 
+"id":249,
+"kode":"CW",
+"nama":"CURACAO",
+"nama_en":"CURACAO",
+"created_at":"2020-10-26 10:30:08",
+"updated_at":"2020-10-26 10:30:08"
+},
+{ 
+"id":250,
+"kode":"CW",
+"nama":"BULLENBAAI",
+"nama_en":"BULLENBAAI",
+"created_at":"2020-10-26 11:57:37",
+"updated_at":"2020-10-26 11:57:37"
+},
+{ 
+"id":251,
+"kode":"CW",
+"nama":"CARACAS BAAI",
+"nama_en":"CARACAS BAAI",
+"created_at":"2020-10-26 11:58:06",
+"updated_at":"2020-10-26 11:58:06"
+},
+{ 
+"id":252,
+"kode":"CW",
+"nama":"DOMINGUITO",
+"nama_en":"DOMINGUITO",
+"created_at":"2020-10-26 11:59:30",
+"updated_at":"2020-10-26 11:59:30"
+},
+{ 
+"id":253,
+"kode":"CW",
+"nama":"EMMASTAD",
+"nama_en":"EMMASTAD",
+"created_at":"2020-10-26 11:59:56",
+"updated_at":"2020-10-26 11:59:56"
+},
+{ 
+"id":254,
+"kode":"CW",
+"nama":"FUIKBAAI",
+"nama_en":"FUIKBAAI",
+"created_at":"2020-10-26 12:00:12",
+"updated_at":"2020-10-26 12:00:12"
+},
+{ 
+"id":255,
+"kode":"CW",
+"nama":"GROTE BERG",
+"nama_en":"GROTE BERG",
+"created_at":"2020-10-26 12:00:32",
+"updated_at":"2020-10-26 12:00:32"
+},
+{ 
+"id":256,
+"kode":"CW",
+"nama":"OTROBANDA",
+"nama_en":"OTROBANDA",
+"created_at":"2020-10-26 12:00:51",
+"updated_at":"2020-10-26 12:00:51"
+},
+{ 
+"id":257,
+"kode":"CW",
+"nama":"PUNDA",
+"nama_en":"PUNDA",
+"created_at":"2020-10-26 12:01:04",
+"updated_at":"2020-10-26 12:01:04"
+},
+{ 
+"id":258,
+"kode":"CW",
+"nama":"SANTA ROSA",
+"nama_en":"SANTA ROSA",
+"created_at":"2020-10-26 12:01:20",
+"updated_at":"2020-10-26 12:01:20"
+},
+{ 
+"id":259,
+"kode":"CW",
+"nama":"SINT MICHIELSBAAI",
+"nama_en":"SINT MICHIELSBAAI",
+"created_at":"2020-10-26 12:01:48",
+"updated_at":"2020-10-26 12:01:48"
+},
+{ 
+"id":260,
+"kode":"CW",
+"nama":"SUFFISANT DROP",
+"nama_en":"SUFFISANT DROP",
+"created_at":"2020-10-26 12:02:20",
+"updated_at":"2020-10-26 12:02:20"
+},
+{ 
+"id":261,
+"kode":"CW",
+"nama":"WILLEMSTAD",
+"nama_en":"WILLEMSTAD",
+"created_at":"2020-10-26 12:02:39",
+"updated_at":"2020-10-26 12:02:39"
+},
+{ 
+"id":262,
+"kode":"CW",
+"nama":"ZEELANDIA",
+"nama_en":"ZEELANDIA",
+"created_at":"2020-10-26 12:02:57",
+"updated_at":"2020-10-26 12:02:57"
+},
+{ 
+"id":264,
+"kode":"IM",
+"nama":"Pulau Man",
+"nama_en":"Isle of Man",
+"created_at":"2023-01-10 13:01:27",
+"updated_at":"2023-01-10 13:01:27"
+},
+{ 
+"id":265,
+"kode":"SX",
+"nama":"SINT MAARTEN (DUTCH PART)",
+"nama_en":"SINT MAARTEN (DUTCH PART)",
+"created_at":"2023-06-22 09:38:06",
+"updated_at":"2023-06-22 09:39:00"
+}]

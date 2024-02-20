@@ -90,6 +90,7 @@ function DocK22() {
     const idPtk = Cookies.get("idPtkPage");
     useEffect(() => {
         if(idPtk) {
+            setValueHeader("tglSurtug", (new Date()).toLocaleString('en-CA', { hourCycle: 'h24' }).replace(',', '').slice(0,16))
             let ptkDecode = idPtk ? base64_decode(idPtk) : "";
             let ptkNomor = idPtk ? ptkDecode.split('m0R3N0r1R') : "";
             setData(values => ({...values,
@@ -313,7 +314,7 @@ function DocK22() {
                                 </div>
                                 <label className="col-sm-1 col-form-label" htmlFor="tglDok22">Tanggal</label>
                                 <div className="col-sm-3">
-                                    <input type="date" value={data.tglSurtug || ""} id="tglDok22" className="form-control form-control-sm" placeholder="Tanggal" disabled />
+                                    <input type="datetime-local" value={data.tglSurtug || ""} id="tglDok22" className="form-control form-control-sm" placeholder="Tanggal" disabled />
                                 </div>
                                 <div className="col-sm-4">
                                     <a href={require("../../dok/k22.pdf")} rel="noopener noreferrer" target='_blank' className='btn btn-info pb-1 float-end'>
@@ -343,7 +344,7 @@ function DocK22() {
                                 </div>
                                 <label className="col-sm-1 col-form-label" htmlFor="tglSurtug">Tanggal</label>
                                 <div className="col-sm-2" style={{borderRight: '0.5px solid grey'}}>  
-                                    <input type="date" id="tglSurtug" name='tglSurtug' {...registerHeader("tglSurtug", { required: "Mohon isi tanggal surat tugas."})} className={errorsHeader.tglSurtug ? "form-control form-control-sm is-invalid" : "form-control form-control-sm"} placeholder="Tanggal Surat Tugas" />
+                                    <input type="datetime-local" id="tglSurtug" name='tglSurtug' {...registerHeader("tglSurtug", { required: "Mohon isi tanggal surat tugas."})} className={errorsHeader.tglSurtug ? "form-control form-control-sm is-invalid" : "form-control form-control-sm"} placeholder="Tanggal Surat Tugas" />
                                     {errorsHeader.tglSurtug && <small className="text-danger">{errorsHeader.tglSurtug.message}</small>}
                                 </div>
                                 <div className="col-sm-2">

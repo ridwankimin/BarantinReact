@@ -26,7 +26,7 @@ export default class PtkHistory {
   
   updateKomoditiP1(id,data) {
     let datasend = {
-      'id': "",
+      'id': id,
       'tindakan': "p1",
       'jantanP1': data.jantanP1,
       'betinaP1': data.betinaP1,
@@ -48,7 +48,7 @@ export default class PtkHistory {
   
   updateKomoditiP2(id, data) {
     let datasend = {
-      'id': "",
+      'id': id,
       'tindakan': "p2",
       'jantanP2': data.jantanP2,
       'betinaP2': data.betinaP2,
@@ -70,7 +70,7 @@ export default class PtkHistory {
   
   updateKomoditiP3(id,data) {
     let datasend = {
-      'id': "",
+      'id': id,
       'tindakan': "p3",
       'jantanP3': data.jantanP3,
       'betinaP3': data.betinaP3,
@@ -92,7 +92,7 @@ export default class PtkHistory {
   
   updateKomoditiP4(id,data) {
     let datasend = {
-      'id': "",
+      'id': id,
       'tindakan': "p4",
       'jantanP4': data.jantanP4,
       'betinaP4': data.betinaP4,
@@ -114,7 +114,7 @@ export default class PtkHistory {
   
   updateKomoditiP5(id, data) {
     let datasend = {
-      'id': "",
+      'id': id,
       'tindakan': "p5",
       'jantanP5': data.jantanP5,
       'betinaP5': data.betinaP5,
@@ -136,7 +136,7 @@ export default class PtkHistory {
   
   updateKomoditiP6(id, data) {
     let datasend = {
-      'id': "",
+      'id': id,
       'tindakan': "p6",
       'jantanP6': data.jantanP6,
       'betinaP6': data.betinaP6,
@@ -158,7 +158,7 @@ export default class PtkHistory {
   
   updateKomoditiP7(id,data) {
     let datasend = {
-      'id': "",
+      'id': id,
       'tindakan': "p7",
       'jantanP7': data.jantanP7,
       'betinaP7': data.betinaP7,
@@ -185,8 +185,8 @@ export default class PtkHistory {
       'nama_umum_tercetak': data.namaUmum,
       'nama_latin_tercetak': data.namaLatin,
       // 'bentuk_tercetak':
-      'jantanP8': data.jantanP8,
-      'betinaP8': data.betinaP8,
+      'jantanP8': data.jantanP8 ? data.jantanP8 : "",
+      'betinaP8': data.betinaP8 ? data.betinaP8 : "",
       'volumeP8': data.volumeP8,
       'nettoP8': data.nettoP8
     }

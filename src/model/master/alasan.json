@@ -1,43 +1,115 @@
 [ 
 { 
 "id":1,
-"dok_kode":"k-8.1",
+"dok_kode":"K-8.1",
 "dok_id":35,
 "deskripsi":"Media Pembawa adalah jenis yang dilarang pemasukannya"
 },
 { 
 "id":2,
-"dok_kode":"k-8.1",
+"dok_kode":"K-8.1",
 "dok_id":35,
 "deskripsi":"Media pembawa rusak/busuk"
 },
 { 
 "id":3,
-"dok_kode":"k-8.1",
+"dok_kode":"K-8.1",
 "dok_id":35,
 "deskripsi":"Berasal dari negara/daerah yang sedang tertular/berjangkit wabah HPHK/HPIK/OPTK"
 },
 { 
 "id":4,
-"dok_kode":"k-8.1",
+"dok_kode":"K-8.1",
 "dok_id":35,
 "deskripsi":"Tidak dapat disembuhkan/dibebaskan dari HPHK/HPIK/OPTK/OPT negara tujuan setelah diberi Perlakuan"
 },
 { 
 "id":5,
-"dok_kode":"k-8.1",
+"dok_kode":"K-8.1",
 "dok_id":35,
 "deskripsi":"Setelah dilakukan penolakan, tidak dikeluarkan dari wilayah negara Republik Indonesia atau dari daerah/area tujuan oleh pemiliknya dalam batas waktu 3 (tiga) hari kerja sejak diterimanya Surat Penolakan"
 },
 { 
 "id":6,
-"dok_kode":"k-8.1",
+"dok_kode":"K-8.1",
 "dok_id":35,
 "deskripsi":"Tidak memenuhi persyaratan keamanan dan mutu pangan/pakan*) "
 },
 { 
 "id":7,
-"dok_kode":"k-8.1",
+"dok_kode":"K-8.1",
 "dok_id":35,
 "deskripsi":"Lainnya…"
+},
+{ 
+"id":8,
+"dok_kode":"K-6.1",
+"dok_id":26,
+"deskripsi":"Media pembawa tidak dilaporkan kepada pejabat karantina pada saat pemasukan/pengeluaran."
+},
+{ 
+"id":9,
+"dok_kode":"K-6.1",
+"dok_id":26,
+"deskripsi":"Tidak disertai Keterangan Mutasi/keterangan tidak terkontaminasi/catatan suhu untuk media pembawa yang dipersyaratkan."
+},
+{ 
+"id":10,
+"dok_kode":"K-6.1",
+"dok_id":26,
+"deskripsi":"Tidak disertai dokumen karantina dan/atau dokumen lain yang dipersyaratkan saat tiba di tempat pemasukan."
+},
+{ 
+"id":11,
+"dok_kode":"K-7.1",
+"dok_id":29,
+"deskripsi":"Tidak dapat melengkapi dokumen persyaratan dalam waktu yang ditetapkan"
+},
+{ 
+"id":12,
+"dok_kode":"K-7.1",
+"dok_id":29,
+"deskripsi":"Persyaratan dokumen lain tidak dapat dipenuhi dalam waktu yang ditetapkan"
+},
+{ 
+"id":13,
+"dok_kode":"K-7.1",
+"dok_id":29,
+"deskripsi":"Berasal dari negara/daerah/tempat yang dilarang"
+},
+{ 
+"id":14,
+"dok_kode":"K-7.1",
+"dok_id":29,
+"deskripsi":"Berasal dari negara/daerah tertular/berjangkit wabah*) penyakit hewan menular"
+},
+{ 
+"id":15,
+"dok_kode":"K-7.1",
+"dok_id":29,
+"deskripsi":"Jenis media pembawa yang dilarang"
+},
+{ 
+"id":16,
+"dok_kode":"K-7.1",
+"dok_id":29,
+"deskripsi":"Sanitasi tidak baik, kemasan tidak utuh/rusak, terjadi perubahan sifat, terkontaminasi, membahayakan kesehatan hewan dan atau manusia"
+},
+{ 
+"id":17,
+"dok_kode":"K-7.1",
+"dok_id":29,
+"deskripsi":"Laporan pemeriksaan di atas alat angkut ditemukan HPHK/HPIK/OPTK"
+},
+{ 
+"id":18,
+"dok_kode":"K-7.1",
+"dok_id":29,
+"deskripsi":"Tidak bebas dan/atau tidak dapat dibebaskan dari HPHK/HPIK/OPTK"
+},
+{ 
+"id":19,
+"dok_kode":"K-7.1",
+"dok_id":29,
+"deskripsi":"Lainnya"
 }]

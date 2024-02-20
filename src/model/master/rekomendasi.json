@@ -190,111 +190,125 @@
 },
 { 
 "id":28,
-"nama":"Melengkapi dokumen karantina dan/atau dokumen lain yang dipersyaratkan dalam waktu 3 (tiga) hari kerja sejak diterimanya Surat Pemberitahuan Penahanan ini",
-"dokumen_karantina_id":26,
-"dok_kode":"k61",
-"jenis_karantina":""
+"nama":"dilakukan pembebasan (untuk Media Pembawa yang tidak dikenai tindakan karantina lebih lanjut)",
+"dokumen_karantina_id":28,
+"dok_kode":"k63",
+"jenis_karantina":null
 },
 { 
 "id":29,
-"nama":"Tidak memindah-tempatkan media pembawa tanpa seizin Pe jabat Karantina",
-"dokumen_karantina_id":26,
-"dok_kode":"k61",
-"jenis_karantina":""
+"nama":"dilakukan pemeriksaan kesehatan",
+"dokumen_karantina_id":28,
+"dok_kode":"k63",
+"jenis_karantina":null
 },
 { 
 "id":30,
-"nama":"Lainnya",
-"dokumen_karantina_id":26,
-"dok_kode":"k61",
-"jenis_karantina":""
+"nama":"dilakukan uji keamanan dan/atau mutu pangan/pakan",
+"dokumen_karantina_id":28,
+"dok_kode":"k63",
+"jenis_karantina":null
 },
 { 
 "id":31,
+"nama":"dilakukan pengasingan dan pengamatan",
+"dokumen_karantina_id":28,
+"dok_kode":"k63",
+"jenis_karantina":null
+},
+{ 
+"id":32,
+"nama":"dilakukan penolakan",
+"dokumen_karantina_id":28,
+"dok_kode":"k63",
+"jenis_karantina":null
+},
+{ 
+"id":33,
 "nama":"Sertifikat Pelepasan Karantina Hewan",
 "dokumen_karantina_id":42,
 "dok_kode":"k94",
 "jenis_karantina":"H"
 },
 { 
-"id":32,
+"id":34,
 "nama":"Sertifikat Kesehatan Hewan",
 "dokumen_karantina_id":42,
 "dok_kode":"k94",
 "jenis_karantina":"H"
 },
 { 
-"id":33,
+"id":35,
 "nama":"Sertifikat Sanitasi Produk Hewan",
 "dokumen_karantina_id":42,
 "dok_kode":"k94",
 "jenis_karantina":"H"
 },
 { 
-"id":34,
+"id":36,
 "nama":"Surat Keterangan Karantina",
 "dokumen_karantina_id":42,
 "dok_kode":"k94",
 "jenis_karantina":"H"
 },
 { 
-"id":35,
+"id":37,
 "nama":"Sertifikat Pelepasan Karantina Ikan",
 "dokumen_karantina_id":42,
 "dok_kode":"k94",
 "jenis_karantina":"I"
 },
 { 
-"id":36,
+"id":38,
 "nama":"Sertifikat Kesehatan Ikan",
 "dokumen_karantina_id":42,
 "dok_kode":"k94",
 "jenis_karantina":"I"
 },
 { 
-"id":37,
+"id":39,
 "nama":"Sertifikat Kesehatan Ikan Antar Area",
 "dokumen_karantina_id":42,
 "dok_kode":"k94",
 "jenis_karantina":"I"
 },
 { 
-"id":38,
+"id":40,
 "nama":"Surat Keterangan Karantina",
 "dokumen_karantina_id":42,
 "dok_kode":"k94",
 "jenis_karantina":"I"
 },
 { 
-"id":39,
+"id":41,
 "nama":"Sertifikat Pelepasan Karantina Tumbuhan",
 "dokumen_karantina_id":42,
 "dok_kode":"k94",
 "jenis_karantina":"T"
 },
 { 
-"id":40,
+"id":42,
 "nama":"Phytosanitary Certificate for Export/Phytosanitary Certificate for Re-export*)",
 "dokumen_karantina_id":42,
 "dok_kode":"k94",
 "jenis_karantina":"T"
 },
 { 
-"id":41,
+"id":43,
 "nama":"Sertifikat Kesehatan Tumbuhan Antar Area",
 "dokumen_karantina_id":42,
 "dok_kode":"k94",
 "jenis_karantina":"T"
 },
 { 
-"id":42,
+"id":44,
 "nama":"Certificate for Export of Processed Plant Product/Non-regulated Article",
 "dokumen_karantina_id":42,
 "dok_kode":"k94",
 "jenis_karantina":"T"
 },
 { 
-"id":43,
+"id":45,
 "nama":"Surat Keterangan Karantina",
 "dokumen_karantina_id":42,
 "dok_kode":"k94",

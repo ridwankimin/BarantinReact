@@ -114,7 +114,8 @@ export default class PtkPemeriksaan {
             'tanggal': data.tglDok37b,
             'kesimpulan': data.kesimpulan37b,
             // 'tanggal_periksa': data.idDok37b === '' ? data.tglDok37b : '',
-            'rekomendasi_id': data.rekom37b,
+            'rekomendasi_id': data.rekom37b[0],
+            'rekomendasi2_id': data.rekom37b.length === 2 ? data.rekom37b[1] : '',
             'user_ttd2_id': data.ttd2,
             'user_id': "1", // session
         }       

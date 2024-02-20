@@ -21,8 +21,8 @@ function DocK82() {
     let [loadKomoditiPesan, setLoadKomoditiPesan] = useState("")
     let [datasend, setDataSend] = useState([])
     let [arraySaksi, setArraySaksi] = useState([])
-    let [indexSaksi, setIndexSaksi] = useState(0)
     let [editSaksi, setEditSaksi] = useState({})
+    // let [indexSaksi, setIndexSaksi] = useState(0)
 
     let [data, setData] = useState({
         noAju: "",
@@ -77,7 +77,7 @@ function DocK82() {
             alamat: "",
             jabatan: ""
         }));
-        setIndexSaksi("")
+        // setIndexSaksi("")
     }
 
     function refreshListKomoditas() {

@@ -10,6 +10,7 @@ import PtkHistory from '../../model/PtkHistory';
 import PnPelepasan from '../../model/PnPelepasan';
 import ModaAlatAngkut from '../../model/master/modaAlatAngkut.json';
 import Keterangan from '../../model/master/keterangan.json';
+
 const log = new PtkHistory()
 const modelPemohon = new PtkModel();
 const modelPelepasan = new PnPelepasan();

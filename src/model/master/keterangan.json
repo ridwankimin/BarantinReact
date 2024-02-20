@@ -118,4 +118,36 @@
 "flag":"PERNYATAAN",
 "karantina":"H",
 "dokumen":""
+},
+{ 
+"id":16,
+"deskripsi":"Bebas dari Hama dan Penyakit Ikan Karantina",
+"deskripsi_en":null,
+"flag":"KETERANGAN",
+"karantina":"I",
+"dokumen":"K-9.2.I"
+},
+{ 
+"id":17,
+"deskripsi":"Memenuhi persyaratan keamanan dan Mutu Pangan atau Pakan",
+"deskripsi_en":null,
+"flag":"KETERANGAN",
+"karantina":"I",
+"dokumen":"K-9.2.I"
+},
+{ 
+"id":18,
+"deskripsi":"Bebas dari kontaminan, dan/atau",
+"deskripsi_en":null,
+"flag":"KETERANGAN",
+"karantina":"I",
+"dokumen":"K-9.2.I"
+},
+{ 
+"id":19,
+"deskripsi":"Memenuhi persyaratan lainnya.",
+"deskripsi_en":null,
+"flag":"KETERANGAN",
+"karantina":"I",
+"dokumen":"K-9.2.I"
 }]
