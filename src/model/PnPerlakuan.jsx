@@ -1,4 +1,5 @@
 import axios from "axios";
+import Cookies from "js-cookie";
 import { v4 as uuidv4 } from 'uuid';
 const url = 'http://localhost/api-barantin/';
 
@@ -61,7 +62,7 @@ export default class PnPerlakuan {
             // 'rekomendasi_id': data.rekomAdmin, // buat form laporan 
             'diterbitkan_di': data.diterbitkan, //
             'user_ttd_id': data.ttdPerlakuan,
-            'user_id': "1" // session
+            'user_id': Cookies.get("userId") // session
         }       
       let config = {
           // method: 'post',
@@ -118,7 +119,7 @@ export default class PnPerlakuan {
             // 'rekomendasi_id': data.rekomAdmin, // buat form laporan 
             'diterbitkan_di': data.diterbitkan, //
             'user_ttd_id': data.ttdPerlakuan,
-            'user_id': "1" // session
+            'user_id': Cookies.get("userId") // session
         }       
       let config = {
           // method: 'post',
@@ -176,7 +177,7 @@ export default class PnPerlakuan {
             'rekomendasi_id': data.rekomPerlakuan, // buat form laporan 
             'diterbitkan_di': data.diterbitkan, //
             'user_ttd_id': data.ttdPerlakuan,
-            'user_id': "1" // session
+            'user_id': Cookies.get("userId") // session
         }       
       let config = {
           // method: 'post',

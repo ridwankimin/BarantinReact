@@ -1,4 +1,5 @@
 import axios from "axios";
+import Cookies from "js-cookie";
 import { v4 as uuidv4 } from 'uuid';
 const url = 'http://localhost/api-barantin/';
 
@@ -43,7 +44,7 @@ export default class PnPemusnahan {
             'kepala_kantor_bc': data.kaBc,
             'nama_pengelola': data.namaPengelola,
             'tgl_dikeluarkan': data.tglDok81,
-            'user_id': "1",
+            'user_id': Cookies.get("userId"),
             'saksi': ""
         }
         
@@ -103,7 +104,7 @@ export default class PnPemusnahan {
             'kepala_kantor_bc': "",
             'nama_pengelola': "",
             'tgl_dikeluarkan': data.tglDok82,
-            'user_id': "1",
+            'user_id': Cookies.get("userId"),
             'saksi': saksi
         }
         

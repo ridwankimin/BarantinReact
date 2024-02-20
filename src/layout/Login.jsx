@@ -1,7 +1,12 @@
 import Cookies from 'js-cookie'
 import React, { useState } from 'react'
 import logbar from '../logo/barantinb.jpeg'
+import UserDummy from '../model/master/userDummy.json'
 // import { useNavigate } from 'react-router-dom';
+
+function setLoginUser(e) {
+        return UserDummy.find((element) => element.username === e)
+}
 
 function Login() {
     require('./styleLogin.css')
@@ -10,14 +15,23 @@ function Login() {
     let [password, setPassword] = useState("")
     
     const handleFormLogin = (e) => {
+        e.preventDefault();
+        const dataUser = setLoginUser(user)
+        // console.log(dataUser.nama_upt)
         // console.log(user + password)
         // alert("user :" + user)
         Cookies.set("isLogin", true, {
             expires: 1,
         });
+
+        Cookies.set("userId", dataUser.id);
+        Cookies.set("uptId", dataUser.id_upt);
+        Cookies.set("kodeSatpel", dataUser.kode_satpel);
+        Cookies.set("namaUpt", dataUser.nama_upt);
+        Cookies.set("namaSatpel", dataUser.nama_satpel);
+
         // alert('A name was submitted: ' + this.state.value);
         alert("login berhasil")
-        e.preventDefault();
         window.location.reload();
         // navigate("/")
     }

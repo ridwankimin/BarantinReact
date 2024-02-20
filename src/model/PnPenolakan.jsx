@@ -1,4 +1,5 @@
 import axios from "axios";
+import Cookies from "js-cookie";
 import { v4 as uuidv4 } from 'uuid';
 const url = 'http://localhost/api-barantin/';
 
@@ -56,7 +57,7 @@ export default class PnPenolakan {
             'tgl_dikeluarkan': "",
             'consignment': "",
             'consignment_detil': "",
-            'user_id': "1",
+            'user_id': Cookies.get("userId"),
             'saksi': ""
         }
         let config = {
@@ -123,7 +124,7 @@ export default class PnPenolakan {
             'tgl_dikeluarkan': "",
             'consignment': "",
             'consignment_detil': "",
-            'user_id': "1",
+            'user_id': Cookies.get("userId"),
             'saksi': saksi
         }
         let config = {
@@ -178,7 +179,7 @@ export default class PnPenolakan {
             'tgl_dikeluarkan': "",
             'consignment': "",
             'consignment_detil': "",
-            'user_id': "1", // session
+            'user_id': Cookies.get("userId"), // session
             'saksi': ""
         }
         let config = {
@@ -233,7 +234,7 @@ export default class PnPenolakan {
             'tgl_dikeluarkan': "",
             'consignment': data.consignment,
             'consignment_detil': data.consignmentDetil,
-            'user_id': "1", // session
+            'user_id': Cookies.get("userId"), // session
             'saksi': ""
         }
         let config = {

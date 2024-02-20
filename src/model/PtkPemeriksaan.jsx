@@ -1,4 +1,5 @@
 import axios from "axios";
+import Cookies from "js-cookie";
 import { v4 as uuidv4 } from 'uuid';
 const url = 'http://localhost/api-barantin/';
 
@@ -42,7 +43,7 @@ export default class PtkPemeriksaan {
             'hasil_periksa_id': data.opsiAdministratif,
             'rekomendasi_id': data.rekomAdmin,
             'user_ttd_id': data.ttdAdminidtratif,
-            'user_id': "1" // session
+            'user_id': Cookies.get("userId") // session
         }       
       let config = {
           // method: 'post',
@@ -89,7 +90,7 @@ export default class PtkPemeriksaan {
             'rekomendasi_id': data.rekom37b,
             'user_ttd1_id': data.ttd1,
             'user_ttd2_id': data.ttd2,
-            'user_id': "1", // session
+            'user_id': Cookies.get("userId"), // session
             'periksa_detil': periksaDetil
         }       
       let config = {
@@ -117,7 +118,7 @@ export default class PtkPemeriksaan {
             'rekomendasi_id': data.rekom37b[0],
             'rekomendasi2_id': data.rekom37b.length === 2 ? data.rekom37b[1] : '',
             'user_ttd2_id': data.ttd2,
-            'user_id': "1", // session
+            'user_id': Cookies.get("userId"), // session
         }       
       let config = {
           // method: 'post',
@@ -146,7 +147,7 @@ export default class PtkPemeriksaan {
         'tanggal': data.tglDok31,
         'setuju_bongkar': data.putusanBongkar,
         'user_ttd_id': data.ttdPutusan,
-        'user_id': "1", // session
+        'user_id': Cookies.get("userId"), // session
       }       
       let config = {
           // method: 'post',

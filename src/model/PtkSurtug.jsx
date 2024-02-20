@@ -1,4 +1,5 @@
 import axios from "axios";
+import Cookies from "js-cookie";
 import { v4 as uuidv4 } from 'uuid';
 // import {decode as base64_decode, encode as base64_encode} from 'base-64';
 const date = new Date();
@@ -24,7 +25,7 @@ export default class PtkSurtug {
             'tanggal': data.tglSurtug,
             'perihal': data.perihalSurtug,
             'penanda_tangan_id': data.ttdSurtug,
-            'user_id': "1", //session
+            'user_id': Cookies.get("userId"), //session
             'created_at': dateNow()
         }       
       let config = {
@@ -55,7 +56,7 @@ export default class PtkSurtug {
             'ptk_id': data.idPtk,
             'ptk_surtug_header_id': data.idHeader,
             'petugas_id': data.pilihPetugas,
-            'user_id': "1", //session
+            'user_id': Cookies.get("userId"), //session
             'penugasan': arrayPenugasan,
             'created_at': dateNow(),
         }
@@ -142,7 +143,7 @@ export default class PtkSurtug {
             'tanggal': data.tglDok21,
             'rekomendasi_id': data.rekomAnalis,
             'user_ttd_id': data.ttdAnalis,
-            'user_id': "1", //session
+            'user_id': Cookies.get("userId"), //session
             'analisa_detil': arrayAnalisa
         }
 

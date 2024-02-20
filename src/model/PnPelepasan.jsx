@@ -1,4 +1,5 @@
 import axios from "axios";
+import Cookies from "js-cookie";
 import { v4 as uuidv4 } from 'uuid';
 const url = 'http://localhost/api-barantin/';
 
@@ -36,7 +37,7 @@ export default class PnPerlakuan {
         is_attachment: data.isAttach,
         diterbitkan_di: data.diterbitkan,
         user_ttd_id: data.ttdPutusan,
-        user_id: "1" //session
+        user_id: Cookies.get("userId") //session
     }
     let config = {
       method: data.idDok92i === '' ? 'post' : 'put',
@@ -83,7 +84,7 @@ export default class PnPerlakuan {
         'is_attachment': data.isAttach,
         'diterbitkan_di': data.diterbitkan,
         'user_ttd_id': data.ttdPutusan,
-        'user_id': "1", //session
+        'user_id': Cookies.get("userId"), //session
     }
     let config = {
       method: data.idDokKT1 === '' ? 'post' : 'put',
@@ -130,7 +131,7 @@ export default class PnPerlakuan {
         'is_attachment': data.isAttach,
         'diterbitkan_di': data.diterbitkan,
         'user_ttd_id': data.ttdPutusan,
-        'user_id': "1", //session
+        'user_id': Cookies.get("userId"), //session
     }
     let config = {
       method: data.idDok92t === '' ? 'post' : 'put',
@@ -176,7 +177,7 @@ export default class PnPerlakuan {
         'is_attachment': data.isAttach,
         'diterbitkan_di': data.diterbitkan,
         'user_ttd_id': data.ttdPutusan,
-        'user_id': "1", //session
+        'user_id': Cookies.get("userId"), //session
     }
     let config = {
       method: data.idDokKT3 === '' ? 'post' : 'put',
@@ -213,7 +214,7 @@ export default class PnPerlakuan {
       'is_attachment': data.isAttach,
       'diterbitkan_di': data.diterbitkan,
       'user_ttd_id': data.ttdPutusan,
-      'user_id': "1" //session
+      'user_id': Cookies.get("userId") //session
     }
 
     let config = {
@@ -251,7 +252,7 @@ export default class PnPerlakuan {
       'is_attachment': data.isAttach,
       'diterbitkan_di': data.diterbitkan,
       'user_ttd_id': data.ttdPutusan,
-      'user_id': "1" //session
+      'user_id': Cookies.get("userId") //session
     }
 
     let config = {
@@ -289,7 +290,7 @@ export default class PnPerlakuan {
       'is_attachment': data.isAttach,
       'diterbitkan_di': data.diterbitkan,
       'user_ttd_id': data.ttdPutusan,
-      'user_id': "1" //session
+      'user_id': Cookies.get("userId") //session
     }
 
     let config = {

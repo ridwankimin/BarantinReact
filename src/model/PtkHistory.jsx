@@ -1,5 +1,6 @@
 
 import axios from "axios";
+import Cookies from "js-cookie";
 const url = 'http://localhost/api-barantin/';
 
 export default class PtkHistory {
@@ -9,7 +10,7 @@ export default class PtkHistory {
         'status_p8': statusP8,
         'dokumen': dokumen,
         'status': stat,
-        'user_id': "1", //session
+        'user_id': Cookies.get("userId"), //session
     }
     let config = {
       method: 'post',

@@ -1,4 +1,5 @@
 import axios from "axios";
+import Cookies from "js-cookie";
 import { v4 as uuidv4 } from 'uuid';
 const url = 'http://localhost/api-barantin/';
 
@@ -54,7 +55,7 @@ export default class PnPenahanan {
             'tembusan2': data.tembusan2,
             'tembusan3': data.tembusan3,
             'tembusan4': data.tembusan4,
-            'user_id': "1", //session
+            'user_id': Cookies.get("userId"), //session
         }
         let config = {
         method: data.idDok61 === '' ? 'post' : 'put',
@@ -105,7 +106,7 @@ export default class PnPenahanan {
             'tembusan2': data.tembusan2,
             'tembusan3': data.tembusan3,
             'tembusan4': data.tembusan4,
-            'user_id': "1", //session
+            'user_id': Cookies.get("userId"), //session
         }
         let config = {
         method: data.idDok62 === '' ? 'post' : 'put',
@@ -156,7 +157,7 @@ export default class PnPenahanan {
             'tembusan2': "",
             'tembusan3': "",
             'tembusan4': "",
-            'user_id': "1", //session
+            'user_id': Cookies.get("userId"), //session
         }
         let config = {
         method: data.idDok63 === '' ? 'post' : 'put',

@@ -1,4 +1,5 @@
 import axios from "axios";
+import Cookies from "js-cookie";
 // import { Navigate, json } from "react-router-dom";
 import { v4 as uuidv4 } from 'uuid';
 // import {decode as base64_decode, encode as base64_encode} from 'base-64';
@@ -35,11 +36,11 @@ export default class PtkModel {
             // 'tgl_aju' => $data['tgl_aju'],
             "jenis_dokumen": data.jenisForm,
             "is_guest": data.pJRutin, //ok           // pemohon rutin/guest: 0,1
-            "user_id": 123, //pake session
+            'user_id': Cookies.get("userId"), //pake session
             "pengguna_jasa_id": 456, // pake session
             "calo_id": 0,
-            "upt_id": 1, //poake session
-            "kode_wilker": '0100', //poake session
+            "upt_id": Cookies.get("uptId"), //poake session
+            "kode_wilker": Cookies.get("kodeSatpel"), //poake session
             "nama_pemohon": data.namaPemohon, //ok
             "jenis_identitas_pemohon": data.jenisIdentitasPemohon, //ok
             "nomor_identitas_pemohon": data.noIdentitasPemohon, //ok
@@ -75,7 +76,7 @@ export default class PtkModel {
             "negara_penerima_id": data.negaraPenerima, // ok
             "status_ptk": '0',
             "is_from_ptk": 1,
-            "user_created": 123, // pake session
+            "user_created": Cookies.get("userId"), // pake session
             "created_at": dateNow() // ok
       }
         console.log(JSON.stringify(datasend))
@@ -104,11 +105,11 @@ export default class PtkModel {
             // 'tgl_aju' => $data['tgl_aju'],
             "jenis_dokumen": data.jenisForm, // ok
             "is_guest": data.pJRutin,            // pemohon rutin/guest: 0,1
-            "user_id": 123, // ok pake session
+            'user_id': Cookies.get("userId"), // ok pake session
             "pengguna_jasa_id": 456, // ok pake session
             "calo_id": 0,
             "upt_id": 1,
-            "kode_wilker": '0100', // ok pake session
+            "kode_wilker": Cookies.get("kodeSatpel"), // ok pake session
             "nama_pemohon": data.namaPemohon,
             "jenis_identitas_pemohon": data.jenisIdentitasPemohon,
             "nomor_identitas_pemohon": data.noIdentitasPemohon,
@@ -145,7 +146,7 @@ export default class PtkModel {
             "negara_penerima_id": data.negaraPenerima,
             "status_ptk": '0',
             "is_from_ppk": 1,
-            "user_created": 123, //pake session
+            "user_created": Cookies.get("userId"), //pake session
             "updated_at": dateNow()
         }
         let config = {
@@ -182,8 +183,8 @@ export default class PtkModel {
             "jenis_permohonan": input.jenisPermohonan, //EX, IM dst
             "jenis_karantina": input.jenisKarantina, // H, I, T
             "jenis_dokumen": input.jenisDokumen, // PTK, NHI, BST
-            "upt_id": "1", // PAKE SESSION
-            "kode_wilker": "0100" // PAKE SESSION
+            'user_id': Cookies.get("userId"), // PAKE SESSION
+            "kode_wilker": Cookies.get("kodeSatpel") // PAKE SESSION
         }
 
         let config = {
