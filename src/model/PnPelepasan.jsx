@@ -3,7 +3,7 @@ import Cookies from "js-cookie";
 import { v4 as uuidv4 } from 'uuid';
 const url = 'http://localhost/api-barantin/';
 
-export default class PnPerlakuan {
+export default class PnPelepasan {
   imporAreaKI(data) {
     const uuid = uuidv4()
     let datasend = {
@@ -15,8 +15,10 @@ export default class PnPerlakuan {
         nomor_seri: data.noSeri,
         karantina_tujuan: "",
         upt_tujuan_id: "",
-        tipe_usaha: data.tipeUsaha,
-        temperatur_mp: data.temperaturMP,
+        tgl_awal: data.tglPeriksaAwal,
+        tgl_akhir: data.tglPeriksaAkhir,
+        tipe_usaha: "",
+        temperatur_mp: "",
         hasil_periksa: data.hasilPemeriksaan,
         p1: data.hasilPemeriksaanKet1,
         p2: data.hasilPemeriksaanKet2,
@@ -33,7 +35,7 @@ export default class PnPerlakuan {
         attestation_nosign: "",
         add_information: "",
         status_dok: data.jenisDokumen,
-        replaced_dok_id: data.idDokReplaced,
+        replaced_dok_id: "", // nanti data.idDokReplaced
         is_attachment: data.isAttach,
         diterbitkan_di: data.diterbitkan,
         user_ttd_id: data.ttdPutusan,
@@ -50,6 +52,57 @@ export default class PnPerlakuan {
       data: datasend
     };
     console.log("dok k921: " + JSON.stringify(config))
+    return axios.request(config)
+  }
+  
+  dokelKI(data) {
+    const uuid = uuidv4()
+    let datasend = {
+        id: data.idDoki2 === '' ? uuid : data.idDoki2,
+        ptk_id: data.idPtk,
+        dokumen_karantina_id: "46",
+        nomor: data.noDokumen.replace("K.1.1", "K.I.2"),
+        tanggal: data.tglDoki2,
+        nomor_seri: data.noSeri,
+        karantina_tujuan: "",
+        upt_tujuan_id: data.uptTujuan,
+        // tgl_awal: data.tglPeriksaAwal,
+        // tgl_akhir: data.tglPeriksaAkhir,
+        tipe_usaha: "",
+        temperatur_mp: "",
+        hasil_periksa: data.hasilPemeriksaan,
+        p1: data.hasilPemeriksaanKet1,
+        p2: data.hasilPemeriksaanKet2,
+        p3: data.hasilPemeriksaanKet3,
+        p4: data.hasilPemeriksaanKet4,
+        nama_labuji: "",
+        alamat_labuji: "",
+        attestation_a: "",
+        attestation_b: "",
+        attestation_c: "",
+        attestation_d: "",
+        attestation_lain: "",
+        attestation_free_from: "",
+        attestation_nosign: "",
+        add_information: "",
+        status_dok: data.jenisDokumen,
+        replaced_dok_id: "", // nanti data.idDokReplaced
+        is_attachment: data.isAttach,
+        diterbitkan_di: data.diterbitkan,
+        user_ttd_id: data.ttdPutusan,
+        user_id: Cookies.get("userId") //session
+    }
+    let config = {
+      method: data.idDoki2 === '' ? 'post' : 'put',
+      maxBodyLength: Infinity,
+      url: url + (data.idDoki2 === '' ? 'pn-pelepasan-ki' : 'pn-pelepasan-ki/' + data.idDoki2),
+      // url: url + 'pn-adm',
+      headers: { 
+        'Content-Type': 'application/json', 
+      },
+      data: datasend
+    };
+    console.log("dok ki2: " + JSON.stringify(config))
     return axios.request(config)
   }
 

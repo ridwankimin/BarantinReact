@@ -4,7 +4,7 @@ function DocK75() {
   return (
     <div className="container-xxl flex-grow-1 container-p-y">
     <h4 className="py-3 breadcrumb-wrapper mb-4">
-        K-7.5 <span className="text-muted fw-light">(SURAT PERPANJANGAN BATAS WAKTU)</span>
+        K-7.4 <span className="text-muted fw-light">(SURAT PERMOHONAN PERPANJANGAN BATAS WAKTU)</span>
     </h4>
 
     {/* <!-- Multi Column with Form Separator --> */}
@@ -12,59 +12,65 @@ function DocK75() {
         {/* <!-- Form Separator --> */}
         <div className="col-xxl">
             <div className="card mb-4">
-                {/* <!-- <h5 className="card-header">PEMILIK</h5> --> */}
                 <form className="card-body">
-                    <div className="row mb-3">
-                        <label className="col-sm-2 col-form-label" htmlFor="nomor_k75">Nomor K-7.5</label>
-                        <div className="col-sm-4">
-                            <input type="text" id="nomor_k75" className="form-control form-control-sm" placeholder="Nomor K-7.5" disabled />
-                        </div>
-                        <label className="col-sm-2 col-form-label" htmlFor="tanggal_k75">Tanggal</label>
-                        <div className="col-sm-4">
-                            <input type="text" id="tanggal_k75" className="form-control form-control-sm" placeholder="Tanggal K-7.5" disabled />
-                        </div>
-                    </div>
-                    <div className="row mb-3">
-                        <label className="col-sm-2 col-form-label" htmlFor="tujuan_surat">Tujuan Surat</label>
-                        <div className="col-sm-10">
-                            <input type="text" id="tujuan_surat" className="form-control form-control-sm" placeholder="Tujuan Surat" disabled />
-                        </div>
-                    </div>
-                    <hr className="my-4 mx-n4" />
-                    <h6 className="mb-b fw-normal">INFO PERMOHONAN PERPANJANGAN BATAS WAKTU</h6>
-                    <div className="row mb-3">
-                        <label className="col-sm-2 col-form-label" htmlFor="nomor_k71">Nomor K-7.1</label>
-                        <div className="col-sm-4">
-                            <input type="text" id="nomor_k71" className="form-control form-control-sm" placeholder="Nomor Surat Penolakan" disabled />
-                        </div>
-                        <label className="col-sm-2 col-form-label" htmlFor="tanggal_k71">Tanggal</label>
-                        <div className="col-sm-4">
-                            <input type="text" id="tanggal_k71" className="form-control form-control-sm" placeholder="Tanggal Surat Penolakan" disabled />
-                        </div>
-                    </div>
+                    {/* <!-- <h5 className="card-header">PEMILIK</h5> --> */}
                     <div className="row mb-3">
                         <label className="col-sm-2 col-form-label" htmlFor="nomor_k74">Nomor K-7.4</label>
                         <div className="col-sm-4">
-                            <input type="text" id="nomor_k74" className="form-control form-control-sm" placeholder="Nomor Surat Permohonan Perpanjangan Batas Waktu" disabled />
+                            <input type="text" id="nomor_k74" className="form-control form-control-sm" placeholder="Nomor K-7.4" disabled />
                         </div>
                         <label className="col-sm-2 col-form-label" htmlFor="tanggal_k74">Tanggal</label>
                         <div className="col-sm-4">
-                            <input type="text" id="tanggal_k74" className="form-control form-control-sm" placeholder="Tanggal Surat Permohonan Perpanjangan Batas Waktu" disabled />
+                            <input type="text" id="tanggal_k74" className="form-control form-control-sm" placeholder="Tanggal K-7.4" disabled />
+                        </div>
+                    </div>
+                    <hr className="my-4 mx-n4" />
+                    <div className="row mb-3">
+                        <label className="col-sm-3 col-form-label" htmlFor="upt_kar">UPT Karantina</label>
+                        <div className="col-sm-9">
+                            <input type="text" id="upt_kar" className="form-control form-control-sm" placeholder="UPT Karantina" />
+                        </div>
+                    </div>
+                    <h6 className="mb-b fw-normal">PEMILIK</h6>
+                    <div className="row mb-3">
+                        <label className="col-sm-3 col-form-label" htmlFor="nama_pemilik">Nama</label>
+                        <div className="col-sm-9">
+                            <input type="text" id="nama_pemilik" className="form-control form-control-sm" placeholder="Nama Pemilik" />
                         </div>
                     </div>
                     <div className="row mb-3">
-                        <label className="col-sm-2 col-form-label" htmlFor="tanggal_mohon">Tanggal Pengeluaran MP</label>
-                        <div className="col-sm-10">
-                            <input type="text" id="tanggal_mohon" className="form-control form-control-sm" placeholder="Tanggal pemasukan/pengeluaran" disabled />
+                        <label className="col-sm-3 col-form-label" htmlFor="alamat_pemilik">Alamat</label>
+                        <div className="col-sm-9">
+                            <input type="text" id="alamat_pemilik" className="form-control form-control-sm" placeholder="Alamat Pemilik" />
                         </div>
                     </div>
                     <div className="row mb-3">
-                        <label className="col-sm-2 col-form-label" htmlFor="jenis_angkut">Jenis dan Nama Alat Angkut</label>
+                        <label className="col-sm-3 col-form-label" htmlFor="nomor_tlp">No. Telepon</label>
+                        <div className="col-sm-9">
+                            <input type="text" id="nomor_tlp" className="form-control form-control-sm" placeholder="No. Telepon" />
+                        </div>
+                    </div>
+                    <div className="row mb-3">
+                        <label className="col-sm-3 col-form-label" htmlFor="email_pemilik">Email</label>
+                        <div className="col-sm-9">
+                            <input type="text" id="email_pemilik" className="form-control form-control-sm" placeholder="Email" />
+                        </div>
+                    </div>
+                    <hr className="my-4 mx-n4" />
+                    <h5 className="mb-3 fw-normal">INFO PERMOHONAN PERPANJANGAN</h5>
+                    <div className="row mb-3">
+                        <label className="col-sm-3 col-form-label" htmlFor="tanggal_mohon">Tanggal pemasukan/pengeluaran**)</label>
+                        <div className="col-sm-9">
+                            <input type="text" id="tanggal_mohon" className="form-control form-control-sm" placeholder="Tanggal pemasukan/pengeluaran" />
+                        </div>
+                    </div>
+                    <div className="row mb-3">
+                        <label className="col-sm-3 col-form-label" htmlFor="jenis_angkut">Jenis dan Nama Alat Angkut</label>
                         <div className="col-sm-4">
-                            <input type="text" id="jenis_angkut" className="form-control form-control-sm" placeholder="Jenis Alat Angkut" disabled />
+                            <input type="text" id="jenis_angkut" className="form-control form-control-sm" placeholder="Jenis Alat Angkut" />
                         </div>
-                        <div className="col-sm-6">
-                            <input type="text" id="nama_angkut" className="form-control form-control-sm" placeholder="Nama Alat Angkut" disabled />
+                        <div className="col-sm-5">
+                            <input type="text" id="nama_angkut" className="form-control form-control-sm" placeholder="Nama Alat Angkut" />
                         </div>
                     </div>
                     <hr className="my-4 mx-n4" />
@@ -75,8 +81,7 @@ function DocK75() {
                         </div>
                     </div>
                     <center>
-                        <button type="button" className="btn btn-label-success">Setujui</button>
-                        <button type="button" className="btn btn-label-danger">Tolak</button>
+                        <button type="button" className="btn btn-label-primary">Simpan</button>
                     </center>
                 </form>
             </div>

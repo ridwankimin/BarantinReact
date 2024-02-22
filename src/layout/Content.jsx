@@ -16,7 +16,7 @@ import DocK63 from '../pages/penahanan/DocK63';
 import DocK71 from '../pages/penolakan/DocK71';
 import DocK72 from '../pages/penolakan/DocK72';
 import DocK73 from '../pages/penolakan/DocK73';
-import DocK74 from '../pages/penolakan/DocK76';
+import DocK74 from '../pages/penolakan/DocK74';
 // import DocK75 from '../pages/penolakan/DocK75';
 // import DocK76 from '../pages/penolakan/DocK76';
 import DocK81 from '../pages/pemusnahan/DocK81';

@@ -935,20 +935,20 @@ function DocK63() {
                                                 <div className='row'>
                                                     <label className="col-sm-3 col-form-label" htmlFor="masaPenahanan">Masa Penahanan</label>
                                                     <div className='col-sm-8'>
-                                                        <div class="input-group input-group-sm">
+                                                        <div className="input-group input-group-sm">
                                                             <input
                                                             type="date"
                                                             name='tglTahanMulai'
                                                             id='tglTahanMulai'
-                                                            class="form-control form-control-sm"
+                                                            className="form-control form-control-sm"
                                                             {...register("tglTahanMulai")}
                                                             />
-                                                            <span class="input-group-text">s/d</span>
+                                                            <span className="input-group-text">s/d</span>
                                                             <input
                                                             type="date"
                                                             name='tglTahanSelesai'
                                                             id='tglTahanSelesai'
-                                                            class="form-control form-control-sm"
+                                                            className="form-control form-control-sm"
                                                             {...register("tglTahanSelesai")}
                                                             />
                                                         </div>

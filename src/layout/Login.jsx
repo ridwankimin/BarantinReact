@@ -1,46 +1,55 @@
+/* eslint-disable eqeqeq */
 import Cookies from 'js-cookie'
 import React, { useState } from 'react'
 import logbar from '../logo/barantinb.jpeg'
 import UserDummy from '../model/master/userDummy.json'
-// import { useNavigate } from 'react-router-dom';
+import Swal from 'sweetalert2'
+import LogoBarantin from '../assets/logo/logo_barantin.png'
 
 function setLoginUser(e) {
-        return UserDummy.find((element) => element.username === e)
+    return UserDummy.find((element) => element.username === e)
 }
 
 function Login() {
     require('./styleLogin.css')
-    // let navigate = useNavigate();
     let [user, setUser] = useState("")
     let [password, setPassword] = useState("")
     
     const handleFormLogin = (e) => {
         e.preventDefault();
         const dataUser = setLoginUser(user)
-        // console.log(dataUser.nama_upt)
-        // console.log(user + password)
-        // alert("user :" + user)
-        Cookies.set("isLogin", true, {
-            expires: 1,
-        });
-
-        Cookies.set("userId", dataUser.id);
-        Cookies.set("uptId", dataUser.id_upt);
-        Cookies.set("kodeSatpel", dataUser.kode_satpel);
-        Cookies.set("namaUpt", dataUser.nama_upt);
-        Cookies.set("namaSatpel", dataUser.nama_satpel);
-
-        // alert('A name was submitted: ' + this.state.value);
-        alert("login berhasil")
-        window.location.reload();
-        // navigate("/")
+        if(dataUser == undefined) {
+            Swal.fire({
+                title: "Login gagal!",
+                text: "Username tidak ada, mohon cek username anda.",
+                icon: "error"
+            });
+        } else {
+            Cookies.set("isLogin", true, {
+                expires: 1,
+            });
+    
+            Cookies.set("userId", dataUser.id);
+            Cookies.set("uptId", dataUser.id_upt);
+            Cookies.set("kodeSatpel", dataUser.kode_satpel);
+            Cookies.set("namaUpt", dataUser.nama_upt);
+            Cookies.set("namaSatpel", dataUser.nama_satpel);
+    
+            Swal.fire({
+                title: "Login berhasil!",
+                icon: "success"
+            });
+            setTimeout(() => {
+                window.location.reload();
+            }, 1000)
+        }
     }
   return (
     <div className="form-bg">
         <div className="container">
             <div className="row">
                 <center>
-                    <img style={{marginTop: "5%"}} src="http://qsdm.karantina.pertanian.go.id/q-dashboard/templates/img/logo_barantin.png" alt="BARANTIN" width="100px" />
+                    <img style={{marginTop: "5%"}} src={LogoBarantin} alt="BARANTIN" width="100px" />
                 </center>
                 <center>
                     <div className="col-md-offset-4 col-md-4 col-sm-offset-3 col-sm-6">

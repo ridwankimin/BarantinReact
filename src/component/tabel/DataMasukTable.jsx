@@ -2,8 +2,9 @@ import React, { useCallback, useEffect, useMemo, useState } from 'react'
 import DataTable from 'react-data-table-component'
 import PtkModel from '../../model/PtkModel'
 import { useNavigate } from 'react-router-dom'
-import {decode as base64_decode, encode as base64_encode} from 'base-64'
+import {encode as base64_encode} from 'base-64'
 import Cookies from 'js-cookie'
+import Swal from 'sweetalert2'
 
 const tableCustomStyles = {
     headCells: {
@@ -222,24 +223,51 @@ function DataMasukTable(props) {
 	}, [filterText]);
 
     function handleClick(e) {
-        if (window.confirm('Anda memilih No AJU ' + e.selectedRows[0].noAju)) {
-            // alert(e.selectedRows[0].noAju)
-            Cookies.set("idPtkPage", base64_encode(base64_encode(e.selectedRows[0].noAju) + 'm0R3N0r1R' + base64_encode(e.selectedRows[0].idPtk) + "m0R3N0r1R"  + base64_encode(e.selectedRows[0].noDokumen)), {
-                expires: 3,
+        if(e.selectedCount === 1) {
+            Swal.fire({
+                title: "Yakin?",
+                text: "Anda memilih No AJU " + e.selectedRows[0].noAju,
+                icon: "warning",
+                showCancelButton: true,
+                confirmButtonColor: "#086b06",
+                cancelButtonColor: "#d33",
+                confirmButtonText: "Ya!"
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    Cookies.set("idPtkPage", base64_encode(base64_encode(e.selectedRows[0].noAju) + 'm0R3N0r1R' + base64_encode(e.selectedRows[0].idPtk) + "m0R3N0r1R"  + base64_encode(e.selectedRows[0].noDokumen)), {
+                        expires: 3,
+                    });
+                    Cookies.set("tglPtk", e.selectedRows[0].tglDokumen, {
+                        expires: 3
+                    });
+                    Cookies.set("jenisKarantina", (e.selectedRows[0].karantina === "Tumbuhan" ? "T" : (e.selectedRows[0].karantina === "Hewan" ? "H" : "I")), {
+                        expires: 3
+                    });
+                    Cookies.set("jenisForm", "PTK", {
+                        expires: 3
+                    });
+                    navigate('/k11')
+                }
             });
-            Cookies.set("tglPtk", e.selectedRows[0].tglDokumen, {
-                expires: 3
-            });
-            Cookies.set("jenisKarantina", (e.selectedRows[0].karantina === "Tumbuhan" ? "T" : (e.selectedRows[0].karantina === "Hewan" ? "H" : "I")), {
-                expires: 3
-            });
-            Cookies.set("jenisForm", "PTK", {
-                expires: 3
-            });
-            navigate('/k11')
-            // navigate('/k11/' + base64_encode(base64_encode(e.selectedRows[0].noAju) + 'm0R3N0r1R' + base64_encode(e.selectedRows[0].idPtk) + "m0R3N0r1R"  + base64_encode(e.selectedRows[0].noDokumen)))
         }
-        console.log(e)
+        // if (window.confirm('Anda memilih No AJU ' + e.selectedRows[0].noAju)) {
+        //     // alert(e.selectedRows[0].noAju)
+        //     Cookies.set("idPtkPage", base64_encode(base64_encode(e.selectedRows[0].noAju) + 'm0R3N0r1R' + base64_encode(e.selectedRows[0].idPtk) + "m0R3N0r1R"  + base64_encode(e.selectedRows[0].noDokumen)), {
+        //         expires: 3,
+        //     });
+        //     Cookies.set("tglPtk", e.selectedRows[0].tglDokumen, {
+        //         expires: 3
+        //     });
+        //     Cookies.set("jenisKarantina", (e.selectedRows[0].karantina === "Tumbuhan" ? "T" : (e.selectedRows[0].karantina === "Hewan" ? "H" : "I")), {
+        //         expires: 3
+        //     });
+        //     Cookies.set("jenisForm", "PTK", {
+        //         expires: 3
+        //     });
+        //     navigate('/k11')
+        //     // navigate('/k11/' + base64_encode(base64_encode(e.selectedRows[0].noAju) + 'm0R3N0r1R' + base64_encode(e.selectedRows[0].idPtk) + "m0R3N0r1R"  + base64_encode(e.selectedRows[0].noDokumen)))
+        // }
+        // console.log(e)
     }
 
   return (
@@ -262,6 +290,7 @@ function DataMasukTable(props) {
                 responsive
                 striped
                 subHeader
+                clearSelectedRows
 			    subHeaderComponent={subHeaderComponentMemo}
 			    // persistTableHead
             />

@@ -32,7 +32,7 @@ export default class PtkModel {
       let datasend = {
             "id": uuid,
             // "tab": data.tabWizard,
-            "no_aju": '0100' + data.permohonan + date.getFullYear() + (date.getMonth() < 9 ? "0" + (date.getMonth() + 1) : date.getMonth())+ (date.getDate() < 10 ? "0" + date.getDate() : date.getDate()) + (date.getHours() < 10 ? "0" + date.getHours() : date.getHours()) + (date.getMinutes() < 10 ? "0" + date.getMinutes() : date.getMinutes()) + (date.getSeconds() <10 ? "0" + date.getSeconds() : date.getSeconds()) + makeid(5),
+            "no_aju": Cookies.get("kodeSatpel") + data.permohonan + date.getFullYear() + (date.getMonth() < 9 ? "0" + (date.getMonth() + 1) : date.getMonth())+ (date.getDate() < 10 ? "0" + date.getDate() : date.getDate()) + (date.getHours() < 10 ? "0" + date.getHours() : date.getHours()) + (date.getMinutes() < 10 ? "0" + date.getMinutes() : date.getMinutes()) + (date.getSeconds() <10 ? "0" + date.getSeconds() : date.getSeconds()) + makeid(5),
             // 'tgl_aju' => $data['tgl_aju'],
             "jenis_dokumen": data.jenisForm,
             "is_guest": data.pJRutin, //ok           // pemohon rutin/guest: 0,1
@@ -183,7 +183,7 @@ export default class PtkModel {
             "jenis_permohonan": input.jenisPermohonan, //EX, IM dst
             "jenis_karantina": input.jenisKarantina, // H, I, T
             "jenis_dokumen": input.jenisDokumen, // PTK, NHI, BST
-            'user_id': Cookies.get("userId"), // PAKE SESSION
+            'upt_id': Cookies.get("uptId"), // PAKE SESSION
             "kode_wilker": Cookies.get("kodeSatpel") // PAKE SESSION
         }
 
@@ -424,32 +424,32 @@ export default class PtkModel {
       return axios.request(config)
     }
     
-    pushKomoditi(data) {
+    pushKomoditi(data, jenisKar) {
       const uuid = uuidv4();
       let datasend = {
             'id': data.idDetilMP ? data.idDetilMP : uuid,
             'ptk_id': data.idPtk,
-            'klasifikasi_id': (data.jenisKar === "T" ? data.peruntukanMP : (data.jenisKar === "H" ? "1" : (data.jenisKar === "I" ? "" : ""))),
-            // 'klasifikasi_id': (data.jenisKar === "T" ? data.peruntukanMP : (data.jenisKar === "H" ? data.klasifikasiMPKHid : (data.jenisKar === "I" ? "" : ""))),
-            'komoditas_id': (data.jenisKar === "T" ? data.komoditasMP : (data.jenisKar === "H" ? data.komoditasMPKHid : (data.jenisKar === "I" ? "" : ""))),
-            'nama_umum_tercetak': (data.jenisKar === "T" ? data.namaUmum : (data.jenisKar === "H" ? data.namaUmumKH : (data.jenisKar === "I" ? "" : ""))),
-            'nama_latin_tercetak': (data.jenisKar === "T" ? data.namaLatin : (data.jenisKar === "H" ? data.namaLatinKH : (data.jenisKar === "I" ? "" : ""))),
-            'kode_hs': (data.jenisKar === "T" ? data.kodeHSMp : (data.jenisKar === "H" ? data.kodeHSMpKH : (data.jenisKar === "I" ? "" : ""))),
+            'klasifikasi_id': (jenisKar === "T" ? data.peruntukanMP : (jenisKar === "H" ? "1" : (jenisKar === "I" ? "" : ""))),
+            // 'klasifikasi_id': (jenisKar === "T" ? data.peruntukanMP : (jenisKar === "H" ? data.klasifikasiMPKHid : (jenisKar === "I" ? "" : ""))),
+            'komoditas_id': (jenisKar === "T" ? data.komoditasMP : (jenisKar === "H" ? data.komoditasMPKHid : (jenisKar === "I" ? "" : ""))),
+            'nama_umum_tercetak': (jenisKar === "T" ? data.namaUmum : (jenisKar === "H" ? data.namaUmumKH : (jenisKar === "I" ? "" : ""))),
+            'nama_latin_tercetak': (jenisKar === "T" ? data.namaLatin : (jenisKar === "H" ? data.namaLatinKH : (jenisKar === "I" ? "" : ""))),
+            'kode_hs': (jenisKar === "T" ? data.kodeHSMp : (jenisKar === "H" ? data.kodeHSMpKH : (jenisKar === "I" ? "" : ""))),
             'jantan': data.jantan,
             'betina': data.betina,
-            'volume_bruto': (data.jenisKar === "T" ? data.volumeBrutto : (data.jenisKar === "H" ? data.brutoMP : (data.jenisKar === "I" ? "" : ""))),
+            'volume_bruto': (jenisKar === "T" ? data.volumeBrutto : (jenisKar === "H" ? data.brutoMP : (jenisKar === "I" ? "" : ""))),
             'satuan_bruto_id': 1356,
-            'volume_netto': (data.jenisKar === "T" ? data.volumeNetto : (data.jenisKar === "H" ? data.nettoMP : (data.jenisKar === "I" ? "" : ""))),
+            'volume_netto': (jenisKar === "T" ? data.volumeNetto : (jenisKar === "H" ? data.nettoMP : (jenisKar === "I" ? "" : ""))),
             'satuan_netto_id': 1356,
-            'volume_lain': (data.jenisKar === "T" ? data.volumeLain : (data.jenisKar === "H" ? data.jumlahMP : (data.jenisKar === "I" ? "" : ""))),
-            'satuan_lain_id': (data.jenisKar === "T" ? data.satuanLain : (data.jenisKar === "H" ? data.satJumlahMP : (data.jenisKar === "I" ? "" : ""))),
+            'volume_lain': (jenisKar === "T" ? data.volumeLain : (jenisKar === "H" ? data.jumlahMP : (jenisKar === "I" ? "" : ""))),
+            'satuan_lain_id': (jenisKar === "T" ? data.satuanLain : (jenisKar === "H" ? data.satJumlahMP : (jenisKar === "I" ? "" : ""))),
             'kemasan_id': data.satuanKemasanDetil,
             'keterangan': data.breedMP,
             'jumlah_kemasan': data.jumlahKemasanDetil,
-            'harga': (data.jenisKar === "T" ? data.nilaiBarangMP : (data.jenisKar === "H" ? data.nilaiBarangMPKH : (data.jenisKar === "I" ? "" : ""))),
-            'mata_uang': (data.jenisKar === "T" ? data.satuanNilaiMP : (data.jenisKar === "H" ? data.satuanNilaiMPKH : (data.jenisKar === "I" ? "" : ""))),
+            'harga': (jenisKar === "T" ? data.nilaiBarangMP : (jenisKar === "H" ? data.nilaiBarangMPKH : (jenisKar === "I" ? "" : ""))),
+            'mata_uang': (jenisKar === "T" ? data.satuanNilaiMP : (jenisKar === "H" ? data.satuanNilaiMPKH : (jenisKar === "I" ? "" : ""))),
             'kurs': "14500", // dari API curs
-            'harga_rp': (data.jenisKar === "T" ? (data.satuanNilaiMP === "IDR" ? data.nilaiBarangMP : (data.nilaiBarangMP *14500)) : (data.jenisKar === "H" ? (data.satuanNilaiMPKH === "IDR" ? data.nilaiBarangMPKH : (data.nilaiBarangMPKH * 14500)) : (data.jenisKar === "I" ? "" : ""))), // konversi inputan ke RP (Jika mata_uang <> 'IDR'>)
+            'harga_rp': (jenisKar === "T" ? (data.satuanNilaiMP === "IDR" ? data.nilaiBarangMP : (data.nilaiBarangMP *14500)) : (jenisKar === "H" ? (data.satuanNilaiMPKH === "IDR" ? data.nilaiBarangMPKH : (data.nilaiBarangMPKH * 14500)) : (jenisKar === "I" ? "" : ""))), // konversi inputan ke RP (Jika mata_uang <> 'IDR'>)
             'created_at': dateNow(),
             'tindakan': ""
       };

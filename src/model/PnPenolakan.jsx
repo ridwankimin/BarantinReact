@@ -28,7 +28,7 @@ export default class PnPenolakan {
             'dokumen_karantina_id': "29",
             'ptk_surat_tugas_id': data.idSurtug,
             'pn_penolakan_id': "",
-            'kepada': data.namaPemilik,
+            'kepada': "",
             'nomor': data.noDokumen.replace("K.1.1", "K.7.1"),
             'tanggal': data.tglDok71,
             'alasan1': data.alasanTolak1,
@@ -45,6 +45,7 @@ export default class PnPenolakan {
             'diwajibkan3': data.diwajibkan3,
             'diwajibkan4': data.diwajibkan4,
             'rekomendasi_id': "",
+            'information': "",
             'diterbitkan_di': data.diterbitkan,
             'user_ttd_id': data.ttdPutusan,
             // 'is_attachment': data.isAttach,
@@ -95,7 +96,7 @@ export default class PnPenolakan {
             'dokumen_karantina_id': "30",
             'ptk_surat_tugas_id': data.idSurtug,
             'pn_penolakan_id': data.idDok71,
-            'kepada': data.namaPemilik,
+            'kepada': "",
             'nomor': data.noDokumen.replace("K.1.1", "K.7.2"),
             'tanggal': data.tglDok72,
             'alasan1': "",
@@ -112,6 +113,7 @@ export default class PnPenolakan {
             'diwajibkan3': "",
             'diwajibkan4': "",
             'rekomendasi_id': "",
+            'information': "",
             'diterbitkan_di': data.diterbitkan,
             'user_ttd_id': data.ttdPutusan,
             // 'is_attachment': data.isAttach,
@@ -171,6 +173,7 @@ export default class PnPenolakan {
             'user_ttd_id': data.ttdPutusan,
             // 'is_attachment': data.isAttach,
             'tembusan': "",
+            'information': "",
             // 'otoritas_pelabuhan': data.otban,
             // 'kepala_kantor_bc': data.kaBc,
             // 'nama_pengelola': data.namaPengelola,
@@ -204,8 +207,8 @@ export default class PnPenolakan {
             'ptk_id': data.idPtk,
             'dokumen_karantina_id': "32",
             'ptk_surat_tugas_id': data.idSurtug,
-            'pn_penolakan_id': data.idDok71,
-            'kepada': "",
+            'pn_penolakan_id': "",
+            'kepada': data.toNPPO,
             'nomor': data.noDokumen.replace("K.1.1", "K.7.4"),
             'tanggal': data.tglDok74,
             'alasan1': "",
@@ -221,33 +224,39 @@ export default class PnPenolakan {
             'diwajibkan2': "",
             'diwajibkan3': "",
             'diwajibkan4': "",
-            'rekomendasi_id': "",
+            'specify1': data.nnc1 === "1" ? data.textNnc1 : "",
+            'specify2': data.nnc2 === "1" ? data.textNnc2 : "",
+            'specify3': data.nnc3 === "1" ? data.textNnc3 : "",
+            'specify4': data.nnc4 === "1" ? data.textNnc4 : "",
+            'specify5': data.nnc5 === "1" ? data.textNnc5 : "",
+            'rekomendasi_id': data.rekomendasi,
             'diterbitkan_di': data.diterbitkan,
             'user_ttd_id': data.ttdPutusan,
-            // 'is_attachment': data.isAttach,
+            'is_attachment': data.isAttach,
             'tembusan': "",
+            'information': "",
             // 'otoritas_pelabuhan': data.otban,
             // 'kepala_kantor_bc': data.kaBc,
             // 'nama_pengelola': data.namaPengelola,
             'permohonan_perpanjangan_id': "",
             'status_perpanjangan': "",
             'tgl_dikeluarkan': "",
-            'consignment': data.consignment,
+            'consignment': data.entirePartial,
             'consignment_detil': data.consignmentDetil,
             'user_id': Cookies.get("userId"), // session
             'saksi': ""
         }
         let config = {
-        method: data.idDok73 === '' ? 'post' : 'put',
+        method: data.idDok74 === '' ? 'post' : 'put',
         maxBodyLength: Infinity,
-        url: url + (data.idDok73 === '' ? 'pn-tolak' : 'pn-tolak/' + data.idDok73),
+        url: url + (data.idDok74 === '' ? 'pn-tolak' : 'pn-tolak/' + data.idDok74),
         // url: url + 'pn-adm',
         headers: { 
             'Content-Type': 'application/json', 
         },
         data: datasend
         };
-        // console.log("dok 61: " + JSON.stringify(config))
+        console.log("dok 74: " + JSON.stringify(config))
         return axios.request(config)
     }
 }
