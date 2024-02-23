@@ -25,27 +25,36 @@ function Login() {
                 icon: "error"
             });
         } else {
-            Cookies.set("isLogin", true, {
-                expires: 1,
-            });
-    
-            Cookies.set("userId", dataUser.id);
-            Cookies.set("uptId", dataUser.id_upt);
-            Cookies.set("kodeSatpel", dataUser.kode_satpel);
-            Cookies.set("namaUpt", dataUser.nama_upt);
-            Cookies.set("namaSatpel", dataUser.nama_satpel);
-    
-            Swal.fire({
-                title: "Login berhasil!",
-                icon: "success"
-            });
-            setTimeout(() => {
-                window.location.reload();
-            }, 1000)
+            if(password == "admin@123!") {
+                Cookies.set("isLogin", true, {
+                    expires: 1,
+                });
+        
+                Cookies.set("userId", dataUser.id, {expires: 7});
+                Cookies.set("uptId", dataUser.id_upt, {expires: 7});
+                Cookies.set("username", dataUser.username, {expires: 7});
+                Cookies.set("kodeSatpel", dataUser.kode_satpel, {expires: 7});
+                Cookies.set("namaUpt", dataUser.nama_upt, {expires: 7});
+                Cookies.set("namaSatpel", dataUser.nama_satpel, {expires: 7});
+        
+                Swal.fire({
+                    title: "Login berhasil!",
+                    icon: "success"
+                });
+                setTimeout(() => {
+                    window.location.reload();
+                }, 1000)
+            } else {
+                Swal.fire({
+                    title: "Login gagal!",
+                    text: "Password salah.",
+                    icon: "error"
+                });
+            }
         }
     }
   return (
-    <div className="form-bg">
+    <div className='form-bg'>
         <div className="container">
             <div className="row">
                 <center>
@@ -59,11 +68,11 @@ function Login() {
                                 <h3 className="title">Silahkan login untuk memulai aplikasi</h3>
                                 <div className="form-group">
                                     <span className="input-icon"><i className="fa fa-user"></i></span>
-                                    <input className="form-control" value={user} onChange={(e) => setUser(e.target.value)} type="text" name="username" id="username" placeholder="Username" required />
+                                    <input className="form-control" value={user} onChange={(e) => setUser(e.target.value)} type="text" name="username" id="username" placeholder="Username" autoComplete="off" required />
                                 </div>
                                 <div className="form-group">
                                     <span className="input-icon"><i className="fa fa-lock"></i></span>
-                                    <input className="form-control" value={password} onChange={(e) => setPassword(e.target.value)} type="password" name="password" id="password" placeholder="Password" required />
+                                    <input className="form-control" value={password} onChange={(e) => setPassword(e.target.value)} type="password" name="password" id="password" placeholder="Password" autoComplete="off" required />
                                 </div>
                                 <button type="submit" className="btn signin">Log in</button>
                             </form>

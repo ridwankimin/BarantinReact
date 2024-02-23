@@ -1,5 +1,13 @@
-body{
-    background-image: url('../logo/bgblur.jpg');
+/* body{ */
+    /* background-image: url("file://./images/your_image"); */
+    /* background-image: url('../logo/bgblur.jpg'); */
+    /* background-repeat: no-repeat;
+    background-size: cover; */
+/* } */
+.form-bg {
+    background: url("../logo/bgblur.jpg");
+    height: 100vh;
+    background-position: center;
     background-repeat: no-repeat;
     background-size: cover;
 }

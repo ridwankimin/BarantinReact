@@ -1,3 +1,4 @@
+/* eslint-disable jsx-a11y/anchor-is-valid */
 import Cookies from 'js-cookie';
 import React, { useEffect, useState } from 'react'
 import PnPerlakuan from '../../model/PnPerlakuan';
@@ -416,7 +417,7 @@ function DocK53() {
         <div className="col-xxl">
             <div className="card card-action mb-4">
                 <div className="card-header mb-2 p-2" style={{backgroundColor: '#123138'}}>
-                    <div className="card-action-title">
+                    <div className="card-action-title text-lightest">
                         <div className='row'>
                             <label className="col-sm-1 col-form-label text-sm-end" htmlFor="noDok"><b>No PTK</b></label>
                             <div className="col-sm-3">

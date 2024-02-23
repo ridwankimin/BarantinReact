@@ -1,6 +1,6 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
 import Cookies from 'js-cookie';
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import PtkHistory from '../../model/PtkHistory';
 import PtkModel from '../../model/PtkModel';
 import PnPemusnahan from '../../model/PnPemusnahan';
@@ -121,11 +121,11 @@ function DocK82() {
         register,
         setValue,
         handleSubmit,
-        watch,
+        // watch,
         formState: { errors },
     } = useForm();
 
-    const cekWatch = watch()
+    // const cekWatch = watch()
 
     const onSubmit = (data) => {
         const response = modelPemusnahan.simpan82(data, arraySaksi);
@@ -166,7 +166,7 @@ function DocK82() {
         // control: controlMPk82,
         watch: watchMPk82,
         handleSubmit: handleFormMPk82,
-        reset: resetFormKomoditikh1,
+        // reset: resetFormKomoditikh1,
         formState: { errors: errorsMPk82 },
     } = useForm({
         defaultValues: {

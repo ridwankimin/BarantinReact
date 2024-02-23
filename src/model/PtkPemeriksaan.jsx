@@ -136,16 +136,33 @@ export default class PtkPemeriksaan {
         return axios.request(config)
     }
     
-    pnBongkar(data) {
+    getPnBongkar(id) {
+      let config = {
+          // method: 'post',
+          method: 'get',
+          maxBodyLength: Infinity,
+          url: url + 'pn-bongkar/' + id,
+          headers: { 
+            'Content-Type': 'application/json', 
+          },
+        };
+        
+        return axios.request(config)
+    }
+
+    pnBongkar31(data) {
       const uuid = uuidv4();
       let datasend = {
-        'id': uuid,
+        'id': data.idDok31 === '' ? uuid : data.idDok31,
         'ptk_id': data.idPtk,
-        // 'ptk_analisis_id': data.idAnalis,
-        'ptk_analisis_id': "123",
+        'dokumen_karantina_id': "9",
         'nomor': data.noDokumen.replace("K.1.1", "K.3.1"),
         'tanggal': data.tglDok31,
-        'setuju_bongkar': data.putusanBongkar,
+        'is_lengkap': "",
+        'is_sah': "",
+        'is_benar': "",
+        'setuju_bongkar_muat': data.putusanBongkar,
+        'keterangan': "",
         'user_ttd_id': data.ttdPutusan,
         'user_id': Cookies.get("userId"), // session
       }       
@@ -154,6 +171,97 @@ export default class PtkPemeriksaan {
           method: data.idDok31 === '' ? 'post' : 'put',
           maxBodyLength: Infinity,
           url: url + (data.idDok31 === '' ? 'pn-bongkar' : 'pn-bongkar/' + data.idDok31),
+          headers: { 
+            'Content-Type': 'application/json', 
+          },
+          data: datasend
+        };
+        console.log(JSON.stringify(datasend))
+        
+        return axios.request(config)
+    }
+    
+    pnBongkar32(data) {
+      const uuid = uuidv4();
+
+      let datasend = {
+        'id': data.idDok32 === '' ? uuid : data.idDok32,
+        'ptk_id': data.idPtk,
+        'dokumen_karantina_id': "10",
+        'nomor': data.noDokumen.replace("K.1.1", "K.3.2"),
+        'tanggal': data.tglDok32,
+        'is_lengkap': data.isLengkap,
+        'is_sah': data.isSah,
+        'is_benar': data.isBenar,
+        'setuju_bongkar_muat': data.putusanBongkar,
+        'keterangan': data.keterangan,
+        'user_ttd_id': data.ttdPutusan,
+        'user_id': Cookies.get("userId"), // session
+      }       
+      let config = {
+        // method: 'post',
+          method: data.idDok32 === '' ? 'post' : 'put',
+          maxBodyLength: Infinity,
+          url: url + (data.idDok32 === '' ? 'pn-bongkar' : 'pn-bongkar/' + data.idDok32),
+          headers: { 
+            'Content-Type': 'application/json', 
+          },
+          data: datasend
+        };
+        console.log(JSON.stringify(datasend))
+        
+        return axios.request(config)
+    }
+
+    pnSampling(data) {
+      const uuid = uuidv4();
+
+      const detilSampling = {
+        id: "",
+        pn_ba_contoh_id: "",
+        ptk_komoditas_id: "",
+        kode_contoh: "",
+        jumlah_contoh: "",
+        identitas_contoh: "",
+        kondisi_contoh: "",
+        suhu_contoh: "",
+        nomor_kontainer: "",
+        keterangan: ""
+      }
+      
+      let datasend = {
+        'id': data.idDok33 === '' ? uuid : data.idDok33,
+        'ptk_id': data.idPtk,
+        'ptk_surat_tugas_id': data.idSurtug,
+        'nomor': data.noDokumen.replace("K.1.1", "K.3.2"),
+        'tanggal': data.tglDok33,
+        'lokasi_mp': data.lokasiMP,
+        'tgl_sampling': data.tglSampling,
+        'norek_ppc': data.noRegistrasi,
+        'tujuan1': data.tujuan1,
+        'tujuan2': data.tujuan2,
+        'tujuan3': data.tujuan3,
+        'tujuan4': data.tujuan4,
+        'tujuan5': data.tujuan5,
+        'tujuan6': data.tujuan6,
+        'tujuan7': data.tujuan7,
+        'tujuan8': data.tujuan8,
+        'tujuan9': data.tujuan9,
+        'tujuan10': data.tujuan10,
+        'tujuan11': data.tujuan11,
+        'tujuan12': data.tujuan12,
+        'catatan': data.catatan,
+        'nama_pemilik': data.namapemilik,
+        'nik_pemilik': data.nikPemilik,
+        'user_ttd_id': data.ttdPutusan,
+        'user_id': Cookies.get("userId"), // session
+        'sampling_detil': detilSampling
+      }       
+      let config = {
+          // method: 'post',
+          method: data.idDok33 === '' ? 'post' : 'put',
+          maxBodyLength: Infinity,
+          url: url + (data.idDok33 === '' ? 'pn-sampling' : 'pn-sampling/' + data.idDok33),
           headers: { 
             'Content-Type': 'application/json', 
           },

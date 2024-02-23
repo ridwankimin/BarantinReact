@@ -367,4 +367,103 @@
 "nama_upt":"Balai Karantina Hewan, Ikan dan Tumbuhan Papua Barat Daya ",
 "nama_satpel":"UPT Induk",
 "username":"pbd"
+},
+{ 
+"id":42,
+"id_upt":1,
+"kode_upt":"00",
+"kode_satpel":"0000",
+"nama_upt":"Kantor Pusat",
+"nama_satpel":"UPT Induk",
+"username":"ichwandi"
+},
+{ 
+"id":43,
+"id_upt":1,
+"kode_upt":"00",
+"kode_satpel":"0000",
+"nama_upt":"Kantor Pusat",
+"nama_satpel":"UPT Induk",
+"username":"lmahandry"
+},
+{ 
+"id":44,
+"id_upt":1,
+"kode_upt":"00",
+"kode_satpel":"0000",
+"nama_upt":"Kantor Pusat",
+"nama_satpel":"UPT Induk",
+"username":"suryak"
+},
+{ 
+"id":45,
+"id_upt":1,
+"kode_upt":"00",
+"kode_satpel":"0000",
+"nama_upt":"Kantor Pusat",
+"nama_satpel":"UPT Induk",
+"username":"mnurman"
+},
+{ 
+"id":46,
+"id_upt":1,
+"kode_upt":"00",
+"kode_satpel":"0000",
+"nama_upt":"Kantor Pusat",
+"nama_satpel":"UPT Induk",
+"username":"fahmih"
+},
+{ 
+"id":47,
+"id_upt":1,
+"kode_upt":"00",
+"kode_satpel":"0000",
+"nama_upt":"Kantor Pusat",
+"nama_satpel":"UPT Induk",
+"username":"retna"
+},
+{ 
+"id":48,
+"id_upt":1,
+"kode_upt":"00",
+"kode_satpel":"0000",
+"nama_upt":"Kantor Pusat",
+"nama_satpel":"UPT Induk",
+"username":"lia"
+},
+{ 
+"id":49,
+"id_upt":1,
+"kode_upt":"00",
+"kode_satpel":"0000",
+"nama_upt":"Kantor Pusat",
+"nama_satpel":"UPT Induk",
+"username":"ibnu"
+},
+{ 
+"id":50,
+"id_upt":1,
+"kode_upt":"00",
+"kode_satpel":"0000",
+"nama_upt":"Kantor Pusat",
+"nama_satpel":"UPT Induk",
+"username":"cecilia"
+},
+{ 
+"id":51,
+"id_upt":1,
+"kode_upt":"00",
+"kode_satpel":"0000",
+"nama_upt":"Kantor Pusat",
+"nama_satpel":"UPT Induk",
+"username":"sekarw"
+},
+{ 
+"id":52,
+"id_upt":1,
+"kode_upt":"00",
+"kode_satpel":"0000",
+"nama_upt":"Kantor Pusat",
+"nama_satpel":"UPT Induk",
+"username":"ridwan"
 }]

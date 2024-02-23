@@ -1,3 +1,4 @@
+/* eslint-disable jsx-a11y/anchor-is-valid */
 import Cookies from 'js-cookie';
 import React, { useEffect } from 'react'
 import { useState } from 'react'
@@ -229,7 +230,7 @@ function DocK22() {
             <div className="col-xxl">
                 <div className="card card-action mb-4">
                     <div className="card-header mb-2 p-2" style={{backgroundColor: '#123138'}}>
-                        <div className="card-action-title">
+                        <div className="card-action-title text-lightest">
                             <div className='row'>
                                 <div className='col-md-3' style={{borderRight: '1px solid'}}>
                                     <h4 className="text-lightest">Daftar Surat Tugas</h4>

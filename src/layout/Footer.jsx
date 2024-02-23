@@ -38,7 +38,7 @@ function Footer() {
                                             </div>
                                             <div className="flex-grow-1">
                                                 <span className="fw-semibold d-block lh-1">{Cookies.get("namaUpt") ? Cookies.get("namaUpt").replace("Balai Karantina Hewan, Ikan dan Tumbuhan", "BKHIT").replace("Balai Besar Karantina Hewan, Ikan dan Tumbuhan", "BBKHIT") : ""}</span>
-                                                <small>Admin</small>
+                                                <small>{Cookies.get("username")}</small>
                                             </div>
                                         </div>
                                     </a>

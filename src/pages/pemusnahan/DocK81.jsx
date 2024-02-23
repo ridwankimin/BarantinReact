@@ -133,7 +133,7 @@ function DocK81() {
         // control: controlMPk81,
         watch: watchMPk81,
         handleSubmit: handleFormMPk81,
-        reset: resetFormKomoditikh1,
+        // reset: resetFormKomoditikh1,
         formState: { errors: errorsMPk81 },
     } = useForm({
         defaultValues: {

@@ -1,8 +1,9 @@
+/* eslint-disable jsx-a11y/anchor-is-valid */
 import React, { useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
 import PtkSurtug from '../../model/PtkSurtug';
-import {decode as base64_decode, encode as base64_encode} from 'base-64';
+import {decode as base64_decode} from 'base-64';
 import Cookies from 'js-cookie';
 import PtkPemeriksaan from '../../model/PtkPemeriksaan';
 

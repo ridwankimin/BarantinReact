@@ -62,61 +62,61 @@ import DocK37b from '../pages/pemeriksaan/DocK37b';
 function Content() {
   return (
     <BrowserRouter>
-        <Routes>
-          <Route path="/" element={<Beranda />} />
+        <Routes basename={process.env.PUBLIC_URL}>
+          <Route path={process.env.PUBLIC_URL + "/"} element={<Beranda />} />
           {/* <Route path="/k11" element={<DataDiri1 />} /> */}
-          <Route path="/datam" element={<DataMasuk />} />
-          <Route path="/k11" element={<DocK11 />} />
-          <Route path="/k11/:idPtk" element={<DocK11 />} />
-          <Route path="/k12" element={<DocK12 />} />
-          <Route path="/k13" element={<DocK13 />} />
-          <Route path="/k14" element={<DocK14 />} />
-          <Route path="/k15" element={<DocK15 />} />
-          <Route path="/k21" element={<DocK21 />} />
-          <Route path="/k22" element={<DocK22 />} />
-          <Route path="/k31" element={<DocK31 />} />
-          <Route path="/k32" element={<DocK32 />} />
-          <Route path="/k33" element={<DocK33 />} />
-          <Route path="/k34" element={<DocK34 />} />
-          <Route path="/k35" element={<DocK35 />} />
-          <Route path="/k36" element={<DocK36 />} />
-          <Route path="/k37a" element={<DocK37a />} />
-          <Route path="/k37b" element={<DocK37b />} />
-          <Route path="/k38" element={<DocK38 />} />
-          <Route path="/k39" element={<DocK39 />} />
-          <Route path="/k310" element={<DocK310 />} />
-          <Route path="/k41" element={<DocK41 />} />
-          <Route path="/k42" element={<DocK42 />} />
-          <Route path="/k51" element={<DocK51 />} />
-          <Route path="/k52" element={<DocK52 />} />
-          <Route path="/k53" element={<DocK53 />} />
-          <Route path="/k54" element={<DocK54 />} />
-          <Route path="/k55" element={<DocK55 />} />
-          <Route path="/k61" element={<DocK61 />} />
-          <Route path="/k62" element={<DocK62 />} />
-          <Route path="/k63" element={<DocK63 />} />
-          <Route path="/k71" element={<DocK71 />} />
-          <Route path="/k72" element={<DocK72 />} />
-          <Route path="/k73" element={<DocK73 />} />
-          <Route path="/k74" element={<DocK74 />} />
+          <Route path={process.env.PUBLIC_URL + "/datam"} element={<DataMasuk />} />
+          <Route path={process.env.PUBLIC_URL + "/k11"} element={<DocK11 />} />
+          {/* <Route path="/k11/:idPtk" element={<DocK11 />} /> */}
+          <Route path={process.env.PUBLIC_URL + "/k12"} element={<DocK12 />} />
+          <Route path={process.env.PUBLIC_URL + "/k13"} element={<DocK13 />} />
+          <Route path={process.env.PUBLIC_URL + "/k14"} element={<DocK14 />} />
+          <Route path={process.env.PUBLIC_URL + "/k15"} element={<DocK15 />} />
+          <Route path={process.env.PUBLIC_URL + "/k21"} element={<DocK21 />} />
+          <Route path={process.env.PUBLIC_URL + "/k22"} element={<DocK22 />} />
+          <Route path={process.env.PUBLIC_URL + "/k31"} element={<DocK31 />} />
+          <Route path={process.env.PUBLIC_URL + "/k32"} element={<DocK32 />} />
+          <Route path={process.env.PUBLIC_URL + "/k33"} element={<DocK33 />} />
+          <Route path={process.env.PUBLIC_URL + "/k34"} element={<DocK34 />} />
+          <Route path={process.env.PUBLIC_URL + "/k35"} element={<DocK35 />} />
+          <Route path={process.env.PUBLIC_URL + "/k36"} element={<DocK36 />} />
+          <Route path={process.env.PUBLIC_URL + "/k37a"} element={<DocK37a />} />
+          <Route path={process.env.PUBLIC_URL + "/k37b"} element={<DocK37b />} />
+          <Route path={process.env.PUBLIC_URL + "/k38"} element={<DocK38 />} />
+          <Route path={process.env.PUBLIC_URL + "/k39"} element={<DocK39 />} />
+          <Route path={process.env.PUBLIC_URL + "/k310"} element={<DocK310 />} />
+          <Route path={process.env.PUBLIC_URL + "/k41"} element={<DocK41 />} />
+          <Route path={process.env.PUBLIC_URL + "/k42"} element={<DocK42 />} />
+          <Route path={process.env.PUBLIC_URL + "/k51"} element={<DocK51 />} />
+          <Route path={process.env.PUBLIC_URL + "/k52"} element={<DocK52 />} />
+          <Route path={process.env.PUBLIC_URL + "/k53"} element={<DocK53 />} />
+          <Route path={process.env.PUBLIC_URL + "/k54"} element={<DocK54 />} />
+          <Route path={process.env.PUBLIC_URL + "/k55"} element={<DocK55 />} />
+          <Route path={process.env.PUBLIC_URL + "/k61"} element={<DocK61 />} />
+          <Route path={process.env.PUBLIC_URL + "/k62"} element={<DocK62 />} />
+          <Route path={process.env.PUBLIC_URL + "/k63"} element={<DocK63 />} />
+          <Route path={process.env.PUBLIC_URL + "/k71"} element={<DocK71 />} />
+          <Route path={process.env.PUBLIC_URL + "/k72"} element={<DocK72 />} />
+          <Route path={process.env.PUBLIC_URL + "/k73"} element={<DocK73 />} />
+          <Route path={process.env.PUBLIC_URL + "/k74"} element={<DocK74 />} />
           {/* <Route path="/k75" element={<DocK75 />} />
           <Route path="/k76" element={<DocK76 />} /> */}
-          <Route path="/k81" element={<DocK81 />} />
-          <Route path="/k82" element={<DocK82 />} />
-          <Route path="/k91" element={<DocK91 />} />
-          <Route path="/k92h" element={<DocK92h />} />
-          <Route path="/k92i" element={<DocK92i />} />
-          <Route path="/k92t" element={<DocK92t />} />
-          <Route path="/k93" element={<DocK93 />} />
-          <Route path="/k94" element={<DocK94 />} />
-          <Route path="/kh1" element={<DocKH1 />} />
-          <Route path="/kh2" element={<DocKH2 />} />
-          <Route path="/ki1" element={<DocKI1 />} />
-          <Route path="/ki2" element={<DocKI2 />} />
-          <Route path="/kt1" element={<DocKT1 />} />
-          <Route path="/kt2" element={<DocKT2 />} />
-          <Route path="/kt3" element={<DocKT3 />} />
-          <Route path="/kt4" element={<DocKT4 />} />
+          <Route path={process.env.PUBLIC_URL + "/k81"} element={<DocK81 />} />
+          <Route path={process.env.PUBLIC_URL + "/k82"} element={<DocK82 />} />
+          <Route path={process.env.PUBLIC_URL + "/k91"} element={<DocK91 />} />
+          <Route path={process.env.PUBLIC_URL + "/k92h"} element={<DocK92h />} />
+          <Route path={process.env.PUBLIC_URL + "/k92i"} element={<DocK92i />} />
+          <Route path={process.env.PUBLIC_URL + "/k92t"} element={<DocK92t />} />
+          <Route path={process.env.PUBLIC_URL + "/k93"} element={<DocK93 />} />
+          <Route path={process.env.PUBLIC_URL + "/k94"} element={<DocK94 />} />
+          <Route path={process.env.PUBLIC_URL + "/kh1"} element={<DocKH1 />} />
+          <Route path={process.env.PUBLIC_URL + "/kh2"} element={<DocKH2 />} />
+          <Route path={process.env.PUBLIC_URL + "/ki1"} element={<DocKI1 />} />
+          <Route path={process.env.PUBLIC_URL + "/ki2"} element={<DocKI2 />} />
+          <Route path={process.env.PUBLIC_URL + "/kt1"} element={<DocKT1 />} />
+          <Route path={process.env.PUBLIC_URL + "/kt2"} element={<DocKT2 />} />
+          <Route path={process.env.PUBLIC_URL + "/kt3"} element={<DocKT3 />} />
+          <Route path={process.env.PUBLIC_URL + "/kt4"} element={<DocKT4 />} />
         </Routes>
       </BrowserRouter>
   )

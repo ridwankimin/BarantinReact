@@ -1,9 +1,14 @@
+/* eslint-disable jsx-a11y/anchor-is-valid */
 import Cookies from 'js-cookie';
 import React, { useEffect, useState } from 'react';
 import {decode as base64_decode} from 'base-64';
 import PtkModel from '../../model/PtkModel';
 import { useForm } from 'react-hook-form';
 import PtkPemeriksaan from '../../model/PtkPemeriksaan';
+import Swal from 'sweetalert2';
+
+const modelPemohon = new PtkModel()
+const modelPeriksa = new PtkPemeriksaan()
 
 function DocK31() {
     const idPtk = Cookies.get("idPtkPage");
@@ -17,7 +22,7 @@ function DocK31() {
         register,
         setValue,
         handleSubmit,
-        watch,
+        // watch,
         formState: { errors },
     } = useForm({
         noDok31: ""
@@ -25,45 +30,54 @@ function DocK31() {
 
     const onSubmit = (data) => {
         // console.log(data)
-        const model = new PtkPemeriksaan();
-        const response = model.pnBongkar(data);
-            response
-            .then((response) => {
-                console.log(response.data)
-                if(response.data) {
-                    if(response.data.status === '201') {
-                        alert(response.data.status + " - " + response.data.message)
-                        // setValueDetilSurtug("idHeader", response.data.data.id)
-                        setValue("idDok31", response.data.data.id)
-                        setValue("noDok31", response.data.data.nomor)
-                        // setData(values => (
-                        //     {...values, 
-                        //         nomorSurtug: response.data.data.nomor,
-                        //         tglSurtug: data.tglSurtug,
-                        //     }));
-                        // dataSurtugHeader()
-                    }
+        const response = modelPeriksa.pnBongkar31(data);
+        response
+        .then((response) => {
+            // console.log(response.data)
+            if(response.data) {
+                if(response.data.status === '201') {
+                    Swal.fire({
+                        title: "Sukses!",
+                        text: "Surat Persetujuan/Penolakan Bongkar berhasil " + (data.idDok31 ? "diedit." : "disimpan."),
+                        icon: "success"
+                    });
+                    // alert(response.data.status + " - " + response.data.message)
+                    // setValueDetilSurtug("idHeader", response.data.data.id)
+                    setValue("idDok31", response.data.data.id)
+                    setValue("noDok31", response.data.data.nomor)
+                } else {
+                    Swal.fire({
+                        title: "Error!",
+                        text: response.data.status + " - " + response.data.message,
+                        icon: "error"
+                    });
                 }
-            })
-            .catch((error) => {
-                console.log(error);
-                alert(error.response.status + " - " + error.response.data.message)
+            }
+        })
+        .catch((error) => {
+            console.log(error);
+            // alert(error.response.status + " - " + error.response.data.message)
+            Swal.fire({
+                title: "Error!",
+                text: error.response.status + " - " + error.response.data.message,
+                icon: "error"
             });
+        });
     }
 
     useEffect(()=>{
         if(idPtk) {
+            setValue("tglDok31", (new Date()).toLocaleString('en-CA', { hourCycle: 'h24' }).replace(',', '').slice(0,16))
             const tglPtk = Cookies.get("tglPtk");
             let ptkDecode = idPtk ? base64_decode(idPtk) : "";
             let ptkNomor = idPtk ? ptkDecode.split('m0R3N0r1R') : "";
             
-            const modelPemohon = new PtkModel();
             const response = modelPemohon.getPtkId(base64_decode(ptkNomor[1]));
             response
             .then((response) => {
                 if(response.data.status === '200') {
-                    console.log(response.data.data)
-                    alert(response.data.message);
+                    // console.log(response.data.data)
+                    // alert(response.data.message);
                     // isiDataPtk(response)
                     setData(values => ({...values,
                         noAju: idPtk ? base64_decode(ptkNomor[0]) : "",
@@ -79,8 +93,24 @@ function DocK31() {
                 }
             })
             .catch((error) => {
-                setData()
-                console.log(error.response);
+                // setData()
+                console.log(error);
+            });
+            
+            const response31 = modelPeriksa.getPnBongkar(base64_decode(ptkNomor[1]));
+            response31
+            .then((response) => {
+                if(response.data.status === '200') {
+                    setValue("idPtk", response.data.data.id)
+                    setValue("noDok31", response.data.data.nomor)
+                    setValue("tglDok31", response.data.data.tanggal)
+                    setValue("putusanBongkar", response.data.data.setuju_bongkar_muat)
+                    setValue("ttdPutusan", response.data.data.user_ttd_id)
+                }
+            })
+            .catch((error) => {
+                // setData()
+                console.log(error);
             });
         }
     },[idPtk, setValue])
@@ -95,7 +125,7 @@ function DocK31() {
             <div className="col-xxl">
                 <div className="card card-action mb-4">
                     <div className="card-header mb-2 p-2" style={{backgroundColor: '#123138'}}>
-                        <div className="card-action-title">
+                        <div className="card-action-title text-lightest">
                             <div className='row'>
                                 <label className="col-sm-1 col-form-label text-sm-end" htmlFor="noDok"><b>No PTK</b></label>
                                 <div className="col-sm-3">
@@ -351,7 +381,7 @@ function DocK31() {
                                                     <input type="hidden" name='idDok31' {...register("idDok31")} />
                                                     <div className="col-md-12 mt-3">
                                                         <div className="row mb-3">
-                                                            <label className="col-sm-2 col-form-label text-sm-center" htmlFor="noDok31">Nomor</label>
+                                                            <label className="col-sm-2 col-form-label text-sm-center" htmlFor="noDok31">Nomor Dokumen</label>
                                                             <div className="col-sm-3">
                                                                 <input type="text" id="noDok31" name='noDok31' {...register("noDok31")} className="form-control form-control-sm" placeholder="Nomor Dok K-3.1" disabled />
                                                             </div>

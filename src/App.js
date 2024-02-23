@@ -20,6 +20,10 @@ function App() {
   // };
   // console.log(Cookies.get("token"))
   // console.log(process.env)
+  // console.log(process.env.REACT_APP_SESSION_SECRET)
+  // console.log(process.env.REACT_APP_PUBLIC_URL)
+  // console.log(process.env.PUBLIC_URL)
+  // console.log(window.location.pathname)
   return (
     <>
       {/* <Wrapper /> */}

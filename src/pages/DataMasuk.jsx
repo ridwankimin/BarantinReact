@@ -19,8 +19,8 @@ function DataMasuk() {
 
   const {
     register: registerPtk,
-    setValue: setValuePtk,
-    watch: watchPtk,
+    // setValue: setValuePtk,
+    // watch: watchPtk,
     handleSubmit: handleFormPtk,
     formState: { errors: errorsPtk }
 } = useForm({
@@ -30,7 +30,7 @@ function DataMasuk() {
   }
 })
 
-const cekdataDokumen = watchPtk();
+// const cekdataDokumen = watchPtk();
 
 const onSubmitPtk = (data) => {
   const dataMasuk = <DataMasukTable dataIn={data}/>;
