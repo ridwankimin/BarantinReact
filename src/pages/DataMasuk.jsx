@@ -115,7 +115,7 @@ function removeCookie() {
                     </div>
                     <div className="tab-content">
                       <div className="tab-pane fade show active" id="navs-justified-ppk-active" role="tabpanel">
-                        <a href='/k11' onClick={removeCookie} className='btn btn-sm btn-primary mb-3'>Tambah Baru</a>
+                        <a href={process.env.PUBLIC_URL + '/k11'} onClick={removeCookie} className='btn btn-sm btn-primary mb-3'>Tambah Baru</a>
                         <form onSubmit={handleFormPtk(onSubmitPtk)}>
                           <div className='row'>
                               <div className='col-2'>

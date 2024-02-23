@@ -4,7 +4,7 @@ import Cookies from "js-cookie";
 import { v4 as uuidv4 } from 'uuid';
 // import {decode as base64_decode, encode as base64_encode} from 'base-64';
 const date = new Date();
-const url = 'http://localhost/api-barantin/';
+const url = process.env.REACT_APP_BE_LINK;
 
 function makeid(length) {
   let result = '';

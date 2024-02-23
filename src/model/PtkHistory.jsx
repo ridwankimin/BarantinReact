@@ -1,7 +1,7 @@
 
 import axios from "axios";
 import Cookies from "js-cookie";
-const url = 'http://localhost/api-barantin/';
+const url = process.env.REACT_APP_BE_LINK;
 
 export default class PtkHistory {
   pushHistory(idPtk, statusP8, dokumen, stat) {
