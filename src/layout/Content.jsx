@@ -62,7 +62,7 @@ import DocK37b from '../pages/pemeriksaan/DocK37b';
 function Content() {
   return (
     <BrowserRouter>
-        <Routes basename={process.env.PUBLIC_URL}>
+        <Routes>
           <Route path={process.env.PUBLIC_URL + "/"} element={<Beranda />} />
           {/* <Route path="/k11" element={<DataDiri1 />} /> */}
           <Route path={process.env.PUBLIC_URL + "/datam"} element={<DataMasuk />} />

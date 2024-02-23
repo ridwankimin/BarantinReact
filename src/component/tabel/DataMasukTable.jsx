@@ -147,7 +147,8 @@ function DataMasukTable(props) {
     const getListPtk = useCallback(async () => {
         try {
             const response = await model.getPtkList(props.dataIn)
-            console.log(response.data)
+            console.log("get response")
+            console.log(response)
             if(response.data.status === '200') {
                 const dataReturn = response.data.data;
                 // setTotalRows(dataReturn.length)
@@ -197,6 +198,7 @@ function DataMasukTable(props) {
                 setDataTable(filteredItems);
             }
         } catch (error) {
+            console.log("error get")
             console.log(error)
         }
     }, [model, props.dataIn, filterText])
@@ -246,7 +248,7 @@ function DataMasukTable(props) {
                     Cookies.set("jenisForm", "PTK", {
                         expires: 3
                     });
-                    navigate('/k11')
+                    navigate(process.env.PUBLIC_URL + '/k11')
                 }
             });
         }

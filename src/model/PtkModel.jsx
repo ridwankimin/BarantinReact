@@ -196,9 +196,10 @@ export default class PtkModel {
           },
           data: datasend
         };
-        console.log(JSON.stringify(datasend))
+        // console.log(config)
         
         return axios.request(config)
+        // console.log(JSON.stringify(axios.request(config)))
       }
 
       tabPelabuhan(data) {

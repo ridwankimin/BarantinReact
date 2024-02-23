@@ -156,7 +156,7 @@ function DocK52() {
                             // isiDataPtk(response)
                         } else {
                             alert("Laporan Hasil Perlakuan belum dibuat.\nMohon buat laporan perlakuan terlebih dahulu!")
-                            navigate('/k53')
+                            navigate(process.env.PUBLIC_URL + '/k53')
                         }
                     })
                     .catch((error) => {
@@ -164,13 +164,13 @@ function DocK52() {
                         console.log(error.response);
                         if(error.response.status === 404) {
                             alert("Laporan Hasil Perlakuan belum dibuat.\nMohon buat laporan perlakuan terlebih dahulu!")
-                            navigate('/k53')
+                            navigate(process.env.PUBLIC_URL + '/k53')
                         }
                     });
                 }
                 console.log(error.response);
                 // alert("Laporan Hasil Perlakuan belum dibuat.\nMohon buat laporan perlakuan terlebih dahulu!")
-                // navigate('/k53')
+                // navigate(process.env.PUBLIC_URL + '/k53')
             });
             
             const modelPemohon = new PtkModel();

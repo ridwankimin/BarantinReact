@@ -403,7 +403,7 @@ function DocK72() {
                     if(error.response.data.status == 404) {
                         // alert("Surat Penolakan tidak ada/Belum dibuat.")
                         Swal.fire("Surat Penolakan tidak ada/Belum dibuat. Mohon buat Surat Penolakan dahulu!");
-                        navigate('/k71')
+                        navigate(process.env.PUBLIC_URL + '/k71')
                         // setData(values => ({...values,
                         //     errorPenolakan: "Surat Penolakan tidak ada/Belum dibuat.",
                         // }));

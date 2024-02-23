@@ -197,7 +197,7 @@ function DocK53() {
                 // setData()
                 console.log(error.response);
                 // alert("Laporan Hasil Perlakuan belum dibuat.\nMohon buat laporan perlakuan terlebih dahulu!")
-                // navigate('/k53')
+                // navigate(process.env.PUBLIC_URL + '/k53')
             });
 
             const modelSurtug = new PtkSurtug();
@@ -365,7 +365,7 @@ function DocK53() {
                 // setData()
                 console.log(error.response);
                 // alert("Laporan Hasil Perlakuan belum dibuat.\nMohon buat laporan perlakuan terlebih dahulu!")
-                // navigate('/k53')
+                // navigate(process.env.PUBLIC_URL + '/k53')
             });
 
             const modelSurtug = new PtkSurtug();

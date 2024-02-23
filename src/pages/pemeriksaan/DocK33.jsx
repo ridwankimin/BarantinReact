@@ -1,3 +1,4 @@
+/* eslint-disable eqeqeq */
 /* eslint-disable jsx-a11y/anchor-is-valid */
 import React, { useEffect, useState } from 'react'
 import {decode as base64_decode} from 'base-64';
@@ -7,9 +8,14 @@ import PtkPemeriksaan from '../../model/PtkPemeriksaan';
 import Swal from 'sweetalert2';
 import { useForm } from 'react-hook-form';
 import Select from 'react-select';
+import PtkSurtug from '../../model/PtkSurtug';
 
 const modelPemohon = new PtkModel()
+const modelSurtug = new PtkSurtug()
 const modelPeriksa = new PtkPemeriksaan()
+
+const addCommas = num => num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+const removeNonNumeric = num => num.toString().replace(/[^0-9.]/g, "");
 
 const customStyles = {
     control: (provided, state) => ({
@@ -52,61 +58,66 @@ function DocK33() {
     let [listDetilSampel, setListDetilSampel] = useState([])
     let [dataSelect, setDataSelect] = useState([])
 
-    let [detilSampel, setDetilSampel] = useState({
-        idDetil: "",
-        idkom: "",
-        identitas: "",
-        kode: "",
-        kondisi: "",
-        suhu: "-",
-        noKontainer: "",
-        keterangan: "",
-    })
+    let [detilSampel, setDetilSampel] = useState({})
 
     function handleDetilSampel(e) {
+        // console.log(e.label.split("|")[0]) & 
         e.preventDefault()
         setListDetilSampel([...listDetilSampel, { 
             ptk_komoditas_id: detilSampel.idkom,
-
+            nama_umum_tercetak: detilSampel.namaKom,
+            nama_latin_tercetak: detilSampel.namaLatinTC,
+            kode_contoh: detilSampel.kode,
+            kondisi_contoh: detilSampel.kondisi,
+            identitas_contoh: detilSampel.identitas,
+            jumlah_contoh: detilSampel.jumlah,
+            nomor_kontainer: detilSampel.noKontainer,
+            keterangan: detilSampel.keterangan
         }]);
          setDetilSampel(values => ({...values, 
-            idDetil: "",
             idkom: "",
-            identitas: "",
+            idkomView: "",
+            namaKom: "",
+            volKom: "",
+            satKom: "",
+            namaLatinTC: "",
             kode: "",
             kondisi: "",
-            suhu: "-",
+            identitas: "",
+            jumlah: "",
             noKontainer: "",
-            keterangan: "",
+            keterangan: ""
         }));
     }
     const {
         register,
         setValue,
         handleSubmit,
-        // watch,
+        watch,
         formState: { errors },
     } = useForm({
         noDok31: ""
     });
 
+    const cekWatch = watch()
+
     const onSubmit = (data) => {
         // console.log(data)
-        const response = modelPeriksa.pnBongkar31(data);
+        const response = modelPeriksa.pnSampling(data, listDetilSampel);
         response
         .then((response) => {
-            // console.log(response.data)
+            console.log(response.data)
             if(response.data) {
                 if(response.data.status === '201') {
                     Swal.fire({
                         title: "Sukses!",
-                        text: "Surat Persetujuan/Penolakan Bongkar berhasil " + (data.idDok31 ? "diedit." : "disimpan."),
+                        text: "Berita Acara Pengambilan Contoh berhasil " + (data.idDok33 ? "diedit." : "disimpan."),
                         icon: "success"
                     });
                     // alert(response.data.status + " - " + response.data.message)
                     // setValueDetilSurtug("idHeader", response.data.data.id)
-                    setValue("idDok31", response.data.data.id)
-                    setValue("noDok31", response.data.data.nomor)
+                    setValue("idDok33", response.data.data.id)
+                    setValue("noDok33", response.data.data.nomor)
                 } else {
                     Swal.fire({
                         title: "Error!",
@@ -127,66 +138,445 @@ function DocK33() {
         });
     }
 
+    function handleDeleteDetilSampel(e) {
+        Swal.fire({
+            title: "Anda Yakin?",
+            text: "Data akan dihapus!",
+            icon: "warning",
+            showCancelButton: true,
+            confirmButtonColor: "#3085d6",
+            cancelButtonColor: "#d33",
+            confirmButtonText: "Ya!"
+          }).then((result) => {
+            if (result.isConfirmed) {
+                const filteralist = listDetilSampel.filter((element, index) => index != e)
+                setListDetilSampel(filteralist)
+            }
+          });
+    }
+
     useEffect(()=>{
         if(idPtk) {
-            setValue("tglDok31", (new Date()).toLocaleString('en-CA', { hourCycle: 'h24' }).replace(',', '').slice(0,16))
+            setValue("tglDok33", (new Date()).toLocaleString('en-CA', { hourCycle: 'h24' }).replace(',', '').slice(0,16))
             const tglPtk = Cookies.get("tglPtk");
             let ptkDecode = idPtk ? base64_decode(idPtk) : "";
             let ptkNomor = idPtk ? ptkDecode.split('m0R3N0r1R') : "";
             
+            setData(values => ({...values,
+                noAju: idPtk ? base64_decode(ptkNomor[0]) : "",
+                noIdPtk: idPtk ? base64_decode(ptkNomor[1]) : "",
+                noDokumen: idPtk ? base64_decode(ptkNomor[2]) : "",
+                tglDokumen: tglPtk,
+            }));
+            
             const response = modelPemohon.getPtkId(base64_decode(ptkNomor[1]));
             response
             .then((response) => {
-                if(response.data.status === '200') {
-                    // console.log(response.data.data)
-                    // alert(response.data.message);
-                    // isiDataPtk(response)
+                if(typeof response.data != "string") {
                     setData(values => ({...values,
-                        noAju: idPtk ? base64_decode(ptkNomor[0]) : "",
-                        noIdPtk: idPtk ? base64_decode(ptkNomor[1]) : "",
-                        noDokumen: idPtk ? base64_decode(ptkNomor[2]) : "",
-                        tglDokumen: tglPtk,
-                        listPtk: response.data.data.ptk,
-                        listKomoditas: response.data.data.ptk_komoditi,
-                        listDokumen: response.data.data.ptk_dokumen
+                        errorPTK: ""
                     }));
-                    setValue("idPtk", base64_decode(ptkNomor[1]))
-                    setValue("noDokumen", base64_decode(ptkNomor[2]))
-                    const arraySelectKomoditi = response.data.data.ptk_komoditi.map(item => {
-                        return {
-                            value: item.id,
-                            label: item.nama_umum_tercetak + " - " + item.nama_latin_tercetak
-                        }
-                    })
-                    setDataSelect(values => ({...values, komoditas: arraySelectKomoditi }));
+                    if(response.data.status === '200') {
+                        // console.log(response.data.data)
+                        // alert(response.data.message);
+                        // isiDataPtk(response)
+                        setData(values => ({...values,
+                            listPtk: response.data.data.ptk,
+                            listKomoditas: response.data.data.ptk_komoditi,
+                            listDokumen: response.data.data.ptk_dokumen
+                        }));
+                        setValue("idPtk", base64_decode(ptkNomor[1]))
+                        setValue("noDokumen", base64_decode(ptkNomor[2]))
+                        const arraySelectKomoditi = response.data.data.ptk_komoditi.map(item => {
+                            return {
+                                value: item.id + ";" + item.volume_lain + ";" + item.sat_lain,
+                                label: item.nama_umum_tercetak + " | " + item.nama_latin_tercetak
+                            }
+                        })
+                        setDataSelect(values => ({...values, komoditas: arraySelectKomoditi }));
+                    } else {
+                        setData(values => ({...values,
+                            errorPTK: "Gagal load data PTK."
+                        }));
+                    }
+                } else {
+                    setData(values => ({...values,
+                        errorPTK: "Gagal load data PTK."
+                    }));
                 }
             })
             .catch((error) => {
-                // setData()
                 console.log(error);
+                if(error.response) {
+                    if(error.response.data.status === 404) {
+                        setData(values => ({...values,
+                            errorPTK: "Data PTK Kosong/Tidak Ada"
+                        }));
+                    } else {
+                        setData(values => ({...values,
+                            errorPTK: "Gagal load data PTK"
+                        }));
+                    }
+                }
+            });
+
+            const resAdmin = modelPeriksa.getAdminByPtkId(base64_decode(ptkNomor[1]))
+            resAdmin
+            .then((response) => {
+                console.log(response.data)
+                if(response.data) {
+                    if(typeof response.data != "string") {
+                        setData(values => ({...values,
+                            errorAdmin: ""
+                        }));
+                        if(response.data.status === '200') {
+                            setValue("idDok37a", response.data.data.id)
+                            setValue("noDok37a", response.data.data.nomor)
+                            setValue("tglDok37a", response.data.data.tanggal)
+                        } else {
+                            setData(values => ({...values,
+                                errorAdmin: "Gagal load data Periksa Administratif"
+                            }));
+                        }
+                    } else {
+                        setData(values => ({...values,
+                            errorAdmin: "Gagal load data Periksa Administratif"
+                        }));
+                    }
+                }
+            })
+            .catch((error) => {
+                console.log(error);
+                if(error.response) {
+                    if(error.response.data.status === 404) {
+                        setData(values => ({...values,
+                            errorAdmin: "Data Periksa Administratif Kosong/Tidak Ada"
+                        }));
+                    } else {
+                        setData(values => ({...values,
+                            errorAdmin: "Gagal load data Periksa Administratif"
+                        }));
+                    }
+                }
+            })
+
+            const resSurtug = modelSurtug.getDetilSurtugPenugasan(base64_decode(ptkNomor[1]), 2);
+            resSurtug
+            .then((response) => {
+                // console.log(response.data)
+                if(response.data) {
+                    if(typeof response.data != "string") {
+                        setData(values => ({...values,
+                            errorSurtug: ""
+                        }));
+                        if(response.data.status === '200') {
+                            // console.log(response.data.data[0])
+                            setData(values => ({...values,
+                                noSurtug: response.data.data[0].nomor,
+                                tglSurtug: response.data.data[0].tanggal,
+                            }));
+                            setValue("idSurtug", response.data.data[0].id)
+                        } else {
+                            setData(values => ({...values,
+                                errorSurtug: "Gagal load data Surat Tugas"
+                            }));
+                        }
+                    } else {
+                        setData(values => ({...values,
+                            errorSurtug: "Gagal load data Surat Tugas"
+                        }));
+                    }
+                }
+            })
+            .catch((error) => {
+                console.log(error);
+                if(error.response) {
+                    if(error.response.data.status === 404) {
+                        setData(values => ({...values,
+                            errorSurtug: "Data Surat Tugas Kosong/Tidak Ada"
+                        }));
+                    } else {
+                        setData(values => ({...values,
+                            errorSurtug: "Gagal load data Surat Tugas"
+                        }));
+                    }
+                }
             });
             
-            const response31 = modelPeriksa.getPnBongkar(base64_decode(ptkNomor[1]));
-            response31
+            const response33 = modelPeriksa.getSamplingByPtkId(base64_decode(ptkNomor[1]));
+            response33
             .then((response) => {
-                if(response.data.status === '200') {
-                    setValue("idPtk", response.data.data.id)
-                    setValue("noDok31", response.data.data.nomor)
-                    setValue("tglDok31", response.data.data.tanggal)
-                    setValue("putusanBongkar", response.data.data.setuju_bongkar_muat)
-                    setValue("ttdPutusan", response.data.data.user_ttd_id)
+                if(typeof response.data != "string") {
+                    setData(values => ({...values,
+                        errorSampling: ""
+                    }));
+                    if(response.data.status === '200') {
+                        setValue("idPtk", response.data.data[0].id)
+                        setValue("noDok33", response.data.data[0].nomor)
+                        setValue("tglDok33", response.data.data[0].tanggal)
+                        setValue("idSurtug", response.data.data[0].ptk_surat_tugas_id)
+                        setValue("lokasiMP", response.data.data[0].lokasi_mp)
+                        setValue("tglSampling", response.data.data[0].tgl_sampling)
+                        setValue("noRegPPC", response.data.data[0].norek_ppc)
+                        setValue("tujuan1", response.data.data[0].tujuan1)
+                        setValue("tujuan2", response.data.data[0].tujuan2)
+                        setValue("tujuan3", response.data.data[0].tujuan3)
+                        setValue("tujuan4", response.data.data[0].tujuan4)
+                        setValue("tujuan5", response.data.data[0].tujuan5)
+                        setValue("tujuan6", response.data.data[0].tujuan6)
+                        setValue("tujuan7", response.data.data[0].tujuan7)
+                        setValue("tujuan8", response.data.data[0].tujuan8)
+                        setValue("tujuan9", response.data.data[0].tujuan9 == null ? "" : "1")
+                        setValue("tujuan9Text", response.data.data[0].tujuan9)
+                        setValue("tujuan10", response.data.data[0].tujuan10)
+                        setValue("tujuan11", response.data.data[0].tujuan11)
+                        setValue("tujuan12", response.data.data[0].tujuan12 == null ? "" : "1")
+                        setValue("tujuan12Text", response.data.data[0].tujuan12)
+                        setValue("catatan", response.data.data[0].catatan)
+                        setValue("namaPemilik", response.data.data[0].nama_pemilik)
+                        setValue("nikPemilik", response.data.data[0].nik_pemilik)
+                        setValue("ttdUser", response.data.data[0].user_ttd_id)
+                        setListDetilSampel(response.data.data)
+                    } else {
+                        setData(values => ({...values,
+                            errorSampling: "Gagal load data BA Sampling"
+                        }));
+                    }
+                } else {
+                    setData(values => ({...values,
+                        errorSampling: "Gagal load data BA Sampling"
+                    }));
                 }
             })
             .catch((error) => {
                 // setData()
                 console.log(error);
+                if(error.response) {
+                    if(error.response.data.status === 404) {
+                        setData(values => ({...values,
+                            errorSampling: ""
+                        }));
+                    } else {
+                        setData(values => ({...values,
+                            errorSampling: "Gagal load data BA Sampling"
+                        }));
+                    }
+                }
             });
         }
     },[idPtk, setValue])
+    
+    function refreshData() {
+        if(data.errorPTK) {
+            const response = modelPemohon.getPtkId(data.noIdPtk);
+            response
+            .then((response) => {
+                if(typeof response.data != "string") {
+                    setData(values => ({...values,
+                        errorPTK: ""
+                    }));
+                    if(response.data.status === '200') {
+                        // console.log(response.data.data)
+                        // alert(response.data.message);
+                        // isiDataPtk(response)
+                        setData(values => ({...values,
+                            listPtk: response.data.data.ptk,
+                            listKomoditas: response.data.data.ptk_komoditi,
+                            listDokumen: response.data.data.ptk_dokumen
+                        }));
+                        setValue("idPtk", data.noIdPtk)
+                        setValue("noDokumen", data.noDokumen)
+                        const arraySelectKomoditi = response.data.data.ptk_komoditi.map(item => {
+                            return {
+                                value: item.id + ";" + item.volume_lain + ";" + item.sat_lain,
+                                label: item.nama_umum_tercetak + " | " + item.nama_latin_tercetak
+                            }
+                        })
+                        setDataSelect(values => ({...values, komoditas: arraySelectKomoditi }));
+                    } else {
+                        setData(values => ({...values,
+                            errorPTK: "Gagal load data PTK."
+                        }));
+                    }
+                } else {
+                    setData(values => ({...values,
+                        errorPTK: "Gagal load data PTK."
+                    }));
+                }
+            })
+            .catch((error) => {
+                console.log(error);
+                if(error.response) {
+                    if(error.response.data.status === 404) {
+                        setData(values => ({...values,
+                            errorPTK: "Data PTK Kosong/Tidak Ada"
+                        }));
+                    } else {
+                        setData(values => ({...values,
+                            errorPTK: "Gagal load data PTK"
+                        }));
+                    }
+                }
+            });
+        }
+
+        if(data.errorAdmin) {
+            const resAdmin = modelPeriksa.getAdminByPtkId(data.noIdPtk)
+            resAdmin
+            .then((response) => {
+                console.log(response.data)
+                if(response.data) {
+                    if(typeof response.data != "string") {
+                        setData(values => ({...values,
+                            errorAdmin: ""
+                        }));
+                        if(response.data.status === '200') {
+                            setValue("idDok37a", response.data.data.id)
+                            setValue("noDok37a", response.data.data.nomor)
+                            setValue("tglDok37a", response.data.data.tanggal)
+                        } else {
+                            setData(values => ({...values,
+                                errorAdmin: "Gagal load data Periksa Administratif"
+                            }));
+                        }
+                    } else {
+                        setData(values => ({...values,
+                            errorAdmin: "Gagal load data Periksa Administratif"
+                        }));
+                    }
+                }
+            })
+            .catch((error) => {
+                console.log(error);
+                if(error.response) {
+                    if(error.response.data.status === 404) {
+                        setData(values => ({...values,
+                            errorAdmin: "Data Periksa Administratif Kosong/Tidak Ada"
+                        }));
+                    } else {
+                        setData(values => ({...values,
+                            errorAdmin: "Gagal load data Periksa Administratif"
+                        }));
+                    }
+                }
+            })
+        }
+
+        if(data.errorSurtug) {
+            const resSurtug = modelSurtug.getDetilSurtugPenugasan(data.noIdPtk, 2);
+            resSurtug
+            .then((response) => {
+                // console.log(response.data)
+                if(response.data) {
+                    if(typeof response.data != "string") {
+                        setData(values => ({...values,
+                            errorSurtug: ""
+                        }));
+                        if(response.data.status === '200') {
+                            // console.log(response.data.data[0])
+                            setData(values => ({...values,
+                                noSurtug: response.data.data[0].nomor,
+                                tglSurtug: response.data.data[0].tanggal,
+                            }));
+                            setValue("idSurtug", response.data.data[0].id)
+                        }
+                    } else {
+                        setData(values => ({...values,
+                            errorSurtug: "Gagal load data Surat Tugas"
+                        }));
+                    }
+                }
+            })
+            .catch((error) => {
+                console.log(error);
+                if(error.response) {
+                    if(error.response.data.status === 404) {
+                        setData(values => ({...values,
+                            errorSurtug: "Data Surat Tugas Kosong/Tidak Ada"
+                        }));
+                    } else {
+                        setData(values => ({...values,
+                            errorSurtug: "Gagal load data Surat Tugas"
+                        }));
+                    }
+                }
+            });
+        }
+        
+        if(data.errorSampling) {
+            const response33 = modelPeriksa.getSamplingByPtkId(data.noIdPtk);
+            response33
+            .then((response) => {
+                if(typeof response.data != "string") {
+                    setData(values => ({...values,
+                        errorSampling: ""
+                    }));
+                    if(response.data.status === '200') {
+                        setValue("idPtk", response.data.data[0].id)
+                        setValue("noDok33", response.data.data[0].nomor)
+                        setValue("tglDok33", response.data.data[0].tanggal)
+                        setValue("idSurtug", response.data.data[0].ptk_surat_tugas_id)
+                        setValue("lokasiMP", response.data.data[0].lokasi_mp)
+                        setValue("tglSampling", response.data.data[0].tgl_sampling)
+                        setValue("noRegPPC", response.data.data[0].norek_ppc)
+                        setValue("tujuan1", response.data.data[0].tujuan1)
+                        setValue("tujuan2", response.data.data[0].tujuan2)
+                        setValue("tujuan3", response.data.data[0].tujuan3)
+                        setValue("tujuan4", response.data.data[0].tujuan4)
+                        setValue("tujuan5", response.data.data[0].tujuan5)
+                        setValue("tujuan6", response.data.data[0].tujuan6)
+                        setValue("tujuan7", response.data.data[0].tujuan7)
+                        setValue("tujuan8", response.data.data[0].tujuan8)
+                        setValue("tujuan9", response.data.data[0].tujuan9 == null ? "" : "1")
+                        setValue("tujuan9Text", response.data.data[0].tujuan9)
+                        setValue("tujuan10", response.data.data[0].tujuan10)
+                        setValue("tujuan11", response.data.data[0].tujuan11)
+                        setValue("tujuan12", response.data.data[0].tujuan12 == null ? "" : "1")
+                        setValue("tujuan12Text", response.data.data[0].tujuan12)
+                        setValue("catatan", response.data.data[0].catatan)
+                        setValue("namaPemilik", response.data.data[0].nama_pemilik)
+                        setValue("nikPemilik", response.data.data[0].nik_pemilik)
+                        setValue("ttdUser", response.data.data[0].user_ttd_id)
+                        setListDetilSampel(response.data.data)
+                    } else {
+                        setData(values => ({...values,
+                            errorSampling: "Gagal load data BA Sampling"
+                        }));
+                    }
+                } else {
+                    setData(values => ({...values,
+                        errorSampling: "Gagal load data BA Sampling"
+                    }));
+                }
+            })
+            .catch((error) => {
+                // setData()
+                console.log(error);
+                if(error.response) {
+                    if(error.response.data.status === 404) {
+                        setData(values => ({...values,
+                            errorSampling: ""
+                        }));
+                    } else {
+                        setData(values => ({...values,
+                            errorSampling: "Gagal load data BA Sampling"
+                        }));
+                    }
+                }
+            });
+        }
+    }
   return (
     <div className="container-xxl flex-grow-1 container-p-y">
         <h4 className="py-3 breadcrumb-wrapper mb-4">
             K-3.3 <span className="fw-light" style={{color: 'blue'}}>BERITA ACARA PENGAMBILAN CONTOH</span>
+            
+            <small className='float-end'>
+                <span className='text-danger'>{(data.errorPTK ? data.errorPTK + "; " : "") + (data.errorAdmin ? data.errorAdmin + "; " : "") + (data.errorSampling ? data.errorSampling + "; " : "") + (data.errorSurtug ? data.errorSurtug + "; " : "")}</span>
+                {data.errorPTK || data.errorSampling || data.errorAdmin || data.errorSurtug ?
+                    <button type='button' className='btn btn-warning btn-xs' onClick={() => refreshData()}><i className='fa-solid fa-sync'></i> Refresh</button>
+                : ""}
+            </small>
         </h4>
 
         <div className="row">
@@ -218,6 +608,11 @@ function DocK33() {
                         </div>
                     </div>
                     <form className="card-body" onSubmit={handleSubmit(onSubmit)}>
+                        <input type="hidden" id='idDok33' name='idDok33' {...register("idDok33")} />
+                        <input type="hidden" id='idDok37a' name='idDok37a' {...register("idDok37a")} />
+                        <input type="hidden" id='idPtk' name='idPtk' {...register("idPtk")} />
+                        <input type="hidden" id='idSurtug' name='idSurtug' {...register("idSurtug")} />
+                        <input type="hidden" id='noDokumen' name='noDokumen' {...register("noDokumen")} />
                         <div className="col-md-12 mt-3">
                             <div className="row mb-3">
                                 <label className="col-sm-2 col-form-label text-sm-start" htmlFor="noDok37a">Nomor Pemeriksaan Administrasi</label>
@@ -324,17 +719,111 @@ function DocK33() {
                                 </h2>
                                 <div id="collapseAlasan">
                                     <div className="accordion-body">
-                                        <button type='button' className='btn btn-sm btn-info mb-3' data-bs-toggle="modal" data-bs-target="#modSampling">Tambah Data</button>
-                                        <div className="table-responsive text-nowrap" style={{height: "300px"}}>
+                                        <div className='row'>
+                                            <div className="col-md-6">
+                                                <div className="row">
+                                                    <label className="col-sm-4 col-form-label" htmlFor="lokasiMP">Lokasi MP<span className='text-danger'>*</span></label>
+                                                    <div className="col-sm-6">
+                                                        <input type="text" id="lokasiMP" name='lokasiMP' className={errors.lokasiMP ? "form-control form-control-sm is-invalid" : "form-control form-control-sm"} placeholder="Lokasi Media Pembawa.." {...register("lokasiMP", {required: "Mohon isi lokasi MP."})} />
+                                                        {errors.lokasiMP && <small className="text-danger">{errors.lokasiMP.message}</small>}
+                                                    </div>
+                                                </div>
+                                                <div className="row">
+                                                    <label className="col-sm-4 col-form-label" htmlFor="tglSampling">Tgl Pengambilan Contoh<span className='text-danger'>*</span></label>
+                                                    <div className="col-sm-3">
+                                                        <input type="date" id="tglSampling" name='tglSampling' className={errors.lokasiMP ? "form-control form-control-sm is-invalid" : "form-control form-control-sm"} placeholder="Tgl Pengambilan Contoh.." {...register("tglSampling", {required: "Mohon isi tanggal pengambilan contoh."})} />
+                                                        {errors.tglSampling && <small className="text-danger">{errors.tglSampling.message}</small>}
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div className="col-md-6">
+                                                <div className="row">
+                                                    <label className="col-sm-4 col-form-label" htmlFor="noRegPPC">Nomor Registrasi PPC</label>
+                                                    <div className="col-sm-6">
+                                                        <input type="text" id="noRegPPC" className="form-control form-control-sm" placeholder="Nomor Registrasi Petugas Pengambil Contoh.." {...register("noRegPPC")} />
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div className='col-md-12 mb-3'>
+                                                <div className='row'>
+                                                    <label className="col-sm-2 col-form-label" htmlFor="namaPengirim">Tujuan Pengambilan Contoh<span className='text-danger'>*</span></label>
+                                                    <div className="col-sm-3">
+                                                        <div className="form-check mt-2">
+                                                            <input className="form-check-input" type="checkbox" name="tujuan1" id="tujuan1" value="1" {...register("tujuan1")} />
+                                                            <label className="form-check-label" htmlFor="tujuan1">Pemeriksaan visual</label>
+                                                        </div>
+                                                        <div className="form-check">
+                                                            <input className="form-check-input" type="checkbox" name="tujuan2" id="tujuan2" value="1" {...register("tujuan2")} />
+                                                            <label className="form-check-label" htmlFor="tujuan2">Pemeriksaan kesehatan</label>
+                                                        </div>
+                                                        <div className="form-check">
+                                                            <input className="form-check-input" type="checkbox" name="tujuan3" id="tujuan3" value="1" {...register("tujuan3")} />
+                                                            <label className="form-check-label" htmlFor="tujuan3">Uji keamanan/mutu pangan**)</label>
+                                                        </div>
+                                                        <div className="form-check">
+                                                            <input className="form-check-input" type="checkbox" name="tujuan4" id="tujuan4" value="1" {...register("tujuan4")} />
+                                                            <label className="form-check-label" htmlFor="tujuan4">Residu pestisida</label>
+                                                        </div>
+                                                        <div className="form-check">
+                                                            <input className="form-check-input" type="checkbox" name="tujuan5" id="tujuan5" value="1" {...register("tujuan5")} />
+                                                            <label className="form-check-label" htmlFor="tujuan5">Logam berat</label>
+                                                        </div>
+                                                        <div className="form-check">
+                                                            <input className="form-check-input" type="checkbox" name="tujuan6" id="tujuan6" value="1" {...register("tujuan6")} />
+                                                            <label className="form-check-label" htmlFor="tujuan6">Mikotoksin</label>
+                                                        </div>
+                                                    </div>
+                                                    <div className="col-sm-4">
+                                                        <div className="form-check mt-2">
+                                                            <input className="form-check-input" type="checkbox" name="tujuan7" id="tujuan7" value="1" {...register("tujuan7")} />
+                                                            <label className="form-check-label" htmlFor="tujuan7">Cemaran mikrobiologi</label>
+                                                        </div>
+                                                        <div className="form-check">
+                                                            <input className="form-check-input" type="checkbox" name="tujuan8" id="tujuan8" value="1" {...register("tujuan8")} />
+                                                            <label className="form-check-label" htmlFor="tujuan8">Cemaran radioaktif</label>
+                                                        </div>
+                                                        <div className="form-check">
+                                                            <input className="form-check-input" type="checkbox" name="tujuan9" id="tujuan9" value="1" {...register("tujuan9")} />
+                                                            <label className="form-check-label" htmlFor="tujuan9">Lainnya</label>
+                                                            <input style={{display: (cekWatch.tujuan9 ? "block" : "none")}} type="text" className='form-control form-control-sm' placeholder='Lainnya..' {...register("tujuan9Text")} />
+                                                        </div>
+                                                        <div className="form-check">
+                                                            <input className="form-check-input" type="checkbox" name="tujuan10" id="tujuan10" value="1" {...register("tujuan10")} />
+                                                            <label className="form-check-label" htmlFor="tujuan10">Uji keamanan/mutu pakan</label>
+                                                        </div>
+                                                        <div className="form-check">
+                                                            <input className="form-check-input" type="checkbox" name="tujuan11" id="tujuan11" value="1" {...register("tujuan11")} />
+                                                            <label className="form-check-label" htmlFor="tujuan11">Uji PRG, SDG, IAS</label>
+                                                        </div>
+                                                        <div className="form-check">
+                                                            <input className="form-check-input" type="checkbox" name="tujuan12" id="tujuan12" value="1" {...register("tujuan12")} />
+                                                            <label className="form-check-label" htmlFor="tujuan12">Pengujian Lainnya</label>
+                                                            <input style={{display: (cekWatch.tujuan12 ? "block" : "none")}} type="text" className='form-control form-control-sm' placeholder='Pengujian Lainnya..' {...register("tujuan12Text")} />
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div className="col-md-6 mb-3">
+                                                <div className="row">
+                                                    <label className="col-sm-4 col-form-label" htmlFor="catatan">Catatan Pengambilan Contoh</label>
+                                                    <div className="col-sm-7">
+                                                        <textarea name="catatan" id="catatan" rows="2" className='form-control form-control-sm' placeholder='Catatan..' {...register("catatan")}></textarea>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <h5><b><u>Detil Contoh</u></b>
+                                            <button type='button' className='btn btn-xs btn-info' style={{marginLeft: "25px"}} data-bs-toggle="modal" data-bs-target="#modSampling">Tambah Data</button>
+                                        </h5>
+                                        <div className="table-responsive text-nowrap" style={{height: "150px"}}>
                                             <table className="table table-sm table-bordered table-hover table-striped dataTable">
                                                 <thead>
                                                     <tr>
                                                         <th>No</th>
                                                         <th>Nama Komoditas (Umum/Latin)</th>
                                                         <th>Identitas Contoh</th>
-                                                        <th>Kode Contoh</th>
-                                                        <th>Kondisi Contoh</th>
-                                                        <th>Suhu Contoh</th>
+                                                        <th>Nama/Kode Contoh</th>
+                                                        <th>Kondisi/Suhu Contoh</th>
                                                         <th>Nomor Kontainer/Palka</th>
                                                         <th>Keterangan</th>
                                                         <th>Act</th>
@@ -344,14 +833,15 @@ function DocK33() {
                                                     {listDetilSampel ? (listDetilSampel?.map((item, index) => (
                                                                 <tr key={index}>
                                                                     <td>{index + 1}</td>
-                                                                    <td>""</td>
+                                                                    <td>{item.nama_umum_tercetak + " / " + item.nama_latin_tercetak}</td>
                                                                     <td>{item.identitas_contoh}</td>
                                                                     <td>{item.kode_contoh}</td>
                                                                     <td>{item.kondisi_contoh}</td>
-                                                                    <td>{item.suhu_contoh}</td>
                                                                     <td>{item.nomor_kontainer}</td>
                                                                     <td>{item.keterangan}</td>
-                                                                    <td>#</td>
+                                                                    <td>
+                                                                        <button type='button' className="btn btn-xs text-danger" data-index={index} onClick={() => handleDeleteDetilSampel(index)}><i className='fa-solid fa-trash'></i></button>
+                                                                    </td>
                                                                 </tr>
                                                             ))
                                                         ) : null
@@ -363,346 +853,28 @@ function DocK33() {
                                     </div>
                                 </div>
                             </div>
-                            <div className='row'>
-                                <div className="col-sm-5" style={{marginLeft: "15px"}}>
-                                    <div className='col-sm-6 mb-3 mt-2'>
-                                        <div className="form-check form-check-inline">
-                                            <input className="form-check-input" type="checkbox" name="isAttach" id="isAttach" value="1" {...register("isAttach")} />
-                                            <label className="form-check-label" htmlFor="isAttach">Attachment</label>
-                                        </div>
-                                    </div>
-                                    <div className="col-sm-6 mb-3">
-                                        <div className='col-form-label mb-0'>Penandatangan</div>
-                                        <input type="text" {...register("ttdPutusan", { required: "Mohon pilih nama penandatangan."})} className={errors.ttdPutusan ? "form-control form-control-sm is-invalid" : "form-control form-control-sm"} />
-                                        {errors.ttdPutusan && <small className="text-danger">{errors.ttdPutusan.message}</small>}
-                                    </div>
-                                    <div className="col-sm-6 mb-3">
-                                        <div className='col-form-label mb-0'>Diterbitkan di</div>
-                                        <input type="text" {...register("diterbitkan", { required: "Mohon isi tempat terbit dokumen."})} className={errors.diterbitkan ? "form-control form-control-sm is-invalid" : "form-control form-control-sm"} />
-                                        {errors.diterbitkan && <small className="text-danger">{errors.diterbitkan.message}</small>}
-                                    </div>
-                                </div>
+                        </div>
+                        <div className="row mt-3 mb-3">
+                            <div className='col-sm-2 form-control-label' htmlFor="namaPemilik">Nama Pemilik<span className='text-danger'>*</span></div>
+                            <div className="col-sm-4">
+                                <input type="text" name='namaPemilik' id='namaPemilik' {...register("namaPemilik", {required: "Mohon isi nama pemikik."})} className={errors.namaPemilik ? "form-control form-control-sm is-invalid" : "form-control form-control-sm"}/>
+                                {errors.namaPemilik && <small className="text-danger">{errors.namaPemilik.message}</small>}
+                            </div>
+                            <div className='col-sm-2 form-control-label text-sm-center' htmlFor="nikPemilik">NIK Pemilik<span className='text-danger'>*</span></div>
+                            <div className="col-sm-4">
+                                <input type="text" name='nikPemilik' id='nikPemilik' {...register("nikPemilik", {required: "Mohon isi NIK pemikik."})} className={errors.nikPemilik ? "form-control form-control-sm is-invalid" : "form-control form-control-sm"}/>
+                                {errors.nikPemilik && <small className="text-danger">{errors.nikPemilik.message}</small>}
                             </div>
                         </div>
-                        <div className="card">
-                            <div className="col-md-12 mt-3">
-                                <div className="row mb-3">
-                                    <label className="col-sm-2 col-form-label text-sm-end" htmlFor="nomor_k12">Nomor Berita Acara</label>
-                                    <div className="col-sm-3">
-                                        <input type="text" id="nomor_k12" className="form-control form-control-sm" placeholder="Nomor" disabled />
-                                    </div>
-                                    <label className="col-sm-2 col-form-label text-sm-end" htmlFor="nomor_k12">Hari/Tanggal</label>
-                                    <div className="col-sm-2">
-                                        <input type="text" id="nomor_k12" className="form-control form-control-sm" placeholder="Hari" disabled />
-                                    </div>
-                                    <div className="col-sm-2">
-                                        <input type="date" id="nomor_k12" className="form-control form-control-sm" disabled />
-                                    </div>
-                                </div>
-                                <div className="row mb-3">
-                                    <label className="col-sm-2 col-form-label text-sm-end" htmlFor="nomor_k12">Nomor Surat Tugas</label>
-                                    <div className="col-sm-2">
-                                        <input type="text" id="nomor_k12" className="form-control form-control-sm" placeholder="Nomor Surat Tugas" disabled />
-                                    </div>
-                                    <label className="col-sm-2 col-form-label text-sm-end" htmlFor="nomor_k12">Tanggal Surat Tugas</label>
-                                    <div className="col-sm-2">
-                                        <input type="date" id="nomor_k12" className="form-control form-control-sm" disabled />
-                                    </div>
-                                </div>
-                                <div className="row mb-3">
-                                    <label className="col-sm-2 col-form-label text-sm-end" htmlFor="nomor_k12">Nomor Pemeriksaan Administratif dan Kesesuaian Dokumen</label>
-                                    <div className="col-sm-2">
-                                        <input type="text" id="nomor_k12" className="form-control form-control-sm" placeholder="Nomor Pemeriksaan" disabled />
-                                    </div>
-                                    <label className="col-sm-2 col-form-label text-sm-end" htmlFor="nomor_k12">Tanggal</label>
-                                    <div className="col-sm-2">
-                                        <input type="date" id="nomor_k12" className="form-control form-control-sm" disabled />
-                                    </div>
-                                </div>
+                        <div className="row mt-3 mb-3">
+                            <div className='col-sm-2 form-control-label' htmlFor="ttdUser">Petugas Pengambil Contoh<span className='text-danger'>*</span></div>
+                            <div className="col-sm-4">
+                                <input type="text" name='ttdUser' id='ttdUser' {...register("ttdUser", {required: "Mohon pilih penandatangan."})} className={errors.ttdUser ? "form-select form-select-sm is-invalid" : "form-select form-select-sm"}/>
+                                {errors.ttdUser && <small className="text-danger">{errors.ttdUser.message}</small>}
                             </div>
                         </div>
-                        <div className="row my-4">
-                            <div className="col">
-                                <div className="accordion" id="collapseSection">
-                                    <div className="card accordion-item">
-                                        <h2 className="accordion-header" id="headerCountry">
-                                            <button className="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseCountry" aria-expanded="true" aria-controls="collapseCountry">
-                                                I. Keterangan Media Pembawa
-                                            </button>
-                                        </h2>
-                                        <div id="collapseCountry">
-                                            <div className="accordion-body">
-                                                <div className="row g-3 mb-3">
-                                                    <div className="col-md-6">
-                                                        <div className="row">
-                                                            <label className="col-sm-3 col-form-label text-sm-end" htmlFor="collapse-name">Jenis Media Pembawa</label>
-                                                            <div className="col-sm-9">
-                                                                <select className="form-select">
-                                                                    <option>Hewan</option>
-                                                                    <option>Ikan</option>
-                                                                    <option>Tumbuhan</option>
-                                                                    <option>Produk Hewan</option>
-                                                                    <option>Produk Ikan</option>
-                                                                    <option>Produk Tumbuhan</option>
-                                                                    <option>Media Pembawa Lain</option>
-                                                                </select>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <div className="row g-3 mb-3">
-                                                    <div className="col-md-6">
-                                                        <div className="row">
-                                                            <label className="col-sm-3 col-form-label text-sm-end" htmlFor="collapse-name">Nama Umum/Dagang</label>
-                                                            <div className="col-sm-9">
-                                                                <input type="text" id="collapse-name" className="form-control" placeholder="Nama Umum/Dagang" />
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <div className="row g-3 mb-3">
-                                                    <div className="col-md-6">
-                                                        <div className="row">
-                                                            <label className="col-sm-3 col-form-label text-sm-end" htmlFor="collapse-name">Nama Ilmiah</label>
-                                                            <div className="col-sm-9">
-                                                                <input type="text" id="collapse-name" className="form-control" placeholder="Nama Ilmiah" />
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <div className="row g-3 mb-3">
-                                                    <div className="col-md-6">
-                                                        <div className="row">
-                                                            <label className="col-sm-3 col-form-label text-sm-end" htmlFor="collapse-name">Kode HS</label>
-                                                            <div className="col-sm-9">
-                                                                <input type="text" id="collapse-name" className="form-control" placeholder="Kode HS" />
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <div className="row g-3 mb-3">
-                                                    <div className="col-md-6">
-                                                        <div className="row">
-                                                            <label className="col-sm-3 col-form-label text-sm-end" htmlFor="collapse-name">Bentuk</label>
-                                                            <div className="col-sm-9">
-                                                                <input type="text" id="collapse-name" className="form-control" placeholder="Bentuk" />
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <div className="row g-3 mb-3">
-                                                    <div className="col-md-6">
-                                                        <div className="row">
-                                                            <label className="col-sm-3 col-form-label text-sm-end" htmlFor="collapse-name">Jumlah</label>
-                                                            <div className="col-sm-9">
-                                                                <input type="text" id="collapse-name" className="form-control" placeholder="Jumlah" />
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <div className="row g-3 mb-3">
-                                                    <div className="col-md-6">
-                                                        <div className="row">
-                                                            <label className="col-sm-3 col-form-label text-sm-end" htmlFor="collapse-name">Nama Pemilik</label>
-                                                            <div className="col-sm-9">
-                                                                <input type="text" id="collapse-name" className="form-control" placeholder="Nama Pemilik" />
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <div className="row g-3 mb-3">
-                                                    <div className="col-md-6">
-                                                        <div className="row">
-                                                            <label className="col-sm-3 col-form-label text-sm-end" htmlFor="collapse-name">Alamat Pemilik</label>
-                                                            <div className="col-sm-9">
-                                                                <textarea name="collapsible-address" className="form-control" id="collapsible-address" rows="5" placeholder=""></textarea>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <div className="row g-3 mb-3">
-                                                    <div className="col-md-6">
-                                                        <div className="row">
-                                                            <label className="col-sm-3 col-form-label text-sm-end" htmlFor="collapse-name">Lokasi Media Pembawa</label>
-                                                            <div className="col-sm-9">
-                                                                <textarea name="collapsible-address" className="form-control" id="collapsible-address" rows="5" placeholder=""></textarea>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div className="card accordion-item">
-                                        <h2 className="accordion-header" id="headerExporter">
-                                            <button className="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseExporter" aria-expanded="true" aria-controls="collapseExporter">
-                                                Pelaksanaan Pengambilan Contoh
-                                            </button>
-                                        </h2>
-                                        <div id="collapseExporter">
-                                            <div className="accordion-body">
-                                                <div className="row g-3 mb-3">
-                                                    <div className="col-md-6">
-                                                        <div className="row">
-                                                            <label className="col-sm-3 col-form-label text-sm-end" htmlFor="collapse-name">Nama Petugas Pengambil Contoh</label>
-                                                            <div className="col-sm-9">
-                                                                <input type="text" id="collapse-name" className="form-control" placeholder="Nama Petugas" />
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <div className="row g-3 mb-3">
-                                                    <div className="col-md-6">
-                                                        <div className="row">
-                                                            <label className="col-sm-3 col-form-label text-sm-end" htmlFor="collapse-name">Nomor Registrasi</label>
-                                                            <div className="col-sm-9">
-                                                                <input type="text" id="collapse-name" className="form-control" placeholder="Nomor Registrasi" />
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <div className="row g-3 mb-3">
-                                                    <div className="col-md-6">
-                                                        <div className="row">
-                                                            <label className="col-sm-3 col-form-label text-sm-end" htmlFor="collapse-name">Tanggal Pengambil Contoh</label>
-                                                            <div className="col-sm-9">
-                                                                <input type="date" id="collapse-name" className="form-control" />
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <div className="row g-3 mb-3">
-                                                    <div className="col-md-6">
-                                                        <div className="row">
-                                                            <label className="col-sm-3 col-form-label text-sm-end" htmlFor="collapse-name">Jumlah Contoh</label>
-                                                            <div className="col-sm-9">
-                                                                <input type="text" id="collapse-name" className="form-control" placeholder="Jumlah Contoh" />
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <div className="row g-3 mb-3">
-                                                    <div className="col-md-6">
-                                                        <div className="row">
-                                                            <label className="col-sm-3 col-form-label text-sm-end" htmlFor="collapse-name">Identitas Contoh</label>
-                                                            <div className="col-sm-9">
-                                                                <input type="text" id="collapse-name" className="form-control" placeholder="Identitas Contoh" />
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <div className="row g-3 mb-3">
-                                                    <div className="col-md-6">
-                                                        <button type="button" className="btn btn-xs btn-primary">Add Contoh</button>
-                                                    </div>
-                                                    <table className="table table-bordered table-hover table-striped dataTable">
-                                                        <thead>
-                                                            <tr>
-                                                                <th>Nama/Kode Contoh</th>
-                                                                <th>Kondisi/Suhu Contoh</th>
-                                                                <th>Nomor Kontainer/Palka</th>
-                                                                <th>Keterangan</th>
-                                                            </tr>
-                                                        </thead>
-                                                        <tbody>
-                                                            <tr>
-                                                                <th>1</th>
-                                                                <th>-</th>
-                                                                <th>-</th>
-                                                                <th>-</th>
-                                                            </tr>
-                                                            <tr>
-                                                                <th>2</th>
-                                                                <th>-</th>
-                                                                <th>-</th>
-                                                                <th>-</th>
-                                                            </tr>
-                                                        </tbody>
-                                                    </table>
-                                                </div>
-                                                <div className="row g-3 mb-3">
-                                                    <div className="col-md-6">
-                                                        <div className="row">
-                                                            <label className="col-sm-3 col-form-label text-sm-end" htmlFor="collapse-name">Tujuan Pengambilan Contoh</label>
-                                                            <div className="col-sm-9">
-                                                                <div className="form-check">
-                                                                    <label className="form-check-label" htmlFor="checktujuan1">Pemeriksaan Visual</label>
-                                                                    <input name="default-radio-checktujuan" className="form-check-input" type="radio" value="" id="checktujuan1" />
-                                                                </div>
-                                                                <div className="form-check">
-                                                                    <label className="form-check-label" htmlFor="checktujuan2">Pemeriksaan Kesehatan</label>
-                                                                    <input name="default-radio-checktujuan" className="form-check-input" type="radio" value="" id="checktujuan2" />
-                                                                </div>
-                                                                <div className="form-check">
-                                                                    <label className="form-check-label" htmlFor="checktujuan3">Uji Keamanan/mutu pangan</label>
-                                                                    <input name="default-radio-checktujuan" className="form-check-input" type="radio" value="" id="checktujuan3" />
-                                                                </div>
-                                                                <div className="form-check">
-                                                                    <label className="form-check-label" htmlFor="checktujuan4">Residu Pestisida</label>
-                                                                    <input name="default-radio-checktujuan" className="form-check-input" type="radio" value="" id="checktujuan4" />
-                                                                </div>
-                                                                <div className="form-check">
-                                                                    <label className="form-check-label" htmlFor="checktujuan5">Logam Berat</label>
-                                                                    <input name="default-radio-checktujuan" className="form-check-input" type="radio" value="" id="checktujuan5" />
-                                                                </div>
-                                                                <div className="form-check">
-                                                                    <label className="form-check-label" htmlFor="checktujuan6">Mikotoksin</label>
-                                                                    <input name="default-radio-checktujuan" className="form-check-input" type="radio" value="" id="checktujuan6" />
-                                                                </div>
-                                                                <div className="form-check">
-                                                                    <label className="form-check-label" htmlFor="checktujuan9">Cemaran Mikrobiologi</label>
-                                                                    <input name="default-radio-checktujuan" className="form-check-input" type="radio" value="" id="checktujuan9" />
-                                                                </div>
-                                                                <div className="form-check">
-                                                                    <label className="form-check-label" htmlFor="checktujuan10">Cemaran Radioaktif</label>
-                                                                    <input name="default-radio-checktujuan" className="form-check-input" type="radio" value="" id="checktujuan10" />
-                                                                </div>
-                                                                <div className="form-check">
-                                                                    <label className="form-check-label" htmlFor="checktujuan12">Lainnya</label>
-                                                                    <input name="default-radio-checktujuan" className="form-check-input" type="radio" value="" id="checktujuan12" />
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                    <div className="col-md-6">
-                                                        <div className="row">
-                                                            <div className="form-check">
-                                                                <label className="form-check-label" htmlFor="checktujuan7">Uji Keamanan/mutu pakan</label>
-                                                                <input name="default-radio-checktujuan" className="form-check-input" type="radio" value="" id="checktujuan7" />
-                                                            </div>
-                                                            <div className="form-check">
-                                                                <label className="form-check-label" htmlFor="checktujuan8">Uji PRG,SDG, IAS</label>
-                                                                <input name="default-radio-checktujuan" className="form-check-input" type="radio" value="" id="checktujuan8" />
-                                                            </div>
-                                                            <div className="form-check">
-                                                                <label className="form-check-label" htmlFor="checktujuan11">Pengujian Lainnya</label>
-                                                                <input name="default-radio-checktujuan" className="form-check-input" type="radio" value="" id="checktujuan11" />
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <div className="row g-3 mb-3">
-                                                    <div className="col-md-6">
-                                                        <div className="row">
-                                                            <label className="col-sm-3 col-form-label text-sm-end" htmlFor="collapsible-address">Catatan Pengambilan Contoh</label>
-                                                            <div className="col-sm-9">
-                                                                <textarea name="collapsible-address" className="form-control" id="collapsible-address" rows="5" placeholder=""></textarea>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div className="row">
-                            <div className="col-sm-2">
-                                <button type="button" className="btn btn-primary">Simpan</button>
-                                <button type="button" className="btn btn-danger">Batal</button>
-                            </div>
-                        </div>
+                        <button type="submit" className="btn btn-primary me-sm-2 me-1">Simpan</button>
+                        <button type="button" className="btn btn-danger me-sm-2 me-1">Hapus</button>
                     </form>
                 </div>
             </div>
@@ -721,23 +893,36 @@ function DocK33() {
                                 <div className='col-sm-12 mb-3'>
                                     <div className='mb-2'>
                                         <label className="form-label" style={{marginTop: "10px"}} htmlFor="mpPeriksa">Media Pembawa</label>
-                                        <Select styles={customStyles} defaultValue={detilSampel.idkom} value={{id: detilSampel.idkom, label: detilSampel.idkomView} || ""} placeholder="Pilih Komoditas.." options={dataSelect.komoditas} onChange={(e) => setDetilSampel(values => ({...values, idkom: e.value})) & setDetilSampel(values => ({...values, idkomView: e.label}))} />
+                                        <Select styles={customStyles} defaultValue="" value={{id: detilSampel.idkom, label: detilSampel.idkomView} || ""} placeholder="Pilih Komoditas.." options={dataSelect.komoditas} onChange={(e) => setDetilSampel(values => ({...values, idkom: e.value.split(";")[0], volKom: e.value.split(";")[1], satKom: e.value.split(";")[2], idkomView: e.label, namaLatinTC: e.label.split(" | ")[1], namaKom: e.label.split(" | ")[0]}))} />
                                     </div>
                                     <div className='mb-2'>
                                         <label className="form-label" htmlFor="identitas">Identitas Contoh</label>
                                         <input type="text" className="form-control form-control-sm" id="identitas" name='identitas' placeholder="Identitas Contoh.." value={detilSampel.identitas || ""} onChange={(e) => setDetilSampel(values => ({...values, identitas: e.target.value}))} />
                                     </div>
+                                    {/* <input type='hidden' name='namaUmum' id='namaUmum' value={detilSampel.namaKom || ""} />
+                                    <input type='hidden' name='namaLatin' id='namaLatin' value={detilSampel.namaLatinTC || ""} /> */}
                                     <div className='mb-2'>
-                                        <label className="form-label" htmlFor="kode">Kode Contoh</label>
-                                        <input type="text" className="form-control form-control-sm" id="kode" name='kode' placeholder="Kode Contoh.." value={detilSampel.kode || ""} onChange={(e) => setDetilSampel(values => ({...values, kode: e.target.value}))} />
+                                        <label className="form-label" htmlFor="kode">Nama/Kode Contoh</label>
+                                        <input type="text" className="form-control form-control-sm" id="kode" name='kode' placeholder="Nama / Kode Contoh.." value={detilSampel.kode || ""} onChange={(e) => setDetilSampel(values => ({...values, kode: e.target.value}))} />
                                     </div>
                                     <div className='mb-2'>
-                                        <label className="form-label" htmlFor="kondisi">Kondisi Contoh</label>
-                                        <input type="text" className="form-control form-control-sm" id="kondisi" name='kondisi' placeholder="Kondisi Contoh.." value={detilSampel.kondisi || ""} onChange={(e) => setDetilSampel(values => ({...values, kondisi: e.target.value}))} />
+                                        <label className="form-label" htmlFor="kondisi">Kondisi/Suhu Contoh</label>
+                                        <input type="text" className="form-control form-control-sm" id="kondisi" name='kondisi' placeholder="Kondisi / Suhu Contoh.." value={detilSampel.kondisi || ""} onChange={(e) => setDetilSampel(values => ({...values, kondisi: e.target.value}))} />
                                     </div>
                                     <div className='mb-2'>
-                                        <label className="form-label" htmlFor="suhu">Suhu Contoh <small>(khusus untuk pengujian cemaran biologi)</small></label>
-                                        <input type="text" className="form-control form-control-sm" id="suhu" name='suhu' placeholder="Suhu Contoh.." value={detilSampel.suhu || ""} onChange={(e) => setDetilSampel(values => ({...values, suhu: e.target.value}))} />
+                                        <label className="form-label" htmlFor="jumlah">Jumlah Contoh</label>
+                                        <div className="row">
+                                            <div className="col-md-3">
+                                                <input type="text" className="form-control form-control-sm" id="jumlah" name='jumlah' placeholder="Jumlah Contoh.." value={detilSampel.jumlah ? (addCommas(removeNonNumeric(detilSampel.jumlah))) : ""} onChange={(e) => setDetilSampel(values => ({...values, jumlah: e.target.value}))} />
+                                            </div>
+                                            <div className="col-md-2">
+                                                <input type="text" disabled className="form-control form-control-sm" id="satJumlah" name='satJumlah' value={detilSampel.satKom || ""} placeholder="Satuan.." />
+                                            </div>
+                                            <div className="col-md-7">
+                                                <p>{detilSampel.volKom ? ("Total: " + addCommas(removeNonNumeric(detilSampel.volKom)) + " " + detilSampel.satKom) : ""}</p>
+                                            </div>
+                                        </div>
+                                        <small className='text-danger'>*Format penulisan desimal menggunakan titik ( . )</small>
                                     </div>
                                     <div className='mb-2'>
                                         <label className="form-label" htmlFor="noKontainer">Nomor Kontainer / Palka</label>

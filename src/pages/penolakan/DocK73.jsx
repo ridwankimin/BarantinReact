@@ -389,7 +389,7 @@ function DocK73() {
                 if(error.response) {
                     if(error.response.data.status == 404) {
                         Swal.fire("Berita Acara Penolakan tidak ada/Belum dibuat. Mohon buat Berita Acara Penolakan dahulu!");
-                        navigate('/k72')
+                        navigate(process.env.PUBLIC_URL + '/k72')
                     } else {
                         setData(values => ({...values,
                             errorBAPenolakan: "Gagal load data Berita Acara Penolakan",
