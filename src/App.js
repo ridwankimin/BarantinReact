@@ -27,7 +27,7 @@ function App() {
   return (
     <>
       {/* <Wrapper /> */}
-      {Cookies.get("isLogin") ? <Wrapper /> : <Login />}
+      {Cookies.get("isLogin") && Cookies.get("uptId") && Cookies.get("userId") && Cookies.get("kodeSatpel") ? <Wrapper /> : <Login />}
       
     </>
   );

@@ -11,24 +11,15 @@ function Footer(props) {
         // navigate('/')
         window.location.reload();
     }
-
-    // let[showMenu, setShowMenu] = useState(Cookies.get("showmenu"))
-    function menuKecil(e) {
-        e.preventDefault();
-        console.log(props.setShowMenu(!props.showMenu))
-        // setShowMenu(!showMenu)
-        // // this.state = {username: ''}
-        // Cookies.set("showmenu", showMenu)
-        // console.log(Cookies.get("showmenu"))
-    }
+    
   return (
     <div className="layout-page">
         <nav className="layout-navbar navbar navbar-expand-xl align-items-center" style={{background: '#123138'}} id="layout-navbar">
             <div className="container-fluid">
                 <div className="layout-menu-toggle navbar-nav align-items-xl-center me-3 me-xl-0 d-xl-none">
-                    <button type='button' onClick={menuKecil} className="nav-item nav-link px-0 me-xl-4 text-lightest">
+                    <a href='#layout-menu' onClick={props.clicked} className="btn btn-default nav-item nav-link px-0 me-xl-4 text-lightest">
                         <i className="fa fa-solid fa-bars"></i>
-                    </button>
+                    </a>
                 </div>
                 <div className="navbar-nav-right d-flex align-items-center" id="navbar-collapse">
                     <h4 className='text-lightest mt-3'>-- {Cookies.get("namaSatpel")} --</h4>

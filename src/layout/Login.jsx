@@ -29,7 +29,7 @@ function Login() {
                 Cookies.set("isLogin", true, {
                     expires: 1,
                 });
-        
+                
                 Cookies.set("userId", dataUser.id, {expires: 7});
                 Cookies.set("uptId", dataUser.id_upt, {expires: 7});
                 Cookies.set("username", dataUser.username, {expires: 7});

@@ -3,7 +3,7 @@ import logbar from '../logo/barantins.png'
 // import Cookies from 'js-cookie'
 // import Footer from './Footer';
 
-function Navbar() {
+function Navbar(props) {
     // let [showMenu, setShowMenu] = useState(false)
     let [ketMenu, setKetMenu] = useState("")
     let [ketSubMenu, setKetSubMenu] = useState("")
@@ -20,20 +20,17 @@ function Navbar() {
         // console.log(menuOpen)
         // console.log(e.target.dataset.i18n);
     }
-    
+
     function handleSubMenuOpen(e) {
         if(e.target.dataset.i18n === ketSubMenu || ketSubMenu === "") {
             setSubMenuOpen(!subMenuOpen);
         }
         setKetSubMenu(e.target.dataset.i18n);
-        console.log(ketMenu)
-        console.log(subMenuOpen)
-        console.log(e.target.dataset.i18n);
     } 
     // class="light-style layout-navbar-fixed layout-menu-fixed layout-menu-collapsed"
     // console.log((window.location.pathname.split("/")[2]) === 'k11' ? "ok" : "tidak")
   return (
-    <aside id="layout-menu" className={"menu-vertical menu bg-menu-theme layout-menu"}>
+    <aside id="layout-menu" className={"menu-vertical menu bg-menu-theme" + (props.menu ? " layout-menu" : "")}>
         <div className="app-brand demo" style={{background: 'black'}}>
             <a href="/" className="app-brand-link">
                 <img src={logbar} alt="Barantin App" width="150px" />
@@ -79,7 +76,7 @@ function Navbar() {
                     <i className="menu-icon tf-icons fa-solid fa-bar-chart"></i>
                     <div data-i18n="Informasi Pre Border">Informasi Pre Border</div>
                 </button>
-                <ul className="menu-sub">
+                <ul className="menu-sub" style={{transition: "all 0.5s ease"}}>
                     <li className={window.location.pathname.split("/")[2] === 'k11' ? "menu-item active" : "menu-item"}>
                         <a href={process.env.PUBLIC_URL + '/k11'} className="menu-link" title='PERMOHONAN TINDAKAN KARANTINA DAN PENGAWASAN DAN/ATAU PENGENDALIAN SERTA BERITA ACARA SERAH TERIMA MEDIA PEMBAWA DI TEMPAT PEMASUKAN, PENGELUARAN DAN/ATAU TRANSIT'>
                             <div data-i18n="K-1.1">K-1.1</div>

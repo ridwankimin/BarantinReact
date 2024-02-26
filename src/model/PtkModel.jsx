@@ -104,6 +104,10 @@ export default class PtkModel {
             "no_aju": data.noAju, // ok
             // 'tgl_aju' => $data['tgl_aju'],
             "jenis_dokumen": data.jenisForm, // ok
+
+            'jenis_karantina': data.mediaPembawa, // ok
+            'jenis_media_pembawa_id': data.jenisMp, // ok
+
             "is_guest": data.pJRutin,            // pemohon rutin/guest: 0,1
             'user_id': Cookies.get("userId"), // ok pake session
             "pengguna_jasa_id": 456, // ok pake session
@@ -257,8 +261,8 @@ export default class PtkModel {
           'tab': '3', // ok
           'id': data.idPtk, // ok
           'no_aju': data.noAju, // ok
-          'jenis_karantina': data.mediaPembawa, // ok
-          'jenis_media_pembawa_id': data.jenisMp, // ok
+          // 'jenis_karantina': data.mediaPembawa, // ok
+          // 'jenis_media_pembawa_id': data.jenisMp, // ok
           'is_curah' : data.jenisAngkut, // curah/non curah
           'peruntukan_id' : data.peruntukan, // ?
           'peruntukan_lainnya' : data.peruntukanLain, // ?
