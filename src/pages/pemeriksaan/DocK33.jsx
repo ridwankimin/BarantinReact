@@ -1,5 +1,4 @@
 /* eslint-disable eqeqeq */
-/* eslint-disable jsx-a11y/anchor-is-valid */
 import React, { useEffect, useState } from 'react'
 import {decode as base64_decode} from 'base-64';
 import Cookies from 'js-cookie';
@@ -89,6 +88,7 @@ function DocK33() {
             keterangan: ""
         }));
     }
+
     const {
         register,
         setValue,
@@ -602,7 +602,7 @@ function DocK33() {
                         <div className="card-action-element">
                             <ul className="list-inline mb-0">
                                 <li className="list-inline-item">
-                                    <a href="#" className="card-collapsible"><i className="tf-icons bx bx-chevron-up"></i></a>
+                                    <button type='button' className="btn btn-default card-collapsible text-lighter p-0"><i className="tf-icons fa-solid fa-chevron-up"></i></button>
                                 </li>
                             </ul>
                         </div>

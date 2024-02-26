@@ -1,207 +1,547 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
+import {decode as base64_decode} from 'base-64';
+import PtkModel from '../../model/PtkModel';
+import PtkPemeriksaan from '../../model/PtkPemeriksaan';
+import Cookies from 'js-cookie';
+import ModaAlatAngkut from '../../model/master/modaAlatAngkut.json';
+import { useForm } from 'react-hook-form';
+import Swal from 'sweetalert2';
+
+const modelPemohon = new PtkModel()
+const modelPeriksa = new PtkPemeriksaan()
+
+function modaAlatAngkut(e){
+    return ModaAlatAngkut.find((element) => element.id === parseInt(e))
+}
+
+const addCommas = num => num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+const removeNonNumeric = num => num.toString().replace(/[^0-9.]/g, "");
 
 function DocK34() {
+    const idPtk = Cookies.get("idPtkPage");
+    let [data, setData] = useState({
+        noAju: "",
+        noIdPtk: "",
+        noDokumen: "",
+        tglDokumen: "",
+    })
+
+    const {
+        register,
+        setValue,
+        handleSubmit,
+        // watch,
+        formState: { errors },
+    } = useForm({
+        noDok31: ""
+    });
+
+    // const cekWatch = watch()
+
+    const onSubmit = (data) => {
+        const response = modelPeriksa.pnInstalasi(data,);
+        response
+        .then((response) => {
+            console.log(response.data)
+            if(response.data) {
+                if(response.data.status === '201') {
+                    Swal.fire({
+                        title: "Sukses!",
+                        text: "Surat Perintah Masuk Instalasi berhasil " + (data.idDok34 ? "diedit." : "disimpan."),
+                        icon: "success"
+                    });
+                    setValue("idDok34", response.data.data.id)
+                    setValue("noDok34", response.data.data.nomor)
+                } else {
+                    Swal.fire({
+                        title: "Error!",
+                        text: response.data.status + " - " + response.data.message,
+                        icon: "error"
+                    });
+                }
+            }
+        })
+        .catch((error) => {
+            console.log(error);
+            Swal.fire({
+                title: "Error!",
+                text: error.response.status + " - " + error.response.data.message,
+                icon: "error"
+            });
+        });
+    }
+
+    useEffect(()=>{
+        if(idPtk) {
+            setValue("tglDok34", (new Date()).toLocaleString('en-CA', { hourCycle: 'h24' }).replace(',', '').slice(0,16))
+            const tglPtk = Cookies.get("tglPtk");
+            let ptkDecode = idPtk ? base64_decode(idPtk) : "";
+            let ptkNomor = idPtk ? ptkDecode.split('m0R3N0r1R') : "";
+            
+            setData(values => ({...values,
+                noAju: idPtk ? base64_decode(ptkNomor[0]) : "",
+                noIdPtk: idPtk ? base64_decode(ptkNomor[1]) : "",
+                noDokumen: idPtk ? base64_decode(ptkNomor[2]) : "",
+                tglDokumen: tglPtk,
+            }));
+            
+            const response = modelPemohon.getPtkId(base64_decode(ptkNomor[1]));
+            response
+            .then((response) => {
+                if(typeof response.data != "string") {
+                    setData(values => ({...values,
+                        errorPTK: ""
+                    }));
+                    if(response.data.status === '200') {
+                        setData(values => ({...values,
+                            listPtk: response.data.data.ptk,
+                            listKomoditas: response.data.data.ptk_komoditi,
+                            listDokumen: response.data.data.ptk_dokumen
+                        }));
+                        setValue("idPtk", base64_decode(ptkNomor[1]))
+                        setValue("noDokumen", base64_decode(ptkNomor[2]))
+                    } else {
+                        setData(values => ({...values,
+                            errorPTK: "Gagal load data PTK."
+                        }));
+                    }
+                } else {
+                    setData(values => ({...values,
+                        errorPTK: "Gagal load data PTK."
+                    }));
+                }
+            })
+            .catch((error) => {
+                console.log(error);
+                if(error.response) {
+                    if(error.response.data.status === 404) {
+                        setData(values => ({...values,
+                            errorPTK: "Data PTK Kosong/Tidak Ada"
+                        }));
+                    } else {
+                        setData(values => ({...values,
+                            errorPTK: "Gagal load data PTK"
+                        }));
+                    }
+                }
+            });
+
+            const resInstalasi = modelPeriksa.getPnInstalasiByPtkId(base64_decode(ptkNomor[1]))
+            resInstalasi
+            .then((response) => {
+                console.log(response.data)
+                if(response.data) {
+                    if(typeof response.data != "string") {
+                        setData(values => ({...values,
+                            errorInstalasi: ""
+                        }));
+                        if(response.data.status === '200') {
+                            setValue("idDok34", response.data.data.id)
+                            setValue("noDok34", response.data.data.nomor)
+                            setValue("tglDok34", response.data.data.tanggal)
+                            setValue("pemilikInstalasi", response.data.data.pemilik)
+                            setValue("namaPenanggungJawab", response.data.data.penanggungjawab)
+                            setValue("alamatInstalasi", response.data.data.alamat_instalasi)
+                            setValue("jenisIdentitas", response.data.data.jenis_identitas)
+                            setValue("nomorIdentitas", response.data.data.nomor_identitas)
+                            setValue("nomorTelepon", response.data.data.nomor_telp)
+                            // setValue("diterbitkan", response.data.data.diterbitkan_di)
+                            setValue("userTtd", response.data.data.user_ttd_id)
+                        } else {
+                            setData(values => ({...values,
+                                errorInstalasi: "Gagal load data Surat Perintah Masuk Instalasi"
+                            }));
+                        }
+                    } else {
+                        setData(values => ({...values,
+                            errorInstalasi: "Gagal load data Surat Perintah Masuk Instalasi"
+                        }));
+                    }
+                }
+            })
+            .catch((error) => {
+                console.log(error);
+                if(error.response) {
+                    if(error.response.data.status === 404) {
+                        setData(values => ({...values,
+                            errorInstalasi: ""
+                        }));
+                    } else {
+                        setData(values => ({...values,
+                            errorInstalasi: "Gagal load data Surat Perintah Masuk Instalasi"
+                        }));
+                    }
+                }
+            })
+        }
+    },[idPtk, setValue])
+
+    function refreshData() {
+        if(data.errorPTK) {
+            const response = modelPemohon.getPtkId(data.noIdPtk);
+            response
+            .then((response) => {
+                if(typeof response.data != "string") {
+                    setData(values => ({...values,
+                        errorPTK: ""
+                    }));
+                    if(response.data.status === '200') {
+                        setData(values => ({...values,
+                            listPtk: response.data.data.ptk,
+                            listKomoditas: response.data.data.ptk_komoditi,
+                            listDokumen: response.data.data.ptk_dokumen
+                        }));
+                        setValue("idPtk", data.noIdPtk)
+                        setValue("noDokumen", data.noDokumen)
+                    } else {
+                        setData(values => ({...values,
+                            errorPTK: "Gagal load data PTK."
+                        }));
+                    }
+                } else {
+                    setData(values => ({...values,
+                        errorPTK: "Gagal load data PTK."
+                    }));
+                }
+            })
+            .catch((error) => {
+                console.log(error);
+                if(error.response) {
+                    if(error.response.data.status === 404) {
+                        setData(values => ({...values,
+                            errorPTK: "Data PTK Kosong/Tidak Ada"
+                        }));
+                    } else {
+                        setData(values => ({...values,
+                            errorPTK: "Gagal load data PTK"
+                        }));
+                    }
+                }
+            })
+        }
+
+        if(data.errorInstalasi) {
+            const resInstalasi = modelPeriksa.getPnInstalasiByPtkId(data.noIdPtk)
+            resInstalasi
+            .then((response) => {
+                if(response.data) {
+                    if(typeof response.data != "string") {
+                        setData(values => ({...values,
+                            errorInstalasi: ""
+                        }));
+                        if(response.data.status === '200') {
+                            setValue("idDok34", response.data.data.id)
+                            setValue("noDok34", response.data.data.nomor)
+                            setValue("tglDok34", response.data.data.tanggal)
+                            setValue("pemilikInstalasi", response.data.data.pemilik)
+                            setValue("namaPenanggungJawab", response.data.data.penanggungjawab)
+                            setValue("alamatInstalasi", response.data.data.alamat_instalasi)
+                            setValue("jenisIdentitas", response.data.data.jenis_identitas)
+                            setValue("nomorIdentitas", response.data.data.nomor_identitas)
+                            setValue("nomorTelepon", response.data.data.nomor_telp)
+                            // setValue("diterbitkan", response.data.data.diterbitkan_di)
+                            setValue("userTtd", response.data.data.user_ttd_id)
+                        } else {
+                            setData(values => ({...values,
+                                errorInstalasi: "Gagal load data Surat Perintah Masuk Instalasi"
+                            }));
+                        }
+                    } else {
+                        setData(values => ({...values,
+                            errorInstalasi: "Gagal load data Surat Perintah Masuk Instalasi"
+                        }));
+                    }
+                }
+            })
+            .catch((error) => {
+                console.log(error);
+                if(error.response) {
+                    if(error.response.data.status === 404) {
+                        setData(values => ({...values,
+                            errorInstalasi: ""
+                        }));
+                    } else {
+                        setData(values => ({...values,
+                            errorInstalasi: "Gagal load data Surat Perintah Masuk Instalasi"
+                        }));
+                    }
+                }
+            })
+        }
+    }
+
   return (
     <div className="container-xxl flex-grow-1 container-p-y">
-    <h4 className="py-3 breadcrumb-wrapper mb-4">
-        K-3.4 <span className="text-muted fw-light">SURAT PERINTAH MASUK INSTALASI KARANTINA ATAU TEMPAT LAIN</span>
-    </h4>
+        <h4 className="py-3 breadcrumb-wrapper mb-4">
+            K-3.4 <span className="fw-light" style={{color: 'blue'}}>SURAT PERINTAH MASUK INSTALASI KARANTINA ATAU TEMPAT LAIN</span>
+        
+            <small className='float-end'>
+                <span className='text-danger'>{(data.errorPTK ? data.errorPTK + "; " : "") + (data.errorAdmin ? data.errorAdmin + "; " : "") + (data.errorSampling ? data.errorSampling + "; " : "") + (data.errorSurtug ? data.errorSurtug + "; " : "")}</span>
+                {data.errorPTK || data.errorSampling || data.errorAdmin || data.errorSurtug ?
+                    <button type='button' className='btn btn-warning btn-xs' onClick={() => refreshData()}><i className='fa-solid fa-sync'></i> Refresh</button>
+                : ""}
+            </small>
+        </h4>
 
-    <div className="row">
-        <div className="col-xxl">
-            <form className="card-body">
-                <div className="card">
-                    <div className="col-md-12 mt-3">
-                        <div className="row mb-3">
-                            <label className="col-sm-2 col-form-label text-sm-end" htmlFor="nomor_k12">Nomor</label>
-                            <div className="col-sm-3">
-                                <input type="text" id="nomor_k12" className="form-control form-control-sm" placeholder="Nomor" disabled />
-                            </div>
-                            <label className="col-sm-2 col-form-label text-sm-end" htmlFor="nomor_k12">UPT</label>
-                            <div className="col-sm-3">
-                                <input type="text" id="nomor_k12" className="form-control form-control-sm" placeholder="UPT" disabled />
-                            </div>
-                        </div>
-                        <div className="row mb-3">
-                            <label className="col-sm-2 col-form-label text-sm-end" htmlFor="nomor_k12">Nomor Permohonan Tindakan Karantina</label>
-                            <div className="col-sm-3">
-                                <input type="text" id="nomor_k12" className="form-control form-control-sm" placeholder="Nomor PTK" disabled />
-                            </div>
-                            <label className="col-sm-2 col-form-label text-sm-end" htmlFor="nomor_k12">Tanggal</label>
-                            <div className="col-sm-3">
-                                <input type="date" id="nomor_k12" className="form-control form-control-sm" disabled />
+        <div className="row">
+            <div className="col-xxl">
+                <div className='card card-action mb-4'>
+                    <div className="card-header mb-2 p-2" style={{backgroundColor: '#123138'}}>
+                        <div className="card-action-title text-lightest">
+                            <div className='row'>
+                                <label className="col-sm-1 col-form-label text-sm-end" htmlFor="noDok"><b>No PTK</b></label>
+                                <div className="col-sm-3">
+                                    <input type="text" id="noDokumen" value={data.noDokumen || ""} className="form-control form-control-sm" placeholder="Nomor PTK" disabled />
+                                </div>
+                                <label className="col-sm-1 col-form-label" htmlFor="tglDokumen"><b>Tanggal</b></label>
+                                <div className="col-sm-2">
+                                    <input type="text" id='tglDokumen' value={data.tglDokumen || ""} className='form-control form-control-sm' disabled/>
+                                </div>
                             </div>
                         </div>
-                        <div className="row mb-3">
-                            <label className="col-sm-2 col-form-label text-sm-end" htmlFor="nomor_k12">Nama Petugas</label>
-                            <div className="col-sm-3">
-                                <input type="text" id="nomor_k12" className="form-control form-control-sm" placeholder="Nama Petugas" disabled />
-                            </div>
+                        <div className="card-action-element">
+                            <ul className="list-inline mb-0">
+                                <li className="list-inline-item">
+                                    <button type='button' className="btn btn-default card-collapsible text-lighter p-0"><i className="tf-icons fa-solid fa-chevron-up"></i></button>
+                                </li>
+                            </ul>
                         </div>
                     </div>
-                </div>
-                <div className="row my-4">
-                    <div className="col">
-                        <div className="accordion" id="collapseSection">
-                            <div className="card accordion-item">
-                                <h2 className="accordion-header" id="headerExporter">
-                                    <button className="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseExporter" aria-expanded="true" aria-controls="collapseExporter">
-                                        Uraian Media Pembawa
+                    <form className="card-body" onSubmit={handleSubmit(onSubmit)}>
+                        <div className="col-md-12 mt-3">
+                            <div className="row mb-3">
+                                <label className="col-sm-2 col-form-label text-sm-start" htmlFor="noDok34">Nomor Dokumen</label>
+                                <div className="col-sm-3">
+                                    <input type="text" id="noDok63" name='noDok34' {...register("noDok34")} className="form-control form-control-sm" placeholder="Nomor Dokumen K-3.4" disabled />
+                                </div>
+                                <label className="col-sm-3 col-form-label text-sm-end" htmlFor="tglDok34">Tanggal <span className='text-danger'>*</span></label>
+                                <div className="col-sm-2">
+                                    <input type="datetime-local" id="tglDok34" name='tglDok34' {...register("tglDok34", {required: "Mohon isi tanggal dokumen."})} className={errors.tglDok34 ? "form-control form-control-sm is-invalid" : "form-control form-control-sm"} />
+                                    {errors.tglDok34 && <small className="text-danger">{errors.tglDok34.message}</small>}
+                                </div>
+                            </div>
+                        </div>
+                        <div className="accordion mb-4" id="collapseSection">
+                            <div className="card">
+                                <h2 className="accordion-header" id="headerKeterangan">
+                                    <button className="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseKeterangan"  style={{backgroundColor: '#123138'}} aria-expanded="true" aria-controls="collapseCountry">
+                                        <h5 className='text-lightest mb-0'>I. Informasi PTK</h5>
                                     </button>
                                 </h2>
-                                <div id="collapseExporter">
+                                <div id="collapseKeterangan">
                                     <div className="accordion-body">
-                                        <div className="row g-3 mb-3">
+                                        <div className="row">
                                             <div className="col-md-6">
+                                                <h5 className='mb-1'><b><u>Identitas Pengirim</u></b></h5>
                                                 <div className="row">
-                                                    <label className="col-sm-3 col-form-label text-sm-end" htmlFor="collapse-name">Jenis Media Pembawa</label>
-                                                    <div className="col-sm-9">
-                                                        <div className="form-check">
-                                                            <label className="form-check-label" htmlFor="jenismedia1">Hewan/Ikan/Tumbuhan</label>
-                                                            <input name="default-radio-jenismedia" className="form-check-input" type="radio" value="" id="jenismedia1" />
-                                                        </div>
-                                                        <div className="form-check">
-                                                            <label className="form-check-label" htmlFor="jenismedia2">Produk Hewan/Ikan/Tumbuhan</label>
-                                                            <input name="default-radio-jenismedia" className="form-check-input" type="radio" value="" id="jenismedia2" />
-                                                        </div>
-                                                        <div className="form-check">
-                                                            <label className="form-check-label" htmlFor="jenismedia3">Media Pembawa Lain Hewan/Ikan/Tumbuhan</label>
-                                                            <input name="default-radio-jenismedia" className="form-check-input" type="radio" value="" id="jenismedia3" />
-                                                        </div>
+                                                    <label className="col-sm-4 col-form-label" htmlFor="namaPengirim">Nama</label>
+                                                    <div className="col-sm-8">
+                                                        <input type="text" id="namaPengirim" value={(data.listPtk ? data.listPtk.nama_pengirim : "") || ""} disabled className="form-control form-control-sm" placeholder="Nama Pengirim" />
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div className="col-md-6">
+                                                <h5 className='mb-1'><b><u>Identitas Penerima</u></b></h5>
+                                                <div className="row">
+                                                    <label className="col-sm-4 col-form-label" htmlFor="namaPenerima">Nama</label>
+                                                    <div className="col-sm-8">
+                                                        <input type="text" id="namaPenerima" value={(data.listPtk ? data.listPtk.nama_penerima : "") || ""} disabled className="form-control form-control-sm" placeholder="Nama Penerima" />
                                                     </div>
                                                 </div>
                                             </div>
                                         </div>
-                                        <div className="row g-3 mb-3">
+                                        <div className="row mb-1">
                                             <div className="col-md-6">
-                                                <button type="button" className="btn btn-xs btn-primary">Add Media Pembawa</button>
+                                                <div className="row">
+                                                    <label className="col-sm-4 col-form-label" htmlFor="alamatPengirim">Alamat</label>
+                                                    <div className="col-sm-8">
+                                                        <textarea name="alamatPengirim" className="form-control form-control-sm" disabled value={(data.listPtk ? data.listPtk.alamat_pengirim : "") || ""} id="alamatPengirim" rows="2" placeholder=""></textarea>
+                                                    </div>
+                                                </div>
                                             </div>
-                                            <table className="table table-bordered table-hover table-striped dataTable">
+                                            <div className="col-md-6">
+                                                <div className="row">
+                                                    <label className="col-sm-4 col-form-label" htmlFor="alamatPenerima">Alamat</label>
+                                                    <div className="col-sm-8">
+                                                        <textarea name="alamatPenerima" className="form-control form-control-sm" disabled value={(data.listPtk ? data.listPtk.alamat_penerima : "") || ""} id="alamatPenerima" rows="2" placeholder=""></textarea>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div className="row">
+                                            <div className="col-md-6">
+                                                <div className="row">
+                                                    <label className="col-sm-4 col-form-label" htmlFor="identitasPengirim">Identitas</label>
+                                                    <div className="col-sm-8">
+                                                        <input name="identitastPengirim" className="form-control form-control-sm" disabled value={(data.listPtk ? (data.listPtk.jenis_identitas_pengirim + " - " + data.listPtk.nomor_identitas_pengirim) : "") || ""} id="identitasPengirim" placeholder="" />
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div className="col-md-6">
+                                                <div className="row">
+                                                    <label className="col-sm-4 col-form-label" htmlFor="identitasPenerima">Identitas</label>
+                                                    <div className="col-sm-8">
+                                                        <input name="identitasPenerima" className="form-control form-control-sm" disabled value={(data.listPtk ? (data.listPtk.jenis_identitas_penerima + " - " + data.listPtk.nomor_identitas_penerima) : "") || ""} id="identitasPenerima" placeholder="" />
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <hr />
+                                        <div className="row">
+                                            <h5 className='mb-2'><b><u>Informasi Pemasukan / Pengeluaran</u></b></h5>
+                                            <div className="col-md-6">
+                                                <div className="row">
+                                                    <label className="col-sm-4 col-form-label" htmlFor="daerahAsal">{data.listPtk ? (data.listPtk.permohonan === "DK" ? "Daerah" : "Negara") : ""} Asal</label>
+                                                    <div className="col-sm-8">
+                                                        <input name="daerahAsal" className="form-control form-control-sm" disabled value={(data.listPtk ? (data.listPtk.permohonan === "DK" ? data.listPtk.kota_asal : data.listPtk.negara_asal) : "") || ""} id="daerahAsal" />
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div className="col-md-6">
+                                                <div className="row">
+                                                    <label className="col-sm-4 col-form-label" htmlFor="daerahTujuan">{data.listPtk ? (data.listPtk.permohonan === "DK" ? "Daerah" : "Negara") : ""} Tujuan</label>
+                                                    <div className="col-sm-8">
+                                                        <input name="daerahTujuan" className="form-control form-control-sm" disabled value={(data.listPtk ? (data.listPtk.permohonan === "DK" ? data.listPtk.kota_tujuan : data.listPtk.negara_tujuan) : "") || ""} id="daerahTujuan" />
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div className="row">
+                                            <div className="col-md-6">
+                                                <div className="row">
+                                                    <label className="col-sm-4 col-form-label" htmlFor="tempatKeluar">Tempat Pengeluaran / Perkiraan Tgl Berangkat</label>
+                                                    <div className="col-sm-8">
+                                                        <input name="tempatKeluar" className="form-control form-control-sm" disabled value={(data.listPtk ? (data.listPtk.pelabuhan_muat + " / " + data.listPtk.tanggal_rencana_berangkat_terakhir) : "") || ""} id="tempatKeluar" />
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div className="col-md-6">
+                                                <div className="row">
+                                                    <label className="col-sm-4 col-form-label" htmlFor="tempatMasuk">Tempat Pemasukan / Perkiraan Tgl Tiba</label>
+                                                    <div className="col-sm-8">
+                                                        <input name="tempatMasuk" className="form-control form-control-sm" disabled value={(data.listPtk ? (data.listPtk.pelabuhan_bongkar + " / " + data.listPtk.tanggal_rencana_tiba_terakhir) : "") || ""} id="tempatMasuk" />
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div className="row mb-4">
+                                            <div className="col-md-6">
+                                                <div className="row">
+                                                    <label className="col-sm-4 col-form-label" htmlFor="tempatTransit">Tempat Transit</label>
+                                                    <div className="col-sm-8">
+                                                        <input name="tempatTransit" className="form-control form-control-sm" disabled value={(data.listPtk ? (data.listPtk.pelabuhan_transit === null ? "-" : data.listPtk.pelabuhan_transit + ", " + data.listPtk.negara_transit) : "") || ""} id="tempatTransit" />
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div className="col-md-6">
+                                                <div className="row">
+                                                    <label className="col-sm-4 col-form-label" htmlFor="identitasAngkut">Jenis, Nama Alat Angkut</label>
+                                                    <div className="col-sm-8">
+                                                        <input name="identitasAngkut" className="form-control form-control-sm" disabled value={(data.listPtk ? (modaAlatAngkut(data.listPtk.tipe_alat_angkut_terakhir_id).nama + ", " + data.listPtk.nama_alat_angkut_terakhir) : "") || "" } id="identitasAngkut" />
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <h5><b><u>Rincian Media Pembawa</u></b></h5>
+                                        <div className="table-responsive text-nowrap" style={{height: "300px"}}>
+                                            <table className="table table-sm table-bordered table-hover table-striped dataTable">
                                                 <thead>
                                                     <tr>
-                                                        <th>NO</th>
-                                                        <th>Media Pembawa</th>
+                                                        <th>No</th>
+                                                        <th>Kode HS</th>
+                                                        <th>Klasifikasi</th>
+                                                        <th>Komoditas Umum</th>
+                                                        <th>Komoditas En/Latin</th>
+                                                        <th>Netto</th>
+                                                        <th>Satuan</th>
                                                         <th>Jumlah</th>
                                                         <th>Satuan</th>
-                                                        <th>Keterangan</th>
+                                                        <th>Jantan</th>
+                                                        <th>Betina</th>
                                                     </tr>
                                                 </thead>
                                                 <tbody>
-                                                    <tr>
-                                                        <th>1</th>
-                                                        <th>-</th>
-                                                        <th>-</th>
-                                                        <th>-</th>
-                                                        <th>-</th>
-                                                    </tr>
-                                                    <tr>
-                                                        <th>2</th>
-                                                        <th>-</th>
-                                                        <th>-</th>
-                                                        <th>-</th>
-                                                        <th>-</th>
-                                                    </tr>
+                                                    {data.listKomoditas ? (data.listKomoditas?.map((data, index) => (
+                                                                <tr key={index}>
+                                                                    <td>{index + 1}</td>
+                                                                    <td>{data.kode_hs}</td>
+                                                                    <td>{data.klasifikasi}</td>
+                                                                    <td>{data.nama_umum_tercetak}</td>
+                                                                    <td>{data.nama_latin_tercetak}</td>
+                                                                    <td>{data.volume_netto == null ? "" : addCommas(removeNonNumeric(data.volume_netto))}</td>
+                                                                    <td>{data.sat_netto}</td>
+                                                                    <td>{data.volume_lain == null ? "" : addCommas(removeNonNumeric(data.volume_lain))}</td>
+                                                                    <td>{data.sat_lain}</td>
+                                                                    <td>{data.jantan == null ? "" : addCommas(removeNonNumeric(data.jantan))}</td>
+                                                                    <td>{data.betina == null ? "" : addCommas(removeNonNumeric(data.betina))}</td>
+                                                                </tr>
+                                                            ))
+                                                        ) : null
+                                                    }
                                                 </tbody>
                                             </table>
                                         </div>
                                     </div>
                                 </div>
                             </div>
-                            <div className="card accordion-item">
-                                <h2 className="accordion-header" id="headerImporter">
-                                    <button className="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseImporter" aria-expanded="true" aria-controls="collapseImporter">
-                                        Informasi Pemasukan/Pengeluaran
+                            <div className="card">
+                                <h2 className="accordion-header" id="headerAlasan">
+                                    <button className="accordion-button" type="button" style={{backgroundColor: '#123138'}} data-bs-toggle="collapse" data-bs-target="#collapseAlasan" aria-expanded="true" aria-controls="collapseImporter">
+                                        <h5 className='text-lightest mb-0'>II. INFORMASI INSTALASI KARANTINA/TEMPAT LAIN</h5>
                                     </button>
                                 </h2>
-                                <div id="collapseImporter">
+                                <div id="collapseAlasan">
                                     <div className="accordion-body">
-                                        <div className="row g-3 mb-3">
-                                            <div className="col-md-12">
+                                        <div className='row'>
+                                            <div className="col-md-6">
                                                 <div className="row">
-                                                    <label className="col-sm-3 col-form-label text-sm-end" htmlFor="collapse-name">Negara/Daerah Asal</label>
-                                                    <div className="col-sm-6">
-                                                        <input type="text" id="collapse-name" className="form-control" placeholder="Negara/Daerah Asal" />
+                                                    <label className="col-sm-4 col-form-label" htmlFor="jenisIdentitas">Identitas<span className='text-danger'>*</span></label>
+                                                    <div className="col-sm-8">
+                                                        <div className='input-group'>
+                                                            <div className='col-sm-4'>
+                                                                <select name="jenisIdentitas" id="jenisIdentitas" {...register("jenisIdentitas", {required: "Mohon pilih jenis identitas."})} className={errors.jenisIdentitas ? "form-control form-control-sm is-invalid" : "form-control form-control-sm"}>
+                                                                    <option value="">--</option>
+                                                                    <option value="NIB">NIB</option>
+                                                                    <option value="NPWP">NPWP</option>
+                                                                    <option value="KTP">KTP</option>
+                                                                    <option value="PASSPORT">Passport</option>
+                                                                </select>
+                                                            </div>
+                                                            <div className='col-sm-8'>
+                                                                <input type="text" className={errors.nomorIdentitas ? "form-control form-control-sm is-invalid" : "form-control form-control-sm"} id='nomorIdentitas' name='nomorIdentitas' {...register("nomorIdentitas", {required: "Mohon isi nomor identitas."})} />
+                                                            </div>
+                                                        </div>
+                                                        {errors.jenisIdentitas && <small className="text-danger">{errors.jenisIdentitas.message}</small>}
+                                                        {errors.nomorIdentitas && <small className="text-danger">{errors.nomorIdentitas.message}</small>}
+                                                    </div>
+                                                </div>
+                                                <div className="row">
+                                                    <label className="col-sm-4 col-form-label" htmlFor="pemilikInstalasi">Pemilik Instalasi<span className='text-danger'>*</span></label>
+                                                    <div className="col-sm-8">
+                                                        <input type="text" id="pemilikInstalasi" name='pemilikInstalasi' className={errors.pemilikInstalasi ? "form-control form-control-sm is-invalid" : "form-control form-control-sm"} placeholder="Pemilik Instalasi Karantina / Tempat Lain.." {...register("pemilikInstalasi", {required: "Mohon isi nama pemilik Instalasi."})} />
+                                                        {errors.pemilikInstalasi && <small className="text-danger">{errors.pemilikInstalasi.message}</small>}
+                                                    </div>
+                                                </div>
+                                                <div className="row">
+                                                    <label className="col-sm-4 col-form-label" htmlFor="alamatInstalasi">Alamat Instalasi<span className='text-danger'>*</span></label>
+                                                    <div className="col-sm-8">
+                                                        <textarea name="alamatInstalasi" id="alamatInstalasi" rows="2" className={errors.alamatInstalasi ? "form-control form-control-sm is-invalid" : "form-control form-control-sm"} placeholder="Alamat Instalasi Karantina / Tempat Lain.." {...register("alamatInstalasi", {required: "Mohon isi alamat Instalasi Karantina."})}></textarea>
+                                                        {errors.alamatInstalasi && <small className="text-danger">{errors.alamatInstalasi.message}</small>}
                                                     </div>
                                                 </div>
                                             </div>
-                                        </div>
-                                        <div className="row g-3 mb-3">
-                                            <div className="col-md-12">
+                                            <div className="col-md-6">
                                                 <div className="row">
-                                                    <label className="col-sm-3 col-form-label text-sm-end" htmlFor="collapse-name">Negara/Daerah Tujuan</label>
-                                                    <div className="col-sm-6">
-                                                        <input type="text" id="collapse-name" className="form-control" placeholder="Negara/Daerah Tujuan" />
+                                                    <label className="col-sm-4 col-form-label" htmlFor="namaPenanggungJawab">Penanggungjawab<span className='text-danger'>*</span></label>
+                                                    <div className="col-sm-8">
+                                                        <input type="text" id="namaPenanggungJawab" name='namaPenanggungJawab' className="form-control form-control-sm" placeholder="Nama PenanggungJawab.." {...register("namaPenanggungJawab", {required: "Mohon isi nama PenanggungJawab."})} />
+                                                        {errors.namaPenanggungJawab && <small className="text-danger">{errors.namaPenanggungJawab.message}</small>}
                                                     </div>
                                                 </div>
-                                            </div>
-                                        </div>
-                                        <div className="row g-3 mb-3">
-                                            <div className="col-md-12">
                                                 <div className="row">
-                                                    <label className="col-sm-3 col-form-label text-sm-end" htmlFor="collapse-name">Tempat Pemasukan/Pengeluaran</label>
-                                                    <div className="col-sm-6">
-                                                        <input type="text" id="collapse-name" className="form-control" placeholder="Tempat Pemasukan/Pengeluaran" />
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div className="row g-3 mb-3">
-                                            <div className="col-md-12">
-                                                <div className="row">
-                                                    <label className="col-sm-3 col-form-label text-sm-end" htmlFor="collapse-name">Perkiraan Waktu Tiba/Berangkat</label>
-                                                    <div className="col-sm-6">
-                                                        <input type="text" id="collapse-name" className="form-control" placeholder="Perkiraan Waktu Tiba/Berangkat" />
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div className="card accordion-item">
-                                <h2 className="accordion-header" id="headerImporter">
-                                    <button className="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseImporter" aria-expanded="true" aria-controls="collapseImporter">
-                                        Informasi Instalasi Karantina/Tempat Lain
-                                    </button>
-                                </h2>
-                                <div id="collapseImporter">
-                                    <div className="accordion-body">
-                                        <div className="row g-3 mb-3">
-                                            <div className="col-md-12">
-                                                <div className="row">
-                                                    <label className="col-sm-3 col-form-label text-sm-end" htmlFor="collapse-name">Pemilik Instalasi Karantina/Tempat Lain</label>
-                                                    <div className="col-sm-6">
-                                                        <input type="text" id="collapse-name" className="form-control" placeholder="Pemilik Instalasi Karantina/Tempat Lain" />
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div className="row g-3 mb-3">
-                                            <div className="col-md-12">
-                                                <div className="row">
-                                                    <label className="col-sm-3 col-form-label text-sm-end" htmlFor="collapse-name">Alamat Instalasi Karantina/Tempat Lain</label>
-                                                    <div className="col-sm-6">
-                                                        <textarea name="collapsible-address" className="form-control" id="collapsible-address" rows="5" placeholder=""></textarea>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div className="row g-3 mb-3">
-                                            <div className="col-md-12">
-                                                <div className="row">
-                                                    <label className="col-sm-3 col-form-label text-sm-end" htmlFor="collapse-name">Penanggungjawab</label>
-                                                    <div className="col-sm-6">
-                                                        <input type="text" id="collapse-name" className="form-control" placeholder="Penanggungjawab" />
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div className="row g-3 mb-3">
-                                            <div className="col-md-12">
-                                                <div className="row">
-                                                    <label className="col-sm-3 col-form-label text-sm-end" htmlFor="collapse-name">Nomor Kontak (Telp/HP)</label>
-                                                    <div className="col-sm-6">
-                                                        <input type="text" id="collapse-name" className="form-control" placeholder="Nomor Kontak (Telp/HP)" />
+                                                    <label className="col-sm-4 col-form-label" htmlFor="nomorTelepon">Nomor Kontak (TelplHP)</label>
+                                                    <div className="col-sm-5">
+                                                        <input type="text" id="nomorTelepon" name="nomorTelepon" className="form-control form-control-sm" placeholder="628898888888.." {...register("nomorTelepon")} />
                                                     </div>
                                                 </div>
                                             </div>
@@ -210,18 +550,25 @@ function DocK34() {
                                 </div>
                             </div>
                         </div>
-                    </div>
+                        <div className="row mt-3 mb-3">
+                            <div className='col-sm-2 form-control-label' htmlFor="ttdUser">Penandatangan<span className='text-danger'>*</span></div>
+                            <div className="col-sm-4">
+                                <input type="text" name='ttdUser' id='ttdUser' {...register("ttdUser", {required: "Mohon pilih penandatangan."})} className={errors.ttdUser ? "form-select form-select-sm is-invalid" : "form-select form-select-sm"}/>
+                                {errors.ttdUser && <small className="text-danger">{errors.ttdUser.message}</small>}
+                            </div>
+                            <div className='col-sm-2 form-control-label' htmlFor="diterbitkan">Diterbitkan di<span className='text-danger'>*</span></div>
+                            <div className="col-sm-4">
+                                <input type="text" name='diterbitkan' id='diterbitkan' {...register("diterbitkan", {required: "Mohon isi tempat penerbitan sertifikat."})} className={errors.diterbitkan ? "form-control form-control-sm is-invalid" : "form-control form-control-sm"}/>
+                                {errors.diterbitkan && <small className="text-danger">{errors.diterbitkan.message}</small>}
+                            </div>
+                        </div>
+                        <button type="submit" className="btn btn-primary me-sm-2 me-1">Simpan</button>
+                        <button type="button" className="btn btn-danger me-sm-2 me-1">Hapus</button>
+                    </form>
                 </div>
-                <div className="row">
-                    <div className="col-sm-2">
-                        <button type="button" className="btn btn-primary">Simpan</button>
-                        <button type="button" className="btn btn-danger">Batal</button>
-                    </div>
-                </div>
-            </form>
+            </div>
         </div>
     </div>
-</div>
   )
 }
 

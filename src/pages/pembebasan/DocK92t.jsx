@@ -29,7 +29,7 @@ function DocK92t() {
         register,
         setValue,
         handleSubmit,
-        watch,
+        // watch,
         formState: { errors },
     } = useForm();
 
@@ -243,7 +243,7 @@ function DocK92t() {
                         <div className="card-action-element">
                             <ul className="list-inline mb-0">
                                 <li className="list-inline-item">
-                                    <a href="#" className="card-collapsible"><i className="tf-icons bx bx-chevron-up"></i></a>
+                                    <button type='button' className="btn btn-default card-collapsible text-lighter p-0"><i className="tf-icons fa-solid fa-chevron-up"></i></button>
                                 </li>
                             </ul>
                         </div>
@@ -394,7 +394,7 @@ function DocK92t() {
                                                                                 <td>{data.volumeP8}</td>
                                                                                 <td>{data.nettoP8}</td>
                                                                                 <td>
-                                                                                    <a className="dropdown-item" href="#" type="button" onClick={handleEditKomoditas} data-header={data.id} data-ptk={data.ptk_id} data-bs-toggle="modal" data-bs-target="#modKomoditas"><i className="fa-solid fa-pen-to-square me-1"></i> Edit</a>
+                                                                                    <button className="btn btn-default dropdown-item" href="#" type="button" onClick={handleEditKomoditas} data-header={data.id} data-ptk={data.ptk_id} data-bs-toggle="modal" data-bs-target="#modKomoditas"><i className="fa-solid fa-pen-to-square me-1"></i> Edit</button>
                                                                                 </td>
                                                                             </tr>
                                                                         ))

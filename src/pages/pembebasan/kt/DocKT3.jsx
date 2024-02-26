@@ -1,3 +1,4 @@
+/* eslint-disable jsx-a11y/anchor-is-valid */
 import Cookies from 'js-cookie';
 import React, { useEffect, useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';

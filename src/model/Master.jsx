@@ -79,8 +79,32 @@ export default class Master {
         })
     }
     
+    masterKlasKH(idData) {
+        return axios.get(url + 'klaskh/gol/' + idData, {
+            headers: {
+            //   'Cookie': 'PHPSESSID=jgepu06btvgculap0gl0tao0fp',
+            }
+        })
+    }
+
     masterKomKH(idData) {
         return axios.get(url + 'komkh/gol/' + idData, {
+            headers: {
+            //   'Cookie': 'PHPSESSID=jgepu06btvgculap0gl0tao0fp',
+            }
+        })
+    }
+    
+    masterKlasKI(idData) {
+        return axios.get(url + 'klaski/gol/' + idData, {
+            headers: {
+            //   'Cookie': 'PHPSESSID=jgepu06btvgculap0gl0tao0fp',
+            }
+        })
+    }
+
+    masterKomKI() {
+        return axios.get(url + 'komki', {
             headers: {
             //   'Cookie': 'PHPSESSID=jgepu06btvgculap0gl0tao0fp',
             }

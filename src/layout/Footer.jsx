@@ -1,10 +1,8 @@
-/* eslint-disable jsx-a11y/anchor-is-valid */
 import React from 'react'
 import Content from './Content'
 import Cookies from 'js-cookie';
 // import { useNavigate } from 'react-router-dom';
-
-function Footer() {
+function Footer(props) {
     // let navigate = useNavigate();
     const handleLogout = () => {
         Cookies.remove("isLogin");
@@ -13,23 +11,36 @@ function Footer() {
         // navigate('/')
         window.location.reload();
     }
+
+    // let[showMenu, setShowMenu] = useState(Cookies.get("showmenu"))
+    function menuKecil(e) {
+        e.preventDefault();
+        console.log(props.setShowMenu(!props.showMenu))
+        // setShowMenu(!showMenu)
+        // // this.state = {username: ''}
+        // Cookies.set("showmenu", showMenu)
+        // console.log(Cookies.get("showmenu"))
+    }
   return (
     <div className="layout-page">
         <nav className="layout-navbar navbar navbar-expand-xl align-items-center" style={{background: '#123138'}} id="layout-navbar">
             <div className="container-fluid">
-                
+                <div className="layout-menu-toggle navbar-nav align-items-xl-center me-3 me-xl-0 d-xl-none">
+                    <button type='button' onClick={menuKecil} className="nav-item nav-link px-0 me-xl-4 text-lightest">
+                        <i className="fa fa-solid fa-bars"></i>
+                    </button>
+                </div>
                 <div className="navbar-nav-right d-flex align-items-center" id="navbar-collapse">
-                <h4 className='text-lightest'>-- {Cookies.get("namaSatpel")} --</h4>
+                    <h4 className='text-lightest mt-3'>-- {Cookies.get("namaSatpel")} --</h4>
 
                     <ul className="navbar-nav flex-row align-items-center ms-auto">
-                        
                         <li className="nav-item navbar-dropdown dropdown-user dropdown">
-                            <a className="nav-link dropdown-toggle" href="#" data-bs-toggle="dropdown" style={{color: 'white'}}>
+                            <button type='button' className="btn btn-default nav-link dropdown-toggle" data-bs-toggle="dropdown" style={{color: 'white'}}>
                                 <i className="menu-icon tf-icons fa-regular fa-circle-user"></i>
-                            </a>
+                            </button>
                             <ul className="dropdown-menu dropdown-menu-end">
                                 <li>
-                                    <a className="dropdown-item" href="#">
+                                    <button type='button' className="btn btn-default dropdown-item">
                                         <div className="d-flex">
                                             <div className="flex-shrink-0 me-3">
                                                 <div className="avatar avatar-online">
@@ -41,25 +52,25 @@ function Footer() {
                                                 <small>{Cookies.get("username")}</small>
                                             </div>
                                         </div>
-                                    </a>
+                                    </button>
                                 </li>
                                 <li>
                                     <div className="dropdown-divider"></div>
                                 </li>
                                 <li>
-                                    <a className="dropdown-item" href="#">
+                                    <button type='button' className="dropdown-item">
                                         <i className="bx bx-cog me-2"></i>
                                         <span className="align-middle">Settings Satpel</span>
-                                    </a>
+                                    </button>
                                 </li>
                                 <li>
                                     <div className="dropdown-divider"></div>
                                 </li>
                                 <li>
-                                    <a className="dropdown-item" href='#' onClick={handleLogout}>
+                                    <button type='button' className="dropdown-item" onClick={handleLogout}>
                                         <i className="bx bx-power-off me-2"></i>
                                         <span className="align-middle">Log Out</span>
-                                    </a>
+                                    </button>
                                 </li>
                             </ul>
                         </li>

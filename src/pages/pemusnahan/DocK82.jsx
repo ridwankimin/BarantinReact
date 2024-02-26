@@ -1,4 +1,3 @@
-/* eslint-disable jsx-a11y/anchor-is-valid */
 import Cookies from 'js-cookie';
 import React, { useEffect, useState } from 'react';
 import PtkHistory from '../../model/PtkHistory';
@@ -356,7 +355,7 @@ function DocK82() {
                     <div className="card-action-element">
                         <ul className="list-inline mb-0">
                             <li className="list-inline-item">
-                                <a href="#" className="card-collapsible"><i className="tf-icons bx bx-chevron-up"></i></a>
+                                <button type='button' className="btn btn-default card-collapsible text-lighter p-0"><i className="tf-icons fa-solid fa-chevron-up"></i></button>
                             </li>
                         </ul>
                     </div>
@@ -516,7 +515,7 @@ function DocK82() {
                                                                         <td>{data.jantanP7}</td>
                                                                         <td>{data.betinaP7}</td>
                                                                         <td>
-                                                                            <a className="dropdown-item" href="#" type="button" onClick={handleEditKomoditas} data-headerid={data.id} data-ptk={data.ptk_id} data-bs-toggle="modal" data-bs-target="#modKomoditas"><i className="fa-solid fa-pen-to-square me-1"></i> Edit</a>
+                                                                            <button className="btn btn-default dropdown-item" type="button" onClick={handleEditKomoditas} data-headerid={data.id} data-ptk={data.ptk_id} data-bs-toggle="modal" data-bs-target="#modKomoditas"><i className="fa-solid fa-pen-to-square me-1"></i> Edit</button>
                                                                         </td>
                                                                     </tr>
                                                                 ))
@@ -595,7 +594,7 @@ function DocK82() {
                                                                 <td>{item.alamat}</td>
                                                                 <td>{index === 0 ? <input type='text' value={item.jabatan} onChange={(e) => {item.jabatan = e.target.value; setArraySaksi([...arraySaksi])}} style={{border:0, borderBottom: "1px dotted black"}} /> : item.jabatan}</td>
                                                                 <td>
-                                                                    {index === 0 ? "#" : <a className="text-danger" href="#"><i className="fa-solid fa-trash me-1"></i> Delete</a>}
+                                                                    {index === 0 ? "#" : <button type='button' className="btn btn-default text-danger"><i className="fa-solid fa-trash me-1"></i> Delete</button>}
                                                                 </td>
                                                             </tr>
                                                         ))

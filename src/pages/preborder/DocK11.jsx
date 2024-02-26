@@ -1,45 +1,27 @@
 /* eslint-disable eqeqeq */
-/* eslint-disable jsx-a11y/anchor-is-valid */
 import React, { useCallback, useEffect, useState } from 'react'
 import PersonSvg from '../../logo/svg/PersonSvg'
 import ShipSvg from '../../logo/svg/ShipSvg'
 import PackageSvg from '../../logo/svg/PackageSvg'
 import DokumenSvg from '../../logo/svg/DokumenSvg'
 import ConfirmSvg from '../../logo/svg/ConfirmSvg'
-// import MasterNegara from '../../model/master/MasterNegara'
-// import MasterKota from '../../model/master/MasterKota'
-// import MasterPelabuhan from '../../model/master/MasterPelabuhan'
 import MasterKemasan from '../../model/master/MasterKemasan'
 import MasterMataUang from '../../model/master/MasterMataUang'
 import NegaraJson from '../../model/master/negara.json'
 import PelabuhanJson from '../../model/master/pelabuhan.json'
-import KlasifikasiKTJson from '../../model/master/klasifikasiKT.json'
 import JenisDokumenJson from '../../model/master/jenisDokumen.json'
-import KomoditasKTJson from '../../model/master/komoditasKT.json'
-// import MasterKlasKT from '../../model/master/MasterKlasKT'
-// import MasterKomKT from '../../model/master/MasterKomKT'
-// import MasterSatuan from '../../model/master/MasterSatuan'
 import MasterSatuanJson from '../../model/master/satuan.json'
-// import MasterHS from '../../model/master/MasterHS'
 import { Controller, useForm } from 'react-hook-form'
-// import { motion } from "framer-motion";
-// import MasterProv from '../../model/master/MasterProv'
 import {decode as base64_decode, encode as base64_encode} from 'base-64';
 import PtkModel from '../../model/PtkModel'
 import { useNavigate } from 'react-router-dom'
-// import MasterKomKH from '../../model/master/MasterKomKH'
-// import MasterDokumen from '../../model/master/MasterDokumen'
 import moment from 'moment/moment'
 import Select from 'react-select'
 import Master from '../../model/Master'
 import Cookies from 'js-cookie'
 import PtkHistory from '../../model/PtkHistory'
 import Swal from 'sweetalert2'
-// import $ from 'jquery';
-// import './assets/vendor/libs/popper/popper.js'
-// import '../../assets/vendor/libs/popper/popper.js'
-// import '../../assets/vendor/libs/bs-stepper/bs-stepper.css'
-// import '../../assets/vendor/libs/bs-stepper/bs-stepper.js'
+
 const modelPemohon = new PtkModel()
 const modelMaster = new Master()
 const log = new PtkHistory()
@@ -67,60 +49,47 @@ function handleJenisDokumen(e) {
     return arraySelect
 }
 
-function masterKomKT() {
-        
-    var arraySelect = KomoditasKTJson.map(item => {
-        return {
-            value: item.id + ";" + item.nama + ";" + item.nama_latin,
-            label: item.nama + " - " + item.nama_en,
-        }
-    })
-    return arraySelect
+const customStyles = {
+    control: (provided, state) => ({
+        ...provided,
+        background: '#fff',
+        borderColor: '#D4D8DD',
+        cursor: 'text',
+        minHeight: '30px',
+        height: '30px',
+        boxShadow: state.isFocused ? null : null,
+    }),
+
+    valueContainer: (provided, state) => ({
+        ...provided,
+        height: '30px',
+        padding: '0 6px'
+    }),
+
+    input: (provided, state) => ({
+        ...provided,
+        margin: '0px',
+    }),
+    indicatorSeparator: state => ({
+        display: 'none',
+    }),
+    indicatorsContainer: (provided, state) => ({
+        ...provided,
+        height: '30px',
+    }),
 }
 
 function DocK11() {
     require("../../assets/vendor/libs/bs-stepper/bs-stepper.css")
-    require("../../assets/vendor/libs/bs-stepper/bs-stepper.js")
+    // require("../../assets/vendor/libs/bs-stepper/bs-stepper.js")
     
     let navigate = useNavigate();
-    // const { idPtk } = useParams()
-    // Cookies.remove("idPtkPage");
     const idPtk = Cookies.get("idPtkPage");
     let [dataIdPage, setDataIdPage] = useState({});
-    // let [opsiVerif, setOpsiVerif] = useState();
-
-    const customStyles = {
-        control: (provided, state) => ({
-          ...provided,
-          background: '#fff',
-          borderColor: '#D4D8DD',
-          cursor: 'text',
-          minHeight: '30px',
-          height: '30px',
-          boxShadow: state.isFocused ? null : null,
-        }),
-        
-        valueContainer: (provided, state) => ({
-            ...provided,
-            height: '30px',
-            padding: '0 6px'
-        }),
-        
-        input: (provided, state) => ({
-            ...provided,
-            margin: '0px',
-        }),
-        indicatorSeparator: state => ({
-            display: 'none',
-        }),
-        indicatorsContainer: (provided, state) => ({
-            ...provided,
-            height: '30px',
-        }),
-      };
 
     let [dataSelect, setdataSelect] = useState({});
     let [ptkLengkap, setPtkLengkap] = useState(false);
+    let [wizardPage, setWizardPage] = useState(1);
     
     function handlePermohonan(e) {
         if(e.target.value === 'EX') {
@@ -169,80 +138,33 @@ function DocK11() {
             handlePelabuhan("99", "pelMuat")
             handlePelabuhan("99", "pelBongkar")
         }
-        // setdataSelect(values => ({...values, [e.target.name]: <MasterKlasKT gol={e.target.dataset.gol}/>}))
     }
     
-    // function handlePeruntukanKT(e) {
-    //     setdataSelect(values => ({...values, [e.target.name]: <MasterKlasKT gol={e.target.dataset.gol}/>}))
-    // }
     
     function handleSetKomoditasSelect(e) {
         console.log(e)
         const dataKomKT = e.value;
         const dataPisahKT = dataKomKT.split(";");
-        if(cekdataMP.mediaPembawa === "T") {
+        if(cekdataDiri.mediaPembawa === "T") {
             setValueDetilMP("komoditasMP", dataPisahKT[0])
             setValueDetilMP("namaUmum", dataPisahKT[1])
             setValueDetilMP("namaLatin", (dataPisahKT[2] | dataPisahKT[2] === null ? dataPisahKT[2] : "-"))
-        } else if(cekdataMP.mediaPembawa === "H") {
+        } else if(cekdataDiri.mediaPembawa === "H") {
             setValueDetilMP("komoditasMPKHid", dataPisahKT[0])
             setValueDetilMP("namaUmumKH", dataPisahKT[1])
             setValueDetilMP("namaLatinKH", (dataPisahKT[2] | dataPisahKT[2] === null ? dataPisahKT[2] : "-"))
             // setValueDetilMP("klasifikasiMPKHid", dataPisahKT[3]) //klasifikasi KH
+        } else if(cekdataDiri.mediaPembawa === "I") {
+            setValueDetilMP("komoditasMPKIid", dataPisahKT[0])
+            setValueDetilMP("namaUmumKI", dataPisahKT[1])
+            setValueDetilMP("namaLatinKI", (dataPisahKT[2] | dataPisahKT[2] === null ? dataPisahKT[2] : "-"))
+            // setValueDetilMP("klasifikasiMPKHid", dataPisahKT[3]) //klasifikasi KH
         }
     }
-    
-    // function handleMPDetil(e) {
-    //     // console.log(e.label)
-    //     setValueMP("mediaPembawa", e.target.value);
-    //     setValueDetilMP("jenisKar", e.target.value);
-    //     handleJenisDokumen(e.target.value);
-    //     if(e.target.value === "T") {
-    //         handleKomKTDetil()
-    //     }
-    // }
-    
-    // function handleKomKTDetil() {
-    //     // const modelMaster = new Master()
-    //     // var arrayKomKT = MasterKomKT.map(item => {
-    //     //     return {
-    //     //         value: item.id,
-    //     //         label: item.nama,
-    //     //     }
-    //     // })
-    //     // setdataSelect(values => ({...values, "selectKomoditasMP": arrayKomKT}));
-    //     const resKomKT = modelMaster.masterKomKT()
-    //     resKomKT
-    //     .then((response) => {
-    //         let dataKomKT = response.data.data;
-    //         var arrayKomKT = dataKomKT.map(item => {
-    //             return {
-    //                 value: item.id + ";" + item.nama + ";" + item.nama_latin,
-    //                 label: item.nama + " - " + item.nama_en
-    //             }
-    //         })
-    //         setdataSelect(values => ({...values, "selectKomoditasMP": arrayKomKT}));
-    //     })
-    //     .catch((error) => {
-    //         console.log(error);
-    //     });
-    // }
     
     function handleKemasan(e) {
         setdataSelect(values => ({...values, [e.target.name]: <MasterKemasan/>}))
     }
-    
-    // function handleMasterSatuan(e) {
-    //     setdataSelect(values => ({...values, [e.target.name]: <MasterSatuan kar={e.target.dataset.kar} />}))
-    // }
-    
-    // function handleMasterHS(e) {
-    //     setdataSelect(values => ({...values, [e.target.name]: <MasterHS kar={e.target.dataset.kar} />}))
-    // }
-    
-    // function handleProv(e) {
-    //     setdataSelect(values => ({...values, [e.target.name]: <MasterProv/>}))
-    // }
     
     function handleBase64Upload(e) {
         let fileReader = new FileReader();
@@ -255,26 +177,8 @@ function DocK11() {
         fileReader.onload = (event) => {
             
             setValueDokumen("fileDokumen", event.target.result);
-            // console.log(event.target.result);
         }
-    //   console.log(cekdataDokumen.fileDokumen)
     }
-    
-    // function handleMataUang(e) {
-    //     setdataSelect(values => ({...values, [e.target.name]: <MasterMataUang/>}))
-    // }
-    
-    // function handleKota(e) {
-    //     setdataSelect(values => ({...values, [e.target.name]: <MasterKota iddata={e.target.dataset.input}/>}))
-    // }
-    
-    // function handleKomoditasKT(e) {
-    //     setdataSelect(values => ({...values, [e.target.name]: <MasterKomKT />}))
-    // }
-    
-    // function handleKomoditasKH(e) {
-    //     setdataSelect(values => ({...values, [e.target.name]: <MasterKomKH gol={e.target.dataset.gol} />}))
-    // }
     
     let [formTab, setFormTab] = useState({
         tab1: false,
@@ -287,17 +191,7 @@ function DocK11() {
         // tab4: false,
         // tab1: true,
     });
-    // let [komoditas, setKomoditas] = useState({});
-    // let [komMP, setKomMP] = useState({});
-    // let [arrKontainer, setArrKontainer] = useState([]);
-    // let [kontainer, setKontainer] = useState({
-    //     noKontainer: "",
-    //     tipeKontainer: "",
-    //     ukuranKontainer: "",
-    //     stuffKontainer: "",
-    //     segel: ""
-    // });
-
+    
     const {
 		register: registerPemohon,
         setValue: setValuePemohon,
@@ -368,10 +262,14 @@ function DocK11() {
         defaultValues: {
             idDetilMP: "",
             peruntukanMP: "",
+            peruntukanMPKH: "",
+            peruntukanMPKI: "",
             volumeNetto: "",
             komoditasMP: "",
+            komoditasMPKI: "",
             volumeBrutto: "",
             kodeHSMp: "",
+            kodeHSMpKI: "",
             volumeLain: "",
             satuanLain: "",
             namaUmum: "",
@@ -384,12 +282,20 @@ function DocK11() {
             komoditasMPKHid: "",
             namaUmumKH: "",
             namaLatinKH: "",
-            klasifikasiMPKHid: "",
+            // klasifikasiMPKHid: "",
+            namaUmumKI: "",
+            namaLatinKI: "",
+            // klasifikasiMPKIid: "",
             jumlahMP: "",
+            jumlahMPKI: "",
             satJumlahMP: "",
+            satJumlahMPKI: "",
             nettoMP: "",
             brutoMP: "",
             nilaiBarangMPKH: "",
+            nettoMPKI: "",
+            brutoMPKI: "",
+            nilaiBarangMPKI: "",
             // satuanNilaiMPKH: "IDR",
           }
         })
@@ -443,58 +349,23 @@ function DocK11() {
     // const cekdataKonfirmasi = watchKonfirmasi()
     const cekdataVerify = watchVerify()
 
-    // let master = useMemo(() => modelMaster, [])
-
     const getListNegara = useCallback(async () => {
-            const arraySelectNegara = NegaraJson.map(item => {
-                return {
-                    value: item.id,
-                    label: item.kode + " - " + item.nama
-                }
-            })
-            setdataSelect(values => ({...values, "negaraPengirim": arraySelectNegara }));
-            setdataSelect(values => ({...values, "negaraPenerima": arraySelectNegara }));
-            setdataSelect(values => ({...values, "negaraAsal": arraySelectNegara }));
-            setdataSelect(values => ({...values, "negaraTujuan": arraySelectNegara }));
-            setdataSelect(values => ({...values, "negaraTransit": arraySelectNegara }));
-            setdataSelect(values => ({...values, "negaraAsalMP": arraySelectNegara }));
-            setdataSelect(values => ({...values, "negaraTujuanMP": arraySelectNegara }));
-            setdataSelect(values => ({...values, "negaraAsalDokumen": arraySelectNegara }));
-            setdataSelect(values => ({...values, "benderaTransit": arraySelectNegara }));
-            setdataSelect(values => ({...values, "benderaAkhir": arraySelectNegara }));
-    //     try {
-    //     const response = await modelMaster.masterNegara();
-    //     if(response.data.status === '200') {
-    //         let dataneg = response.data.data;
-    //         const arraySelectNegara = dataneg.map(item => {
-    //             return {
-    //                 value: item.id.toString(),
-    //                 label: item.kode + " - " + item.nama
-    //             }
-    //         })
-    //         // setSelect2Negara(arraySelectNegara)
-    //         setdataSelect(values => ({...values, "negaraPengirim": arraySelectNegara }));
-    //         setdataSelect(values => ({...values, "negaraPenerima": arraySelectNegara }));
-    //         setdataSelect(values => ({...values, "negaraAsal": arraySelectNegara }));
-    //         setdataSelect(values => ({...values, "negaraTujuan": arraySelectNegara }));
-    //         setdataSelect(values => ({...values, "negaraTransit": arraySelectNegara }));
-    //         setdataSelect(values => ({...values, "negaraAsalMP": arraySelectNegara }));
-    //         setdataSelect(values => ({...values, "negaraTujuanMP": arraySelectNegara }));
-    //         setdataSelect(values => ({...values, "negaraAsalDokumen": arraySelectNegara }));
-    //         setdataSelect(values => ({...values, "benderaTransit": arraySelectNegara }));
-    //         setdataSelect(values => ({...values, "benderaAkhir": arraySelectNegara }));
-    //     }
-    // } catch (error) {
-    //     console.log(error)
-    //     setdataSelect(values => ({...values, "negaraPengirim": [] }));
-    //     setdataSelect(values => ({...values, "negaraPenerima": [] }));
-    //     setdataSelect(values => ({...values, "negaraAsal": [] }));
-    //     setdataSelect(values => ({...values, "negaraTujuan": [] }));
-    //     setdataSelect(values => ({...values, "negaraTransit": [] }));
-    //     setdataSelect(values => ({...values, "negaraAsalMP": [] }));
-    //     setdataSelect(values => ({...values, "negaraTujuanMP": [] }));
-    //     setdataSelect(values => ({...values, "negaraAsalDokumen": [] }));
-    // }
+        const arraySelectNegara = NegaraJson.map(item => {
+            return {
+                value: item.id,
+                label: item.kode + " - " + item.nama
+            }
+        })
+        setdataSelect(values => ({...values, "negaraPengirim": arraySelectNegara }));
+        setdataSelect(values => ({...values, "negaraPenerima": arraySelectNegara }));
+        setdataSelect(values => ({...values, "negaraAsal": arraySelectNegara }));
+        setdataSelect(values => ({...values, "negaraTujuan": arraySelectNegara }));
+        setdataSelect(values => ({...values, "negaraTransit": arraySelectNegara }));
+        setdataSelect(values => ({...values, "negaraAsalMP": arraySelectNegara }));
+        setdataSelect(values => ({...values, "negaraTujuanMP": arraySelectNegara }));
+        setdataSelect(values => ({...values, "negaraAsalDokumen": arraySelectNegara }));
+        setdataSelect(values => ({...values, "benderaTransit": arraySelectNegara }));
+        setdataSelect(values => ({...values, "benderaAkhir": arraySelectNegara }));
     }, [])
 
     useEffect(() => {
@@ -529,24 +400,22 @@ function DocK11() {
     }, [getListProv])
 
     const handleKota = useCallback(async (e, pel) => {
-            try {
-                const response = await modelMaster.masterKota(e)
-                if(response.data.status === '200') {
-                    let dataKota = response.data.data;
-                    const arraySelectKota = dataKota.map(item => {
-                    return {
-                        value: item.id.toString(),
-                        label: item.nama
-                    }
-                    })
-                    setdataSelect(values => ({...values, [pel]: arraySelectKota}))
+        try {
+            const response = await modelMaster.masterKota(e)
+            if(response.data.status === '200') {
+                let dataKota = response.data.data;
+                const arraySelectKota = dataKota.map(item => {
+                return {
+                    value: item.id.toString(),
+                    label: item.nama
                 }
-                // console.log(dataSelect.pelMuat)
-            } catch (error) {
-            console.log(error)
-            setdataSelect(values => ({...values, [pel]: []}))
+                })
+                setdataSelect(values => ({...values, [pel]: arraySelectKota}))
             }
-        // }
+        } catch (error) {
+        console.log(error)
+        setdataSelect(values => ({...values, [pel]: []}))
+        }
     }, [])
 
     useEffect(() => {
@@ -564,23 +433,6 @@ function DocK11() {
                 }
             })
             setdataSelect(values => ({...values, [pel]: arraySelectPelabuhan}))
-            // try {
-            //     const response = await modelMaster.masterPelabuhanID(e)
-            //     if(response.data.status === '200') {
-            //         let dataPel = response.data.data;
-            //         const arraySelectPelabuhan = dataPel.map(item => {
-            //         return {
-            //             value: item.id.toString(),
-            //             label: item.kode + " - " + item.nama
-            //         }
-            //         })
-            //         setdataSelect(values => ({...values, [pel]: arraySelectPelabuhan}))
-            //     }
-            //     // console.log(dataSelect.pelMuat)
-            // } catch (error) {
-            // console.log(error)
-            // setdataSelect(values => ({...values, [pel]: []}))
-            // }
         }
     },[])
 
@@ -588,53 +440,803 @@ function DocK11() {
         handlePelabuhan()
     }, [handlePelabuhan])
 
-    // const handleJenisDokumen = useCallback(async (e) => {
-    //     if(e) {
-    //         const dataJenisDokumen = JenisDokumenJson.filter((element) => (e === "H" ? element.komoditas_hewan === 1 : (e === "T" ? element.komoditas_tumbuhan === 1 : element.komoditas_ikan === 1)))
-        
-    //         var arraySelectJenisDok = dataJenisDokumen.map(item => {
-    //             return {
-    //                 value: item.id,
-    //                 label: item.kode + " - " + item.nama,
-    //             }
-    //         })
-    //         setdataSelect(values => ({...values, "jenisDokumen": arraySelectJenisDok}))
-    //         // try {
-    //         //     const response = await modelMaster.masterDok(e)
-    //         //     if(response.data.status === '200') {
-    //         //         let jenisDok = response.data.data;
-    //         //         const arraySelectJenisDok = jenisDok.map(item => {
-    //         //         return {
-    //         //             value: item.id,
-    //         //             label: item.kode + " - " + item.nama
-    //         //         }
-    //         //         })
-    //         //         setdataSelect(values => ({...values, "jenisDokumen": arraySelectJenisDok}))
-    //         //     }
-    //         // } catch (error) {
-    //         //     console.log(error)
-    //         //     setdataSelect(values => ({...values, "jenisDokumen": []}))
-    //         // }
-    //     }
-    // }, [])
+    const handleKomKHIDetil = useCallback(async (e) => {
+    // function handleKomKHIDetil(e) {
+        if(cekdataDiri.mediaPembawa && cekdataMP.jenisMp) {
+            const resKodeHS = modelMaster.masterHS(cekdataDiri.mediaPembawa)
+            resKodeHS
+            .then((response) => {
+                let resKodeHS = response.data.data;
+                var arrayKodeHS = resKodeHS.map(item => {
+                    return {
+                        value: item.kode,
+                        label: item.kode + " - " + item.nama_en
+                    }
+                })
+                setdataSelect(values => ({...values, "kodeHSMp": arrayKodeHS}));
+            })
+            .catch((error) => {
+                console.log(error);
+            });
     
-    // useEffect(() => {
-    //     handleJenisDokumen()
-    // }, [handleJenisDokumen])
-  
-    // let [dataKlasKT,setDataKlasKT] = useState([]);
+            if(cekdataDiri.mediaPembawa === "H") {
+                const resKlasKH = modelMaster.masterKlasKH(e)
+                resKlasKH
+                .then((response) => {
+                    let dataKlasKH = response.data.data;
+                    var arraySelectKlasKH = dataKlasKH.map(item => {
+                        return {
+                            value: item.id,
+                            label: item.deskripsi,
+                        }
+                    })
+                    setdataSelect(values => ({...values, "peruntukanMPKH": arraySelectKlasKH}));
 
-    useEffect(()=>{
-        let ptkDecode = idPtk ? base64_decode(idPtk) : "";
-        let ptkNomor = idPtk ? ptkDecode.split('m0R3N0r1R') : "";
-        setDataIdPage(values => ({...values,
-            noAju: idPtk ? base64_decode(ptkNomor[0]) : "",
-            noIdPtk: idPtk ? base64_decode(ptkNomor[1]) : "",
-            noPermohonan: idPtk ? base64_decode(ptkNomor[2]) : "",
-        }));
-        setdataSelect(values => ({...values, "satuanNilai": <MasterMataUang/>}));
+                    const resKomKH = modelMaster.masterKomKH(e)
+                    resKomKH
+                    .then((response) => {
+                        let dataKomKH = response.data.data;
+                        var arrayKomKH = dataKomKH.map(item => {
+                            return {
+                                value: item.id + ";" + item.nama + ";" + item.nama_latin + ";" + item.kode,
+                                label: item.nama + " / " + (item.nama_en == null ? "-" : item.nama_en)
+                            }
+                        })
+                        setdataSelect(values => ({...values, "selectKomoditasMPKH": arrayKomKH}));
+                    })
+                    .catch((error) => {
+                        console.log(error);
+                    });
+                })
+                .catch((error) => {
+                    console.log(error);
+                });
+
+            } else if(cekdataDiri.mediaPembawa === "T") {
+                const resPeruntukan = modelMaster.masterKlasKT(e)
+                resPeruntukan
+                .then((response) => {
+                    console.log(response.data)
+                    let dataPeruntukanKT = response.data.data;
+                    const arraySelectKlasKT = dataPeruntukanKT.map(item => {
+                        return {
+                            value: item.id,
+                            label: item.deskripsi
+                        }
+                    })
+                    setdataSelect(values => ({...values, "peruntukanMP": arraySelectKlasKT}))
+
+                    const resKomKT = modelMaster.masterKomKT()
+                    resKomKT
+                    .then((response) => {
+                        let dataKomKT = response.data.data;
+                        var arrayKomKT = dataKomKT.map(item => {
+                            return {
+                                value: item.id + ";" + item.nama + ";" + item.nama_latin,
+                                label: item.nama + " / " + (item.nama_en == null ? "-" : item.nama_en)
+                            }
+                        })
+                        setdataSelect(values => ({...values, "selectKomoditasMP": arrayKomKT}))
+                    })
+                    .catch((error) => {
+                        console.log(error);
+                    });
+                })
+                .catch((error) => {
+                    console.log(error);
+                });
+
+            } else if(cekdataDiri.mediaPembawa === "I") {
+                const resPeruntukan = modelMaster.masterKlasKI(e)
+                resPeruntukan
+                .then((response) => {
+                    let dataPeruntukanKI = response.data.data;
+                    const arraySelectKlasKI = dataPeruntukanKI.map(item => {
+                        return {
+                            value: item.id,
+                            label: item.deskripsi
+                        }
+                    })
+                    setdataSelect(values => ({...values, "peruntukanMPKI": arraySelectKlasKI}))
+
+                    const resKomKI = modelMaster.masterKomKI()
+                    resKomKI
+                    .then((response) => {
+                        if(response.data.status === '200') {
+                            let dataKomKI = response.data.data;
+                            var arrayKomKI = dataKomKI.map(item => {
+                                return {
+                                    value: item.id + ";" + item.nama + ";" + item.nama_latin,
+                                    label: item.nama + " / " + (item.nama_en == null ? "-" : item.nama_en)
+                                }
+                            })
+                            setdataSelect(values => ({...values, "selectKomoditasMPKI": arrayKomKI}));
+                        }
+                    })
+                    .catch((error) => {
+                        console.log(error);
+                    });
+                })
+                .catch((error) => {
+                    console.log(error);
+                });
+            }
+        }
+        },[cekdataDiri.mediaPembawa, cekdataMP.jenisMp])
+    // }
+    useEffect(() => {
+        handleKomKHIDetil()
+    }, [handleKomKHIDetil])
+    
+    const onSubmitDokumen = (data) => {
+
+        const response = modelPemohon.pushDetilDokumen(data);
+            response
+            .then((response) => {
+                if(response.data.status == 201) {
+                    Swal.fire({
+                        position: "top-center",
+                        icon: "success",
+                        title: "Dokumen berhasil disimpan.",
+                        showConfirmButton: false,
+                        timer: 1000
+                    })
+                    resetFormDokumen();
+                    // setSelectedFile(null)
+                    dataDokumenPtk();
+                    setDataIdPage(values => ({...values,
+                        fileDokumenUpload: "",
+                    }));
+                }
+            })
+            .catch((error) => {
+                console.log(error);
+            });
+    }
+
+    const onSubmitDetilMP = (data) => {
+    
+        if(cekdataDiri.mediaPembawa) {
+            const response = modelPemohon.pushKomoditi(data, cekdataDiri.mediaPembawa);
+            response
+            .then((response) => {
+                console.log(response)
+                if(response.data.status === '201') {
+                    Swal.fire({
+                        position: "top-center",
+                        icon: "success",
+                        title: "Detil Media Pembawa berhasil disimpan.",
+                        showConfirmButton: false,
+                        timer: 1000
+                    })
+                    resetFormKomoditi();
+                    dataKomoditiPtk();
+                }
+            })
+            .catch((error) => {
+                console.log(error);
+            });
+        }
+    };
+
+    const onSubmitPemohon = (data) => {
+
         if(idPtk) {
+            const response = modelPemohon.tabPemohonUpdate(data);
+            response
+            .then((response) => {
+                if(response.data.status === '201') {
+                    Swal.fire({
+                        position: "top-center",
+                        icon: "success",
+                        title: "Data Pemohon berhasil disimpan.",
+                        showConfirmButton: false,
+                        timer: 1000
+                    })
+                    setFormTab(values => ({...values, tab2: false}))
+                    setWizardPage(wizardPage + 1)
+                }
+            })
+            .catch((error) => {
+                console.log(error);
+                alert(error.response.status + " - " + error.response.data.message)
+            });
+        } else {
+            const response = modelPemohon.tabPemohonInsert(data);
+            response
+            .then((response) => {
+                console.log(response)
+                if(response.data.status === '201') {
+                    Swal.fire({
+                        position: "top-center",
+                        icon: "success",
+                        title: "Data Pemohon berhasil disimpan.",
+                        showConfirmButton: false,
+                        timer: 1000
+                    })
+                    Cookies.set("idPtkPage", base64_encode(base64_encode(response.data.data.no_aju) + 'm0R3N0r1R' + base64_encode(response.data.data.id) + "m0R3N0r1R" ))
+                    setDataIdPage(values => ({...values,
+                        noAju: response.data.data.no_aju,
+                        noIdPtk: response.data.data.id,
+                        noPermohonan: "",
+                    }));
+                    setValuePemohon("idPtk", response.data.data.id);
+                    setValuePemohon("noAju", response.data.data.no_aju)
+                    setValueKontainer("idPtk", response.data.data.id);
+                    setValuePelabuhan("idPtk", response.data.data.id);
+                    setValuePelabuhan("noAju", response.data.data.no_aju);
+                    setValueMP("idPtk", response.data.data.id);
+                    setValueMP("noAju", response.data.data.no_aju);
+                    setValueDetilMP("idPtk", response.data.data.id);
+                    setValueDokumen("idPtk",response.data.data.id);
+                    setValueDokumen("noAju", response.data.data.no_aju);
+                    setValueDokPeriksa("idPtk", response.data.data.id);
+                    setValueDokPeriksa("noAju", response.data.data.no_aju);
+                    setValueKonfirmasi("idPtk", response.data.data.id);
+                    setValueKonfirmasi("noAju", response.data.data.no_aju);
+                } else {
+                    Swal.fire({
+                        icon: "error",
+                        title: "Data Pemohon gagal disimpan.",
+                        text: response.data.status + " - " + response.data.message,
+                        showConfirmButton: true
+                    })
+                }
+
+                setFormTab(values => ({...values, tab2: false}))
+                setWizardPage(wizardPage + 1)
+            })
+            .catch((error) => {
+                console.log(error);
+                Swal.fire({
+                    icon: "error",
+                    title: "Data Pemohon gagal disimpan.",
+                    text: response.data.status + " - " + response.data.message,
+                    showConfirmButton: true
+                })
+            });
+        }
+    };
+
+    const onSubmitPelabuhan = (data) => {
+        
+        if(idPtk) {
+            const response = modelPemohon.tabPelabuhan(data);
+            response
+            .then((response) => {
+                if(response.data.status === '201') {
+                    Swal.fire({
+                        icon: "success",
+                        title: "Sukses!",
+                        text: "Data Pelabuhan berhasil disimpan.",
+                        showConfirmButton: false,
+                        timer: 1000
+                    })
+                    setFormTab(values => ({...values, tab3: false}))
+                    setWizardPage(wizardPage + 1)
+                } else {
+                    Swal.fire({
+                        icon: "error",
+                        title: "Data Pelabuhan gagal disimpan.",
+                        text: response.data.status + " - " + response.data.message,
+                        showConfirmButton: true
+                    })
+                }
+            })
+            .catch((error) => {
+                console.log(error);
+                Swal.fire({
+                    icon: "error",
+                    title: "Data Pelabuhan gagal disimpan.",
+                    text: response.data.status + " - " + response.data.message,
+                    showConfirmButton: true
+                })
+            });
+        } else {
+            // alert('Data id kosong')
+            Swal.fire({
+                icon: "error",
+                title: "Data id kosong.",
+                showConfirmButton: true
+            })
+        }
+    };
+    
+    const onSubmitKomoditas = (data) => {
+    
+        if(idPtk) {
+             const response = modelPemohon.tabKomoditas(data);
+            response
+            .then((response) => {
+                if(response.data.status === '201') {
+                    Swal.fire({
+                        icon: "Success",
+                        title: "Sukses!",
+                        text: "Data Komoditas berhasil disimpan.",
+                        showConfirmButton: false,
+                        timer: 1000
+                    })
+                    setFormTab(values => ({...values, tab4: false}))
+                    setWizardPage(wizardPage + 1)
+                } else {
+                    Swal.fire({
+                        icon: "error",
+                        title: "Data Komoditas gagal disimpan.",
+                        text: response.data.status + " - " + response.data.message,
+                        showConfirmButton: true
+                    })
+                }
+            })
+            .catch((error) => {
+                console.log(error);
+                Swal.fire({
+                    icon: "error",
+                    title: "Data Pemohon gagal disimpan.",
+                    text: response.data.status + " - " + response.data.message,
+                    showConfirmButton: true
+                })
+            });
+        } else {
+            Swal.fire({
+                icon: "error",
+                title: "Data id kosong.",
+                showConfirmButton: true
+            })
+        }
+    };
+    
+    const onSubmitDokPeriksa = (data) => {
+        console.log(data)
+        setFormTab(values => ({...values, tab5: false}))
+        setWizardPage(wizardPage + 1)
+    
+        if(idPtk) {
+            const response = modelPemohon.tabTempatPeriksa(data);
+            response
+            .then((response) => {
+                if(response.data.status === '201') {
+                    Swal.fire({
+                        icon: "success",
+                        title: "Sukses!",
+                        text: "Permohonan berhasil disubmit.",
+                        showConfirmButton: false,
+                        timer: 1000
+                    })
+                    setFormTab(values => ({...values, tab5: false}))
+                    setWizardPage(wizardPage + 1)
+                } else {
+                    Swal.fire({
+                        icon: "error",
+                        title: "Error!",
+                        text: "Permohonan gagal disubmit!",
+                        showConfirmButton: true
+                    })
+                    
+                }
+            })
+            .catch((error) => {
+                console.log(error);
+                Swal.fire({
+                    icon: "error",
+                    title: "Error!",
+                    text: error.response.status + " - " + error.response.data.message,
+                    showConfirmButton: true
+                })
+            });
+        } else {
+            // alert('Data id kosong')
+            Swal.fire({
+                icon: "error",
+                title: "Error!",
+                text: "Data id kosong",
+                showConfirmButton: true
+            })
+        }
+    };
+    
+    const onSubmitKonfirmasi = (data) => {
+        if(idPtk) {
+            const response = modelPemohon.tabKonfirmasi(data);
+            response
+            .then((response) => {
+                console.log(response.data)
+                if(response.data.status === '201') {
+                    setPtkLengkap(true);
+                    setValueVerify("idPtk", data.idPtk);
+                    setValueVerify("noAju", data.noAju);
+                    setValueVerify("mediaPembawaVerif", cekdataDiri.mediaPembawa);
+                    // alert(response.data.status + " - " + response.data.message)
+                    Swal.fire({
+                        icon: "success",
+                        title: "Sukses!",
+                        text: response.data.message,
+                        showConfirmButton: false,
+                        timer: 1000
+                    })
+                } else {
+                    Swal.fire({
+                        icon: "error",
+                        title: "Error!",
+                        text: response.response.status + " - " + response.response.data.message,
+                        showConfirmButton: true
+                    })
+                }
+            })
+            .catch((error) => {
+                console.log(error);
+                Swal.fire({
+                    icon: "error",
+                    title: "Error!",
+                    text: error.response.status + " - " + error.response.data.message,
+                    showConfirmButton: true
+                })
+            });
+        } else {
+            Swal.fire({
+                icon: "error",
+                title: "Data id kosong!",
+                showConfirmButton: true
+            })
+        }
+    };
+    
+    const onSubmitVerify = (data) => {
+        if(idPtk) {
+            const response = modelPemohon.ptkVerify(data);
+            response
+            .then((response) => {
+                console.log(response.data)
+                if(response.data.status === '201') {
+                    // setPtkLengkap(true);
+                    Cookies.set("idPtkPage", base64_encode(
+                        base64_encode(cekdataDiri.noAju) + 'm0R3N0r1R' + 
+                        base64_encode(cekdataDiri.idPtk) + "m0R3N0r1R" + 
+                        base64_encode(response.data.data.no_dok_permohonan)
+                        )
+                    )
+                    Cookies.set("tglPtk", cekdataVerify.tglTerimaVerif)
+                    Cookies.set("jenisKarantina", cekdataDiri.mediaPembawa)
+                    Cookies.set("jenisForm", cekdataDiri.jenisForm)
+                    setDataIdPage(values => ({...values,
+                        noPermohonan: response.data.data.no_dok_permohonan,
+                    }));
+                    setValueVerify("noDokumen", response.data.data.no_dok_permohonan);
+                    
+                    //start save history
+                    const resHsy = log.pushHistory(cekdataDiri.idPtk, "p0", "K-1.1", (dataIdPage.noPermohonan ? 'UPDATE' : 'NEW'));
+                    resHsy
+                    .then((response) => {
+                        if(response.data.status === '201') {
+                            console.log("history saved")
+                        }
+                    })
+                    .catch((error) => {
+                        console.log(error.response.data);
+                    });
+                    //end save history
+    
+                    Swal.fire({
+                        position: "top-center",
+                        icon: "success",
+                        title: response.data.message,
+                        showConfirmButton: false,
+                        timer: 1000
+                    })
+                } else {
+                    Swal.fire({
+                        icon: "error",
+                        title: response.data.message,
+                        showConfirmButton: true
+                    })
+                }
+            })
+            .catch((error) => {
+                console.log(error);
+                Swal.fire({
+                    icon: "error",
+                    title: error.response.status + " - " + error.data.message,
+                    showConfirmButton: true
+                })
+            });
+        } else {
+            Swal.fire({
+                icon: "error",
+                title: "Data id kosong",
+                showConfirmButton: true
+            })
+        }
+    };
+    
+      const onSubmitKontainer = (data) => {
+        
+        const response = modelPemohon.pushDetilKontainer(data);
+        response
+        .then((response) => {
+            if(response.data.status === '201') {
+                Swal.fire({
+                    position: "top-center",
+                    icon: "success",
+                    title: "Data Kontainer berhasil disimpan.",
+                    showConfirmButton: false,
+                    timer: 1000
+                })
+                resetFormKontainer();
+                dataKontainerPtk();
+            } else {
+                Swal.fire({
+                    icon: "error",
+                    title: "Data Kontainer gagal disimpan!",
+                    showConfirmButton: true,
+                    text: response.data.status + " - " + response.data.message
+                })
+            }
+        })
+        .catch((error) => {
+            console.log(error.response);
+            Swal.fire({
+                icon: "error",
+                title: "Data Kontainer gagal disimpan!",
+                showConfirmButton: true,
+                text: error.data.status + " - " + error.data.message
+            })
+        });
+    }      
+
+    const handleCekSameTTD = (event) => {
+        if(event.target.checked === true) {
+            setValuePemohon("namaTtd", cekdataDiri.namaPemohon);
+            setValuePemohon("alamatTtd", cekdataDiri.alamatPemohon);
+            setValuePemohon("jenisIdentitasTtd", cekdataDiri.jenisIdentitasPemohon);
+            setValuePemohon("noIdentitasTtd", cekdataDiri.noIdentitasPemohon);
+        } else {
+            setValuePemohon("namaTtd", "");
+            setValuePemohon("alamatTtd", "");
+            setValuePemohon("jenisIdentitasTtd", "");
+            setValuePemohon("noIdentitasTtd", "");
+        }
+    }
+    
+    const handleCekSamePengirim = (event) => {
+        if(event.target.checked === true) {
+            setValuePemohon("namaPengirim", cekdataDiri.namaPemohon);
+            setValuePemohon("alamatPengirim", cekdataDiri.alamatPemohon);
+            setValuePemohon("jenisIdentitasPengirim", cekdataDiri.jenisIdentitasPemohon);
+            setValuePemohon("noIdentitasPengirim", cekdataDiri.noIdentitasPemohon);
+            setValuePemohon("nomorTlpPengirim", cekdataDiri.nomorTlp);
+            setValuePemohon("negaraPengirim", (cekdataDiri.permohonan === 'IM' ? "" : "99"));
+            setValuePemohon("provPengirim", (cekdataDiri.permohonan === 'IM' ? "" : cekdataDiri.provPemohon));
+            setValuePemohon("provPengirimView", (cekdataDiri.permohonan === 'IM' ? "" : cekdataDiri.provPemohonView));
+            setValuePemohon("kotaPengirim", (cekdataDiri.permohonan === 'IM' ? "" : cekdataDiri.kotaPemohon));
+            setValuePemohon("kotaPengirimView", (cekdataDiri.permohonan === 'IM' ? "" : cekdataDiri.kotaPemohonView));
+        } else {
+            setValuePemohon("namaPengirim", "");
+            setValuePemohon("alamatPengirim", "");
+            setValuePemohon("jenisIdentitasPengirim", "");
+            setValuePemohon("noIdentitasPengirim", "");
+            setValuePemohon("nomorTlpPengirim", "");
+            setValuePemohon("negaraPengirim", "");
+            setValuePemohon("provPengirim", "");
+            setValuePemohon("kotaPengirim", "");
+            setValuePemohon("provPengirimView", "");
+            setValuePemohon("kotaPengirimView", "");
+        }
+    }
+    
+    const handleCekSamePenerima = (event) => {
+        if(event.target.checked === true) {
+            setValuePemohon("namaPenerima", cekdataDiri.namaPemohon);
+            setValuePemohon("alamatPenerima", cekdataDiri.alamatPemohon);
+            setValuePemohon("jenisIdentitasPenerima", cekdataDiri.jenisIdentitasPemohon);
+            setValuePemohon("noIdentitasPenerima", cekdataDiri.noIdentitasPemohon);
+            setValuePemohon("nomorTlpPenerima", cekdataDiri.nomorTlp);
+            setValuePemohon("negaraPenerima", (cekdataDiri.permohonan === 'EX' ? "" : "99"));
+            setValuePemohon("provPenerima", (cekdataDiri.permohonan === 'EX' ? "" : cekdataDiri.provPemohon));
+            setValuePemohon("provPenerimaView", (cekdataDiri.permohonan === 'EX' ? "" : cekdataDiri.provPemohonView));
+            setValuePemohon("kotaPenerima", (cekdataDiri.permohonan === 'EX' ? "" : cekdataDiri.kotaPemohon));
+            setValuePemohon("kotaPenerimaView", (cekdataDiri.permohonan === 'EX' ? "" : cekdataDiri.kotaPemohonView));
+        } else {
+            setValuePemohon("namaPenerima", "");
+            setValuePemohon("alamatPenerima", "");
+            setValuePemohon("jenisIdentitasPenerima", "");
+            setValuePemohon("noIdentitasPenerima", "");
+            setValuePemohon("nomorTlpPenerima", "");
+            setValuePemohon("negaraPenerima", "");
+            setValuePemohon("provPenerima", "");
+            setValuePemohon("kotaPenerima", "");
+            setValuePemohon("provPenerimaView", "");
+            setValuePemohon("kotaPenerimaView", "");
+        }
+    }
+
+    let [kontainerPtk, setKontainerPtk] = useState();
+    let [komoditiPtk, setKomoditiPtk] = useState();
+    let [dokumenPtk, setDokumenPtk] = useState();
+    function dataKontainerPtk() {
+        if(wizardPage === 2) {
             // const modelPemohon = new PtkModel();
+            const response = modelPemohon.detilKontainerPtk(dataIdPage.noIdPtk);
+            // console.log(noIdPtk)
+
+            response
+            .then((res) => {
+                // console.log(res)
+                if(res.data.status === '200') {
+                    setKontainerPtk(res.data.data)
+                }
+            })
+            .catch((error) => {
+                console.log(error.response);
+            });
+        }
+        console.log(kontainerPtk);
+    }
+    
+    function dataDokumenPtk() {
+        if(wizardPage === 4) {
+            const response = modelPemohon.getDokumenPtkId(dataIdPage.noIdPtk);
+    
+            response
+            .then((res) => {
+                console.log(res.data)
+                if(res.data.status === '200') {
+                    setDokumenPtk(res.data.data)
+                }
+            })
+            .catch((error) => {
+                console.log(error.response);
+            });
+        }
+    }
+    
+    function dataKomoditiPtk() {
+        if(wizardPage === 3) {
+            const response = modelPemohon.getKomoditiPtkId(dataIdPage.noIdPtk, cekdataDiri.mediaPembawa);
+    
+            response
+            .then((res) => {
+                if(res.data.status === '200') {
+                    setKomoditiPtk(res.data.data)
+                }
+            })
+            .catch((error) => {
+                console.log(error.response.data);
+            });
+        }
+    }
+        
+    let [sizeKontainer] = useState(["20 feet", "40 feet", "40 feet", "42 feet", "43 feet", "45 feet", "50 feet", "Lainnya"])
+    let [tipeKontainer] = useState(["General/Dry cargo", "Tunnel type", "Open Top Steel", "Flat Rack", "Reefer / Refrigerate", "Barge Container", "Bulk Container"])
+    
+    function handleSelectPemohon(e, pel) {
+        if(e) {
+            setValuePemohon(pel, e.value);
+            setValuePemohon(pel + "View", e.label);
+        }
+    }
+    
+    function handleEditKontainer(e) {
+        const response = modelPemohon.detilKontainerId(e.target.dataset.header);
+        response
+        .then((res) => {
+            // console.log(res.data)
+            if(res.data.status === '200') {
+                setValueKontainer("idDataKontainer", res.data.data.id)
+                setValueKontainer("idPtk", res.data.data.ptk_id)
+                setValueKontainer("noKontainer", res.data.data.nomor)
+                setValueKontainer("tipeKontainer", res.data.data.tipe_kontainer_id.toString())
+                setValueKontainer("ukuranKontainer", res.data.data.ukuran_kontainer_id.toString())
+                setValueKontainer("stuffKontainer", res.data.data.stuff_kontainer_id.toString())
+                setValueKontainer("segel", res.data.data.segel)
+            }
+        })
+        .catch((error) => {
+            console.log(error.response.data);
+        });
+    }
+
+    const addCommas = num => num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+    const removeNonNumeric = num => num.toString().replace(/[^0-9.]/g, "");
+    
+    function handleEditKomoditas(e) {
+        setValueDetilMP("idDetilMP", e.target.dataset.header)
+        setValueDetilMP("idPtk", e.target.dataset.ptk)
+        setValueDetilMP("jenisKar", cekdataDiri.mediaPembawa)
+        const cell = e.target.closest('tr')
+        if(cekdataDiri.mediaPembawa === "H") {
+            setTimeout(() => {
+                setValueDetilMP("peruntukanMPKH", e.target.dataset.klas)
+                setValueDetilMP("kodeHSMpKH", cell.cells[1].innerHTML)
+                setValueDetilMP("komoditasMPKHid", e.target.dataset.kom)
+                setValueDetilMP("namaUmumKH", cell.cells[3].innerHTML)
+                setValueDetilMP("namaLatinKH", cell.cells[4].innerHTML)
+                // setValueDetilMP("klasifikasiMPKHid", e.target.dataset.klas)
+                setValueDetilMP("jumlahMP", cell.cells[9].innerHTML)
+                setValueDetilMP("satJumlahMP", e.target.dataset.satuanlain)
+                setValueDetilMP("breedMP", e.target.dataset.ket)
+                setValueDetilMP("jantan", cell.cells[11].innerHTML)
+                setValueDetilMP("betina", cell.cells[12].innerHTML)
+                setValueDetilMP("nettoMP", cell.cells[5].innerHTML)
+                setValueDetilMP("brutoMP", cell.cells[7].innerHTML)
+                setValueDetilMP("nilaiBarangMPKH", cell.cells[13].innerHTML)
+                setValueDetilMP("satuanNilaiMPKH", cell.cells[14].innerHTML)
+            }, 300)
+        } else if(cekdataDiri.mediaPembawa === "T") {
+            setdataSelect(values => ({...values, "satuanKemasanDetil": <MasterKemasan/>}))
+            setTimeout(() => {
+                setValueDetilMP("peruntukanMP", e.target.dataset.klas)
+                setValueDetilMP("volumeNetto", cell.cells[5].innerHTML)
+                setValueDetilMP("komoditasMP", e.target.dataset.kom)
+                setValueDetilMP("volumeBrutto", cell.cells[7].innerHTML)
+                setValueDetilMP("kodeHSMp", cell.cells[1].innerHTML)
+                setValueDetilMP("volumeLain", cell.cells[9].innerHTML)
+                setValueDetilMP("satuanLain", e.target.dataset.satuanlain)
+                setValueDetilMP("namaUmum", cell.cells[3].innerHTML)
+                setValueDetilMP("namaLatin", cell.cells[4].innerHTML)
+                setValueDetilMP("nilaiBarangMP", cell.cells[13].innerHTML)
+                setValueDetilMP("satuanNilaiMP", cell.cells[14].innerHTML)
+                setValueDetilMP("jumlahKemasanDetil", e.target.dataset.kemasan)
+                setValueDetilMP("satuanKemasanDetil", e.target.dataset.kemasansat)
+            },300)
+        } else if(cekdataDiri.mediaPembawa === "I") {
+            setTimeout(() => {
+                setValueDetilMP("peruntukanMPKI", e.target.dataset.klas)
+                setValueDetilMP("kodeHSMpKI", cell.cells[1].innerHTML)
+                setValueDetilMP("komoditasMPKIid", e.target.dataset.kom)
+                setValueDetilMP("namaUmumKI", cell.cells[3].innerHTML)
+                setValueDetilMP("namaLatinKI", cell.cells[4].innerHTML)
+                setValueDetilMP("nettoMPKI", cell.cells[5].innerHTML)
+                setValueDetilMP("jumlahMPKI", cell.cells[9].innerHTML)
+                setValueDetilMP("satJumlahMPKI", e.target.dataset.satuanlain)
+                setValueDetilMP("brutoMPKI", cell.cells[7].innerHTML)
+                setValueDetilMP("nilaiBarangMPKI", cell.cells[13].innerHTML)
+                setValueDetilMP("satuanNilaiMPKI", cell.cells[14].innerHTML)
+            }, 300)
+        }
+    }
+    
+    function handleEditDokumen(e) {
+        const response = modelPemohon.getDokumenId(e.target.dataset.header);
+        response
+        .then((res) => {
+            // console.log(res.data)
+            if(res.data.status === '200') {
+                setValueDokumen("idDataDokumen", res.data.data.id)
+                setValueDokumen("idPtk", res.data.data.ptk_id)
+                setValueDokumen("noAju", dataIdPage.noAju)
+                setValueDokumen("kategoriDokumen", res.data.data.kategori_dokumen)
+                setValueDokumen("jenisDokumen", res.data.data.kode_dokumen)
+                setValueDokumen("jenisDokumenView", res.data.data.kode_dokumen + " - " + res.data.data.nama_dokumen)
+                setValueDokumen("noDokumen", res.data.data.no_dokumen)
+                setValueDokumen("negaraAsalDokumen", res.data.data.negara_asal_id === null ? "" : res.data.data.negara_asal_id.toString())
+                setValueDokumen("negaraAsalDokumenView", res.data.data.negara_asal)
+                setValueDokumen("kotaAsalDokumen", res.data.data.kota_kab_asal_id === null ? "" : res.data.data.kota_kab_asal_id.toString())
+                setValueDokumen("kotaAsalDokumenView", res.data.data.kota_kab_asal)
+                setValueDokumen("ketDokumen", res.data.data.keterangan)
+                setValueDokumen("tglDokumen", res.data.data.tanggal_dokumen)
+            }
+        })
+        .catch((error) => {
+            console.log(error.response.data);
+        });
+    }
+    
+    function handleSelectNegKomoditas(e, pel) {
+        if(e) {
+            setValueMP(pel, e.value);
+            setValueMP(pel + "View", e.label);
+        }
+    }
+    
+    useEffect(()=>{
+        if(idPtk) {
+            let ptkDecode = idPtk ? base64_decode(idPtk) : "";
+            let ptkNomor = idPtk ? ptkDecode.split('m0R3N0r1R') : "";
+            setDataIdPage(values => ({...values,
+                noAju: idPtk ? base64_decode(ptkNomor[0]) : "",
+                noIdPtk: idPtk ? base64_decode(ptkNomor[1]) : "",
+                noPermohonan: idPtk ? base64_decode(ptkNomor[2]) : "",
+            }));
+            setdataSelect(values => ({...values, "satuanNilai": <MasterMataUang/>}));
             const response = modelPemohon.getPtkId(base64_decode(ptkNomor[1]));
             response
             .then((response) => {
@@ -650,134 +1252,152 @@ function DocK11() {
                         handleKota(null, "daerahTujuanMP")
                     }
 
-                    // const modelMaster = new Master()
                     if(response.data.data.ptk.jenis_karantina != null) {
-                        const resKomKT = modelMaster.masterHS(response.data.data.ptk.jenis_karantina)
-                        resKomKT
+                        const resHs = modelMaster.masterHS(response.data.data.ptk.jenis_karantina)
+                        resHs
                         .then((response) => {
-                            let dataKomKT = response.data.data;
-                            var arrayKomKT = dataKomKT.map(item => {
+                            let dataHS = response.data.data;
+                            var arrayDataHS = dataHS.map(item => {
                                 return {
                                     value: item.kode,
                                     label: item.kode + " - " + item.nama_en
                                 }
                             })
-                            setdataSelect(values => ({...values, "kodeHSMp": arrayKomKT}));
+                            setdataSelect(values => ({...values, "kodeHSMp": arrayDataHS}));
                         })
                         .catch((error) => {
                             console.log(error);
                         });
-                    }
 
-                    if(response.data.data.ptk.jenis_karantina === "T") {
-                        const resKomKT = modelMaster.masterKomKT()
-                        resKomKT
-                        .then((response) => {
-                            let dataKomKT = response.data.data;
-                            var arrayKomKT = dataKomKT.map(item => {
-                                return {
-                                    value: item.id + ";" + item.nama + ";" + item.nama_latin,
-                                    label: item.nama + " - " + item.nama_en
-                                }
+                        // handleKomKHIDetil(response.data.data.ptk.jenis_media_pembawa_id)
+                        if(response.data.data.ptk.jenis_karantina && response.data.data.ptk.jenis_media_pembawa_id) {
+                            const resKodeHS = modelMaster.masterHS(response.data.data.ptk.jenis_karantina)
+                            resKodeHS
+                            .then((response) => {
+                                let resKodeHS = response.data.data;
+                                var arrayKodeHS = resKodeHS.map(item => {
+                                    return {
+                                        value: item.kode,
+                                        label: item.kode + " - " + item.nama_en
+                                    }
+                                })
+                                setdataSelect(values => ({...values, "kodeHSMp": arrayKodeHS}));
                             })
-                            setdataSelect(values => ({...values, "selectKomoditasMP": arrayKomKT}));
-                        })
-                        .catch((error) => {
-                            console.log(error);
-                        });
-                        
-                        if(response.data.data.ptk.jenis_media_pembawa_id === 4) {
-                            const dataKlasKT = KlasifikasiKTJson.filter((element) => element.kode_golongan === "A")
-        
-                            var arrayKlasKTBenih = dataKlasKT.map(item => {
-                                return {
-                                    value: item.id,
-                                    label: item.peruntukan + " - " + item.bentuk + " - " + item.golongan
-                                }
-                            })
-                            setdataSelect(values => ({...values, "peruntukanMP": arrayKlasKTBenih}))
-                            // const resPeruntukan = modelMaster.masterKlasKT("A")
-                            // resPeruntukan
-                            // .then((response) => {
-                            //     console.log(response.data)
-                            //     let dataPeruntukanKT = response.data.data;
-                            //     const arraySelectKota = dataPeruntukanKT.map(item => {
-                            //         return {
-                            //             value: item.id.toString(),
-                            //             label: item.peruntukan + " - " + item.bentuk + " - " + item.golongan
-                            //         }
-                            //     })
-                            //     setdataSelect(values => ({...values, "peruntukanMP": arraySelectKota}))
-                            // })
-                            // .catch((error) => {
-                            //     console.log(error);
-                            // });
-                        } else {
-                            const dataKlasKT = KlasifikasiKTJson.filter((element) => element.kode_golongan === "B" || element.kode_golongan === "C" || element.kode_golongan === "D")
-        
-                            var arrayKlasKTNonBenih = dataKlasKT.map(item => {
-                                return {
-                                    value: item.id,
-                                    label: item.peruntukan + " - " + item.bentuk + " - " + item.golongan
-                                }
-                            })
-                            setdataSelect(values => ({...values, "peruntukanMP": arrayKlasKTNonBenih}))
-                            // const resPeruntukanB = modelMaster.masterKlasKT("B")
-                            // resPeruntukanB
-                            // .then((response) => {
-                            //     let dataPeruntukanKTB = response.data.data;
-                            //     var arrayPeruntukanKTB = dataPeruntukanKTB.map(item => {
-                            //         return {
-                            //             value: item.id.toString(),
-                            //             label: item.peruntukan + " - " + item.bentuk + " - " + item.golongan
-                            //         }
-                            //     })
-                            //     setDataKlasKT(arrayPeruntukanKTB)
-                            // })
-                            // .catch((error) => {
-                            //     console.log(error);
-                            // });
-                            // const resPeruntukanC = modelMaster.masterKlasKT("C")
-                            // resPeruntukanC
-                            // .then((response) => {
-                            //     let dataPeruntukanKTC = response.data.data;
-                            //     var arrayPeruntukanKTC = dataPeruntukanKTC.map(item => {
-                            //         return {
-                            //             value: item.id.toString(),
-                            //             label: item.peruntukan + " - " + item.bentuk + " - " + item.golongan
-                            //         }
-                            //     })
-                            //     setDataKlasKT(dataKlasKT => dataKlasKT.concat(arrayPeruntukanKTC))
-                            // })
-                            // .catch((error) => {
-                            //     console.log(error);
-                            // });
-                            // const resPeruntukanD = modelMaster.masterKlasKT("D")
-                            // resPeruntukanD
-                            // .then((response) => {
-                            //     let dataPeruntukanKTD = response.data.data;
-                            //     var arrayPeruntukanKTD = dataPeruntukanKTD.map(item => {
-                            //         return {
-                            //             value: item.id.toString(),
-                            //             label: item.peruntukan + " - " + item.bentuk + " - " + item.golongan
-                            //         }
-                            //     })
-                            //     setDataKlasKT(dataKlasKT => dataKlasKT.concat(arrayPeruntukanKTD))
-                            // })
-                            // .catch((error) => {
-                            //     console.log(error);
-                            // });
-                            // setdataSelect(values => ({...values, "peruntukanMP": dataKlasKT}))
+                            .catch((error) => {
+                                console.log(error);
+                            });
+                    
+                            if(response.data.data.ptk.jenis_karantina === "H") {
+                                const resKlasKH = modelMaster.masterKlasKH(response.data.data.ptk.jenis_media_pembawa_id)
+                                resKlasKH
+                                .then((response) => {
+                                    let dataKlasKH = response.data.data;
+                                    var arraySelectKlasKH = dataKlasKH.map(item => {
+                                        return {
+                                            value: item.id,
+                                            label: item.deskripsi,
+                                        }
+                                    })
+                                    setdataSelect(values => ({...values, "peruntukanMPKH": arraySelectKlasKH}));
+                                })
+                                .catch((error) => {
+                                    console.log(error);
+                                });
+                                
+                                const resKomKH = modelMaster.masterKomKH(response.data.data.ptk.jenis_media_pembawa_id)
+                                resKomKH
+                                .then((response) => {
+                                    let dataKomKH = response.data.data;
+                                    var arrayKomKH = dataKomKH.map(item => {
+                                        return {
+                                            value: item.id + ";" + item.nama + ";" + item.nama_latin + ";" + item.kode,
+                                            label: item.nama + " / " + (item.nama_en == null ? "-" : item.nama_en)
+                                        }
+                                    })
+                                    setdataSelect(values => ({...values, "selectKomoditasMPKH": arrayKomKH}));
+                                })
+                                .catch((error) => {
+                                    console.log(error);
+                                });
+                
+                            } else if(response.data.data.ptk.jenis_karantina === "T") {
+                                const resPeruntukan = modelMaster.masterKlasKT(response.data.data.ptk.jenis_media_pembawa_id)
+                                resPeruntukan
+                                .then((response) => {
+                                    console.log(response.data)
+                                    let dataPeruntukanKT = response.data.data;
+                                    const arraySelectKlasKT = dataPeruntukanKT.map(item => {
+                                        return {
+                                            value: item.id,
+                                            label: item.deskripsi
+                                        }
+                                    })
+                                    setdataSelect(values => ({...values, "peruntukanMP": arraySelectKlasKT}))
+                                })
+                                .catch((error) => {
+                                    console.log(error);
+                                });
+                                
+                                const resKomKT = modelMaster.masterKomKT()
+                                resKomKT
+                                .then((response) => {
+                                    let dataKomKT = response.data.data;
+                                    var arrayKomKT = dataKomKT.map(item => {
+                                        return {
+                                            value: item.id + ";" + item.nama + ";" + item.nama_latin,
+                                            label: item.nama + " / " + (item.nama_en == null ? "-" : item.nama_en)
+                                        }
+                                    })
+                                    setdataSelect(values => ({...values, "selectKomoditasMP": arrayKomKT}))
+                                })
+                                .catch((error) => {
+                                    console.log(error);
+                                });
+                
+                            } else if(response.data.data.ptk.jenis_karantina === "I") {
+                                const resPeruntukan = modelMaster.masterKlasKI(response.data.data.ptk.jenis_media_pembawa_id)
+                                resPeruntukan
+                                .then((response) => {
+                                    let dataPeruntukanKI = response.data.data;
+                                    const arraySelectKlasKI = dataPeruntukanKI.map(item => {
+                                        return {
+                                            value: item.id,
+                                            label: item.deskripsi
+                                        }
+                                    })
+                                    setdataSelect(values => ({...values, "peruntukanMPKI": arraySelectKlasKI}))
+                                })
+                                .catch((error) => {
+                                    console.log(error);
+                                });
+                                
+                                const resKomKI = modelMaster.masterKomKI()
+                                resKomKI
+                                .then((response) => {
+                                    if(response.data.status === '200') {
+                                        let dataKomKI = response.data.data;
+                                        var arrayKomKI = dataKomKI.map(item => {
+                                            return {
+                                                value: item.id + ";" + item.nama + ";" + item.nama_latin,
+                                                label: item.nama + " / " + (item.nama_en == null ? "-" : item.nama_en)
+                                            }
+                                        })
+                                        setdataSelect(values => ({...values, "selectKomoditasMPKI": arrayKomKI}));
+                                    }
+                                })
+                                .catch((error) => {
+                                    console.log(error);
+                                });
+                            }
                         }
                     }
+
                     setdataSelect(values => ({...values, "jenisKemasan": <MasterKemasan/>}));
-                    // setdataSelect(values => ({...values, "satuanNilai": <MasterMataUang/>}));
                     setdataSelect(values => ({...values, "pelMuat": {value: response.data.data.ptk.pelabuhan_muat_id, label: response.data.data.ptk.kd_pelabuhan_muat + " - " + response.data.data.ptk.pelabuhan_muat}}))
                     setdataSelect(values => ({...values, "pelBongkar": {value: response.data.data.ptk.pelabuhan_bongkar_id, label: response.data.data.ptk.kd_pelabuhan_bongkar + " - " + response.data.data.ptk.pelabuhan_bongkar}}))
                     if(response.data.data.ptk.is_transit === 1) {
                         setdataSelect(values => ({...values, "pelTransit": {value: response.data.data.ptk.pelabuhan_transit_id, label: response.data.data.ptk.kd_pelabuhan_transit + " - " + response.data.data.ptk.pelabuhan_transit}}))
                     }
-                    // handleJenisDokumen(response.data.data.ptk.jenis_karantina);
                     setTimeout(() => {
                         setValuePemohon("idPtk", response.data.data.ptk.id);
                         setValuePemohon("noAju", response.data.data.ptk.no_aju)
@@ -798,6 +1418,9 @@ function DocK11() {
                         setValueVerify("mediaPembawaVerif", response.data.data.ptk.jenis_karantina); // delete soon
             
                         setValuePemohon("jenisForm", response.data.data.ptk.jenis_dokumen);
+                        setValuePemohon("mediaPembawa", response.data.data.ptk.jenis_karantina);
+                        setValuePemohon("jenisMp", response.data.data.ptk.jenis_media_pembawa_id == null ? "" : response.data.data.ptk.jenis_media_pembawa_id.toString());
+                        
                         setValuePemohon("pJRutin", response.data.data.ptk.is_guest ? response.data.data.ptk.is_guest.toString() : "");
                         setValuePemohon("namaPemohon", response.data.data.ptk.nama_pemohon);
                         setValuePemohon("permohonan", response.data.data.ptk.jenis_permohonan);
@@ -885,11 +1508,9 @@ function DocK11() {
                         setValuePelabuhan("pelTransitView", response.data.data.ptk.kd_pelabuhan_transit == null ? "" : response.data.data.ptk.kd_pelabuhan_transit + " - " + response.data.data.ptk.pelabuhan_transit);
                         setKontainerPtk(response.data.data.ptk_kontainer)
                         
-                        setValueMP("mediaPembawa", response.data.data.ptk.jenis_karantina);
                         if(response.data.data.ptk.jenis_karantina !== null || response.data.data.ptk_kontainer.length > 0) {
                             setFormTab(values => ({...values, tab3: false}))
                         }
-                        setValueMP("jenisMp", response.data.data.ptk.jenis_media_pembawa_id === null ? "" : response.data.data.ptk.jenis_media_pembawa_id.toString());
                         setValueMP("jenisKemasan", response.data.data.ptk.kemasan_id === null ? "" : response.data.data.ptk.kemasan_id.toString());
                         setValueMP("jenisAngkut", response.data.data.ptk.is_curah === null ? "" : response.data.data.ptk.is_curah.toString());
                         setValueMP("peruntukan", response.data.data.ptk.peruntukan_id ? response.data.data.ptk.peruntukan_id.toString() : "");
@@ -897,7 +1518,7 @@ function DocK11() {
                         setValueMP("jumlahKemasan", response.data.data.ptk.jumlah_kemasan);
                         setValueMP("tandaKemasan", response.data.data.ptk.tanda_khusus);
                         setValueMP("nilaiBarang", response.data.data.ptk.nilai_barang);
-                        setValueMP("satuanNilai", response.data.data.ptk.mata_uang);
+                        setValueMP("satuanNilai", response.data.data.ptk.mata_uang == null ? "IDR" : response.data.data.ptk.mata_uang);
                         setValueMP("negaraAsalMP", response.data.data.ptk.negara_asal_id == null ? "" : response.data.data.ptk.negara_asal_id);
                         setValueMP("negaraAsalMPView", response.data.data.ptk.kd_negara_asal == null ? "" : response.data.data.ptk.kd_negara_asal + " - " + response.data.data.ptk.negara_asal);
                         setValueMP("daerahAsalMP", response.data.data.ptk.kota_kab_asal_id);
@@ -933,1009 +1554,9 @@ function DocK11() {
                 console.log(error);
             });
         }
-    },[handleKota, handlePelabuhan, idPtk, setValueDetilMP, setValueDokPeriksa, setValueDokumen, setValueKonfirmasi, setValueKontainer, setValueMP, setValuePelabuhan, setValuePemohon, setValueVerify])
+    },[idPtk, handleKota, handlePelabuhan, setValueDetilMP, setValueDokPeriksa, setValueDokumen, setValueKonfirmasi, setValueKontainer, setValueMP, setValuePelabuhan, setValuePemohon, setValueVerify])
 
-    
-    // function isiDataPtk(response) {
-        
-    // }
-
-    const handleKomKHIDetil = useCallback(async (e) => {
-        if(cekdataMP.mediaPembawa) {
-            const resKodeHS = modelMaster.masterHS(cekdataMP.mediaPembawa)
-            resKodeHS
-            .then((response) => {
-                let resKodeHS = response.data.data;
-                var arrayKodeHS = resKodeHS.map(item => {
-                    return {
-                        value: item.kode,
-                        label: item.kode + " - " + item.nama_en
-                    }
-                })
-                setdataSelect(values => ({...values, "kodeHSMp": arrayKodeHS}));
-            })
-            .catch((error) => {
-                console.log(error);
-            });
-    
-            if(cekdataMP.mediaPembawa === "H") {
-                const resKomKH = modelMaster.masterKomKH(e)
-                resKomKH
-                .then((response) => {
-                    let dataKomKH = response.data.data;
-                    var arrayKomKH = dataKomKH.map(item => {
-                        return {
-                            value: item.id + ";" + item.nama + ";" + item.nama_latin + ";" + item.kode,
-                            label: item.nama + " - " + item.nama_en
-                        }
-                    })
-                    setdataSelect(values => ({...values, "komoditasMPKH": arrayKomKH}));
-                })
-                .catch((error) => {
-                    console.log(error);
-                });
-            } else if(cekdataMP.mediaPembawa === "T") {
-                // const resKomKT = modelMaster.masterKomKT()
-                // resKomKT
-                // .then((response) => {
-                //     let dataKomKT = response.data.data;
-                //     var arrayKomKT = dataKomKT.map(item => {
-                //         return {
-                //             value: item.id + ";" + item.nama + ";" + item.nama_latin,
-                //             label: item.nama + " - " + item.nama_en
-                //         }
-                //     })
-                //     setdataSelect(values => ({...values, "selectKomoditasMP": arrayKomKT}));
-                // })
-                // .catch((error) => {
-                //     console.log(error);
-                // });
-    
-                if(e === "4") {
-                    const dataKlasKT = KlasifikasiKTJson.filter((element) => element.kode_golongan === "A")
-        
-                    var arrayKlasKTBenih = dataKlasKT.map(item => {
-                        return {
-                            value: item.id,
-                            label: item.peruntukan + " - " + item.bentuk + " - " + item.golongan
-                        }
-                    })
-                    setdataSelect(values => ({...values, "peruntukanMP": arrayKlasKTBenih}))
-                    // const resPeruntukan = modelMaster.masterKlasKT("A")
-                    // resPeruntukan
-                    // .then((response) => {
-                    //     console.log(response.data)
-                    //     let dataPeruntukanKT = response.data.data;
-                    //     const arraySelectKota = dataPeruntukanKT.map(item => {
-                    //         return {
-                    //             value: item.id.toString(),
-                    //             label: item.peruntukan + " - " + item.bentuk + " - " + item.golongan
-                    //         }
-                    //     })
-                    //     setdataSelect(values => ({...values, "peruntukanMP": arraySelectKota}))
-                    // })
-                    // .catch((error) => {
-                    //     console.log(error);
-                    // });
-                } else {
-                    const dataKlasKT = KlasifikasiKTJson.filter((element) => element.kode_golongan === "B" || element.kode_golongan === "C" || element.kode_golongan === "D")
-        
-                    var arrayKlasKTNonBenih = dataKlasKT.map(item => {
-                        return {
-                            value: item.id,
-                            label: item.peruntukan + " - " + item.bentuk + " - " + item.golongan
-                        }
-                    })
-                    setdataSelect(values => ({...values, "peruntukanMP": arrayKlasKTNonBenih}))
-                    // const resPeruntukanB = modelMaster.masterKlasKT("B")
-                    // resPeruntukanB
-                    // .then((response) => {
-                    //     let dataPeruntukanKTB = response.data.data;
-                    //     var arrayPeruntukanKTB = dataPeruntukanKTB.map(item => {
-                    //         return {
-                    //             value: item.id.toString(),
-                    //             label: item.peruntukan + " - " + item.bentuk + " - " + item.golongan
-                    //         }
-                    //     })
-                    //     const resPeruntukanC = modelMaster.masterKlasKT("C")
-                    //     resPeruntukanC
-                    //     .then((response) => {
-                    //         let dataPeruntukanKTC = response.data.data;
-                    //         var arrayPeruntukanKTC = dataPeruntukanKTC.map(item => {
-                    //             return {
-                    //                 value: item.id.toString(),
-                    //                 label: item.peruntukan + " - " + item.bentuk + " - " + item.golongan
-                    //             }
-                    //         })
-                    //         const resPeruntukanD = modelMaster.masterKlasKT("D")
-                    //         resPeruntukanD
-                    //         .then((response) => {
-                    //             let dataPeruntukanKTD = response.data.data;
-                    //             var arrayPeruntukanKTD = dataPeruntukanKTD.map(item => {
-                    //                 return {
-                    //                     value: item.id.toString(),
-                    //                     label: item.peruntukan + " - " + item.bentuk + " - " + item.golongan
-                    //                 }
-                    //             })
-                    //             setdataSelect(values => ({...values, "peruntukanMP": [...arrayPeruntukanKTB, ...arrayPeruntukanKTC, ...arrayPeruntukanKTD]}))
-                    //         })
-                    //         .catch((error) => {
-                    //             console.log(error);
-                    //         });
-                    //     })
-                    //     .catch((error) => {
-                    //         console.log(error);
-                    //     });
-                    //     setdataSelect(values => ({...values, "peruntukanMP": arrayPeruntukanKTB}))
-                    // })
-                    // .catch((error) => {
-                    //     console.log(error);
-                    // });
-                }
-            } else if(cekdataMP.mediaPembawa === "I") {
-                // komoditas ikan
-            }
-        }
-        },[cekdataMP.mediaPembawa])
-    
-    useEffect(() => {
-        handleKomKHIDetil()
-    }, [handleKomKHIDetil])
-    
-    const onSubmitDokumen = (data) => {
-        // const modelPemohon = new PtkModel();
-
-        const response = modelPemohon.pushDetilDokumen(data);
-            response
-            .then((response) => {
-                // console.log(response)
-                // alert(response.data.status + " - " + response.data.message)
-                
-                // setFormTab(values => ({...values, tab4: false}))
-                // setWizardPage(wizardPage + 1)
-                if(response.data.status == 201) {
-                    Swal.fire({
-                        position: "top-center",
-                        icon: "success",
-                        title: "Dokumen berhasil disimpan.",
-                        showConfirmButton: false,
-                        timer: 1000
-                    })
-                    resetFormDokumen();
-                    // setSelectedFile(null)
-                    dataDokumenPtk();
-                    setDataIdPage(values => ({...values,
-                        fileDokumenUpload: "",
-                    }));
-                    // "fileDokumenUpload".target.value = "";
-                }
-            })
-            .catch((error) => {
-                console.log(error);
-            });
-    }
-
-    const onSubmitDetilMP = (data) => {
-        // setValueDetilMP("idPtk", dataIdPage.noIdPtk)
-        // setValueDetilMP("datenow", dateNow())
-        // console.log(data.jenisKar)
-        // const modelPemohon = new PtkModel();
-
-        if(cekdataMP.mediaPembawa) {
-            const response = modelPemohon.pushKomoditi(data, cekdataMP.mediaPembawa);
-            response
-            .then((response) => {
-                // console.log(response)
-                // alert(response.data.status + " - " + response.data.message)
-                // setFormTab(values => ({...values, tab4: false}))
-                // setWizardPage(wizardPage + 1)
-                if(response.data.status === '201') {
-                    Swal.fire({
-                        position: "top-center",
-                        icon: "success",
-                        title: "Detil Media Pembawa berhasil disimpan.",
-                        showConfirmButton: false,
-                        timer: 1000
-                    })
-                    resetFormKomoditi();
-                    dataKomoditiPtk();
-                }
-            })
-            .catch((error) => {
-                console.log(error);
-            });
-        }
-    };
-    // const date = new Date();
-    // function addZero(i) {
-    //     if (i < 10) {i = "0" + i}
-    //     return i;
-    // }
-
-    // console.count()
-
-    const onSubmitPemohon = (data) => {
-    // const modelPemohon = new PtkModel();
-
-        if(idPtk) {
-            // setValuePemohon("idPtk", dataIdPage.noIdPtk)
-            // setValuePemohon("noAju", dataIdPage.noAju)
-            // setValuePemohon("noPermohonan", dataIdPage.noPermohonan)
-            // setValuePemohon("makeid", makeid())
-            // setValuePemohon("datenow", dateNow())
-            const response = modelPemohon.tabPemohonUpdate(data);
-            response
-            .then((response) => {
-                // console.log(response.data)
-                // alert(response.data.status + " - " + response.data.message)
-                if(response.data.status === '201') {
-                    Swal.fire({
-                        position: "top-center",
-                        icon: "success",
-                        title: "Data Pemohon berhasil disimpan.",
-                        showConfirmButton: false,
-                        timer: 1000
-                    })
-                    setFormTab(values => ({...values, tab2: false}))
-                    setWizardPage(wizardPage + 1)
-                }
-            })
-            .catch((error) => {
-                console.log(error);
-                alert(error.response.status + " - " + error.response.data.message)
-            });
-        } else {
-            // setValuePemohon("makeid", makeid())
-            // setValuePemohon("datenow", dateNow())
-            const response = modelPemohon.tabPemohonInsert(data);
-            response
-            .then((response) => {
-                console.log(response)
-                // alert(response.data.status + " - " + response.data.message)
-                // Cookies.set("idPtkPage", base64_encode(base64_encode(response.data.data.no_aju) + 'm0R3N0r1R' + base64_encode(response.data.data.id) + "m0R3N0r1R" ), { expires: 1,});
-                // response.data.status === '201' ? navigate('/k11/' + base64_encode(base64_encode(response.data.data.no_aju) + 'm0R3N0r1R' + base64_encode(response.data.data.id) + "m0R3N0r1R")) : alert(response.data.message)
-                if(response.data.status === '201') {
-                    Swal.fire({
-                        position: "top-center",
-                        icon: "success",
-                        title: "Data Pemohon berhasil disimpan.",
-                        showConfirmButton: false,
-                        timer: 1000
-                    })
-                    Cookies.set("idPtkPage", base64_encode(base64_encode(response.data.data.no_aju) + 'm0R3N0r1R' + base64_encode(response.data.data.id) + "m0R3N0r1R" ))
-                    setDataIdPage(values => ({...values,
-                        noAju: response.data.data.no_aju,
-                        noIdPtk: response.data.data.id,
-                        noPermohonan: "",
-                    }));
-                    setValuePemohon("idPtk", response.data.data.id);
-                    setValuePemohon("noAju", response.data.data.no_aju)
-                    setValueKontainer("idPtk", response.data.data.id);
-                    setValuePelabuhan("idPtk", response.data.data.id);
-                    setValuePelabuhan("noAju", response.data.data.no_aju);
-                    setValueMP("idPtk", response.data.data.id);
-                    setValueMP("noAju", response.data.data.no_aju);
-                    setValueDetilMP("idPtk", response.data.data.id);
-                    setValueDokumen("idPtk",response.data.data.id);
-                    setValueDokumen("noAju", response.data.data.no_aju);
-                    setValueDokPeriksa("idPtk", response.data.data.id);
-                    setValueDokPeriksa("noAju", response.data.data.no_aju);
-                    setValueKonfirmasi("idPtk", response.data.data.id);
-                    setValueKonfirmasi("noAju", response.data.data.no_aju);
-                } else {
-                    Swal.fire({
-                        icon: "error",
-                        title: "Data Pemohon gagal disimpan.",
-                        text: response.data.status + " - " + response.data.message,
-                        showConfirmButton: true
-                    })
-                }
-
-                setFormTab(values => ({...values, tab2: false}))
-                setWizardPage(wizardPage + 1)
-            })
-            .catch((error) => {
-                console.log(error);
-                Swal.fire({
-                    icon: "error",
-                    title: "Data Pemohon gagal disimpan.",
-                    text: response.data.status + " - " + response.data.message,
-                    showConfirmButton: true
-                })
-                // alert(error.response.status + " - " + error.response.data.message)
-            });
-        }
-    };
-
-    // const iddataaa = base64_encode(base64_encode("0100EX1240113150657GZTL5") + 'm0R3N0r1R' + base64_encode("a3678a03-5f2d-4ba7-acd1-e749d9e4b0ba") + "m0R3N0r1R");
-    // console.log(iddataaa)
-
-    const onSubmitPelabuhan = (data) => {
-        // setValuePelabuhan("idPtk", noIdPtk)
-        // const modelPemohon = new PtkModel();
-        
-        if(idPtk) {
-            // setValuePelabuhan("idPtk", dataIdPage.noIdPtk)
-            // setValuePelabuhan("noAju", dataIdPage.noAju)
-            // setValuePelabuhan("datenow", dateNow())
-            const response = modelPemohon.tabPelabuhan(data);
-            response
-            .then((response) => {
-                // console.log(response)
-                if(response.data.status === '201') {
-                    Swal.fire({
-                        icon: "success",
-                        title: "Sukses!",
-                        text: "Data Pelabuhan berhasil disimpan.",
-                        showConfirmButton: false,
-                        timer: 1000
-                    })
-                    setFormTab(values => ({...values, tab3: false}))
-                    setWizardPage(wizardPage + 1)
-                } else {
-                    Swal.fire({
-                        icon: "error",
-                        title: "Data Pelabuhan gagal disimpan.",
-                        text: response.data.status + " - " + response.data.message,
-                        showConfirmButton: true
-                    })
-                }
-                // alert(response.data.status + " - " + response.data.message)
-            })
-            .catch((error) => {
-                console.log(error);
-                Swal.fire({
-                    icon: "error",
-                    title: "Data Pelabuhan gagal disimpan.",
-                    text: response.data.status + " - " + response.data.message,
-                    showConfirmButton: true
-                })
-                // alert(error.response.status + " - " + error.response.data.message)
-            });
-        } else {
-            // alert('Data id kosong')
-            Swal.fire({
-                icon: "error",
-                title: "Data id kosong.",
-                showConfirmButton: true
-            })
-        }
-    };
-    
-    const onSubmitKomoditas = (data) => {
-        // const modelPemohon = new PtkModel();
-
-        if(idPtk) {
-            // setValueMP("idPtk", dataIdPage.noIdPtk)
-            // setValueMP("noAju", dataIdPage.noAju)
-            // setValueMP("datenow", dateNow())
-             const response = modelPemohon.tabKomoditas(data);
-            response
-            .then((response) => {
-                // console.log(response.data)
-                // alert(response.data.status + " - " + response.data.message)
-                if(response.data.status === '201') {
-                    Swal.fire({
-                        icon: "Success",
-                        title: "Sukses!",
-                        text: "Data Komoditas berhasil disimpan.",
-                        showConfirmButton: false,
-                        timer: 1000
-                    })
-                    setFormTab(values => ({...values, tab4: false}))
-                    setWizardPage(wizardPage + 1)
-                } else {
-                    Swal.fire({
-                        icon: "error",
-                        title: "Data Komoditas gagal disimpan.",
-                        text: response.data.status + " - " + response.data.message,
-                        showConfirmButton: true
-                    })
-                }
-            })
-            .catch((error) => {
-                console.log(error);
-                // alert(error.response.status + " - " + error.response.data.message)
-                Swal.fire({
-                    icon: "error",
-                    title: "Data Pemohon gagal disimpan.",
-                    text: response.data.status + " - " + response.data.message,
-                    showConfirmButton: true
-                })
-            });
-        } else {
-            // alert('Data id kosong')
-            Swal.fire({
-                icon: "error",
-                title: "Data id kosong.",
-                showConfirmButton: true
-            })
-        }
-    };
-    
-    const onSubmitDokPeriksa = (data) => {
-        console.log(data)
-        setFormTab(values => ({...values, tab5: false}))
-        setWizardPage(wizardPage + 1)
-        // const modelPemohon = new PtkModel();
-
-        if(idPtk) {
-            const response = modelPemohon.tabTempatPeriksa(data);
-            response
-            .then((response) => {
-                // console.log(response.data)
-                // alert(response.data.status + " - " + response.data.message)
-                if(response.data.status === '201') {
-                    Swal.fire({
-                        icon: "success",
-                        title: "Sukses!",
-                        text: "Permohonan berhasil disubmit.",
-                        showConfirmButton: false,
-                        timer: 1000
-                    })
-                    setFormTab(values => ({...values, tab5: false}))
-                    setWizardPage(wizardPage + 1)
-                } else {
-                    Swal.fire({
-                        icon: "error",
-                        title: "Error!",
-                        text: "Permohonan gagal disubmit!",
-                        showConfirmButton: true
-                    })
-                    
-                }
-            })
-            .catch((error) => {
-                console.log(error);
-                Swal.fire({
-                    icon: "error",
-                    title: "Error!",
-                    text: error.response.status + " - " + error.response.data.message,
-                    showConfirmButton: true
-                })
-                // alert(error.response.status + " - " + error.response.data.message)
-            });
-        } else {
-            // alert('Data id kosong')
-            Swal.fire({
-                icon: "error",
-                title: "Error!",
-                text: "Data id kosong",
-                showConfirmButton: true
-            })
-        }
-    };
-    
-    const onSubmitKonfirmasi = (data) => {
-        // const modelPemohon = new PtkModel();
-
-        if(idPtk) {
-            const response = modelPemohon.tabKonfirmasi(data);
-            response
-            .then((response) => {
-                console.log(response.data)
-                if(response.data.status === '201') {
-                    setPtkLengkap(true);
-                    setValueVerify("idPtk", data.idPtk);
-                    setValueVerify("noAju", data.noAju);
-                    setValueVerify("mediaPembawaVerif", cekdataMP.mediaPembawa);
-                    // alert(response.data.status + " - " + response.data.message)
-                    Swal.fire({
-                        icon: "success",
-                        title: "Sukses!",
-                        text: response.data.message,
-                        showConfirmButton: false,
-                        timer: 1000
-                    })
-                } else {
-                    // alert(response.data.status + " - " + response.data.message)
-                    Swal.fire({
-                        icon: "error",
-                        title: "Error!",
-                        text: response.response.status + " - " + response.response.data.message,
-                        showConfirmButton: true
-                    })
-                }
-                // setFormTab(values => ({...values, tab4: false}))
-                // setWizardPage(wizardPage + 1)
-            })
-            .catch((error) => {
-                console.log(error);
-                // alert(error.response.status + " - " + error.response.data.message)
-                Swal.fire({
-                    icon: "error",
-                    title: "Error!",
-                    text: error.response.status + " - " + error.response.data.message,
-                    showConfirmButton: true
-                })
-            });
-        } else {
-            // alert('Data id kosong')
-            Swal.fire({
-                icon: "error",
-                title: "Data id kosong!",
-                showConfirmButton: true
-            })
-        }
-    };
-    
-    const onSubmitVerify = (data) => {
-        // const modelPemohon = new PtkModel();
-
-        if(idPtk) {
-            const response = modelPemohon.ptkVerify(data);
-            response
-            .then((response) => {
-                console.log(response.data)
-                if(response.data.status === '201') {
-                    // setPtkLengkap(true);
-                    Cookies.set("idPtkPage", base64_encode(
-                        base64_encode(cekdataDiri.noAju) + 'm0R3N0r1R' + 
-                        base64_encode(cekdataDiri.idPtk) + "m0R3N0r1R" + 
-                        base64_encode(response.data.data.no_dok_permohonan)
-                        )
-                    )
-                    Cookies.set("tglPtk", cekdataVerify.tglTerimaVerif)
-                    Cookies.set("jenisKarantina", cekdataMP.mediaPembawa)
-                    Cookies.set("jenisForm", cekdataDiri.jenisForm)
-                    setDataIdPage(values => ({...values,
-                        noPermohonan: response.data.data.no_dok_permohonan,
-                    }));
-                    setValueVerify("noDokumen", response.data.data.no_dok_permohonan);
-                    
-                    //start save history
-                    // const log = new PtkHistory();
-                    const resHsy = log.pushHistory(cekdataDiri.idPtk, "p0", "K-1.1", (dataIdPage.noPermohonan ? 'UPDATE' : 'NEW'));
-                    resHsy
-                    .then((response) => {
-                        if(response.data.status === '201') {
-                            console.log("history saved")
-                        }
-                    })
-                    .catch((error) => {
-                        console.log(error.response.data);
-                    });
-                    //end save history
-                    // alert(response.data.status + " - " + response.data.message)
-                    Swal.fire({
-                        position: "top-center",
-                        icon: "success",
-                        title: response.data.message,
-                        showConfirmButton: false,
-                        timer: 1000
-                    })
-                } else {
-                    Swal.fire({
-                        icon: "error",
-                        title: response.data.message,
-                        showConfirmButton: true
-                    })
-                    // alert(response.data.status + " - " + response.data.message)
-                }
-                // setFormTab(values => ({...values, tab4: false}))
-                // setWizardPage(wizardPage + 1)
-            })
-            .catch((error) => {
-                console.log(error);
-                Swal.fire({
-                    icon: "error",
-                    title: error.response.status + " - " + error.data.message,
-                    showConfirmButton: true
-                })
-                // alert(error.response.status + " - " + error.response.data.message)
-            });
-        } else {
-            // alert('Data id kosong')
-            Swal.fire({
-                icon: "error",
-                title: "Data id kosong",
-                showConfirmButton: true
-            })
-        }
-    };
-    
-      const onSubmitKontainer = (data) => {
-        // setValueKontainer("idPtk", noIdPtk);
-        // const modelPemohon = new PtkModel();
-        // setValueKontainer("idPtk", dataIdPage.noIdPtk)
-        // setValueKontainer("datenow", dateNow())
-        
-        const response = modelPemohon.pushDetilKontainer(data);
-            response
-            .then((response) => {
-                // console.log(response.data)
-                
-                // alert(response.data.status + " - " + response.data.message)
-                // setFormTab(values => ({...values, tab4: false}))
-                // setWizardPage(wizardPage + 1)
-                if(response.data.status === '201') {
-                    Swal.fire({
-                        position: "top-center",
-                        icon: "success",
-                        title: "Data Kontainer berhasil disimpan.",
-                        showConfirmButton: false,
-                        timer: 1000
-                    })
-                    resetFormKontainer();
-                    dataKontainerPtk();
-                } else {
-                    Swal.fire({
-                        icon: "error",
-                        title: "Data Kontainer gagal disimpan!",
-                        showConfirmButton: true,
-                        text: response.data.status + " - " + response.data.message
-                    })
-                }
-            })
-            .catch((error) => {
-                console.log(error.response);
-                Swal.fire({
-                    icon: "error",
-                    title: "Data Kontainer gagal disimpan!",
-                    showConfirmButton: true,
-                    text: error.data.status + " - " + error.data.message
-                })
-                // alert(error.response.status + " - " + error.response.data.message)
-            });
-    }      
-
-    const handleCekSameTTD = (event) => {
-        // console.log(cekdataDiri.alamatPemohon)
-        if(event.target.checked === true) {
-            setValuePemohon("namaTtd", cekdataDiri.namaPemohon);
-            setValuePemohon("alamatTtd", cekdataDiri.alamatPemohon);
-            setValuePemohon("jenisIdentitasTtd", cekdataDiri.jenisIdentitasPemohon);
-            setValuePemohon("noIdentitasTtd", cekdataDiri.noIdentitasPemohon);
-        } else {
-            setValuePemohon("namaTtd", "");
-            setValuePemohon("alamatTtd", "");
-            setValuePemohon("jenisIdentitasTtd", "");
-            setValuePemohon("noIdentitasTtd", "");
-        }
-    }
-    
-    const handleCekSamePengirim = (event) => {
-        if(event.target.checked === true) {
-            setValuePemohon("namaPengirim", cekdataDiri.namaPemohon);
-            setValuePemohon("alamatPengirim", cekdataDiri.alamatPemohon);
-            setValuePemohon("jenisIdentitasPengirim", cekdataDiri.jenisIdentitasPemohon);
-            setValuePemohon("noIdentitasPengirim", cekdataDiri.noIdentitasPemohon);
-            setValuePemohon("nomorTlpPengirim", cekdataDiri.nomorTlp);
-            setValuePemohon("negaraPengirim", (cekdataDiri.permohonan === 'IM' ? "" : "99"));
-            setValuePemohon("provPengirim", (cekdataDiri.permohonan === 'IM' ? "" : cekdataDiri.provPemohon));
-            setValuePemohon("provPengirimView", (cekdataDiri.permohonan === 'IM' ? "" : cekdataDiri.provPemohonView));
-            setValuePemohon("kotaPengirim", (cekdataDiri.permohonan === 'IM' ? "" : cekdataDiri.kotaPemohon));
-            setValuePemohon("kotaPengirimView", (cekdataDiri.permohonan === 'IM' ? "" : cekdataDiri.kotaPemohonView));
-        } else {
-            setValuePemohon("namaPengirim", "");
-            setValuePemohon("alamatPengirim", "");
-            setValuePemohon("jenisIdentitasPengirim", "");
-            setValuePemohon("noIdentitasPengirim", "");
-            setValuePemohon("nomorTlpPengirim", "");
-            setValuePemohon("negaraPengirim", "");
-            setValuePemohon("provPengirim", "");
-            setValuePemohon("kotaPengirim", "");
-            setValuePemohon("provPengirimView", "");
-            setValuePemohon("kotaPengirimView", "");
-        }
-    }
-    
-    const handleCekSamePenerima = (event) => {
-        if(event.target.checked === true) {
-            setValuePemohon("namaPenerima", cekdataDiri.namaPemohon);
-            setValuePemohon("alamatPenerima", cekdataDiri.alamatPemohon);
-            setValuePemohon("jenisIdentitasPenerima", cekdataDiri.jenisIdentitasPemohon);
-            setValuePemohon("noIdentitasPenerima", cekdataDiri.noIdentitasPemohon);
-            setValuePemohon("nomorTlpPenerima", cekdataDiri.nomorTlp);
-            setValuePemohon("negaraPenerima", (cekdataDiri.permohonan === 'EX' ? "" : "99"));
-            setValuePemohon("provPenerima", (cekdataDiri.permohonan === 'EX' ? "" : cekdataDiri.provPemohon));
-            setValuePemohon("provPenerimaView", (cekdataDiri.permohonan === 'EX' ? "" : cekdataDiri.provPemohonView));
-            setValuePemohon("kotaPenerima", (cekdataDiri.permohonan === 'EX' ? "" : cekdataDiri.kotaPemohon));
-            setValuePemohon("kotaPenerimaView", (cekdataDiri.permohonan === 'EX' ? "" : cekdataDiri.kotaPemohonView));
-        } else {
-            setValuePemohon("namaPenerima", "");
-            setValuePemohon("alamatPenerima", "");
-            setValuePemohon("jenisIdentitasPenerima", "");
-            setValuePemohon("noIdentitasPenerima", "");
-            setValuePemohon("nomorTlpPenerima", "");
-            setValuePemohon("negaraPenerima", "");
-            setValuePemohon("provPenerima", "");
-            setValuePemohon("kotaPenerima", "");
-            setValuePemohon("provPenerimaView", "");
-            setValuePemohon("kotaPenerimaView", "");
-        }
-    }
-
-    // const handleKomMP = (event) => {
-    //     const name = event.target.name;
-    //     const value = event.target.value;
-    //     setKomMP(values => ({...values, [name]: value}))
-    // }
-    
-    // const handleKomKTByID = (event) => {
-    //     // const name = event.target.name;
-    //     const value = event.target.value;
-    //     const kom = value.split(';');
-    //     setKomMP(values => ({...values,
-    //         idkom: kom[0],
-    //         kodeKomoditasMP: kom[1],
-    //         namaUmum: kom[2],
-    //         namaLatin: kom[3]
-    //     }))
-    //     setKomMP(values => ({...values, [komMP.kodeKomoditasMP]: kom[1]}))
-    // }
-    
-    // const handleKomoditas = (event) => {
-    //     const name = event.target.name;
-    //     const value = event.target.value;
-    //     setKomoditas(values => ({...values, [name]: value}))
-    // }
-
-    let [wizardPage, setWizardPage] = useState(1);
-    // let [editKontainer, setEditKontainer] = useState();
-
-    // const handleAddKontainer = (e) => {
-    //     e.preventDefault();
-    //     setArrKontainer([...arrKontainer, { 
-    //         noKontainer: kontainer.noKontainer,
-    //         tipeKontainer: kontainer.tipeKontainer,
-    //         ukuranKontainer: kontainer.ukuranKontainer,
-    //         stuffKontainer: kontainer.stuffKontainer,
-    //         segel: kontainer.segel
-    //      }]);
-    //      setKontainer(values => ({...values, noKontainer: "",
-    //         tipeKontainer: "",
-    //         ukuranKontainer: "",
-    //         stuffKontainer: "",
-    //         segel: ""
-    //     }));
-    // }
-
-    let [kontainerPtk, setKontainerPtk] = useState();
-    let [komoditiPtk, setKomoditiPtk] = useState();
-    let [dokumenPtk, setDokumenPtk] = useState();
-    // let [kontainerById, setKontainerById] = useState({});
-    // useEffect(()=>{
-        function dataKontainerPtk() {
-            if(wizardPage === 2) {
-                // const modelPemohon = new PtkModel();
-                const response = modelPemohon.detilKontainerPtk(dataIdPage.noIdPtk);
-                // console.log(noIdPtk)
-    
-                response
-                .then((res) => {
-                    // console.log(res)
-                    if(res.data.status === '200') {
-                        setKontainerPtk(res.data.data)
-                    }
-                })
-                .catch((error) => {
-                    console.log(error.response);
-                });
-            }
-            console.log(kontainerPtk);
-        }
-        
-        function dataDokumenPtk() {
-            if(wizardPage === 4) {
-                // const modelPemohon = new PtkModel();
-                // console.log(wizardPage)
-                // console.log(dataIdPage.noIdPtk)
-                const response = modelPemohon.getDokumenPtkId(dataIdPage.noIdPtk);
-                // console.log(noIdPtk)
-    
-                response
-                .then((res) => {
-                    console.log(res.data)
-                    if(res.data.status === '200') {
-                        setDokumenPtk(res.data.data)
-                    }
-                })
-                .catch((error) => {
-                    console.log(error.response);
-                });
-            }
-            // console.log("datadok : " + dokumenPtk)
-        }
-        
-        function dataKomoditiPtk() {
-            if(wizardPage === 3) {
-                // const modelPemohon = new PtkModel();
-                const response = modelPemohon.getKomoditiPtkId(dataIdPage.noIdPtk, cekdataMP.mediaPembawa);
-                // console.log(dataIdPage.noIdPtk)
-                // console.log(cekdataMP.mediaPembawa)
-    
-                response
-                .then((res) => {
-                    // console.log(res)
-                    if(res.data.status === '200') {
-                        setKomoditiPtk(res.data.data)
-                    }
-                })
-                .catch((error) => {
-                    console.log(error.response.data);
-                });
-            }
-        }
-    // },[noIdPtk, wizardPage])
-    
-        
-    let [sizeKontainer] = useState(["20 feet", "40 feet", "40 feet", "42 feet", "43 feet", "45 feet", "50 feet", "Lainnya"])
-    let [tipeKontainer] = useState(["General/Dry cargo", "Tunnel type", "Open Top Steel", "Flat Rack", "Reefer / Refrigerate", "Barge Container", "Bulk Container"])
-    // },[noIdPtk, wizardPage]);
-    // let [kontainerPtk, setKontainerPtk] = useState({});
-    // let [kontainerById, setKontainerById] = useState({});
-    
-    // if(wizardPage === 3) {
-    //     const modelPemohon = new PtkModel();
-
-    //     if(idPtk) {
-    //         const response = modelPemohon.detilKontainerPtk(noIdPtk);
-    //         if(response.data.status === '200') {
-    //             setKontainerPtk(response.data.data)
-    //         } 
-    //     }
-    // }
-    
-    // const getDataKontId = (e) => {
-    //     const modelPemohon = new PtkModel();
-    
-    //     if(idPtk) {
-    //         const response = modelPemohon.detilKontainerId(e.target.dataset.input);
-    //         if(response.data.status === '200') {
-    //             setValuePemohon("noKontainer", response.data.data.nomor);
-    //             setValuePemohon("tipeKontainer", response.data.data.tipe_kontainer_id);
-    //             setValuePemohon("ukuranKontainer", response.data.data.ukuran_kontainer_id);
-    //             setValuePemohon("stuffKontainer", response.data.data.stuff_kontainer_id);
-    //             setValuePemohon("segel", response.data.data.segel);
-    //             setValuePemohon("idDataKontainer", response.data.data.id);
-    //         } 
-    //     }
-    // }
-
-    function handleSelectPemohon(e, pel) {
-        // console.log(e)
-        if(e) {
-            setValuePemohon(pel, e.value);
-            setValuePemohon(pel + "View", e.label);
-        }
-    }
-    
-    function handleEditKontainer(e) {
-        // const modelPemohon = new PtkModel();
-        const response = modelPemohon.detilKontainerId(e.target.dataset.header);
-        response
-        .then((res) => {
-            // console.log(res.data)
-            if(res.data.status === '200') {
-                setValueKontainer("idDataKontainer", res.data.data.id)
-                setValueKontainer("idPtk", res.data.data.ptk_id)
-                setValueKontainer("noKontainer", res.data.data.nomor)
-                setValueKontainer("tipeKontainer", res.data.data.tipe_kontainer_id.toString())
-                setValueKontainer("ukuranKontainer", res.data.data.ukuran_kontainer_id.toString())
-                setValueKontainer("stuffKontainer", res.data.data.stuff_kontainer_id.toString())
-                setValueKontainer("segel", res.data.data.segel)
-            }
-        })
-        .catch((error) => {
-            console.log(error.response.data);
-        });
-    }
-
-    const addCommas = num => num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-    const removeNonNumeric = num => num.toString().replace(/[^0-9.]/g, "");
-    
-    function handleEditKomoditas(e) {
-        setValueDetilMP("idDetilMP", e.target.dataset.header)
-        setValueDetilMP("idPtk", e.target.dataset.ptk)
-        setValueDetilMP("jenisKar", cekdataMP.mediaPembawa)
-        const cell = e.target.closest('tr')
-        if(cekdataMP.mediaPembawa === "H") {
-            // setdataSelect(values => ({...values, "satJumlahMP": <MasterSatuan kar="kh" />}))
-            // setdataSelect(values => ({...values, "satuanNilaiMPKH": <MasterMataUang/>}))
-            setTimeout(() => {
-                setValueDetilMP("kodeHSMpKH", cell.cells[1].innerHTML)
-                setValueDetilMP("komoditasMPKHid", e.target.dataset.kom)
-                setValueDetilMP("namaUmumKH", cell.cells[3].innerHTML)
-                setValueDetilMP("namaLatinKH", cell.cells[4].innerHTML)
-                setValueDetilMP("klasifikasiMPKHid", e.target.dataset.klas)
-                setValueDetilMP("jumlahMP", cell.cells[9].innerHTML)
-                setValueDetilMP("satJumlahMP", e.target.dataset.satuanlain)
-                setValueDetilMP("breedMP", e.target.dataset.ket)
-                setValueDetilMP("jantan", cell.cells[11].innerHTML)
-                setValueDetilMP("betina", cell.cells[12].innerHTML)
-                setValueDetilMP("nettoMP", cell.cells[5].innerHTML)
-                setValueDetilMP("brutoMP", cell.cells[7].innerHTML)
-                setValueDetilMP("nilaiBarangMPKH", cell.cells[13].innerHTML)
-                setValueDetilMP("satuanNilaiMPKH", cell.cells[14].innerHTML)
-            }, 300)
-        } else if(cekdataMP.mediaPembawa === "T") {
-            // setdataSelect(values => ({...values, "satuanLain": <MasterSatuan kar="kt" />}))
-            // setdataSelect(values => ({...values, "satuanNilaiMP": <MasterMataUang/>}))
-            setdataSelect(values => ({...values, "satuanKemasanDetil": <MasterKemasan/>}))
-            setTimeout(() => {
-                setValueDetilMP("peruntukanMP", e.target.dataset.klas)
-                setValueDetilMP("volumeNetto", cell.cells[5].innerHTML)
-                setValueDetilMP("komoditasMP", e.target.dataset.kom)
-                setValueDetilMP("volumeBrutto", cell.cells[7].innerHTML)
-                setValueDetilMP("kodeHSMp", cell.cells[1].innerHTML)
-                setValueDetilMP("volumeLain", cell.cells[9].innerHTML)
-                setValueDetilMP("satuanLain", e.target.dataset.satuanlain)
-                setValueDetilMP("namaUmum", cell.cells[3].innerHTML)
-                setValueDetilMP("namaLatin", cell.cells[4].innerHTML)
-                setValueDetilMP("nilaiBarangMP", cell.cells[13].innerHTML)
-                setValueDetilMP("satuanNilaiMP", cell.cells[14].innerHTML)
-                setValueDetilMP("jumlahKemasanDetil", e.target.dataset.kemasan)
-                setValueDetilMP("satuanKemasanDetil", e.target.dataset.kemasansat)
-            },300)
-        } else if(cekdataMP.mediaPembawa === "I") {
-
-        }
-        // const modelPemohon = new PtkModel();
-        // const response = modelPemohon.detilKontainerId(e.target.dataset.header);
-        // response
-        // .then((res) => {
-        //     // console.log(res.data)
-        //     if(res.data.status === '200') {
-        //         setValueKontainer("idDataKontainer", res.data.data.id)
-        //         setValueKontainer("idPtk", res.data.data.ptk_id)
-        //         setValueKontainer("noKontainer", res.data.data.nomor)
-        //         setValueKontainer("tipeKontainer", res.data.data.tipe_kontainer_id.toString())
-        //         setValueKontainer("ukuranKontainer", res.data.data.ukuran_kontainer_id.toString())
-        //         setValueKontainer("stuffKontainer", res.data.data.stuff_kontainer_id.toString())
-        //         setValueKontainer("segel", res.data.data.segel)
-        //     }
-        // })
-        // .catch((error) => {
-        //     console.log(error.response.data);
-        // });
-    }
-    
-    function handleEditDokumen(e) {
-        // console.log(e.target.dataset.header)
-        // const modelPemohon = new PtkModel();
-        const response = modelPemohon.getDokumenId(e.target.dataset.header);
-        response
-        .then((res) => {
-            // console.log(res.data)
-            if(res.data.status === '200') {
-                setValueDokumen("idDataDokumen", res.data.data.id)
-                setValueDokumen("idPtk", res.data.data.ptk_id)
-                setValueDokumen("noAju", dataIdPage.noAju)
-                setValueDokumen("kategoriDokumen", res.data.data.kategori_dokumen)
-                setValueDokumen("jenisDokumen", res.data.data.kode_dokumen)
-                setValueDokumen("jenisDokumenView", res.data.data.kode_dokumen + " - " + res.data.data.nama_dokumen)
-                setValueDokumen("noDokumen", res.data.data.no_dokumen)
-                setValueDokumen("negaraAsalDokumen", res.data.data.negara_asal_id === null ? "" : res.data.data.negara_asal_id.toString())
-                setValueDokumen("negaraAsalDokumenView", res.data.data.negara_asal)
-                setValueDokumen("kotaAsalDokumen", res.data.data.kota_kab_asal_id === null ? "" : res.data.data.kota_kab_asal_id.toString())
-                setValueDokumen("kotaAsalDokumenView", res.data.data.kota_kab_asal)
-                setValueDokumen("ketDokumen", res.data.data.keterangan)
-                setValueDokumen("tglDokumen", res.data.data.tanggal_dokumen)
-            }
-        })
-        .catch((error) => {
-            console.log(error.response.data);
-        });
-    }
-    
-    // function handleSelectPelabuhan(e, pel) {
-    //     // console.log(e)
-    //     if(e) {
-    //         setValuePelabuhan(pel, e.value);
-    //         setValuePelabuhan(pel + "View", e.label);
-    //     }
-    // }
-    
-    function handleSelectNegKomoditas(e, pel) {
-        // console.log(e)
-        if(e) {
-            setValueMP(pel, e.value);
-            setValueMP(pel + "View", e.label);
-        }
-    }
-
-  return (
+    return (
     <div className="container-xxl flex-grow-1 container-p-y">
         <h4 className="py-3 breadcrumb-wrapper mb-4">
             K-1.1 <span style={{color: "blue"}}>PERMOHONAN TINDAKAN KARANTINA</span>
@@ -2021,465 +1642,554 @@ function DocK11() {
             transition={{ stiffness: 150 }}
         > */}
             <div className="row">
-            <div className="col-sm-6">
-                <div className="card card-action mb-4">
-                    <div className="card-header mb-3 p-2" style={{backgroundColor: '#123138'}}>
-                        <div className="card-action-title">
-                            <h5 className="mb-0 text-lightest">Pemohon</h5>
+                <div className="col-sm-12">
+                    <div className="card card-action mb-4">
+                        <div className="card-header mb-3 p-2" style={{backgroundColor: '#123138'}}>
+                            <div className="card-action-title">
+                                <h5 className="mb-0 text-lightest">Permohonan</h5>
+                            </div>
+                            <div className="card-action-element">
+                                <ul className="list-inline mb-0">
+                                    <li className="list-inline-item">
+                                        <button type='button' className="btn btn-default card-collapsible text-lighter p-0"><i className="tf-icons fa-solid fa-chevron-up"></i></button>
+                                    </li>
+                                </ul>
+                            </div>
                         </div>
-                        <div className="card-action-element">
-                            <ul className="list-inline mb-0">
-                                <li className="list-inline-item">
-                                    <a href="#" className="card-collapsible"><i className="tf-icons fa-solid fa-chevron-up"></i></a>
-                                </li>
-                            </ul>
-                        </div>
-                    </div>
-                    <div className="collapse show">
-                        <div className="card-body pt-0">
-                            <div className="row mb-3">
-                                <label className="col-sm-3 col-form-label" htmlFor="jenisForm">Jenis Form <span className='text-danger'>*</span></label>
-                                <div className="col-sm-9">
-                                    <select className={errorsPemohon.jenisForm ? "form-control form-control-sm is-invalid" : "form-control form-control-sm"} name="jenisForm" id="jenisForm" {...registerPemohon("jenisForm", { required: "Mohon pilih jenis form."})}>
-                                        <option value="">--</option>
-                                        <option value="PTK">Permohonan Tindakan Karantina (PTK)</option>
-                                        <option value="NHI">Nota Hasil Intelejen (NHI)</option>
-                                        <option value="BST">Serah Terima (BST)</option>
-                                    </select>
-                                    {errorsPemohon.jenisForm && <small className="text-danger">{errorsPemohon.jenisForm.message}</small>}
+                        <div className="collapse show">
+                            <div className="card-body pt-0 pb-0">
+                                <div className="row mb-3">
+                                    <div className="col-sm-12">
+                                        <div className="col-sm-5">
+                                            <div className="row">
+                                                <label className="col-sm-4 col-form-label" htmlFor="jenisForm">Jenis Form <span className='text-danger'>*</span></label>
+                                                <div className="col-sm-7" style={{paddingLeft: "8px"}}>
+                                                    <select className={errorsPemohon.jenisForm ? "form-select form-select-sm is-invalid" : "form-select form-select-sm"} name="jenisForm" id="jenisForm" {...registerPemohon("jenisForm", { required: "Mohon pilih jenis form."})}>
+                                                        <option value="">--</option>
+                                                        <option value="PTK">Permohonan Tindakan Karantina (PTK)</option>
+                                                        <option value="NHI">Nota Hasil Intelejen (NHI)</option>
+                                                        <option value="BST">Serah Terima (BST)</option>
+                                                    </select>
+                                                    {errorsPemohon.jenisForm && <small className="text-danger">{errorsPemohon.jenisForm.message}</small>}
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div className="col-sm-5">
+                                        <div className="row mb-3">
+                                            <label className="col-sm-4 col-form-label" htmlFor="mediaPembawa">Media Pembawa <span className='text-danger'>*</span></label>
+                                            <div className="col-sm-6">
+                                                <select name="mediaPembawa" id="mediaPembawa" {...registerPemohon("mediaPembawa", { required: "Mohon pilih media pembawa."})} className={errorsPemohon.mediaPembawa ? "form-select form-select-sm is-invalid" : "form-select form-select-sm"}>
+                                                    <option value="">--</option>
+                                                    <option value="H">Hewan</option>
+                                                    <option value="I">Ikan</option>
+                                                    <option value="T">Tumbuhan</option>
+                                                </select>
+                                            </div>
+                                            {errorsPemohon.mediaPembawa && <div className="offset-3 col-sm-9"><small className="text-danger">{errorsPemohon.mediaPembawa.message}</small></div>}
+                                        </div>
+                                    </div>
+                                    <div className="col-sm-7">
+                                        <div className="row mb-3">
+                                            <label className="col-sm-3 col-form-label" htmlFor="jenisMp">Jenis Media Pembawa <span className='text-danger'>*</span></label>
+                                            <div className="col-sm-9">
+                                                {/* <!-- Hewan --> */}
+                                                <div style={{display: cekdataDiri.mediaPembawa === 'H' ? 'block' : 'none'}}>
+                                                    <div className="form-check form-check-inline">
+                                                        <input className="form-check-input" type="radio" onInput={(e) => handleKomKHIDetil(e.target.value)} name="jenisMp" id="hidup" value="1" {...registerPemohon("jenisMp", { required: "Mohon pilih jenis media pembawa."})} />
+                                                        <label className="form-check-label" htmlFor="hidup">Hewan Hidup</label>
+                                                    </div>
+                                                    <div className="form-check form-check-inline">
+                                                        <input className="form-check-input" type="radio" onInput={(e) => handleKomKHIDetil(e.target.value)} name="jenisMp" id="produk" value="2" {...registerPemohon("jenisMp")} />
+                                                        <label className="form-check-label" htmlFor="produk">Produk Hewan</label>
+                                                    </div>
+                                                    <div className="form-check form-check-inline">
+                                                        <input className="form-check-input" type="radio" onInput={(e) => handleKomKHIDetil(e.target.value)} name="jenisMp" id="mpl" value="3" {...registerPemohon("jenisMp")} />
+                                                        <label className="form-check-label" htmlFor="mpl">Media Pembawa Lain</label>
+                                                    </div>
+                                                </div>
+                                                {/* <!-- Ikan --> */}
+                                                <div style={{display: cekdataDiri.mediaPembawa === 'I' ? 'block' : 'none'}}>
+                                                    <div className="form-check form-check-inline">
+                                                        <input className="form-check-input" type="radio" onInput={(e) => handleKomKHIDetil(e.target.value)} name="jenisMp" id="hidupKI" value="6" {...registerPemohon("jenisMp", { required: "Mohon pilih jenis media pembawa."})} />
+                                                        <label className="form-check-label" htmlFor="hidupKI">Ikan Hidup</label>
+                                                    </div>
+                                                    <div className="form-check form-check-inline">
+                                                        <input className="form-check-input" type="radio" onInput={(e) => handleKomKHIDetil(e.target.value)} name="jenisMp" id="produkKI" value="7" {...registerPemohon("jenisMp")} />
+                                                        <label className="form-check-label" htmlFor="produkKI">Produk Ikan</label>
+                                                    </div>
+                                                    <div className="form-check form-check-inline">
+                                                        <input className="form-check-input" type="radio" onInput={(e) => handleKomKHIDetil(e.target.value)} name="jenisMp" id="mplKI" value="8" {...registerPemohon("jenisMp")} />
+                                                        <label className="form-check-label" htmlFor="mplKI">Media Pembawa Lain</label>
+                                                    </div>
+                                                </div>
+                                                {/* <!-- Tumbuhan --> */}
+                                                <div style={{display: cekdataDiri.mediaPembawa === 'T' ? 'block' : 'none'}}>
+                                                    <div className="form-check form-check-inline">
+                                                        <input className="form-check-input" type="radio" name="jenisMp" id="benih" onInput={(e) => handleKomKHIDetil(e.target.value)} value="4" {...registerPemohon("jenisMp")} />
+                                                        <label className="form-check-label" htmlFor="benih">Benih</label>
+                                                    </div>
+                                                    <div className="form-check form-check-inline mb-3">
+                                                        <input className="form-check-input" type="radio" name="jenisMp" id="nonbenih" onInput={(e) => handleKomKHIDetil(e.target.value)} value="5" {...registerPemohon("jenisMp")} />
+                                                        <label className="form-check-label" htmlFor="nonbenih">Non Benih</label>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            {errorsPemohon.jenisMp && <div className="offset-3 col-sm-9"><small className="text-danger">{errorsPemohon.jenisMp.message}</small></div>}
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
-                            <div className="row mb-3">
-                                <label className="col-sm-3 col-form-label" htmlFor="permohonan">Jenis Permohonan <span className='text-danger'>*</span></label>
-                                <div className="col-sm-9">
-                                        <select className={errorsPemohon.permohonan ? "form-control form-control-sm is-invalid" : "form-control form-control-sm"} name="permohonan" id="permohonan" {...registerPemohon("permohonan", { required: "Mohon pilih jenis permohonan."})} onChange={(e) => handlePermohonan(e)}>
+                        </div>
+                    </div>
+                </div>
+                <div className="col-sm-6">
+                    <div className="card card-action mb-4">
+                        <div className="card-header mb-3 p-2" style={{backgroundColor: '#123138'}}>
+                            <div className="card-action-title">
+                                <h5 className="mb-0 text-lightest">Pemohon</h5>
+                            </div>
+                            <div className="card-action-element">
+                                <ul className="list-inline mb-0">
+                                    <li className="list-inline-item">
+                                        <button type='button' className="btn btn-default card-collapsible text-lighter p-0"><i className="tf-icons fa-solid fa-chevron-up"></i></button>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                        <div className="collapse show">
+                            <div className="card-body pt-0">
+                                <div className="row mb-3">
+                                    <label className="col-sm-3 col-form-label" htmlFor="permohonan">Jenis Permohonan <span className='text-danger'>*</span></label>
+                                    <div className="col-sm-9">
+                                            <select className={errorsPemohon.permohonan ? "form-control form-control-sm is-invalid" : "form-control form-control-sm"} name="permohonan" id="permohonan" {...registerPemohon("permohonan", { required: "Mohon pilih jenis permohonan."})} onChange={(e) => handlePermohonan(e)}>
+                                                <option value="">--</option>
+                                                <option value="EX">Ekspor</option>
+                                                <option value="IM">Impor</option>
+                                                <option value="DM">Domestik Masuk</option>
+                                                <option value="DK">Domestik Keluar</option>
+                                            </select>
+                                        {errorsPemohon.permohonan && <small className="text-danger">{errorsPemohon.permohonan.message}</small>}
+                                    </div>
+                                </div>
+                                <div className="row mb-3">
+                                    <label className="col-sm-3 col-form-label" htmlFor="pJRutin">Pengguna Jasa Rutin <span className='text-danger'>*</span></label>
+                                    <div className="col-sm-9">
+                                            <div className="form-check form-check-inline">
+                                                <input className="form-check-input" type="radio" name="pJRutin" id="ya" value="0" {...registerPemohon("pJRutin", { required: "Mohon pilih jenis pengguna jasa."})} />
+                                                <label className="form-check-label" htmlFor="ya">Ya</label>
+                                            </div>
+                                            <div className="form-check form-check-inline">
+                                                <input className="form-check-input" type="radio" name="pJRutin" id="tidak" value="1"  {...registerPemohon("pJRutin")}/>
+                                                <label className="form-check-label" htmlFor="tidak">Tidak</label>
+                                            </div>
+                                            {errorsPemohon.pJRutin && <><br/><small className="text-danger">{errorsPemohon.pJRutin.message}</small></>}
+                                    </div>
+                                </div>
+                                <div className="row mb-3">
+                                    <label className="col-sm-3 col-form-label" htmlFor="namaPemohon">Nama <span className='text-danger'>*</span></label>
+                                    <div className="col-sm-9">
+                                            <input type="text" id="namaPemohon" name="namaPemohon" {...registerPemohon("namaPemohon", { required: "Mohon isi nama pemohon."})} className={errorsPemohon.namaPemohon ? "form-control form-control-sm is-invalid" : "form-control form-control-sm"} placeholder="Nama Pemohon" />
+                                            {errorsPemohon.namaPemohon && <small className="text-danger">{errorsPemohon.namaPemohon.message}</small>}
+                                    </div>
+                                </div>
+                                <div className="row mb-3">
+                                    <label className="col-sm-3 col-form-label" htmlFor="alamatPemohon">Alamat <span className='text-danger'>*</span></label>
+                                    <div className="col-sm-9">
+                                        <input type="text" id="alamatPemohon" name="alamatPemohon" {...registerPemohon("alamatPemohon", { required: "Mohon isi alamat pemohon."})} className={errorsPemohon.alamatPemohon ? "form-control form-control-sm is-invalid" : "form-control form-control-sm"} placeholder="Alamat Pemohon" />
+                                        {errorsPemohon.alamatPemohon && <small className="text-danger">{errorsPemohon.alamatPemohon.message}</small>}
+                                    </div>
+                                </div>
+                                <div className="row mb-3">
+                                    <label className="col-sm-3 col-form-label" htmlFor="provPemohon">Provinsi <span className='text-danger'>*</span></label>
+                                    <div className="col-sm-9">
+                                            <Controller
+                                                control={controlPemohon}
+                                                name={"provPemohon"}
+                                                defaultValue={""}
+                                                className="form-control form-control-sm"
+                                                rules={{ required: "Mohon pilih provinsi pemohon." }}
+                                                render={({ field: { value,onChange, ...field } }) => (
+                                                    <Select styles={customStyles} placeholder={"Pilih provinsi pemohon.."} value={{id: cekdataDiri.provPemohon, label: cekdataDiri.provPemohonView}} {...field} options={dataSelect.provPemohon} onChange={(e) => handleSelectPemohon(e, "provPemohon") & handleKota(e.value, "kotaPemohon")} />
+                                                )}
+                                            />
+                                            {errorsPemohon.provPemohon && <small className="text-danger">{errorsPemohon.provPemohon.message}</small>}
+                                    </div>
+                                </div>
+                                <div className="row mb-3">
+                                    <label className="col-sm-3 col-form-label" htmlFor="kotaPemohon">Kota/Kab <span className='text-danger'>*</span></label>
+                                    <div className="col-sm-9">
+                                            <Controller
+                                                control={controlPemohon}
+                                                name={"kotaPemohon"}
+                                                defaultValue={""}
+                                                className="form-control form-control-sm"
+                                                rules={{ required: false }}
+                                                render={({ field: { value,onChange, ...field } }) => (
+                                                    <Select styles={customStyles} placeholder={"Pilih kota/kab asal pemohon.."} value={{id: cekdataDiri.kotaPemohon, label: cekdataDiri.kotaPemohonView}} {...field} options={dataSelect.kotaPemohon} onChange={(e) => handleSelectPemohon(e, "kotaPemohon")} />
+                                                )}
+                                            />
+                                            {errorsPemohon.kotaPemohon && <small className="text-danger">{errorsPemohon.kotaPemohon.message}</small>}
+                                    </div>
+                                </div>
+                                <div className="row mb-3">
+                                    <label className="col-sm-3 col-form-label" htmlFor="nomorTlp">No. Telepon</label>
+                                    <div className="col-sm-9">
+                                        <input type="number" name='nomorTlp' id="nomorTlp" {...registerPemohon("nomorTlp")} className="form-control form-control-sm" placeholder="No. Telepon" />
+                                    </div>
+                                </div>
+                                <div className="row mb-3">
+                                    <label className="col-sm-3 col-form-label" htmlFor="nomorFax">No. Fax.</label>
+                                    <div className="col-sm-9">
+                                        <input type="number" name='nomorFax' id="nomorFax" {...registerPemohon("nomorFax")} className="form-control form-control-sm" placeholder="No. Fax." />
+                                    </div>
+                                </div>
+                                <div className="row mb-3">
+                                    <label className="col-sm-3 col-form-label" htmlFor="jenisIdentitasPemohon">Identitas <span className='text-danger'>*</span></label>
+                                    <div className="col-sm-2">
+                                        <select className={errorsPemohon.jenisIdentitasPemohon ? "form-control form-control-sm is-invalid" : "form-control form-control-sm"} name="jenisIdentitasPemohon" id="jenisIdentitasPemohon" {...registerPemohon("jenisIdentitasPemohon", { required: true})}>
                                             <option value="">--</option>
-                                            <option value="EX">Ekspor</option>
-                                            <option value="IM">Impor</option>
-                                            <option value="DM">Domestik Masuk</option>
-                                            <option value="DK">Domestik Keluar</option>
+                                            <option value="NPWP">NPWP</option>
+                                            <option value="KTP">KTP</option>
+                                            <option value="PASSPORT">Passport</option>
+                                            <option value="LAIN-LAIN">Lain-lain</option>
                                         </select>
-                                    {errorsPemohon.permohonan && <small className="text-danger">{errorsPemohon.permohonan.message}</small>}
+                                    </div>
+                                    <div className="col-sm-7">
+                                        <input type="text" name="noIdentitasPemohon" id="noIdentitasPemohon" {...registerPemohon("noIdentitasPemohon", { required: "Mohon isi identitas pemohon."})} className={errorsPemohon.noIdentitasPemohon ? "form-control form-control-sm is-invalid" : "form-control form-control-sm"} placeholder="Nomor Identitas" />
+                                            {errorsPemohon.noIdentitasPemohon && <small className="text-danger">{errorsPemohon.noIdentitasPemohon.message}</small>}
+                                    </div>
+                                </div>
+                                <div className="form-check mt-3">
+                                    <input className="form-check-input" type="checkbox" name='samaTTD' id="samaTTD" value="1" onChange={handleCekSameTTD} />
+                                    <label className="form-check-label" htmlFor="samaTTD"> Pemohon sama dengan penandatangan dokumen. </label>
                                 </div>
                             </div>
-                            <div className="row mb-3">
-                                <label className="col-sm-3 col-form-label" htmlFor="pJRutin">Pengguna Jasa Rutin <span className='text-danger'>*</span></label>
-                                <div className="col-sm-9">
-                                        <div className="form-check form-check-inline">
-                                            <input className="form-check-input" type="radio" name="pJRutin" id="ya" value="0" {...registerPemohon("pJRutin", { required: "Mohon pilih jenis pengguna jasa."})} />
-                                            <label className="form-check-label" htmlFor="ya">Ya</label>
-                                        </div>
-                                        <div className="form-check form-check-inline">
-                                            <input className="form-check-input" type="radio" name="pJRutin" id="tidak" value="1"  {...registerPemohon("pJRutin")}/>
-                                            <label className="form-check-label" htmlFor="tidak">Tidak</label>
-                                        </div>
-                                        {errorsPemohon.pJRutin && <><br/><small className="text-danger">{errorsPemohon.pJRutin.message}</small></>}
+                        </div>
+                    </div>
+                </div>
+                <div className="col-sm-6">
+                    <div className="card card-action mb-4">
+                        <div className="card-header mb-3 p-2" style={{backgroundColor: '#123138'}}>
+                            <div className="card-action-title">
+                                <h5 className="mb-0 text-lightest">Penandatangan Dokumen</h5>
+                            </div>
+                            <div className="card-action-element">
+                                <ul className="list-inline mb-0">
+                                    <li className="list-inline-item">
+                                        <button type='button' className="btn btn-default card-collapsible text-lighter p-0"><i className="tf-icons fa-solid fa-chevron-up"></i></button>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                        <div className="collapse show">
+                            <div className="card-body pt-0">
+                                <div className="row mb-3">
+                                    <label className="col-sm-3 col-form-label" htmlFor="namaTtd">Nama <span className='text-danger'>*</span></label>
+                                    <div className="col-sm-9">
+                                        <input type="text" id="namaTtd" name="namaTtd" {...registerPemohon("namaTtd", { required: "Mohon isi nama penandatangan."})} className={errorsPemohon.namaTtd ? "form-control form-control-sm is-invalid" : "form-control form-control-sm"} placeholder="Nama Penandatangan" />
+                                        {errorsPemohon.namaTtd && <small className="text-danger">{errorsPemohon.namaTtd.message}</small>}
+                                    </div>
+                                </div>
+                                <div className="row mb-3">
+                                    <label className="col-sm-3 col-form-label" htmlFor="alamatTtd">Alamat <span className='text-danger'>*</span></label>
+                                    <div className="col-sm-9">
+                                        <input type="text" id="alamatTtd" name="alamatTtd" {...registerPemohon("alamatTtd", { required: "Mohon isi nama penandatangan."})} className={errorsPemohon.alamatTtd ? "form-control form-control-sm is-invalid" : "form-control form-control-sm"} placeholder="Alamat Penandatangan" />
+                                        {errorsPemohon.alamatTtd && <small className="text-danger">{errorsPemohon.alamatTtd.message}</small>}
+                                    </div>
+                                </div>
+                                <div className="row mb-3">
+                                    <label className="col-sm-3 col-form-label" htmlFor="jenisIdentitasTtd">Identitas <span className='text-danger'>*</span></label>
+                                    <div className="col-sm-2">
+                                        <select className={errorsPemohon.jenisIdentitasTtd ? "form-control form-control-sm is-invalid" : "form-control form-control-sm"} name="jenisIdentitasTtd" id="jenisIdentitasTtd" {...registerPemohon("jenisIdentitasTtd", { required: true})}>
+                                            <option value="">--</option>
+                                            <option value="NPWP">NPWP</option>
+                                            <option value="KTP">KTP</option>
+                                            <option value="PASSPORT">Passport</option>
+                                            <option value="LAIN-LAIN">Lain-lain</option>
+                                        </select>
+                                    </div>
+                                    <div className="col-sm-7">
+                                        <input type="text" id="noIdentitasTtd" name="noIdentitasTtd" className={errorsPemohon.noIdentitasTtd ? "form-control form-control-sm is-invalid" : "form-control form-control-sm"} {...registerPemohon("noIdentitasTtd", { required: "Mohon isi identitas penandatangan."})} placeholder="Nomor Identitas" />
+                                        {errorsPemohon.noIdentitasTtd && <small className="text-danger">{errorsPemohon.noIdentitasTtd.message}</small>}
+                                    </div>
+                                </div>
+                                <div className="row mb-3">
+                                    <label className="col-sm-3 col-form-label" htmlFor="jabatanTtd">Jabatan</label>
+                                    <div className="col-sm-9">
+                                        <input type="text" id="jabatanTtd" name="jabatanTtd" {...registerPemohon("jabatanTtd")} className="form-control form-control-sm" placeholder="Jabatan" />
+                                    </div>
                                 </div>
                             </div>
-                            <div className="row mb-3">
-                                <label className="col-sm-3 col-form-label" htmlFor="namaPemohon">Nama <span className='text-danger'>*</span></label>
-                                <div className="col-sm-9">
-                                        <input type="text" id="namaPemohon" name="namaPemohon" {...registerPemohon("namaPemohon", { required: "Mohon isi nama pemohon."})} className={errorsPemohon.namaPemohon ? "form-control form-control-sm is-invalid" : "form-control form-control-sm"} placeholder="Nama Pemohon" />
-                                        {errorsPemohon.namaPemohon && <small className="text-danger">{errorsPemohon.namaPemohon.message}</small>}
+                        </div>
+                    </div>
+                    <div className="card card-action mb-4">
+                        <div className="card-header mb-3 p-2" style={{backgroundColor: '#123138'}}>
+                            <div className="card-action-title">
+                                <h5 className="mb-0 text-lightest">Contact Person</h5>
+                            </div>
+                            <div className="card-action-element">
+                                <ul className="list-inline mb-0">
+                                    <li className="list-inline-item">
+                                        <button type='button' className="btn btn-default card-collapsible text-lighter p-0"><i className="tf-icons fa-solid fa-chevron-up"></i></button>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                        <div className="collapse show">
+                            <div className="card-body pt-0">
+                                <div className="row mb-3">
+                                    <label className="col-sm-3 col-form-label" htmlFor="namaCp">Nama</label>
+                                    <div className="col-sm-9">
+                                        <input type="text" id="namaCp" name="namaCp" {...registerPemohon("namaCp")} className="form-control form-control-sm" placeholder="Nama Contact Person" />
+                                    </div>
+                                </div>
+                                <div className="row mb-3">
+                                    <label className="col-sm-3 col-form-label" htmlFor="alamatCp">Alamat</label>
+                                    <div className="col-sm-9">
+                                        <input type="text" id="alamatCp" name="alamatCp" {...registerPemohon("alamatCp")} className="form-control form-control-sm" placeholder="Alamat Contact Person" />
+                                    </div>
+                                </div>
+                                <div className="row mb-3">
+                                    <label className="col-sm-3 col-form-label" htmlFor="teleponCp">Telepon</label>
+                                    <div className="col-sm-9">
+                                        <input type="text" id="teleponCp" name="teleponCp" {...registerPemohon("teleponCp")} className="form-control form-control-sm" placeholder="Telepon Contact Person" />
+                                    </div>
                                 </div>
                             </div>
-                            <div className="row mb-3">
-                                <label className="col-sm-3 col-form-label" htmlFor="alamatPemohon">Alamat <span className='text-danger'>*</span></label>
-                                <div className="col-sm-9">
-                                    <input type="text" id="alamatPemohon" name="alamatPemohon" {...registerPemohon("alamatPemohon", { required: "Mohon isi alamat pemohon."})} className={errorsPemohon.alamatPemohon ? "form-control form-control-sm is-invalid" : "form-control form-control-sm"} placeholder="Alamat Pemohon" />
-                                    {errorsPemohon.alamatPemohon && <small className="text-danger">{errorsPemohon.alamatPemohon.message}</small>}
-                                </div>
+                        </div>
+                    </div>
+                </div>
+                <div className="col-sm-6">
+                    <div className="card card-action mb-4">
+                        <div className="card-header mb-3 p-2" style={{backgroundColor: '#123138'}}>
+                            <div className="card-action-title">
+                                <h5 className="mb-0 text-lightest">Pengirim</h5>
                             </div>
-                            <div className="row mb-3">
-                                <label className="col-sm-3 col-form-label" htmlFor="provPemohon">Provinsi <span className='text-danger'>*</span></label>
-                                <div className="col-sm-9">
+                            <div className="card-action-element">
+                                <ul className="list-inline mb-0">
+                                    <li className="list-inline-item">
+                                        <button type='button' className="btn btn-default card-collapsible text-lighter p-0"><i className="tf-icons fa-solid fa-chevron-up"></i></button>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                        <div className="collapse show">
+                            <div className="card-body pt-0">
+                                <div className="row mb-3">
+                                    <label className="col-sm-3 col-form-label" htmlFor="namaPengirim">Nama <span className='text-danger'>*</span></label>
+                                    <div className="col-sm-9">
+                                        <input type="text" id="namaPengirim" name="namaPengirim" {...registerPemohon("namaPengirim", { required: "Mohon isi nama pengirim."})} className={errorsPemohon.namaPengirim ? "form-control form-control-sm is-invalid" : "form-control form-control-sm"} placeholder="Nama Pengirim" />
+                                        {errorsPemohon.namaPengirim && <small className="text-danger">{errorsPemohon.namaPengirim.message}</small>}
+                                    </div>
+                                </div>
+                                <div className="row mb-3">
+                                    <label className="col-sm-3 col-form-label" htmlFor="alamatPengirim">Alamat <span className='text-danger'>*</span></label>
+                                    <div className="col-sm-9">
+                                        <input type="text" id="alamatPengirim" name="alamatPengirim" {...registerPemohon("alamatPengirim", { required: "Mohon isi alamat pengirim."})} className={errorsPemohon.alamatPengirim ? "form-control form-control-sm is-invalid" : "form-control form-control-sm"} placeholder="Alamat Pengirim" />
+                                        {errorsPemohon.alamatPengirim && <small className="text-danger">{errorsPemohon.alamatPengirim.message}</small>}
+                                    </div>
+                                </div>
+                                <div className="row mb-3">
+                                    <label className="col-sm-3 col-form-label" htmlFor="identitas">Identitas <span className='text-danger'>*</span></label>
+                                    <div className="col-sm-2">
+                                        <select className={errorsPemohon.jenisIdentitasPengirim ? "form-control form-control-sm is-invalid" : "form-control form-control-sm"} name="jenisIdentitasPengirim" id="jenisIdentitasPengirim" {...registerPemohon("jenisIdentitasPengirim", { required: true})}>
+                                            <option value="">--</option>
+                                            <option value="NPWP">NPWP</option>
+                                            <option value="KTP">KTP</option>
+                                            <option value="PASSPORT">Passport</option>
+                                            <option value="LAIN-LAIN">Lain-lain</option>
+                                        </select>
+                                    </div>
+                                    <div className="col-sm-7">
+                                        <input type="text" id="noIdentitasPengirim" name="noIdentitasPengirim" {...registerPemohon("noIdentitasPengirim", { required: "Mohon isi identitas pengirim."})} className={errorsPemohon.noIdentitasPengirim ? "form-control form-control-sm is-invalid" : "form-control form-control-sm"} placeholder="Nomor Identitas" />
+                                        {errorsPemohon.noIdentitasPengirim && <small className="text-danger">{errorsPemohon.noIdentitasPengirim.message}</small>}
+                                    </div>
+                                </div>
+                                <div className="row mb-3">
+                                    <label className="col-sm-3 col-form-label" htmlFor="nomorTlpPengirim">No. Telepon</label>
+                                    <div className="col-sm-9">
+                                        <input type="number" id="nomorTlpPengirim" name="nomorTlpPengirim" {...registerPemohon("nomorTlpPengirim")} className="form-control form-control-sm" placeholder="No. Telepon" />
+                                    </div>
+                                </div>
+                                <div className="row mb-3">
+                                    <label className="col-sm-3 col-form-label" htmlFor="negaraPengirim">Negara <span className='text-danger'>*</span></label>
+                                    <div className="col-sm-9">
                                         <Controller
                                             control={controlPemohon}
-                                            name={"provPemohon"}
+                                            name={"negaraPengirim"}
                                             defaultValue={""}
                                             className="form-control form-control-sm"
-                                            rules={{ required: "Mohon pilih provinsi pemohon." }}
+                                            rules={{ required: "Mohon pilih negara pengirim." }}
                                             render={({ field: { value,onChange, ...field } }) => (
-                                                <Select styles={customStyles} placeholder={"Pilih provinsi pemohon.."} value={{id: cekdataDiri.provPemohon, label: cekdataDiri.provPemohonView}} {...field} options={dataSelect.provPemohon} onChange={(e) => handleSelectPemohon(e, "provPemohon") & handleKota(e.value, "kotaPemohon")} />
+                                                <Select styles={customStyles} placeholder={"Pilih negara pengirim.."} value={{id: cekdataDiri.negaraPengirim, label: cekdataDiri.negaraPengirimView}} {...field} options={cekdataDiri.permohonan != 'IM' ? [{value: "99", label: "ID - INDONESIA"}] : dataSelect.negaraPengirim} onChange={(e) => handleSelectPemohon(e, "negaraPengirim")} />
                                             )}
                                         />
-                                        {errorsPemohon.provPemohon && <small className="text-danger">{errorsPemohon.provPemohon.message}</small>}
+                                        {errorsPemohon.negaraPengirim && <small className="text-danger">{errorsPemohon.negaraPengirim.message}</small>}
+                                    </div>
                                 </div>
-                            </div>
-                            <div className="row mb-3">
-                                <label className="col-sm-3 col-form-label" htmlFor="kotaPemohon">Kota/Kab <span className='text-danger'>*</span></label>
-                                <div className="col-sm-9">
-                                        <Controller
-                                            control={controlPemohon}
-                                            name={"kotaPemohon"}
-                                            defaultValue={""}
-                                            className="form-control form-control-sm"
-                                            rules={{ required: false }}
-                                            render={({ field: { value,onChange, ...field } }) => (
-                                                <Select styles={customStyles} placeholder={"Pilih kota/kab asal pemohon.."} value={{id: cekdataDiri.kotaPemohon, label: cekdataDiri.kotaPemohonView}} {...field} options={dataSelect.kotaPemohon} onChange={(e) => handleSelectPemohon(e, "kotaPemohon")} />
-                                            )}
-                                        />
-                                        {errorsPemohon.kotaPemohon && <small className="text-danger">{errorsPemohon.kotaPemohon.message}</small>}
+                                <div style={{visibility: cekdataDiri.permohonan === 'IM' ? 'hidden' : 'visible'}}>
+                                    <div className="row mb-3">
+                                        <label className="col-sm-3 col-form-label" htmlFor="provPengirim">Provinsi</label>
+                                        <div className="col-sm-9">
+                                            <Controller
+                                                control={controlPemohon}
+                                                name={"provPengirim"}
+                                                defaultValue={""}
+                                                className="form-control form-control-sm"
+                                                rules={{ required: false }}
+                                                render={({ field: { value,onChange, ...field } }) => (
+                                                    <Select styles={customStyles} placeholder={"Pilih provinsi pengirim.."} value={{id: cekdataDiri.provPengirim, label: cekdataDiri.provPengirimView}} {...field} options={dataSelect.provPengirim} onChange={(e) => handleSelectPemohon(e, "provPengirim")} />
+                                                )}
+                                            />
+                                        </div>
+                                    </div>
+                                    <div className="row mb-3">
+                                        <label className="col-sm-3 col-form-label" htmlFor="kotaPengirim">Kota/Kabupaten</label>
+                                        <div className="col-sm-9">
+                                            <Controller
+                                                control={controlPemohon}
+                                                name={"kotaPengirim"}
+                                                defaultValue={""}
+                                                className="form-control form-control-sm"
+                                                rules={{ required: false }}
+                                                render={({ field: { value,onChange, ...field } }) => (
+                                                    <Select styles={customStyles} placeholder={"Pilih kota/kab asal pengirim.."} value={{id: cekdataDiri.kotaPengirim, label: cekdataDiri.kotaPengirimView}} {...field} options={dataSelect.kotaPengirim} onChange={(e) => handleSelectPemohon(e, "kotaPengirim")} />
+                                                )}
+                                            />
+                                        </div>
+                                    </div>
                                 </div>
-                            </div>
-                            <div className="row mb-3">
-                                <label className="col-sm-3 col-form-label" htmlFor="nomorTlp">No. Telepon</label>
-                                <div className="col-sm-9">
-                                    <input type="number" name='nomorTlp' id="nomorTlp" {...registerPemohon("nomorTlp")} className="form-control form-control-sm" placeholder="No. Telepon" />
-                                </div>
-                            </div>
-                            <div className="row mb-3">
-                                <label className="col-sm-3 col-form-label" htmlFor="nomorFax">No. Fax.</label>
-                                <div className="col-sm-9">
-                                    <input type="number" name='nomorFax' id="nomorFax" {...registerPemohon("nomorFax")} className="form-control form-control-sm" placeholder="No. Fax." />
-                                </div>
-                            </div>
-                            <div className="row mb-3">
-                                <label className="col-sm-3 col-form-label" htmlFor="jenisIdentitasPemohon">Identitas <span className='text-danger'>*</span></label>
-                                <div className="col-sm-2">
-                                    <select className={errorsPemohon.jenisIdentitasPemohon ? "form-control form-control-sm is-invalid" : "form-control form-control-sm"} name="jenisIdentitasPemohon" id="jenisIdentitasPemohon" {...registerPemohon("jenisIdentitasPemohon", { required: true})}>
-                                        <option value="">--</option>
-                                        <option value="NPWP">NPWP</option>
-                                        <option value="KTP">KTP</option>
-                                        <option value="PASSPORT">Passport</option>
-                                        <option value="LAIN-LAIN">Lain-lain</option>
-                                    </select>
-                                </div>
-                                <div className="col-sm-7">
-                                    <input type="text" name="noIdentitasPemohon" id="noIdentitasPemohon" {...registerPemohon("noIdentitasPemohon", { required: "Mohon isi identitas pemohon."})} className={errorsPemohon.noIdentitasPemohon ? "form-control form-control-sm is-invalid" : "form-control form-control-sm"} placeholder="Nomor Identitas" />
-                                        {errorsPemohon.noIdentitasPemohon && <small className="text-danger">{errorsPemohon.noIdentitasPemohon.message}</small>}
-                                </div>
-                            </div>
-                            <div className="form-check mt-3">
-                                <input className="form-check-input" type="checkbox" name='samaTTD' id="samaTTD" value="1" onChange={handleCekSameTTD} />
-                                <label className="form-check-label" htmlFor="samaTTD"> Pemohon sama dengan penandatangan dokumen. </label>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div className="col-sm-6">
-                <div className="card card-action mb-4">
-                    <div className="card-header mb-3 p-2" style={{backgroundColor: '#123138'}}>
-                        <div className="card-action-title">
-                            <h5 className="mb-0 text-lightest">Penandatangan Dokumen</h5>
-                        </div>
-                        <div className="card-action-element">
-                            <ul className="list-inline mb-0">
-                                <li className="list-inline-item">
-                                    <a href="#" className="card-collapsible"><i className="tf-icons fa-solid fa-chevron-up"></i></a>
-                                </li>
-                            </ul>
-                        </div>
-                    </div>
-                    <div className="collapse show">
-                        <div className="card-body pt-0">
-                            <div className="row mb-3">
-                                <label className="col-sm-3 col-form-label" htmlFor="namaTtd">Nama <span className='text-danger'>*</span></label>
-                                <div className="col-sm-9">
-                                    <input type="text" id="namaTtd" name="namaTtd" {...registerPemohon("namaTtd", { required: "Mohon isi nama penandatangan."})} className={errorsPemohon.namaTtd ? "form-control form-control-sm is-invalid" : "form-control form-control-sm"} placeholder="Nama Penandatangan" />
-                                    {errorsPemohon.namaTtd && <small className="text-danger">{errorsPemohon.namaTtd.message}</small>}
-                                </div>
-                            </div>
-                            <div className="row mb-3">
-                                <label className="col-sm-3 col-form-label" htmlFor="alamatTtd">Alamat <span className='text-danger'>*</span></label>
-                                <div className="col-sm-9">
-                                    <input type="text" id="alamatTtd" name="alamatTtd" {...registerPemohon("alamatTtd", { required: "Mohon isi nama penandatangan."})} className={errorsPemohon.alamatTtd ? "form-control form-control-sm is-invalid" : "form-control form-control-sm"} placeholder="Alamat Penandatangan" />
-                                    {errorsPemohon.alamatTtd && <small className="text-danger">{errorsPemohon.alamatTtd.message}</small>}
-                                </div>
-                            </div>
-                            <div className="row mb-3">
-                                <label className="col-sm-3 col-form-label" htmlFor="jenisIdentitasTtd">Identitas <span className='text-danger'>*</span></label>
-                                <div className="col-sm-2">
-                                    <select className={errorsPemohon.jenisIdentitasTtd ? "form-control form-control-sm is-invalid" : "form-control form-control-sm"} name="jenisIdentitasTtd" id="jenisIdentitasTtd" {...registerPemohon("jenisIdentitasTtd", { required: true})}>
-                                        <option value="">--</option>
-                                        <option value="NPWP">NPWP</option>
-                                        <option value="KTP">KTP</option>
-                                        <option value="PASSPORT">Passport</option>
-                                        <option value="LAIN-LAIN">Lain-lain</option>
-                                    </select>
-                                </div>
-                                <div className="col-sm-7">
-                                    <input type="text" id="noIdentitasTtd" name="noIdentitasTtd" className={errorsPemohon.noIdentitasTtd ? "form-control form-control-sm is-invalid" : "form-control form-control-sm"} {...registerPemohon("noIdentitasTtd", { required: "Mohon isi identitas penandatangan."})} placeholder="Nomor Identitas" />
-                                    {errorsPemohon.noIdentitasTtd && <small className="text-danger">{errorsPemohon.noIdentitasTtd.message}</small>}
-                                </div>
-                            </div>
-                            <div className="row mb-3">
-                                <label className="col-sm-3 col-form-label" htmlFor="jabatanTtd">Jabatan</label>
-                                <div className="col-sm-9">
-                                    <input type="text" id="jabatanTtd" name="jabatanTtd" {...registerPemohon("jabatanTtd")} className="form-control form-control-sm" placeholder="Jabatan" />
+                                <div className="form-check mt-3">
+                                <input className="form-check-input" type="checkbox" name='samaPengirim' id="samaPengirim" value="1" onChange={handleCekSamePengirim} />
+                                <label className="form-check-label" htmlFor="samaPengirim"> Sama dengan pemohon. </label>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
-                <div className="card card-action mb-4">
-                    <div className="card-header mb-3 p-2" style={{backgroundColor: '#123138'}}>
-                        <div className="card-action-title">
-                            <h5 className="mb-0 text-lightest">Contact Person</h5>
-                        </div>
-                        <div className="card-action-element">
-                            <ul className="list-inline mb-0">
-                                <li className="list-inline-item">
-                                    <a href="#" className="card-collapsible"><i className="tf-icons fa-solid fa-chevron-up"></i></a>
-                                </li>
-                            </ul>
-                        </div>
-                    </div>
-                    <div className="collapse show">
-                        <div className="card-body pt-0">
-                            <div className="row mb-3">
-                                <label className="col-sm-3 col-form-label" htmlFor="namaCp">Nama</label>
-                                <div className="col-sm-9">
-                                    <input type="text" id="namaCp" name="namaCp" {...registerPemohon("namaCp")} className="form-control form-control-sm" placeholder="Nama Contact Person" />
-                                </div>
+                <div className="col-sm-6">
+                    <div className="card card-action mb-4">
+                        <div className="card-header mb-3 p-2" style={{backgroundColor: '#123138'}}>
+                            <div className="card-action-title">
+                                <h5 className="mb-0 text-lightest">Penerima</h5>
                             </div>
-                            <div className="row mb-3">
-                                <label className="col-sm-3 col-form-label" htmlFor="alamatCp">Alamat</label>
-                                <div className="col-sm-9">
-                                    <input type="text" id="alamatCp" name="alamatCp" {...registerPemohon("alamatCp")} className="form-control form-control-sm" placeholder="Alamat Contact Person" />
-                                </div>
-                            </div>
-                            <div className="row mb-3">
-                                <label className="col-sm-3 col-form-label" htmlFor="teleponCp">Telepon</label>
-                                <div className="col-sm-9">
-                                    <input type="text" id="teleponCp" name="teleponCp" {...registerPemohon("teleponCp")} className="form-control form-control-sm" placeholder="Telepon Contact Person" />
-                                </div>
+                            <div className="card-action-element">
+                                <ul className="list-inline mb-0">
+                                    <li className="list-inline-item">
+                                        <button type='button' className="btn btn-default card-collapsible text-lighter p-0"><i className="tf-icons fa-solid fa-chevron-up"></i></button>
+                                    </li>
+                                </ul>
                             </div>
                         </div>
-                    </div>
-                </div>
-            </div>
-            <div className="col-sm-6">
-                <div className="card card-action mb-4">
-                    <div className="card-header mb-3 p-2" style={{backgroundColor: '#123138'}}>
-                        <div className="card-action-title">
-                            <h5 className="mb-0 text-lightest">Pengirim</h5>
-                        </div>
-                        <div className="card-action-element">
-                            <ul className="list-inline mb-0">
-                                <li className="list-inline-item">
-                                    <a href="#" className="card-collapsible"><i className="tf-icons fa-solid fa-chevron-up"></i></a>
-                                </li>
-                            </ul>
-                        </div>
-                    </div>
-                    <div className="collapse show">
-                        <div className="card-body pt-0">
-                            <div className="row mb-3">
-                                <label className="col-sm-3 col-form-label" htmlFor="namaPengirim">Nama <span className='text-danger'>*</span></label>
-                                <div className="col-sm-9">
-                                    <input type="text" id="namaPengirim" name="namaPengirim" {...registerPemohon("namaPengirim", { required: "Mohon isi nama pengirim."})} className={errorsPemohon.namaPengirim ? "form-control form-control-sm is-invalid" : "form-control form-control-sm"} placeholder="Nama Pengirim" />
-                                    {errorsPemohon.namaPengirim && <small className="text-danger">{errorsPemohon.namaPengirim.message}</small>}
+                        <div className="collapse show">
+                            <div className="card-body pt-0">
+                                <div className="row mb-3">
+                                    <label className="col-sm-3 col-form-label" htmlFor="namaPenerima">Nama <span className='text-danger'>*</span></label>
+                                    <div className="col-sm-9">
+                                        <input type="text" id="namaPenerima" name="namaPenerima" {...registerPemohon("namaPenerima", { required: "Mohon isi nama penerima."})} className={errorsPemohon.namaPenerima ? "form-control form-control-sm is-invalid" : "form-control form-control-sm"} placeholder="Nama Penerima" />
+                                        {errorsPemohon.namaPenerima && <small className="text-danger">{errorsPemohon.namaPenerima.message}</small>}
+                                    </div>
                                 </div>
-                            </div>
-                            <div className="row mb-3">
-                                <label className="col-sm-3 col-form-label" htmlFor="alamatPengirim">Alamat <span className='text-danger'>*</span></label>
-                                <div className="col-sm-9">
-                                    <input type="text" id="alamatPengirim" name="alamatPengirim" {...registerPemohon("alamatPengirim", { required: "Mohon isi alamat pengirim."})} className={errorsPemohon.alamatPengirim ? "form-control form-control-sm is-invalid" : "form-control form-control-sm"} placeholder="Alamat Pengirim" />
-                                    {errorsPemohon.alamatPengirim && <small className="text-danger">{errorsPemohon.alamatPengirim.message}</small>}
+                                <div className="row mb-3">
+                                    <label className="col-sm-3 col-form-label" htmlFor="alamatPenerima">Alamat <span className='text-danger'>*</span></label>
+                                    <div className="col-sm-9">
+                                        <input type="text" id="alamatPenerima" name="alamatPenerima" {...registerPemohon("alamatPenerima", { required: "Mohon isi alamat penerima."})} className={errorsPemohon.alamatPenerima ? "form-control form-control-sm is-invalid" : "form-control form-control-sm"} placeholder="Alamat Penerima" />
+                                        {errorsPemohon.alamatPenerima && <small className="text-danger">{errorsPemohon.alamatPenerima.message}</small>}
+                                    </div>
                                 </div>
-                            </div>
-                            <div className="row mb-3">
-                                <label className="col-sm-3 col-form-label" htmlFor="identitas">Identitas <span className='text-danger'>*</span></label>
-                                <div className="col-sm-2">
-                                    <select className={errorsPemohon.jenisIdentitasPengirim ? "form-control form-control-sm is-invalid" : "form-control form-control-sm"} name="jenisIdentitasPengirim" id="jenisIdentitasPengirim" {...registerPemohon("jenisIdentitasPengirim", { required: true})}>
+                                <div className="row mb-3">
+                                    <label className="col-sm-3 col-form-label" htmlFor="jenisIdentitasPenerima">Identitas <span className='text-danger'>*</span></label>
+                                    <div className="col-sm-2">
+                                        <select className={errorsPemohon.jenisIdentitasPenerima ? "form-control form-control-sm is-invalid" : "form-control form-control-sm"} name="jenisIdentitasPenerima" id="jenisIdentitasPenerima" {...registerPemohon("jenisIdentitasPenerima", { required: true})}>
                                         <option value="">--</option>
-                                        <option value="NPWP">NPWP</option>
-                                        <option value="KTP">KTP</option>
-                                        <option value="PASSPORT">Passport</option>
-                                        <option value="LAIN-LAIN">Lain-lain</option>
-                                    </select>
+                                            <option value="NPWP">NPWP</option>
+                                            <option value="KTP">KTP</option>
+                                            <option value="PASSPORT">Passport</option>
+                                            <option value="LAIN-LAIN">Lain-lain</option>
+                                        </select>
+                                    </div>
+                                    <div className="col-sm-7">
+                                        <input type="text" id="noIdentitasPenerima" name="noIdentitasPenerima" className={errorsPemohon.noIdentitasPenerima ? "form-control form-control-sm is-invalid" : "form-control form-control-sm"} placeholder="Nomor Identitas" {...registerPemohon("noIdentitasPenerima", { required: "Mohon isi identitas penerima."})} />
+                                        {errorsPemohon.noIdentitasPenerima && <small className="text-danger">{errorsPemohon.noIdentitasPenerima.message}</small>}
+                                    </div>
                                 </div>
-                                <div className="col-sm-7">
-                                    <input type="text" id="noIdentitasPengirim" name="noIdentitasPengirim" {...registerPemohon("noIdentitasPengirim", { required: "Mohon isi identitas pengirim."})} className={errorsPemohon.noIdentitasPengirim ? "form-control form-control-sm is-invalid" : "form-control form-control-sm"} placeholder="Nomor Identitas" />
-                                    {errorsPemohon.noIdentitasPengirim && <small className="text-danger">{errorsPemohon.noIdentitasPengirim.message}</small>}
+                                <div className="row mb-3">
+                                    <label className="col-sm-3 col-form-label" htmlFor="nomorTlpPenerima">No. Telepon</label>
+                                    <div className="col-sm-9">
+                                        <input type="number" id="nomorTlpPenerima" name="nomorTlpPenerima" {...registerPemohon("nomorTlpPenerima")} className="form-control form-control-sm" placeholder="No. Telepon" />
+                                    </div>
                                 </div>
-                            </div>
-                            <div className="row mb-3">
-                                <label className="col-sm-3 col-form-label" htmlFor="nomorTlpPengirim">No. Telepon</label>
-                                <div className="col-sm-9">
-                                    <input type="number" id="nomorTlpPengirim" name="nomorTlpPengirim" {...registerPemohon("nomorTlpPengirim")} className="form-control form-control-sm" placeholder="No. Telepon" />
-                                </div>
-                            </div>
-                            <div className="row mb-3">
-                                <label className="col-sm-3 col-form-label" htmlFor="negaraPengirim">Negara <span className='text-danger'>*</span></label>
-                                <div className="col-sm-9">
+                                <div className="row mb-3">
+                                    <label className="col-sm-3 col-form-label" htmlFor="negaraPenerima">Negara <span className='text-danger'>*</span></label>
+                                    <div className="col-sm-9">
                                     <Controller
-                                        control={controlPemohon}
-                                        name={"negaraPengirim"}
-                                        defaultValue={""}
-                                        className="form-control form-control-sm"
-                                        rules={{ required: "Mohon pilih negara pengirim." }}
-                                        render={({ field: { value,onChange, ...field } }) => (
-                                            <Select styles={customStyles} placeholder={"Pilih negara pengirim.."} value={{id: cekdataDiri.negaraPengirim, label: cekdataDiri.negaraPengirimView}} {...field} options={cekdataDiri.permohonan != 'IM' ? [{value: "99", label: "ID - INDONESIA"}] : dataSelect.negaraPengirim} onChange={(e) => handleSelectPemohon(e, "negaraPengirim")} />
-                                        )}
-                                    />
-                                    {errorsPemohon.negaraPengirim && <small className="text-danger">{errorsPemohon.negaraPengirim.message}</small>}
-                                </div>
-                            </div>
-                            <div style={{visibility: cekdataDiri.permohonan === 'IM' ? 'hidden' : 'visible'}}>
-                                <div className="row mb-3">
-                                    <label className="col-sm-3 col-form-label" htmlFor="provPengirim">Provinsi</label>
-                                    <div className="col-sm-9">
-                                        <Controller
                                             control={controlPemohon}
-                                            name={"provPengirim"}
+                                            name={"negaraPenerima"}
                                             defaultValue={""}
                                             className="form-control form-control-sm"
-                                            rules={{ required: false }}
+                                            rules={{ required: "Mohon pilih negara penerima." }}
                                             render={({ field: { value,onChange, ...field } }) => (
-                                                <Select styles={customStyles} placeholder={"Pilih provinsi pengirim.."} value={{id: cekdataDiri.provPengirim, label: cekdataDiri.provPengirimView}} {...field} options={dataSelect.provPengirim} onChange={(e) => handleSelectPemohon(e, "provPengirim")} />
+                                                <Select styles={customStyles} placeholder={"Pilih negara penerima.."} value={{id: cekdataDiri.negaraPenerima, label: cekdataDiri.negaraPenerimaView}} {...field} options={cekdataDiri.permohonan != 'EX' ? [{value: "99", label: "ID - INDONESIA"}] : dataSelect.negaraPenerima} onChange={(e) => handleSelectPemohon(e, "negaraPenerima")} />
                                             )}
                                         />
+                                        {errorsPemohon.negaraPenerima && <small className="text-danger">{errorsPemohon.negaraPenerima.message}</small>}
                                     </div>
                                 </div>
-                                <div className="row mb-3">
-                                    <label className="col-sm-3 col-form-label" htmlFor="kotaPengirim">Kota/Kabupaten</label>
-                                    <div className="col-sm-9">
-                                        <Controller
-                                            control={controlPemohon}
-                                            name={"kotaPengirim"}
-                                            defaultValue={""}
-                                            className="form-control form-control-sm"
-                                            rules={{ required: false }}
-                                            render={({ field: { value,onChange, ...field } }) => (
-                                                <Select styles={customStyles} placeholder={"Pilih kota/kab asal pengirim.."} value={{id: cekdataDiri.kotaPengirim, label: cekdataDiri.kotaPengirimView}} {...field} options={dataSelect.kotaPengirim} onChange={(e) => handleSelectPemohon(e, "kotaPengirim")} />
-                                            )}
-                                        />
+                                <div style={{visibility: cekdataDiri.permohonan === 'EX' ? 'hidden' : 'visible'}}>
+                                    <div className="row mb-3">
+                                        <label className="col-sm-3 col-form-label" htmlFor="provPenerima">Provinsi</label>
+                                        <div className="col-sm-9">
+                                            <Controller
+                                                control={controlPemohon}
+                                                name={"provPenerima"}
+                                                defaultValue={""}
+                                                className="form-control form-control-sm"
+                                                rules={{ required: false }}
+                                                render={({ field: { value,onChange, ...field } }) => (
+                                                    <Select styles={customStyles} placeholder={"Pilih provinsi penerima.."} value={{id: cekdataDiri.provPenerima, label: cekdataDiri.provPenerimaView}} {...field} options={dataSelect.provPenerima} onChange={(e) => handleSelectPemohon(e, "provPenerima") & handleKota(e.value, "kotaPenerima")} />
+                                                )}
+                                            />
+                                        </div>
+                                    </div>
+                                    <div className="row mb-3">
+                                        <label className="col-sm-3 col-form-label" htmlFor="kotaPenerima">Kota/Kabupaten</label>
+                                        <div className="col-sm-9">
+                                            <Controller
+                                                control={controlPemohon}
+                                                name={"kotaPenerima"}
+                                                defaultValue={""}
+                                                className="form-control form-control-sm"
+                                                rules={{ required: false }}
+                                                render={({ field: { value,onChange, ...field } }) => (
+                                                    <Select styles={customStyles} placeholder={"Pilih kota/kab penerima.."} value={{id: cekdataDiri.kotaPenerima, label: cekdataDiri.kotaPenerimaView}} {...field} options={dataSelect.kotaPenerima} onChange={(e) => handleSelectPemohon(e, "kotaPenerima")} />
+                                                )}
+                                            />
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
-                            <div className="form-check mt-3">
-                            <input className="form-check-input" type="checkbox" name='samaPengirim' id="samaPengirim" value="1" onChange={handleCekSamePengirim} />
-                            <label className="form-check-label" htmlFor="samaPengirim"> Sama dengan pemohon. </label>
+                                <div className="form-check mt-3">
+                                    <input className="form-check-input" type="checkbox" name='samaPenerima' id="samaPenerima" value="1" onChange={handleCekSamePenerima} />
+                                    <label className="form-check-label" htmlFor="samaPenerima"> Sama dengan pemohon. </label>
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
-            </div>
-            <div className="col-sm-6">
-                <div className="card card-action mb-4">
-                    <div className="card-header mb-3 p-2" style={{backgroundColor: '#123138'}}>
-                        <div className="card-action-title">
-                            <h5 className="mb-0 text-lightest">Penerima</h5>
-                        </div>
-                        <div className="card-action-element">
-                            <ul className="list-inline mb-0">
-                                <li className="list-inline-item">
-                                    <a href="#" className="card-collapsible"><i className="tf-icons fa-solid fa-chevron-up"></i></a>
-                                </li>
-                            </ul>
-                        </div>
-                    </div>
-                    <div className="collapse show">
-                        <div className="card-body pt-0">
-                            <div className="row mb-3">
-                                <label className="col-sm-3 col-form-label" htmlFor="namaPenerima">Nama <span className='text-danger'>*</span></label>
-                                <div className="col-sm-9">
-                                    <input type="text" id="namaPenerima" name="namaPenerima" {...registerPemohon("namaPenerima", { required: "Mohon isi nama penerima."})} className={errorsPemohon.namaPenerima ? "form-control form-control-sm is-invalid" : "form-control form-control-sm"} placeholder="Nama Penerima" />
-                                    {errorsPemohon.namaPenerima && <small className="text-danger">{errorsPemohon.namaPenerima.message}</small>}
-                                </div>
-                            </div>
-                            <div className="row mb-3">
-                                <label className="col-sm-3 col-form-label" htmlFor="alamatPenerima">Alamat <span className='text-danger'>*</span></label>
-                                <div className="col-sm-9">
-                                    <input type="text" id="alamatPenerima" name="alamatPenerima" {...registerPemohon("alamatPenerima", { required: "Mohon isi alamat penerima."})} className={errorsPemohon.alamatPenerima ? "form-control form-control-sm is-invalid" : "form-control form-control-sm"} placeholder="Alamat Penerima" />
-                                    {errorsPemohon.alamatPenerima && <small className="text-danger">{errorsPemohon.alamatPenerima.message}</small>}
-                                </div>
-                            </div>
-                            <div className="row mb-3">
-                                <label className="col-sm-3 col-form-label" htmlFor="jenisIdentitasPenerima">Identitas <span className='text-danger'>*</span></label>
-                                <div className="col-sm-2">
-                                    <select className={errorsPemohon.jenisIdentitasPenerima ? "form-control form-control-sm is-invalid" : "form-control form-control-sm"} name="jenisIdentitasPenerima" id="jenisIdentitasPenerima" {...registerPemohon("jenisIdentitasPenerima", { required: true})}>
-                                    <option value="">--</option>
-                                        <option value="NPWP">NPWP</option>
-                                        <option value="KTP">KTP</option>
-                                        <option value="PASSPORT">Passport</option>
-                                        <option value="LAIN-LAIN">Lain-lain</option>
-                                    </select>
-                                </div>
-                                <div className="col-sm-7">
-                                    <input type="text" id="noIdentitasPenerima" name="noIdentitasPenerima" className={errorsPemohon.noIdentitasPenerima ? "form-control form-control-sm is-invalid" : "form-control form-control-sm"} placeholder="Nomor Identitas" {...registerPemohon("noIdentitasPenerima", { required: "Mohon isi identitas penerima."})} />
-                                    {errorsPemohon.noIdentitasPenerima && <small className="text-danger">{errorsPemohon.noIdentitasPenerima.message}</small>}
-                                </div>
-                            </div>
-                            <div className="row mb-3">
-                                <label className="col-sm-3 col-form-label" htmlFor="nomorTlpPenerima">No. Telepon</label>
-                                <div className="col-sm-9">
-                                    <input type="number" id="nomorTlpPenerima" name="nomorTlpPenerima" {...registerPemohon("nomorTlpPenerima")} className="form-control form-control-sm" placeholder="No. Telepon" />
-                                </div>
-                            </div>
-                            <div className="row mb-3">
-                                <label className="col-sm-3 col-form-label" htmlFor="negaraPenerima">Negara <span className='text-danger'>*</span></label>
-                                <div className="col-sm-9">
-                                <Controller
-                                        control={controlPemohon}
-                                        name={"negaraPenerima"}
-                                        defaultValue={""}
-                                        className="form-control form-control-sm"
-                                        rules={{ required: "Mohon pilih negara penerima." }}
-                                        render={({ field: { value,onChange, ...field } }) => (
-                                            <Select styles={customStyles} placeholder={"Pilih negara penerima.."} value={{id: cekdataDiri.negaraPenerima, label: cekdataDiri.negaraPenerimaView}} {...field} options={cekdataDiri.permohonan != 'EX' ? [{value: "99", label: "ID - INDONESIA"}] : dataSelect.negaraPenerima} onChange={(e) => handleSelectPemohon(e, "negaraPenerima")} />
-                                        )}
-                                    />
-                                    {errorsPemohon.negaraPenerima && <small className="text-danger">{errorsPemohon.negaraPenerima.message}</small>}
-                                </div>
-                            </div>
-                            <div style={{visibility: cekdataDiri.permohonan === 'EX' ? 'hidden' : 'visible'}}>
-                                <div className="row mb-3">
-                                    <label className="col-sm-3 col-form-label" htmlFor="provPenerima">Provinsi</label>
-                                    <div className="col-sm-9">
-                                        <Controller
-                                            control={controlPemohon}
-                                            name={"provPenerima"}
-                                            defaultValue={""}
-                                            className="form-control form-control-sm"
-                                            rules={{ required: false }}
-                                            render={({ field: { value,onChange, ...field } }) => (
-                                                <Select styles={customStyles} placeholder={"Pilih provinsi penerima.."} value={{id: cekdataDiri.provPenerima, label: cekdataDiri.provPenerimaView}} {...field} options={dataSelect.provPenerima} onChange={(e) => handleSelectPemohon(e, "provPenerima") & handleKota(e.value, "kotaPenerima")} />
-                                            )}
-                                        />
-                                    </div>
-                                </div>
-                                <div className="row mb-3">
-                                    <label className="col-sm-3 col-form-label" htmlFor="kotaPenerima">Kota/Kabupaten</label>
-                                    <div className="col-sm-9">
-                                        <Controller
-                                            control={controlPemohon}
-                                            name={"kotaPenerima"}
-                                            defaultValue={""}
-                                            className="form-control form-control-sm"
-                                            rules={{ required: false }}
-                                            render={({ field: { value,onChange, ...field } }) => (
-                                                <Select styles={customStyles} placeholder={"Pilih kota/kab penerima.."} value={{id: cekdataDiri.kotaPenerima, label: cekdataDiri.kotaPenerimaView}} {...field} options={dataSelect.kotaPenerima} onChange={(e) => handleSelectPemohon(e, "kotaPenerima")} />
-                                            )}
-                                        />
-                                    </div>
-                                </div>
-                            </div>
-                            <div className="form-check mt-3">
-                                <input className="form-check-input" type="checkbox" name='samaPenerima' id="samaPenerima" value="1" onChange={handleCekSamePenerima} />
-                                <label className="form-check-label" htmlFor="samaPenerima"> Sama dengan pemohon. </label>
-                            </div>
-                        </div>
-                    </div>
+                <div className="col-12 d-flex justify-content-between">
+                    <button type="button" className="btn btn-label-secondary" disabled>
+                        <i className="fa-solid fa-chevron-left fa-sm ms-sm-n2"></i>
+                        <span className="d-sm-inline-block d-none">Sebelumnya</span>
+                    </button>
+                    <button type="submit" className="btn btn-primary">
+                        <span className="d-sm-inline-block d-none me-sm-1">Simpan & Lanjutkan</span>
+                        <i className="fa-solid fa-angle-right fa-sm me-sm-n2"></i>
+                    </button>
                 </div>
             </div>
-            <div className="col-12 d-flex justify-content-between">
-                <button type="button" className="btn btn-label-secondary" disabled>
-                    <i className="fa-solid fa-chevron-left fa-sm ms-sm-n2"></i>
-                    <span className="d-sm-inline-block d-none">Sebelumnya</span>
-                </button>
-                <button type="submit" className="btn btn-primary">
-                    <span className="d-sm-inline-block d-none me-sm-1">Simpan & Lanjutkan</span>
-                    <i className="fa-solid fa-angle-right fa-sm me-sm-n2"></i>
-                </button>
-            </div>
+            {/* </motion.div> */}
+            </form>
         </div>
-        {/* </motion.div> */}
-        </form>
-    </div>
                             <div id="cardPelabuhan" className={wizardPage === 2 ? "content active dstepper-block" : "content"}>
                             <form className="input-form" onSubmit={handleFormPelabuhan(onSubmitPelabuhan)}>
                                 <input type="hidden" name='idPtk' {...registerPelabuhan("idPtk")} />
@@ -2495,7 +2205,7 @@ function DocK11() {
                                                 <div className="card-action-element">
                                                     <ul className="list-inline mb-0">
                                                         <li className="list-inline-item">
-                                                            <a href="#" className="card-collapsible"><i className="tf-icons fa-solid fa-chevron-up"></i></a>
+                                                            <button type='button' className="btn btn-default card-collapsible text-lighter p-0"><i className="tf-icons fa-solid fa-chevron-up"></i></button>
                                                         </li>
                                                     </ul>
                                                 </div>
@@ -2578,7 +2288,7 @@ function DocK11() {
                                                 <div className="card-action-element">
                                                     <ul className="list-inline mb-0">
                                                         <li className="list-inline-item">
-                                                            <a href="#" className="card-collapsible"><i className="tf-icons fa-solid fa-chevron-up"></i></a>
+                                                            <button type='button' className="btn btn-default card-collapsible text-lighter p-0"><i className="tf-icons fa-solid fa-chevron-up"></i></button>
                                                         </li>
                                                     </ul>
                                                 </div>
@@ -2654,7 +2364,7 @@ function DocK11() {
                                                 <div className="card-action-element">
                                                     <ul className="list-inline mb-0">
                                                         <li className="list-inline-item">
-                                                            <a href="#" className="card-collapsible"><i className="tf-icons fa-solid fa-chevron-up"></i></a>
+                                                            <button type='button' className="btn btn-default card-collapsible text-lighter p-0"><i className="tf-icons fa-solid fa-chevron-up"></i></button>
                                                         </li>
                                                     </ul>
                                                 </div>
@@ -2748,7 +2458,7 @@ function DocK11() {
                                                 <div className="card-action-element">
                                                     <ul className="list-inline mb-0">
                                                         <li className="list-inline-item">
-                                                            <a href="#" className="card-collapsible"><i className="tf-icons fa-solid fa-chevron-up"></i></a>
+                                                            <button type='button' className="btn btn-default card-collapsible text-lighter p-0"><i className="tf-icons fa-solid fa-chevron-up"></i></button>
                                                         </li>
                                                     </ul>
                                                 </div>
@@ -2859,7 +2569,7 @@ function DocK11() {
                                                 <div className="card-action-element">
                                                     <ul className="list-inline mb-0">
                                                         <li className="list-inline-item">
-                                                            <a href="#" className="card-collapsible"><i className="tf-icons fa-solid fa-chevron-up"></i></a>
+                                                            <button type='button' className="btn btn-default card-collapsible text-lighter p-0"><i className="tf-icons fa-solid fa-chevron-up"></i></button>
                                                         </li>
                                                     </ul>
                                                 </div>
@@ -2899,8 +2609,8 @@ function DocK11() {
                                                                                         <i className="fa-solid fa-ellipsis-vertical"></i>
                                                                                     </button>
                                                                                     <div className="dropdown-menu">
-                                                                                        <a className="dropdown-item" type="button" data-ptk={data.ptk_id} data-header={data.id} onClick={handleEditKontainer} data-bs-toggle="modal" data-bs-target="#modKontainer"><i className="fa-solid fa-pen-to-square me-1"></i> Edit</a>
-                                                                                        <a className="dropdown-item" href="#"><i className="fa-solid fa-trash me-1"></i> Delete</a>
+                                                                                        <button className="btn btn-default dropdown-item" type="button" data-ptk={data.ptk_id} data-header={data.id} onClick={handleEditKontainer} data-bs-toggle="modal" data-bs-target="#modKontainer"><i className="fa-solid fa-pen-to-square me-1"></i> Edit</button>
+                                                                                        <button type='button' className="btn btn-default dropdown-item"><i className="fa-solid fa-trash me-1"></i> Delete</button>
                                                                                     </div>
                                                                                 </div>
                                                                             </td>
@@ -2943,7 +2653,7 @@ function DocK11() {
                                                 <div className="card-action-element">
                                                     <ul className="list-inline mb-0">
                                                         <li className="list-inline-item">
-                                                            <a href="#" className="card-collapsible"><i className="tf-icons fa-solid fa-chevron-up"></i></a>
+                                                            <button type='button' className="btn btn-default card-collapsible text-lighter p-0"><i className="tf-icons fa-solid fa-chevron-up"></i></button>
                                                         </li>
                                                     </ul>
                                                 </div>
@@ -2953,61 +2663,8 @@ function DocK11() {
                                                         <div className="col-sm-6">
                                                             <div className="card-body pt-0">
                                                                 <div className="row mb-3">
-                                                                    <label className="col-sm-3 col-form-label" htmlFor="mediaPembawa">Media Pembawa <span className='text-danger'>*</span></label>
+                                                                    <label className="col-sm-3 col-form-label" htmlFor="mediaPembawa">Muatan <span className='text-danger'>*</span></label>
                                                                     <div className="col-sm-4">
-                                                                        <select name="mediaPembawa" id="mediaPembawa" {...registerMP("mediaPembawa", { required: "Mohon pilih media pembawa."})} className={errorsMP.mediaPembawa ? "form-select form-select-sm is-invalid" : "form-select form-select-sm"}>
-                                                                            <option value="">--</option>
-                                                                            <option value="H">Hewan</option>
-                                                                            <option value="I">Ikan</option>
-                                                                            <option value="T">Tumbuhan</option>
-                                                                        </select>
-                                                                    </div>
-                                                                    {errorsMP.mediaPembawa && <div className="offset-3 col-sm-9"><small className="text-danger">{errorsMP.mediaPembawa.message}</small></div>}
-                                                                </div>
-                                                                <div className="row mb-3">
-                                                                    <label className="col-sm-3 col-form-label" htmlFor="jenisMp">Jenis Media Pembawa <span className='text-danger'>*</span></label>
-                                                                    <div className="col-sm-9">
-                                                                        {/* <!-- Hewan --> */}
-                                                                        <div style={{display: cekdataMP.mediaPembawa === 'H' ? 'block' : 'none'}}>
-                                                                            <div className="form-check form-check-inline">
-                                                                                <input className="form-check-input" type="radio" onInput={(e) => handleKomKHIDetil(e.target.value)} name="jenisMp" id="hidup" value="1" {...registerMP("jenisMp", { required: "Mohon pilih jenis media pembawa."})} />
-                                                                                <label className="form-check-label" htmlFor="hidup">Hewan Hidup</label>
-                                                                            </div>
-                                                                            <div className="form-check form-check-inline">
-                                                                                <input className="form-check-input" type="radio" onInput={(e) => handleKomKHIDetil(e.target.value)} name="jenisMp" id="produk" value="2" {...registerMP("jenisMp")} />
-                                                                                <label className="form-check-label" htmlFor="produk">Produk Hewan</label>
-                                                                            </div>
-                                                                            <div className="form-check form-check-inline">
-                                                                                <input className="form-check-input" type="radio" onInput={(e) => handleKomKHIDetil(e.target.value)} name="jenisMp" id="mpl" value="3" {...registerMP("jenisMp")} />
-                                                                                <label className="form-check-label" htmlFor="mpl">Media Pembawa Lain</label>
-                                                                            </div>
-                                                                        </div>
-                                                                        {/* <!-- Ikan --> */}
-                                                                        <div style={{display: cekdataMP.mediaPembawa === 'I' ? 'block' : 'none'}}>
-                                                                            <div className="form-check form-check-inline">
-                                                                                <input className="form-check-input" type="radio" onInput={(e) => handleKomKHIDetil(e.target.value)} name="jenisMp" id="hidup" value="6" {...registerMP("jenisMp", { required: "Mohon pilih jenis media pembawa."})} />
-                                                                                <label className="form-check-label" htmlFor="hidup">Ikan Hidup</label>
-                                                                            </div>
-                                                                            <div className="form-check form-check-inline">
-                                                                                <input className="form-check-input" type="radio" onInput={(e) => handleKomKHIDetil(e.target.value)} name="jenisMp" id="produk" value="7" {...registerMP("jenisMp")} />
-                                                                                <label className="form-check-label" htmlFor="produk">Produk Ikan</label>
-                                                                            </div>
-                                                                            <div className="form-check form-check-inline">
-                                                                                <input className="form-check-input" type="radio" onInput={(e) => handleKomKHIDetil(e.target.value)} name="jenisMp" id="mpl" value="8" {...registerMP("jenisMp")} />
-                                                                                <label className="form-check-label" htmlFor="mpl">Media Pembawa Lain</label>
-                                                                            </div>
-                                                                        </div>
-                                                                        {/* <!-- Tumbuhan --> */}
-                                                                        <div style={{display: cekdataMP.mediaPembawa === 'T' ? 'block' : 'none'}}>
-                                                                            <div className="form-check form-check-inline">
-                                                                                <input className="form-check-input" type="radio" name="jenisMp" id="benih" onInput={(e) => handleKomKHIDetil(e.target.value)} value="4" {...registerMP("jenisMp")} />
-                                                                                <label className="form-check-label" htmlFor="benih">Benih</label>
-                                                                            </div>
-                                                                            <div className="form-check form-check-inline mb-3">
-                                                                                <input className="form-check-input" type="radio" name="jenisMp" id="nonbenih" onInput={(e) => handleKomKHIDetil(e.target.value)} value="5" {...registerMP("jenisMp")} />
-                                                                                <label className="form-check-label" htmlFor="nonbenih">Non Benih</label>
-                                                                            </div>
-                                                                        </div>
                                                                         <div className="form-check form-check-inline">
                                                                             <input className="form-check-input" type="radio" name="jenisAngkut" id="curah" value="1" {...registerMP("jenisAngkut", { required: "Mohon pilih apakah komoditas curah atau tidak."})} />
                                                                             <label className="form-check-label" htmlFor="curah">Curah</label>
@@ -3016,15 +2673,13 @@ function DocK11() {
                                                                             <input className="form-check-input" type="radio" name="jenisAngkut" id="noncurah" value="0" {...registerMP("jenisAngkut")} />
                                                                             <label className="form-check-label" htmlFor="noncurah">Non Curah</label>
                                                                         </div>
+                                                                        {errorsMP.jenisAngkut && <div className="offset-3 col-sm-9"><small className="text-danger">{errorsMP.jenisAngkut.message}</small></div>}
                                                                     </div>
-                                                                    {errorsMP.jenisMp && <div className="offset-3 col-sm-9"><small className="text-danger">{errorsMP.jenisMp.message}</small></div>}
-                                                                    {errorsMP.jenisAngkut && <div className="offset-3 col-sm-9"><small className="text-danger">{errorsMP.jenisAngkut.message}</small></div>}
                                                                 </div>
-                                                                {/* <!-- Khusus Tumbuhan --> */}
                                                                 <div className="row mb-3">
                                                                     <label className="col-sm-3 col-form-label" htmlFor="peruntukan">Peruntukan</label>
                                                                     <div className="col-sm-4">
-                                                                        <select name="peruntukan" id="peruntukan" {...registerMP("peruntukan", { required: cekdataMP.mediaPembawa === "T" ? "Mohon pilih jenis angkut." : false})} className={errorsMP.peruntukan ? "form-select form-select-sm is-invalid" : "form-select form-select-sm"}>
+                                                                        <select name="peruntukan" id="peruntukan" {...registerMP("peruntukan", { required: cekdataDiri.mediaPembawa === "T" ? "Mohon pilih jenis angkut." : false})} className={errorsMP.peruntukan ? "form-select form-select-sm is-invalid" : "form-select form-select-sm"}>
                                                                             <option value="">--</option>
                                                                             <option value="1">Ditanam/Budidaya/Peningkatan Mutu Genetik</option>
                                                                             <option value="2">Konsumsi</option>
@@ -3190,7 +2845,7 @@ function DocK11() {
                                                 <div className="card-action-element">
                                                     <ul className="list-inline mb-0">
                                                         <li className="list-inline-item">
-                                                            <a href="#" className="card-collapsible"><i className="tf-icons fa-solid fa-chevron-up"></i></a>
+                                                            <button type='button' className="btn btn-default card-collapsible text-lighter p-0"><i className="tf-icons fa-solid fa-chevron-up"></i></button>
                                                         </li>
                                                     </ul>
                                                 </div>
@@ -3250,8 +2905,8 @@ function DocK11() {
                                                                                                         <i className="fa-solid fa-ellipsis-vertical"></i>
                                                                                                     </button>
                                                                                                     <div className="dropdown-menu">
-                                                                                                        <a className="dropdown-item" type="button" data-ptk={data.ptk_id} data-kemasan={data.jumlah_kemasan} data-kemasansat={data.kemasan_id} data-satuanlain={data.satuan_lain_id} data-kom={data.komoditas_id} data-klas={data.klasifikasi_id} data-header={data.id} data-ket={data.keterangan} onClick={handleEditKomoditas} data-bs-toggle="modal" data-bs-target="#modKomoditas"><i className="fa-solid fa-pen-to-square me-1"></i> Edit</a>
-                                                                                                        <a className="dropdown-item" href="#"><i className="fa-solid fa-trash me-1"></i> Delete</a>
+                                                                                                        <button className="btn btn-default dropdown-item" type="button" data-ptk={data.ptk_id} data-kemasan={data.jumlah_kemasan} data-kemasansat={data.kemasan_id} data-satuanlain={data.satuan_lain_id} data-kom={data.komoditas_id} data-klas={data.klasifikasi_id} data-header={data.id} data-ket={data.keterangan} onClick={handleEditKomoditas} data-bs-toggle="modal" data-bs-target="#modKomoditas"><i className="fa-solid fa-pen-to-square me-1"></i> Edit</button>
+                                                                                                        <button type='button' className="btn btn-default dropdown-item"><i className="fa-solid fa-trash me-1"></i> Delete</button>
                                                                                                     </div>
                                                                                                 </div>
                                                                                             </td>
@@ -3298,7 +2953,7 @@ function DocK11() {
                                                     <div className="card-action-element">
                                                         <ul className="list-inline mb-0">
                                                             <li className="list-inline-item">
-                                                                <a href="#" className="card-collapsible"><i className="tf-icons fa-solid fa-chevron-up"></i></a>
+                                                                <button type='button' className="btn btn-default card-collapsible text-lighter p-0"><i className="tf-icons fa-solid fa-chevron-up"></i></button>
                                                             </li>
                                                         </ul>
                                                     </div>
@@ -3309,7 +2964,7 @@ function DocK11() {
                                                             <div className="card-body pt-0">
                                                                 <div className="row g-3 mb-3">
                                                                     <div className="col-md-12">
-                                                                        <button type="button" className="btn btn-xs btn-primary" data-bs-toggle={cekdataMP.mediaPembawa ? "modal" : ""} data-bs-target={cekdataMP.mediaPembawa ? "#modDokumen" : ""} onClick={cekdataMP.mediaPembawa ? null : () => {Swal.fire({icon: "error", title: "Mohon pilih media pembawa terlebih dahulu!", showConfirmButton: true})}}>Tambah Dokumen</button>
+                                                                        <button type="button" className="btn btn-xs btn-primary" data-bs-toggle={cekdataDiri.mediaPembawa ? "modal" : ""} data-bs-target={cekdataDiri.mediaPembawa ? "#modDokumen" : ""} onClick={cekdataDiri.mediaPembawa ? null : () => {Swal.fire({icon: "error", title: "Mohon pilih media pembawa terlebih dahulu!", showConfirmButton: true})}}>Tambah Dokumen</button>
                                                                         <button type="button" className="btn btn-xs btn-info float-end"  onClick={dataDokumenPtk}><i className="menu-icon tf-icons fa-solid fa-sync"></i> Refresh Data</button>
                                                                     </div>
                                                                     <div className="text-nowrap">
@@ -3342,8 +2997,8 @@ function DocK11() {
                                                                                                         <i className="fa-solid fa-ellipsis-vertical"></i>
                                                                                                     </button>
                                                                                                     <div className="dropdown-menu">
-                                                                                                        <a className="dropdown-item" type="button" data-header={data.id} onClick={handleEditDokumen} data-bs-toggle="modal" data-bs-target="#modDokumen"><i className="fa-solid fa-pen-to-square me-1"></i> Edit</a>
-                                                                                                        <a className="dropdown-item" href="#"><i className="fa-solid fa-trash me-1"></i> Delete</a>
+                                                                                                        <button className="btn btn-default dropdown-item" type="button" data-header={data.id} onClick={handleEditDokumen} data-bs-toggle="modal" data-bs-target="#modDokumen"><i className="fa-solid fa-pen-to-square me-1"></i> Edit</button>
+                                                                                                        <button type='button' className="btn btn-default dropdown-item"><i className="fa-solid fa-trash me-1"></i> Delete</button>
                                                                                                     </div>
                                                                                                 </div>
                                                                                             </td>
@@ -3367,7 +3022,7 @@ function DocK11() {
                                                     <div className="card-action-element">
                                                         <ul className="list-inline mb-0">
                                                             <li className="list-inline-item">
-                                                                <a href="#" className="card-collapsible"><i className="tf-icons fa-solid fa-chevron-up"></i></a>
+                                                                <button type='button' className="btn btn-default card-collapsible text-lighter p-0"><i className="tf-icons fa-solid fa-chevron-up"></i></button>
                                                             </li>
                                                         </ul>
                                                     </div>
@@ -3644,7 +3299,7 @@ function DocK11() {
                                 className="form-control form-control-sm"
                                 rules={{ required: "Mohon pilih jenis dokumen." }}
                                 render={({ field: { value,onChange, ...field } }) => (
-                                    <Select styles={customStyles} placeholder={"Pilih jenis dokumen.."} value={{id: cekdataDokumen.jenisDokumen, label: cekdataDokumen.jenisDokumenView}} {...field} options={handleJenisDokumen(cekdataMP.mediaPembawa)} onChange={(e) => setValueDokumen("jenisDokumen", e.value) & setValueDokumen("jenisDokumenView", e.label)} />
+                                    <Select styles={customStyles} placeholder={"Pilih jenis dokumen.."} value={{id: cekdataDokumen.jenisDokumen, label: cekdataDokumen.jenisDokumenView}} {...field} options={handleJenisDokumen(cekdataDiri.mediaPembawa)} onChange={(e) => setValueDokumen("jenisDokumen", e.value) & setValueDokumen("jenisDokumenView", e.label)} />
                                 )}
                             />
                             {errorsDokumen.jenisDokumen && <small className="text-danger">{errorsDokumen.jenisDokumen.message}</small>}
@@ -3725,13 +3380,13 @@ function DocK11() {
                     <div className="modal-body">
                         <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                         <div className="text-center mb-4">
-                            <h3 className="address-title">{cekdataDetilMP.idDetilMP ? "Edit" : "Tambah"} Media Pembawa {cekdataMP.mediaPembawa === 'H' ? 'Hewan' : (cekdataMP.mediaPembawa === 'I' ? 'Ikan' : 'Tumbuhan')}</h3>
+                            <h3 className="address-title">{cekdataDetilMP.idDetilMP ? "Edit" : "Tambah"} Media Pembawa {cekdataDiri.mediaPembawa === 'H' ? 'Hewan' : (cekdataDiri.mediaPembawa === 'I' ? 'Ikan' : 'Tumbuhan')}</h3>
                         </div>
                         <form onSubmit={handleFormDetilMP(onSubmitDetilMP)} className="row g-3">
                         <input type="hidden" name='idDetilMP' {...registerDetilMP("idDetilMP")} />
                         <input type="hidden" name='idPtk' {...registerDetilMP("idPtk")} />
                         {/* <input type="hidden" name='jenisKar' {...registerDetilMP("jenisKar")} /> */}
-                        {cekdataMP.mediaPembawa === 'T' ?
+                        {cekdataDiri.mediaPembawa === 'T' ?
                         <>
                             <div className="col-6">
                                 <label className="form-label" htmlFor="peruntukanMP">Klasifikasi</label>
@@ -3745,7 +3400,6 @@ function DocK11() {
                                         <Select styles={customStyles} placeholder={"Pilih klasifikasi tumbuhan.."} value={{id: cekdataDetilMP.peruntukanMP, label: cekdataDetilMP.peruntukanMPView}} {...field} onChange={(e) => setValueDetilMP("peruntukanMP", e.value) & setValueDetilMP("peruntukanMPView", e.label)} options={dataSelect.peruntukanMP} />
                                     )}
                                 />
-                                {cekdataDetilMP.peruntukanMP}
                                 <small className='text-danger'>{cekdataDetilMP.idDetilMP ? "*Tidak perlu dipilih ulang jika tidak ubah klasifikasi" : null}</small>
                             </div>
                             <div className="col-6">
@@ -3757,7 +3411,7 @@ function DocK11() {
                                     <div className="col-7" style={{paddingLeft: '2px'}}>
                                         <input type="hidden" name='satuanNetto' id='satuanNetto' {...registerDetilMP("satuanNetto")} value="1356" />
                                         <input type="text" className='form-control form-control-sm' value='KILOGRAM' readOnly />
-                                        {/* <select name="satuanNetto" id="satuanNetto" onClick={handleMasterSatuan} data-kar={cekdataMP.mediaPembawa === 'T' ? 'kt' : (cekdataMP.mediaPembawa === 'H' ? 'kh' : 'ki')} {...registerDetilMP("satuanNetto", {required: "Mohon isi satuan netto."})} className={errorsKontainer.satuanNetto ? "form-control form-control-sm is-invalid" : "form-control form-control-sm"}>
+                                        {/* <select name="satuanNetto" id="satuanNetto" onClick={handleMasterSatuan} data-kar={cekdataDiri.mediaPembawa === 'T' ? 'kt' : (cekdataDiri.mediaPembawa === 'H' ? 'kh' : 'ki')} {...registerDetilMP("satuanNetto", {required: "Mohon isi satuan netto."})} className={errorsKontainer.satuanNetto ? "form-control form-control-sm is-invalid" : "form-control form-control-sm"}>
                                             <option value="">--</option>
                                             {dataSelect.satuanNetto}
                                         </select> */}
@@ -3776,7 +3430,7 @@ function DocK11() {
                                     className="form-control form-control-sm"
                                     rules={{ required: false }}
                                     render={({ field: { value,onChange, ...field } }) => (
-                                        <Select styles={customStyles} placeholder={"Pilih komoditas.."} value={{id: cekdataDetilMP.selectKomoditasMP, label: cekdataDetilMP.selectKomoditasMPView}} onChange={(e) => setValueDetilMP("selectKomoditasMP", e.value) & setValueDetilMP("selectKomoditasMPView", e.label) & handleSetKomoditasSelect(e)} {...field} options={masterKomKT()} />
+                                        <Select styles={customStyles} placeholder={"Pilih komoditas.."} value={{id: cekdataDetilMP.selectKomoditasMP, label: cekdataDetilMP.selectKomoditasMPView}} onChange={(e) => setValueDetilMP("selectKomoditasMP", e.value) & setValueDetilMP("selectKomoditasMPView", e.label) & handleSetKomoditasSelect(e)} {...field} options={dataSelect.selectKomoditasMP} />
                                     )}
                                 />
                                 <small className='text-danger'>{cekdataDetilMP.idDetilMP ? "*Tidak perlu dipilih ulang jika tidak ubah komoditas" : null}</small>
@@ -3791,7 +3445,7 @@ function DocK11() {
                                     <div className="col-7" style={{paddingLeft: '2px'}}>
                                         <input type="hidden" name='satuanBrutto' id='satuanBrutto' {...registerDetilMP("satuanBrutto")} value="1356" />
                                         <input type="text" className='form-control form-control-sm' value='KILOGRAM' readOnly />
-                                        {/* <select name="satuanBrutto" id="satuanBrutto" data-kar={cekdataMP.mediaPembawa === 'T' ? 'kt' : (cekdataMP.mediaPembawa === 'H' ? 'kh' : 'ki')} onClick={handleMasterSatuan} {...registerDetilMP("satuanBrutto", {required: "Mohon isi satuan brutto."})} className={errorsDetilMP.satuanBrutto ? "form-control form-control-sm is-invalid" : "form-control form-control-sm"}>
+                                        {/* <select name="satuanBrutto" id="satuanBrutto" data-kar={cekdataDiri.mediaPembawa === 'T' ? 'kt' : (cekdataDiri.mediaPembawa === 'H' ? 'kh' : 'ki')} onClick={handleMasterSatuan} {...registerDetilMP("satuanBrutto", {required: "Mohon isi satuan brutto."})} className={errorsDetilMP.satuanBrutto ? "form-control form-control-sm is-invalid" : "form-control form-control-sm"}>
                                             <option value="">--</option>
                                             {dataSelect.satuanBrutto}
                                         </select> */}
@@ -3828,11 +3482,11 @@ function DocK11() {
                                             className="form-control form-control-sm"
                                             rules={{ required: "Mohon isi satuan volume." }}
                                             render={({ field: { value,onChange, ...field } }) => (
-                                                <Select styles={customStyles} placeholder={"Pilih Satuan.."} value={{id: cekdataDetilMP.satuanLain, label: cekdataDetilMP.satuanLainView}} onChange={(e) => setValueDetilMP("satuanLain", e.value) & setValueDetilMP("satuanLainView", e.label)} {...field} options={masterSatuanJson(cekdataMP.mediaPembawa)} />
+                                                <Select styles={customStyles} placeholder={"Pilih Satuan.."} value={{id: cekdataDetilMP.satuanLain, label: cekdataDetilMP.satuanLainView}} onChange={(e) => setValueDetilMP("satuanLain", e.value) & setValueDetilMP("satuanLainView", e.label)} {...field} options={masterSatuanJson(cekdataDiri.mediaPembawa)} />
                                                 )}
                                         />
                                         {errorsDetilMP.satuanLain && <small className="text-danger">{errorsDetilMP.satuanLain.message}</small>}
-                                        {/* <select name="satuanLain" id="satuanLain" data-kar={cekdataMP.mediaPembawa === 'T' ? 'kt' : (cekdataMP.mediaPembawa === 'H' ? 'kh' : 'ki')} onClick={handleMasterSatuan} className='form-control form-control-sm' {...registerDetilMP("satuanLain")}>
+                                        {/* <select name="satuanLain" id="satuanLain" data-kar={cekdataDiri.mediaPembawa === 'T' ? 'kt' : (cekdataDiri.mediaPembawa === 'H' ? 'kh' : 'ki')} onClick={handleMasterSatuan} className='form-control form-control-sm' {...registerDetilMP("satuanLain")}>
                                             <option value="">--</option>
                                             {dataSelect.satuanLain}
                                         </select> */}
@@ -3875,12 +3529,28 @@ function DocK11() {
                                 </div>
                                 </div>
                             </div>
-                        </> : (cekdataMP.mediaPembawa === 'H' ?
+                        </> : (cekdataDiri.mediaPembawa === 'H' ?
                         <>
+                            <div className='col-12'>
+                                <div className="col-6">
+                                    <label className="form-label" htmlFor="peruntukanMP">Klasifikasi</label>
+                                    <Controller
+                                        control={controlDetilMP}
+                                        name={"peruntukanMPKH"}
+                                        defaultValue={""}
+                                        className="form-control form-control-sm"
+                                        rules={{ required: false }}
+                                        render={({ field: { value,onChange, ...field } }) => (
+                                            <Select styles={customStyles} placeholder={"Pilih klasifikasi Hewan.."} value={{id: cekdataDetilMP.peruntukanMPKH, label: cekdataDetilMP.peruntukanMPKHView}} {...field} onChange={(e) => setValueDetilMP("peruntukanMPKH", e.value) & setValueDetilMP("peruntukanMPKHView", e.label)} options={dataSelect.peruntukanMPKH} />
+                                        )}
+                                    />
+                                    <small className='text-danger'>{cekdataDetilMP.idDetilMP ? "*Tidak perlu dipilih ulang jika tidak ubah klasifikasi" : null}</small>
+                                </div>
+                            </div>
                             <div className="col-6">
                                 <label className="form-label" htmlFor="komoditasMPKH">Komoditas<span className='text-danger'>*</span></label>
                                 <input type="hidden" name='komoditasMPKHid' {...registerDetilMP("komoditasMPKHid")} />
-                                <input type="hidden" name='klasifikasiMPKHid' {...registerDetilMP("klasifikasiMPKHid")} />
+                                {/* <input type="hidden" name='klasifikasiMPKHid' {...registerDetilMP("klasifikasiMPKHid")} /> */}
                                 <Controller
                                     control={controlDetilMP}
                                     name={"komoditasMPKH"}
@@ -3889,7 +3559,7 @@ function DocK11() {
                                     rules={{ required: false }}
                                     render={({ field: { value,onChange, ...field } }) => (
                                         <Select placeholder= 'Pilih Komoditas..' styles={customStyles}
-                                         value={{id: cekdataDetilMP.komoditasMPKH, label: cekdataDetilMP.komoditasMPKHView}} onChange={(e) => setValueDetilMP("komoditasMPKH", e.value) & setValueDetilMP("komoditasMPKHView", e.label) & handleSetKomoditasSelect(e)} {...field} options={dataSelect.komoditasMPKH} />
+                                         value={{id: cekdataDetilMP.komoditasMPKH, label: cekdataDetilMP.komoditasMPKHView}} onChange={(e) => setValueDetilMP("komoditasMPKH", e.value) & setValueDetilMP("komoditasMPKHView", e.label) & handleSetKomoditasSelect(e)} {...field} options={dataSelect.selectKomoditasMPKH} />
                                     )}
                                 />
                                 <small className='text-danger'>{cekdataDetilMP.idDetilMP ? "*Tidak perlu dipilih ulang jika tidak ubah komoditas" : null}</small>
@@ -3912,7 +3582,7 @@ function DocK11() {
                                     )}
                                 />
                                 <small className='text-danger'>{cekdataDetilMP.idDetilMP ? "*Tidak perlu dipilih ulang jika tidak ubah kode HS" : null}</small>
-                                {/* <select name="kodeHSMp" id="kodeHSMp" data-kar={cekdataMP.mediaPembawa} className="form-control form-control-sm" {...registerDetilMP("kodeHSMp")} onClick={handleMasterHS}>
+                                {/* <select name="kodeHSMp" id="kodeHSMp" data-kar={cekdataDiri.mediaPembawa} className="form-control form-control-sm" {...registerDetilMP("kodeHSMp")} onClick={handleMasterHS}>
                                 <option value="">--</option>
                                 {dataSelect.kodeHSMp}
                                 </select> */}
@@ -3929,7 +3599,7 @@ function DocK11() {
                                 <label className="form-label" htmlFor="jumlahMP">Jumlah</label>
                                 <div className='row'>
                                 <div className='col-7' style={{paddingRight: '2px'}}>
-                                    <input type="text" value={cekdataDetilMP.jumlahMP ? addCommas(removeNonNumeric(cekdataDetilMP.jumlahMP)) : ""} {...registerDetilMP("jumlahMP", {required: "Mohon isi satuan brutto."})} className={errorsDetilMP.jumlahMP ? "form-control form-control-sm is-invalid" : "form-control form-control-sm"} name='jumlahMP' id='jumlahMP' />
+                                    <input type="text" value={cekdataDetilMP.jumlahMP ? addCommas(removeNonNumeric(cekdataDetilMP.jumlahMP)) : ""} {...registerDetilMP("jumlahMP", {required: "Mohon isi jumlah."})} className={errorsDetilMP.jumlahMP ? "form-control form-control-sm is-invalid" : "form-control form-control-sm"} name='jumlahMP' id='jumlahMP' />
                                 </div>
                                 <div className='col-5' style={{paddingLeft: '2px'}}>
                                     <Controller
@@ -3937,13 +3607,13 @@ function DocK11() {
                                         name={"satJumlahMP"}
                                         defaultValue={""}
                                         className="form-control form-control-sm"
-                                        rules={{ required: "Mohon isi saatuan volume." }}
+                                        rules={{ required: "Mohon isi satuan volume." }}
                                         render={({ field: { value,onChange, ...field } }) => (
-                                            <Select styles={customStyles} placeholder={"Pilih Satuan.."} value={{id: cekdataDetilMP.satJumlahMP, label: cekdataDetilMP.satJumlahMPView}} onChange={(e) => setValueDetilMP("satJumlahMP", e.value) & setValueDetilMP("satJumlahMPView", e.label)} {...field} options={masterSatuanJson(cekdataMP.mediaPembawa)} />
+                                            <Select styles={customStyles} placeholder={"Pilih Satuan.."} value={{id: cekdataDetilMP.satJumlahMP, label: cekdataDetilMP.satJumlahMPView}} onChange={(e) => setValueDetilMP("satJumlahMP", e.value) & setValueDetilMP("satJumlahMPView", e.label)} {...field} options={masterSatuanJson(cekdataDiri.mediaPembawa)} />
                                         )}
                                     />
                                     {errorsDetilMP.satJumlahMP && <small className="text-danger">{errorsDetilMP.satJumlahMP.message}</small>}
-                                    {/* <select name="satJumlahMP" id="satJumlahMP" data-kar={cekdataMP.mediaPembawa === 'T' ? 'kt' : (cekdataMP.mediaPembawa === 'H' ? 'kh' : 'ki')} onClick={handleMasterSatuan} {...registerDetilMP("satJumlahMP")} className="form-control form-control-sm">
+                                    {/* <select name="satJumlahMP" id="satJumlahMP" data-kar={cekdataDiri.mediaPembawa === 'T' ? 'kt' : (cekdataDiri.mediaPembawa === 'H' ? 'kh' : 'ki')} onClick={handleMasterSatuan} {...registerDetilMP("satJumlahMP")} className="form-control form-control-sm">
                                     <option value="">--</option>
                                         {dataSelect.satJumlahMP}
                                     </select> */}
@@ -4010,7 +3680,142 @@ function DocK11() {
                                     </div>
                                 </div>
                             </div>
-                        </> : <p>Komoditas Ikan</p>)
+                        </> : (cekdataDiri.mediaPembawa === 'I' ?
+                        <>
+                            <div className='col-12'>
+                                <div className="col-6">
+                                    <label className="form-label" htmlFor="peruntukanMPKI">Klasifikasi</label>
+                                    <Controller
+                                        control={controlDetilMP}
+                                        name={"peruntukanMPKI"}
+                                        defaultValue={""}
+                                        className="form-control form-control-sm"
+                                        rules={{ required: false }}
+                                        render={({ field: { value,onChange, ...field } }) => (
+                                            <Select styles={customStyles} placeholder={"Pilih klasifikasi Ikan.."} value={{id: cekdataDetilMP.peruntukanMPKI, label: cekdataDetilMP.peruntukanMPKIView}} {...field} onChange={(e) => setValueDetilMP("peruntukanMPKI", e.value) & setValueDetilMP("peruntukanMPKIView", e.label)} options={dataSelect.peruntukanMPKI} />
+                                        )}
+                                    />
+                                    <small className='text-danger'>{cekdataDetilMP.idDetilMP ? "*Tidak perlu dipilih ulang jika tidak ubah klasifikasi" : null}</small>
+                                </div>
+                            </div>
+                            <div className="col-6">
+                                <label className="form-label" htmlFor="komoditasMPKI">Komoditas<span className='text-danger'>*</span></label>
+                                <input type="hidden" name='komoditasMPKIid' {...registerDetilMP("komoditasMPKIid")} />
+                                {/* <input type="hidden" name='klasifikasiMPKIid' {...registerDetilMP("klasifikasiMPKIid")} /> */}
+                                <Controller
+                                    control={controlDetilMP}
+                                    name={"komoditasMPKI"}
+                                    defaultValue={""}
+                                    className="form-control form-control-sm"
+                                    rules={{ required: false }}
+                                    render={({ field: { value,onChange, ...field } }) => (
+                                        <Select placeholder= 'Pilih Komoditas..' styles={customStyles}
+                                         value={{id: cekdataDetilMP.komoditasMPKI, label: cekdataDetilMP.komoditasMPKIView}} onChange={(e) => setValueDetilMP("komoditasMPKI", e.value) & setValueDetilMP("komoditasMPKIView", e.label) & handleSetKomoditasSelect(e)} {...field} options={dataSelect.selectKomoditasMPKI} />
+                                    )}
+                                />
+                                <small className='text-danger'>{cekdataDetilMP.idDetilMP ? "*Tidak perlu dipilih ulang jika tidak ubah komoditas" : null}</small>
+                                {/* <select name="komoditasMP" id="komoditasMP" data-gol={cekdataMP.jenisMp} onClick={handleKomoditasKH} {...registerDetilMP("komoditasMP", {required: "Mohon isi Komoditas."})} className={errorsDetilMP.komoditasMP ? "form-control form-control-sm is-invalid" : "form-control form-control-sm"} >
+                                        <option value="">--</option>
+                                        {dataSelect.komoditasMP}
+                                </select> */}
+                                {errorsDetilMP.komoditasMPKI && <small className="text-danger">{errorsDetilMP.komoditasMPKI.message}</small>}
+                            </div>
+                            <div className="col-6">
+                                <label className="form-label" htmlFor="kodeHSMpKI">Kode HS</label>
+                                <Controller
+                                    control={controlDetilMP}
+                                    name={"kodeHSMpKI"}
+                                    defaultValue={""}
+                                    className="form-control form-control-sm"
+                                    rules={{ required: false }}
+                                    render={({ field: { value,onChange, ...field } }) => (
+                                        <Select styles={customStyles} placeholder={"Pilih kode HS.."} value={{id: cekdataDetilMP.kodeHSMpKI, label: cekdataDetilMP.kodeHSMpKIView}} onChange={(e) => setValueDetilMP("kodeHSMpKI", e.value) & setValueDetilMP("kodeHSMpKIView", e.label)} {...field} options={dataSelect.kodeHSMp} />
+                                    )}
+                                />
+                                <small className='text-danger'>{cekdataDetilMP.idDetilMP ? "*Tidak perlu dipilih ulang jika tidak ubah kode HS" : null}</small>
+                                {/* <select name="kodeHSMp" id="kodeHSMp" data-kar={cekdataDiri.mediaPembawa} className="form-control form-control-sm" {...registerDetilMP("kodeHSMp")} onClick={handleMasterHS}>
+                                <option value="">--</option>
+                                {dataSelect.kodeHSMp}
+                                </select> */}
+                            </div>
+                            <div className="col-6">
+                                <label className="form-label" htmlFor="namaUmumKI">Nama Umum</label>
+                                <input type='text' name="namaUmumKI" id="namaUmumKI" {...registerDetilMP("namaUmumKI")} className="form-control form-control-sm" />
+                            </div>
+                            <div className="col-6">
+                                <label className="form-label" htmlFor="namaLatinKI">Nama Latin</label>
+                                <input type='text' name="namaLatinKI" id="namaLatinKI" {...registerDetilMP("namaLatinKI")} className="form-control form-control-sm" />
+                            </div>
+                            <div className="col-6">
+                                <label className="form-label" htmlFor="nettoMPKI">Netto</label>
+                                <div className='row'>
+                                <div className='col-7' style={{paddingRight: '2px'}}>
+                                    <input type="text" className='form-control form-control-sm' value={cekdataDetilMP.nettoMPKI ? addCommas(removeNonNumeric(cekdataDetilMP.nettoMPKI)) : ""} {...registerDetilMP("nettoMPKI")} name='nettoMPKI' id='nettoMPKI' />
+                                </div>
+                                {/* ekor: 1122 || KG: 1356  */}
+                                <div className='col-5' style={{paddingLeft: '2px'}}>
+                                    {/* <input type="hidden" name='satNettoMP' id='satNettoMP' {...registerDetilMP("satNettoMP")} value={cekdataMP.jenisMp === '1' || cekdataMP.jenisMp === '6' ? '1122' : '1356'} />
+                                    <input type="text" className='form-control form-control-sm' value={cekdataMP.jenisMp === '1' || cekdataMP.jenisMp === '6' ? 'EKOR' : 'KILOGRAM'} readOnly /> */}
+                                    <input type="hidden" name='satNettoMPKI' id='satNettoMPKI' {...registerDetilMP("satNettoMPKI")} value="1356" />
+                                    <input type="text" className='form-control form-control-sm' value='KILOGRAM' readOnly />
+                                </div>
+                                </div>
+                            </div>
+                            <div className="col-6">
+                                <label className="form-label" htmlFor="jumlahMPKI">Jumlah</label>
+                                <div className='row'>
+                                <div className='col-7' style={{paddingRight: '2px'}}>
+                                    <input type="text" value={cekdataDetilMP.jumlahMPKI ? addCommas(removeNonNumeric(cekdataDetilMP.jumlahMPKI)) : ""} {...registerDetilMP("jumlahMPKI", {required: "Mohon isi jumlah."})} className={errorsDetilMP.jumlahMPKI ? "form-control form-control-sm is-invalid" : "form-control form-control-sm"} name='jumlahMPKI' id='jumlahMPKI' />
+                                </div>
+                                <div className='col-5' style={{paddingLeft: '2px'}}>
+                                    <Controller
+                                        control={controlDetilMP}
+                                        name={"satJumlahMPKI"}
+                                        defaultValue={""}
+                                        className="form-control form-control-sm"
+                                        rules={{ required: "Mohon isi satuan volume." }}
+                                        render={({ field: { value,onChange, ...field } }) => (
+                                            <Select styles={customStyles} placeholder={"Pilih Satuan.."} value={{id: cekdataDetilMP.satJumlahMPKI, label: cekdataDetilMP.satJumlahMPKIView}} onChange={(e) => setValueDetilMP("satJumlahMPKI", e.value) & setValueDetilMP("satJumlahMPKIView", e.label)} {...field} options={masterSatuanJson(cekdataDiri.mediaPembawa)} />
+                                        )}
+                                    />
+                                    {errorsDetilMP.satJumlahMPKI && <small className="text-danger">{errorsDetilMP.satJumlahMPKI.message}</small>}
+                                    {/* <select name="satJumlahMP" id="satJumlahMP" data-kar={cekdataDiri.mediaPembawa === 'T' ? 'kt' : (cekdataDiri.mediaPembawa === 'H' ? 'kh' : 'ki')} onClick={handleMasterSatuan} {...registerDetilMP("satJumlahMP")} className="form-control form-control-sm">
+                                    <option value="">--</option>
+                                        {dataSelect.satJumlahMP}
+                                    </select> */}
+                                </div>
+                                </div>
+                            </div>
+                            <div className="col-6">
+                                <label className="form-label" htmlFor="brutoMPKI">Bruto</label>
+                                <div className='row'>
+                                <div className='col-7' style={{paddingRight: '2px'}}>
+                                    <input type="text" value={cekdataDetilMP.brutoMPKI ? addCommas(removeNonNumeric(cekdataDetilMP.brutoMPKI)) : ""} {...registerDetilMP("brutoMPKI")} className='form-control form-control-sm' name='brutoMPKI' id='brutoMPKI' />
+                                </div>
+                                {/* ekor: 1122 || KG: 1356  */}
+                                <div className='col-5' style={{paddingLeft: '2px'}}>
+                                    {/* <input type="hidden" name='satBrutoMP' id='satBrutoMP' {...registerDetilMP("satBrutoMP")} value={cekdataMP.jenisMp === '1' || cekdataMP.jenisMp === '6' ? '1122' : '1356'} /> */}
+                                    {/* <input type="text" className='form-control form-control-sm' value={cekdataMP.jenisMp === '1' || cekdataMP.jenisMp === '6' ? 'EKOR' : 'KILOGRAM'} readOnly  /> */}
+                                    <input type="hidden" name='satBrutoMPKI' id='satBrutoMPKI' {...registerDetilMP("satBrutoMPKI")} value="1356" />
+                                    <input type="text" className='form-control form-control-sm' value="KILOGRAM" readOnly  />
+                                </div>
+                                </div>
+                            </div>
+                            <div className="col-6">
+                                <label className="form-label" htmlFor="nilaiBarangMPKI">Nilai Barang</label>
+                                <div className='row'>
+                                    <div className="col-7" style={{paddingRight: '2px'}}>
+                                        <input type="text" className='form-control form-control-sm' value={cekdataDetilMP.nilaiBarangMPKI ? addCommas(removeNonNumeric(cekdataDetilMP.nilaiBarangMPKI)) : ""} name='nilaiBarangMPKI' id='nilaiBarangMPKI' {...registerDetilMP("nilaiBarangMPKI")} />
+                                    </div>
+                                    <div className="col-5" style={{paddingLeft: '2px'}}>
+                                        <select name="satuanNilaiMPKI" id="satuanNilaiMPKI" value={cekdataDetilMP.satuanNilaiMPKI || "IDR"} {...registerDetilMP("satuanNilaiMPKI")} className='form-control form-control-sm'>
+                                        <option value="">--</option>
+                                            {dataSelect.satuanNilai}
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                        </> : "Mohon pilih jenis media pembawa"))
                         }
                         <small className='text-danger'>*Format penulisan desimal menggunakan titik ( . )</small>
                         <div className="col-12 text-center">

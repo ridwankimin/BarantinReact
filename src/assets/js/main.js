@@ -2,7 +2,6 @@
  * Main
  */
 
-'use strict';
 
 let isRtl = window.Helpers.isRtl(),
   isDarkStyle = window.Helpers.isDarkStyle(),
@@ -20,6 +19,7 @@ if (document.getElementById('layout-menu')) {
 
   let layoutMenuEl = document.querySelectorAll('#layout-menu');
   layoutMenuEl.forEach(function (element) {
+    // eslint-disable-next-line no-undef
     menu = new Menu(element, {
       orientation: isHorizontalLayout ? 'horizontal' : 'vertical',
       closeChildren: isHorizontalLayout ? true : false,
@@ -260,9 +260,9 @@ if (document.getElementById('layout-menu')) {
   });
 
   // If layout is RTL add .dropdown-menu-end class to .dropdown-menu
-  if (isRtl) {
-    Helpers._addClass('dropdown-menu-end', document.querySelectorAll('#layout-navbar .dropdown-menu'));
-  }
+  // if (isRtl) {
+  //   Helpers._addClass('dropdown-menu-end', document.querySelectorAll('#layout-navbar .dropdown-menu'));
+  // }
 
   // Auto update layout based on screen size
   window.Helpers.setAutoUpdate(true);

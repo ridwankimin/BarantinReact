@@ -212,11 +212,11 @@ export default class PtkPemeriksaan {
         console.log(JSON.stringify(datasend))
         
         return axios.request(config)
-    }
-
-    pnSampling(data, listSampling) {
+      }
+      
+      pnSampling(data, listSampling) {
       const uuid = uuidv4();
-
+      
       const detilSampling = listSampling.map(item => {
         return {
           id: uuidv4(),
@@ -230,7 +230,7 @@ export default class PtkPemeriksaan {
           keterangan: item.keterangan
         }
       })
-
+      
       let datasend = {
         'id': data.idDok33 === '' ? uuid : data.idDok33,
         'ptk_id': data.idPtk,
@@ -261,30 +261,75 @@ export default class PtkPemeriksaan {
         'sampling_detil': detilSampling
       }       
       let config = {
-          method: data.idDok33 === '' ? 'post' : 'put',
+        method: data.idDok33 === '' ? 'post' : 'put',
+        maxBodyLength: Infinity,
+        url: url + (data.idDok33 === '' ? 'pn-sampling' : 'pn-sampling/' + data.idDok33),
+        headers: { 
+          'Content-Type': 'application/json', 
+        },
+        data: datasend
+      };
+      console.log(JSON.stringify(datasend))
+      
+      return axios.request(config)
+    }
+    
+    getSamplingByPtkId(id) {
+      let config = {
+        method: 'get',
+        maxBodyLength: Infinity,
+        url: url + 'pn-sampling/' + id,
+        headers: { 
+          'Content-Type': 'application/json', 
+        },
+      };
+      // console.log(JSON.stringify(datasend))
+      
+      return axios.request(config)
+    }
+    
+    pnInstalasi(data) {
+      const uuid = uuidv4();
+  
+      let datasend = {
+        'id': data.idDok34 === '' ? uuid : data.idDok34,
+        'ptk_id': data.idPtk,
+        'nomor': data.noDokumen.replace("K.1.1", "K.3.4"),
+        'tanggal': data.tglDok34,
+        'pemilik': data.pemilikInstalasi,
+        'penanggungjawab': data.namaPenanggungJawab,
+        'alamat_instalasi': data.alamatInstalasi,
+        'jenis_identitas': data.jenisIdentitas,
+        'nomor_identitas': data.nomorIdentitas,
+        'nomor_telp': data.nomorTelepon,
+        // 'diterbitkan_di': data.diterbitkan,
+        'user_ttd_id': data.userTtd,
+        'user_id': Cookies.get("userId"), // session
+      }       
+      let config = {
+          method: data.idDok34 === '' ? 'post' : 'put',
           maxBodyLength: Infinity,
-          url: url + (data.idDok33 === '' ? 'pn-sampling' : 'pn-sampling/' + data.idDok33),
+          url: url + (data.idDok34 === '' ? 'pn-ik' : 'pn-ik/' + data.idDok34),
           headers: { 
             'Content-Type': 'application/json', 
           },
           data: datasend
         };
+        console.log("sv instalasi")
         console.log(JSON.stringify(datasend))
-        
         return axios.request(config)
-    }
-
-    getSamplingByPtkId(id) {
-      let config = {
-          method: 'get',
-          maxBodyLength: Infinity,
-          url: url + 'pn-sampling/' + id,
-          headers: { 
-            'Content-Type': 'application/json', 
-          },
-        };
-        // console.log(JSON.stringify(datasend))
-        
-        return axios.request(config)
+      }
+      
+      getPnInstalasiByPtkId(id) {
+        let config = {
+            method: 'get',
+            maxBodyLength: Infinity,
+            url: url + 'pn-ik/' + id,
+            headers: { 
+              'Content-Type': 'application/json', 
+            }
+          };
+          
+          return axios.request(config)
     }
 }

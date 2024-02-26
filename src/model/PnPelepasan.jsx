@@ -54,6 +54,45 @@ export default class PnPelepasan {
     console.log("dok k921: " + JSON.stringify(config))
     return axios.request(config)
   }
+
+  getPengawasanByPtkId(id) {
+    
+    let config = {
+      method: 'get',
+      maxBodyLength: Infinity,
+      url: url + 'pn-pengawasan/' + id,
+      headers: { 
+        'Content-Type': 'application/json', 
+      }
+    };
+    return axios.request(config)
+  }
+
+  pnPengawasan(data) {
+
+    const uuid = uuidv4()
+    let datasend = {
+        id: data.idDok94 === '' ? uuid : data.idDok94,
+        ptk_id: data.idPtk,
+        nomor: data.noDokumen.replace("K.1.1", "K.9.4"),
+        tanggal: data.tglDok94,
+        syarat_id: data.syarat,
+        rekomendasi_id: data.rekomendasi,
+        user_ttd_id: data.ttdUser,
+        user_id: Cookies.get("userId") //session
+    }
+    let config = {
+      method: data.idDok94 === '' ? 'post' : 'put',
+      maxBodyLength: Infinity,
+      url: url + (data.idDok94 === '' ? 'pn-pengawasan' : 'pn-pengawasan/' + data.idDok94),
+      headers: { 
+        'Content-Type': 'application/json', 
+      },
+      data: datasend
+    };
+    console.log("dok k94: " + JSON.stringify(config))
+    return axios.request(config)
+  }
   
   dokelKI(data) {
     const uuid = uuidv4()
@@ -66,8 +105,8 @@ export default class PnPelepasan {
         nomor_seri: data.noSeri,
         karantina_tujuan: "",
         upt_tujuan_id: data.uptTujuan,
-        // tgl_awal: data.tglPeriksaAwal,
-        // tgl_akhir: data.tglPeriksaAkhir,
+        tgl_awal: "",
+        tgl_akhir: "",
         tipe_usaha: "",
         temperatur_mp: "",
         hasil_periksa: data.hasilPemeriksaan,
