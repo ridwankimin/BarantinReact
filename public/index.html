@@ -7,54 +7,14 @@ data-template="vertical-menu-template"
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0" />
+    <link rel="icon" href="./favicon.ico" />
 
     <title>Barantin App</title>
 
     <meta name="description" content="" />
     <style>
-      html {
-        scroll-behavior: smooth;
-      }
-
-      #menu-toggler:checked ~ #menu-btn:before {
-        content: "\2715";
-      }
-      #menu-toggler:checked ~ #menu {
-        transform: translateX(0);
-      }
-
-      #menu-btn {
-        position: fixed;
-        z-index: 101;
-        padding: 10px;
-        font-size: 2em;
-        cursor: pointer;
-      }
-      #menu-btn:before {
-        content: "\2630";
-      }
-      #layout-menu {
-        /* position: fixed; */
-        /* z-index: 100; */
-        /* top:0; */
-        /* bottom: 0; */
-        /* left: 0; */
-        /* min-width: 200px; */
-        /* transition: 0.5s; */
-        /* transform: translateX(-100%); */
-        /* padding-top: 4em; */
-        /* background: #f48024; */
-      }
-
-      #menu-sub {
-        --webkit-transition: all 1.3s ease;
-      }
-
       body {
           font-family: 'Helvetica Neue', Arial, Helvetica, sans-serif;
-      }
-      .text-muted {
-        color: blue;
       }
       .full-height {
         height: 100%;

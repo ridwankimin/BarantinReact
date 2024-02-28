@@ -104,12 +104,9 @@ function DocKI2() {
     const cekWatch = watch()
 
     const onSubmit = (data) => {
-        // alert("Submit")
-        // console.log(data)
         const response = modelPelepasan.dokelKI(data);
         response
         .then((response) => {
-            console.log(response.data)
             if(response.data) {
                 if(response.data.status === '201') {
                     //start save history
@@ -118,11 +115,15 @@ function DocKI2() {
                     resHsy
                     .then((response) => {
                         if(response.data.status === '201') {
-                            console.log("history saved")
+                            if(process.env.REACT_APP_BE_ENV == "DEV") {
+                                console.log("history saved")
+                            }
                         }
                     })
                     .catch((error) => {
-                        console.log(error.response.data);
+                        if(process.env.REACT_APP_BE_ENV == "DEV") {
+                            console.log(error.response.data);
+                        }
                     });
                     //end save history
 
@@ -138,8 +139,9 @@ function DocKI2() {
             }
         })
         .catch((error) => {
-            console.log(error);
-            // alert(error.response.status + " - " + error.response.data.message)
+            if(process.env.REACT_APP_BE_ENV == "DEV") {
+                console.log(error)
+            }
             Swal.fire({
                 title: "Error!",
                 text: error.response.status + " - " + error.response.data.message,
@@ -174,7 +176,6 @@ function DocKI2() {
     function onSubmitMPki2(data) {
         log.updateKomoditiP8(data.idMPki2, data)
         .then((response) => {
-            console.log(response)
             if(response.data.status === '201') {
                 // alert(response.data.status + " - " + response.data.message)
                 Swal.fire({
@@ -187,12 +188,13 @@ function DocKI2() {
             }
         })
         .catch((error) => {
-            console.log(error);
+            if(process.env.REACT_APP_BE_ENV == "DEV") {
+                console.log(error)
+            }
         })
     }
 
     function handleEditKomoditas(e) {
-        // console.log(e.target.dataset.headerid)
         setValueMPki2("idMPki2", e.target.dataset.headerid)
         setValueMPki2("idPtk", e.target.dataset.ptk)
         setValueMPki2("jenisKar", "I")
@@ -207,7 +209,6 @@ function DocKI2() {
     }
 
     function handleEditKomoditasAll() {
-        // console.log(datasend)
         setLoadKomoditi(true)
         data.listKomoditas?.map((item, index) => (
             log.updateKomoditiP8(item.id, datasend[index])
@@ -215,13 +216,17 @@ function DocKI2() {
                     if(response.data.status === '201') {
                         refreshListKomoditas()
                         setLoadKomoditi(false)
-                        console.log("history saved")
+                        if(process.env.REACT_APP_BE_ENV == "DEV") {
+                            console.log("history saved")
+                        }
                     }
                 })
                 .catch((error) => {
                     setLoadKomoditi(false)
                     setLoadKomoditiPesan("Terjadi error pada saat simpan, mohon refresh halaman dan coba lagi.")
-                    console.log(error.response.data);
+                    if(process.env.REACT_APP_BE_ENV == "DEV") {
+                        console.log(error)
+                    }
                 })
             )
         )
@@ -239,7 +244,9 @@ function DocKI2() {
             }
         })
         .catch((error) => {
-            console.log(error);
+            if(process.env.REACT_APP_BE_ENV == "DEV") {
+                console.log(error)
+            }
         });
     }
 
@@ -259,8 +266,6 @@ function DocKI2() {
             const response = modelPemohon.getPtkId(base64_decode(ptkNomor[1]));
             response
             .then((response) => {
-                console.log("response.data ptk")
-                console.log(response.data)
                 if(typeof response.data != "string") {
                     if(response.data.status == 200) {
                         // alert(response.data.message);
@@ -274,7 +279,6 @@ function DocKI2() {
                         const resKom = modelPemohon.getKomoditiPtkId(base64_decode(ptkNomor[1]), "H");
                         resKom
                         .then((res) => {
-                            // console.log(res)
                             if(typeof res.data != "string") {
                                 if(res.data.status == 200) {
                                     setData(values => ({...values,
@@ -300,7 +304,9 @@ function DocKI2() {
                             }
                         })
                         .catch((error) => {
-                            console.log(error);
+                            if(process.env.REACT_APP_BE_ENV == "DEV") {
+                                console.log(error)
+                            }
                             setData(values => ({...values,
                                 errorKomoditas: "Gagal load data Komoditas"
                             }));
@@ -320,7 +326,9 @@ function DocKI2() {
                 }
             })
             .catch((error) => {
-                console.log(error.response);
+                if(process.env.REACT_APP_BE_ENV == "DEV") {
+                    console.log(error)
+                }
                 setData(values => ({...values,
                     errorPTK: "Gagal load data PTK",
                     errorKomoditas: "Gagal load data Komoditas"
@@ -330,8 +338,6 @@ function DocKI2() {
             const resPelId = modelPelepasan.getById(base64_decode(ptkNomor[1]), "I");
             resPelId
             .then((response) => {
-                console.log("pelepasan ki")
-                console.log(response.data)
                 if(response.data) {
                     if(typeof response.data != "string") {
                         setData(values => ({...values,
@@ -361,8 +367,9 @@ function DocKI2() {
                 }
             })
             .catch((error) => {
-                console.log("error ki2");
-                console.log(error);
+                if(process.env.REACT_APP_BE_ENV == "DEV") {
+                    console.log(error)
+                }
                 if(error.response) {
                     if(error.response.data.status == 404) {
                         setData(values => ({...values,
@@ -379,8 +386,6 @@ function DocKI2() {
             const resFisik = modelPeriksa.getFisikByPtkId(base64_decode(ptkNomor[1]))
             resFisik
             .then((response) => {
-                console.log("periksa fisik")
-                console.log(response)
                 if(response.data) {
                     if(typeof response.data != "string") {
                         setData(values => ({...values,
@@ -402,8 +407,9 @@ function DocKI2() {
                 }
             })
             .catch((error) => {
-                console.log("periksa fisik")
-                console.log(error);
+                if(process.env.REACT_APP_BE_ENV == "DEV") {
+                    console.log(error)
+                }
                 if(error.response) {
                     if(error.response.data.status == 404) {
                         setData(values => ({...values,
@@ -421,14 +427,12 @@ function DocKI2() {
             const resSurtug = modelSurtug.getDetilSurtugPenugasan(base64_decode(ptkNomor[1]), 14);
             resSurtug
             .then((response) => {
-                console.log(response.data)
                 if(response.data) {
                     if(typeof response.data != "string") {
                         setData(values => ({...values,
                             errorSurtug: ""
                         }));
                         if(response.data.status === '200') {
-                            // console.log(response.data.data[0])
                             setData(values => ({...values,
                                 noSurtug: response.data.data[0].nomor,
                                 tglSurtug: response.data.data[0].tanggal,
@@ -443,8 +447,9 @@ function DocKI2() {
                 }
             })
             .catch((error) => {
-                console.log(error);
-                // alert(error.response.status + " - " + error.response.data.message)
+                if(process.env.REACT_APP_BE_ENV == "DEV") {
+                    console.log(error)
+                }
                 if(error.response) {
                     if(error.response.data.status == 404) {
                         setData(values => ({...values,
@@ -465,7 +470,6 @@ function DocKI2() {
             const response = modelPemohon.getPtkId(data.noIdPtk);
             response
             .then((response) => {
-                // console.log(response.data)
                 if(typeof response.data != "string") {
                     if(response.data.status == 200) {
                         // alert(response.data.message);
@@ -489,7 +493,9 @@ function DocKI2() {
                 }
             })
             .catch((error) => {
-                console.log(error.response);
+                if(process.env.REACT_APP_BE_ENV == "DEV") {
+                    console.log(error)
+                }
                 setData(values => ({...values,
                     errorPTK: "Gagal load data PTK",
                 }));
@@ -500,7 +506,6 @@ function DocKI2() {
             const resKom = modelPemohon.getKomoditiPtkId(data.noIdPtk, "H");
             resKom
             .then((res) => {
-                // console.log(res)
                 if(typeof res.data != "string") {
                     if(res.data.status == 200) {
                         setData(values => ({...values,
@@ -526,7 +531,9 @@ function DocKI2() {
                 }
             })
             .catch((error) => {
-                console.log(error);
+                if(process.env.REACT_APP_BE_ENV == "DEV") {
+                    console.log(error)
+                }
                 setData(values => ({...values,
                     errorKomoditas: "Gagal load data Komoditas"
                 }));
@@ -537,7 +544,6 @@ function DocKI2() {
             const resPelId = modelPelepasan.getById(data.noIdPtk, "I");
             resPelId
             .then((response) => {
-                console.log(response.data)
                 if(response.data) {
                     if(typeof response.data != "string") {
                         setData(values => ({...values,
@@ -567,8 +573,9 @@ function DocKI2() {
                 }
             })
             .catch((error) => {
-                console.log("error ki2");
-                console.log(error);
+                if(process.env.REACT_APP_BE_ENV == "DEV") {
+                    console.log(error)
+                }
                 if(error.response) {
                     if(error.response.data.status == 404) {
                         setData(values => ({...values,
@@ -587,7 +594,6 @@ function DocKI2() {
             const resFisik = modelPeriksa.getFisikByPtkId(data.noIdPtk)
             resFisik
             .then((response) => {
-                // // console.log(response.data)
                 if(response.data) {
                     if(typeof response.data != "string") {
                         setData(values => ({...values,
@@ -609,7 +615,9 @@ function DocKI2() {
                 }
             })
             .catch((error) => {
-                console.log(error);
+                if(process.env.REACT_APP_BE_ENV == "DEV") {
+                    console.log(error)
+                }
                 if(error.response) {
                     if(error.response.data.status == 404) {
                         setData(values => ({...values,
@@ -629,14 +637,12 @@ function DocKI2() {
             const resSurtug = modelSurtug.getDetilSurtugPenugasan(data.noIdPtk, 14);
             resSurtug
             .then((response) => {
-                console.log(response.data)
                 if(response.data) {
                     if(typeof response.data != "string") {
                         setData(values => ({...values,
                             errorSurtug: ""
                         }));
                         if(response.data.status === '200') {
-                            // console.log(response.data.data[0])
                             setData(values => ({...values,
                                 noSurtug: response.data.data[0].nomor,
                                 tglSurtug: response.data.data[0].tanggal,
@@ -651,8 +657,9 @@ function DocKI2() {
                 }
             })
             .catch((error) => {
-                console.log(error);
-                // alert(error.response.status + " - " + error.response.data.message)
+                if(process.env.REACT_APP_BE_ENV == "DEV") {
+                    console.log(error)
+                }
                 if(error.response) {
                     if(error.response.data.status == 404) {
                         setData(values => ({...values,

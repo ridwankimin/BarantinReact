@@ -1,3 +1,4 @@
+/* eslint-disable eqeqeq */
 import Cookies from 'js-cookie';
 import React, { useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form';
@@ -31,12 +32,10 @@ function DocK52() {
     // const dataWatch = watch()
 
     const onSubmit = (data) => {
-        // console.log(data)
         const model = new PnPerlakuan();
         const response = model.sertifFumigasi(data);
             response
             .then((response) => {
-                console.log(response.data)
                 if(response.data) {
                     if(response.data.status === '201') {
                         //start save history
@@ -45,11 +44,15 @@ function DocK52() {
                         resHsy
                         .then((response) => {
                             if(response.data.status === '201') {
-                                console.log("history saved")
+                                if(process.env.REACT_APP_BE_ENV == "DEV") {
+                                    console.log("history saved")
+                                }
                             }
                         })
                         .catch((error) => {
-                            console.log(error.response.data);
+                            if(process.env.REACT_APP_BE_ENV == "DEV") {
+                                console.log(error)
+                            }
                         });
                         //end save history
 
@@ -60,7 +63,9 @@ function DocK52() {
                 }
             })
             .catch((error) => {
-                console.log(error);
+                if(process.env.REACT_APP_BE_ENV == "DEV") {
+                    console.log(error)
+                }
                 alert(error.response.status + " - " + error.response.data.message)
             });
     }
@@ -77,8 +82,6 @@ function DocK52() {
             setValue("idPtk", base64_decode(ptkNomor[1]))
             resLaporan
             .then((response) => {
-                console.log("dok52")
-                console.log(response.data.data)
                 if(response.data.status === '200') {
                     // alert(response.data.message);
                     setValue("idDok52", response.data.data[0].id)
@@ -119,8 +122,6 @@ function DocK52() {
                     const resLaporan = modelPerlakuan.getPtkByDokumen(base64_decode(ptkNomor[1]), 23);
                     resLaporan
                     .then((response) => {
-                        console.log("dok53")
-                        console.log(response.data.data)
                         if(response.data.status === '200') {
                             // alert(response.data.message);
                             setValue("idDok53", response.data.data[0].id)
@@ -159,15 +160,19 @@ function DocK52() {
                         }
                     })
                     .catch((error) => {
-                        setData()
-                        console.log(error.response);
+                        // setData()
+                        if(process.env.REACT_APP_BE_ENV == "DEV") {
+                            console.log(error)
+                        }
                         if(error.response.status === 404) {
                             alert("Laporan Hasil Perlakuan belum dibuat.\nMohon buat laporan perlakuan terlebih dahulu!")
                             navigate(process.env.PUBLIC_URL + '/k53')
                         }
                     });
                 }
-                console.log(error.response);
+                if(process.env.REACT_APP_BE_ENV == "DEV") {
+                    console.log(error)
+                }
                 // alert("Laporan Hasil Perlakuan belum dibuat.\nMohon buat laporan perlakuan terlebih dahulu!")
                 // navigate(process.env.PUBLIC_URL + '/k53')
             });
@@ -177,9 +182,6 @@ function DocK52() {
             response
             .then((response) => {
                 if(response.data.status === '200') {
-                    console.log(response.data.data)
-                    // alert(response.data.message);
-                    // isiDataPtk(response)
                     setData(values => ({...values,
                         noAju: idPtk ? base64_decode(ptkNomor[0]) : "",
                         noIdPtk: idPtk ? base64_decode(ptkNomor[1]) : "",
@@ -202,8 +204,10 @@ function DocK52() {
                 }
             })
             .catch((error) => {
-                setData()
-                console.log(error.response);
+                // setData()
+                if(process.env.REACT_APP_BE_ENV == "DEV") {
+                    console.log(error)
+                }
             });
         }
     },[idPtk, setValue, navigate])

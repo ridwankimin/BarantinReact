@@ -1,3 +1,4 @@
+/* eslint-disable eqeqeq */
 /* eslint-disable jsx-a11y/anchor-is-valid */
 import Cookies from 'js-cookie';
 import React, { useEffect, useState } from 'react';
@@ -108,7 +109,6 @@ function DocKT3() {
         const response = model.dokelKT(data);
         response
         .then((response) => {
-            console.log(response.data)
             if(response.data) {
                 if(response.data.status === '201') {
                     //start save history
@@ -117,11 +117,15 @@ function DocKT3() {
                     resHsy
                     .then((response) => {
                         if(response.data.status === '201') {
-                            console.log("history saved")
+                            if(process.env.REACT_APP_BE_ENV == "DEV") {
+                                console.log("history saved")
+                            }
                         }
                     })
                     .catch((error) => {
-                        console.log(error.response.data);
+                        if(process.env.REACT_APP_BE_ENV == "DEV") {
+                            console.log(error.response.data);
+                        }
                     });
                     //end save history
 
@@ -132,7 +136,9 @@ function DocKT3() {
             }
         })
         .catch((error) => {
-            console.log(error);
+            if(process.env.REACT_APP_BE_ENV == "DEV") {
+                console.log(error)
+            }
             alert(error.response.status + " - " + error.response.data.message)
         });
     }
@@ -145,25 +151,26 @@ function DocKT3() {
         return Peruntukan.find((element) => element.id === parseInt(e))
     }
 
-    // console.log(modaAlatAngkut(4).nama)
-
     const addCommas = num => num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
     const removeNonNumeric = num => num.toString().replace(/[^0-9.]/g, "");
 
     function handleEditKomoditasAll() {
         setLoadKomoditi(true)
         data.listKomoditas?.map((item, index) => (
-            // console.log(datasend[index])
             log.updateKomoditiP8(item.id, datasend[index])
                 .then((response) => {
                     if(response.data.status === '201') {
-                        console.log("history saved")
+                        if(process.env.REACT_APP_BE_ENV == "DEV") {
+                            console.log("history saved")
+                        }
                     }
                 })
                 .catch((error) => {
                     setLoadKomoditi(true)
                     setLoadKomoditiPesan("Terjadi error pada saat simpan, mohon refresh halaman dan coba lagi.")
-                    console.log(error.response.data);
+                    if(process.env.REACT_APP_BE_ENV == "DEV") {
+                        console.log(error)
+                    }
                 })
             )
         )
@@ -171,7 +178,6 @@ function DocKT3() {
     }
 
     function onSubmitMPKT1(data) {
-        console.log(data)
     }
 
     function handleEditKomoditas(e) {
@@ -212,7 +218,9 @@ function DocKT3() {
             }
         })
         .catch((error) => {
-            console.log(error.response);
+            if(process.env.REACT_APP_BE_ENV == "DEV") {
+                console.log(error)
+            }
             alert(error.response.status + " - " + error.response.data.message)
         });
     }
@@ -232,8 +240,6 @@ function DocKT3() {
             response
             .then((response) => {
                 if(response.data.status === '200') {
-                    console.log(response.data.data)
-
                     let kodeHSData = response.data.data.ptk_komoditi?.map(item => {
                         return item.kode_hs
                     })
@@ -271,7 +277,6 @@ function DocKT3() {
                         }
                     })
                     setDataSend(arrayKomKT)
-                    // console.log(arrayKomKT)
                     
                     setValue("tandaKhusus", response.data.data.ptk.tanda_khusus)
                     setValue("namaUmum", namaUmumMP.join(";"))
@@ -286,7 +291,9 @@ function DocKT3() {
                 }
             })
             .catch((error) => {
-                console.log(error.response);
+                if(process.env.REACT_APP_BE_ENV == "DEV") {
+                    console.log(error)
+                }
             });
             
             const modelSurtug = new PtkSurtug();
@@ -294,10 +301,8 @@ function DocKT3() {
             const resSurtug = modelSurtug.getDetilSurtugPenugasan(base64_decode(ptkNomor[1]), 14);
             resSurtug
             .then((response) => {
-                console.log(response.data)
                 if(response.data) {
                     if(response.data.status === '200') {
-                        // console.log(response.data.data[0])
                         setData(values => ({...values,
                             noSurtug: response.data.data[0].nomor,
                             tglSurtug: response.data.data[0].tanggal,
@@ -307,7 +312,9 @@ function DocKT3() {
                 }
             })
             .catch((error) => {
-                console.log(error);
+                if(process.env.REACT_APP_BE_ENV == "DEV") {
+                    console.log(error)
+                }
                 // alert(error.response.status + " - " + error.response.data.message)
             });
         }

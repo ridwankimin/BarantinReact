@@ -1,3 +1,4 @@
+/* eslint-disable eqeqeq */
 import Cookies from 'js-cookie';
 import React, { useEffect } from 'react'
 import { useState } from 'react'
@@ -6,7 +7,14 @@ import {decode as base64_decode} from 'base-64';
 import { useForm } from 'react-hook-form';
 import PtkSurtug from '../../model/PtkSurtug';
 
+const modelSurtug = new PtkSurtug()
+
+function stringSimbol(e) {
+    return <div dangerouslySetInnerHTML={{__html: e}} />;
+}
+
 function DocK22() {
+    const idPtk = Cookies.get("idPtkPage");
     let navigate = useNavigate();
     let [addSurtug, setAddSurtug] = useState(false);
     let [listDataHeader, setListDataHeader] = useState();
@@ -22,12 +30,13 @@ function DocK22() {
     const dataHeader = watchHeader()
 
     const onSubmitHeader = (data) => {
-        console.log(data)
         const modelSurtug = new PtkSurtug();
         const response = modelSurtug.simpanHeader(data);
             response
             .then((response) => {
-                console.log(response.data)
+                if(process.env.ENV == "DEV") {
+                    console.log(response);
+                }
                 if(response.data) {
                     if(response.data.status === '201') {
                         alert(response.data.status + " - " + response.data.message)
@@ -44,7 +53,9 @@ function DocK22() {
                 }
             })
             .catch((error) => {
-                console.log(error);
+                if(process.env.REACT_APP_BE_ENV == "DEV") {
+                    console.log(error)
+                }
                 alert(error.response.status + " - " + error.response.data.message)
             });
     }
@@ -72,7 +83,9 @@ function DocK22() {
         const response = modelSurtug.simpanDetil(data);
             response
             .then((response) => {
-                console.log(response.data)
+                if(process.env.REACT_APP_BE_ENV == "DEV") {
+                    console.log(response);
+                }
                 if(response.data) {
                     if(response.data.status === '201') {
                         alert(response.data.status + " - " + response.data.message)
@@ -82,71 +95,19 @@ function DocK22() {
                 }
             })
             .catch((error) => {
-                console.log(error);
+                if(process.env.REACT_APP_BE_ENV == "DEV") {
+                    console.log(error)
+                }
                 alert(error.response.status + " - " + error.response.data.message)
             });
     }
 
-    const idPtk = Cookies.get("idPtkPage");
-    useEffect(() => {
-        if(idPtk) {
-            setValueHeader("tglSurtug", (new Date()).toLocaleString('en-CA', { hourCycle: 'h24' }).replace(',', '').slice(0,16))
-            let ptkDecode = idPtk ? base64_decode(idPtk) : "";
-            let ptkNomor = idPtk ? ptkDecode.split('m0R3N0r1R') : "";
-            setData(values => ({...values,
-                noAju: idPtk ? base64_decode(ptkNomor[0]) : "",
-                idPtk: idPtk ? base64_decode(ptkNomor[1]) : "",
-                noDokumen: idPtk ? base64_decode(ptkNomor[2]): "",
-            }));
-            setValueHeader("idPtk", base64_decode(ptkNomor[1]));
-            setValueHeader("noDok", base64_decode(ptkNomor[2]));
-            setValueDetilSurtug("idPtk", base64_decode(ptkNomor[1]));
-            const modelSurtug = new PtkSurtug();
-
-            const resAnalis = modelSurtug.getAnalisByPtk(base64_decode(ptkNomor[1]));
-            resAnalis
-            .then((res) => {
-                if(res.data) {
-                    if(res.data.status === '200') {
-                        setValueHeader("idAnalis", res.data.data[0].id);
-                        setData(values => ({...values,
-                            noAnalisa: res.data.data[0].nomor,
-                            tglAnalisa: res.data.data[0].tanggal,
-                        }));
-                    }
-                }
-            })
-            .catch((error) => {
-                console.log(error);
-            });
-
-            const response = modelSurtug.getDetilSurtugPenugasan(base64_decode(ptkNomor[1]), "");
-            response
-            .then((res) => {
-                console.log(res)
-                if(res.data) {
-                    if(res.data.status === '200') {
-                        console.log(res.data.data[0])
-                        setListDataHeader(res.data.data)
-                    }
-                }
-            })
-            .catch((error) => {
-                console.log(error);
-                setListDataHeader() 
-            });
-        }
-        // dataSurtugHeader()
-    },[idPtk, setValueDetilSurtug, setValueHeader])
-
     function dataSurtugHeader() {
         const modelSurtug = new PtkSurtug();
         const response = modelSurtug.getDetilSurtugPenugasan(data.idPtk, "");
-        // console.log(noIdPtk)
     
         response
         .then((res) => {
-            // console.log(res)
             if(res.data) {
                 if(res.data.status === '200') {
                     setListDataHeader(res.data.data)
@@ -154,7 +115,9 @@ function DocK22() {
             }
         })
         .catch((error) => {
-            console.log(error.response);
+            if(process.env.REACT_APP_BE_ENV == "DEV") {
+                console.log(error)
+            }
             setListDataHeader()
         });
     }
@@ -165,10 +128,8 @@ function DocK22() {
 
         response
         .then((res) => {
-            // console.log(res)
             if(res.data) {
                 if(res.data.status === '200') {
-                    console.log(res.data)
                     setListDataDetil(res.data.data)
                 } else {
                     setListDataDetil()
@@ -176,7 +137,9 @@ function DocK22() {
             }
         })
         .catch((error) => {
-            console.log(error.response);
+            if(process.env.REACT_APP_BE_ENV == "DEV") {
+                console.log(error)
+            }
             setListDataDetil()
         });
     }
@@ -215,9 +178,71 @@ function DocK22() {
 
     // let cekSurtug = "";
 
-    function stringSimbol(e) {
-        return <div dangerouslySetInnerHTML={{__html: e}} />;
-    }
+    useEffect(() => {
+        if(idPtk) {
+            setValueHeader("tglSurtug", (new Date()).toLocaleString('en-CA', { hourCycle: 'h24' }).replace(',', '').slice(0,16))
+            let ptkDecode = idPtk ? base64_decode(idPtk) : "";
+            let ptkNomor = idPtk ? ptkDecode.split('m0R3N0r1R') : "";
+            setData(values => ({...values,
+                noAju: idPtk ? base64_decode(ptkNomor[0]) : "",
+                idPtk: idPtk ? base64_decode(ptkNomor[1]) : "",
+                noDokumen: idPtk ? base64_decode(ptkNomor[2]): "",
+            }));
+            setValueHeader("idPtk", base64_decode(ptkNomor[1]));
+            setValueHeader("noDok", base64_decode(ptkNomor[2]));
+            setValueDetilSurtug("idPtk", base64_decode(ptkNomor[1]));
+            
+            const resAnalis = modelSurtug.getAnalisByPtk(base64_decode(ptkNomor[1]));
+            resAnalis
+            .then((res) => {
+                if(res.data) {
+                    if(typeof response.data != "string") {
+                        if(res.data.status == '200') {
+                            setValueHeader("idAnalis", res.data.data[0].id);
+                            setData(values => ({...values,
+                                errorAnalis: "",
+                                noAnalisa: res.data.data[0].nomor,
+                                tglAnalisa: res.data.data[0].tanggal,
+                            }));
+                        } else {
+                            setData(values => ({...values,
+                                errorAnalisis: "Gagal load data analisis",
+                            }))
+                        }
+                    } else {
+                        setData(values => ({...values,
+                            errorAnalisis: "Gagal load data analisis",
+                        }))
+                    }
+                }
+            })
+            .catch((error) => {
+                if(process.env.REACT_APP_BE_ENV == "DEV") {
+                    console.log(error)
+                }
+                setData(values => ({...values,
+                    errorAnalisis: "Gagal load data analisis",
+                }))
+            });
+
+            const response = modelSurtug.getDetilSurtugPenugasan(base64_decode(ptkNomor[1]), "");
+            response
+            .then((res) => {
+                if(res.data) {
+                    if(res.data.status === '200') {
+                        setListDataHeader(res.data.data)
+                    }
+                }
+            })
+            .catch((error) => {
+                if(process.env.REACT_APP_BE_ENV == "DEV") {
+                    console.log(error)
+                }
+                setListDataHeader() 
+            });
+        }
+        // dataSurtugHeader()
+    },[idPtk, setValueDetilSurtug, setValueHeader])
 
     return (
     <div className="container-xxl flex-grow-1 container-p-y">

@@ -35,6 +35,10 @@ export default class PtkModel {
             "no_aju": Cookies.get("kodeSatpel") + data.permohonan + date.getFullYear() + (date.getMonth() < 9 ? "0" + (date.getMonth() + 1) : date.getMonth())+ (date.getDate() < 10 ? "0" + date.getDate() : date.getDate()) + (date.getHours() < 10 ? "0" + date.getHours() : date.getHours()) + (date.getMinutes() < 10 ? "0" + date.getMinutes() : date.getMinutes()) + (date.getSeconds() <10 ? "0" + date.getSeconds() : date.getSeconds()) + makeid(5),
             // 'tgl_aju' => $data['tgl_aju'],
             "jenis_dokumen": data.jenisForm,
+
+            'jenis_karantina': data.mediaPembawa, // ok
+            'jenis_media_pembawa_id': data.jenisMp, // ok
+            
             "is_guest": data.pJRutin, //ok           // pemohon rutin/guest: 0,1
             'user_id': Cookies.get("userId"), //pake session
             "pengguna_jasa_id": 456, // pake session
@@ -82,14 +86,14 @@ export default class PtkModel {
         console.log(JSON.stringify(datasend))
               
         let config = {
-              method: 'post',
-              maxBodyLength: Infinity,
-              url: url + 'ptk',
-              headers: { 
-                'Content-Type': 'application/json', 
-              },
-              data : datasend
-            };
+            method: 'post',
+            maxBodyLength: Infinity,
+            url: url + 'ptk',
+            headers: { 
+              'Content-Type': 'application/json', 
+            },
+            data : datasend
+        };
               
       return axios.request(config)
     }
@@ -175,7 +179,7 @@ export default class PtkModel {
             'Content-Type': 'application/json', 
           }
         };
-        
+        console.log(config)
         return axios.request(config)
       }
       
@@ -188,7 +192,7 @@ export default class PtkModel {
             "jenis_karantina": input.jenisKarantina, // H, I, T
             "jenis_dokumen": input.jenisDokumen, // PTK, NHI, BST
             'upt_id': Cookies.get("uptId"), // PAKE SESSION
-            "kode_wilker": Cookies.get("kodeSatpel") // PAKE SESSION
+            "kode_satpel": Cookies.get("kodeSatpel") // PAKE SESSION
         }
 
         let config = {

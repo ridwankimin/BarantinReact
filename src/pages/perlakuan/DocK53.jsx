@@ -1,3 +1,4 @@
+/* eslint-disable eqeqeq */
 import Cookies from 'js-cookie';
 import React, { useEffect, useState } from 'react'
 import PnPerlakuan from '../../model/PnPerlakuan';
@@ -28,12 +29,10 @@ function DocK53() {
     const dataWatch = watch()
 
     const onSubmit = (data) => {
-        console.log(data)
         const model = new PnPerlakuan();
         const response = model.sertifLaporan(data);
             response
             .then((response) => {
-                console.log(response.data)
                 if(response.data) {
                     if(response.data.status === '201') {
                         //start save history
@@ -42,11 +41,15 @@ function DocK53() {
                         resHsy
                         .then((response) => {
                             if(response.data.status === '201') {
-                                console.log("history saved")
+                                if(process.env.REACT_APP_BE_ENV == "DEV") {
+                                    console.log("history saved")
+                                }
                             }
                         })
                         .catch((error) => {
-                            console.log(error.response.data);
+                            if(process.env.REACT_APP_BE_ENV == "DEV") {
+                                console.log(error)
+                            }
                         });
                         //end save history
 
@@ -57,11 +60,13 @@ function DocK53() {
                 }
             })
             .catch((error) => {
-                console.log(error);
+                if(process.env.REACT_APP_BE_ENV == "DEV") {
+                    console.log(error)
+                }
                 alert(error.response.status + " - " + error.response.data.message)
             });
     }
-    // console.log("idptk : " + idPtk)
+
     useEffect(() => {
         if(idPtk) {
             setValue("tglDok53", (new Date()).toLocaleString('en-CA', { hourCycle: 'h24' }).replace(',', '').slice(0,16))
@@ -137,7 +142,9 @@ function DocK53() {
                 }
             })
             .catch((error) => {
-                console.log(error)
+                if(process.env.REACT_APP_BE_ENV == "DEV") {
+                    console.log(error)
+                }
                 setData(values => ({...values,
                     errorPtk: true
                 }))
@@ -147,7 +154,7 @@ function DocK53() {
 
             const modelPerlakuan = new PnPerlakuan();
             const resLaporan = modelPerlakuan.getPtkByDokumen(base64_decode(ptkNomor[1]), 23);
-            console.log(base64_decode(ptkNomor[1]))
+            
             resLaporan
             .then((response) => {
                 if(typeof response.data != "string") {
@@ -194,7 +201,9 @@ function DocK53() {
             })
             .catch((error) => {
                 // setData()
-                console.log(error.response);
+                if(process.env.REACT_APP_BE_ENV == "DEV") {
+                    console.log(error)
+                }
                 // alert("Laporan Hasil Perlakuan belum dibuat.\nMohon buat laporan perlakuan terlebih dahulu!")
                 // navigate(process.env.PUBLIC_URL + '/k53')
             });
@@ -225,7 +234,9 @@ function DocK53() {
                 }
             })
             .catch((error) => {
-                console.log(error);
+                if(process.env.REACT_APP_BE_ENV == "DEV") {
+                    console.log(error)
+                }
                 setData(values => ({...values,
                     errorSurtug: true
                 }))
@@ -306,7 +317,9 @@ function DocK53() {
                 }
             })
             .catch((error) => {
-                console.log(error)
+                if(process.env.REACT_APP_BE_ENV == "DEV") {
+                    console.log(error)
+                }
                 setData(values => ({...values,
                     errorPtk: true
                 }))
@@ -362,7 +375,9 @@ function DocK53() {
             })
             .catch((error) => {
                 // setData()
-                console.log(error.response);
+                if(process.env.REACT_APP_BE_ENV == "DEV") {
+                    console.log(error)
+                }
                 // alert("Laporan Hasil Perlakuan belum dibuat.\nMohon buat laporan perlakuan terlebih dahulu!")
                 // navigate(process.env.PUBLIC_URL + '/k53')
             });
@@ -393,7 +408,9 @@ function DocK53() {
                 }
             })
             .catch((error) => {
-                console.log(error);
+                if(process.env.REACT_APP_BE_ENV == "DEV") {
+                    console.log(error)
+                }
                 setData(values => ({...values,
                     errorSurtug: true
                 }))

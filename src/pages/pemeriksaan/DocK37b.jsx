@@ -1,3 +1,4 @@
+/* eslint-disable eqeqeq */
 import Cookies from 'js-cookie';
 import React, { useEffect, useState } from 'react';
 import {decode as base64_decode} from 'base-64';
@@ -30,12 +31,10 @@ function DocK37b() {
     const dataWatchHeader = watchHeader()
 
     const onSubmitHeader = (data) => {
-        // console.log(data.rekom37b[1])
         const model = new PtkPemeriksaan();
         const response = model.ptkFisikKesehatanHeader(data);
         response
         .then((response) => {
-            // console.log(response.data)
             if(response.data) {
                 if(response.data.status === '201') {
                     //start save history
@@ -44,11 +43,15 @@ function DocK37b() {
                     resHsy
                     .then((response) => {
                         if(response.data.status === '201') {
-                            console.log("history saved")
+                            if(process.env.REACT_APP_BE_ENV == "DEV") {
+                                console.log("history saved")
+                            }
                         }
                     })
                     .catch((error) => {
-                        console.log(error.response.data);
+                        if(process.env.REACT_APP_BE_ENV == "DEV") {
+                            console.log(error)
+                        }
                     });
                     //end save history
 
@@ -60,7 +63,9 @@ function DocK37b() {
             }
         })
         .catch((error) => {
-            console.log(error);
+            if(process.env.REACT_APP_BE_ENV == "DEV") {
+                console.log(error)
+            }
             alert(error.response.status + " - " + error.response.data.message)
         });
     }
@@ -70,14 +75,10 @@ function DocK37b() {
     // let [listWasdal, setListWasdal] = useState([])
 
     const onSubmit = (data) => {
-        // console.log(JSON.stringify(listKesehatan))
-        // console.log(JSON.stringify(listWasdal))
-        // let dataDetil = listKesehatan.map((item, i) => Object.assign({}, item, listWasdal[i]));
         const model = new PtkPemeriksaan();
         const response = model.ptkFisikKesehatan(data, listKesehatan);
             response
             .then((response) => {
-                console.log(response)
                 if(response.data) {
                     if(response.data.status === '201') {
                         //start save history
@@ -86,11 +87,15 @@ function DocK37b() {
                         resHsy
                         .then((response) => {
                             if(response.data.status === '201') {
-                                console.log("history saved")
+                                if(process.env.REACT_APP_BE_ENV == "DEV") {
+                                    console.log("history saved")
+                                }
                             }
                         })
                         .catch((error) => {
-                            console.log(error.response.data);
+                            if(process.env.REACT_APP_BE_ENV == "DEV") {
+                                console.log(error)
+                            }
                         });
                         //end save history
 
@@ -102,8 +107,9 @@ function DocK37b() {
                 }
             })
             .catch((error) => {
-                console.log(error);
-                // alert(error.response.status + " - " + error.response.data.message)
+                if(process.env.REACT_APP_BE_ENV == "DEV") {
+                    console.log(error)
+                }
             });
     }
     
@@ -159,7 +165,6 @@ function DocK37b() {
             const resFisik = modelPeriksa.getFisikByPtkId(base64_decode(ptkNomor[1]))
             resFisik
             .then((response) => {
-                // // console.log(response.data)
                 if(response.data) {
                     if(response.data.status === '200') {
                         setValue("idDok37a", response.data.data[0].pn_administrasi_id)
@@ -184,13 +189,14 @@ function DocK37b() {
                 }
             })
             .catch((error) => {
-                console.log(error);
+                if(process.env.REACT_APP_BE_ENV == "DEV") {
+                    console.log(error)
+                }
             });
 
             const response = modelPeriksa.getAdminByPtkId(base64_decode(ptkNomor[1]))
             response
             .then((response) => {
-                // // console.log(response)
                 if(typeof response.data != "string") {
                     setData(values => ({...values,
                         errorAdmin: false
@@ -209,8 +215,9 @@ function DocK37b() {
                 }
             })
             .catch((error) => {
-                console.log(error);
-                // alert(error.response.status + " - " + error.response.data.message)
+                if(process.env.REACT_APP_BE_ENV == "DEV") {
+                    console.log(error)
+                }
                 setData(values => ({...values,
                     errorAdmin: true
                 }));
@@ -220,7 +227,6 @@ function DocK37b() {
             const resKom = modelPemohon.getKomoditiPtkId(base64_decode(ptkNomor[1]), Cookies.get("jenisKarantina"));
             resKom
             .then((res) => {
-                // // console.log(res)
                 if(typeof res.data != "string") {
                     setData(values => ({...values,
                         errorKomoditi: false
@@ -241,7 +247,9 @@ function DocK37b() {
                 }
             })
             .catch((error) => {
-                console.log(error);
+                if(process.env.REACT_APP_BE_ENV == "DEV") {
+                    console.log(error)
+                }
                 setData(values => ({...values,
                     errorKomoditi: true
                 }));
@@ -256,8 +264,6 @@ function DocK37b() {
                         errorOptk: false
                     }));
                     if(res.data.status === '200') {
-                        // console.log(res)
-                        // setKomoditiPtk(res.data.data)
                         const arraySelectOPTK = res.data.data.map(item => {
                             return {
                                 value: item.nama_umum,
@@ -273,7 +279,9 @@ function DocK37b() {
                 }
             })
             .catch((error) => {
-                console.log(error.response.data);
+                if(process.env.REACT_APP_BE_ENV == "DEV") {
+                    console.log(error)
+                }
                 setData(values => ({...values,
                     errorOptk: true
                 }));
@@ -287,7 +295,6 @@ function DocK37b() {
             const response = modelPeriksa.getAdminByPtkId(data.idPtk)
             response
             .then((response) => {
-                // // console.log(response)
                 if(typeof response.data != "string") {
                     setData(values => ({...values,
                         errorAdmin: false
@@ -306,7 +313,9 @@ function DocK37b() {
                 }
             })
             .catch((error) => {
-                console.log(error);
+                if(process.env.REACT_APP_BE_ENV == "DEV") {
+                    console.log(error)
+                }
                 // alert(error.response.status + " - " + error.response.data.message)
                 setData(values => ({...values,
                     errorAdmin: true
@@ -319,7 +328,6 @@ function DocK37b() {
             const resKom = modelPemohon.getKomoditiPtkId(data.idPtk, Cookies.get("jenisKarantina"));
             resKom
             .then((res) => {
-                // // console.log(res)
                 if(typeof res.data != "string") {
                     setData(values => ({...values,
                         errorKomoditi: false
@@ -340,7 +348,9 @@ function DocK37b() {
                 }
             })
             .catch((error) => {
-                console.log(error);
+                if(process.env.REACT_APP_BE_ENV == "DEV") {
+                    console.log(error)
+                }
                 setData(values => ({...values,
                     errorKomoditi: true
                 }));
@@ -357,8 +367,6 @@ function DocK37b() {
                         errorOptk: false
                     }));
                     if(res.data.status === '200') {
-                        // console.log(res)
-                        // setKomoditiPtk(res.data.data)
                         const arraySelectOPTK = res.data.data.map(item => {
                             return {
                                 value: item.nama_umum,
@@ -374,7 +382,9 @@ function DocK37b() {
                 }
             })
             .catch((error) => {
-                console.log(error.response.data);
+                if(process.env.REACT_APP_BE_ENV == "DEV") {
+                    console.log(error)
+                }
                 setData(values => ({...values,
                     errorOptk: true
                 }));

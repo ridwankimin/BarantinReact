@@ -1,11 +1,13 @@
 import React, { useState } from 'react'
 import logbar from '../logo/barantins.png'
+import Cookies from 'js-cookie'
 // import Cookies from 'js-cookie'
 // import Footer from './Footer';
 
+
 function Navbar(props) {
     // let [showMenu, setShowMenu] = useState(false)
-    let [ketMenu, setKetMenu] = useState("")
+    let [ketMenu, setKetMenu] = useState(Cookies.get("ketMenu"))
     let [ketSubMenu, setKetSubMenu] = useState("")
     let [menuOpen, setMenuOpen] = useState(false)
     let [subMenuOpen, setSubMenuOpen] = useState(false)
@@ -13,10 +15,12 @@ function Navbar(props) {
     // const [menuOpen, setMenuOpen] = useState(false)
     function handleMenuOpen(e) {
         if(e.target.dataset.i18n === ketMenu || ketMenu === "") {
+            Cookies.set("menuOpen", !menuOpen)
             setMenuOpen(!menuOpen);
             // setMenuOpen(menuOpen => ({show: !menuOpen.show}));
         }
         setKetMenu(e.target.dataset.i18n);
+        Cookies.set("ketMenu", e.target.dataset.i18n)
         // console.log(menuOpen)
         // console.log(e.target.dataset.i18n);
     }
@@ -30,7 +34,7 @@ function Navbar(props) {
     // class="light-style layout-navbar-fixed layout-menu-fixed layout-menu-collapsed"
     // console.log((window.location.pathname.split("/")[2]) === 'k11' ? "ok" : "tidak")
   return (
-    <aside id="layout-menu" className={"menu-vertical menu bg-menu-theme" + (props.menu ? " layout-menu" : "")}>
+    <aside id="layout-menu" className={"menu-vertical menu bg-menu-theme" + (props.menu ? " layout-menu" : "")} style={{transition: "all 0.5s ease"}}>
         <div className="app-brand demo" style={{background: 'black'}}>
             <a href="/" className="app-brand-link">
                 <img src={logbar} alt="Barantin App" width="150px" />
@@ -76,7 +80,7 @@ function Navbar(props) {
                     <i className="menu-icon tf-icons fa-solid fa-bar-chart"></i>
                     <div data-i18n="Informasi Pre Border">Informasi Pre Border</div>
                 </button>
-                <ul className="menu-sub" style={{transition: "all 0.5s ease"}}>
+                <ul className="menu-sub">
                     <li className={window.location.pathname.split("/")[2] === 'k11' ? "menu-item active" : "menu-item"}>
                         <a href={process.env.PUBLIC_URL + '/k11'} className="menu-link" title='PERMOHONAN TINDAKAN KARANTINA DAN PENGAWASAN DAN/ATAU PENGENDALIAN SERTA BERITA ACARA SERAH TERIMA MEDIA PEMBAWA DI TEMPAT PEMASUKAN, PENGELUARAN DAN/ATAU TRANSIT'>
                             <div data-i18n="K-1.1">K-1.1</div>
@@ -128,7 +132,7 @@ function Navbar(props) {
                 </ul>
             </li>
             <li className={(ketMenu === 'Pemeriksaan' && menuOpen === true) || window.location.pathname.split("/")[2] === 'k31' || window.location.pathname.split("/")[2] === 'k32' || window.location.pathname.split("/")[2] === 'k33' || window.location.pathname.split("/")[2] === 'k34' || window.location.pathname.split("/")[2] === 'k35' || window.location.pathname.split("/")[2] === 'k36' || window.location.pathname.split("/")[2] === 'k37b' || window.location.pathname.split("/")[2] === 'k37a' || window.location.pathname.split("/")[2] === 'k38' || window.location.pathname.split("/")[2] === 'k39' || window.location.pathname.split("/")[2] === 'k310' ? 'menu-item open menu-item-animating open' : 'menu-item menu-item-animating menu-item-closing'}>
-                <button type='button' style={{backgroundColor: "#123138"}} className="w-100 menu-link menu-toggle text-lightest" data-i18n="Pemeriksaan" onClick={handleMenuOpen}>
+                <button type='button' style={{backgroundColor: "#123138"}} className="w-100 text-sm-start menu-link menu-toggle text-lightest" data-i18n="Pemeriksaan" onClick={handleMenuOpen}>
                     <i className="menu-icon tf-icons fa-solid fa-magnifying-glass"></i>
                     <div data-i18n="Pemeriksaan">Pemeriksaan</div>
                 </button>

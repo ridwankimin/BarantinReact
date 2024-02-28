@@ -1,3 +1,4 @@
+/* eslint-disable eqeqeq */
 import Cookies from 'js-cookie'
 import React, { useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
@@ -28,11 +29,9 @@ function DocK32() {
     });
 
     const onSubmit = (data) => {
-        // console.log(data)
         const response = modelPeriksa.pnBongkar32(data);
         response
         .then((response) => {
-            // console.log(response.data)
             if(response.data) {
                 if(response.data.status === '201') {
                     Swal.fire({
@@ -54,7 +53,9 @@ function DocK32() {
             }
         })
         .catch((error) => {
-            console.log(error);
+            if(process.env.REACT_APP_BE_ENV == "DEV") {
+                console.log(error)
+            }
             // alert(error.response.status + " - " + error.response.data.message)
             Swal.fire({
                 title: "Error!",
@@ -75,9 +76,6 @@ function DocK32() {
             response
             .then((response) => {
                 if(response.data.status === '200') {
-                    // console.log(response.data.data)
-                    // alert(response.data.message);
-                    // isiDataPtk(response)
                     setData(values => ({...values,
                         noAju: idPtk ? base64_decode(ptkNomor[0]) : "",
                         noIdPtk: idPtk ? base64_decode(ptkNomor[1]) : "",
@@ -92,8 +90,9 @@ function DocK32() {
                 }
             })
             .catch((error) => {
-                // setData()
-                console.log(error);
+                if(process.env.REACT_APP_BE_ENV == "DEV") {
+                    console.log(error)
+                }
             });
             
             const response32 = modelPeriksa.getPnBongkar(base64_decode(ptkNomor[1]));
@@ -112,8 +111,9 @@ function DocK32() {
                 }
             })
             .catch((error) => {
-                // setData()
-                console.log(error);
+                if(process.env.REACT_APP_BE_ENV == "DEV") {
+                    console.log(error)
+                }
             });
         }
     },[idPtk, setValue])

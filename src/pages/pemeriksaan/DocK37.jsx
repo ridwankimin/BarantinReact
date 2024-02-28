@@ -1,3 +1,4 @@
+/* eslint-disable eqeqeq */
 import React, { useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
@@ -18,13 +19,10 @@ function DocK37() {
     const dataWatch = watchAdministratif()
 
     const onSubmit = (data) => {
-        // alert("oke")
-        // console.log(data)
         const model = new PtkPemeriksaan();
         const response = model.ptkAdmin(data);
             response
             .then((response) => {
-                console.log(response.data)
                 if(response.data) {
                     if(response.data.status === '201') {
                         alert(response.data.status + " - " + response.data.message)
@@ -41,7 +39,9 @@ function DocK37() {
                 }
             })
             .catch((error) => {
-                console.log(error);
+                if(process.env.REACT_APP_BE_ENV == "DEV") {
+                    console.log(error)
+                }
                 alert(error.response.status + " - " + error.response.data.message)
             });
     }
@@ -71,10 +71,8 @@ function DocK37() {
             const response = modelSurtug.getDetilSurtugPenugasan(base64_decode(ptkNomor[1]), 1);
             response
             .then((response) => {
-                console.log(response.data)
                 if(response.data) {
                     if(response.data.status === '200') {
-                        // console.log(response.data.data[0])
                         setData(values => ({...values,
                             noAju: idPtk ? base64_decode(ptkNomor[0]) : "",
                             idPtk: idPtk ? base64_decode(ptkNomor[1]) : "",
@@ -89,7 +87,9 @@ function DocK37() {
                 }
             })
             .catch((error) => {
-                console.log(error);
+                if(process.env.REACT_APP_BE_ENV == "DEV") {
+                    console.log(error)
+                }
                 alert(error.response.status + " - " + error.response.data.message)
             });
         }

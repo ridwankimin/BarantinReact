@@ -34,7 +34,6 @@ function DataMasuk() {
 
 const onSubmitPtk = (data) => {
   const dataMasuk = <DataMasukTable dataIn={data}/>;
-  // console.log(dataMasuk)
   setTabel(values => ({...values, "ptk": dataMasuk }));
 };
 
@@ -47,7 +46,7 @@ function removeCookie() {
 
   return (
     <div className="container-xxl flex-grow-1 container-p-y">
-    <h6 className="text-muted">PROSES DATA MASUK</h6>
+      <h6 className="text-muted">PROSES DATA MASUK</h6>
                   <div className="card shadow-none border mb-3">
                     <div className="card-header border-bottom">
                       <ul className="nav nav-tabs card-header-tabs" role="tablist">

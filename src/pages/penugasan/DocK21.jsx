@@ -1,3 +1,4 @@
+/* eslint-disable eqeqeq */
 import Cookies from 'js-cookie';
 import React, { useEffect, useState } from 'react';
 import {decode as base64_decode} from 'base-64';
@@ -5,10 +6,13 @@ import { useForm } from 'react-hook-form';
 import PtkSurtug from '../../model/PtkSurtug';
 import PtkModel from '../../model/PtkModel';
 
+const modelSurtug = new PtkSurtug()
+const modelPemohon = new PtkModel()
+
 function DocK21() {
     const idPtk = Cookies.get("idPtkPage")
     const jenisKar = Cookies.get("jenisKarantina")
-    let [komoditiPtk, setKomoditiPtk] = useState([])
+    let [dataPtk, setDataPtk] = useState([])
 
     const {
         register,
@@ -21,25 +25,24 @@ function DocK21() {
     const dataWatch = watch()
 
     const onSubmit = (data) => {
-        console.log(data)
-        const modelSurtug = new PtkSurtug();
         const response = modelSurtug.ptkAnalisis(data);
-            response
-            .then((response) => {
-                console.log(response.data)
-                if(response.data) {
-                    if(response.data.status === '201') {
-                        alert(response.data.status + " - " + response.data.message)
-                        // resetFormDetilSurtug()
-                        setValue("idDok21", response.data.data.id)
-                        setValue("noDok21", response.data.data.nomor)
-                    }
+        response
+        .then((response) => {
+            if(response.data) {
+                if(response.data.status === '201') {
+                    alert(response.data.status + " - " + response.data.message)
+                    // resetFormDetilSurtug()
+                    setValue("idDok21", response.data.data.id)
+                    setValue("noDok21", response.data.data.nomor)
                 }
-            })
-            .catch((error) => {
-                console.log(error);
-                alert(error.response.status + " - " + error.response.data.message)
-            });
+            }
+        })
+        .catch((error) => {
+            if(process.env.REACT_APP_BE_ENV == "DEV") {
+                console.log(error)
+            }
+            alert(error.response.status + " - " + error.response.data.message)
+        });
     }
 
     let [data,setData] = useState({
@@ -60,35 +63,242 @@ function DocK21() {
                 tglDokumen: tglPtk,
                 jenisForm: jenisForm,
                 jenisKarantina: Cookies.get("jenisKarantina"),
-                noAnalisa: "",
-                tglAnalisa: "",
-                nomorSurtug: "",
-                tglSurtug: "",
             }));
             setValue("idPtk",base64_decode(ptkNomor[1]))
             setValue("noDokumen",base64_decode(ptkNomor[2]))
             setValue("jenisKarantina", Cookies.get("jenisKarantina"))
 
-            const modelPemohon = new PtkModel();
-            const resKom = modelPemohon.getKomoditiPtkId(base64_decode(ptkNomor[1]), Cookies.get("jenisKarantina"));
+            const resKom = modelPemohon.getPtkId(base64_decode(ptkNomor[1]));
             resKom
             .then((res) => {
-                if(res.data.status === '200') {
-                    console.log(res.data.data)
-                    // setKomoditiPtk(res.data.data)
-                    setKomoditiPtk(res.data.data)
+                if(typeof res.data != "string") {
+                    if(res.data.status === '200') {
+                        setData(values => ({...values,
+                            errorPTK: "",
+                        }));
+                        setDataPtk(values => ({...values,
+                            listPtk: res.data.data.ptk,
+                            listKontainer: res.data.data.ptk_kontainer,
+                            listKomoditas: res.data.data.ptk_komoditi,
+                            listDokumen: res.data.data.ptk_dokumen
+                        }));
+                    } else {
+                        setData(values => ({...values,
+                            errorPTK: "Gagal load data PTK",
+                        }))
+                    }
+                } else {
+                    setData(values => ({...values,
+                        errorPTK: "Gagal load data PTK",
+                    }))
                 }
             })
             .catch((error) => {
-                console.log(error.response.data);
+                if(process.env.REACT_APP_BE_ENV == "DEV") {
+                    console.log(error)
+                }
+                setData(values => ({...values,
+                    errorPTK: "Gagal load data PTK",
+                }))
+            });
+            
+            const response21 = modelSurtug.getAnalisByPtk(base64_decode(ptkNomor[1]));
+            response21
+            .then((response) => {
+                if(typeof response.data != "string") {
+                    if(response.data) {
+                        if(response.data.status == '200') {
+                            setData(values => ({...values,
+                                errorAnalisis: "",
+                            }))
+                            setValue("idDok21", response.data.data[0].id)
+                            setValue("noDok21", response.data.data[0].nomor)
+                            setValue("tglDok21", response.data.data[0].tanggal)
+                            setValue("rekomAnalis", response.data.data[0].rekomendasi_id)
+                            setValue("ttdAnalis", response.data.data[0].user_ttd_id)
+                            const arrayOlah = response.data.data?.map(item => {
+                                return item.hasil_analisis_id.toString()
+                            })
+                            const arrayOpsi = arrayOlah.filter((element) => element != "2" && element != "3" && element != "13" && element != "14" && element != "24" && element != "34" && element != "35" && element != "32" && element != "33" && element != "23" && element != "37" && element != "38" && element != "39" && element != "40" && element != "41" && element != "42" && element != "43")
+                            
+                            if(response.data.data[0].karantina == "H") {
+                                setValue("opsiOlahH", (arrayOlah.indexOf('2') >= 0 ? "2" : (arrayOlah.indexOf('3') >= 0 ? "3" : "")))
+                                setValue("opsiKH", arrayOpsi)
+                                
+                                const arrayOlahText = response.data.data?.filter((element) => element.hasil_analisis_id == 11)
+                                setValue("opsiKHLainnya", arrayOlahText[0].lainnya)
+                            } else if(response.data.data[0].karantina == "I"){
+                                setValue("opsiOlahI", (arrayOlah.indexOf('13') >= 0 ? "13" : (arrayOlah.indexOf('14') >= 0 ? "14" : "")))
+                                setValue("opsiKI", arrayOpsi)
+                                
+                                const arrayOlahText = response.data.data?.filter((element) => element.hasil_analisis_id == 22)
+                                setValue("opsiKILainnya", arrayOlahText[0].lainnya)
+                            } else if(response.data.data[0].karantina == "T"){
+                                setValue("opsiOlahT", (arrayOlah.indexOf('24') >= 0 ? "24" : (arrayOlah.indexOf('34') >= 0 ? "34" : (arrayOlah.indexOf('35') >= 0 ? "35" : ""))))
+                                setValue("opsiKT", arrayOpsi)
+                                setValue("opsiDilarangOPTK", (arrayOlah.indexOf('32') >= 0 ? "32" : (arrayOlah.indexOf('33') >= 0 ? "33" : (arrayOlah.indexOf('23') >= 0 ? "23" : ""))))
+                                
+                                const arrayOlahText = response.data.data?.filter((element) => element.hasil_analisis_id == 36)
+                                setValue("opsiKTLainnya", arrayOlahText[0].lainnya)
+                            }
+                            
+                            const arrayOlahText = response.data.data?.filter((element) => element.hasil_analisis_id == 37 || element.hasil_analisis_id == 38 || element.hasil_analisis_id == 39 || element.hasil_analisis_id == 40 || element.hasil_analisis_id == 41 || element.hasil_analisis_id == 42 || element.hasil_analisis_id == 43)
+                            setValue("opsiNHI", arrayOlahText[0]?.hasil_analisis_id.toString())
+                            setValue("opsiNHILainnya", arrayOlahText[0]?.lainnya)
+                        } else {
+                            setData(values => ({...values,
+                                errorAnalisis: "Gagal load data analisis",
+                            }))
+                        }
+                    }
+                } else {
+                    setData(values => ({...values,
+                        errorAnalisis: "Gagal load data analisis",
+                    }))
+                }
+            })
+            .catch((error) => {
+                if(process.env.REACT_APP_BE_ENV == "DEV") {
+                    console.log(error)
+                }
+                if(error.response) {
+                    if(error.response.data.status === 404) {
+                        setData(values => ({...values,
+                            errorAnalisis: ""
+                        }));
+                    } else {
+                        setData(values => ({...values,
+                            errorAnalisis: "Gagal load data analisis"
+                        }));
+                    }
+                }
             });
         }
     }, [idPtk, setValue])
+
+    function refreshData() {
+        if(data.errorPTK) {
+            const resKom = modelPemohon.getPtkId(data.idPtk);
+            resKom
+            .then((res) => {
+                if(typeof res.data != "string") {
+                    if(res.data.status === '200') {
+                        setData(values => ({...values,
+                            errorPTK: "",
+                        }));
+                        setDataPtk(values => ({...values,
+                            listPtk: res.data.data.ptk,
+                            listKontainer: res.data.data.ptk_kontainer,
+                            listKomoditas: res.data.data.ptk_komoditi,
+                            listDokumen: res.data.data.ptk_dokumen
+                        }));
+                    } else {
+                        setData(values => ({...values,
+                            errorPTK: "Gagal load data PTK.",
+                        }))
+                    }
+                } else {
+                    setData(values => ({...values,
+                        errorPTK: "Gagal load data PTK.",
+                    }))
+                }
+            })
+            .catch((error) => {
+                if(process.env.REACT_APP_BE_ENV == "DEV") {
+                    console.log(error)
+                }
+                setData(values => ({...values,
+                    errorPTK: "Gagal load data PTK.",
+                }))
+            });
+        }
+        
+        if(data.errorAnalisis) {
+            const response21 = modelSurtug.getAnalisByPtk(data.idPtk);
+            response21
+            .then((response) => {
+                if(typeof response.data != "string") {
+                    if(response.data) {
+                        if(response.data.status == '200') {
+                            setData(values => ({...values,
+                                errorAnalisis: "",
+                            }))
+                            setValue("idDok21", response.data.data[0].id)
+                            setValue("noDok21", response.data.data[0].nomor)
+                            setValue("tglDok21", response.data.data[0].tanggal)
+                            setValue("rekomAnalis", response.data.data[0].rekomendasi_id)
+                            setValue("ttdAnalis", response.data.data[0].user_ttd_id)
+                            const arrayOlah = response.data.data?.map(item => {
+                                return item.hasil_analisis_id.toString()
+                            })
+                            const arrayOpsi = arrayOlah.filter((element) => element != "2" && element != "3" && element != "13" && element != "14" && element != "24" && element != "34" && element != "35" && element != "32" && element != "33" && element != "23" && element != "37" && element != "38" && element != "39" && element != "40" && element != "41" && element != "42" && element != "43")
+                            
+                            if(response.data.data[0].karantina == "H") {
+                                setValue("opsiOlahH", (arrayOlah.indexOf('2') >= 0 ? "2" : (arrayOlah.indexOf('3') >= 0 ? "3" : "")))
+                                setValue("opsiKH", arrayOpsi)
+                                
+                                const arrayOlahText = response.data.data?.filter((element) => element.hasil_analisis_id == 11)
+                                setValue("opsiKHLainnya", arrayOlahText[0].lainnya)
+                            } else if(response.data.data[0].karantina == "I"){
+                                setValue("opsiOlahI", (arrayOlah.indexOf('13') >= 0 ? "13" : (arrayOlah.indexOf('14') >= 0 ? "14" : "")))
+                                setValue("opsiKI", arrayOpsi)
+                                
+                                const arrayOlahText = response.data.data?.filter((element) => element.hasil_analisis_id == 22)
+                                setValue("opsiKILainnya", arrayOlahText[0].lainnya)
+                            } else if(response.data.data[0].karantina == "T"){
+                                setValue("opsiOlahT", (arrayOlah.indexOf('24') >= 0 ? "24" : (arrayOlah.indexOf('34') >= 0 ? "34" : (arrayOlah.indexOf('35') >= 0 ? "35" : ""))))
+                                setValue("opsiKT", arrayOpsi)
+                                setValue("opsiDilarangOPTK", (arrayOlah.indexOf('32') >= 0 ? "32" : (arrayOlah.indexOf('33') >= 0 ? "33" : (arrayOlah.indexOf('23') >= 0 ? "23" : ""))))
+                                
+                                const arrayOlahText = response.data.data?.filter((element) => element.hasil_analisis_id == 36)
+                                setValue("opsiKTLainnya", arrayOlahText[0].lainnya)
+                            }
+                            
+                            const arrayOlahText = response.data.data?.filter((element) => element.hasil_analisis_id == 37 || element.hasil_analisis_id == 38 || element.hasil_analisis_id == 39 || element.hasil_analisis_id == 40 || element.hasil_analisis_id == 41 || element.hasil_analisis_id == 42 || element.hasil_analisis_id == 43)
+                            setValue("opsiNHI", arrayOlahText[0]?.hasil_analisis_id.toString())
+                            setValue("opsiNHILainnya", arrayOlahText[0]?.lainnya)
+                        } else {
+                            setData(values => ({...values,
+                                errorAnalisis: "Gagal load data analisis",
+                            }))
+                        }
+                    }
+                } else {
+                    setData(values => ({...values,
+                        errorAnalisis: "Gagal load data analisis",
+                    }))
+                }
+            })
+            .catch((error) => {
+                if(process.env.REACT_APP_BE_ENV == "DEV") {
+                    console.log(error)
+                }
+                if(error.response) {
+                    if(error.response.data.status === 404) {
+                        setData(values => ({...values,
+                            errorAnalisis: ""
+                        }));
+                    } else {
+                        setData(values => ({...values,
+                            errorAnalisis: "Gagal load data analisis"
+                        }));
+                    }
+                }
+            });
+        }
+    }
 
   return (
     <div className="container-xxl flex-grow-1 container-p-y">
     <h4 className="py-3 breadcrumb-wrapper mb-4">
         K-2.1 <span className="fw-light" style={{color: 'blue'}}>HASIL ANALISA PERMOHONAN/SERAH TERIMA MEDIA PEMBAWA/NHI</span>
+
+        <small className='float-end'>
+            <span className='text-danger'>{(data.errorPTK ? data.errorPTK + "; " : "") + (data.errorAnalisis ? data.errorAnalisis + "; " : "")}</span>
+            {data.errorPTK || data.errorAnalisis ?
+                <button type='button' className='btn btn-warning btn-xs' onClick={() => refreshData()}><i className='fa-solid fa-sync'></i> Refresh</button>
+            : ""}
+        </small>
     </h4>
 
     <div className="row">
@@ -166,7 +376,7 @@ function DocK21() {
                                                             </tr>
                                                         </thead>
                                                         <tbody>
-                                                            {komoditiPtk ? (komoditiPtk?.map((data, index) => (
+                                                            {dataPtk.listKomoditas ? (dataPtk.listKomoditas?.map((data, index) => (
                                                                         <tr key={index}>
                                                                             <td>{index + 1}</td>
                                                                             <td>{data.kode_hs}</td>
@@ -212,53 +422,53 @@ function DocK21() {
                                                         <div className="col-sm-3">
                                                             <div className="form-check">
                                                                 <label className="form-check-label" htmlFor="opsiOlah2H">Belum Diolah</label>
-                                                                <input name="opsiOlahH" value={2} {...register("opsiOlahH", {required: (data.jenisKarantina === "H" ? "Mohon pilih salah satu (belum/sudah diolah)" : false)})} className={errors.opsiOlahH ? "form-check-input is-invalid" : "form-check-input"} type="radio" id="opsiOlah2H" />
+                                                                <input name="opsiOlahH" value="2" {...register("opsiOlahH", {required: (data.jenisKarantina === "H" ? "Mohon pilih salah satu (belum/sudah diolah)" : false)})} className={errors.opsiOlahH ? "form-check-input is-invalid" : "form-check-input"} type="radio" id="opsiOlah2H" />
                                                             </div>
                                                             <div className="form-check">
                                                                 <label className="form-check-label" htmlFor="opsiOlah3H">Sudah Diolah</label>
-                                                                <input name="opsiOlahH" value={3} {...register("opsiOlahH")} className={errors.opsiOlahH ? "form-check-input is-invalid" : "form-check-input"} type="radio" id="opsiOlah3H" />
+                                                                <input name="opsiOlahH" value="3" {...register("opsiOlahH")} className={errors.opsiOlahH ? "form-check-input is-invalid" : "form-check-input"} type="radio" id="opsiOlah3H" />
                                                             </div>
                                                             <div className="form-check">
                                                                 <label className="form-check-label" htmlFor="opsiKH4">Termasuk Pangan</label>
-                                                                <input name="opsiKH" value={4} {...register("opsiKH", { required: (data.jenisKarantina === "H" ? "Mohon isi analisa minimal 1 pilihan." : false)})} className={errors.opsiKH ? "form-check-input is-invalid" : "form-check-input"} type="checkbox" id="opsiKH4" />
+                                                                <input name="opsiKH" value="4" {...register("opsiKH", { required: (data.jenisKarantina === "H" ? "Mohon isi analisa minimal 1 pilihan." : false)})} className={errors.opsiKH ? "form-check-input is-invalid" : "form-check-input"} type="checkbox" id="opsiKH4" />
                                                             </div>
                                                         </div>
                                                         <div className="col-sm-3">
                                                             <div className="form-check">
                                                                 <label className="form-check-label" htmlFor="opsiKH5">Termasuk Pakan</label>
-                                                                <input name="opsiKH" value={5} {...register("opsiKH")} className={errors.opsiKH ? "form-check-input is-invalid" : "form-check-input"} type="checkbox" id="opsiKH5" />
+                                                                <input name="opsiKH" value="5" {...register("opsiKH")} className={errors.opsiKH ? "form-check-input is-invalid" : "form-check-input"} type="checkbox" id="opsiKH5" />
                                                             </div>
                                                             <div className="form-check">
                                                                 <label className="form-check-label" htmlFor="opsiKH6">Produk Rekayasa Genetik</label>
-                                                                <input name="opsiKH" value={6} {...register("opsiKH")} className={errors.opsiKH ? "form-check-input is-invalid" : "form-check-input"} type="checkbox" id="opsiKH6" />
+                                                                <input name="opsiKH" value="6" {...register("opsiKH")} className={errors.opsiKH ? "form-check-input is-invalid" : "form-check-input"} type="checkbox" id="opsiKH6" />
                                                             </div>
                                                             <div className="form-check">
                                                                 <label className="form-check-label" htmlFor="opsiKH7">Sumber Daya Genetik</label>
-                                                                <input name="opsiKH" value={7} {...register("opsiKH")} className={errors.opsiKH ? "form-check-input is-invalid" : "form-check-input"} type="checkbox" id="opsiKH7" />
+                                                                <input name="opsiKH" value="7" {...register("opsiKH")} className={errors.opsiKH ? "form-check-input is-invalid" : "form-check-input"} type="checkbox" id="opsiKH7" />
                                                             </div>
                                                         </div>
                                                         <div className="col-sm-3">
                                                             <div className="form-check">
                                                                 <label className="form-check-label" htmlFor="opsiKH8">Agensia Hayati</label>
-                                                                <input name="opsiKH" value={8} {...register("opsiKH")} className={errors.opsiKH ? "form-check-input is-invalid" : "form-check-input"} type="checkbox" id="opsiKH8" />
+                                                                <input name="opsiKH" value="8" {...register("opsiKH")} className={errors.opsiKH ? "form-check-input is-invalid" : "form-check-input"} type="checkbox" id="opsiKH8" />
                                                             </div>
                                                             <div className="form-check">
                                                                 <label className="form-check-label" htmlFor="opsiKH9">Jenis Asing Invasif</label>
-                                                                <input name="opsiKH" value={9} {...register("opsiKH")} className={errors.opsiKH ? "form-check-input is-invalid" : "form-check-input"} type="checkbox" id="opsiKH9" />
+                                                                <input name="opsiKH" value="9" {...register("opsiKH")} className={errors.opsiKH ? "form-check-input is-invalid" : "form-check-input"} type="checkbox" id="opsiKH9" />
                                                             </div>
                                                             <div className="form-check">
                                                                 <label className="form-check-label" htmlFor="opsiKH10">Satwa Liar dan Satwa Langka</label>
-                                                                <input name="opsiKH" value={10} {...register("opsiKH")} className={errors.opsiKH ? "form-check-input is-invalid" : "form-check-input"} type="checkbox" id="opsiKH10" />
+                                                                <input name="opsiKH" value="10" {...register("opsiKH")} className={errors.opsiKH ? "form-check-input is-invalid" : "form-check-input"} type="checkbox" id="opsiKH10" />
                                                             </div>
                                                         </div>
                                                         <div className="col-sm-3">
                                                             <div className="form-check">
                                                                 <label className="form-check-label" htmlFor="opsiKH1">Dilarang Pemasukan / Pengeluarannya</label>
-                                                                <input name="opsiKH" value={1} {...register("opsiKH")} className={errors.opsiKH ? "form-check-input is-invalid" : "form-check-input"} type="checkbox" id="opsiKH1" />
+                                                                <input name="opsiKH" value="1" {...register("opsiKH")} className={errors.opsiKH ? "form-check-input is-invalid" : "form-check-input"} type="checkbox" id="opsiKH1" />
                                                             </div>
                                                             <div className="form-check">
                                                                 <label className="form-check-label" htmlFor="opsiKH11">Lainnya</label>
-                                                                <input name="opsiKH" value={11} {...register("opsiKH")} className={errors.opsiKH ? "form-check-input is-invalid" : "form-check-input"} type="checkbox" id="opsiKH11" />
+                                                                <input name="opsiKH" value="11" {...register("opsiKH")} className={errors.opsiKH ? "form-check-input is-invalid" : "form-check-input"} type="checkbox" id="opsiKH11" />
                                                                 <input style={{display: (dataWatch.opsiKH ? (dataWatch.opsiKH.indexOf('11') >= 0 ? 'block' : 'none') : 'none')}} type="text" name='opsiKHLainnya' id='opsiKHLainnya' {...register("opsiKHLainnya")} className='form-control form-control-sm' />
                                                             </div>
                                                         </div>
@@ -272,53 +482,53 @@ function DocK21() {
                                                         <div className="col-sm-3">
                                                             <div className="form-check">
                                                                 <label className="form-check-label" htmlFor="opsiOlah13I">Belum Diolah</label>
-                                                                <input name="opsiOlahI" value={13} {...register("opsiOlahI", {required: (data.jenisKarantina === "I" ? "Mohon pilih salah satu (belum/sudah diolah)" : false)})} className={errors.opsiOlahI ? "form-check-input is-invalid" : "form-check-input"} type="radio" id="opsiOlah13I" />
+                                                                <input name="opsiOlahI" value="13" {...register("opsiOlahI", {required: (data.jenisKarantina === "I" ? "Mohon pilih salah satu (belum/sudah diolah)" : false)})} className={errors.opsiOlahI ? "form-check-input is-invalid" : "form-check-input"} type="radio" id="opsiOlah13I" />
                                                             </div>
                                                             <div className="form-check">
                                                                 <label className="form-check-label" htmlFor="opsiOlah14I">Sudah Diolah</label>
-                                                                <input name="opsiOlahI" value={14} {...register("opsiOlahI")} className={errors.opsiOlahI ? "form-check-input is-invalid" : "form-check-input"} type="radio" id="opsiOlah14I" />
+                                                                <input name="opsiOlahI" value="14" {...register("opsiOlahI")} className={errors.opsiOlahI ? "form-check-input is-invalid" : "form-check-input"} type="radio" id="opsiOlah14I" />
                                                             </div>
                                                             <div className="form-check">
                                                                 <label className="form-check-label" htmlFor="opsiKI15">Termasuk Pangan</label>
-                                                                <input name="opsiKI" value={15} {...register("opsiKI", { required: (data.jenisKarantina === "I" ? "Mohon isi analisa minimal 1 pilihan." : false)})} className={errors.opsiKI ? "form-check-input is-invalid" : "form-check-input"} type="checkbox" id="opsiKI15" />
+                                                                <input name="opsiKI" value="15" {...register("opsiKI", { required: (data.jenisKarantina === "I" ? "Mohon isi analisa minimal 1 pilihan." : false)})} className={errors.opsiKI ? "form-check-input is-invalid" : "form-check-input"} type="checkbox" id="opsiKI15" />
                                                             </div>
                                                         </div>
                                                         <div className="col-sm-3">
                                                             <div className="form-check">
                                                                 <label className="form-check-label" htmlFor="opsiKI16">Termasuk Pakan</label>
-                                                                <input name="opsiKI" value={16} {...register("opsiKI")} className={errors.opsiKI ? "form-check-input is-invalid" : "form-check-input"} type="checkbox" id="opsiKI16" />
+                                                                <input name="opsiKI" value="16" {...register("opsiKI")} className={errors.opsiKI ? "form-check-input is-invalid" : "form-check-input"} type="checkbox" id="opsiKI16" />
                                                             </div>
                                                             <div className="form-check">
                                                                 <label className="form-check-label" htmlFor="opsiKI17">Produk Rekayasa Genetik</label>
-                                                                <input name="opsiKI" value={17} {...register("opsiKI")} className={errors.opsiKI ? "form-check-input is-invalid" : "form-check-input"} type="checkbox" id="opsiKI17" />
+                                                                <input name="opsiKI" value="17" {...register("opsiKI")} className={errors.opsiKI ? "form-check-input is-invalid" : "form-check-input"} type="checkbox" id="opsiKI17" />
                                                             </div>
                                                             <div className="form-check">
                                                                 <label className="form-check-label" htmlFor="opsiKI18">Sumber Daya Genetik</label>
-                                                                <input name="opsiKI" value={18} {...register("opsiKI")} className={errors.opsiKI ? "form-check-input is-invalid" : "form-check-input"} type="checkbox" id="opsiKI18" />
+                                                                <input name="opsiKI" value="18" {...register("opsiKI")} className={errors.opsiKI ? "form-check-input is-invalid" : "form-check-input"} type="checkbox" id="opsiKI18" />
                                                             </div>
                                                         </div>
                                                         <div className="col-sm-3">
                                                             <div className="form-check">
                                                                 <label className="form-check-label" htmlFor="opsiKI19">Agensia Hayati</label>
-                                                                <input name="opsiKI" value={19} {...register("opsiKI")} className={errors.opsiKI ? "form-check-input is-invalid" : "form-check-input"} type="checkbox" id="opsiKI19" />
+                                                                <input name="opsiKI" value="19" {...register("opsiKI")} className={errors.opsiKI ? "form-check-input is-invalid" : "form-check-input"} type="checkbox" id="opsiKI19" />
                                                             </div>
                                                             <div className="form-check">
                                                                 <label className="form-check-label" htmlFor="opsiKI20">Jenis Asing Invasif</label>
-                                                                <input name="opsiKI" value={20} {...register("opsiKI")} className={errors.opsiKI ? "form-check-input is-invalid" : "form-check-input"} type="checkbox" id="opsiKI20" />
+                                                                <input name="opsiKI" value="20" {...register("opsiKI")} className={errors.opsiKI ? "form-check-input is-invalid" : "form-check-input"} type="checkbox" id="opsiKI20" />
                                                             </div>
                                                             <div className="form-check">
                                                                 <label className="form-check-label" htmlFor="opsiKI21">Jenis Ikan Dilindungi</label>
-                                                                <input name="opsiKI" value={21} {...register("opsiKI")} className={errors.opsiKI ? "form-check-input is-invalid" : "form-check-input"} type="checkbox" id="opsiKI21" />
+                                                                <input name="opsiKI" value="21" {...register("opsiKI")} className={errors.opsiKI ? "form-check-input is-invalid" : "form-check-input"} type="checkbox" id="opsiKI21" />
                                                             </div>
                                                         </div>
                                                         <div className="col-sm-3">
                                                             <div className="form-check">
                                                                 <label className="form-check-label" htmlFor="opsiKI11">Dilarang Pemasukan / Pengeluarannya</label>
-                                                                <input name="opsiKI" value={12} {...register("opsiKI")} className={errors.opsiKI ? "form-check-input is-invalid" : "form-check-input"} type="checkbox" id="opsiKI11" />
+                                                                <input name="opsiKI" value="12" {...register("opsiKI")} className={errors.opsiKI ? "form-check-input is-invalid" : "form-check-input"} type="checkbox" id="opsiKI11" />
                                                             </div>
                                                             <div className="form-check">
                                                                 <label className="form-check-label" htmlFor="opsiKI22">Lainnya</label>
-                                                                <input name="opsiKI" value={22} {...register("opsiKI")} className={errors.opsiKI ? "form-check-input is-invalid" : "form-check-input"} type="checkbox" id="opsiKI22" />
+                                                                <input name="opsiKI" value="22" {...register("opsiKI")} className={errors.opsiKI ? "form-check-input is-invalid" : "form-check-input"} type="checkbox" id="opsiKI22" />
                                                                 <input style={{display: (dataWatch.opsiKI ? (dataWatch.opsiKI.indexOf('22') >= 0 ? 'block' : 'none') : 'none')}} type="text" name='opsiKILainnya' id='opsiKILainnya' {...register("opsiKILainnya")} className='form-control form-control-sm' />
                                                             </div>
                                                         </div>
@@ -332,65 +542,65 @@ function DocK21() {
                                                         <div className="col-sm-4">
                                                             <div className="form-check">
                                                                 <label className="form-check-label" htmlFor="opsiOlah24T">Belum Diolah</label>
-                                                                <input name="opsiOlahT" value={24} {...register("opsiOlahT", {required: (data.jenisKarantina === "T" ? "Mohon pilih salah satu (belum/sudah diolah)" : false)})} className={errors.opsiOlahT ? "form-check-input is-invalid" : "form-check-input"} type="radio" id="opsiOlah24T" />
+                                                                <input name="opsiOlahT" value="24" {...register("opsiOlahT", {required: (data.jenisKarantina === "T" ? "Mohon pilih salah satu (belum/sudah diolah)" : false)})} className={errors.opsiOlahT ? "form-check-input is-invalid" : "form-check-input"} type="radio" id="opsiOlah24T" />
                                                             </div>
                                                             <div className="form-check">
                                                                 <label className="form-check-label" htmlFor="opsiOlah34T">Sudah diolah sampai tingkat yang tidak dapat lagi terinfestasi OPTK/OPT</label>
-                                                                <input name="opsiOlahT" value={34} {...register("opsiOlahT")} className={errors.opsiOlahT ? "form-check-input is-invalid" : "form-check-input"} type="radio" id="opsiOlah34T" />
+                                                                <input name="opsiOlahT" value="34" {...register("opsiOlahT")} className={errors.opsiOlahT ? "form-check-input is-invalid" : "form-check-input"} type="radio" id="opsiOlah34T" />
                                                             </div>
                                                             <div className="form-check">
                                                                 <label className="form-check-label" htmlFor="opsiOlah35T">Sudah diolah sampai tingkat yang masih dapat terinfestasi OPTK/OPT</label>
-                                                                <input name="opsiOlahT" value={35} {...register("opsiOlahT")} className={errors.opsiOlahT ? "form-check-input is-invalid" : "form-check-input"} type="radio" id="opsiOlah35T" />
+                                                                <input name="opsiOlahT" value="35" {...register("opsiOlahT")} className={errors.opsiOlahT ? "form-check-input is-invalid" : "form-check-input"} type="radio" id="opsiOlah35T" />
                                                             </div>
                                                         </div>
                                                         <div className="col-sm-3">
                                                             <div className="form-check">
                                                                 <label className="form-check-label" htmlFor="opsiKT25">Termasuk Pangan</label>
-                                                                <input name="opsiKT" value={25} {...register("opsiKT", { required: (data.jenisKarantina === "T" ? "Mohon isi analisa minimal 1 pilihan." : false)})} className={errors.opsiKT ? "form-check-input is-invalid" : "form-check-input"} type="checkbox" id="opsiKT25" />
+                                                                <input name="opsiKT" value="25" {...register("opsiKT", { required: (data.jenisKarantina === "T" ? "Mohon isi analisa minimal 1 pilihan." : false)})} className={errors.opsiKT ? "form-check-input is-invalid" : "form-check-input"} type="checkbox" id="opsiKT25" />
                                                             </div>
                                                             <div className="form-check">
                                                                 <label className="form-check-label" htmlFor="opsiKT26">Termasuk Pakan</label>
-                                                                <input name="opsiKT" value={26} {...register("opsiKT")} className={errors.opsiKT ? "form-check-input is-invalid" : "form-check-input"} type="checkbox" id="opsiKT26" />
+                                                                <input name="opsiKT" value="26" {...register("opsiKT")} className={errors.opsiKT ? "form-check-input is-invalid" : "form-check-input"} type="checkbox" id="opsiKT26" />
                                                             </div>
                                                             <div className="form-check">
                                                                 <label className="form-check-label" htmlFor="opsiKT27">Produk Rekayasa Genetik</label>
-                                                                <input name="opsiKT" value={27} {...register("opsiKT")} className={errors.opsiKT ? "form-check-input is-invalid" : "form-check-input"} type="checkbox" id="opsiKT27" />
+                                                                <input name="opsiKT" value="27" {...register("opsiKT")} className={errors.opsiKT ? "form-check-input is-invalid" : "form-check-input"} type="checkbox" id="opsiKT27" />
                                                             </div>
                                                             <div className="form-check">
                                                                 <label className="form-check-label" htmlFor="opsiKT28">Sumber Daya Genetik</label>
-                                                                <input name="opsiKT" value={28} {...register("opsiKT")} className={errors.opsiKT ? "form-check-input is-invalid" : "form-check-input"} type="checkbox" id="opsiKT28" />
+                                                                <input name="opsiKT" value="28" {...register("opsiKT")} className={errors.opsiKT ? "form-check-input is-invalid" : "form-check-input"} type="checkbox" id="opsiKT28" />
                                                             </div>
                                                             <div className="form-check">
                                                                 <label className="form-check-label" htmlFor="opsiKT29">Agensia Hayati</label>
-                                                                <input name="opsiKT" value={29} {...register("opsiKT")} className={errors.opsiKT ? "form-check-input is-invalid" : "form-check-input"} type="checkbox" id="opsiKT29" />
+                                                                <input name="opsiKT" value="29" {...register("opsiKT")} className={errors.opsiKT ? "form-check-input is-invalid" : "form-check-input"} type="checkbox" id="opsiKT29" />
                                                             </div>
                                                             <div className="form-check">
                                                                 <label className="form-check-label" htmlFor="opsiKT30">Jenis Asing Invasif</label>
-                                                                <input name="opsiKT" value={30} {...register("opsiKT")} className={errors.opsiKT ? "form-check-input is-invalid" : "form-check-input"} type="checkbox" id="opsiKT30" />
+                                                                <input name="opsiKT" value="30" {...register("opsiKT")} className={errors.opsiKT ? "form-check-input is-invalid" : "form-check-input"} type="checkbox" id="opsiKT30" />
                                                             </div>
                                                         </div>
                                                         <div className="col-sm-5">
                                                             <div className="form-check">
                                                                 <label className="form-check-label" htmlFor="opsiKT31">Tumbuhan Liar dan Tumbuhan Langka</label>
-                                                                <input name="opsiKT" value={31} {...register("opsiKT")} className={errors.opsiKT ? "form-check-input is-invalid" : "form-check-input"} type="checkbox" id="opsiKT31" />
+                                                                <input name="opsiKT" value="31" {...register("opsiKT")} className={errors.opsiKT ? "form-check-input is-invalid" : "form-check-input"} type="checkbox" id="opsiKT31" />
                                                             </div>
                                                             <div className="form-check">
                                                                 <label className="form-check-label" htmlFor="opsiDilarangOPTK32">Dimasukkan/dikeluarkan untuk ditanam</label>
-                                                                <input name="opsiDilarangOPTK" value={32} {...register("opsiDilarangOPTK", { required: (data.jenisKarantina === "T" ? "Mohon pilih peruntukan pemasukan/pengeluaran MP (ditanam/selain ditaman/dilarang)" : false)})} className={errors.opsiKT ? "form-check-input is-invalid" : "form-check-input"} type="radio" id="opsiDilarangOPTK32" />
+                                                                <input name="opsiDilarangOPTK" value="32" {...register("opsiDilarangOPTK", { required: (data.jenisKarantina === "T" ? "Mohon pilih peruntukan pemasukan/pengeluaran MP (ditanam/selain ditaman/dilarang)" : false)})} className={errors.opsiKT ? "form-check-input is-invalid" : "form-check-input"} type="radio" id="opsiDilarangOPTK32" />
                                                             </div>
                                                             <div className="form-check">
                                                                 <label className="form-check-label" htmlFor="opsiDilarangOPTK33">Dimasukkan/dikeluarkan selain untuk ditanam, antara lain untuk konsumsi atau pengolahan lebih lanjut</label>
-                                                                <input name="opsiDilarangOPTK" value={33} {...register("opsiDilarangOPTK")} className={errors.opsiKT ? "form-check-input is-invalid" : "form-check-input"} type="radio" id="opsiDilarangOPTK33" />
+                                                                <input name="opsiDilarangOPTK" value="33" {...register("opsiDilarangOPTK")} className={errors.opsiKT ? "form-check-input is-invalid" : "form-check-input"} type="radio" id="opsiDilarangOPTK33" />
                                                             </div>
                                                             <div className="form-check">
                                                                 <label className="form-check-label" htmlFor="opsiDilarangOPTK23">Dilarang Pemasukan / Pengeluarannya</label>
-                                                                <input name="opsiDilarangOPTK" value={23} {...register("opsiDilarangOPTK")} className={errors.opsiKT ? "form-check-input is-invalid" : "form-check-input"} type="radio" id="opsiDilarangOPTK23" />
+                                                                <input name="opsiDilarangOPTK" value="23" {...register("opsiDilarangOPTK")} className={errors.opsiKT ? "form-check-input is-invalid" : "form-check-input"} type="radio" id="opsiDilarangOPTK23" />
                                                             </div>
                                                             <div className='row'>
                                                                 <div className='col-sm-3'>
                                                                     <div className="form-check">
                                                                         <label className="form-check-label" htmlFor="opsiKT36">Lainnya...</label>
-                                                                        <input name="opsiKT" value={36} {...register("opsiKT")} className={errors.opsiKT ? "form-check-input is-invalid" : "form-check-input"} type="checkbox" id="opsiKT36" />
+                                                                        <input name="opsiKT" value="36" {...register("opsiKT")} className={errors.opsiKT ? "form-check-input is-invalid" : "form-check-input"} type="checkbox" id="opsiKT36" />
                                                                     </div>
                                                                 </div>
                                                                 <div className='col-sm-9'>
@@ -450,7 +660,28 @@ function DocK21() {
                                                     </div>
                                                 </div>
                                                 <div className="row g-3 mb-3">
-                                                    <div className='form-control-label'><b>Rekomendasi <span className='text-danger'>*</span></b></div>
+                                                    <div className='col-sm-12'>
+                                                        <div className="row">
+                                                            <div className="col-sm-5 mt-0 mb-2">
+                                                            <div className='form-control-label'><b>Rekomendasi <span className='text-danger'>*</span></b></div>
+                                                                <select className={errors.rekomAnalis === '' ? 'form-select form-select-sm is-invalid' : 'form-select form-select-sm'} {...register("rekomAnalis", { required: "Mohon pilih rekomendasi yang sesuai."})}>
+                                                                    <option value=''>--</option>
+                                                                    <option value={1}>Media Pembawa dikenai tindakan karantina</option>
+                                                                    <option value={2}>Media Pembawa dikenai pengawasan</option>
+                                                                    <option value={3}>Media Pembawa dikenai tindakan karantina dan pengawasan</option>
+                                                                    <option value={4}>Media Pembawa tidak dikenai tindakan karantina dan pengawasan</option>
+                                                                    <option value={5}>Wasmalitrik</option>
+                                                                </select>
+                                                                {errors.rekomAnalis && <small className="text-danger">{errors.rekomAnalis.message}</small>}
+                                                            </div>
+                                                            <div className="offset-sm-1 col-sm-5 mt-0 mb-2">
+                                                            <div className='form-control-label'><b>Catatan</b></div>
+                                                                <textarea className='form-control form-control-sm' name='catatan' id='catatan' rows="2" placeholder='Catatan..' {...register("catatan")}></textarea>
+                                                                {errors.catatan && <small className="text-danger">{errors.catatan.message}</small>}
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    {/* <div className='form-control-label'><b>Rekomendasi <span className='text-danger'>*</span></b></div>
                                                     <div className="col-sm-5 mt-0 mb-2">
                                                         <select className={errors.rekomAnalis === '' ? 'form-select form-select-sm is-invalid' : 'form-select form-select-sm'} {...register("rekomAnalis", { required: "Mohon pilih rekomendasi yang sesuai."})}>
                                                             <option value=''>--</option>
@@ -461,7 +692,7 @@ function DocK21() {
                                                             <option value={5}>Wasmalitrik</option>
                                                         </select>
                                                         {errors.rekomAnalis && <small className="text-danger">{errors.rekomAnalis.message}</small>}
-                                                    </div>
+                                                    </div> */}
                                                     <div className='form-control-label'><b>Penandatangan <span className='text-danger'>*</span></b></div>
                                                     <div className="col-sm-5 mt-0">
                                                         <input type="text" className={errors.ttdAnalis === '' ? 'form-control form-control-sm is-invalid' : 'form-control form-control-sm'} {...register("ttdAnalis", { required: "Mohon pilih nama penandatangan."})}/>

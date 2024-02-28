@@ -1,3 +1,4 @@
+/* eslint-disable eqeqeq */
 import Cookies from 'js-cookie';
 import React, { useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form';
@@ -55,16 +56,13 @@ function DocK92t() {
     const cekdataMPK92t = watchMPK92t()
 
     function onSubmitMPK92t(data) {
-        console.log(data)
     }
 
     const onSubmit = (data) => {
-        // console.log(data)
         const model = new PnPelepasan();
         const response = model.eksporKT(data);
         response
         .then((response) => {
-            console.log(response.data)
             if(response.data) {
                 if(response.data.status === '201') {
                     //start save history
@@ -73,11 +71,15 @@ function DocK92t() {
                     resHsy
                     .then((response) => {
                         if(response.data.status === '201') {
-                            console.log("history saved")
+                            if(process.env.REACT_APP_BE_ENV == "DEV") {
+                                console.log("history saved")
+                            }
                         }
                     })
                     .catch((error) => {
-                        console.log(error.response.data);
+                        if(process.env.REACT_APP_BE_ENV == "DEV") {
+                            console.log(error)
+                        }
                     });
                     //end save history
 
@@ -88,7 +90,9 @@ function DocK92t() {
             }
         })
         .catch((error) => {
-            console.log(error);
+            if(process.env.REACT_APP_BE_ENV == "DEV") {
+                console.log(error)
+            }
             alert(error.response.status + " - " + error.response.data.message)
         });
     }
@@ -109,17 +113,20 @@ function DocK92t() {
     function handleEditKomoditasAll() {
         setLoadKomoditi(true)
         data.listKomoditas?.map((item, index) => (
-            // console.log(datasend[index])
             log.updateKomoditiP8(item.id, datasend[index])
                 .then((response) => {
                     if(response.data.status === '201') {
-                        console.log("history saved")
+                        if(process.env.REACT_APP_BE_ENV == "DEV") {
+                            console.log("history saved")
+                        }
                     }
                 })
                 .catch((error) => {
                     setLoadKomoditi(true)
                     setLoadKomoditiPesan("Terjadi error pada saat simpan, mohon refresh halaman dan coba lagi.")
-                    console.log(error.response.data);
+                    if(process.env.REACT_APP_BE_ENV == "DEV") {
+                        console.log(error)
+                    }
                 })
             )
         )
@@ -138,8 +145,6 @@ function DocK92t() {
             response
             .then((response) => {
                 if(response.data.status === '200') {
-                    console.log(response.data.data)
-
                     let kodeHSData = response.data.data.ptk_komoditi?.map(item => {
                         return item.kode_hs
                     })
@@ -188,7 +193,9 @@ function DocK92t() {
                 }
             })
             .catch((error) => {
-                console.log(error.response);
+                if(process.env.REACT_APP_BE_ENV == "DEV") {
+                    console.log(error)
+                }
             });
 
             const modelSurtug = new PtkSurtug();
@@ -196,10 +203,8 @@ function DocK92t() {
             const resSurtug = modelSurtug.getDetilSurtugPenugasan(base64_decode(ptkNomor[1]), 14);
             resSurtug
             .then((response) => {
-                console.log(response.data)
                 if(response.data) {
                     if(response.data.status === '200') {
-                        // console.log(response.data.data[0])
                         setData(values => ({...values,
                             noSurtug: response.data.data[0].nomor,
                             tglSurtug: response.data.data[0].tanggal,
@@ -209,8 +214,9 @@ function DocK92t() {
                 }
             })
             .catch((error) => {
-                console.log(error);
-                // alert(error.response.status + " - " + error.response.data.message)
+                if(process.env.REACT_APP_BE_ENV == "DEV") {
+                    console.log(error)
+                }
             });
         }
     },[idPtk, setValue])

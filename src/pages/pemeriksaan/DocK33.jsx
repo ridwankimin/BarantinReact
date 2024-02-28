@@ -60,7 +60,6 @@ function DocK33() {
     let [detilSampel, setDetilSampel] = useState({})
 
     function handleDetilSampel(e) {
-        // console.log(e.label.split("|")[0]) & 
         e.preventDefault()
         setListDetilSampel([...listDetilSampel, { 
             ptk_komoditas_id: detilSampel.idkom,
@@ -102,11 +101,9 @@ function DocK33() {
     const cekWatch = watch()
 
     const onSubmit = (data) => {
-        // console.log(data)
         const response = modelPeriksa.pnSampling(data, listDetilSampel);
         response
         .then((response) => {
-            console.log(response.data)
             if(response.data) {
                 if(response.data.status === '201') {
                     Swal.fire({
@@ -128,8 +125,9 @@ function DocK33() {
             }
         })
         .catch((error) => {
-            console.log(error);
-            // alert(error.response.status + " - " + error.response.data.message)
+            if(process.env.REACT_APP_BE_ENV == "DEV") {
+                console.log(error)
+            }
             Swal.fire({
                 title: "Error!",
                 text: error.response.status + " - " + error.response.data.message,
@@ -177,9 +175,6 @@ function DocK33() {
                         errorPTK: ""
                     }));
                     if(response.data.status === '200') {
-                        // console.log(response.data.data)
-                        // alert(response.data.message);
-                        // isiDataPtk(response)
                         setData(values => ({...values,
                             listPtk: response.data.data.ptk,
                             listKomoditas: response.data.data.ptk_komoditi,
@@ -206,7 +201,9 @@ function DocK33() {
                 }
             })
             .catch((error) => {
-                console.log(error);
+                if(process.env.REACT_APP_BE_ENV == "DEV") {
+                    console.log(error)
+                }
                 if(error.response) {
                     if(error.response.data.status === 404) {
                         setData(values => ({...values,
@@ -223,7 +220,6 @@ function DocK33() {
             const resAdmin = modelPeriksa.getAdminByPtkId(base64_decode(ptkNomor[1]))
             resAdmin
             .then((response) => {
-                console.log(response.data)
                 if(response.data) {
                     if(typeof response.data != "string") {
                         setData(values => ({...values,
@@ -246,7 +242,9 @@ function DocK33() {
                 }
             })
             .catch((error) => {
-                console.log(error);
+                if(process.env.REACT_APP_BE_ENV == "DEV") {
+                    console.log(error)
+                }
                 if(error.response) {
                     if(error.response.data.status === 404) {
                         setData(values => ({...values,
@@ -263,14 +261,12 @@ function DocK33() {
             const resSurtug = modelSurtug.getDetilSurtugPenugasan(base64_decode(ptkNomor[1]), 2);
             resSurtug
             .then((response) => {
-                // console.log(response.data)
                 if(response.data) {
                     if(typeof response.data != "string") {
                         setData(values => ({...values,
                             errorSurtug: ""
                         }));
                         if(response.data.status === '200') {
-                            // console.log(response.data.data[0])
                             setData(values => ({...values,
                                 noSurtug: response.data.data[0].nomor,
                                 tglSurtug: response.data.data[0].tanggal,
@@ -289,7 +285,9 @@ function DocK33() {
                 }
             })
             .catch((error) => {
-                console.log(error);
+                if(process.env.REACT_APP_BE_ENV == "DEV") {
+                    console.log(error)
+                }
                 if(error.response) {
                     if(error.response.data.status === 404) {
                         setData(values => ({...values,
@@ -349,8 +347,9 @@ function DocK33() {
                 }
             })
             .catch((error) => {
-                // setData()
-                console.log(error);
+                if(process.env.REACT_APP_BE_ENV == "DEV") {
+                    console.log(error)
+                }
                 if(error.response) {
                     if(error.response.data.status === 404) {
                         setData(values => ({...values,
@@ -376,9 +375,6 @@ function DocK33() {
                         errorPTK: ""
                     }));
                     if(response.data.status === '200') {
-                        // console.log(response.data.data)
-                        // alert(response.data.message);
-                        // isiDataPtk(response)
                         setData(values => ({...values,
                             listPtk: response.data.data.ptk,
                             listKomoditas: response.data.data.ptk_komoditi,
@@ -405,7 +401,9 @@ function DocK33() {
                 }
             })
             .catch((error) => {
-                console.log(error);
+                if(process.env.REACT_APP_BE_ENV == "DEV") {
+                    console.log(error)
+                }
                 if(error.response) {
                     if(error.response.data.status === 404) {
                         setData(values => ({...values,
@@ -424,7 +422,6 @@ function DocK33() {
             const resAdmin = modelPeriksa.getAdminByPtkId(data.noIdPtk)
             resAdmin
             .then((response) => {
-                console.log(response.data)
                 if(response.data) {
                     if(typeof response.data != "string") {
                         setData(values => ({...values,
@@ -447,7 +444,9 @@ function DocK33() {
                 }
             })
             .catch((error) => {
-                console.log(error);
+                if(process.env.REACT_APP_BE_ENV == "DEV") {
+                    console.log(error)
+                }
                 if(error.response) {
                     if(error.response.data.status === 404) {
                         setData(values => ({...values,
@@ -466,14 +465,12 @@ function DocK33() {
             const resSurtug = modelSurtug.getDetilSurtugPenugasan(data.noIdPtk, 2);
             resSurtug
             .then((response) => {
-                // console.log(response.data)
                 if(response.data) {
                     if(typeof response.data != "string") {
                         setData(values => ({...values,
                             errorSurtug: ""
                         }));
                         if(response.data.status === '200') {
-                            // console.log(response.data.data[0])
                             setData(values => ({...values,
                                 noSurtug: response.data.data[0].nomor,
                                 tglSurtug: response.data.data[0].tanggal,
@@ -488,7 +485,9 @@ function DocK33() {
                 }
             })
             .catch((error) => {
-                console.log(error);
+                if(process.env.REACT_APP_BE_ENV == "DEV") {
+                    console.log(error)
+                }
                 if(error.response) {
                     if(error.response.data.status === 404) {
                         setData(values => ({...values,
@@ -550,8 +549,9 @@ function DocK33() {
                 }
             })
             .catch((error) => {
-                // setData()
-                console.log(error);
+                if(process.env.REACT_APP_BE_ENV == "DEV") {
+                    console.log(error)
+                }
                 if(error.response) {
                     if(error.response.data.status === 404) {
                         setData(values => ({...values,

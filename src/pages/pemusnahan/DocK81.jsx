@@ -1,3 +1,4 @@
+/* eslint-disable eqeqeq */
 import Cookies from 'js-cookie';
 import React, { useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form';
@@ -30,7 +31,6 @@ function DocK81() {
     })
 
     function handleEditKomoditas(e) {
-        console.log(e.target.dataset.headerid)
         setValueMPk81("idMPk81", e.target.dataset.headerid)
         setValueMPk81("idPtk", e.target.dataset.ptk)
         setValueMPk81("jenisKar", "H")
@@ -57,12 +57,13 @@ function DocK81() {
             }
         })
         .catch((error) => {
-            console.log(error);
+            if(process.env.REACT_APP_BE_ENV == "DEV") {
+                console.log(error)
+            }
         });
     }
 
     function handleEditKomoditasAll() {
-        // console.log(datasend)
         setLoadKomoditi(true)
         data.listKomoditas?.map((item, index) => (
             log.updateKomoditiP7(item.id, datasend[index])
@@ -70,13 +71,17 @@ function DocK81() {
                     if(response.data.status === '201') {
                         refreshListKomoditas()
                         setLoadKomoditi(false)
-                        console.log("history saved")
+                        if(process.env.REACT_APP_BE_ENV == "DEV") {
+                            console.log("history saved")
+                        }
                     }
                 })
                 .catch((error) => {
                     setLoadKomoditi(false)
                     setLoadKomoditiPesan("Terjadi error pada saat simpan, mohon refresh halaman dan coba lagi.")
-                    console.log(error.response.data);
+                    if(process.env.REACT_APP_BE_ENV == "DEV") {
+                        console.log(error)
+                    }
                 })
             )
         )
@@ -97,7 +102,6 @@ function DocK81() {
         const response = modelPemusnahan.simpan81(data);
         response
         .then((response) => {
-            console.log(response.data)
             if(response.data) {
                 if(response.data.status === '201') {
                     //start save history
@@ -106,11 +110,15 @@ function DocK81() {
                     resHsy
                     .then((response) => {
                         if(response.data.status === '201') {
-                            console.log("history saved")
+                            if(process.env.REACT_APP_BE_ENV == "DEV") {
+                                console.log("history saved")
+                            }
                         }
                     })
                     .catch((error) => {
-                        console.log(error.response.data);
+                        if(process.env.REACT_APP_BE_ENV == "DEV") {
+                            console.log(error)
+                        }
                     });
                     //end save history
 
@@ -121,7 +129,9 @@ function DocK81() {
             }
         })
         .catch((error) => {
-            console.log(error);
+            if(process.env.REACT_APP_BE_ENV == "DEV") {
+                console.log(error)
+            }
             alert(error.response.status + " - " + error.response.data.message)
         });
     }
@@ -148,7 +158,6 @@ function DocK81() {
     const cekdataMPk81 = watchMPk81()
 
     function onSubmitMPk81(data) {
-        console.log(data)
     }
 
     function modaAlatAngkut(e){
@@ -158,8 +167,6 @@ function DocK81() {
     function alasan(){
         return Alasan.filter((element) => element.dok_id === 35)
     }
-
-    // console.log(Cookies.get("jenisKarantina"))
 
     useEffect(()=>{
         if(idPtk) {
@@ -172,8 +179,6 @@ function DocK81() {
             response
             .then((response) => {
                 if(response.data.status === '200') {
-                    console.log(response.data.data)
-
                     let kodeHSData = response.data.data.ptk_komoditi?.map(item => {
                         return item.kode_hs
                     })
@@ -202,7 +207,6 @@ function DocK81() {
                     const resKom = modelPemohon.getKomoditiPtkId(base64_decode(ptkNomor[1]), Cookies.get("jenisKarantina"));
                     resKom
                     .then((res) => {
-                        console.log(res)
                         if(res.data.status === '200') {
                             setData(values => ({...values,
                                 listKomoditas: res.data.data
@@ -219,7 +223,9 @@ function DocK81() {
                         }
                     })
                     .catch((error) => {
-                        console.log(error);
+                        if(process.env.REACT_APP_BE_ENV == "DEV") {
+                            console.log(error)
+                        }
                     });
                     
                     setValue("tandaKhusus", response.data.data.ptk.tanda_khusus)
@@ -233,45 +239,16 @@ function DocK81() {
                 }
             })
             .catch((error) => {
-                console.log(error.response);
+                if(process.env.REACT_APP_BE_ENV == "DEV") {
+                    console.log(error)
+                }
             });
-
-            // const resPelId = modelPemusnahan.getById(base64_decode(ptkNomor[1]), "H");
-            // resPelId
-            // .then((response) => {
-            //     console.log(response.data)
-            //     if(response.data) {
-            //         if(response.data.status === '200') {
-            //             setValue("idDokh1", response.data.data.id)
-            //             setValue("noDokh1", response.data.data.nomor)
-            //             setValue("tglDokh1", response.data.data.tanggal)
-            //             setValue("noSeri", response.data.data.nomor_seri)
-            //             setValue("jenisDokumen", response.data.data.status_dok)
-            //             setValue("m1", response.data.data.m1 !== null ? response.data.data.m1.toString() : "")
-            //             setValue("m2", response.data.data.m2 !== null ? response.data.data.m2.toString() : "")
-            //             setValue("m3", response.data.data.m3 !== null ? response.data.data.m3.toString() : "")
-            //             setValue("m4", response.data.data.m_lain !== null ? "1" : "")
-            //             setValue("m4Lain", response.data.data.m_lain)
-            //             setValue("p1", response.data.data.p_teknis)
-            //             setValue("p2", response.data.data.p_lab)
-            //             setValue("p3", response.data.data.p_lain)
-            //             setValue("isAttach", response.data.data.is_attachment !== null ? response.data.data.is_attachment.toString() : "")
-            //             setValue("ttdPutusan", response.data.data.user_ttd_id)
-            //             setValue("diterbitkan", response.data.data.diterbitkan_di)
-
-            //         }
-            //     }
-            // })
-            // .catch((error) => {
-            //     console.log(error);
-            // });
 
             const modelSurtug = new PtkSurtug();
                 // 1: penugasan periksa administratif
             const resSurtug = modelSurtug.getDetilSurtugPenugasan(base64_decode(ptkNomor[1]), 11);
             resSurtug
             .then((response) => {
-                console.log(response.data)
                 if(response.data) {
                     if(response.data.status === '200') {
                         // console.log(response.data.data[0])
@@ -284,7 +261,9 @@ function DocK81() {
                 }
             })
             .catch((error) => {
-                console.log(error);
+                if(process.env.REACT_APP_BE_ENV == "DEV") {
+                    console.log(error)
+                }
                 // alert(error.response.status + " - " + error.response.data.message)
             });
         }

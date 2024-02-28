@@ -52,23 +52,24 @@ function DocK73() {
     const cekWatch = watch()
 
     function onSubmit(data) {
-        // console.log(data)
         const response = modelPenolakan.save73(data, data.idDok72);
-        // console.log(response)
         response
         .then((response) => {
-            // console.log(response.data)
             if(response.data) {
                 if(response.data.status === '201') {
                     const resHsy = log.pushHistory(data.idPtk, "p6", "K-7.3", (data.idDok73 ? 'UPDATE' : 'NEW'));
                     resHsy
                     .then((response) => {
                         if(response.data.status === '201') {
-                            console.log("history saved")
+                            if(process.env.REACT_APP_BE_ENV == "DEV") {
+                                console.log("history saved")
+                            }
                         }
                     })
                     .catch((error) => {
-                        console.log(error.response.data);
+                        if(process.env.REACT_APP_BE_ENV == "DEV") {
+                            console.log(error)
+                        }
                     });
                     //end save history
 
@@ -84,7 +85,9 @@ function DocK73() {
             }
         })
         .catch((error) => {
-            console.log(error);
+            if(process.env.REACT_APP_BE_ENV == "DEV") {
+                console.log(error)
+            }
             Swal.fire({
                 title: "Error " + error.response.status,
                 text: error.response.data.message,
@@ -118,9 +121,7 @@ function DocK73() {
     function onSubmitMPk73(data) {
         log.updateKomoditiP6(data.idMPk73, data)
         .then((response) => {
-            // console.log(response)
             if(response.data.status === '201') {
-                // alert(response.data.status + " - " + response.data.message)
                 Swal.fire({
                     title: "Sukses!",
                     text: "Volume P6 berhasil diupdate.",
@@ -133,12 +134,13 @@ function DocK73() {
             }
         })
         .catch((error) => {
-            console.log(error);
+            if(process.env.REACT_APP_BE_ENV == "DEV") {
+                console.log(error)
+            }
         })
     }
 
     function handleEditKomoditas(e) {
-        console.log(e.target.dataset.headerid)
         setValueMPk73("idMPk73", e.target.dataset.headerid)
         setValueMPk73("idPtk", e.target.dataset.ptk)
         setValueMPk73("jenisKar", Cookies.get("jenisKarantina"))
@@ -153,7 +155,6 @@ function DocK73() {
     }
 
     function handleEditKomoditasAll() {
-        // console.log(datasend)
         setLoadKomoditi(true)
         data.listKomoditas?.map((item, index) => (
             log.updateKomoditiP6(item.id, datasend[index])
@@ -161,13 +162,17 @@ function DocK73() {
                     if(response.data.status === '201') {
                         refreshListKomoditas()
                         setLoadKomoditi(false)
-                        console.log("history saved")
+                        if(process.env.REACT_APP_BE_ENV == "DEV") {
+                            console.log("history saved")
+                        }
                     }
                 })
                 .catch((error) => {
                     setLoadKomoditi(false)
                     setLoadKomoditiPesan("Terjadi error pada saat simpan, mohon refresh halaman dan coba lagi.")
-                    console.log(error.response.data);
+                    if(process.env.REACT_APP_BE_ENV == "DEV") {
+                        console.log(error)
+                    }
                 })
             )
         )
@@ -185,7 +190,9 @@ function DocK73() {
             }
         })
         .catch((error) => {
-            console.log(error);
+            if(process.env.REACT_APP_BE_ENV == "DEV") {
+                console.log(error)
+            }
         });
     }
 
@@ -208,7 +215,6 @@ function DocK73() {
             .then((response) => {
                 if(typeof response.data != "string") {
                     if(response.data.status == 200) {
-                        // console.log(response.data)
                         setData(values => ({...values,
                             errorPTK: "",
                             listPtk: response.data.data.ptk,
@@ -241,7 +247,9 @@ function DocK73() {
                             }
                         })
                         .catch((error) => {
-                            console.log(error);
+                            if(process.env.REACT_APP_BE_ENV == "DEV") {
+                                console.log(error)
+                            }
                             setData(values => ({...values,
                                 errorKomoditas: "Gagal load data Komoditas"
                             }));
@@ -258,7 +266,9 @@ function DocK73() {
                 }
             })
             .catch((error) => {
-                console.log(error.response);
+                if(process.env.REACT_APP_BE_ENV == "DEV") {
+                    console.log(error)
+                }
                 if(error.response) {
                     if(error.response.data.status == 404) {
                         setData(values => ({...values,
@@ -277,7 +287,6 @@ function DocK73() {
             const resPenId = modelPenolakan.getByPtkId(base64_decode(ptkNomor[1]), 29);
             resPenId
             .then((response) => {
-                // console.log(response.data)
                 if(response.data) {
                     if(typeof response.data != "string") {
                         setData(values => ({...values,
@@ -310,7 +319,9 @@ function DocK73() {
                 }
             })
             .catch((error) => {
-                console.log(error);
+                if(process.env.REACT_APP_BE_ENV == "DEV") {
+                    console.log(error)
+                }
                 if(error.response) {
                     setData(values => ({...values,
                         errorPenolakan: "Gagal load data Surat Penolakan",
@@ -321,7 +332,6 @@ function DocK73() {
             const resPenId30 = modelPenolakan.getByPtkId(base64_decode(ptkNomor[1]), 30);
             resPenId30
             .then((response) => {
-                // console.log(response.data)
                 if(response.data) {
                     if(typeof response.data != "string") {
                         setData(values => ({...values,
@@ -338,7 +348,6 @@ function DocK73() {
                             const resPenId31 = modelPenolakan.getByPtkId(base64_decode(ptkNomor[1]), 31);
                             resPenId31
                             .then((response) => {
-                                // console.log(response.data)
                                 if(response.data) {
                                     if(typeof response.data != "string") {
                                         setData(values => ({...values,
@@ -360,8 +369,9 @@ function DocK73() {
                                 }
                             })
                             .catch((error) => {
-                                console.log("error 73");
-                                console.log(error);
+                                if(process.env.REACT_APP_BE_ENV == "DEV") {
+                                    console.log(error)
+                                }
                                 if(error.response) {
                                     if(error.response.data.status == 404) {
                                         setData(values => ({...values,
@@ -383,8 +393,9 @@ function DocK73() {
                 }
             })
             .catch((error) => {
-                console.log("error 72");
-                console.log(error);
+                if(process.env.REACT_APP_BE_ENV == "DEV") {
+                    console.log(error)
+                }
                 if(error.response) {
                     if(error.response.data.status == 404) {
                         Swal.fire("Berita Acara Penolakan tidak ada/Belum dibuat. Mohon buat Berita Acara Penolakan dahulu!");
@@ -402,14 +413,12 @@ function DocK73() {
             const resSurtug = modelSurtug.getDetilSurtugPenugasan(base64_decode(ptkNomor[1]), 9);
             resSurtug
             .then((response) => {
-                // console.log(response.data)
                 if(response.data) {
                     if(typeof response.data != "string") {
                         setData(values => ({...values,
                             errorSurtug: ""
                         }));
                         if(response.data.status == 200) {
-                            // console.log(response.data.data[0])
                             setData(values => ({...values,
                                 noSurtug: response.data.data[0].nomor,
                                 tglSurtug: response.data.data[0].tanggal,
@@ -424,7 +433,9 @@ function DocK73() {
                 }
             })
             .catch((error) => {
-                console.log(error);
+                if(process.env.REACT_APP_BE_ENV == "DEV") {
+                    console.log(error)
+                }
                 if(error.response) {
                     if(error.response.data.status == 404) {
                         setData(values => ({...values,
@@ -447,7 +458,6 @@ function DocK73() {
             .then((response) => {
                 if(typeof response.data != "string") {
                     if(response.data.status == 200) {
-                        // console.log(response.data)
                         setData(values => ({...values,
                             errorPTK: "",
                             listPtk: response.data.data.ptk,
@@ -465,7 +475,9 @@ function DocK73() {
                 }
             })
             .catch((error) => {
-                console.log(error.response);
+                if(process.env.REACT_APP_BE_ENV == "DEV") {
+                    console.log(error)
+                }
                 if(error.response) {
                     if(error.response.data.status == 404) {
                         setData(values => ({...values,
@@ -484,7 +496,6 @@ function DocK73() {
             const resKom = modelPemohon.getKomoditiPtkId(data.noIdPtk, Cookies.get("jenisKarantina"));
             resKom
             .then((res) => {
-                console.log(res)
                 if(typeof res.data != "string") {
                     if(res.data.status == 200) {
                         setData(values => ({...values,
@@ -508,7 +519,9 @@ function DocK73() {
                 }
             })
             .catch((error) => {
-                console.log(error);
+                if(process.env.REACT_APP_BE_ENV == "DEV") {
+                    console.log(error)
+                }
                 setData(values => ({...values,
                     errorKomoditas: "Gagal load data Komoditas"
                 }));
@@ -519,7 +532,6 @@ function DocK73() {
             const resPenId = modelPenolakan.getByPtkId(data.noIdPtk, 29);
             resPenId
             .then((response) => {
-                // console.log(response.data)
                 if(response.data) {
                     if(typeof response.data != "string") {
                         setData(values => ({...values,
@@ -552,7 +564,9 @@ function DocK73() {
                 }
             })
             .catch((error) => {
-                console.log(error);
+                if(process.env.REACT_APP_BE_ENV == "DEV") {
+                    console.log(error)
+                }
                 if(error.response) {
                     setData(values => ({...values,
                         errorPenolakan: "Gagal load data Surat Penolakan",
@@ -565,7 +579,6 @@ function DocK73() {
             const resPenId30 = modelPenolakan.getByPtkId(data.errorBAPenolakan, 30);
             resPenId30
             .then((response) => {
-                // console.log(response.data)
                 if(response.data) {
                     if(typeof response.data != "string") {
                         setData(values => ({...values,
@@ -592,7 +605,9 @@ function DocK73() {
                 }
             })
             .catch((error) => {
-                console.log(error);
+                if(process.env.REACT_APP_BE_ENV == "DEV") {
+                    console.log(error)
+                }
                 if(error.response) {
                     if(error.response.data.status == 404) {
                         setData(values => ({...values,
@@ -611,7 +626,6 @@ function DocK73() {
             const resPenId31 = modelPenolakan.getByPtkId(data.noIdPtk, 31);
             resPenId31
             .then((response) => {
-                // console.log(response.data)
                 if(response.data) {
                     if(typeof response.data != "string") {
                         setData(values => ({...values,
@@ -632,8 +646,9 @@ function DocK73() {
                 }
             })
             .catch((error) => {
-                console.log("error 73");
-                console.log(error);
+                if(process.env.REACT_APP_BE_ENV == "DEV") {
+                    console.log(error)
+                }
                 if(error.response) {
                     if(error.response.data.status == 404) {
                         setData(values => ({...values,
@@ -654,14 +669,12 @@ function DocK73() {
             const resSurtug = modelSurtug.getDetilSurtugPenugasan(data.noIdPtk, 9);
             resSurtug
             .then((response) => {
-                // console.log(response.data)
                 if(response.data) {
                     if(typeof response.data != "string") {
                         setData(values => ({...values,
                             errorSurtug: ""
                         }));
                         if(response.data.status == 200) {
-                            // console.log(response.data.data[0])
                             setData(values => ({...values,
                                 noSurtug: response.data.data[0].nomor,
                                 tglSurtug: response.data.data[0].tanggal,
@@ -676,7 +689,9 @@ function DocK73() {
                 }
             })
             .catch((error) => {
-                console.log(error);
+                if(process.env.REACT_APP_BE_ENV == "DEV") {
+                    console.log(error)
+                }
                 if(error.response) {
                     if(error.response.data.status == 404) {
                         setData(values => ({...values,

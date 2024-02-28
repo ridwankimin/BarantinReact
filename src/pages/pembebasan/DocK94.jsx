@@ -44,11 +44,15 @@ function DocK94() {
                     // resHsy
                     // .then((response) => {
                     //     if(response.data.status === '201') {
+                        // if(process.env.REACT_APP_BE_ENV == "DEV") {
                     //         console.log("history saved")
+                        // }
                     //     }
                     // })
                     // .catch((error) => {
-                    //     console.log(error.response.data);
+                        // if(process.env.REACT_APP_BE_ENV == "DEV") {
+                        //     console.log(error)
+                        // }
                     // });
                     //end save history
 
@@ -63,7 +67,9 @@ function DocK94() {
             }
         })
         .catch((error) => {
-            console.log(error);
+            if(process.env.REACT_APP_BE_ENV == "DEV") {
+                console.log(error)
+            }
             Swal.fire({
                 title: "Error!",
                 text: error.response.status + " - " + error.response.data.message,
@@ -117,7 +123,9 @@ function DocK94() {
                             }
                         })
                         .catch((error) => {
-                            console.log(error);
+                            if(process.env.REACT_APP_BE_ENV == "DEV") {
+                                console.log(error)
+                            }
                             setData(values => ({...values,
                                 errorKomoditas: "Gagal load data Komoditas"
                             }));
@@ -139,7 +147,9 @@ function DocK94() {
                 }
             })
             .catch((error) => {
-                console.log(error.response);
+                if(process.env.REACT_APP_BE_ENV == "DEV") {
+                    console.log(error)
+                }
                 if(error.response) {
                     if(error.response.data.status === 404) {
                         setData(values => ({...values,
@@ -181,7 +191,9 @@ function DocK94() {
                 }
             })
             .catch((error) => {
-                console.log(error)
+                if(process.env.REACT_APP_BE_ENV == "DEV") {
+                    console.log(error)
+                }
                 if(error.response) {
                     if(error.response.data.status === 404) {
                         setData(values => ({...values,
@@ -220,7 +232,9 @@ function DocK94() {
                 }
             })
             .catch((error) => {
-                console.log(error.response);
+                if(process.env.REACT_APP_BE_ENV == "DEV") {
+                    console.log(error)
+                }
                 if(error.response) {
                     if(error.response.data.status === 404) {
                         setData(values => ({...values,
@@ -253,7 +267,9 @@ function DocK94() {
                 }
             })
             .catch((error) => {
-                console.log(error);
+                if(process.env.REACT_APP_BE_ENV == "DEV") {
+                    console.log(error)
+                }
                 setData(values => ({...values,
                     errorKomoditas: "Gagal load data Komoditas"
                 }));
@@ -287,7 +303,9 @@ function DocK94() {
                 }
             })
             .catch((error) => {
-                console.log(error)
+                if(process.env.REACT_APP_BE_ENV == "DEV") {
+                    console.log(error)
+                }
                 if(error.response) {
                     if(error.response.data.status === 404) {
                         setData(values => ({...values,

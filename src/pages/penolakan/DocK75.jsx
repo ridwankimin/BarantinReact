@@ -7,13 +7,10 @@ function DocK75() {
         K-7.4 <span className="text-muted fw-light">(SURAT PERMOHONAN PERPANJANGAN BATAS WAKTU)</span>
     </h4>
 
-    {/* <!-- Multi Column with Form Separator --> */}
     <div className="row">
-        {/* <!-- Form Separator --> */}
         <div className="col-xxl">
             <div className="card mb-4">
                 <form className="card-body">
-                    {/* <!-- <h5 className="card-header">PEMILIK</h5> --> */}
                     <div className="row mb-3">
                         <label className="col-sm-2 col-form-label" htmlFor="nomor_k74">Nomor K-7.4</label>
                         <div className="col-sm-4">

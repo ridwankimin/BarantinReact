@@ -1,3 +1,4 @@
+/* eslint-disable eqeqeq */
 import Cookies from 'js-cookie';
 import React, { useEffect, useState } from 'react';
 import {decode as base64_decode} from 'base-64';
@@ -41,12 +42,9 @@ function DocK92h() {
     const cekWatch = watch()
 
     const onSubmit = (data) => {
-        // alert("Submit")
-        // console.log(data)
         const response = modelPelepasan.imporAreaKH(data);
         response
         .then((response) => {
-            console.log(response.data)
             if(response.data) {
                 if(response.data.status === '201') {
                     //start save history
@@ -55,11 +53,15 @@ function DocK92h() {
                     resHsy
                     .then((response) => {
                         if(response.data.status === '201') {
-                            console.log("history saved")
+                            if(process.env.REACT_APP_BE_ENV == "DEV") {
+                                console.log("history saved")
+                            }
                         }
                     })
                     .catch((error) => {
-                        console.log(error.response.data);
+                        if(process.env.REACT_APP_BE_ENV == "DEV") {
+                            console.log(error)
+                        }
                     });
                     //end save history
 
@@ -70,7 +72,9 @@ function DocK92h() {
             }
         })
         .catch((error) => {
-            console.log(error);
+            if(process.env.REACT_APP_BE_ENV == "DEV") {
+                console.log(error)
+            }
             alert(error.response.status + " - " + error.response.data.message)
         });
     }
@@ -101,7 +105,6 @@ function DocK92h() {
     function onSubmitMPk92h(data) {
         log.updateKomoditiP8(data.idMPk92h, data)
         .then((response) => {
-            // console.log(response)
             if(response.data.status === '201') {
                 alert(response.data.status + " - " + response.data.message)
                 resetFormKomoditik92h()
@@ -109,7 +112,9 @@ function DocK92h() {
             }
         })
         .catch((error) => {
-            console.log(error);
+            if(process.env.REACT_APP_BE_ENV == "DEV") {
+                console.log(error)
+            }
         })
     }
 
@@ -122,7 +127,6 @@ function DocK92h() {
     }
 
     function handleEditKomoditas(e) {
-        console.log(e.target.dataset.headerid)
         setValueMPk92h("idMPk92h", e.target.dataset.headerid)
         setValueMPk92h("idPtk", e.target.dataset.ptk)
         setValueMPk92h("jenisKar", "H")
@@ -139,7 +143,6 @@ function DocK92h() {
     }
 
     function handleEditKomoditasAll() {
-        // console.log(datasend)
         setLoadKomoditi(true)
         data.listKomoditas?.map((item, index) => (
             log.updateKomoditiP8(item.id, datasend[index])
@@ -147,13 +150,17 @@ function DocK92h() {
                     if(response.data.status === '201') {
                         refreshListKomoditas()
                         setLoadKomoditi(false)
-                        console.log("history saved")
+                        if(process.env.REACT_APP_BE_ENV == "DEV") {
+                            console.log("history saved")
+                        }
                     }
                 })
                 .catch((error) => {
                     setLoadKomoditi(false)
                     setLoadKomoditiPesan("Terjadi error pada saat simpan, mohon refresh halaman dan coba lagi.")
-                    console.log(error.response.data);
+                    if(process.env.REACT_APP_BE_ENV == "DEV") {
+                        console.log(error)
+                    }
                 })
             )
         )
@@ -171,7 +178,9 @@ function DocK92h() {
             }
         })
         .catch((error) => {
-            console.log(error);
+            if(process.env.REACT_APP_BE_ENV == "DEV") {
+                console.log(error)
+            }
         });
     }
 
@@ -186,8 +195,6 @@ function DocK92h() {
             response
             .then((response) => {
                 if(response.data.status === '200') {
-                    console.log(response.data.data)
-
                     let kodeHSData = response.data.data.ptk_komoditi?.map(item => {
                         return item.kode_hs
                     })
@@ -216,7 +223,6 @@ function DocK92h() {
                     const resKom = modelPemohon.getKomoditiPtkId(base64_decode(ptkNomor[1]), "H");
                     resKom
                     .then((res) => {
-                        console.log(res)
                         if(res.data.status === '200') {
                             setData(values => ({...values,
                                 listKomoditas: res.data.data
@@ -235,7 +241,9 @@ function DocK92h() {
                         }
                     })
                     .catch((error) => {
-                        console.log(error);
+                        if(process.env.REACT_APP_BE_ENV == "DEV") {
+                            console.log(error)
+                        }
                     });
                     
                     setValue("tandaKhusus", response.data.data.ptk.tanda_khusus)
@@ -249,13 +257,14 @@ function DocK92h() {
                 }
             })
             .catch((error) => {
-                console.log(error.response);
+                if(process.env.REACT_APP_BE_ENV == "DEV") {
+                    console.log(error)
+                }
             });
 
             const resPelId = modelPelepasan.getById(base64_decode(ptkNomor[1]), "H");
             resPelId
             .then((response) => {
-                console.log(response.data)
                 if(response.data) {
                     if(response.data.status === '200') {
                         setValue("idDok92h", response.data.data.id)
@@ -277,7 +286,9 @@ function DocK92h() {
                 }
             })
             .catch((error) => {
-                console.log(error);
+                if(process.env.REACT_APP_BE_ENV == "DEV") {
+                    console.log(error)
+                }
             });
 
             const modelSurtug = new PtkSurtug();
@@ -285,10 +296,8 @@ function DocK92h() {
             const resSurtug = modelSurtug.getDetilSurtugPenugasan(base64_decode(ptkNomor[1]), 14);
             resSurtug
             .then((response) => {
-                console.log(response.data)
                 if(response.data) {
                     if(response.data.status === '200') {
-                        // console.log(response.data.data[0])
                         setData(values => ({...values,
                             noSurtug: response.data.data[0].nomor,
                             tglSurtug: response.data.data[0].tanggal,
@@ -298,7 +307,9 @@ function DocK92h() {
                 }
             })
             .catch((error) => {
-                console.log(error);
+                if(process.env.REACT_APP_BE_ENV == "DEV") {
+                    console.log(error)
+                }
                 // alert(error.response.status + " - " + error.response.data.message)
             });
         }

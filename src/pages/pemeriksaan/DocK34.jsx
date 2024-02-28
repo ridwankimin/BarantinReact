@@ -1,3 +1,4 @@
+/* eslint-disable eqeqeq */
 import React, { useEffect, useState } from 'react'
 import {decode as base64_decode} from 'base-64';
 import PtkModel from '../../model/PtkModel';
@@ -42,7 +43,6 @@ function DocK34() {
         const response = modelPeriksa.pnInstalasi(data,);
         response
         .then((response) => {
-            console.log(response.data)
             if(response.data) {
                 if(response.data.status === '201') {
                     Swal.fire({
@@ -62,7 +62,9 @@ function DocK34() {
             }
         })
         .catch((error) => {
-            console.log(error);
+            if(process.env.REACT_APP_BE_ENV == "DEV") {
+                console.log(error)
+            }
             Swal.fire({
                 title: "Error!",
                 text: error.response.status + " - " + error.response.data.message,
@@ -112,7 +114,9 @@ function DocK34() {
                 }
             })
             .catch((error) => {
-                console.log(error);
+                if(process.env.REACT_APP_BE_ENV == "DEV") {
+                    console.log(error)
+                }
                 if(error.response) {
                     if(error.response.data.status === 404) {
                         setData(values => ({...values,
@@ -129,7 +133,6 @@ function DocK34() {
             const resInstalasi = modelPeriksa.getPnInstalasiByPtkId(base64_decode(ptkNomor[1]))
             resInstalasi
             .then((response) => {
-                console.log(response.data)
                 if(response.data) {
                     if(typeof response.data != "string") {
                         setData(values => ({...values,
@@ -160,7 +163,9 @@ function DocK34() {
                 }
             })
             .catch((error) => {
-                console.log(error);
+                if(process.env.REACT_APP_BE_ENV == "DEV") {
+                    console.log(error)
+                }
                 if(error.response) {
                     if(error.response.data.status === 404) {
                         setData(values => ({...values,
@@ -205,7 +210,9 @@ function DocK34() {
                 }
             })
             .catch((error) => {
-                console.log(error);
+                if(process.env.REACT_APP_BE_ENV == "DEV") {
+                    console.log(error)
+                }
                 if(error.response) {
                     if(error.response.data.status === 404) {
                         setData(values => ({...values,
@@ -254,7 +261,9 @@ function DocK34() {
                 }
             })
             .catch((error) => {
-                console.log(error);
+                if(process.env.REACT_APP_BE_ENV == "DEV") {
+                    console.log(error)
+                }
                 if(error.response) {
                     if(error.response.data.status === 404) {
                         setData(values => ({...values,

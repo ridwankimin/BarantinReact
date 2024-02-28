@@ -1,3 +1,4 @@
+/* eslint-disable eqeqeq */
 import React, { useEffect, useState } from 'react'
 import ModaAlatAngkut from '../../model/master/modaAlatAngkut.json';
 import Cookies from 'js-cookie';
@@ -57,18 +58,21 @@ function DocK63() {
         const response = modelPenahanan.save63(data);
         response
         .then((response) => {
-            // console.log(response.data)
             if(response.data) {
                 if(response.data.status === '201') {
                     const resHsy = log.pushHistory(data.idPtk, "p5", "K-6.3", (data.idDok61 ? 'UPDATE' : 'NEW'));
                     resHsy
                     .then((response) => {
                         if(response.data.status === '201') {
-                            console.log("history saved")
+                            if(process.env.REACT_APP_BE_ENV == "DEV") {
+                                console.log("history saved")
+                            }
                         }
                     })
                     .catch((error) => {
-                        console.log(error.response.data);
+                        if(process.env.REACT_APP_BE_ENV == "DEV") {
+                            console.log(error)
+                        }
                     });
                     //end save history
 
@@ -79,7 +83,9 @@ function DocK63() {
             }
         })
         .catch((error) => {
-            console.log(error);
+            if(process.env.REACT_APP_BE_ENV == "DEV") {
+                console.log(error)
+            }
             alert(error.response.status + " - " + error.response.data.message)
         });
     }
@@ -108,7 +114,6 @@ function DocK63() {
     function onSubmitMPk61(data) {
         log.updateKomoditiP5(data.idMPk61, data)
         .then((response) => {
-            // console.log(response)
             if(response.data.status === '201') {
                 alert(response.data.status + " - " + response.data.message)
                 resetFormKomoditikh1()
@@ -118,12 +123,13 @@ function DocK63() {
             }
         })
         .catch((error) => {
-            console.log(error);
+            if(process.env.REACT_APP_BE_ENV == "DEV") {
+                console.log(error)
+            }
         })
     }
 
     function handleEditKomoditas(e) {
-        console.log(e.target.dataset.headerid)
         setValueMPk61("idMPk61", e.target.dataset.headerid)
         setValueMPk61("idPtk", e.target.dataset.ptk)
         setValueMPk61("jenisKar", Cookies.get("jenisKarantina"))
@@ -138,7 +144,6 @@ function DocK63() {
     }
 
     function handleEditKomoditasAll() {
-        // console.log(datasend)
         setLoadKomoditi(true)
         data.listKomoditas?.map((item, index) => (
             log.updateKomoditiP5(item.id, datasend[index])
@@ -146,13 +151,17 @@ function DocK63() {
                     if(response.data.status === '201') {
                         refreshListKomoditas()
                         setLoadKomoditi(false)
-                        console.log("history saved")
+                        if(process.env.REACT_APP_BE_ENV == "DEV") {
+                            console.log("history saved")
+                        }
                     }
                 })
                 .catch((error) => {
                     setLoadKomoditi(false)
                     setLoadKomoditiPesan("Terjadi error pada saat simpan, mohon refresh halaman dan coba lagi.")
-                    console.log(error.response.data);
+                    if(process.env.REACT_APP_BE_ENV == "DEV") {
+                        console.log(error)
+                    }
                 })
             )
         )
@@ -170,7 +179,9 @@ function DocK63() {
             }
         })
         .catch((error) => {
-            console.log(error);
+            if(process.env.REACT_APP_BE_ENV == "DEV") {
+                console.log(error)
+            }
         });
     }
 
@@ -202,7 +213,6 @@ function DocK63() {
                         const resKom = modelPemohon.getKomoditiPtkId(base64_decode(ptkNomor[1]), Cookies.get("jenisKarantina"));
                         resKom
                         .then((res) => {
-                            // console.log(res)
                             if(typeof res.data != "string") {
                                 setData(values => ({...values,
                                     errorKomoditas: ""
@@ -228,7 +238,9 @@ function DocK63() {
                             }
                         })
                         .catch((error) => {
-                            console.log(error);
+                            if(process.env.REACT_APP_BE_ENV == "DEV") {
+                                console.log(error)
+                            }
                             if(error.response) {
                                 if(error.response.data.status === 404) {
                                     setData(values => ({...values,
@@ -253,7 +265,9 @@ function DocK63() {
                 }
             })
             .catch((error) => {
-                console.log(error);
+                if(process.env.REACT_APP_BE_ENV == "DEV") {
+                    console.log(error)
+                }
                 if(error.response) {
                     if(error.response.data.status === 404) {
                         setData(values => ({...values,
@@ -272,7 +286,6 @@ function DocK63() {
             const resPenId63 = modelPenahanan.getByPtkId(base64_decode(ptkNomor[1]), 28);
             resPenId63
             .then((response) => {
-                console.log(response.data)
                 if(response.data) {
                     if(typeof response.data != "string") {
                         setData(values => ({...values,
@@ -308,7 +321,9 @@ function DocK63() {
                 }
             })
             .catch((error) => {
-                console.log(error);
+                if(process.env.REACT_APP_BE_ENV == "DEV") {
+                    console.log(error)
+                }
                 if(error.response) {
                     if(error.response.data.status === 404) {
                         setData(values => ({...values,
@@ -325,7 +340,6 @@ function DocK63() {
             const resPenId = modelPenahanan.getByPtkId(base64_decode(ptkNomor[1]), 26);
             resPenId
             .then((response) => {
-                console.log(response.data)
                 if(response.data) {
                     if(typeof response.data != "string") {
                         setData(values => ({...values,
@@ -352,7 +366,9 @@ function DocK63() {
                 }
             })
             .catch((error) => {
-                console.log(error);
+                if(process.env.REACT_APP_BE_ENV == "DEV") {
+                    console.log(error)
+                }
                 if(error.response) {
                     if(error.response.data.status === 404) {
                         setData(values => ({...values,
@@ -371,14 +387,12 @@ function DocK63() {
             const resSurtug = modelSurtug.getDetilSurtugPenugasan(base64_decode(ptkNomor[1]), 9);
             resSurtug
             .then((response) => {
-                console.log(response.data)
                 if(response.data) {
                     if(typeof response.data != "string") {
                         setData(values => ({...values,
                             errorSurtug: ""
                         }));
                         if(response.data.status === '200') {
-                            // console.log(response.data.data[0])
                             setData(values => ({...values,
                                 noSurtug: response.data.data[0].nomor,
                                 tglSurtug: response.data.data[0].tanggal,
@@ -393,7 +407,9 @@ function DocK63() {
                 }
             })
             .catch((error) => {
-                console.log(error);
+                if(process.env.REACT_APP_BE_ENV == "DEV") {
+                    console.log(error)
+                }
                 if(error.response) {
                     if(error.response.data.status === 404) {
                         setData(values => ({...values,
@@ -433,7 +449,9 @@ function DocK63() {
                 }
             })
             .catch((error) => {
-                console.log(error);
+                if(process.env.REACT_APP_BE_ENV == "DEV") {
+                    console.log(error)
+                }
                 if(error.response) {
                     if(error.response.data.status === 404) {
                         setData(values => ({...values,
@@ -452,7 +470,6 @@ function DocK63() {
             const resKom = modelPemohon.getKomoditiPtkId(data.noIdPtk, Cookies.get("jenisKarantina"));
             resKom
             .then((res) => {
-                // console.log(res)
                 if(typeof res.data != "string") {
                     setData(values => ({...values,
                         errorKomoditas: ""
@@ -478,7 +495,9 @@ function DocK63() {
                 }
             })
             .catch((error) => {
-                console.log(error);
+                if(process.env.REACT_APP_BE_ENV == "DEV") {
+                    console.log(error)
+                }
                 if(error.response) {
                     if(error.response.data.status === 404) {
                         setData(values => ({...values,
@@ -497,7 +516,6 @@ function DocK63() {
             const resPenId63 = modelPenahanan.getByPtkId(data.noIdPtk, 28);
             resPenId63
             .then((response) => {
-                console.log(response.data)
                 if(response.data) {
                     if(typeof response.data != "string") {
                         setData(values => ({...values,
@@ -533,7 +551,9 @@ function DocK63() {
                 }
             })
             .catch((error) => {
-                console.log(error);
+                if(process.env.REACT_APP_BE_ENV == "DEV") {
+                    console.log(error)
+                }
                 if(error.response) {
                     if(error.response.data.status === 404) {
                         setData(values => ({...values,
@@ -552,7 +572,6 @@ function DocK63() {
             const resPenId = modelPenahanan.getByPtkId(data.noIdPtk, 26);
             resPenId
             .then((response) => {
-                console.log(response.data)
                 if(response.data) {
                     if(typeof response.data != "string") {
                         setData(values => ({...values,
@@ -579,7 +598,9 @@ function DocK63() {
                 }
             })
             .catch((error) => {
-                console.log(error);
+                if(process.env.REACT_APP_BE_ENV == "DEV") {
+                    console.log(error)
+                }
                 if(error.response) {
                     if(error.response.data.status === 404) {
                         setData(values => ({...values,
@@ -600,14 +621,12 @@ function DocK63() {
             const resSurtug = modelSurtug.getDetilSurtugPenugasan(data.noIdPtk, 9);
             resSurtug
             .then((response) => {
-                console.log(response.data)
                 if(response.data) {
                     if(typeof response.data != "string") {
                         setData(values => ({...values,
                             errorSurtug: ""
                         }));
                         if(response.data.status === '200') {
-                            // console.log(response.data.data[0])
                             setData(values => ({...values,
                                 noSurtug: response.data.data[0].nomor,
                                 tglSurtug: response.data.data[0].tanggal,
@@ -622,7 +641,9 @@ function DocK63() {
                 }
             })
             .catch((error) => {
-                console.log(error);
+                if(process.env.REACT_APP_BE_ENV == "DEV") {
+                    console.log(error)
+                }
                 if(error.response) {
                     if(error.response.data.status === 404) {
                         setData(values => ({...values,

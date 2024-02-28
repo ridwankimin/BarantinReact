@@ -26,6 +26,9 @@ const modelPemohon = new PtkModel()
 const modelMaster = new Master()
 const log = new PtkHistory()
 
+const addCommas = num => num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+const removeNonNumeric = num => num.toString().replace(/[^0-9.]/g, "");
+
 function masterSatuanJson(e) {
     const dataSatuan = MasterSatuanJson.filter((element) => (e == "H" ? element.sat_kh == "Y" : (e == "T" ? element.sat_kt == "Y" : (e == "I" ? element.sat_ki == "Y" : (element.id != null)))))
         
@@ -140,9 +143,22 @@ function DocK11() {
         }
     }
     
+    // useEffect(() => {
+    //     window.addEventListener("scroll", isSticky);
+    //     return () => {
+    //         window.removeEventListener("scroll", isSticky);
+    //     };
+    // });
+
+    // const isSticky = (e) => {
+    //     const header = document.querySelector(".card-header");
+    //     const scrollTop = window.scrollY;
+    //     scrollTop >= 250
+    //       ? header.classList.add("is-sticky")
+    //       : header.classList.remove("is-sticky");
+    //   };
     
     function handleSetKomoditasSelect(e) {
-        console.log(e)
         const dataKomKT = e.value;
         const dataPisahKT = dataKomKT.split(";");
         if(cekdataDiri.mediaPembawa === "T") {
@@ -388,7 +404,9 @@ function DocK11() {
                 setdataSelect(values => ({...values, provPenerima: arraySelectProv }))
             }
         } catch (error) {
-            console.log(error)
+            if(process.env.REACT_APP_BE_ENV == "DEV") {
+                console.log(error)
+            }
             setdataSelect(values => ({...values, provPemohon: [] }))
             setdataSelect(values => ({...values, provPengirim: [] }))
             setdataSelect(values => ({...values, provPenerima: [] }))
@@ -413,7 +431,9 @@ function DocK11() {
                 setdataSelect(values => ({...values, [pel]: arraySelectKota}))
             }
         } catch (error) {
-        console.log(error)
+        if(process.env.REACT_APP_BE_ENV == "DEV") {
+                console.log(error)
+            }
         setdataSelect(values => ({...values, [pel]: []}))
         }
     }, [])
@@ -442,7 +462,7 @@ function DocK11() {
 
     const handleKomKHIDetil = useCallback(async (e) => {
     // function handleKomKHIDetil(e) {
-        if(cekdataDiri.mediaPembawa && cekdataMP.jenisMp) {
+        if(cekdataDiri.mediaPembawa && cekdataDiri.jenisMp) {
             const resKodeHS = modelMaster.masterHS(cekdataDiri.mediaPembawa)
             resKodeHS
             .then((response) => {
@@ -456,7 +476,9 @@ function DocK11() {
                 setdataSelect(values => ({...values, "kodeHSMp": arrayKodeHS}));
             })
             .catch((error) => {
-                console.log(error);
+                if(process.env.REACT_APP_BE_ENV == "DEV") {
+                console.log(error)
+            };
             });
     
             if(cekdataDiri.mediaPembawa === "H") {
@@ -485,11 +507,15 @@ function DocK11() {
                         setdataSelect(values => ({...values, "selectKomoditasMPKH": arrayKomKH}));
                     })
                     .catch((error) => {
-                        console.log(error);
+                        if(process.env.REACT_APP_BE_ENV == "DEV") {
+                console.log(error)
+            };
                     });
                 })
                 .catch((error) => {
-                    console.log(error);
+                    if(process.env.REACT_APP_BE_ENV == "DEV") {
+                console.log(error)
+            };
                 });
 
             } else if(cekdataDiri.mediaPembawa === "T") {
@@ -519,11 +545,15 @@ function DocK11() {
                         setdataSelect(values => ({...values, "selectKomoditasMP": arrayKomKT}))
                     })
                     .catch((error) => {
-                        console.log(error);
+                        if(process.env.REACT_APP_BE_ENV == "DEV") {
+                console.log(error)
+            };
                     });
                 })
                 .catch((error) => {
-                    console.log(error);
+                    if(process.env.REACT_APP_BE_ENV == "DEV") {
+                console.log(error)
+            };
                 });
 
             } else if(cekdataDiri.mediaPembawa === "I") {
@@ -554,15 +584,19 @@ function DocK11() {
                         }
                     })
                     .catch((error) => {
-                        console.log(error);
+                        if(process.env.REACT_APP_BE_ENV == "DEV") {
+                console.log(error)
+            };
                     });
                 })
                 .catch((error) => {
-                    console.log(error);
+                    if(process.env.REACT_APP_BE_ENV == "DEV") {
+                console.log(error)
+            };
                 });
             }
         }
-        },[cekdataDiri.mediaPembawa, cekdataMP.jenisMp])
+        },[cekdataDiri.mediaPembawa, cekdataDiri.jenisMp])
     // }
     useEffect(() => {
         handleKomKHIDetil()
@@ -575,7 +609,7 @@ function DocK11() {
             .then((response) => {
                 if(response.data.status == 201) {
                     Swal.fire({
-                        position: "top-center",
+                        position: "top-right",
                         icon: "success",
                         title: "Dokumen berhasil disimpan.",
                         showConfirmButton: false,
@@ -590,7 +624,9 @@ function DocK11() {
                 }
             })
             .catch((error) => {
-                console.log(error);
+                if(process.env.REACT_APP_BE_ENV == "DEV") {
+                console.log(error)
+            };
             });
     }
 
@@ -600,10 +636,10 @@ function DocK11() {
             const response = modelPemohon.pushKomoditi(data, cekdataDiri.mediaPembawa);
             response
             .then((response) => {
-                console.log(response)
+                
                 if(response.data.status === '201') {
                     Swal.fire({
-                        position: "top-center",
+                        position: "top-right",
                         icon: "success",
                         title: "Detil Media Pembawa berhasil disimpan.",
                         showConfirmButton: false,
@@ -614,7 +650,9 @@ function DocK11() {
                 }
             })
             .catch((error) => {
-                console.log(error);
+                if(process.env.REACT_APP_BE_ENV == "DEV") {
+                console.log(error)
+            };
             });
         }
     };
@@ -627,7 +665,7 @@ function DocK11() {
             .then((response) => {
                 if(response.data.status === '201') {
                     Swal.fire({
-                        position: "top-center",
+                        position: "top-right",
                         icon: "success",
                         title: "Data Pemohon berhasil disimpan.",
                         showConfirmButton: false,
@@ -638,17 +676,19 @@ function DocK11() {
                 }
             })
             .catch((error) => {
-                console.log(error);
+                if(process.env.REACT_APP_BE_ENV == "DEV") {
+                console.log(error)
+            };
                 alert(error.response.status + " - " + error.response.data.message)
             });
         } else {
             const response = modelPemohon.tabPemohonInsert(data);
             response
             .then((response) => {
-                console.log(response)
+                
                 if(response.data.status === '201') {
                     Swal.fire({
-                        position: "top-center",
+                        position: "top-right",
                         icon: "success",
                         title: "Data Pemohon berhasil disimpan.",
                         showConfirmButton: false,
@@ -676,6 +716,7 @@ function DocK11() {
                     setValueKonfirmasi("noAju", response.data.data.no_aju);
                 } else {
                     Swal.fire({
+                        position: "top-right",
                         icon: "error",
                         title: "Data Pemohon gagal disimpan.",
                         text: response.data.status + " - " + response.data.message,
@@ -687,8 +728,11 @@ function DocK11() {
                 setWizardPage(wizardPage + 1)
             })
             .catch((error) => {
-                console.log(error);
+                if(process.env.REACT_APP_BE_ENV == "DEV") {
+                console.log(error)
+            };
                 Swal.fire({
+                    position: "top-right",
                     icon: "error",
                     title: "Data Pemohon gagal disimpan.",
                     text: response.data.status + " - " + response.data.message,
@@ -706,6 +750,7 @@ function DocK11() {
             .then((response) => {
                 if(response.data.status === '201') {
                     Swal.fire({
+                        position: "top-right",
                         icon: "success",
                         title: "Sukses!",
                         text: "Data Pelabuhan berhasil disimpan.",
@@ -716,6 +761,7 @@ function DocK11() {
                     setWizardPage(wizardPage + 1)
                 } else {
                     Swal.fire({
+                        position: "top-right",
                         icon: "error",
                         title: "Data Pelabuhan gagal disimpan.",
                         text: response.data.status + " - " + response.data.message,
@@ -724,8 +770,11 @@ function DocK11() {
                 }
             })
             .catch((error) => {
-                console.log(error);
+                if(process.env.REACT_APP_BE_ENV == "DEV") {
+                console.log(error)
+            };
                 Swal.fire({
+                    position: "top-right",
                     icon: "error",
                     title: "Data Pelabuhan gagal disimpan.",
                     text: response.data.status + " - " + response.data.message,
@@ -735,6 +784,7 @@ function DocK11() {
         } else {
             // alert('Data id kosong')
             Swal.fire({
+                position: "top-right",
                 icon: "error",
                 title: "Data id kosong.",
                 showConfirmButton: true
@@ -750,7 +800,8 @@ function DocK11() {
             .then((response) => {
                 if(response.data.status === '201') {
                     Swal.fire({
-                        icon: "Success",
+                        position: "top-right",
+                        icon: "success",
                         title: "Sukses!",
                         text: "Data Komoditas berhasil disimpan.",
                         showConfirmButton: false,
@@ -760,6 +811,7 @@ function DocK11() {
                     setWizardPage(wizardPage + 1)
                 } else {
                     Swal.fire({
+                        position: "top-right",
                         icon: "error",
                         title: "Data Komoditas gagal disimpan.",
                         text: response.data.status + " - " + response.data.message,
@@ -768,8 +820,11 @@ function DocK11() {
                 }
             })
             .catch((error) => {
-                console.log(error);
+                if(process.env.REACT_APP_BE_ENV == "DEV") {
+                console.log(error)
+            };
                 Swal.fire({
+                    position: "top-right",
                     icon: "error",
                     title: "Data Pemohon gagal disimpan.",
                     text: response.data.status + " - " + response.data.message,
@@ -778,6 +833,7 @@ function DocK11() {
             });
         } else {
             Swal.fire({
+                position: "top-right",
                 icon: "error",
                 title: "Data id kosong.",
                 showConfirmButton: true
@@ -796,6 +852,7 @@ function DocK11() {
             .then((response) => {
                 if(response.data.status === '201') {
                     Swal.fire({
+                        position: "top-right",
                         icon: "success",
                         title: "Sukses!",
                         text: "Permohonan berhasil disubmit.",
@@ -805,7 +862,9 @@ function DocK11() {
                     setFormTab(values => ({...values, tab5: false}))
                     setWizardPage(wizardPage + 1)
                 } else {
+                    console.log(response.data)
                     Swal.fire({
+                        position: "top-right",
                         icon: "error",
                         title: "Error!",
                         text: "Permohonan gagal disubmit!",
@@ -815,8 +874,11 @@ function DocK11() {
                 }
             })
             .catch((error) => {
-                console.log(error);
+                if(process.env.REACT_APP_BE_ENV == "DEV") {
+                console.log(error)
+            };
                 Swal.fire({
+                    position: "top-right",
                     icon: "error",
                     title: "Error!",
                     text: error.response.status + " - " + error.response.data.message,
@@ -826,6 +888,7 @@ function DocK11() {
         } else {
             // alert('Data id kosong')
             Swal.fire({
+                position: "top-right",
                 icon: "error",
                 title: "Error!",
                 text: "Data id kosong",
@@ -847,6 +910,7 @@ function DocK11() {
                     setValueVerify("mediaPembawaVerif", cekdataDiri.mediaPembawa);
                     // alert(response.data.status + " - " + response.data.message)
                     Swal.fire({
+                        position: "top-right",
                         icon: "success",
                         title: "Sukses!",
                         text: response.data.message,
@@ -855,6 +919,7 @@ function DocK11() {
                     })
                 } else {
                     Swal.fire({
+                        position: "top-right",
                         icon: "error",
                         title: "Error!",
                         text: response.response.status + " - " + response.response.data.message,
@@ -863,8 +928,11 @@ function DocK11() {
                 }
             })
             .catch((error) => {
-                console.log(error);
+                if(process.env.REACT_APP_BE_ENV == "DEV") {
+                console.log(error)
+            };
                 Swal.fire({
+                    position: "top-right",
                     icon: "error",
                     title: "Error!",
                     text: error.response.status + " - " + error.response.data.message,
@@ -873,6 +941,7 @@ function DocK11() {
             });
         } else {
             Swal.fire({
+                position: "top-right",
                 icon: "error",
                 title: "Data id kosong!",
                 showConfirmButton: true
@@ -916,7 +985,7 @@ function DocK11() {
                     //end save history
     
                     Swal.fire({
-                        position: "top-center",
+                        position: "top-right",
                         icon: "success",
                         title: response.data.message,
                         showConfirmButton: false,
@@ -924,6 +993,7 @@ function DocK11() {
                     })
                 } else {
                     Swal.fire({
+                        position: "top-right",
                         icon: "error",
                         title: response.data.message,
                         showConfirmButton: true
@@ -931,8 +1001,11 @@ function DocK11() {
                 }
             })
             .catch((error) => {
-                console.log(error);
+                if(process.env.REACT_APP_BE_ENV == "DEV") {
+                console.log(error)
+            };
                 Swal.fire({
+                    position: "top-right",
                     icon: "error",
                     title: error.response.status + " - " + error.data.message,
                     showConfirmButton: true
@@ -940,6 +1013,7 @@ function DocK11() {
             });
         } else {
             Swal.fire({
+                position: "top-right",
                 icon: "error",
                 title: "Data id kosong",
                 showConfirmButton: true
@@ -954,7 +1028,7 @@ function DocK11() {
         .then((response) => {
             if(response.data.status === '201') {
                 Swal.fire({
-                    position: "top-center",
+                    position: "top-right",
                     icon: "success",
                     title: "Data Kontainer berhasil disimpan.",
                     showConfirmButton: false,
@@ -964,6 +1038,7 @@ function DocK11() {
                 dataKontainerPtk();
             } else {
                 Swal.fire({
+                    position: "top-right",
                     icon: "error",
                     title: "Data Kontainer gagal disimpan!",
                     showConfirmButton: true,
@@ -974,6 +1049,7 @@ function DocK11() {
         .catch((error) => {
             console.log(error.response);
             Swal.fire({
+                position: "top-right",
                 icon: "error",
                 title: "Data Kontainer gagal disimpan!",
                 showConfirmButton: true,
@@ -1059,7 +1135,6 @@ function DocK11() {
 
             response
             .then((res) => {
-                // console.log(res)
                 if(res.data.status === '200') {
                     setKontainerPtk(res.data.data)
                 }
@@ -1134,9 +1209,6 @@ function DocK11() {
         });
     }
 
-    const addCommas = num => num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-    const removeNonNumeric = num => num.toString().replace(/[^0-9.]/g, "");
-    
     function handleEditKomoditas(e) {
         setValueDetilMP("idDetilMP", e.target.dataset.header)
         setValueDetilMP("idPtk", e.target.dataset.ptk)
@@ -1266,7 +1338,9 @@ function DocK11() {
                             setdataSelect(values => ({...values, "kodeHSMp": arrayDataHS}));
                         })
                         .catch((error) => {
-                            console.log(error);
+                            if(process.env.REACT_APP_BE_ENV == "DEV") {
+                console.log(error)
+            };
                         });
 
                         // handleKomKHIDetil(response.data.data.ptk.jenis_media_pembawa_id)
@@ -1284,7 +1358,9 @@ function DocK11() {
                                 setdataSelect(values => ({...values, "kodeHSMp": arrayKodeHS}));
                             })
                             .catch((error) => {
-                                console.log(error);
+                                if(process.env.REACT_APP_BE_ENV == "DEV") {
+                console.log(error)
+            };
                             });
                     
                             if(response.data.data.ptk.jenis_karantina === "H") {
@@ -1301,7 +1377,9 @@ function DocK11() {
                                     setdataSelect(values => ({...values, "peruntukanMPKH": arraySelectKlasKH}));
                                 })
                                 .catch((error) => {
-                                    console.log(error);
+                                    if(process.env.REACT_APP_BE_ENV == "DEV") {
+                console.log(error)
+            };
                                 });
                                 
                                 const resKomKH = modelMaster.masterKomKH(response.data.data.ptk.jenis_media_pembawa_id)
@@ -1317,7 +1395,9 @@ function DocK11() {
                                     setdataSelect(values => ({...values, "selectKomoditasMPKH": arrayKomKH}));
                                 })
                                 .catch((error) => {
-                                    console.log(error);
+                                    if(process.env.REACT_APP_BE_ENV == "DEV") {
+                console.log(error)
+            };
                                 });
                 
                             } else if(response.data.data.ptk.jenis_karantina === "T") {
@@ -1335,7 +1415,9 @@ function DocK11() {
                                     setdataSelect(values => ({...values, "peruntukanMP": arraySelectKlasKT}))
                                 })
                                 .catch((error) => {
-                                    console.log(error);
+                                    if(process.env.REACT_APP_BE_ENV == "DEV") {
+                console.log(error)
+            };
                                 });
                                 
                                 const resKomKT = modelMaster.masterKomKT()
@@ -1351,7 +1433,9 @@ function DocK11() {
                                     setdataSelect(values => ({...values, "selectKomoditasMP": arrayKomKT}))
                                 })
                                 .catch((error) => {
-                                    console.log(error);
+                                    if(process.env.REACT_APP_BE_ENV == "DEV") {
+                console.log(error)
+            };
                                 });
                 
                             } else if(response.data.data.ptk.jenis_karantina === "I") {
@@ -1368,7 +1452,9 @@ function DocK11() {
                                     setdataSelect(values => ({...values, "peruntukanMPKI": arraySelectKlasKI}))
                                 })
                                 .catch((error) => {
-                                    console.log(error);
+                                    if(process.env.REACT_APP_BE_ENV == "DEV") {
+                console.log(error)
+            };
                                 });
                                 
                                 const resKomKI = modelMaster.masterKomKI()
@@ -1386,7 +1472,9 @@ function DocK11() {
                                     }
                                 })
                                 .catch((error) => {
-                                    console.log(error);
+                                    if(process.env.REACT_APP_BE_ENV == "DEV") {
+                console.log(error)
+            };
                                 });
                             }
                         }
@@ -1494,8 +1582,8 @@ function DocK11() {
                         setValuePelabuhan("callSignAkhir", response.data.data.ptk.call_sign_terakhir);
                         setValuePelabuhan("tglTibaAkhir", response.data.data.ptk.tanggal_rencana_tiba_terakhir);
                         setValuePelabuhan("tglBerangkatAkhir", response.data.data.ptk.tanggal_rencana_berangkat_terakhir);
-                        setValuePelabuhan("transitOpsi", response.data.data.ptk.is_transit === null ? "" :response.data.data.ptk.is_transit.toString());
-                        setValuePelabuhan("cekKontainer", response.data.data.ptk.is_kontainer === null ? "" : response.data.data.ptk.is_kontainer.toString());
+                        setValuePelabuhan("transitOpsi", response.data.data.ptk.is_transit == null ? "" :response.data.data.ptk.is_transit.toString());
+                        setValuePelabuhan("cekKontainer", response.data.data.ptk.is_kontainer == null ? "" : response.data.data.ptk.is_kontainer.toString());
                         if(response.data.data.ptk.is_kontainer !== null) {
                             setFormTab(values => ({...values, tab2: false}))
                         }
@@ -1511,8 +1599,8 @@ function DocK11() {
                         if(response.data.data.ptk.jenis_karantina !== null || response.data.data.ptk_kontainer.length > 0) {
                             setFormTab(values => ({...values, tab3: false}))
                         }
-                        setValueMP("jenisKemasan", response.data.data.ptk.kemasan_id === null ? "" : response.data.data.ptk.kemasan_id.toString());
-                        setValueMP("jenisAngkut", response.data.data.ptk.is_curah === null ? "" : response.data.data.ptk.is_curah.toString());
+                        setValueMP("jenisKemasan", response.data.data.ptk.kemasan_id == null ? "" : response.data.data.ptk.kemasan_id.toString());
+                        setValueMP("jenisAngkut", response.data.data.ptk.is_curah == null ? "" : response.data.data.ptk.is_curah.toString());
                         setValueMP("peruntukan", response.data.data.ptk.peruntukan_id ? response.data.data.ptk.peruntukan_id.toString() : "");
                         setValueMP("merkKemasan", response.data.data.ptk.merk_kemasan);
                         setValueMP("jumlahKemasan", response.data.data.ptk.jumlah_kemasan);
@@ -1551,7 +1639,9 @@ function DocK11() {
                 }
             })
             .catch((error) => {
-                console.log(error);
+                if(process.env.REACT_APP_BE_ENV == "DEV") {
+                console.log(error)
+            };
             });
         }
     },[idPtk, handleKota, handlePelabuhan, setValueDetilMP, setValueDokPeriksa, setValueDokumen, setValueKonfirmasi, setValueKontainer, setValueMP, setValuePelabuhan, setValuePemohon, setValueVerify])
@@ -1745,7 +1835,7 @@ function DocK11() {
                 </div>
                 <div className="col-sm-6">
                     <div className="card card-action mb-4">
-                        <div className="card-header mb-3 p-2" style={{backgroundColor: '#123138'}}>
+                        <div className="card-header mb-3 p-2" style={{backgroundColor: '#123138', position: "sticky", top: "0px", zIndex: 1}}>
                             <div className="card-action-title">
                                 <h5 className="mb-0 text-lightest">Pemohon</h5>
                             </div>
@@ -1835,13 +1925,13 @@ function DocK11() {
                                 <div className="row mb-3">
                                     <label className="col-sm-3 col-form-label" htmlFor="nomorTlp">No. Telepon</label>
                                     <div className="col-sm-9">
-                                        <input type="number" name='nomorTlp' id="nomorTlp" {...registerPemohon("nomorTlp")} className="form-control form-control-sm" placeholder="No. Telepon" />
+                                        <input type="text" name='nomorTlp' id="nomorTlp" value={cekdataDiri.nomorTlp ? removeNonNumeric(cekdataDiri.nomorTlp) : ""} {...registerPemohon("nomorTlp")} className="form-control form-control-sm" placeholder="6289898989898" />
                                     </div>
                                 </div>
                                 <div className="row mb-3">
                                     <label className="col-sm-3 col-form-label" htmlFor="nomorFax">No. Fax.</label>
                                     <div className="col-sm-9">
-                                        <input type="number" name='nomorFax' id="nomorFax" {...registerPemohon("nomorFax")} className="form-control form-control-sm" placeholder="No. Fax." />
+                                        <input type="text" name='nomorFax' id="nomorFax" value={cekdataDiri.nomorFax ? removeNonNumeric(cekdataDiri.nomorFax) : ""} {...registerPemohon("nomorFax")} className="form-control form-control-sm" placeholder="-" />
                                     </div>
                                 </div>
                                 <div className="row mb-3">
@@ -1856,8 +1946,11 @@ function DocK11() {
                                         </select>
                                     </div>
                                     <div className="col-sm-7">
-                                        <input type="text" name="noIdentitasPemohon" id="noIdentitasPemohon" {...registerPemohon("noIdentitasPemohon", { required: "Mohon isi identitas pemohon."})} className={errorsPemohon.noIdentitasPemohon ? "form-control form-control-sm is-invalid" : "form-control form-control-sm"} placeholder="Nomor Identitas" />
+                                        <input type="text" name="noIdentitasPemohon" id="noIdentitasPemohon" value={cekdataDiri.noIdentitasPemohon ? removeNonNumeric(cekdataDiri.noIdentitasPemohon) : ""}  {...registerPemohon("noIdentitasPemohon", { required: "Mohon isi identitas pemohon."})} className={errorsPemohon.noIdentitasPemohon ? "form-control form-control-sm is-invalid" : "form-control form-control-sm"} placeholder="Nomor Identitas" />
                                             {errorsPemohon.noIdentitasPemohon && <small className="text-danger">{errorsPemohon.noIdentitasPemohon.message}</small>}
+                                    </div>
+                                    <div className="offset-sm-3 col-sm-9">
+                                        <small className='text-danger'>*Isi nomor identitas tanpa tanda baca (hanya angka)</small>
                                     </div>
                                 </div>
                                 <div className="form-check mt-3">
@@ -1910,8 +2003,11 @@ function DocK11() {
                                         </select>
                                     </div>
                                     <div className="col-sm-7">
-                                        <input type="text" id="noIdentitasTtd" name="noIdentitasTtd" className={errorsPemohon.noIdentitasTtd ? "form-control form-control-sm is-invalid" : "form-control form-control-sm"} {...registerPemohon("noIdentitasTtd", { required: "Mohon isi identitas penandatangan."})} placeholder="Nomor Identitas" />
+                                        <input type="text" id="noIdentitasTtd" name="noIdentitasTtd" className={errorsPemohon.noIdentitasTtd ? "form-control form-control-sm is-invalid" : "form-control form-control-sm"} value={cekdataDiri.noIdentitasTtd ? removeNonNumeric(cekdataDiri.noIdentitasTtd) : ""} {...registerPemohon("noIdentitasTtd", { required: "Mohon isi identitas penandatangan."})} placeholder="Nomor Identitas" />
                                         {errorsPemohon.noIdentitasTtd && <small className="text-danger">{errorsPemohon.noIdentitasTtd.message}</small>}
+                                    </div>
+                                    <div className="offset-sm-3 col-sm-9">
+                                        <small className='text-danger'>*Isi nomor identitas tanpa tanda baca (hanya angka)</small>
                                     </div>
                                 </div>
                                 <div className="row mb-3">
@@ -2002,14 +2098,17 @@ function DocK11() {
                                         </select>
                                     </div>
                                     <div className="col-sm-7">
-                                        <input type="text" id="noIdentitasPengirim" name="noIdentitasPengirim" {...registerPemohon("noIdentitasPengirim", { required: "Mohon isi identitas pengirim."})} className={errorsPemohon.noIdentitasPengirim ? "form-control form-control-sm is-invalid" : "form-control form-control-sm"} placeholder="Nomor Identitas" />
+                                        <input type="text" id="noIdentitasPengirim" name="noIdentitasPengirim" value={cekdataDiri.noIdentitasPengirim ? removeNonNumeric(cekdataDiri.noIdentitasPengirim) : ""} {...registerPemohon("noIdentitasPengirim", { required: "Mohon isi identitas pengirim."})} className={errorsPemohon.noIdentitasPengirim ? "form-control form-control-sm is-invalid" : "form-control form-control-sm"} placeholder="Nomor Identitas" />
                                         {errorsPemohon.noIdentitasPengirim && <small className="text-danger">{errorsPemohon.noIdentitasPengirim.message}</small>}
+                                    </div>
+                                    <div className="offset-sm-3 col-sm-9">
+                                        <small className='text-danger'>*Isi nomor identitas tanpa tanda baca (hanya angka)</small>
                                     </div>
                                 </div>
                                 <div className="row mb-3">
                                     <label className="col-sm-3 col-form-label" htmlFor="nomorTlpPengirim">No. Telepon</label>
                                     <div className="col-sm-9">
-                                        <input type="number" id="nomorTlpPengirim" name="nomorTlpPengirim" {...registerPemohon("nomorTlpPengirim")} className="form-control form-control-sm" placeholder="No. Telepon" />
+                                        <input type="number" id="nomorTlpPengirim" name="nomorTlpPengirim" value={cekdataDiri.nomorTlpPengirim ? removeNonNumeric(cekdataDiri.nomorTlpPengirim) : ""} {...registerPemohon("nomorTlpPengirim")} className="form-control form-control-sm" placeholder="6289898989898" />
                                     </div>
                                 </div>
                                 <div className="row mb-3">
@@ -2110,14 +2209,17 @@ function DocK11() {
                                         </select>
                                     </div>
                                     <div className="col-sm-7">
-                                        <input type="text" id="noIdentitasPenerima" name="noIdentitasPenerima" className={errorsPemohon.noIdentitasPenerima ? "form-control form-control-sm is-invalid" : "form-control form-control-sm"} placeholder="Nomor Identitas" {...registerPemohon("noIdentitasPenerima", { required: "Mohon isi identitas penerima."})} />
+                                        <input type="text" id="noIdentitasPenerima" name="noIdentitasPenerima" value={cekdataDiri.noIdentitasPenerima ? removeNonNumeric(cekdataDiri.noIdentitasPenerima) : ""} className={errorsPemohon.noIdentitasPenerima ? "form-control form-control-sm is-invalid" : "form-control form-control-sm"} placeholder="Nomor Identitas" {...registerPemohon("noIdentitasPenerima", { required: "Mohon isi identitas penerima."})} />
                                         {errorsPemohon.noIdentitasPenerima && <small className="text-danger">{errorsPemohon.noIdentitasPenerima.message}</small>}
+                                    </div>
+                                    <div className="offset-sm-3 col-sm-9">
+                                        <small className='text-danger'>*Isi nomor identitas tanpa tanda baca (hanya angka)</small>
                                     </div>
                                 </div>
                                 <div className="row mb-3">
                                     <label className="col-sm-3 col-form-label" htmlFor="nomorTlpPenerima">No. Telepon</label>
                                     <div className="col-sm-9">
-                                        <input type="number" id="nomorTlpPenerima" name="nomorTlpPenerima" {...registerPemohon("nomorTlpPenerima")} className="form-control form-control-sm" placeholder="No. Telepon" />
+                                        <input type="number" id="nomorTlpPenerima" name="nomorTlpPenerima" {...registerPemohon("nomorTlpPenerima")} value={cekdataDiri.nomorTlpPenerima ? removeNonNumeric(cekdataDiri.nomorTlpPenerima) : ""} className="form-control form-control-sm" placeholder="6289898989898" />
                                     </div>
                                 </div>
                                 <div className="row mb-3">
@@ -2248,12 +2350,12 @@ function DocK11() {
                                                         <label className="col-sm-3 col-form-label" htmlFor="transitOpsi">Transit <span className='text-danger'>*</span></label>
                                                         <div className="col-sm-9">
                                                             <div className="form-check form-check-inline">
-                                                                <input className="form-check-input" type="radio" name="transitOpsi" id="ya" value="1"  {...registerPelabuhan("transitOpsi", { required: "Mohon pilih transit."})}/>
-                                                                <label className="form-check-label" htmlFor="ya">Ya</label>
+                                                                <input className="form-check-input" type="radio" name="transitOpsi" id="transitYa" value="1"  {...registerPelabuhan("transitOpsi", { required: "Mohon pilih transit."})}/>
+                                                                <label className="form-check-label" htmlFor="transitYa">Ya</label>
                                                             </div>
                                                             <div className="form-check form-check-inline">
-                                                                <input className="form-check-input" type="radio" name="transitOpsi" id="tidak" value="0" {...registerPelabuhan("transitOpsi")} />
-                                                                <label className="form-check-label" htmlFor="tidak">Tidak</label>
+                                                                <input className="form-check-input" type="radio" name="transitOpsi" id="transitTidak" value="0" {...registerPelabuhan("transitOpsi")} />
+                                                                <label className="form-check-label" htmlFor="transitTidak">Tidak</label>
                                                             </div>
                                                             {errorsPelabuhan.transitOpsi && <small className="text-danger">{errorsPelabuhan.transitOpsi.message}</small>}
                                                         </div>
@@ -2557,12 +2659,12 @@ function DocK11() {
                                                 <div className="card-action-title">
                                                     <h5 className="mb-0">Apakah ada Kontainer ?</h5>
                                                     <div className="form-check form-check-inline">
-                                                        <input className="form-check-input" type="radio" name="cekKontainer" id="ya" value="1" {...registerPelabuhan("cekKontainer", { required: "Mohon isi pilihan kontainer."})} />
-                                                        <label className="form-check-label" htmlFor="ya">Ya</label>
+                                                        <input className="form-check-input" type="radio" name="cekKontainer" id="kontainerYa" value="1" {...registerPelabuhan("cekKontainer", { required: "Mohon isi pilihan kontainer."})} />
+                                                        <label className="form-check-label" htmlFor="kontainerYa">Ya</label>
                                                     </div>
                                                     <div className="form-check form-check-inline">
-                                                        <input className="form-check-input" type="radio" name="cekKontainer" id="tidak" value="0" {...registerPelabuhan("cekKontainer")} />
-                                                        <label className="form-check-label" htmlFor="tidak">Tidak</label>
+                                                        <input className="form-check-input" type="radio" name="cekKontainer" id="kontainerTidak" value="0" {...registerPelabuhan("cekKontainer")} />
+                                                        <label className="form-check-label" htmlFor="kontainerTidak">Tidak</label>
                                                     </div>
                                                     {errorsPelabuhan.cekKontainer && <small className="text-danger">{errorsPelabuhan.cekKontainer.message}</small>}
                                                 </div>
@@ -2856,7 +2958,7 @@ function DocK11() {
                                                         <div className="card-body pt-0">
                                                             <div className="row g-3 mb-3">
                                                                 <div className="col-md-12">
-                                                                    <button type="button" className="btn btn-xs btn-primary" data-bs-toggle={cekdataMP.jenisMp ? "modal" : ""} data-bs-target={cekdataMP.jenisMp ? "#modKomoditas" : ""} onClick={() => cekdataMP.jenisMp ? resetFormKomoditi() : Swal.fire({icon: "error", title: "Mohon Pilih Jenis Media Pembawa!", showConfirmButton: true})}>Tambah Komoditas</button>
+                                                                    <button type="button" className="btn btn-xs btn-primary" data-bs-toggle={cekdataDiri.jenisMp ? "modal" : ""} data-bs-target={cekdataDiri.jenisMp ? "#modKomoditas" : ""} onClick={() => cekdataDiri.jenisMp ? resetFormKomoditi() : Swal.fire({icon: "error", title: "Mohon Pilih Jenis Media Pembawa!", showConfirmButton: true})}>Tambah Komoditas</button>
                                                                     <button type="button" className="btn btn-xs btn-info float-end"  onClick={dataKomoditiPtk}><i className="menu-icon tf-icons fa-solid fa-sync"></i> Refresh Data</button>
                                                                 </div>
                                                                 <div className="table-responsive text-nowrap" style={{height: "300px"}}>
@@ -3180,7 +3282,7 @@ function DocK11() {
             </div>
         </div>
         <div className="modal fade" id="modKontainer" tabIndex="-1" aria-hidden="true">
-            <div className="modal-dialog modal-dialog-centered1 modal-simple">
+            <div className="modal-dialog modal-dialog-centered">
                 <div className="modal-content p-1">
                     <div className="modal-body">
                     <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
@@ -3563,7 +3665,7 @@ function DocK11() {
                                     )}
                                 />
                                 <small className='text-danger'>{cekdataDetilMP.idDetilMP ? "*Tidak perlu dipilih ulang jika tidak ubah komoditas" : null}</small>
-                                {/* <select name="komoditasMP" id="komoditasMP" data-gol={cekdataMP.jenisMp} onClick={handleKomoditasKH} {...registerDetilMP("komoditasMP", {required: "Mohon isi Komoditas."})} className={errorsDetilMP.komoditasMP ? "form-control form-control-sm is-invalid" : "form-control form-control-sm"} >
+                                {/* <select name="komoditasMP" id="komoditasMP" data-gol={cekdataDiri.jenisMp} onClick={handleKomoditasKH} {...registerDetilMP("komoditasMP", {required: "Mohon isi Komoditas."})} className={errorsDetilMP.komoditasMP ? "form-control form-control-sm is-invalid" : "form-control form-control-sm"} >
                                         <option value="">--</option>
                                         {dataSelect.komoditasMP}
                                 </select> */}
@@ -3620,7 +3722,7 @@ function DocK11() {
                                 </div>
                                 </div>
                             </div>
-                            <div className="col-6" style={{visibility: (cekdataMP.jenisMp === '1' ? "visible" : "hidden")}}>
+                            <div className="col-6" style={{visibility: (cekdataDiri.jenisMp === '1' ? "visible" : "hidden")}}>
                                 <label className="form-label" htmlFor="breedMP">Breed</label>
                                 <input type='text' name="breedMP" id="breedMP" {...registerDetilMP("breedMP")} className="form-control form-control-sm" />
                             </div>
@@ -3632,8 +3734,8 @@ function DocK11() {
                                 </div>
                                 {/* ekor: 1122 || KG: 1356  */}
                                 <div className='col-5' style={{paddingLeft: '2px'}}>
-                                    {/* <input type="hidden" name='satNettoMP' id='satNettoMP' {...registerDetilMP("satNettoMP")} value={cekdataMP.jenisMp === '1' || cekdataMP.jenisMp === '6' ? '1122' : '1356'} />
-                                    <input type="text" className='form-control form-control-sm' value={cekdataMP.jenisMp === '1' || cekdataMP.jenisMp === '6' ? 'EKOR' : 'KILOGRAM'} readOnly /> */}
+                                    {/* <input type="hidden" name='satNettoMP' id='satNettoMP' {...registerDetilMP("satNettoMP")} value={cekdataDiri.jenisMp === '1' || cekdataDiri.jenisMp === '6' ? '1122' : '1356'} />
+                                    <input type="text" className='form-control form-control-sm' value={cekdataDiri.jenisMp === '1' || cekdataDiri.jenisMp === '6' ? 'EKOR' : 'KILOGRAM'} readOnly /> */}
                                     <input type="hidden" name='satNettoMP' id='satNettoMP' {...registerDetilMP("satNettoMP")} value="1356" />
                                     <input type="text" className='form-control form-control-sm' value='KILOGRAM' readOnly />
                                 </div>
@@ -3661,14 +3763,14 @@ function DocK11() {
                                 </div>
                                 {/* ekor: 1122 || KG: 1356  */}
                                 <div className='col-5' style={{paddingLeft: '2px'}}>
-                                    {/* <input type="hidden" name='satBrutoMP' id='satBrutoMP' {...registerDetilMP("satBrutoMP")} value={cekdataMP.jenisMp === '1' || cekdataMP.jenisMp === '6' ? '1122' : '1356'} /> */}
-                                    {/* <input type="text" className='form-control form-control-sm' value={cekdataMP.jenisMp === '1' || cekdataMP.jenisMp === '6' ? 'EKOR' : 'KILOGRAM'} readOnly  /> */}
+                                    {/* <input type="hidden" name='satBrutoMP' id='satBrutoMP' {...registerDetilMP("satBrutoMP")} value={cekdataDiri.jenisMp === '1' || cekdataDiri.jenisMp === '6' ? '1122' : '1356'} /> */}
+                                    {/* <input type="text" className='form-control form-control-sm' value={cekdataDiri.jenisMp === '1' || cekdataDiri.jenisMp === '6' ? 'EKOR' : 'KILOGRAM'} readOnly  /> */}
                                     <input type="hidden" name='satBrutoMP' id='satBrutoMP' {...registerDetilMP("satBrutoMP")} value="1356" />
                                     <input type="text" className='form-control form-control-sm' value="KILOGRAM" readOnly  />
                                 </div>
                                 </div>
                             </div>
-                            <div className="col-6" style={{display: (cekdataMP.jenisMp === '1' ? "block" : "none")}}>
+                            <div className="col-6" style={{display: (cekdataDiri.jenisMp === '1' ? "block" : "none")}}>
                                 <div className='row'>
                                     <div className="col-4">
                                         <label className="form-label" htmlFor="jantan">Jantan (Ekor)</label>
@@ -3714,7 +3816,7 @@ function DocK11() {
                                     )}
                                 />
                                 <small className='text-danger'>{cekdataDetilMP.idDetilMP ? "*Tidak perlu dipilih ulang jika tidak ubah komoditas" : null}</small>
-                                {/* <select name="komoditasMP" id="komoditasMP" data-gol={cekdataMP.jenisMp} onClick={handleKomoditasKH} {...registerDetilMP("komoditasMP", {required: "Mohon isi Komoditas."})} className={errorsDetilMP.komoditasMP ? "form-control form-control-sm is-invalid" : "form-control form-control-sm"} >
+                                {/* <select name="komoditasMP" id="komoditasMP" data-gol={cekdataDiri.jenisMp} onClick={handleKomoditasKH} {...registerDetilMP("komoditasMP", {required: "Mohon isi Komoditas."})} className={errorsDetilMP.komoditasMP ? "form-control form-control-sm is-invalid" : "form-control form-control-sm"} >
                                         <option value="">--</option>
                                         {dataSelect.komoditasMP}
                                 </select> */}
@@ -3754,8 +3856,8 @@ function DocK11() {
                                 </div>
                                 {/* ekor: 1122 || KG: 1356  */}
                                 <div className='col-5' style={{paddingLeft: '2px'}}>
-                                    {/* <input type="hidden" name='satNettoMP' id='satNettoMP' {...registerDetilMP("satNettoMP")} value={cekdataMP.jenisMp === '1' || cekdataMP.jenisMp === '6' ? '1122' : '1356'} />
-                                    <input type="text" className='form-control form-control-sm' value={cekdataMP.jenisMp === '1' || cekdataMP.jenisMp === '6' ? 'EKOR' : 'KILOGRAM'} readOnly /> */}
+                                    {/* <input type="hidden" name='satNettoMP' id='satNettoMP' {...registerDetilMP("satNettoMP")} value={cekdataDiri.jenisMp === '1' || cekdataDiri.jenisMp === '6' ? '1122' : '1356'} />
+                                    <input type="text" className='form-control form-control-sm' value={cekdataDiri.jenisMp === '1' || cekdataDiri.jenisMp === '6' ? 'EKOR' : 'KILOGRAM'} readOnly /> */}
                                     <input type="hidden" name='satNettoMPKI' id='satNettoMPKI' {...registerDetilMP("satNettoMPKI")} value="1356" />
                                     <input type="text" className='form-control form-control-sm' value='KILOGRAM' readOnly />
                                 </div>
@@ -3794,8 +3896,8 @@ function DocK11() {
                                 </div>
                                 {/* ekor: 1122 || KG: 1356  */}
                                 <div className='col-5' style={{paddingLeft: '2px'}}>
-                                    {/* <input type="hidden" name='satBrutoMP' id='satBrutoMP' {...registerDetilMP("satBrutoMP")} value={cekdataMP.jenisMp === '1' || cekdataMP.jenisMp === '6' ? '1122' : '1356'} /> */}
-                                    {/* <input type="text" className='form-control form-control-sm' value={cekdataMP.jenisMp === '1' || cekdataMP.jenisMp === '6' ? 'EKOR' : 'KILOGRAM'} readOnly  /> */}
+                                    {/* <input type="hidden" name='satBrutoMP' id='satBrutoMP' {...registerDetilMP("satBrutoMP")} value={cekdataDiri.jenisMp === '1' || cekdataDiri.jenisMp === '6' ? '1122' : '1356'} /> */}
+                                    {/* <input type="text" className='form-control form-control-sm' value={cekdataDiri.jenisMp === '1' || cekdataDiri.jenisMp === '6' ? 'EKOR' : 'KILOGRAM'} readOnly  /> */}
                                     <input type="hidden" name='satBrutoMPKI' id='satBrutoMPKI' {...registerDetilMP("satBrutoMPKI")} value="1356" />
                                     <input type="text" className='form-control form-control-sm' value="KILOGRAM" readOnly  />
                                 </div>
