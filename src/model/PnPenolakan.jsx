@@ -71,7 +71,6 @@ export default class PnPenolakan {
         },
         data: datasend
         };
-        // console.log("dok 61: " + JSON.stringify(config))
         return axios.request(config)
     }
     
@@ -139,7 +138,6 @@ export default class PnPenolakan {
         },
         data: datasend
         };
-        // console.log("dok 61: " + JSON.stringify(config))
         return axios.request(config)
     }
     
@@ -195,7 +193,6 @@ export default class PnPenolakan {
         },
         data: datasend
         };
-        // console.log("dok 61: " + JSON.stringify(config))
         return axios.request(config)
     }
     
@@ -256,7 +253,6 @@ export default class PnPenolakan {
         },
         data: datasend
         };
-        console.log("dok 74: " + JSON.stringify(config))
         return axios.request(config)
     }
 }

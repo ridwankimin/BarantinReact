@@ -1,3 +1,4 @@
+/* eslint-disable eqeqeq */
 import axios from "axios";
 import Cookies from "js-cookie";
 // import { Navigate, json } from "react-router-dom";
@@ -84,7 +85,7 @@ export default class PtkModel {
             "user_created": Cookies.get("userId"), // pake session
             "created_at": dateNow() // ok
       }
-        console.log(JSON.stringify(datasend))
+        
               
         let config = {
             method: 'post',
@@ -181,7 +182,7 @@ export default class PtkModel {
             'Content-Type': 'application/json', 
           }
         };
-        console.log(config)
+        
         return axios.request(config)
       }
       
@@ -206,10 +207,9 @@ export default class PtkModel {
           },
           data: datasend
         };
-        // console.log(config)
+        // 
         
         return axios.request(config)
-        // console.log(JSON.stringify(axios.request(config)))
       }
 
       tabPelabuhan(data) {
@@ -248,7 +248,7 @@ export default class PtkModel {
           'is_kontainer': data.cekKontainer, // ok
           'updated_at': dateNow()
         }
-        console.log(JSON.stringify(datasend))
+        
       let config = {
         method: 'put',
         maxBodyLength: Infinity,
@@ -305,7 +305,7 @@ export default class PtkModel {
         },
         data : datasend
       };
-      console.log(JSON.stringify(config))
+      
   
       return axios.request(config)
     }
@@ -316,12 +316,12 @@ export default class PtkModel {
           'id': data.idPtk, // ok
           'no_aju': data.noAju, // ok
           'tempat_pemeriksaan': data.tempatPeriksaPtk,
-          'instalasi_karantina_id': data.tempatPeriksaPtk === 'IK' ? data.namaTempatPeriksaPtk.split(";")[0] : "",
-          'tempat_lain_id': data.tempatPeriksaPtk === 'TL' ? data.namaTempatPeriksaPtk.split(";")[0] : "",
-          'nama_tempat_pemeriksaan': data.tempatPeriksaPtk === 'DL' ? data.namaTempatPeriksaPtk : data.namaTempatPeriksaPtk.split(";")[1],
+          'instalasi_karantina_id': data.tempatPeriksaPtk === 'IK' ? (data.namaTempatPeriksaPtk == '' ? "" : data.namaTempatPeriksaPtk.split(";")[0]) : "",
+          'tempat_lain_id': data.tempatPeriksaPtk === 'TL' ? (data.namaTempatPeriksaPtk == '' ? "" : data.namaTempatPeriksaPtk.split(";")[0]) : "",
+          'nama_tempat_pemeriksaan': data.tempatPeriksaPtk === 'DL' ? data.namaTempatPeriksaPtk : (data.namaTempatPeriksaPtk == '' ? "" : data.namaTempatPeriksaPtk?.split(";")[1]),
           'alamat_tempat_pemeriksaan': data.alamatTempatPeriksaPtk,
           }
-        console.log(JSON.stringify(datasend))
+        
       let config = {
         method: 'put',
         maxBodyLength: Infinity,
@@ -342,7 +342,7 @@ export default class PtkModel {
           'no_aju': data.noAju,
           'status_ptk': 9, // draft:0 ;dikirim:9 ;diterima:1 ; ditolak:2
           // 'is_verifikasi': 0,
-          // 'is_draft': 0,
+          'is_draft': data.isDraft == '' ? 0 : data.isDraft,
           'tgl_aju': dateNow(),
           'updated_at': dateNow()
         }
@@ -397,7 +397,7 @@ export default class PtkModel {
         'segel': data.segel,
         // 'created_at': dateNow(),
       };
-      // console.log(JSON.stringify(datasend))
+      // 
       let config = {
         method: data.idDataKontainer === '' ? 'post' : 'put',
         maxBodyLength: Infinity,
@@ -423,7 +423,7 @@ export default class PtkModel {
         'segel': data.segel,
         'created_at': dateNow(),
       };
-      console.log(JSON.stringify(datasend))
+      
       let config = {
         method: 'delete',
         maxBodyLength: Infinity,
@@ -465,7 +465,7 @@ export default class PtkModel {
             'created_at': dateNow(),
             'tindakan': ""
       };
-      console.log(JSON.stringify(datasend))
+      
       let config = {
         method: (data.idDetilMP ? 'put' : 'post'),
         maxBodyLength: Infinity,
@@ -491,7 +491,7 @@ export default class PtkModel {
           'kar': kar
         }
       };
-      console.log(config)
+      
       
       return axios.request(config)
     }
@@ -540,7 +540,7 @@ export default class PtkModel {
         'efile': data.fileDokumen,
         'created_at': dateNow(),
       };
-      // console.log(JSON.stringify(datasend))
+      // 
       let config = {
         method: data.idDataDokumen === '' ? 'post' : 'put',
         maxBodyLength: Infinity,
@@ -570,7 +570,7 @@ export default class PtkModel {
         'petugas': data.petugasVerif, // pake session
         'nip': '123',
       };
-      // console.log(JSON.stringify(datasend))
+      // 
       let config = {
         method: 'put',
         maxBodyLength: Infinity,
@@ -581,7 +581,20 @@ export default class PtkModel {
         },
         data: datasend
       };
-      console.log(JSON.stringify(config))
+      
+      
+      return axios.request(config)
+    }
+    
+    cekPrior(id) {
+      let config = {
+        method: 'get',
+        maxBodyLength: Infinity,
+        url: "https://api.karantinaindonesia.go.id/notice/doc/" + id,
+        headers: { 
+          'Content-Type': 'application/json', 
+        }
+      };
       
       return axios.request(config)
     }

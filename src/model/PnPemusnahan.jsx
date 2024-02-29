@@ -57,13 +57,11 @@ export default class PnPemusnahan {
             },
             data: datasend
           };
-          console.log("dok kt1: " + JSON.stringify(config))
           return axios.request(config)
     }
     
     simpan82(data, listSaksi) {
         const uuid = uuidv4()
-        console.log(listSaksi)
 
         const saksi = listSaksi?.map((item, index) => {
             return {
@@ -117,7 +115,6 @@ export default class PnPemusnahan {
             },
             data: datasend
           };
-          console.log("dok kt1: " + JSON.stringify(config))
           return axios.request(config)
     }
 }

@@ -19,7 +19,6 @@ export default class PnPerlakuan {
         dokumen_karantina_id: idDok
       }
     };
-    // console.log("dok k53: " + JSON.stringify(config))
     return axios.request(config)
   }
     
@@ -75,7 +74,6 @@ export default class PnPerlakuan {
           },
           data: datasend
         };
-        // console.log(JSON.stringify(datasend))
         
         return axios.request(config)
     }
@@ -132,7 +130,6 @@ export default class PnPerlakuan {
           },
           data: datasend
         };
-        // console.log(JSON.stringify(datasend))
         
         return axios.request(config)
     }
@@ -190,7 +187,6 @@ export default class PnPerlakuan {
           },
           data: datasend
         };
-        // console.log(JSON.stringify(datasend))
         
         return axios.request(config)
     }

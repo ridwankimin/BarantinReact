@@ -13,7 +13,7 @@ function Wrapper() {
     <div className="layout-wrapper light-style layout-content-navbar">
       <div className="layout-container">
         <Navbar menu={hideMenu}/>
-        <Footer menu={hideMenu} clicked={onClick}/>
+        <Footer menu={hideMenu} clicked={onClick} />
       </div>
     </div>
   )

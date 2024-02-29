@@ -21,7 +21,7 @@ export default class PtkHistory {
       },
       data: datasend
     };
-    console.log("history: " + JSON.stringify(config))
+    
     return axios.request(config)
   }
   
@@ -43,7 +43,7 @@ export default class PtkHistory {
       },
       data: datasend
     };
-    console.log("history: " + JSON.stringify(config))
+    
     return axios.request(config)
   }
   
@@ -65,7 +65,7 @@ export default class PtkHistory {
       },
       data: datasend
     };
-    console.log("history: " + JSON.stringify(config))
+    
     return axios.request(config)
   }
   
@@ -87,7 +87,7 @@ export default class PtkHistory {
       },
       data: datasend
     };
-    console.log("history: " + JSON.stringify(config))
+    
     return axios.request(config)
   }
   
@@ -109,7 +109,7 @@ export default class PtkHistory {
       },
       data: datasend
     };
-    console.log("history: " + JSON.stringify(config))
+    
     return axios.request(config)
   }
   
@@ -131,7 +131,7 @@ export default class PtkHistory {
       },
       data: datasend
     };
-    console.log("history: " + JSON.stringify(config))
+    
     return axios.request(config)
   }
   
@@ -153,7 +153,7 @@ export default class PtkHistory {
       },
       data: datasend
     };
-    console.log("history: " + JSON.stringify(config))
+    
     return axios.request(config)
   }
   
@@ -175,7 +175,7 @@ export default class PtkHistory {
       },
       data: datasend
     };
-    console.log("history: " + JSON.stringify(config))
+    
     return axios.request(config)
   }
   
@@ -200,7 +200,7 @@ export default class PtkHistory {
       },
       data: datasend
     };
-    console.log("history: " + JSON.stringify(config))
+    
     return axios.request(config)
   }
 }

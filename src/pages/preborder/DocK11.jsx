@@ -199,6 +199,34 @@ function DocK11() {
             // setValueDetilMP("klasifikasiMPKHid", dataPisahKT[3]) //klasifikasi KH
         }
     }
+
+    function cekPrior() {
+        const response = modelPemohon.cekPrior(base64_encode(cekdataDokumen.noDokumen))
+        response
+        .then((response) => {
+            if(response.data.status == '200') {
+                Swal.fire({
+                    icon: "success",
+                    title: response.data.message
+                })
+                setValueDokumen("cekPrior" , "1")
+            } else {
+                Swal.fire({
+                    icon: "error",
+                    title: response.data.message
+                })
+            }
+        })
+        .catch((error) => {
+            if(process.env.REACT_APP_BE_ENV == "DEV") {
+                console.log(error)
+            }
+            Swal.fire({
+                icon: "error",
+                title: "Dokumen Tidak Tersedia."
+            })
+        });
+    }
     
     function handleKemasan(e) {
         setdataSelect(values => ({...values, [e.target.name]: <MasterKemasan/>}))
@@ -351,6 +379,7 @@ function DocK11() {
                 idDataDokumen: "",
                 jenisDokumen: "",
                 kategoriDokumen: "",
+                cekPrior: "",
                 noDokumen: "",
                 tglDokumen: "",
                 negaraAsalDokumen: "",
@@ -530,21 +559,20 @@ function DocK11() {
                     })
                     .catch((error) => {
                         if(process.env.REACT_APP_BE_ENV == "DEV") {
-                console.log(error)
-            };
+                            console.log(error)
+                        };
                     });
                 })
                 .catch((error) => {
                     if(process.env.REACT_APP_BE_ENV == "DEV") {
-                console.log(error)
-            };
+                        console.log(error)
+                    };
                 });
 
             } else if(cekdataDiri.mediaPembawa === "T") {
                 const resPeruntukan = modelMaster.masterKlasKT(e)
                 resPeruntukan
                 .then((response) => {
-                    console.log(response.data)
                     let dataPeruntukanKT = response.data.data;
                     const arraySelectKlasKT = dataPeruntukanKT.map(item => {
                         return {
@@ -568,14 +596,14 @@ function DocK11() {
                     })
                     .catch((error) => {
                         if(process.env.REACT_APP_BE_ENV == "DEV") {
-                console.log(error)
-            };
+                            console.log(error)
+                        };
                     });
                 })
                 .catch((error) => {
                     if(process.env.REACT_APP_BE_ENV == "DEV") {
-                console.log(error)
-            };
+                        console.log(error)
+                    };
                 });
 
             } else if(cekdataDiri.mediaPembawa === "I") {
@@ -631,7 +659,7 @@ function DocK11() {
             .then((response) => {
                 if(response.data.status == 201) {
                     Swal.fire({
-                        position: "top-right",
+                        
                         icon: "success",
                         title: "Dokumen berhasil disimpan.",
                         showConfirmButton: false,
@@ -645,7 +673,7 @@ function DocK11() {
                     }));
                 } else {
                     Swal.fire({
-                        position: "top-right",
+                        
                         icon: "error",
                         title: "Dokumen gagal disimpan.",
                         showConfirmButton: true,
@@ -656,7 +684,7 @@ function DocK11() {
                 if(process.env.REACT_APP_BE_ENV == "DEV") {
                     console.log(error)
                     Swal.fire({
-                        position: "top-right",
+                        
                         icon: "error",
                         title: "Dokumen gagal disimpan.",
                         showConfirmButton: true,
@@ -674,7 +702,7 @@ function DocK11() {
                 
                 if(response.data.status === '201') {
                     Swal.fire({
-                        position: "top-right",
+                        
                         icon: "success",
                         title: "Detil Media Pembawa berhasil disimpan.",
                         showConfirmButton: false,
@@ -736,6 +764,8 @@ function DocK11() {
                                 showConfirmButton: false,
                                 timer: 2000
                             })
+                            Cookies.set("jenisKarantina", cekdataDiri.mediaPembawa)
+                            Cookies.set("jenisForm", cekdataDiri.jenisForm)
                             Cookies.set("idPtkPage", base64_encode(base64_encode(response.data.data.no_aju) + 'm0R3N0r1R' + base64_encode(response.data.data.id) + "m0R3N0r1R" ))
                             setDataIdPage(values => ({...values,
                                 noAju: response.data.data.no_aju,
@@ -895,7 +925,6 @@ function DocK11() {
                     setFormTab(values => ({...values, tab5: false}))
                     setWizardPage(wizardPage + 1)
                 } else {
-                    console.log(response.data)
                     Swal.fire({
                         icon: "error",
                         title: "Error!",
@@ -932,7 +961,6 @@ function DocK11() {
             const response = modelPemohon.tabKonfirmasi(data);
             response
             .then((response) => {
-                console.log(response.data)
                 if(response.data.status === '201') {
                     setPtkLengkap(true);
                     setValueVerify("idPtk", data.idPtk);
@@ -980,7 +1008,6 @@ function DocK11() {
             const response = modelPemohon.ptkVerify(data);
             response
             .then((response) => {
-                console.log(response.data)
                 if(response.data.status === '201') {
                     // setPtkLengkap(true);
                     Cookies.set("idPtkPage", base64_encode(
@@ -990,8 +1017,7 @@ function DocK11() {
                         )
                     )
                     Cookies.set("tglPtk", cekdataVerify.tglTerimaVerif)
-                    Cookies.set("jenisKarantina", cekdataDiri.mediaPembawa)
-                    Cookies.set("jenisForm", cekdataDiri.jenisForm)
+                    
                     setDataIdPage(values => ({...values,
                         noPermohonan: response.data.data.no_dok_permohonan,
                     }));
@@ -1050,7 +1076,7 @@ function DocK11() {
         .then((response) => {
             if(response.data.status === '201') {
                 Swal.fire({
-                    position: "top-right",
+                    
                     icon: "success",
                     title: "Data Kontainer berhasil disimpan.",
                     showConfirmButton: false,
@@ -1060,7 +1086,7 @@ function DocK11() {
                 dataKontainerPtk();
             } else {
                 Swal.fire({
-                    position: "top-right",
+                    
                     icon: "error",
                     title: "Data Kontainer gagal disimpan!",
                     showConfirmButton: true,
@@ -1071,7 +1097,7 @@ function DocK11() {
         .catch((error) => {
             console.log(error.response);
             Swal.fire({
-                position: "top-right",
+                
                 icon: "error",
                 title: "Data Kontainer gagal disimpan!",
                 showConfirmButton: true,
@@ -1174,7 +1200,6 @@ function DocK11() {
     
             response
             .then((res) => {
-                console.log(res.data)
                 if(res.data.status === '200') {
                     setDokumenPtk(res.data.data)
                 }
@@ -1215,7 +1240,6 @@ function DocK11() {
         const response = modelPemohon.detilKontainerId(e.target.dataset.header);
         response
         .then((res) => {
-            // console.log(res.data)
             if(res.data.status === '200') {
                 setValueKontainer("idDataKontainer", res.data.data.id)
                 setValueKontainer("idPtk", res.data.data.ptk_id)
@@ -1292,7 +1316,6 @@ function DocK11() {
         const response = modelPemohon.getDokumenId(e.target.dataset.header);
         response
         .then((res) => {
-            // console.log(res.data)
             if(res.data.status === '200') {
                 setValueDokumen("idDataDokumen", res.data.data.id)
                 setValueDokumen("idPtk", res.data.data.ptk_id)
@@ -1372,7 +1395,7 @@ function DocK11() {
                             resKodeHS
                             .then((response) => {
                                 let resKodeHS = response.data.data;
-                                var arrayKodeHS = resKodeHS.map(item => {
+                                var arrayKodeHS = resKodeHS?.map(item => {
                                     return {
                                         value: item.kode,
                                         label: item.kode + " - " + item.nama_en
@@ -1391,7 +1414,7 @@ function DocK11() {
                                 resKlasKH
                                 .then((response) => {
                                     let dataKlasKH = response.data.data;
-                                    var arraySelectKlasKH = dataKlasKH.map(item => {
+                                    var arraySelectKlasKH = dataKlasKH?.map(item => {
                                         return {
                                             value: item.id,
                                             label: item.deskripsi,
@@ -1409,7 +1432,7 @@ function DocK11() {
                                 resKomKH
                                 .then((response) => {
                                     let dataKomKH = response.data.data;
-                                    var arrayKomKH = dataKomKH.map(item => {
+                                    var arrayKomKH = dataKomKH?.map(item => {
                                         return {
                                             value: item.id + ";" + item.nama + ";" + item.nama_latin + ";" + item.kode,
                                             label: item.nama + " / " + (item.nama_en == null ? "-" : item.nama_en)
@@ -1427,9 +1450,8 @@ function DocK11() {
                                 const resPeruntukan = modelMaster.masterKlasKT(response.data.data.ptk.jenis_media_pembawa_id)
                                 resPeruntukan
                                 .then((response) => {
-                                    console.log(response.data)
                                     let dataPeruntukanKT = response.data.data;
-                                    const arraySelectKlasKT = dataPeruntukanKT.map(item => {
+                                    const arraySelectKlasKT = dataPeruntukanKT?.map(item => {
                                         return {
                                             value: item.id,
                                             label: item.deskripsi
@@ -1447,7 +1469,7 @@ function DocK11() {
                                 resKomKT
                                 .then((response) => {
                                     let dataKomKT = response.data.data;
-                                    var arrayKomKT = dataKomKT.map(item => {
+                                    var arrayKomKT = dataKomKT?.map(item => {
                                         return {
                                             value: item.id + ";" + item.nama + ";" + item.nama_latin,
                                             label: item.nama + " / " + (item.nama_en == null ? "-" : item.nama_en)
@@ -1466,7 +1488,7 @@ function DocK11() {
                                 resPeruntukan
                                 .then((response) => {
                                     let dataPeruntukanKI = response.data.data;
-                                    const arraySelectKlasKI = dataPeruntukanKI.map(item => {
+                                    const arraySelectKlasKI = dataPeruntukanKI?.map(item => {
                                         return {
                                             value: item.id,
                                             label: item.deskripsi
@@ -1485,7 +1507,7 @@ function DocK11() {
                                 .then((response) => {
                                     if(response.data.status === '200') {
                                         let dataKomKI = response.data.data;
-                                        var arrayKomKI = dataKomKI.map(item => {
+                                        var arrayKomKI = dataKomKI?.map(item => {
                                             return {
                                                 value: item.id + ";" + item.nama + ";" + item.nama_latin,
                                                 label: item.nama + " / " + (item.nama_en == null ? "-" : item.nama_en)
@@ -1650,16 +1672,20 @@ function DocK11() {
                         setValueDokPeriksa("namaTempatPeriksaPtk", response.data.data.ptk.nama_tempat_pemeriksaan);
                         setValueDokPeriksa("alamatTempatPeriksaPtk", response.data.data.ptk.alamat_tempat_pemeriksaan);
             
+                        setValueKonfirmasi("isDraft", response.data.data.ptk.is_draft?.toString());
                         setValueVerify("opsiVerif", response.data.data.ptk.is_verifikasi);
                         setValueVerify("tglTerimaVerif", response.data.data.ptk.tgl_dok_permohonan);
                         setValueVerify("alasanTolak", response.data.data.ptk.alasan_penolakan);
                         setValueVerify("petugasVerif", response.data.data.ptk.alasan_penolakan);
             
                         setDokumenPtk(response.data.data.ptk_dokumen);
-                        if(response.data.data.ptk_dokumen.length > 0) {
+                        if(response.data.data.ptk_komoditi?.length > 0 || response.data.data.ptk_dokumen?.length > 0) {
                             setFormTab(values => ({...values, tab4: false}))
                         }
-                        if(response.data.data.ptk.tgl_aju != null) {
+                        if(response.data.data.ptk_dokumen?.length > 0) {
+                            setFormTab(values => ({...values, tab5: false}))
+                        }
+                        if(response.data.data.ptk.no_dok_permohonan != null) {
                             setPtkLengkap(true);
                         }
                     }, 400) //400
@@ -1813,41 +1839,41 @@ function DocK11() {
                                                 {/* <!-- Hewan --> */}
                                                 <div style={{display: cekdataDiri.mediaPembawa === 'H' ? 'block' : 'none'}}>
                                                     <div className="form-check form-check-inline">
-                                                        <input className="form-check-input" type="radio" onInput={(e) => handleKomKHIDetil(e.target.value)} disabled={dataIdPage.noAju && cekdataDiri.jenisMp == "1" ? false : true} name="jenisMp" id="hidup" value="1" {...registerPemohon("jenisMp", { required: "Mohon pilih jenis media pembawa."})} />
+                                                        <input className="form-check-input" type="radio" onChange={(e) => handleKomKHIDetil(e.target.value)} disabled={dataIdPage.noAju && cekdataDiri.jenisMp == "1" ? false : true} name="jenisMp" id="hidup" value="1" {...registerPemohon("jenisMp", { required: "Mohon pilih jenis media pembawa."})} />
                                                         <label className="form-check-label" htmlFor="hidup">Hewan Hidup</label>
                                                     </div>
                                                     <div className="form-check form-check-inline">
-                                                        <input className="form-check-input" type="radio" onInput={(e) => handleKomKHIDetil(e.target.value)} disabled={dataIdPage.noAju && cekdataDiri.jenisMp == "2" ? false : true} name="jenisMp" id="produk" value="2" {...registerPemohon("jenisMp")} />
+                                                        <input className="form-check-input" type="radio" onChange={(e) => handleKomKHIDetil(e.target.value)} disabled={dataIdPage.noAju && cekdataDiri.jenisMp == "2" ? false : true} name="jenisMp" id="produk" value="2" {...registerPemohon("jenisMp")} />
                                                         <label className="form-check-label" htmlFor="produk">Produk Hewan</label>
                                                     </div>
                                                     <div className="form-check form-check-inline">
-                                                        <input className="form-check-input" type="radio" onInput={(e) => handleKomKHIDetil(e.target.value)} disabled={dataIdPage.noAju && cekdataDiri.jenisMp == "3" ? false : true} name="jenisMp" id="mpl" value="3" {...registerPemohon("jenisMp")} />
+                                                        <input className="form-check-input" type="radio" onChange={(e) => handleKomKHIDetil(e.target.value)} disabled={dataIdPage.noAju && cekdataDiri.jenisMp == "3" ? false : true} name="jenisMp" id="mpl" value="3" {...registerPemohon("jenisMp")} />
                                                         <label className="form-check-label" htmlFor="mpl">Media Pembawa Lain</label>
                                                     </div>
                                                 </div>
                                                 {/* <!-- Ikan --> */}
                                                 <div style={{display: cekdataDiri.mediaPembawa === 'I' ? 'block' : 'none'}}>
                                                     <div className="form-check form-check-inline">
-                                                        <input className="form-check-input" type="radio" onInput={(e) => handleKomKHIDetil(e.target.value)} disabled={dataIdPage.noAju && cekdataDiri.jenisMp == "6" ? false : true} name="jenisMp" id="hidupKI" value="6" {...registerPemohon("jenisMp")} />
+                                                        <input className="form-check-input" type="radio" onChange={(e) => handleKomKHIDetil(e.target.value)} disabled={dataIdPage.noAju && cekdataDiri.jenisMp == "6" ? false : true} name="jenisMp" id="hidupKI" value="6" {...registerPemohon("jenisMp")} />
                                                         <label className="form-check-label" htmlFor="hidupKI">Ikan Hidup</label>
                                                     </div>
                                                     <div className="form-check form-check-inline">
-                                                        <input className="form-check-input" type="radio" onInput={(e) => handleKomKHIDetil(e.target.value)} disabled={dataIdPage.noAju && cekdataDiri.jenisMp == "7" ? false : true} name="jenisMp" id="produkKI" value="7" {...registerPemohon("jenisMp")} />
+                                                        <input className="form-check-input" type="radio" onChange={(e) => handleKomKHIDetil(e.target.value)} disabled={dataIdPage.noAju && cekdataDiri.jenisMp == "7" ? false : true} name="jenisMp" id="produkKI" value="7" {...registerPemohon("jenisMp")} />
                                                         <label className="form-check-label" htmlFor="produkKI">Produk Ikan</label>
                                                     </div>
                                                     <div className="form-check form-check-inline">
-                                                        <input className="form-check-input" type="radio" onInput={(e) => handleKomKHIDetil(e.target.value)} disabled={dataIdPage.noAju && cekdataDiri.jenisMp == "8" ? false : true} name="jenisMp" id="mplKI" value="8" {...registerPemohon("jenisMp")} />
+                                                        <input className="form-check-input" type="radio" onChange={(e) => handleKomKHIDetil(e.target.value)} disabled={dataIdPage.noAju && cekdataDiri.jenisMp == "8" ? false : true} name="jenisMp" id="mplKI" value="8" {...registerPemohon("jenisMp")} />
                                                         <label className="form-check-label" htmlFor="mplKI">Media Pembawa Lain</label>
                                                     </div>
                                                 </div>
                                                 {/* <!-- Tumbuhan --> */}
                                                 <div style={{display: cekdataDiri.mediaPembawa === 'T' ? 'block' : 'none'}}>
                                                     <div className="form-check form-check-inline">
-                                                        <input className="form-check-input" type="radio" name="jenisMp" id="benih" onInput={(e) => handleKomKHIDetil(e.target.value)} disabled={dataIdPage.noAju && cekdataDiri.jenisMp == "4" ? false : true} value="4" {...registerPemohon("jenisMp")} />
+                                                        <input className="form-check-input" type="radio" name="jenisMp" id="benih" onChange={(e) => handleKomKHIDetil(e.target.value)} disabled={dataIdPage.noAju && cekdataDiri.jenisMp == "4" ? false : true} value="4" {...registerPemohon("jenisMp")} />
                                                         <label className="form-check-label" htmlFor="benih">Benih</label>
                                                     </div>
                                                     <div className="form-check form-check-inline mb-3">
-                                                        <input className="form-check-input" type="radio" name="jenisMp" id="nonbenih" onInput={(e) => handleKomKHIDetil(e.target.value)} disabled={dataIdPage.noAju && cekdataDiri.jenisMp == "5" ? false : true} value="5" {...registerPemohon("jenisMp")} />
+                                                        <input className="form-check-input" type="radio" name="jenisMp" id="nonbenih" onChange={(e) => handleKomKHIDetil(e.target.value)} disabled={dataIdPage.noAju && cekdataDiri.jenisMp == "5" ? false : true} value="5" {...registerPemohon("jenisMp")} />
                                                         <label className="form-check-label" htmlFor="nonbenih">Non Benih</label>
                                                     </div>
                                                 </div>
@@ -2321,12 +2347,12 @@ function DocK11() {
                 </div>
                 <div className="col-12 d-flex justify-content-between">
                     <button type="button" className="btn btn-label-secondary" disabled>
-                        <i className="fa-solid fa-chevron-left fa-sm ms-sm-n2"></i>
+                        <i className="fa-solid fa-chevron-left me-sm-2 me-1"></i>
                         <span className="d-sm-inline-block d-none">Sebelumnya</span>
                     </button>
                     <button type="submit" className="btn btn-primary">
                         <span className="d-sm-inline-block d-none me-sm-1">Simpan & Lanjutkan</span>
-                        <i className="fa-solid fa-angle-right fa-sm me-sm-n2"></i>
+                        <i className="fa-solid fa-angle-right me-sm-2 me-1"></i>
                     </button>
                 </div>
             </div>
@@ -2769,12 +2795,12 @@ function DocK11() {
                                     </div>
                                     <div className="col-12 d-flex justify-content-between">
                                         <button type="button" className="btn btn-label-secondary" onClick={() => setWizardPage(wizardPage - 1)}>
-                                            <i className="fa-solid fa-chevron-left fa-sm ms-sm-n2"></i>
+                                            <i className="fa-solid fa-chevron-left  me-sm-2 me-1"></i>
                                             <span className="d-sm-inline-block d-none">Sebelumnya</span>
                                         </button>
                                         <button type="submit" className="btn btn-primary">
                                             <span className="d-sm-inline-block d-none me-sm-1">Simpan & Lanjutkan</span>
-                                            <i className="fa-solid fa-angle-right fa-sm me-sm-n2"></i>
+                                            <i className="fa-solid fa-angle-right me-sm-2 me-1"></i>
                                         </button>
                                     </div>
                                 </div>
@@ -3104,12 +3130,12 @@ function DocK11() {
                                     </div>
                                     <div className="col-12 d-flex justify-content-between">
                                         <button type="button" className="btn btn-label-secondary" onClick={() => setWizardPage(wizardPage - 1)}>
-                                            <i className="fa-solid fa-chevron-left fa-sm ms-sm-n2"></i>
+                                            <i className="fa-solid fa-chevron-left me-sm-2 me-1"></i>
                                             <span className="d-sm-inline-block d-none">Sebelumnya</span>
                                         </button>
                                         <button type="submit" className="btn btn-primary">
                                             <span className="d-sm-inline-block d-none me-sm-1">Simpan & Lanjutkan</span>
-                                            <i className="fa-solid fa-angle-right fa-sm me-sm-n2"></i>
+                                            <i className="fa-solid fa-angle-right me-sm-2 me-1"></i>
                                         </button>
                                     </div>
                                     </div>
@@ -3247,12 +3273,12 @@ function DocK11() {
                                         </div>
                                         <div className="col-12 d-flex justify-content-between">
                                             <button type="button" className="btn btn-label-secondary" onClick={() => setWizardPage(wizardPage - 1)}>
-                                                <i className="fa-solid fa-chevron-left fa-sm ms-sm-n2"></i>
+                                                <i className="fa-solid fa-chevron-left me-sm-2 me-1"></i>
                                                 <span className="d-sm-inline-block d-none">Sebelumnya</span>
                                             </button>
                                             <button type="submit" className="btn btn-primary">
                                                 <span className="d-sm-inline-block d-none me-sm-1">Konfirmasi</span>
-                                                <i className="fa-solid fa-angle-right fa-sm me-sm-n2"></i>
+                                                <i className="fa-solid fa-angle-right me-sm-2 me-1"></i>
                                             </button>
                                         </div>
                                     </form>
@@ -3260,23 +3286,30 @@ function DocK11() {
                             </div>
                             <div id="cardKonfirmasi" className={wizardPage === 5 ? "content active dstepper-block" : "content"}>
                                 <div className="row mb-3">
-                                    <div className="col-12 col-lg-8 offset-lg-2 text-center mb-3">
-                                        <h4 className="mt-2">Terimakasih! 😇</h4>
-                                        <p>Silahkan cek kembali kelengkapan data yang diinput!</p>
-                                        <p>
-                                            Silahkan klik tombol Simpan jika data yang diinput sudah benar.
-                                        </p>
-                                    </div>
                                     <form onSubmit={handleFormKonfirmasi(onSubmitKonfirmasi)}>
                                         <input type="hidden" name='idPtk' {...registerKonfirmasi("idPtk")} />
                                         <input type="hidden" name='noAju' {...registerKonfirmasi("noAju")} />
+                                        <div className="col-12" style={{display: (cekdataDiri.permohonan == "EX" ? "block" : "none")}}>
+                                            <div className="form-check form-switch mb-2">
+                                                <input className="form-check-input" type="checkbox" id="isDraft" name='isDraft' {...registerKonfirmasi("isDraft")} />
+                                                <label className="form-check-label" htmlFor="isDraft">Aktifkan fasilitas Draft PC / HC</label>
+                                            </div>
+                                            <hr />                                        
+                                        </div>
+                                        <div className="col-12 col-lg-8 offset-lg-2 text-center mb-3">
+                                            <h4 className="mt-2">Terimakasih! 😇</h4>
+                                            <p>Silahkan cek kembali kelengkapan data yang diinput!</p>
+                                            <p>
+                                                Silahkan klik tombol Simpan jika data yang diinput sudah benar.
+                                            </p>
+                                        </div>
                                         <div className="col-12 d-flex justify-content-between">
                                             <button type="button" className="btn btn-primary btn-prev" onClick={() => setWizardPage(wizardPage - 1)}>
-                                                <i className="fa-solid fa-chevron-left fa-sm ms-sm-n2"></i>
+                                                <i className="fa-solid fa-chevron-left me-sm-2 me-1"></i>
                                                 <span className="d-sm-inline-block d-none">Cek Kembali</span>
                                             </button>
-                                            <button type="submit" className="btn btn-success">
-                                                <i className="fa-solid fa-save fa-sm"></i>
+                                            <button type="submit" className="btn btn-success ms-sm-n2">
+                                                <i className="fa-solid fa-save me-sm-2 me-1"></i>
                                                 <span className="d-sm-inline-block d-none me-sm-1">Simpan & Kirim</span>
                                             </button>
                                         </div>
@@ -3486,6 +3519,7 @@ function DocK11() {
                             <div className="input-group input-group-merge">
                                 <input type='text' name="noDokumen" id="noDokumen" placeholder='No Dokumen..' {...registerDokumen("noDokumen", { required: "Mohon isi nomor dokumen."})} className={errorsDokumen.noDokumen ? "form-control form-control-sm is-invalid" : "form-control form-control-sm"} />
                             </div>
+                            <input type="hidden" name='cekPrior' id='cekPrior' {...registerDokumen("cekPrior")}/>
                             {errorsDokumen.noDokumen && <small className="text-danger">{errorsDokumen.noDokumen.message}</small>}
                         </div>
                         <div className="col-6">
@@ -3536,14 +3570,15 @@ function DocK11() {
                             </div>
                             {errorsDokumen.fileDokumen && <small className="text-danger">{errorsDokumen.fileDokumen.message}</small>}
                         </div>
-                        <div className="col-6 text-center mt-4">
-                            <button type="submit" className="btn btn-sm btn-primary me-sm-3 me-1">{cekdataDokumen.idDataDokumen === '' ? "Tambah" : "Edit"}</button>
+                        <div className="col-12 text-center mt-4">
+                            <button style={{display: (cekdataDokumen.jenisDokumen == "104" ? "block" : "none")}} type='button' className='btn btn-sm btn-warning' onClick={() => cekPrior()}>Cek Prior</button>
+                            <button type="submit" disabled={(cekdataDokumen.jenisDokumen == "104" && cekdataDokumen.cekPrior == "" ? true : false)} className="btn btn-sm btn-primary me-sm-3 me-1">{cekdataDokumen.idDataDokumen === '' ? "Tambah" : "Edit"}</button>
                             <button
                                 type="reset"
-                                className="btn btn-sm btn-label-secondary btn-reset"
+                                className="btn btn-sm btn-label-secondary btn-reset me-sm-3 me-1"
                                 data-bs-dismiss="modal"
                                 aria-label="Close">
-                                Tutup
+                                Cancel
                             </button>
                         </div>
                     </form>

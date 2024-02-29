@@ -37,7 +37,7 @@ export default class PtkSurtug {
           },
           data: datasend
         };
-        console.log(JSON.stringify(datasend))
+        
         
         return axios.request(config)
     }
@@ -70,7 +70,7 @@ export default class PtkSurtug {
           },
           data: datasend
         };
-        console.log(JSON.stringify(datasend))
+        
         
         return axios.request(config)
     }
@@ -156,7 +156,7 @@ export default class PtkSurtug {
           },
           data: datasend
         };
-        console.log(JSON.stringify(datasend))
+        
         
         return axios.request(config)
     }
@@ -170,7 +170,7 @@ export default class PtkSurtug {
           'Content-Type': 'application/json', 
         },
       };
-      // console.log(JSON.stringify(config))
+      // 
       
       return axios.request(config)
     }
@@ -187,7 +187,7 @@ export default class PtkSurtug {
           ptk_surtug_header_id: id
         }
       };
-      console.log(JSON.stringify(config))
+      
       
       return axios.request(config)
     }
@@ -205,7 +205,7 @@ export default class PtkSurtug {
           penugasan_id: idPenugasan
         }
       };
-      console.log(JSON.stringify(config))
+      
       
       return axios.request(config)
     }

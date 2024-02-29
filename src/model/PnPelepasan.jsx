@@ -1,3 +1,4 @@
+/* eslint-disable eqeqeq */
 import axios from "axios";
 import Cookies from "js-cookie";
 import { v4 as uuidv4 } from 'uuid';
@@ -51,7 +52,9 @@ export default class PnPelepasan {
       },
       data: datasend
     };
-    console.log("dok k921: " + JSON.stringify(config))
+    if(process.env.REACT_APP_BE_ENV == "DEV") {
+        console.log("dok k921: " + JSON.stringify(config))
+    }
     return axios.request(config)
   }
 
@@ -90,7 +93,9 @@ export default class PnPelepasan {
       },
       data: datasend
     };
-    console.log("dok k94: " + JSON.stringify(config))
+    if(process.env.REACT_APP_BE_ENV == "DEV") {
+      console.log("dok k94: " + JSON.stringify(config))
+    }
     return axios.request(config)
   }
   
@@ -141,7 +146,9 @@ export default class PnPelepasan {
       },
       data: datasend
     };
-    console.log("dok ki2: " + JSON.stringify(config))
+    if(process.env.REACT_APP_BE_ENV == "DEV") {
+      console.log("dok ki2: " + JSON.stringify(config))
+    }
     return axios.request(config)
   }
 
@@ -188,7 +195,9 @@ export default class PnPelepasan {
       },
       data: datasend
     };
-    console.log("dok kt1: " + JSON.stringify(config))
+    if(process.env.REACT_APP_BE_ENV == "DEV") {
+      console.log("dok kt1: " + JSON.stringify(config))
+    }
     return axios.request(config)
   }
   
@@ -235,7 +244,9 @@ export default class PnPelepasan {
       },
       data: datasend
     };
-    // console.log("dok kt1: " + JSON.stringify(config))
+    if(process.env.REACT_APP_BE_ENV == "DEV") {
+      console.log("dok kt1: " + JSON.stringify(config))
+    }
     return axios.request(config)
   }
   
@@ -281,7 +292,9 @@ export default class PnPelepasan {
       },
       data: datasend
     };
-    // console.log("dok kt1: " + JSON.stringify(config))
+    if(process.env.REACT_APP_BE_ENV == "DEV") {
+      console.log("dok kt3: " + JSON.stringify(config))
+    }
     return axios.request(config)
   }
 
@@ -318,7 +331,9 @@ export default class PnPelepasan {
       },
       data: datasend
     };
-    // console.log("dok kt1: " + JSON.stringify(config))
+    if(process.env.REACT_APP_BE_ENV == "DEV") {
+      console.log("dok kt92h: " + JSON.stringify(config))
+    }
     return axios.request(config)
   }
   
@@ -356,7 +371,9 @@ export default class PnPelepasan {
       },
       data: datasend
     };
-    // console.log("dok kt1: " + JSON.stringify(config))
+    if(process.env.REACT_APP_BE_ENV == "DEV") {
+      console.log("dok kh1: " + JSON.stringify(config))
+    }
     return axios.request(config)
   }
   
@@ -394,7 +411,9 @@ export default class PnPelepasan {
       },
       data: datasend
     };
-    // console.log("dok kt1: " + JSON.stringify(config))
+    if(process.env.REACT_APP_BE_ENV == "DEV") {
+      console.log("dok kh2: " + JSON.stringify(config))
+    }
     return axios.request(config)
   }
 

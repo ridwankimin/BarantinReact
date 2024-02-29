@@ -14,7 +14,7 @@ export default class PtkPemeriksaan {
             'Content-Type': 'application/json', 
           },
         };
-        // console.log(JSON.stringify(datasend))
+        // 
         
         return axios.request(config)
     }
@@ -28,7 +28,7 @@ export default class PtkPemeriksaan {
             'Content-Type': 'application/json', 
           },
         };
-        // console.log(JSON.stringify(datasend))
+        // 
         
         return axios.request(config)
     }
@@ -57,7 +57,7 @@ export default class PtkPemeriksaan {
           },
           data: datasend
         };
-        // console.log(JSON.stringify(datasend))
+        // 
         
         return axios.request(config)
     }
@@ -105,7 +105,7 @@ export default class PtkPemeriksaan {
           },
           data: datasend
         };
-        console.log(JSON.stringify(datasend))
+        
         
         return axios.request(config)
     }
@@ -132,7 +132,7 @@ export default class PtkPemeriksaan {
           },
           data: datasend
         };
-        console.log(JSON.stringify(config))
+        
         
         return axios.request(config)
     }
@@ -177,7 +177,7 @@ export default class PtkPemeriksaan {
           },
           data: datasend
         };
-        console.log(JSON.stringify(datasend))
+        
         
         return axios.request(config)
     }
@@ -209,7 +209,7 @@ export default class PtkPemeriksaan {
           },
           data: datasend
         };
-        console.log(JSON.stringify(datasend))
+        
         
         return axios.request(config)
       }
@@ -269,7 +269,7 @@ export default class PtkPemeriksaan {
         },
         data: datasend
       };
-      console.log(JSON.stringify(datasend))
+      
       
       return axios.request(config)
     }
@@ -283,7 +283,7 @@ export default class PtkPemeriksaan {
           'Content-Type': 'application/json', 
         },
       };
-      // console.log(JSON.stringify(datasend))
+      // 
       
       return axios.request(config)
     }
@@ -315,8 +315,7 @@ export default class PtkPemeriksaan {
           },
           data: datasend
         };
-        console.log("sv instalasi")
-        console.log(JSON.stringify(datasend))
+        
         return axios.request(config)
       }
       

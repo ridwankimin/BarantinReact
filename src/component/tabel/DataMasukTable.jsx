@@ -1,3 +1,4 @@
+/* eslint-disable eqeqeq */
 import React, { useCallback, useEffect, useMemo, useState } from 'react'
 import DataTable from 'react-data-table-component'
 import PtkModel from '../../model/PtkModel'
@@ -147,11 +148,8 @@ function DataMasukTable(props) {
     const getListPtk = useCallback(async () => {
         try {
             const response = await model.getPtkList(props.dataIn)
-            console.log("get response")
-            console.log(response)
-            if(response.data.status === '200') {
+            if(response.data.status == '200') {
                 const dataReturn = response.data.data;
-                // setTotalRows(dataReturn.length)
                 const arrayData = dataReturn.map((item, index) => {
                     return {
                         id: index + 1,
@@ -196,10 +194,14 @@ function DataMasukTable(props) {
                         (item.statusBayar && item.statusBayar.toLowerCase().includes(filterText.toLowerCase())),
                     );
                 setDataTable(filteredItems);
+            } else {
+                setDataTable();
             }
         } catch (error) {
-            console.log("error get")
-            console.log(error)
+            if(process.env.REACT_APP_BE_ENV == "DEV") {
+                console.log(error)
+            }
+            setDataTable();
         }
     }, [model, props.dataIn, filterText])
     
@@ -237,39 +239,24 @@ function DataMasukTable(props) {
             }).then((result) => {
                 if (result.isConfirmed) {
                     Cookies.set("idPtkPage", base64_encode(base64_encode(e.selectedRows[0].noAju) + 'm0R3N0r1R' + base64_encode(e.selectedRows[0].idPtk) + "m0R3N0r1R"  + base64_encode(e.selectedRows[0].noDokumen)), {
-                        expires: 3,
+                        expires: 7,
                     });
                     Cookies.set("tglPtk", e.selectedRows[0].tglDokumen, {
-                        expires: 3
+                        expires: 7
                     });
                     Cookies.set("jenisKarantina", (e.selectedRows[0].karantina === "Tumbuhan" ? "T" : (e.selectedRows[0].karantina === "Hewan" ? "H" : "I")), {
-                        expires: 3
+                        expires: 7
                     });
                     Cookies.set("jenisForm", "PTK", {
-                        expires: 3
+                        expires: 7
                     });
-                    navigate(process.env.PUBLIC_URL + '/k11')
+                    // window.onload(
+                        navigate(process.env.PUBLIC_URL + '/k11')
+                    // )
+                    window.location.reload()
                 }
             });
         }
-        // if (window.confirm('Anda memilih No AJU ' + e.selectedRows[0].noAju)) {
-        //     // alert(e.selectedRows[0].noAju)
-        //     Cookies.set("idPtkPage", base64_encode(base64_encode(e.selectedRows[0].noAju) + 'm0R3N0r1R' + base64_encode(e.selectedRows[0].idPtk) + "m0R3N0r1R"  + base64_encode(e.selectedRows[0].noDokumen)), {
-        //         expires: 3,
-        //     });
-        //     Cookies.set("tglPtk", e.selectedRows[0].tglDokumen, {
-        //         expires: 3
-        //     });
-        //     Cookies.set("jenisKarantina", (e.selectedRows[0].karantina === "Tumbuhan" ? "T" : (e.selectedRows[0].karantina === "Hewan" ? "H" : "I")), {
-        //         expires: 3
-        //     });
-        //     Cookies.set("jenisForm", "PTK", {
-        //         expires: 3
-        //     });
-        //     navigate('/k11')
-        //     // navigate('/k11/' + base64_encode(base64_encode(e.selectedRows[0].noAju) + 'm0R3N0r1R' + base64_encode(e.selectedRows[0].idPtk) + "m0R3N0r1R"  + base64_encode(e.selectedRows[0].noDokumen)))
-        // }
-        // console.log(e)
     }
 
   return (

@@ -67,7 +67,6 @@ export default class PnPenahanan {
         },
         data: datasend
         };
-        // console.log("dok 61: " + JSON.stringify(config))
         return axios.request(config)
     }
     
@@ -118,7 +117,6 @@ export default class PnPenahanan {
         },
         data: datasend
         };
-        console.log("dok 62: " + JSON.stringify(config))
         return axios.request(config)
     }
     
@@ -169,7 +167,6 @@ export default class PnPenahanan {
         },
         data: datasend
         };
-        console.log("dok 62: " + JSON.stringify(config))
         return axios.request(config)
     }
 }

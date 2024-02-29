@@ -10,10 +10,11 @@ function  Negara() {
     const getListNegara = useCallback(async () => {
      try {
          const response = await master.masterNegara()
-         console.log(response.data.data)
          setDataNegara(response.data.data)
      } catch (error) {
-         console.log(error)
+        if(process.env.REACT_APP_BE_ENV == "DEV") {
+            console.log(error)
+        }
          setDataNegara([])
      }
  }, [master])
@@ -22,7 +23,6 @@ function  Negara() {
    getListNegara()
  }, [getListNegara])
  
-    console.log(dataNegara);
     // dataNegara?.map((data) => (
     //     setDataNegara([...dataNegara, {value: data.id, label: data.nama}])
     // ))

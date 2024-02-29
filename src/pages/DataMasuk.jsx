@@ -33,7 +33,7 @@ function DataMasuk() {
 // const cekdataDokumen = watchPtk();
 
 const onSubmitPtk = (data) => {
-  const dataMasuk = <DataMasukTable dataIn={data}/>;
+  const dataMasuk = <DataMasukTable dataIn={data} />;
   setTabel(values => ({...values, "ptk": dataMasuk }));
 };
 
