@@ -196,11 +196,11 @@ function DocK22() {
             resAnalis
             .then((res) => {
                 if(res.data) {
-                    if(typeof response.data != "string") {
+                    if(typeof res.data != "string") {
                         if(res.data.status == '200') {
                             setValueHeader("idAnalis", res.data.data[0].id);
                             setData(values => ({...values,
-                                errorAnalis: "",
+                                errorAnalisis: "",
                                 noAnalisa: res.data.data[0].nomor,
                                 tglAnalisa: res.data.data[0].tanggal,
                             }));
@@ -229,8 +229,21 @@ function DocK22() {
             response
             .then((res) => {
                 if(res.data) {
-                    if(res.data.status === '200') {
-                        setListDataHeader(res.data.data)
+                    if(typeof res.data != "string") {
+                        if(res.data.status === '200') {
+                            setListDataHeader(res.data.data)
+                            setData(values => ({...values,
+                                errorSurtug: "",
+                            }))
+                        } else {
+                            setData(values => ({...values,
+                                errorSurtug: "Gagal load data surat tugas",
+                            }))
+                        }
+                    } else {
+                        setData(values => ({...values,
+                            errorSurtug: "Gagal load data surat tugas",
+                        }))
                     }
                 }
             })
@@ -238,16 +251,105 @@ function DocK22() {
                 if(process.env.REACT_APP_BE_ENV == "DEV") {
                     console.log(error)
                 }
+                if(error.response.data.status == 404) {
+                    setData(values => ({...values,
+                        errorSurtug: "",
+                    }));
+                } else {
+                    setData(values => ({...values,
+                        errorSurtug: "Gagal load data surat tugas",
+                    }));
+                }
                 setListDataHeader() 
             });
         }
         // dataSurtugHeader()
     },[idPtk, setValueDetilSurtug, setValueHeader])
 
+    function refreshData() {
+        const resAnalis = modelSurtug.getAnalisByPtk(data.idPtk);
+        resAnalis
+        .then((res) => {
+            if(res.data) {
+                if(typeof res.data != "string") {
+                    if(res.data.status == "200") {
+                        setData(values => ({...values,
+                            errorAnalisis: "",
+                            noAnalisa: res.data.data[0].nomor,
+                            tglAnalisa: res.data.data[0].tanggal,
+                        }));
+                        setValueHeader("idAnalis", res.data.data[0].id);
+                    } else {
+                        setData(values => ({...values,
+                            errorAnalisis: "Gagal load data analisis else != 200",
+                        }))
+                    }
+                } else {
+                    setData(values => ({...values,
+                        errorAnalisis: "Gagal load data analisis else string",
+                    }))
+                }
+            }
+        })
+        .catch((error) => {
+            if(process.env.REACT_APP_BE_ENV == "DEV") {
+                console.log(error)
+            }
+            setData(values => ({...values,
+                errorAnalisis: "Gagal load data analisis error",
+            }))
+        });
+
+        const response = modelSurtug.getDetilSurtugPenugasan(data.idPtk, "");
+        response
+        .then((res) => {
+            if(res.data) {
+                if(typeof res.data != "string") {
+                    if(res.data.status == '200') {
+                        setData(values => ({...values,
+                            errorSurtug: "",
+                        }))
+                        setListDataHeader(res.data.data)
+                    } else {
+                        setData(values => ({...values,
+                            errorSurtug: "Gagal load data surat tugas",
+                        }))
+                    }
+                } else {
+                    setData(values => ({...values,
+                        errorSurtug: "Gagal load data surat tugas",
+                    }))
+                }
+            }
+        })
+        .catch((error) => {
+            if(process.env.REACT_APP_BE_ENV == "DEV") {
+                console.log(error)
+            }
+            if(error.response.data.status == 404) {
+                setData(values => ({...values,
+                    errorSurtug: "",
+                }));
+            } else {
+                setData(values => ({...values,
+                    errorSurtug: "Gagal load data surat tugas",
+                }));
+            }
+            setListDataHeader() 
+        });
+    }
+
     return (
     <div className="container-xxl flex-grow-1 container-p-y">
         <h4 className="py-3 breadcrumb-wrapper mb-4">
             K-2.2 <span className="fw-light" style={{color: 'blue'}}>SURAT TUGAS</span>
+            
+            <small className='float-end'>
+                <span className='text-danger'>{(data.errorSurtug ? data.errorSurtug + "; " : "") + (data.errorAnalisis ? data.errorAnalisis + "; " : "")}</span>
+                {data.errorSurtug || data.errorAnalisis ?
+                    <button type='button' className='btn btn-warning btn-xs' onClick={() => refreshData()}><i className='fa-solid fa-sync'></i> Refresh</button>
+                : ""}
+            </small>
         </h4>
 
         <div className="row">
