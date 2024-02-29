@@ -72,54 +72,175 @@ function DocK31() {
             let ptkDecode = idPtk ? base64_decode(idPtk) : "";
             let ptkNomor = idPtk ? ptkDecode.split('m0R3N0r1R') : "";
             
+            setData(values => ({...values,
+                noAju: idPtk ? base64_decode(ptkNomor[0]) : "",
+                noIdPtk: idPtk ? base64_decode(ptkNomor[1]) : "",
+                noDokumen: idPtk ? base64_decode(ptkNomor[2]) : "",
+                tglDokumen: tglPtk,
+            }));
             const response = modelPemohon.getPtkId(base64_decode(ptkNomor[1]));
             response
             .then((response) => {
-                if(response.data.status === '200') {
-                    // alert(response.data.message);
-                    // isiDataPtk(response)
+                if(typeof response.data != "string") {
+                    if(response.data.status == '200') {
+                        setData(values => ({...values,
+                            errorPTK: "",
+                            listPtk: response.data.data.ptk,
+                            listKomoditas: response.data.data.ptk_komoditi,
+                            listDokumen: response.data.data.ptk_dokumen
+                        }));
+                        setValue("idPtk", base64_decode(ptkNomor[1]))
+                        setValue("noDokumen", base64_decode(ptkNomor[2]))
+                    } else {
+                        setData(values => ({...values,
+                            errorPTK: "Gagal load data PTK",
+                        }))
+                    }
+                } else {
                     setData(values => ({...values,
-                        noAju: idPtk ? base64_decode(ptkNomor[0]) : "",
-                        noIdPtk: idPtk ? base64_decode(ptkNomor[1]) : "",
-                        noDokumen: idPtk ? base64_decode(ptkNomor[2]) : "",
-                        tglDokumen: tglPtk,
-                        listPtk: response.data.data.ptk,
-                        listKomoditas: response.data.data.ptk_komoditi,
-                        listDokumen: response.data.data.ptk_dokumen
-                    }));
-                    setValue("idPtk", base64_decode(ptkNomor[1]))
-                    setValue("noDokumen", base64_decode(ptkNomor[2]))
+                        errorPTK: "Gagal load data PTK",
+                    }))
                 }
             })
             .catch((error) => {
                 if(process.env.REACT_APP_BE_ENV == "DEV") {
                     console.log(error)
                 }
+                setData(values => ({...values,
+                    errorPTK: "Gagal load data PTK",
+                }))
             });
             
             const response31 = modelPeriksa.getPnBongkar(base64_decode(ptkNomor[1]));
             response31
             .then((response) => {
-                if(response.data.status === '200') {
-                    setValue("idPtk", response.data.data.id)
-                    setValue("noDok31", response.data.data.nomor)
-                    setValue("tglDok31", response.data.data.tanggal)
-                    setValue("putusanBongkar", response.data.data.setuju_bongkar_muat)
-                    setValue("ttdPutusan", response.data.data.user_ttd_id)
+                if(typeof response.data != "string") {
+                    if(response.data.status === '200') {
+                        setData(values => ({...values,
+                            errorBongkar: "",
+                        }))
+                        setValue("idPtk", response.data.data.id)
+                        setValue("noDok31", response.data.data.nomor)
+                        setValue("tglDok31", response.data.data.tanggal)
+                        setValue("putusanBongkar", response.data.data.setuju_bongkar_muat)
+                        setValue("ttdPutusan", response.data.data.user_ttd_id)
+                    } else {
+                        setData(values => ({...values,
+                            errorBongkar: "Gagal load data Surat Bongkar MP",
+                        }))
+                    }
+                } else {
+                    setData(values => ({...values,
+                        errorBongkar: "Gagal load data Surat Bongkar MP",
+                    }))
                 }
             })
             .catch((error) => {
                 if(process.env.REACT_APP_BE_ENV == "DEV") {
                     console.log(error)
                 }
+                if(error.response.data.status == 404) {
+                    setData(values => ({...values,
+                        errorBongkar: ""
+                    }));
+                } else {
+                    setData(values => ({...values,
+                        errorBongkar: "Gagal load data Surat Bongkar MP"
+                    }));
+                }
             });
         }
     },[idPtk, setValue])
+
+    function refreshData() {
+        if(data.errorPTK) {
+            const response = modelPemohon.getPtkId(data.noIdPtk);
+            response
+            .then((response) => {
+                if(typeof response.data != "string") {
+                    if(response.data.status == '200') {
+                        setData(values => ({...values,
+                            errorPTK: "",
+                            listPtk: response.data.data.ptk,
+                            listKomoditas: response.data.data.ptk_komoditi,
+                            listDokumen: response.data.data.ptk_dokumen
+                        }));
+                        setValue("idPtk", data.noIdPtk)
+                        setValue("noDokumen", data.noDokumen)
+                    } else {
+                        setData(values => ({...values,
+                            errorPTK: "Gagal load data PTK",
+                        }))
+                    }
+                } else {
+                    setData(values => ({...values,
+                        errorPTK: "Gagal load data PTK",
+                    }))
+                }
+            })
+            .catch((error) => {
+                if(process.env.REACT_APP_BE_ENV == "DEV") {
+                    console.log(error)
+                }
+                setData(values => ({...values,
+                    errorPTK: "Gagal load data PTK",
+                }))
+            });
+        }
+        
+        if(data.errorBongkar) {
+            const response31 = modelPeriksa.getPnBongkar(data.noIdPtk);
+            response31
+            .then((response) => {
+                if(typeof response.data != "string") {
+                    if(response.data.status === '200') {
+                        setData(values => ({...values,
+                            errorBongkar: "",
+                        }))
+                        setValue("idPtk", response.data.data.id)
+                        setValue("noDok31", response.data.data.nomor)
+                        setValue("tglDok31", response.data.data.tanggal)
+                        setValue("putusanBongkar", response.data.data.setuju_bongkar_muat)
+                        setValue("ttdPutusan", response.data.data.user_ttd_id)
+                    } else {
+                        setData(values => ({...values,
+                            errorBongkar: "Gagal load data Surat Bongkar MP",
+                        }))
+                    }
+                } else {
+                    setData(values => ({...values,
+                        errorBongkar: "Gagal load data Surat Bongkar MP",
+                    }))
+                }
+            })
+            .catch((error) => {
+                if(process.env.REACT_APP_BE_ENV == "DEV") {
+                    console.log(error)
+                }
+                if(error.response.data.status == 404) {
+                    setData(values => ({...values,
+                        errorBongkar: ""
+                    }));
+                } else {
+                    setData(values => ({...values,
+                        errorBongkar: "Gagal load data Surat Bongkar MP"
+                    }));
+                }
+            });
+        }
+    }
 
   return (
     <div className="container-xxl flex-grow-1 container-p-y">
         <h4 className="py-3 breadcrumb-wrapper mb-4">
             K-3.1 <span className="fw-light" style={{color: 'blue'}}>SURAT PERSETUJUAN/PENOLAKAN BONGKAR MEDIA PEMBAWA DARI ALAT ANGKUT</span>
+            
+            <small className='float-end'>
+                <span className='text-danger'>{(data.errorBongkar ? data.errorBongkar + "; " : "") + (data.errorPTK ? data.errorPTK + "; " : "")}</span>
+                {data.errorBongkar || data.errorPTK ?
+                    <button type='button' className='btn btn-warning btn-xs' onClick={() => refreshData()}><i className='fa-solid fa-sync'></i> Refresh</button>
+                : ""}
+            </small>
         </h4>
 
         <div className="row">

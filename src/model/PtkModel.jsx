@@ -22,7 +22,7 @@ function addZero(i) {
   return i;
 }
 function dateNow() {
-  let n = date.getFullYear() + '-' + addZero(date.getMonth() + 1) + '-' + addZero(date.getDate()) + ' ' + addZero(date.getHours()) + ':' + addZero(date.getMinutes()) + ":" + addZero(date.getSeconds());
+  let n = date.getFullYear().toString().substring(2) + addZero(date.getMonth() + 1) + addZero(date.getDate()) + addZero(date.getHours()) + addZero(date.getMinutes()) + addZero(date.getSeconds());
   return n;
 }
 export default class PtkModel {
@@ -32,12 +32,13 @@ export default class PtkModel {
       let datasend = {
             "id": uuid,
             // "tab": data.tabWizard,
-            "no_aju": Cookies.get("kodeSatpel") + data.permohonan + date.getFullYear() + (date.getMonth() < 9 ? "0" + (date.getMonth() + 1) : date.getMonth())+ (date.getDate() < 10 ? "0" + date.getDate() : date.getDate()) + (date.getHours() < 10 ? "0" + date.getHours() : date.getHours()) + (date.getMinutes() < 10 ? "0" + date.getMinutes() : date.getMinutes()) + (date.getSeconds() <10 ? "0" + date.getSeconds() : date.getSeconds()) + makeid(5),
+            "no_aju": Cookies.get("kodeSatpel") + data.permohonan + data.mediaPembawa + dateNow() + makeid(5),
             // 'tgl_aju' => $data['tgl_aju'],
             "jenis_dokumen": data.jenisForm,
 
             'jenis_karantina': data.mediaPembawa, // ok
             'jenis_media_pembawa_id': data.jenisMp, // ok
+            "stat_pemohon": data.statPemilik,
             
             "is_guest": data.pJRutin, //ok           // pemohon rutin/guest: 0,1
             'user_id': Cookies.get("userId"), //pake session
@@ -112,6 +113,7 @@ export default class PtkModel {
             'jenis_karantina': data.mediaPembawa, // ok
             'jenis_media_pembawa_id': data.jenisMp, // ok
 
+            "stat_pemohon": data.statPemilik,
             "is_guest": data.pJRutin,            // pemohon rutin/guest: 0,1
             'user_id': Cookies.get("userId"), // ok pake session
             "pengguna_jasa_id": 456, // ok pake session
@@ -224,7 +226,7 @@ export default class PtkModel {
           'pelabuhan_muat_id': data.pelMuat, // ok
           'pelabuhan_bongkar_id': data.pelBongkar, // API blm ada
           'pelabuhan_transit_id': data.pelTransit, // ok
-          'sandar': data.sandar, // API blm ada
+          'gudang_id': data.sandar, // API blm ada
           'moda_alat_angkut_transit_id': data.modaTransit, // ok
           'tipe_alat_angkut_transit_id': data.tipeTransit, // ok
           'nama_alat_angkut_transit': data.namaAlatAngkutTransit, // ok
@@ -267,6 +269,8 @@ export default class PtkModel {
           'no_aju': data.noAju, // ok
           // 'jenis_karantina': data.mediaPembawa, // ok
           // 'jenis_media_pembawa_id': data.jenisMp, // ok
+          'sumber_mp' : data.sumberMP,
+          'area_tangkap_id' : data.areaTangkap,
           'is_curah' : data.jenisAngkut, // curah/non curah
           'peruntukan_id' : data.peruntukan, // ?
           'peruntukan_lainnya' : data.peruntukanLain, // ?

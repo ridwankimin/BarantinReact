@@ -1,0 +1,56 @@
+[ 
+{ 
+"id":1,
+"kode_area":"WPPNRI 571",
+"deskripsi":"perairan Selat Malaka dan Laut Andaman"
+},
+{ 
+"id":2,
+"kode_area":"WPPNRI 572",
+"deskripsi":"perairan Samudera Hindia sebelah Barat Sumatera dan Selat Sunda"
+},
+{ 
+"id":3,
+"kode_area":"WPPNRI 573",
+"deskripsi":"perairan Samudera Hindia sebelah Selatan Jawa hingga sebelah Selatan Nusa Tenggara, Laut Sawu, dan Laut Timor bagian Barat"
+},
+{ 
+"id":4,
+"kode_area":"WPPNRI 711",
+"deskripsi":"perairan Selat Karimata, Laut Natuna, dan Laut China Selatan"
+},
+{ 
+"id":5,
+"kode_area":"WPPNRI 712",
+"deskripsi":"perairan Laut Jawa"
+},
+{ 
+"id":6,
+"kode_area":"WPPNRI 713",
+"deskripsi":"perairan Selat Makassar, Teluk Bone, Laut Flores, dan Laut Bali"
+},
+{ 
+"id":7,
+"kode_area":"WPPNRI 714",
+"deskripsi":"perairan Teluk Tolo dan Laut Banda"
+},
+{ 
+"id":8,
+"kode_area":"WPPNRI 715",
+"deskripsi":"perairan Teluk Tomini, Laut Maluku, Laut Halmahera, Laut Seram dan Teluk Berau"
+},
+{ 
+"id":9,
+"kode_area":"WPPNRI 716",
+"deskripsi":"perairan Laut Sulawesi dan sebelah Utara Pulau Halmahera"
+},
+{ 
+"id":10,
+"kode_area":"WPPNRI 717",
+"deskripsi":"perairan Teluk Cendrawasih dan Samudera Pasifik"
+},
+{ 
+"id":11,
+"kode_area":"WPPNRI 718",
+"deskripsi":"perairan Laut Aru, Laut Arafuru, dan Laut Timor bagian Timur"
+}]

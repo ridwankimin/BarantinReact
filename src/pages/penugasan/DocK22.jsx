@@ -267,76 +267,80 @@ function DocK22() {
     },[idPtk, setValueDetilSurtug, setValueHeader])
 
     function refreshData() {
-        const resAnalis = modelSurtug.getAnalisByPtk(data.idPtk);
-        resAnalis
-        .then((res) => {
-            if(res.data) {
-                if(typeof res.data != "string") {
-                    if(res.data.status == "200") {
-                        setData(values => ({...values,
-                            errorAnalisis: "",
-                            noAnalisa: res.data.data[0].nomor,
-                            tglAnalisa: res.data.data[0].tanggal,
-                        }));
-                        setValueHeader("idAnalis", res.data.data[0].id);
+        if(data.errorAnalisis) {
+            const resAnalis = modelSurtug.getAnalisByPtk(data.idPtk);
+            resAnalis
+            .then((res) => {
+                if(res.data) {
+                    if(typeof res.data != "string") {
+                        if(res.data.status == "200") {
+                            setData(values => ({...values,
+                                errorAnalisis: "",
+                                noAnalisa: res.data.data[0].nomor,
+                                tglAnalisa: res.data.data[0].tanggal,
+                            }));
+                            setValueHeader("idAnalis", res.data.data[0].id);
+                        } else {
+                            setData(values => ({...values,
+                                errorAnalisis: "Gagal load data analisis else != 200",
+                            }))
+                        }
                     } else {
                         setData(values => ({...values,
-                            errorAnalisis: "Gagal load data analisis else != 200",
+                            errorAnalisis: "Gagal load data analisis else string",
                         }))
                     }
-                } else {
-                    setData(values => ({...values,
-                        errorAnalisis: "Gagal load data analisis else string",
-                    }))
                 }
-            }
-        })
-        .catch((error) => {
-            if(process.env.REACT_APP_BE_ENV == "DEV") {
-                console.log(error)
-            }
-            setData(values => ({...values,
-                errorAnalisis: "Gagal load data analisis error",
-            }))
-        });
+            })
+            .catch((error) => {
+                if(process.env.REACT_APP_BE_ENV == "DEV") {
+                    console.log(error)
+                }
+                setData(values => ({...values,
+                    errorAnalisis: "Gagal load data analisis error",
+                }))
+            });
+        }
 
-        const response = modelSurtug.getDetilSurtugPenugasan(data.idPtk, "");
-        response
-        .then((res) => {
-            if(res.data) {
-                if(typeof res.data != "string") {
-                    if(res.data.status == '200') {
-                        setData(values => ({...values,
-                            errorSurtug: "",
-                        }))
-                        setListDataHeader(res.data.data)
+        if(data.errorSurtug) {
+            const response = modelSurtug.getDetilSurtugPenugasan(data.idPtk, "");
+            response
+            .then((res) => {
+                if(res.data) {
+                    if(typeof res.data != "string") {
+                        if(res.data.status == '200') {
+                            setData(values => ({...values,
+                                errorSurtug: "",
+                            }))
+                            setListDataHeader(res.data.data)
+                        } else {
+                            setData(values => ({...values,
+                                errorSurtug: "Gagal load data surat tugas",
+                            }))
+                        }
                     } else {
                         setData(values => ({...values,
                             errorSurtug: "Gagal load data surat tugas",
                         }))
                     }
+                }
+            })
+            .catch((error) => {
+                if(process.env.REACT_APP_BE_ENV == "DEV") {
+                    console.log(error)
+                }
+                if(error.response.data.status == 404) {
+                    setData(values => ({...values,
+                        errorSurtug: "",
+                    }));
                 } else {
                     setData(values => ({...values,
                         errorSurtug: "Gagal load data surat tugas",
-                    }))
+                    }));
                 }
-            }
-        })
-        .catch((error) => {
-            if(process.env.REACT_APP_BE_ENV == "DEV") {
-                console.log(error)
-            }
-            if(error.response.data.status == 404) {
-                setData(values => ({...values,
-                    errorSurtug: "",
-                }));
-            } else {
-                setData(values => ({...values,
-                    errorSurtug: "Gagal load data surat tugas",
-                }));
-            }
-            setListDataHeader() 
-        });
+                setListDataHeader() 
+            });
+        }
     }
 
     return (
