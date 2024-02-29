@@ -1620,15 +1620,14 @@ function DocK11() {
                         setValuePelabuhan("pelTransitView", response.data.data.ptk.kd_pelabuhan_transit == null ? "" : response.data.data.ptk.kd_pelabuhan_transit + " - " + response.data.data.ptk.pelabuhan_transit);
                         setKontainerPtk(response.data.data.ptk_kontainer)
                         
-                        if(response.data.data.ptk_komoditi.length > null || response.data.data.ptk.is_kontainer !== null) {
+                        if(response.data.data.ptk_komoditi?.length > 0 || response.data.data.ptk.is_kontainer !== null) {
                             setFormTab(values => ({...values, tab3: false}))
                         }
                         setValueMP("jenisKemasan", response.data.data.ptk.kemasan_id == null ? "" : response.data.data.ptk.kemasan_id.toString());
                         setValueMP("jenisAngkut", response.data.data.ptk.is_curah == null ? "" : response.data.data.ptk.is_curah.toString());
                         setValueMP("peruntukan", response.data.data.ptk.peruntukan_id ? response.data.data.ptk.peruntukan_id.toString() : "");
                         setValueMP("merkKemasan", response.data.data.ptk.merk_kemasan);
-                        setValueMP("sumberMp", response.data.data.ptk.sumber_mp);
-                        console.log(response.data.data.ptk.sumber_mp)
+                        setValueMP("sumberMpTangkap", response.data.data.ptk.sumber_mp);
                         setValueMP("areaTangkap", response.data.data.ptk.area_tangkap_id == null ? "" : response.data.data.ptk.area_tangkap_id.toString());
                         setValueMP("areaTangkapView", response.data.data.ptk.area_tangkap_id == null ? "" : getViewAreaTangkap(response.data.data.ptk.area_tangkap_id));
                         setValueMP("jumlahKemasan", response.data.data.ptk.jumlah_kemasan);
@@ -2820,21 +2819,19 @@ function DocK11() {
                                                                         {errorsMP.jenisAngkut && <div className="offset-3 col-sm-9"><small className="text-danger">{errorsMP.jenisAngkut.message}</small></div>}
                                                                     </div>
                                                                 </div>
-                                                                {/* <div style={{display: (cekdataDiri.mediaPembawa == "I" ? "block" : "none")}}> */}
-                                                                <div style={{display: "block"}}>
+                                                                <div style={{display: (cekdataDiri.mediaPembawa == "I" ? "block" : "none")}}>
                                                                     <div className="row mb-3">
-                                                                        <label className="col-sm-3 col-form-label" htmlFor="sumberMP">Sumber</label>
+                                                                        <label className="col-sm-3 col-form-label" htmlFor="sumberMpTangkap">Sumber</label>
                                                                         <div className="col-sm-8">
                                                                             <div className="form-check form-check-inline">
-                                                                                <input className="form-check-input" type="radio" name="sumberMP" id="FARM" value="FARM" {...registerMP("sumberMP", { required: (cekdataDiri.mediaPembawa == "I" ? "Mohon pilih sumber komoditas." : false)})} />
+                                                                                <input className="form-check-input" type="radio" name="sumberMpTangkap" id="FARM" value="FARM" {...registerMP("sumberMpTangkap", { required: (cekdataDiri.mediaPembawa == "I" ? "Mohon pilih sumber komoditas." : false)})} />
                                                                                 <label className="form-check-label" htmlFor="FARM">FARM / budidaya</label>
                                                                             </div>
                                                                             <div className="form-check form-check-inline">
-                                                                                <input className="form-check-input" type="radio" name="sumberMP" id="WILD" value="WILD" {...registerMP("sumberMP")} />
+                                                                                <input className="form-check-input" type="radio" name="sumberMpTangkap" id="WILD" value="WILD" {...registerMP("sumberMpTangkap")} />
                                                                                 <label className="form-check-label" htmlFor="WILD">WILD / tangkap</label>
                                                                             </div>
-                                                                            {cekdataMP.sumberMP}
-                                                                            {errorsMP.sumberMP && <div className="offset-3 col-sm-9"><small className="text-danger">{errorsMP.sumberMP.message}</small></div>}
+                                                                            {errorsMP.sumberMpTangkap && <div className="offset-3 col-sm-9"><small className="text-danger">{errorsMP.sumberMpTangkap.message}</small></div>}
                                                                         </div>
                                                                     </div>
                                                                     <div className="row mb-3">
@@ -2845,7 +2842,7 @@ function DocK11() {
                                                                                 name={"areaTangkap"}
                                                                                 defaultValue={""}
                                                                                 className="form-control form-control-sm"
-                                                                                rules={{required: (cekdataMP.sumberMP == "WILD" ? "Mohon pilih area tangkap." : false)}}
+                                                                                rules={{required: (cekdataMP.sumberMpTangkap == "WILD" ? "Mohon pilih area tangkap." : false)}}
                                                                                 render={({ field: { value,onChange, ...field } }) => (
                                                                                     <Select styles={customStyles} placeholder={"Pilih area.."}
                                                                                     value={{id: cekdataMP.areaTangkap, label: cekdataMP.areaTangkapView}}
@@ -2975,7 +2972,7 @@ function DocK11() {
                                                                 <div className="row mb-3">
                                                                     <label className="col-sm-3 col-form-label" htmlFor="jumlahKemasan">Jumlah Kemasan</label>
                                                                     <div className="col-sm-6">
-                                                                        <input type="text" id="jumlahKemasan" name="jumlahKemasan" {...registerMP("jumlahKemasan")} className="form-control form-control-sm" placeholder="Jumlah Kemasan" />
+                                                                        <input type="text" id="jumlahKemasan" name="jumlahKemasan" {...registerMP("jumlahKemasan")} value={cekdataMP.jumlahKemasan ? removeNonNumeric(cekdataMP.jumlahKemasan) : ""} className="form-control form-control-sm" placeholder="Jumlah Kemasan" />
                                                                     </div>
                                                                 </div>
                                                                 <div className="row mb-3">

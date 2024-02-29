@@ -269,7 +269,7 @@ export default class PtkModel {
           'no_aju': data.noAju, // ok
           // 'jenis_karantina': data.mediaPembawa, // ok
           // 'jenis_media_pembawa_id': data.jenisMp, // ok
-          'sumber_mp' : data.sumberMP,
+          'sumber_mp' : data.sumberMpTangkap,
           'area_tangkap_id' : data.areaTangkap,
           'is_curah' : data.jenisAngkut, // curah/non curah
           'peruntukan_id' : data.peruntukan, // ?
