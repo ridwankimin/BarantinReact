@@ -39,7 +39,8 @@ function Footer(props) {
                     <h4 className='text-lightest mt-3'>-- {Cookies.get("namaSatpel")} --</h4>
 
                     <ul className="navbar-nav flex-row align-items-center ms-auto">
-                        <a href='https://karantinaindonesia.go.id' target='_blank' rel='noreferrer' className='btn btn-sm btn-default text-white' title='SIMPONI'><i className="menu-icon tf-icons fa-solid fa-credit-card"></i></a>
+                        <a href='https://karantinaindonesia.go.id' target='_blank' rel='noreferrer' className='btn btn-sm btn-default text-white' title='ECERT'><i className="menu-icon tf-icons fa-solid fa-file-pdf"></i></a>
+                        <a href='https://karantinaindonesia.go.id' target='_blank' rel='noreferrer' className='btn btn-sm btn-default text-white' title='SIMPONI'><i className="menu-icon tf-icons fa-solid fa-file-invoice-dollar"></i></a>
                         <a href='https://karantinaindonesia.go.id' target='_blank' rel='noreferrer' className='btn btn-sm btn-default text-white' title='TTE'><i className="menu-icon tf-icons fa-solid fa-file-signature"></i></a>
                         <li className="nav-item navbar-dropdown dropdown-user dropdown">
                             <button type='button' className="btn btn-default nav-link dropdown-toggle" data-bs-toggle="dropdown" style={{color: 'white'}}>

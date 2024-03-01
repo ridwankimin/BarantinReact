@@ -72,6 +72,11 @@ function DocK33() {
             nomor_kontainer: detilSampel.noKontainer,
             keterangan: detilSampel.keterangan
         }]);
+        Swal.fire({
+            title: "Sukses!",
+            text: "Data detil pengambilan contoh berhasil ditambahkan",
+            icon: "success"
+        });
          setDetilSampel(values => ({...values, 
             idkom: "",
             idkomView: "",
@@ -111,7 +116,6 @@ function DocK33() {
                         text: "Berita Acara Pengambilan Contoh berhasil " + (data.idDok33 ? "diedit." : "disimpan."),
                         icon: "success"
                     });
-                    // alert(response.data.status + " - " + response.data.message)
                     // setValueDetilSurtug("idHeader", response.data.data.id)
                     setValue("idDok33", response.data.data.id)
                     setValue("noDok33", response.data.data.nomor)
@@ -205,7 +209,7 @@ function DocK33() {
                     console.log(error)
                 }
                 if(error.response) {
-                    if(error.response.data.status === 404) {
+                    if(error.response.data.status == 404) {
                         setData(values => ({...values,
                             errorPTK: "Data PTK Kosong/Tidak Ada"
                         }));
@@ -246,7 +250,7 @@ function DocK33() {
                     console.log(error)
                 }
                 if(error.response) {
-                    if(error.response.data.status === 404) {
+                    if(error.response.data.status == 404) {
                         setData(values => ({...values,
                             errorAdmin: "Data Periksa Administratif Kosong/Tidak Ada"
                         }));
@@ -289,7 +293,7 @@ function DocK33() {
                     console.log(error)
                 }
                 if(error.response) {
-                    if(error.response.data.status === 404) {
+                    if(error.response.data.status == 404) {
                         setData(values => ({...values,
                             errorSurtug: "Data Surat Tugas Kosong/Tidak Ada"
                         }));
@@ -351,7 +355,7 @@ function DocK33() {
                     console.log(error)
                 }
                 if(error.response) {
-                    if(error.response.data.status === 404) {
+                    if(error.response.data.status == 404) {
                         setData(values => ({...values,
                             errorSampling: ""
                         }));
@@ -405,7 +409,7 @@ function DocK33() {
                     console.log(error)
                 }
                 if(error.response) {
-                    if(error.response.data.status === 404) {
+                    if(error.response.data.status == 404) {
                         setData(values => ({...values,
                             errorPTK: "Data PTK Kosong/Tidak Ada"
                         }));
@@ -448,7 +452,7 @@ function DocK33() {
                     console.log(error)
                 }
                 if(error.response) {
-                    if(error.response.data.status === 404) {
+                    if(error.response.data.status == 404) {
                         setData(values => ({...values,
                             errorAdmin: "Data Periksa Administratif Kosong/Tidak Ada"
                         }));
@@ -489,7 +493,7 @@ function DocK33() {
                     console.log(error)
                 }
                 if(error.response) {
-                    if(error.response.data.status === 404) {
+                    if(error.response.data.status == 404) {
                         setData(values => ({...values,
                             errorSurtug: "Data Surat Tugas Kosong/Tidak Ada"
                         }));
@@ -553,7 +557,7 @@ function DocK33() {
                     console.log(error)
                 }
                 if(error.response) {
-                    if(error.response.data.status === 404) {
+                    if(error.response.data.status == 404) {
                         setData(values => ({...values,
                             errorSampling: ""
                         }));

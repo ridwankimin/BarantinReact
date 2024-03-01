@@ -1630,7 +1630,7 @@ function DocK11() {
                         setValuePelabuhan("tglBerangkatAkhir", response.data.data.ptk.tanggal_rencana_berangkat_terakhir);
                         setValuePelabuhan("transitOpsi", response.data.data.ptk.is_transit == null ? "" :response.data.data.ptk.is_transit.toString());
                         setValuePelabuhan("cekKontainer", response.data.data.ptk.is_kontainer == null ? "" : response.data.data.ptk.is_kontainer.toString());
-                        if(response.data.data.ptk.permohonan != null || response.data.data.ptk.is_kontainer !== null) {
+                        if(response.data.data.ptk.permohonan != null) {
                             setFormTab(values => ({...values, tab2: false}))
                         }
                         setValuePelabuhan("sandar", response.data.data.ptk.gudang_id);
@@ -1642,7 +1642,7 @@ function DocK11() {
                         setValuePelabuhan("pelTransitView", response.data.data.ptk.kd_pelabuhan_transit == null ? "" : response.data.data.ptk.kd_pelabuhan_transit + " - " + response.data.data.ptk.pelabuhan_transit);
                         setKontainerPtk(response.data.data.ptk_kontainer)
                         
-                        if(response.data.data.ptk_komoditi?.length > 0 || response.data.data.ptk.is_kontainer !== null) {
+                        if(response.data.data.ptk.is_kontainer != null) {
                             setFormTab(values => ({...values, tab3: false}))
                         }
                         setValueMP("jenisKemasan", response.data.data.ptk.kemasan_id == null ? "" : response.data.data.ptk.kemasan_id.toString());
@@ -1679,10 +1679,10 @@ function DocK11() {
                         setValueVerify("petugasVerif", response.data.data.ptk.alasan_penolakan);
             
                         setDokumenPtk(response.data.data.ptk_dokumen);
-                        if(response.data.data.ptk_komoditi?.length > 0 || response.data.data.ptk_dokumen?.length > 0) {
+                        if(response.data.data.ptk_komoditi.length > 0) {
                             setFormTab(values => ({...values, tab4: false}))
                         }
-                        if(response.data.data.ptk_dokumen?.length > 0) {
+                        if(response.data.data.ptk_dokumen.length > 0) {
                             setFormTab(values => ({...values, tab5: false}))
                         }
                         if(response.data.data.ptk.no_dok_permohonan != null) {
@@ -1839,41 +1839,41 @@ function DocK11() {
                                                 {/* <!-- Hewan --> */}
                                                 <div style={{display: cekdataDiri.mediaPembawa === 'H' ? 'block' : 'none'}}>
                                                     <div className="form-check form-check-inline">
-                                                        <input className="form-check-input" type="radio" onChange={(e) => handleKomKHIDetil(e.target.value)} disabled={dataIdPage.noAju && cekdataDiri.jenisMp == "1" ? false : true} name="jenisMp" id="hidup" value="1" {...registerPemohon("jenisMp", { required: "Mohon pilih jenis media pembawa."})} />
+                                                        <input className="form-check-input" type="radio" onChange={(e) => handleKomKHIDetil(e.target.value)} disabled={dataIdPage.noAju ? (cekdataDiri.jenisMp == "1" ? false : true) : false} name="jenisMp" id="hidup" value="1" {...registerPemohon("jenisMp", { required: "Mohon pilih jenis media pembawa."})} />
                                                         <label className="form-check-label" htmlFor="hidup">Hewan Hidup</label>
                                                     </div>
                                                     <div className="form-check form-check-inline">
-                                                        <input className="form-check-input" type="radio" onChange={(e) => handleKomKHIDetil(e.target.value)} disabled={dataIdPage.noAju && cekdataDiri.jenisMp == "2" ? false : true} name="jenisMp" id="produk" value="2" {...registerPemohon("jenisMp")} />
+                                                        <input className="form-check-input" type="radio" onChange={(e) => handleKomKHIDetil(e.target.value)} disabled={dataIdPage.noAju ? (cekdataDiri.jenisMp == "2" ? false : true) : false} name="jenisMp" id="produk" value="2" {...registerPemohon("jenisMp")} />
                                                         <label className="form-check-label" htmlFor="produk">Produk Hewan</label>
                                                     </div>
                                                     <div className="form-check form-check-inline">
-                                                        <input className="form-check-input" type="radio" onChange={(e) => handleKomKHIDetil(e.target.value)} disabled={dataIdPage.noAju && cekdataDiri.jenisMp == "3" ? false : true} name="jenisMp" id="mpl" value="3" {...registerPemohon("jenisMp")} />
+                                                        <input className="form-check-input" type="radio" onChange={(e) => handleKomKHIDetil(e.target.value)} disabled={dataIdPage.noAju ? (cekdataDiri.jenisMp == "3" ? false : true) : false} name="jenisMp" id="mpl" value="3" {...registerPemohon("jenisMp")} />
                                                         <label className="form-check-label" htmlFor="mpl">Media Pembawa Lain</label>
                                                     </div>
                                                 </div>
                                                 {/* <!-- Ikan --> */}
                                                 <div style={{display: cekdataDiri.mediaPembawa === 'I' ? 'block' : 'none'}}>
                                                     <div className="form-check form-check-inline">
-                                                        <input className="form-check-input" type="radio" onChange={(e) => handleKomKHIDetil(e.target.value)} disabled={dataIdPage.noAju && cekdataDiri.jenisMp == "6" ? false : true} name="jenisMp" id="hidupKI" value="6" {...registerPemohon("jenisMp")} />
+                                                        <input className="form-check-input" type="radio" onChange={(e) => handleKomKHIDetil(e.target.value)} disabled={dataIdPage.noAju ? (cekdataDiri.jenisMp == "6" ? false : true) : false} name="jenisMp" id="hidupKI" value="6" {...registerPemohon("jenisMp")} />
                                                         <label className="form-check-label" htmlFor="hidupKI">Ikan Hidup</label>
                                                     </div>
                                                     <div className="form-check form-check-inline">
-                                                        <input className="form-check-input" type="radio" onChange={(e) => handleKomKHIDetil(e.target.value)} disabled={dataIdPage.noAju && cekdataDiri.jenisMp == "7" ? false : true} name="jenisMp" id="produkKI" value="7" {...registerPemohon("jenisMp")} />
+                                                        <input className="form-check-input" type="radio" onChange={(e) => handleKomKHIDetil(e.target.value)} disabled={dataIdPage.noAju ? (cekdataDiri.jenisMp == "7" ? false : true) : false} name="jenisMp" id="produkKI" value="7" {...registerPemohon("jenisMp")} />
                                                         <label className="form-check-label" htmlFor="produkKI">Produk Ikan</label>
                                                     </div>
                                                     <div className="form-check form-check-inline">
-                                                        <input className="form-check-input" type="radio" onChange={(e) => handleKomKHIDetil(e.target.value)} disabled={dataIdPage.noAju && cekdataDiri.jenisMp == "8" ? false : true} name="jenisMp" id="mplKI" value="8" {...registerPemohon("jenisMp")} />
+                                                        <input className="form-check-input" type="radio" onChange={(e) => handleKomKHIDetil(e.target.value)} disabled={dataIdPage.noAju ? (cekdataDiri.jenisMp == "8" ? false : true) : false} name="jenisMp" id="mplKI" value="8" {...registerPemohon("jenisMp")} />
                                                         <label className="form-check-label" htmlFor="mplKI">Media Pembawa Lain</label>
                                                     </div>
                                                 </div>
                                                 {/* <!-- Tumbuhan --> */}
                                                 <div style={{display: cekdataDiri.mediaPembawa === 'T' ? 'block' : 'none'}}>
                                                     <div className="form-check form-check-inline">
-                                                        <input className="form-check-input" type="radio" name="jenisMp" id="benih" onChange={(e) => handleKomKHIDetil(e.target.value)} disabled={dataIdPage.noAju && cekdataDiri.jenisMp == "4" ? false : true} value="4" {...registerPemohon("jenisMp")} />
+                                                        <input className="form-check-input" type="radio" name="jenisMp" id="benih" onChange={(e) => handleKomKHIDetil(e.target.value)} disabled={dataIdPage.noAju ? (cekdataDiri.jenisMp == "4" ? false : true) : false} value="4" {...registerPemohon("jenisMp")} />
                                                         <label className="form-check-label" htmlFor="benih">Benih</label>
                                                     </div>
                                                     <div className="form-check form-check-inline mb-3">
-                                                        <input className="form-check-input" type="radio" name="jenisMp" id="nonbenih" onChange={(e) => handleKomKHIDetil(e.target.value)} disabled={dataIdPage.noAju && cekdataDiri.jenisMp == "5" ? false : true} value="5" {...registerPemohon("jenisMp")} />
+                                                        <input className="form-check-input" type="radio" name="jenisMp" id="nonbenih" onChange={(e) => handleKomKHIDetil(e.target.value)} disabled={dataIdPage.noAju ? (cekdataDiri.jenisMp == "5" ? false : true) : false} value="5" {...registerPemohon("jenisMp")} />
                                                         <label className="form-check-label" htmlFor="nonbenih">Non Benih</label>
                                                     </div>
                                                 </div>
@@ -2020,7 +2020,7 @@ function DocK11() {
                                         <small className='text-danger'>*Isi nomor identitas tanpa tanda baca (hanya angka)</small>
                                     </div>
                                 </div>
-                                <div className="form-check mt-3">
+                                <div className="form-check mt-3" style={{display: (cekdataDiri.statPemilik == "PEMILIK" ? "block" : "none")}}>
                                     <input className="form-check-input" type="checkbox" name='samaTTD' id="samaTTD" value="1" onChange={handleCekSameTTD} />
                                     <label className="form-check-label" htmlFor="samaTTD"> Pemohon sama dengan penandatangan dokumen. </label>
                                 </div>
@@ -2226,7 +2226,7 @@ function DocK11() {
                                         </div>
                                     </div>
                                 </div>
-                                <div className="form-check mt-3">
+                                <div className="form-check mt-3" style={{display: (cekdataDiri.statPemilik == "PEMILIK" ? "block" : "none")}}>
                                 <input className="form-check-input" type="checkbox" name='samaPengirim' id="samaPengirim" value="1" onChange={handleCekSamePengirim} />
                                 <label className="form-check-label" htmlFor="samaPengirim"> Sama dengan pemohon. </label>
                                 </div>
@@ -2337,7 +2337,7 @@ function DocK11() {
                                         </div>
                                     </div>
                                 </div>
-                                <div className="form-check mt-3">
+                                <div className="form-check mt-3" style={{display: (cekdataDiri.statPemilik == "PEMILIK" ? "block" : "none")}}>
                                     <input className="form-check-input" type="checkbox" name='samaPenerima' id="samaPenerima" value="1" onChange={handleCekSamePenerima} />
                                     <label className="form-check-label" htmlFor="samaPenerima"> Sama dengan pemohon. </label>
                                 </div>
@@ -2724,7 +2724,7 @@ function DocK11() {
                                         <div className="card card-action mb-4">
                                             <div className="card-header">
                                                 <div className="card-action-title">
-                                                    <h5 className="mb-0">Apakah ada Kontainer ?</h5>
+                                                    <h5 className="mb-0">Menggunakan Kontainer</h5>
                                                     <div className="form-check form-check-inline">
                                                         <input className="form-check-input" type="radio" name="cekKontainer" id="kontainerYa" value="1" {...registerPelabuhan("cekKontainer", { required: "Mohon isi pilihan kontainer."})} />
                                                         <label className="form-check-label" htmlFor="kontainerYa">Ya</label>
@@ -3706,7 +3706,7 @@ function DocK11() {
                                 </div>
                             </div>
                             <div className="col-6">
-                                <label className="form-label" htmlFor="namaUmum">Nama Umum</label>
+                                <label className="form-label" htmlFor="namaUmum">Nama Umum Tercetak</label>
                                 <input type='text' name="namaUmum" id="namaUmum" {...registerDetilMP("namaUmum")} className="form-control form-control-sm" />
                             </div>
                             <div className="col-6">
@@ -3724,7 +3724,7 @@ function DocK11() {
                                 </div>
                             </div>
                             <div className="col-6">
-                                <label className="form-label" htmlFor="namaLatin">Nama Latin</label>
+                                <label className="form-label" htmlFor="namaLatin">Nama Latin Tercetak</label>
                                 <input type='text' name="namaLatin" id="namaLatin" {...registerDetilMP("namaLatin")} className="form-control form-control-sm" />
                             </div>
                             <div className="col-6">
@@ -3800,11 +3800,11 @@ function DocK11() {
                                 </select> */}
                             </div>
                             <div className="col-6">
-                                <label className="form-label" htmlFor="namaUmumKH">Nama Umum</label>
+                                <label className="form-label" htmlFor="namaUmumKH">Nama Umum Tercetak</label>
                                 <input type='text' name="namaUmumKH" id="namaUmumKH" {...registerDetilMP("namaUmumKH")} className="form-control form-control-sm" />
                             </div>
                             <div className="col-6">
-                                <label className="form-label" htmlFor="namaLatinKH">Nama Latin</label>
+                                <label className="form-label" htmlFor="namaLatinKH">Nama Latin Tercetak</label>
                                 <input type='text' name="namaLatinKH" id="namaLatinKH" {...registerDetilMP("namaLatinKH")} className="form-control form-control-sm" />
                             </div>
                            <div className="col-6">
@@ -3951,27 +3951,12 @@ function DocK11() {
                                 </select> */}
                             </div>
                             <div className="col-6">
-                                <label className="form-label" htmlFor="namaUmumKI">Nama Umum</label>
+                                <label className="form-label" htmlFor="namaUmumKI">Nama Umum Tercetak</label>
                                 <input type='text' name="namaUmumKI" id="namaUmumKI" {...registerDetilMP("namaUmumKI")} className="form-control form-control-sm" />
                             </div>
                             <div className="col-6">
-                                <label className="form-label" htmlFor="namaLatinKI">Nama Latin</label>
+                                <label className="form-label" htmlFor="namaLatinKI">Nama Latin Tercetak</label>
                                 <input type='text' name="namaLatinKI" id="namaLatinKI" {...registerDetilMP("namaLatinKI")} className="form-control form-control-sm" />
-                            </div>
-                            <div className="col-6">
-                                <label className="form-label" htmlFor="nettoMPKI">Netto</label>
-                                <div className='row'>
-                                <div className='col-7' style={{paddingRight: '2px'}}>
-                                    <input type="text" className='form-control form-control-sm' value={cekdataDetilMP.nettoMPKI ? addCommas(removeNonNumeric(cekdataDetilMP.nettoMPKI)) : ""} {...registerDetilMP("nettoMPKI")} name='nettoMPKI' id='nettoMPKI' />
-                                </div>
-                                {/* ekor: 1122 || KG: 1356  */}
-                                <div className='col-5' style={{paddingLeft: '2px'}}>
-                                    {/* <input type="hidden" name='satNettoMP' id='satNettoMP' {...registerDetilMP("satNettoMP")} value={cekdataDiri.jenisMp === '1' || cekdataDiri.jenisMp === '6' ? '1122' : '1356'} />
-                                    <input type="text" className='form-control form-control-sm' value={cekdataDiri.jenisMp === '1' || cekdataDiri.jenisMp === '6' ? 'EKOR' : 'KILOGRAM'} readOnly /> */}
-                                    <input type="hidden" name='satNettoMPKI' id='satNettoMPKI' {...registerDetilMP("satNettoMPKI")} value="1356" />
-                                    <input type="text" className='form-control form-control-sm' value='KILOGRAM' readOnly />
-                                </div>
-                                </div>
                             </div>
                             <div className="col-6">
                                 <label className="form-label" htmlFor="jumlahMPKI">Jumlah</label>
@@ -3998,18 +3983,22 @@ function DocK11() {
                                 </div>
                                 </div>
                             </div>
+                            <div className="col-6" style={{visibility: (cekdataDiri.jenisMp == '6' ? "visible" : "hidden")}}>
+                                <label className="form-label" htmlFor="sizeIkan">Size</label>
+                                <input type='text' name="sizeIkan" id="sizeIkan" {...registerDetilMP("sizeIkan")} className="form-control form-control-sm" />
+                            </div>
                             <div className="col-6">
-                                <label className="form-label" htmlFor="brutoMPKI">Bruto</label>
+                                <label className="form-label" htmlFor="nettoMPKI">Netto</label>
                                 <div className='row'>
                                 <div className='col-7' style={{paddingRight: '2px'}}>
-                                    <input type="text" value={cekdataDetilMP.brutoMPKI ? addCommas(removeNonNumeric(cekdataDetilMP.brutoMPKI)) : ""} {...registerDetilMP("brutoMPKI")} className='form-control form-control-sm' name='brutoMPKI' id='brutoMPKI' />
+                                    <input type="text" className='form-control form-control-sm' value={cekdataDetilMP.nettoMPKI ? addCommas(removeNonNumeric(cekdataDetilMP.nettoMPKI)) : ""} {...registerDetilMP("nettoMPKI")} name='nettoMPKI' id='nettoMPKI' />
                                 </div>
                                 {/* ekor: 1122 || KG: 1356  */}
                                 <div className='col-5' style={{paddingLeft: '2px'}}>
-                                    {/* <input type="hidden" name='satBrutoMP' id='satBrutoMP' {...registerDetilMP("satBrutoMP")} value={cekdataDiri.jenisMp === '1' || cekdataDiri.jenisMp === '6' ? '1122' : '1356'} /> */}
-                                    {/* <input type="text" className='form-control form-control-sm' value={cekdataDiri.jenisMp === '1' || cekdataDiri.jenisMp === '6' ? 'EKOR' : 'KILOGRAM'} readOnly  /> */}
-                                    <input type="hidden" name='satBrutoMPKI' id='satBrutoMPKI' {...registerDetilMP("satBrutoMPKI")} value="1356" />
-                                    <input type="text" className='form-control form-control-sm' value="KILOGRAM" readOnly  />
+                                    {/* <input type="hidden" name='satNettoMP' id='satNettoMP' {...registerDetilMP("satNettoMP")} value={cekdataDiri.jenisMp === '1' || cekdataDiri.jenisMp === '6' ? '1122' : '1356'} />
+                                    <input type="text" className='form-control form-control-sm' value={cekdataDiri.jenisMp === '1' || cekdataDiri.jenisMp === '6' ? 'EKOR' : 'KILOGRAM'} readOnly /> */}
+                                    <input type="hidden" name='satNettoMPKI' id='satNettoMPKI' {...registerDetilMP("satNettoMPKI")} value="1356" />
+                                    <input type="text" className='form-control form-control-sm' value='KILOGRAM' readOnly />
                                 </div>
                                 </div>
                             </div>
@@ -4025,6 +4014,21 @@ function DocK11() {
                                             {dataSelect.satuanNilai}
                                         </select>
                                     </div>
+                                </div>
+                            </div>
+                            <div className="col-6">
+                                <label className="form-label" htmlFor="brutoMPKI">Bruto</label>
+                                <div className='row'>
+                                <div className='col-7' style={{paddingRight: '2px'}}>
+                                    <input type="text" value={cekdataDetilMP.brutoMPKI ? addCommas(removeNonNumeric(cekdataDetilMP.brutoMPKI)) : ""} {...registerDetilMP("brutoMPKI")} className='form-control form-control-sm' name='brutoMPKI' id='brutoMPKI' />
+                                </div>
+                                {/* ekor: 1122 || KG: 1356  */}
+                                <div className='col-5' style={{paddingLeft: '2px'}}>
+                                    {/* <input type="hidden" name='satBrutoMP' id='satBrutoMP' {...registerDetilMP("satBrutoMP")} value={cekdataDiri.jenisMp === '1' || cekdataDiri.jenisMp === '6' ? '1122' : '1356'} /> */}
+                                    {/* <input type="text" className='form-control form-control-sm' value={cekdataDiri.jenisMp === '1' || cekdataDiri.jenisMp === '6' ? 'EKOR' : 'KILOGRAM'} readOnly  /> */}
+                                    <input type="hidden" name='satBrutoMPKI' id='satBrutoMPKI' {...registerDetilMP("satBrutoMPKI")} value="1356" />
+                                    <input type="text" className='form-control form-control-sm' value="KILOGRAM" readOnly  />
+                                </div>
                                 </div>
                             </div>
                         </> : "Mohon pilih jenis media pembawa"))

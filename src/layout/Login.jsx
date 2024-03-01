@@ -58,14 +58,13 @@ function Login() {
         <div className="container">
             <div className="row">
                 <center>
-                    <img style={{marginTop: "5%"}} src={LogoBarantin} alt="BARANTIN" width="100px" />
+                    <img style={{marginTop: "5%"}} src={LogoBarantin} alt="BARANTIN" width="160px" />
                 </center>
                 <center>
                     <div className="col-md-offset-4 col-md-4 col-sm-offset-3 col-sm-6">
                         <div className="form-container" style={{textAlign: 'center'}}>
                             <form className="form-horizontal" onSubmit={handleFormLogin}>
-                                <img style={{width: "100%"}} src={logbar} alt="BARANTIN" height="80px" />
-                                <h3 className="title">Silahkan login untuk memulai aplikasi</h3>
+                                <img className='mb-4' style={{width: "100%"}} src={logbar} alt="BARANTIN" height="80px" />
                                 <div className="form-group">
                                     <span className="input-icon"><i className="fa fa-user"></i></span>
                                     <input className="form-control" value={user} onChange={(e) => setUser(e.target.value)} type="text" name="username" id="username" placeholder="Username" autoComplete="off" required />

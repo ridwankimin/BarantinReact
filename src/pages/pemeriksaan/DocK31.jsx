@@ -39,7 +39,6 @@ function DocK31() {
                         text: "Surat Persetujuan/Penolakan Bongkar berhasil " + (data.idDok31 ? "diedit." : "disimpan."),
                         icon: "success"
                     });
-                    // alert(response.data.status + " - " + response.data.message)
                     // setValueDetilSurtug("idHeader", response.data.data.id)
                     setValue("idDok31", response.data.data.id)
                     setValue("noDok31", response.data.data.nomor)
@@ -338,7 +337,7 @@ function DocK31() {
                                                         <div className="row">
                                                             <label className="col-sm-3 col-form-label" htmlFor="namaPengirim">Nama</label>
                                                             <div className="col-sm-9">
-                                                                <input type="text" id="namaPengirim" value={data.listPtk && (data.listPtk.nama_pengirim || "")} disabled className="form-control form-control-sm" placeholder="Nama Pengirim" />
+                                                                <input type="text" id="namaPengirim" value={data.listPtk?.nama_pengirim || ""} disabled className="form-control form-control-sm" placeholder="Nama Pengirim" />
                                                             </div>
                                                         </div>
                                                     </div>
@@ -347,7 +346,7 @@ function DocK31() {
                                                         <div className="row">
                                                             <label className="col-sm-3 col-form-label" htmlFor="namaPenerima">Nama</label>
                                                             <div className="col-sm-9">
-                                                                <input type="text" id="namaPenerima" value={data.listPtk && (data.listPtk.nama_penerima || "")} disabled className="form-control form-control-sm" placeholder="Nama Penerima" />
+                                                                <input type="text" id="namaPenerima" value={data.listPtk?.nama_penerima || ""} disabled className="form-control form-control-sm" placeholder="Nama Penerima" />
                                                             </div>
                                                         </div>
                                                     </div>
@@ -357,7 +356,7 @@ function DocK31() {
                                                         <div className="row">
                                                             <label className="col-sm-3 col-form-label" htmlFor="alamatPengirim">Alamat</label>
                                                             <div className="col-sm-9">
-                                                                <textarea name="alamatPengirim" className="form-control form-control-sm" disabled value={data.listPtk && (data.listPtk.alamat_pengirim || "")} id="alamatPengirim" rows="2" placeholder=""></textarea>
+                                                                <textarea name="alamatPengirim" className="form-control form-control-sm" disabled value={data.listPtk?.alamat_pengirim || ""} id="alamatPengirim" rows="2" placeholder=""></textarea>
                                                             </div>
                                                         </div>
                                                     </div>
@@ -365,7 +364,7 @@ function DocK31() {
                                                         <div className="row">
                                                             <label className="col-sm-3 col-form-label" htmlFor="alamatPenerima">Alamat</label>
                                                             <div className="col-sm-9">
-                                                                <textarea name="alamatPenerima" className="form-control form-control-sm" disabled value={data.listPtk && (data.listPtk.alamat_penerima || "")} id="alamatPenerima" rows="2" placeholder=""></textarea>
+                                                                <textarea name="alamatPenerima" className="form-control form-control-sm" disabled value={data.listPtk?.alamat_penerima || ""} id="alamatPenerima" rows="2" placeholder=""></textarea>
                                                             </div>
                                                         </div>
                                                     </div>
@@ -375,7 +374,7 @@ function DocK31() {
                                                         <div className="row">
                                                             <label className="col-sm-3 col-form-label" htmlFor="identitasPengirim">Identitas</label>
                                                             <div className="col-sm-9">
-                                                                <input name="identitastPengirim" className="form-control form-control-sm" disabled value={data.listPtk && ((data.listPtk.jenis_identitas_pengirim + " - " + data.listPtk.nomor_identitas_pengirim) || "")} id="identitasPengirim" placeholder="" />
+                                                                <input name="identitastPengirim" className="form-control form-control-sm" disabled value={(data.listPtk?.jenis_identitas_pengirim + " - " + data.listPtk?.nomor_identitas_pengirim) || ""} id="identitasPengirim" placeholder="" />
                                                             </div>
                                                         </div>
                                                     </div>
@@ -383,7 +382,7 @@ function DocK31() {
                                                         <div className="row">
                                                             <label className="col-sm-3 col-form-label" htmlFor="identitasPenerima">Identitas</label>
                                                             <div className="col-sm-9">
-                                                                <input name="identitasPenerima" className="form-control form-control-sm" disabled value={data.listPtk && ((data.listPtk.jenis_identitas_penerima + " - " + data.listPtk.nomor_identitas_penerima) || "")} id="identitasPenerima" placeholder="" />
+                                                                <input name="identitasPenerima" className="form-control form-control-sm" disabled value={(data.listPtk?.jenis_identitas_penerima + " - " + data.listPtk?.nomor_identitas_penerima) || ""} id="identitasPenerima" placeholder="" />
                                                             </div>
                                                         </div>
                                                     </div>
@@ -395,7 +394,7 @@ function DocK31() {
                                                         <div className="row">
                                                             <label className="col-sm-3 col-form-label" htmlFor="namaAngkutan">Nama</label>
                                                             <div className="col-sm-9">
-                                                                <input type="text" id="namaAngkutan" value={data.listPtk && (data.listPtk.nama_alat_angkut_terakhir || "")} disabled className="form-control form-control-sm" placeholder="Nama Angkut" />
+                                                                <input type="text" id="namaAngkutan" value={data.listPtk?.nama_alat_angkut_terakhir || ""} disabled className="form-control form-control-sm" placeholder="Nama Angkut" />
                                                             </div>
                                                         </div>
                                                     </div>
@@ -403,7 +402,7 @@ function DocK31() {
                                                         <div className="row">
                                                             <label className="col-sm-3 col-form-label" htmlFor="noAngkutan">Nomor</label>
                                                             <div className="col-sm-9">
-                                                                <input type="text" id="noAngkutan" value={data.listPtk && (data.listPtk.no_voyage_terakhir || "")} disabled className="form-control form-control-sm" placeholder="Nomor Alat Angkut" />
+                                                                <input type="text" id="noAngkutan" value={data.listPtk?.no_voyage_terakhir || ""} disabled className="form-control form-control-sm" placeholder="Nomor Alat Angkut" />
                                                             </div>
                                                         </div>
                                                     </div>
@@ -411,7 +410,7 @@ function DocK31() {
                                                         <div className="row">
                                                             <label className="col-sm-3 col-form-label" htmlFor="callSign">Call Sign</label>
                                                             <div className="col-sm-9">
-                                                                <input type="text" id="callSign" value={data.listPtk && (data.listPtk.tanda_khusus || "")} disabled className="form-control form-control-sm" placeholder="Call Sign" />
+                                                                <input type="text" id="callSign" value={data.listPtk?.tanda_khusus || ""} disabled className="form-control form-control-sm" placeholder="Call Sign" />
                                                             </div>
                                                         </div>
                                                     </div>
@@ -419,7 +418,7 @@ function DocK31() {
                                                         <div className="row">
                                                             <label className="col-sm-3 col-form-label" htmlFor="jmlKemasan">Jml Kemasan / Kontainer</label>
                                                             <div className="col-sm-9">
-                                                                <input type="text" id="jmlKemasan" value={data.listPtk && ((data.listPtk.jumlah_kemasan + " " + data.listPtk.kemasan) || "")} disabled className="form-control form-control-sm" placeholder="Jumlah Kemasan / Kontainer" />
+                                                                <input type="text" id="jmlKemasan" value={(data.listPtk?.jumlah_kemasan + " " + data.listPtk?.kemasan) || ""} disabled className="form-control form-control-sm" placeholder="Jumlah Kemasan / Kontainer" />
                                                             </div>
                                                         </div>
                                                     </div>
@@ -430,7 +429,7 @@ function DocK31() {
                                                         <div className="row">
                                                             <label className="col-sm-4 col-form-label" htmlFor="negaraAsal">Negara/Area Asal</label>
                                                             <div className="col-sm-8">
-                                                                <input type="text" id="negaraAsal" value={data.listPtk && (data.listPtk.negara_muat || "")} disabled className="form-control form-control-sm" placeholder="Negara/Area Asal" />
+                                                                <input type="text" id="negaraAsal" value={data.listPtk?.negara_muat || ""} disabled className="form-control form-control-sm" placeholder="Negara/Area Asal" />
                                                             </div>
                                                         </div>
                                                     </div>
@@ -438,7 +437,7 @@ function DocK31() {
                                                         <div className="row">
                                                             <label className="col-sm-4 col-form-label" htmlFor="negaraTujuan">Negara/Area Tujuan</label>
                                                             <div className="col-sm-8">
-                                                                <input type="text" id="negaraTujuan" value={data.listPtk && (data.listPtk.negara_bongkar || "")} disabled className="form-control form-control-sm" placeholder="Negara/Area Tujuan" />
+                                                                <input type="text" id="negaraTujuan" value={data.listPtk?.negara_bongkar || ""} disabled className="form-control form-control-sm" placeholder="Negara/Area Tujuan" />
                                                             </div>
                                                         </div>
                                                     </div>
@@ -449,7 +448,7 @@ function DocK31() {
                                                         <div className="row">
                                                             <label className="col-sm-4 col-form-label" htmlFor="tglKirim">Tanggal Pengiriman</label>
                                                             <div className="col-sm-4">
-                                                                <input type="date" id="tglKirim" value={data.listPtk && (data.listPtk.tanggal_rencana_berangkat_terakhir || "")} disabled className="form-control form-control-sm" />
+                                                                <input type="date" id="tglKirim" value={data.listPtk?.tanggal_rencana_berangkat_terakhir || ""} disabled className="form-control form-control-sm" />
                                                             </div>
                                                         </div>
                                                     </div>
@@ -457,7 +456,7 @@ function DocK31() {
                                                         <div className="row">
                                                             <label className="col-sm-4 col-form-label" htmlFor="tglDatang">Tanggal Kedatangan</label>
                                                             <div className="col-sm-4">
-                                                                <input type="date" id="tglDatang" value={data.listPtk && (data.listPtk.tanggal_rencana_tiba_terakhir || "")} disabled className="form-control form-control-sm" />
+                                                                <input type="date" id="tglDatang" value={data.listPtk?.tanggal_rencana_tiba_terakhir || ""} disabled className="form-control form-control-sm" />
                                                             </div>
                                                         </div>
                                                     </div>
@@ -509,9 +508,8 @@ function DocK31() {
                                                             </div>
                                                             <label className="col-sm-2 col-form-label text-sm-end" htmlFor="tglDok31">Tanggal</label>
                                                             <div className="col-sm-2">
-                                                                {/* <input type="datetime-local" id="tglDok31" name='tglDok31' className="form-control form-control-sm" /> */}
                                                                 <input type="datetime-local" id="tglDok31" name='tglDok31' {...register("tglDok31", {required: "Mohon isi tanggal dokumen."})} className={errors.tglDok31 ? "form-control form-control-sm is-invalid" : "form-control form-control-sm"} />
-                                                                {errors.tglDok31 && <><br/><small className="text-danger">{errors.tglDok31.message}</small></>}
+                                                                {errors.tglDok31 && <small className="text-danger">{errors.tglDok31.message}</small>}
                                                             </div>
                                                         </div>
                                                     </div>
@@ -543,7 +541,7 @@ function DocK31() {
                                                                         <option value='3'>Ditolak</option>
                                                                         <option value='4'>Dilanjutkan pemeriksaan kesehatan</option>
                                                                     </select> */}
-                                                                    {errors.ttdPutusan && <><br/><small className="text-danger">{errors.ttdPutusan.message}</small></>}
+                                                                    {errors.ttdPutusan && <small className="text-danger">{errors.ttdPutusan.message}</small>}
                                                                 </div>
                                                             </div>
                                                         </div>

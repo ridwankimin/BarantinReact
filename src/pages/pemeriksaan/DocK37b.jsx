@@ -9,6 +9,14 @@ import PtkModel from '../../model/PtkModel';
 import Select from 'react-select';
 import Master from '../../model/Master';
 import PtkHistory from '../../model/PtkHistory';
+import Swal from 'sweetalert2';
+import PtkSurtug from '../../model/PtkSurtug';
+
+const modelPemohon = new PtkModel()
+const modelOPTK = new Master()
+const modelSurtug = new PtkSurtug()
+const modelPeriksa = new PtkPemeriksaan()
+const log = new PtkHistory()
 
 function DocK37b() {
     let navigate = useNavigate();
@@ -31,18 +39,17 @@ function DocK37b() {
     const dataWatchHeader = watchHeader()
 
     const onSubmitHeader = (data) => {
-        const model = new PtkPemeriksaan();
-        const response = model.ptkFisikKesehatanHeader(data);
+        const response = modelPeriksa.ptkFisikKesehatanHeader(data);
         response
         .then((response) => {
             if(response.data) {
-                if(response.data.status === '201') {
+                console.log(response.data)
+                if(response.data.status == '201') {
                     //start save history
-                    const log = new PtkHistory();
                     const resHsy = log.pushHistory(data.idPtk, "p1b", "K-3.7b", (data.idDok37b ? 'UPDATE' : 'NEW'));
                     resHsy
                     .then((response) => {
-                        if(response.data.status === '201') {
+                        if(response.data.status == '201') {
                             if(process.env.REACT_APP_BE_ENV == "DEV") {
                                 console.log("history saved")
                             }
@@ -55,10 +62,20 @@ function DocK37b() {
                     });
                     //end save history
 
-                    alert(response.data.status + " - " + response.data.message)
+                    Swal.fire({
+                        title: "Sukses!",
+                        text: "Hasil Pemeriksaan Kesehatan berhasil " + (data.idDok37b ? "diedit." : "disimpan."),
+                        icon: "success"
+                    });
                     setValue("idDok37b", response.data.data.id)
                     setvalueHeader("idDok37b", response.data.data.id)
                     setValue("noDok37b", response.data.data.nomor)
+                } else {
+                    Swal.fire({
+                        title: "Error!",
+                        text: response.data.message,
+                        icon: "error"
+                    });
                 }
             }
         })
@@ -66,7 +83,11 @@ function DocK37b() {
             if(process.env.REACT_APP_BE_ENV == "DEV") {
                 console.log(error)
             }
-            alert(error.response.status + " - " + error.response.data.message)
+            Swal.fire({
+                title: "Error!",
+                text: error.response.data.message,
+                icon: "error"
+            });
         });
     }
 
@@ -75,14 +96,12 @@ function DocK37b() {
     // let [listWasdal, setListWasdal] = useState([])
 
     const onSubmit = (data) => {
-        const model = new PtkPemeriksaan();
-        const response = model.ptkFisikKesehatan(data, listKesehatan);
+        const response = modelPeriksa.ptkFisikKesehatan(data, listKesehatan);
             response
             .then((response) => {
                 if(response.data) {
-                    if(response.data.status === '201') {
+                    if(response.data.status == '201') {
                         //start save history
-                        const log = new PtkHistory();
                         const resHsy = log.pushHistory(data.idPtk, "p1b", "K-3.7b", (data.idDok37b ? 'put' : 'post'));
                         resHsy
                         .then((response) => {
@@ -99,10 +118,21 @@ function DocK37b() {
                         });
                         //end save history
 
-                        alert(response.data.status + " - " + response.data.message)
+                        Swal.fire({
+                            title: "Sukses!",
+                            text: "Laporan Hasil Pemeriksaan Kesehatan berhasil " + (data.idDok37b ? "diedit." : "disimpan."),
+                            icon: "success"
+                        });
                         setValue("idDok37b", response.data.data.id)
                         setvalueHeader("idDok37b", response.data.data.id)
+                        setvalueHeader("tglDok37b", response.data.data.tanggal)
                         setValue("noDok37b", response.data.data.nomor)
+                    } else {
+                        Swal.fire({
+                            title: "Error!",
+                            text: response.data.message,
+                            icon: "error"
+                        });
                     }
                 }
             })
@@ -110,6 +140,11 @@ function DocK37b() {
                 if(process.env.REACT_APP_BE_ENV == "DEV") {
                     console.log(error)
                 }
+                Swal.fire({
+                    title: "Error!",
+                    text: error.response.data.message,
+                    icon: "error"
+                });
             });
     }
     
@@ -130,6 +165,11 @@ function DocK37b() {
             temuan_hasil2: data.temuanWasdal ? data.temuanWasdal : "",
             catatan2: data.catatanWasdal ? data.catatanWasdal : "",
          }]);
+         Swal.fire({
+            title: "Sukses!",
+            text: "Data Pemeriksaan Fisik/Kesehatan berhasil ditambahkan",
+            icon: "success"
+        });
          setData(values => ({...values, 
             mpPeriksa: "",
             mpPeriksaView: [],
@@ -161,30 +201,48 @@ function DocK37b() {
             setValue("idPtk", base64_decode(ptkNomor[1]))
             setValue("noDok", base64_decode(ptkNomor[2]))
 
-            const modelPeriksa = new PtkPemeriksaan();
             const resFisik = modelPeriksa.getFisikByPtkId(base64_decode(ptkNomor[1]))
             resFisik
             .then((response) => {
                 if(response.data) {
-                    if(response.data.status === '200') {
-                        setValue("idDok37a", response.data.data[0].pn_administrasi_id)
-                        setValue("idDok37b", response.data.data[0].id)
-                        setValue("ptkId", response.data.data[0].ptk_id)
-                        setValue("noDok", response.data.data[0].nomor)
-                        setValue("noDok37b", response.data.data[0].nomor)
-                        setValue("tglDok37b", response.data.data[0].tanggal)
-                        setValue("isUjiLab", response.data.data[0].is_ujilab.toString())
-                        setValue("ttd1", response.data.data[0].user_ttd1_id)
-                        setvalueHeader("kesimpulan37b", response.data.data[0].kesimpulan)
-                        setvalueHeader("rekom37b", response.data.data[0].rekomendasi_id)
-                        setvalueHeader("ttd2", response.data.data[0].user_ttd2_id)
-                        setvalueHeader("idDok37b", response.data.data[0].id)
-                        setvalueHeader("tglDok37b", response.data.data[0].tanggal)
-                        setListKesehatan([])
-                        
-                        response.data.data?.map((data) => (
-                            data.target_sasaran1 ? setListKesehatan(listKesehatan => listKesehatan.concat(data)) : null 
-                        ))
+                    if(typeof response.data != "string") {
+                        if(response.data.status == '200') {
+                            setData(values => ({...values,
+                                errorKesehatan: ""
+                            }));
+                            setValue("idDok37a", response.data.data[0].pn_administrasi_id)
+                            setValue("idDok37b", response.data.data[0].id)
+                            setValue("tglDok37b", response.data.data[0].tanggal)
+                            setValue("ptkId", response.data.data[0].ptk_id)
+                            setValue("noDok", response.data.data[0].nomor)
+                            setValue("noDok37b", response.data.data[0].nomor)
+                            setValue("isUjiLab", response.data.data[0].is_ujilab.toString())
+                            setValue("ttd1", response.data.data[0].user_ttd1_id)
+                            setvalueHeader("idDok37b", response.data.data[0].id)
+                            setvalueHeader("tglDok37b", response.data.data.tanggal)
+                            setvalueHeader("kesimpulan37b", response.data.data[0].kesimpulan)
+                            setvalueHeader("rekom37b", [response.data.data[0].rekomendasi_id?.toString(), response.data.data[0].rekomendasi2_id?.toString()])
+                            setvalueHeader("ttd2", response.data.data[0].user_ttd2_id)
+                            setvalueHeader("idDok37b", response.data.data[0].id)
+                            setvalueHeader("tglDok37b", response.data.data[0].tanggal)
+                            setListKesehatan([])
+                            
+                            response.data.data?.map((data) => (
+                                data.target_sasaran1 ? setListKesehatan(listKesehatan => listKesehatan.concat(data)) : null 
+                            ))
+                        } else if(response.data.status == '404') {
+                            setData(values => ({...values,
+                                errorKesehatan: ""
+                            }));
+                        } else {
+                            setData(values => ({...values,
+                                errorKesehatan: "Gagal load data kesehatan"
+                            }));
+                        }
+                    } else {
+                        setData(values => ({...values,
+                            errorKesehatan: "Gagal load data kesehatan"
+                        }));
                     }
                 }
             })
@@ -192,6 +250,50 @@ function DocK37b() {
                 if(process.env.REACT_APP_BE_ENV == "DEV") {
                     console.log(error)
                 }
+                if(error.response) {
+                    if(error.response.data.status == 404) {
+                        setData(values => ({...values,
+                            errorKesehatan: ""
+                        }));
+                    } else {
+                        setData(values => ({...values,
+                            errorKesehatan: "Gagal load data kesehatan"
+                        }));
+                    }
+                }
+            });
+
+            // 2: penugasan periksa kesehatan
+            const responseSurtug = modelSurtug.getDetilSurtugPenugasan(base64_decode(ptkNomor[1]), 2);
+            responseSurtug
+            .then((response) => {
+                if(response.data) {
+                    if(typeof response.data != "string") {
+                        if(response.data.status == '200') {
+                            setData(values => ({...values,
+                                errorSurtug: "",
+                                noSurtug: response.data.data[0].nomor,
+                                tglSurtug: response.data.data[0].tanggal,
+                            }));
+                        } else {
+                            setData(values => ({...values,
+                                errorSurtug: response.data.message,
+                            }));
+                        }
+                    } else {
+                        setData(values => ({...values,
+                            errorSurtug: "Gagal load data Surat Tugas",
+                        }));
+                    }
+                }
+            })
+            .catch((error) => {
+                if(process.env.REACT_APP_BE_ENV == "DEV") {
+                    console.log(error)
+                }
+                setData(values => ({...values,
+                    errorSurtug: error.response.data.message,
+                }));
             });
 
             const response = modelPeriksa.getAdminByPtkId(base64_decode(ptkNomor[1]))
@@ -199,7 +301,7 @@ function DocK37b() {
             .then((response) => {
                 if(typeof response.data != "string") {
                     setData(values => ({...values,
-                        errorAdmin: false
+                        errorAdmin: ""
                     }));
                     if(response.data.status === '200') {
                         setData(values => ({...values,
@@ -210,7 +312,7 @@ function DocK37b() {
                     }
                 } else {
                     setData(values => ({...values,
-                        errorAdmin: true
+                        errorAdmin: "Gagal load data Periksa Administratif"
                     }));
                 }
             })
@@ -219,17 +321,16 @@ function DocK37b() {
                     console.log(error)
                 }
                 setData(values => ({...values,
-                    errorAdmin: true
+                    errorAdmin: "Gagal load data Periksa Administratif"
                 }));
             });
 
-            const modelPemohon = new PtkModel();
             const resKom = modelPemohon.getKomoditiPtkId(base64_decode(ptkNomor[1]), Cookies.get("jenisKarantina"));
             resKom
             .then((res) => {
                 if(typeof res.data != "string") {
                     setData(values => ({...values,
-                        errorKomoditi: false
+                        errorKomoditi: ""
                     }));
                     if(res.data.status === '200') {
                         const arraySelectKomoditi = res.data.data.map(item => {
@@ -242,7 +343,7 @@ function DocK37b() {
                     }
                 } else {
                     setData(values => ({...values,
-                        errorKomoditi: true
+                        errorKomoditi: "Gagal load data Komoditas"
                     }));
                 }
             })
@@ -251,53 +352,85 @@ function DocK37b() {
                     console.log(error)
                 }
                 setData(values => ({...values,
-                    errorKomoditi: true
+                    errorKomoditi: "Gagal load data Komoditas"
                 }));
             });
             
-            const modelOPTK = new Master();
-            const resOPTK = modelOPTK.masterOPTK();
-            resOPTK
-            .then((res) => {
-                if(typeof res.data != "string") {
-                    setData(values => ({...values,
-                        errorOptk: false
-                    }));
-                    if(res.data.status === '200') {
-                        const arraySelectOPTK = res.data.data.map(item => {
-                            return {
-                                value: item.nama_umum,
-                                label: item.nama_umum + " (" + item.nama_latin + ") - " + item.jenis + " (" + item.golongan + ")"
-                            }
-                        })
-                        setDataSelect(values => ({...values, masterOPTK: arraySelectOPTK }));
+            if(Cookies.get("jenisKarantina") == "T") {
+                const resOPTK = modelOPTK.masterOPTK();
+                resOPTK
+                .then((res) => {
+                    if(typeof res.data != "string") {
+                        setData(values => ({...values,
+                            errorOptk: ""
+                        }));
+                        if(res.data.status === '200') {
+                            const arraySelectOPTK = res.data.data.map(item => {
+                                return {
+                                    value: item.nama_umum,
+                                    label: item.nama_umum + " (" + item.nama_latin + ") - " + item.jenis + " (" + item.golongan + ")"
+                                }
+                            })
+                            setDataSelect(values => ({...values, masterOPTK: arraySelectOPTK }));
+                        }
+                    } else {
+                        setData(values => ({...values,
+                            errorOptk: "Gagal load data penyakit"
+                        }));
                     }
-                } else {
+                })
+                .catch((error) => {
+                    if(process.env.REACT_APP_BE_ENV == "DEV") {
+                        console.log(error)
+                    }
                     setData(values => ({...values,
-                        errorOptk: true
+                        errorOptk: "Gagal load data penyakit"
                     }));
-                }
-            })
-            .catch((error) => {
-                if(process.env.REACT_APP_BE_ENV == "DEV") {
-                    console.log(error)
-                }
-                setData(values => ({...values,
-                    errorOptk: true
-                }));
-            });
+                });
+                // } else if(Cookies.get("jenisKarantina") == "H")
+            } else {
+                const resOPTK = modelOPTK.masterHPHK();
+                resOPTK
+                .then((res) => {
+                    if(typeof res.data != "string") {
+                        setData(values => ({...values,
+                            errorOptk: ""
+                        }));
+                        if(res.data.status === '200') {
+                            const arraySelectOPTK = res.data.data.map(item => {
+                                return {
+                                    value: item.uraian,
+                                    label: item.kode + " - " + item.uraian
+                                }
+                            })
+                            setDataSelect(values => ({...values, masterOPTK: arraySelectOPTK }));
+                        }
+                    } else {
+                        setData(values => ({...values,
+                            errorOptk: "Gagal load data penyakit"
+                        }));
+                    }
+                })
+                .catch((error) => {
+                    if(process.env.REACT_APP_BE_ENV == "DEV") {
+                        console.log(error)
+                    }
+                    setData(values => ({...values,
+                        errorOptk: "Gagal load data penyakit"
+                    }));
+                });
+            }
         }
     }, [idPtk, setValue, setvalueHeader])
 
     function refreshData() {
         if(data.errorAdmin) {
-            const modelPeriksa = new PtkPemeriksaan();
             const response = modelPeriksa.getAdminByPtkId(data.idPtk)
             response
             .then((response) => {
                 if(typeof response.data != "string") {
                     setData(values => ({...values,
-                        errorAdmin: false
+                        errorAdmin: ""
                     }));
                     if(response.data.status === '200') {
                         setData(values => ({...values,
@@ -308,7 +441,7 @@ function DocK37b() {
                     }
                 } else {
                     setData(values => ({...values,
-                        errorAdmin: true
+                        errorAdmin: "Gagal load data Periksa Administratif"
                     }));
                 }
             })
@@ -316,21 +449,53 @@ function DocK37b() {
                 if(process.env.REACT_APP_BE_ENV == "DEV") {
                     console.log(error)
                 }
-                // alert(error.response.status + " - " + error.response.data.message)
                 setData(values => ({...values,
-                    errorAdmin: true
+                    errorAdmin: "Gagal load data Periksa Administratif"
+                }));
+            });
+        }
+
+        if(data.errorSurtug) {
+            const responseSurtug = modelSurtug.getDetilSurtugPenugasan(data.idPtk, 2);
+            responseSurtug
+            .then((response) => {
+                if(response.data) {
+                    if(typeof response.data != "string") {
+                        if(response.data.status == '200') {
+                            setData(values => ({...values,
+                                errorSurtug: "",
+                                noSurtug: response.data.data[0].nomor,
+                                tglSurtug: response.data.data[0].tanggal,
+                            }));
+                        } else {
+                            setData(values => ({...values,
+                                errorSurtug: response.data.message,
+                            }));
+                        }
+                    } else {
+                        setData(values => ({...values,
+                            errorSurtug: "Gagal load data Surat Tugas",
+                        }));
+                    }
+                }
+            })
+            .catch((error) => {
+                if(process.env.REACT_APP_BE_ENV == "DEV") {
+                    console.log(error)
+                }
+                setData(values => ({...values,
+                    errorSurtug: error.response.data.message,
                 }));
             });
         }
         
         if(data.errorKomoditi) {
-            const modelPemohon = new PtkModel();
             const resKom = modelPemohon.getKomoditiPtkId(data.idPtk, Cookies.get("jenisKarantina"));
             resKom
             .then((res) => {
                 if(typeof res.data != "string") {
                     setData(values => ({...values,
-                        errorKomoditi: false
+                        errorKomoditi: ""
                     }));
                     if(res.data.status === '200') {
                         const arraySelectKomoditi = res.data.data.map(item => {
@@ -343,7 +508,7 @@ function DocK37b() {
                     }
                 } else {
                     setData(values => ({...values,
-                        errorKomoditi: true
+                        errorKomoditi: "Gagal load data Komoditas"
                     }));
                 }
             })
@@ -352,42 +517,136 @@ function DocK37b() {
                     console.log(error)
                 }
                 setData(values => ({...values,
-                    errorKomoditi: true
+                    errorKomoditi: "Gagal load data Komoditas"
                 }));
             });
         }
             
         if(data.errorOptk) {
-            const modelOPTK = new Master();
-            const resOPTK = modelOPTK.masterOPTK();
-            resOPTK
-            .then((res) => {
-                if(typeof res.data != "string") {
-                    setData(values => ({...values,
-                        errorOptk: false
-                    }));
-                    if(res.data.status === '200') {
-                        const arraySelectOPTK = res.data.data.map(item => {
-                            return {
-                                value: item.nama_umum,
-                                label: item.nama_umum + " (" + item.nama_latin + ") - " + item.jenis + " (" + item.golongan + ")"
-                            }
-                        })
-                        setDataSelect(values => ({...values, masterOPTK: arraySelectOPTK }));
+            if(Cookies.get("jenisKarantina") == "T") {
+                const resOPTK = modelOPTK.masterOPTK();
+                resOPTK
+                .then((res) => {
+                    if(typeof res.data != "string") {
+                        setData(values => ({...values,
+                            errorOptk: ""
+                        }));
+                        if(res.data.status === '200') {
+                            const arraySelectOPTK = res.data.data.map(item => {
+                                return {
+                                    value: item.nama_umum,
+                                    label: item.nama_umum + " (" + item.nama_latin + ") - " + item.jenis + " (" + item.golongan + ")"
+                                }
+                            })
+                            setDataSelect(values => ({...values, masterOPTK: arraySelectOPTK }));
+                        }
+                    } else {
+                        setData(values => ({...values,
+                            errorOptk: "Gagal load data penyakit"
+                        }));
                     }
-                } else {
+                })
+                .catch((error) => {
+                    if(process.env.REACT_APP_BE_ENV == "DEV") {
+                        console.log(error)
+                    }
                     setData(values => ({...values,
-                        errorOptk: true
+                        errorOptk: "Gagal load data penyakit"
                     }));
+                });
+            } else {
+                const resOPTK = modelOPTK.masterHPHK();
+                resOPTK
+                .then((res) => {
+                    if(typeof res.data != "string") {
+                        setData(values => ({...values,
+                            errorOptk: ""
+                        }));
+                        if(res.data.status === '200') {
+                            const arraySelectOPTK = res.data.data.map(item => {
+                                return {
+                                    value: item.uraian,
+                                    label: item.kode + " - " + item.uraian
+                                }
+                            })
+                            setDataSelect(values => ({...values, masterOPTK: arraySelectOPTK }));
+                        }
+                    } else {
+                        setData(values => ({...values,
+                            errorOptk: "Gagal load data penyakit"
+                        }));
+                    }
+                })
+                .catch((error) => {
+                    if(process.env.REACT_APP_BE_ENV == "DEV") {
+                        console.log(error)
+                    }
+                    setData(values => ({...values,
+                        errorOptk: "Gagal load data penyakit"
+                    }));
+                });
+            }
+        }
+
+        if(data.errorKesehatan) {
+            const resFisik = modelPeriksa.getFisikByPtkId(data.idPtk)
+            resFisik
+            .then((response) => {
+                if(response.data) {
+                    if(typeof response.data != "string") {
+                        if(response.data.status == '200') {
+                            setData(values => ({...values,
+                                errorKesehatan: ""
+                            }));
+                            setValue("idDok37a", response.data.data[0].pn_administrasi_id)
+                            setValue("idDok37b", response.data.data[0].id)
+                            setValue("ptkId", response.data.data[0].ptk_id)
+                            setValue("noDok", response.data.data[0].nomor)
+                            setValue("noDok37b", response.data.data[0].nomor)
+                            setValue("tglDok37b", response.data.data[0].tanggal)
+                            setValue("isUjiLab", response.data.data[0].is_ujilab.toString())
+                            setValue("ttd1", response.data.data[0].user_ttd1_id)
+                            setvalueHeader("kesimpulan37b", response.data.data[0].kesimpulan)
+                            setvalueHeader("rekom37b", [response.data.data[0].rekomendasi_id?.toString(), response.data.data[0].rekomendasi2_id?.toString()])
+                            setvalueHeader("ttd2", response.data.data[0].user_ttd2_id)
+                            setvalueHeader("idDok37b", response.data.data[0].id)
+                            setvalueHeader("tglDok37b", response.data.data[0].tanggal)
+                            setListKesehatan([])
+                            
+                            response.data.data?.map((data) => (
+                                data.target_sasaran1 ? setListKesehatan(listKesehatan => listKesehatan.concat(data)) : null 
+                            ))
+                        } else if(response.data.status == '404') {
+                            setData(values => ({...values,
+                                errorKesehatan: ""
+                            }));
+                        } else {
+                            setData(values => ({...values,
+                                errorKesehatan: "Gagal load data kesehatan"
+                            }));
+                        }
+                    } else {
+                        setData(values => ({...values,
+                            errorKesehatan: "Gagal load data kesehatan"
+                        }));
+                    }
                 }
             })
             .catch((error) => {
                 if(process.env.REACT_APP_BE_ENV == "DEV") {
                     console.log(error)
                 }
-                setData(values => ({...values,
-                    errorOptk: true
-                }));
+                if(error.response) {
+                    if(error.response.data.status == 404) {
+                        setData(values => ({...values,
+                            errorKesehatan: ""
+                        }));
+                    } else {
+                        setData(values => ({...values,
+                            errorKesehatan: "Gagal load data kesehatan"
+                        }));
+                    }
+                }
             });
         }
     }
@@ -395,9 +654,13 @@ function DocK37b() {
     <div className="container-xxl flex-grow-1 container-p-y">
         <h4 className="py-3 breadcrumb-wrapper mb-4">
             K-3.7b <span className="fw-light" style={{color: 'blue'}}>LAPORAN HASIL PEMERIKSAAN KESEHATAN</span>
-            <div className="offset-sm-6 col-sm-6">
-                <a href='https://esps.karantina.pertanian.go.id/elab' rel="noreferrer" target='_blank' className='btn btn-info float-end'><i className="menu-icon tf-icons bx bx-send"></i>elab Barantin</a>
-            </div>
+
+            <small className='float-end'>
+                <span className='text-danger'>{(data.errorKesehatan ? data.errorKesehatan + "; " : "") + (data.errorAdmin ? data.errorAdmin + "; " : "") + (data.errorSurtug ? data.errorSurtug + "; " : "") + (data.errorKomoditi ? data.errorKomoditi + "; " : "") + (data.errorOptk ? data.errorOptk + "; " : "")}</span>
+                {data.errorKesehatan || data.errorAdmin || data.errorSurtug || data.errorKomoditi || data.errorOptk ?
+                    <button type='button' className='btn btn-warning btn-xs' onClick={() => refreshData()}><i className='fa-solid fa-sync'></i> Refresh</button>
+                : ""}
+            </small>
         </h4>
 
     <div className="row">
@@ -408,7 +671,7 @@ function DocK37b() {
                         <div className='row'>
                             <label className="col-sm-1 col-form-label text-sm-end" htmlFor="noDok"><b>No PTK</b></label>
                             <div className="col-sm-3">
-                                <input type="text" id="noDok" value={data.noDokumen || ""} className="form-control form-control-sm" placeholder="Nomor Dokumen K.3.7" disabled />
+                                <input type="text" id="noDok" value={data.noDokumen || ""} className="form-control form-control-sm" placeholder="Nomor Dokumen PTK" disabled />
                             </div>
                             <label className="col-sm-2 col-form-label text-sm-end" htmlFor="noAdmin"><b>NO P. Administratif</b></label>
                             <div className="col-sm-3">
@@ -442,7 +705,7 @@ function DocK37b() {
                                 </div>
                                 <label className="col-sm-2 col-form-label text-sm-center" htmlFor="tglDok37b">Tanggal<span className='text-danger'>*</span></label>
                                 <div className="col-sm-2">
-                                    <input type="datetime-local" id="tglDok37b" name='tglDok37b' onInput={(e) => setvalueHeader("tglDok37b", e.target.value)} {...register("tglDok37b", {required: (dataWatch.tglDok37b ? "Mohon isi tanggal dokumen." : false)})} className={errors.tglDok37b ? "form-control form-control-sm is-invalid" : "form-control form-control-sm"} />
+                                    <input type="datetime-local" id="tglDok37b" name='tglDok37b' onChange={(e) => setvalueHeader("tglDok37b", e.target.value)} {...register("tglDok37b", {required: (dataWatch.tglDok37b ? "Mohon isi tanggal dokumen." : false)})} className={errors.tglDok37b ? "form-control form-control-sm is-invalid" : "form-control form-control-sm"} />
                                     {errors.tglDok37b && <small className="text-danger">{errors.tglDok37b.message}</small>}
                                 </div>
                             </div>
@@ -459,27 +722,12 @@ function DocK37b() {
                                         <div id="collapseExporter">
                                             <div className="accordion-body">
                                                 <button type='button' className='btn btn-sm btn-info mb-3' data-bs-toggle="modal" data-bs-target="#modKesehatan" style={{marginLeft: "15px"}}>Tambah Data</button>
-                                                <div className='float-end' style={{display: (data.errorKomoditi | data.errorOptk | data.errorAdmin ? "block" : "none")}}>
-                                                <span className='text-danger'>{data.errorKomoditi ? "Gagal load data komoditi; " : null}</span>
-                                                <span className='text-danger'>{data.errorOptk ? "Gagal load data Target/Sasaran Pemeriksaan; " : null}</span>
-                                                <span className='text-danger'>{data.errorAdmin ? "Gagal load data Pemeriksaan Administratif" : null}</span>
-                                                    <button type='button' className='btn btn-warning btn-xs' onClick={() => refreshData()}><i className='fa-solid fa-sync'></i> Refresh</button>
-                                                </div>
                                                 <h5>
                                                     <u><b>
                                                         A. Pemeriksaan Fisik/Kesehatan, Pemeriksaan HPHK/HPIK/OPTK
                                                     </b></u>
                                                     <div className="float-end">
-                                                        <h5>Perlu uji lab ?
-                                                            <div className="form-check form-check-inline" style={{marginLeft:"10px"}}>
-                                                                <input className="form-check-input" type="radio" name="isUjiLab" id="ya" value={1} {...register("isUjiLab")} />
-                                                                <label className="form-check-label" htmlFor="ya">Ya</label>
-                                                            </div>
-                                                            <div className="form-check form-check-inline">
-                                                                <input className="form-check-input" type="radio" name="isUjiLab" id="tidak" value={0}  {...register("isUjiLab")}/>
-                                                                <label className="form-check-label" htmlFor="tidak">Tidak</label>
-                                                            </div>
-                                                        </h5>
+                                                        <a href='https://esps.karantina.pertanian.go.id/elab' rel="noreferrer" target='_blank' className='btn btn-info btn-sm'><i className="menu-icon tf-icons fa-solid fa-download"></i>Data elab Barantin</a>
                                                     </div>
                                                 </h5>
                                                 <div className="text-wrap mb-3">
@@ -507,7 +755,7 @@ function DocK37b() {
                                                                         <td>{data.temuan_hasil1}</td>
                                                                         <td>{data.catatan1}</td>
                                                                         <td>
-                                                                            <button className="btn btn-xs text-danger"><i className='fa-solid fa-trash'></i></button>
+                                                                            <button type='button' className="btn btn-xs text-danger"><i className='fa-solid fa-trash'></i></button>
                                                                         </td>
                                                                     </tr>)
                                                                 : null))
@@ -515,9 +763,19 @@ function DocK37b() {
                                                         </tbody>
                                                     </table>
                                                 </div>
-                                                <h5 title='Pengawasan dan Pengendalian Pangan/Pakan/SDG/PRG/Agensia Hayati/JAI/Tumbuhan dan Satwa Liar/Tumbuhan dan Satwa Langka'><u><b>B. Pengawasan dan Pengendalian</b></u> 
-                                                {/* <button type='button' className='btn btn-xs btn-info' data-bs-toggle="modal" data-bs-target="#modWasdal" style={{marginLeft: "15px"}}>Tambah Data</button> */}
-                                                </h5>
+                                                <div>
+                                                    <h5>Perlu uji lab ?
+                                                        <div className="form-check form-check-inline" style={{marginLeft:"10px"}}>
+                                                            <input className="form-check-input" type="radio" name="isUjiLab" id="ya" value={1} {...register("isUjiLab")} />
+                                                            <label className="form-check-label mt-1" htmlFor="ya">Ya</label>
+                                                        </div>
+                                                        <div className="form-check form-check-inline">
+                                                            <input className="form-check-input" type="radio" name="isUjiLab" id="tidak" value={0}  {...register("isUjiLab")}/>
+                                                            <label className="form-check-label mt-1" htmlFor="tidak">Tidak</label>
+                                                        </div>
+                                                    </h5>
+                                                </div>
+                                                <h5 title='Pengawasan dan Pengendalian Pangan/Pakan/SDG/PRG/Agensia Hayati/JAI/Tumbuhan dan Satwa Liar/Tumbuhan dan Satwa Langka'><u><b>B. Pengawasan dan Pengendalian</b></u></h5>
                                                 <div className="text-nowrap mb-4">
                                                     <table className="table table-sm table-bordered table-hover table-striped dataTable">
                                                         <thead>
@@ -543,26 +801,11 @@ function DocK37b() {
                                                                         <td>{data.temuan_hasil2}</td>
                                                                         <td>{data.catatan2}</td>
                                                                         <td>
-                                                                            <button className="btn btn-xs text-danger"><i className='fa-solid fa-trash'></i></button>
+                                                                            <button type='button' className="btn btn-xs text-danger"><i className='fa-solid fa-trash'></i></button>
                                                                         </td>
                                                                     </tr>)
                                                                 : null))
                                                             ) : null }
-                                                            {/* {listWasdal ? (listWasdal.map((data, index) =>
-                                                                    (<tr key={index}>
-                                                                        <td>{index + 1}</td>
-                                                                        <td>{data.nama_umum_tercetak}</td>
-                                                                        <td>{data.volume_lain + " " + data.satuan_lain}</td>
-                                                                        <td>{data.target_sasaran2}</td>
-                                                                        <td>{data.metode2}</td>
-                                                                        <td>{data.temuan_hasil2}</td>
-                                                                        <td>{data.catatan2}</td>
-                                                                        <td>
-                                                                            <button className="btn btn-xs text-danger"><i className='fa-solid fa-trash'></i></button>
-                                                                        </td>
-                                                                    </tr>)
-                                                                )
-                                                            ) : null } */}
                                                         </tbody>
                                                     </table>
                                                 </div>
@@ -583,6 +826,8 @@ function DocK37b() {
                         </div>
                     </form>
                     <form onSubmit={handleSubmitHeader(onSubmitHeader)}>
+                        <input type="hidden" name='idDok37b' id='idDok37b' {...registerHeader("idDok37b")} />
+                        <input type="hidden" name='tglDok37b' id='tglDok37b' {...registerHeader("tglDok37b")} />
                         <div className="row">
                             <div className='col-sm-2 form-control-label'><b>Kesimpulan</b></div>
                             <div className="col-sm-3 mb-3">
@@ -593,19 +838,19 @@ function DocK37b() {
                             <div className='col-sm-2 form-control-label'><b>Rekomendasi <span className='text-danger'>*</span></b></div>
                             <div className="col-sm-8 mb-3">
                                 <div className="form-check form-check-inline">
-                                    <input className="form-check-input" type="checkbox" name="rekom37b" id="rekom37b16" value={16} disabled={dataWatchHeader.rekom37b ? (dataWatchHeader.rekom37b.length === 2 && dataWatchHeader.rekom37b.indexOf('16') < 0 ? true : false) : false} {...registerHeader("rekom37b", { required: "Mohon pilih rekomendasi yang sesuai."})} />
+                                    <input className="form-check-input" type="checkbox" name="rekom37b" id="rekom37b16" value="16" disabled={dataWatchHeader.rekom37b ? (dataWatchHeader.rekom37b.length === 2 && dataWatchHeader.rekom37b.indexOf('16') < 0 ? true : false) : false} {...registerHeader("rekom37b", { required: "Mohon pilih rekomendasi yang sesuai."})} />
                                     <label className="form-check-label" htmlFor="rekom37b16">Diberi Perlakuan</label>
                                 </div>
                                 <div className="form-check form-check-inline">
-                                    <input className="form-check-input" type="checkbox" name="rekom37b" id="rekom37b17" disabled={dataWatchHeader.rekom37b ? (dataWatchHeader.rekom37b.length === 2 && dataWatchHeader.rekom37b.indexOf('17') < 0 ? true : false) : false} value={17} {...registerHeader("rekom37b")} />
+                                    <input className="form-check-input" type="checkbox" name="rekom37b" id="rekom37b17" disabled={dataWatchHeader.rekom37b ? (dataWatchHeader.rekom37b.length === 2 && dataWatchHeader.rekom37b.indexOf('17') < 0 ? true : false) : false} value="17" {...registerHeader("rekom37b")} />
                                     <label className="form-check-label" htmlFor="rekom37b17">Ditolak</label>
                                 </div>
                                 <div className="form-check form-check-inline">
-                                    <input className="form-check-input" type="checkbox" name="rekom37b" id="rekom37b18" disabled={dataWatchHeader.rekom37b ? (dataWatchHeader.rekom37b.length === 2 && dataWatchHeader.rekom37b.indexOf('18') < 0 ? true : false) : false} value={18} {...registerHeader("rekom37b")} />
+                                    <input className="form-check-input" type="checkbox" name="rekom37b" id="rekom37b18" disabled={dataWatchHeader.rekom37b ? (dataWatchHeader.rekom37b.length === 2 && dataWatchHeader.rekom37b.indexOf('18') < 0 ? true : false) : false} value="18" {...registerHeader("rekom37b")} />
                                     <label className="form-check-label" htmlFor="rekom37b18">Dimusnahkan</label>
                                 </div>
                                 <div className="form-check form-check-inline">
-                                    <input className="form-check-input" type="checkbox" name="rekom37b" id="rekom37b19" value={19} disabled={dataWatchHeader.rekom37b ? (dataWatchHeader.rekom37b.length === 2 && dataWatchHeader.rekom37b.indexOf('19') < 0 ? true : false) : false} {...registerHeader("rekom37b")} />
+                                    <input className="form-check-input" type="checkbox" name="rekom37b" id="rekom37b19" disabled={dataWatchHeader.rekom37b ? (dataWatchHeader.rekom37b.length === 2 && dataWatchHeader.rekom37b.indexOf('19') < 0 ? true : false) : false} value="19" {...registerHeader("rekom37b")} />
                                     <label className="form-check-label" htmlFor="rekom37b19">Dibebaskan</label>
                                 </div>
                                 {errorsHeader.rekom37b && <small className="text-danger">{errorsHeader.rekom37b.message}</small>}

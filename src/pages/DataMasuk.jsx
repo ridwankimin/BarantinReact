@@ -128,11 +128,11 @@ function removeCookie() {
                                   {errorsPtk.dTo && <small className="text-danger">{errorsPtk.dTo.message}</small>}                            
                               </div>
                               <div className='col-2'>
-                                  <label htmlFor="search">Filter Berdasarkan</label>
+                                  <label htmlFor="search">Status Dokumen</label>
                                   <select name="search" id="search" {...registerPtk("search")} className='form-control form-control-sm'>
-                                    <option value="DRAFT">Tanggal Permohonan Draft</option>
-                                    <option value="AJU">Tgl Aju</option>
-                                    <option value="DOK">Tgl Dokumen</option>
+                                    <option value="AJU">Pengajuan</option>
+                                    <option value="DRAFT">Draft</option>
+                                    <option value="DOK">Verifikasi</option>
                                   </select>
                               </div>
                               <div className='col-2'>

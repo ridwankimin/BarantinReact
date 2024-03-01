@@ -36,7 +36,7 @@ function DocK32() {
                 if(response.data.status === '201') {
                     Swal.fire({
                         title: "Sukses!",
-                        text: "Surat Persetujuan/Penolakan Bongkar berhasil " + (data.idDok32 ? "diedit." : "disimpan."),
+                        text: "Surat Persetujuan/Penolakan Muat berhasil " + (data.idDok32 ? "diedit." : "disimpan."),
                         icon: "success"
                     });
                     // alert(response.data.status + " - " + response.data.message)
@@ -72,55 +72,190 @@ function DocK32() {
             let ptkDecode = idPtk ? base64_decode(idPtk) : "";
             let ptkNomor = idPtk ? ptkDecode.split('m0R3N0r1R') : "";
             
+            setData(values => ({...values,
+                noAju: idPtk ? base64_decode(ptkNomor[0]) : "",
+                noIdPtk: idPtk ? base64_decode(ptkNomor[1]) : "",
+                noDokumen: idPtk ? base64_decode(ptkNomor[2]) : "",
+                tglDokumen: tglPtk,
+            }));
             const response = modelPemohon.getPtkId(base64_decode(ptkNomor[1]));
             response
             .then((response) => {
-                if(response.data.status === '200') {
+                if(typeof response.data != "string") {
+                    if(response.data.status == '200') {
+                        setData(values => ({...values,
+                            errorPTK: "",
+                            listPtk: response.data.data.ptk,
+                            listKomoditas: response.data.data.ptk_komoditi,
+                            listDokumen: response.data.data.ptk_dokumen
+                        }));
+                        setValue("idPtk", base64_decode(ptkNomor[1]))
+                        setValue("noDokumen", base64_decode(ptkNomor[2]))
+                    } else {
+                        setData(values => ({...values,
+                            errorPTK: "Gagal load data PTK",
+                        }));
+                    }
+                } else {
                     setData(values => ({...values,
-                        noAju: idPtk ? base64_decode(ptkNomor[0]) : "",
-                        noIdPtk: idPtk ? base64_decode(ptkNomor[1]) : "",
-                        noDokumen: idPtk ? base64_decode(ptkNomor[2]) : "",
-                        tglDokumen: tglPtk,
-                        listPtk: response.data.data.ptk,
-                        listKomoditas: response.data.data.ptk_komoditi,
-                        listDokumen: response.data.data.ptk_dokumen
+                        errorPTK: "Gagal load data PTK",
                     }));
-                    setValue("idPtk", base64_decode(ptkNomor[1]))
-                    setValue("noDokumen", base64_decode(ptkNomor[2]))
                 }
             })
             .catch((error) => {
                 if(process.env.REACT_APP_BE_ENV == "DEV") {
                     console.log(error)
                 }
+                setData(values => ({...values,
+                    errorPTK: "Gagal load data PTK",
+                }));
             });
             
             const response32 = modelPeriksa.getPnBongkar(base64_decode(ptkNomor[1]));
             response32
             .then((response) => {
-                if(response.data.status === '200') {
-                    setValue("idPtk", response.data.data.id)
-                    setValue("noDok32", response.data.data.nomor)
-                    setValue("tglDok32", response.data.data.tanggal)
-                    setValue("isLengkap", response.data.data.is_lengkap)
-                    setValue("isBenar", response.data.data.is_benar)
-                    setValue("isSah", response.data.data.is_sah)
-                    setValue("keterangan", response.data.data.keterangan)
-                    setValue("putusanBongkar", response.data.data.setuju_bongkar_muat)
-                    setValue("ttdPutusan", response.data.data.user_ttd_id)
+                if(typeof response.data != "string") {
+                    if(response.data.status == '200') {
+                        setData(values => ({...values,
+                            errorMuat: "",
+                        }));
+                        setValue("idPtk", response.data.data.id)
+                        setValue("noDok32", response.data.data.nomor)
+                        setValue("tglDok32", response.data.data.tanggal)
+                        setValue("isLengkap", response.data.data.is_lengkap)
+                        setValue("isBenar", response.data.data.is_benar)
+                        setValue("isSah", response.data.data.is_sah)
+                        setValue("keterangan", response.data.data.keterangan)
+                        setValue("putusanBongkar", response.data.data.setuju_bongkar_muat)
+                        setValue("ttdPutusan", response.data.data.user_ttd_id)
+                    } else if(response.data.status == '404') {
+                        setData(values => ({...values,
+                            errorMuat: "",
+                        }));
+                    } else {
+                        setData(values => ({...values,
+                            errorMuat: "Gagal load data Surat Muat",
+                        }));
+                    }
+                } else {
+                    setData(values => ({...values,
+                        errorMuat: "Gagal load data Surat Muat",
+                    }));
                 }
             })
             .catch((error) => {
                 if(process.env.REACT_APP_BE_ENV == "DEV") {
                     console.log(error)
                 }
+                if(error.response.data.status == 404) {
+                    setData(values => ({...values,
+                        errorMuat: ""
+                    }));
+                } else {
+                    setData(values => ({...values,
+                        errorMuat: "Gagal load data Surat Muat"
+                    }));
+                }
             });
         }
     },[idPtk, setValue])
+
+    function refreshData() {
+        if(data.errorPTK) {
+            const response = modelPemohon.getPtkId(data.noIdPtk);
+            response
+            .then((response) => {
+                if(typeof response.data != "string") {
+                    if(response.data.status == '200') {
+                        setData(values => ({...values,
+                            errorPTK: "",
+                            listPtk: response.data.data.ptk,
+                            listKomoditas: response.data.data.ptk_komoditi,
+                            listDokumen: response.data.data.ptk_dokumen
+                        }));
+                        setValue("idPtk", data.noIdPtk)
+                        setValue("noDokumen", data.noDokumen)
+                    } else {
+                        setData(values => ({...values,
+                            errorPTK: "Gagal load data PTK",
+                        }));
+                    }
+                } else {
+                    setData(values => ({...values,
+                        errorPTK: "Gagal load data PTK",
+                    }));
+                }
+            })
+            .catch((error) => {
+                if(process.env.REACT_APP_BE_ENV == "DEV") {
+                    console.log(error)
+                }
+                setData(values => ({...values,
+                    errorPTK: "Gagal load data PTK",
+                }));
+            });
+        }
+        
+        if(data.errorMuat) {
+            const response32 = modelPeriksa.getPnBongkar(data.noIdPtk);
+            response32
+            .then((response) => {
+                if(typeof response.data != "string") {
+                    if(response.data.status == '200') {
+                        setData(values => ({...values,
+                            errorMuat: "",
+                        }));
+                        setValue("idPtk", response.data.data.id)
+                        setValue("noDok32", response.data.data.nomor)
+                        setValue("tglDok32", response.data.data.tanggal)
+                        setValue("isLengkap", response.data.data.is_lengkap)
+                        setValue("isBenar", response.data.data.is_benar)
+                        setValue("isSah", response.data.data.is_sah)
+                        setValue("keterangan", response.data.data.keterangan)
+                        setValue("putusanBongkar", response.data.data.setuju_bongkar_muat)
+                        setValue("ttdPutusan", response.data.data.user_ttd_id)
+                    } else if(response.data.status == '404') {
+                        setData(values => ({...values,
+                            errorMuat: "",
+                        }));
+                    } else {
+                        setData(values => ({...values,
+                            errorMuat: "Gagal load data Surat Muat",
+                        }));
+                    }
+                } else {
+                    setData(values => ({...values,
+                        errorMuat: "Gagal load data Surat Muat",
+                    }));
+                }
+            })
+            .catch((error) => {
+                if(process.env.REACT_APP_BE_ENV == "DEV") {
+                    console.log(error)
+                }
+                if(error.response.data.status == 404) {
+                    setData(values => ({...values,
+                        errorMuat: ""
+                    }));
+                } else {
+                    setData(values => ({...values,
+                        errorMuat: "Gagal load data Surat Muat"
+                    }));
+                }
+            });
+        }
+    }
   return (
     <div className="container-xxl flex-grow-1 container-p-y">
         <h4 className="py-3 breadcrumb-wrapper mb-4">
             K-3.2 <span className="fw-light" style={{color: 'blue'}}>PERSETUJUAN/PENOLAKAN MUAT MEDIA PEMBAWA KE ALAT ANGKUT</span>
+            
+            <small className='float-end'>
+                <span className='text-danger'>{(data.errorMuat ? data.errorMuat + "; " : "") + (data.errorPTK ? data.errorPTK + "; " : "")}</span>
+                {data.errorMuat || data.errorPTK ?
+                    <button type='button' className='btn btn-warning btn-xs' onClick={() => refreshData()}><i className='fa-solid fa-sync'></i> Refresh</button>
+                : ""}
+            </small>
         </h4>
 
         <div className="row">
@@ -218,7 +353,7 @@ function DocK32() {
                                                         <div className="row">
                                                             <label className="col-sm-3 col-form-label" htmlFor="namaPengirim">Nama</label>
                                                             <div className="col-sm-9">
-                                                                <input type="text" id="namaPengirim" value={data.listPtk && (data.listPtk.nama_pengirim || "")} disabled className="form-control form-control-sm" placeholder="Nama Pengirim" />
+                                                                <input type="text" id="namaPengirim" value={data.listPtk?.nama_pengirim || ""} disabled className="form-control form-control-sm" placeholder="Nama Pengirim" />
                                                             </div>
                                                         </div>
                                                     </div>
@@ -227,7 +362,7 @@ function DocK32() {
                                                         <div className="row">
                                                             <label className="col-sm-3 col-form-label" htmlFor="namaPenerima">Nama</label>
                                                             <div className="col-sm-9">
-                                                                <input type="text" id="namaPenerima" value={data.listPtk && (data.listPtk.nama_penerima || "")} disabled className="form-control form-control-sm" placeholder="Nama Penerima" />
+                                                                <input type="text" id="namaPenerima" value={data.listPtk?.nama_penerima || ""} disabled className="form-control form-control-sm" placeholder="Nama Penerima" />
                                                             </div>
                                                         </div>
                                                     </div>
@@ -237,7 +372,7 @@ function DocK32() {
                                                         <div className="row">
                                                             <label className="col-sm-3 col-form-label" htmlFor="alamatPengirim">Alamat</label>
                                                             <div className="col-sm-9">
-                                                                <textarea name="alamatPengirim" className="form-control form-control-sm" disabled value={data.listPtk && (data.listPtk.alamat_pengirim || "")} id="alamatPengirim" rows="2" placeholder=""></textarea>
+                                                                <textarea name="alamatPengirim" className="form-control form-control-sm" disabled value={data.listPtk?.alamat_pengirim || ""} id="alamatPengirim" rows="2" placeholder=""></textarea>
                                                             </div>
                                                         </div>
                                                     </div>
@@ -245,7 +380,7 @@ function DocK32() {
                                                         <div className="row">
                                                             <label className="col-sm-3 col-form-label" htmlFor="alamatPenerima">Alamat</label>
                                                             <div className="col-sm-9">
-                                                                <textarea name="alamatPenerima" className="form-control form-control-sm" disabled value={data.listPtk && (data.listPtk.alamat_penerima || "")} id="alamatPenerima" rows="2" placeholder=""></textarea>
+                                                                <textarea name="alamatPenerima" className="form-control form-control-sm" disabled value={data.listPtk?.alamat_penerima || ""} id="alamatPenerima" rows="2" placeholder=""></textarea>
                                                             </div>
                                                         </div>
                                                     </div>
@@ -255,7 +390,7 @@ function DocK32() {
                                                         <div className="row">
                                                             <label className="col-sm-3 col-form-label" htmlFor="identitasPengirim">Identitas</label>
                                                             <div className="col-sm-9">
-                                                                <input name="identitastPengirim" className="form-control form-control-sm" disabled value={data.listPtk && ((data.listPtk.jenis_identitas_pengirim + " - " + data.listPtk.nomor_identitas_pengirim) || "")} id="identitasPengirim" placeholder="" />
+                                                                <input name="identitastPengirim" className="form-control form-control-sm" disabled value={(data.listPtk?.jenis_identitas_pengirim + " - " + data.listPtk?.nomor_identitas_pengirim) || ""} id="identitasPengirim" placeholder="" />
                                                             </div>
                                                         </div>
                                                     </div>
@@ -263,7 +398,7 @@ function DocK32() {
                                                         <div className="row">
                                                             <label className="col-sm-3 col-form-label" htmlFor="identitasPenerima">Identitas</label>
                                                             <div className="col-sm-9">
-                                                                <input name="identitasPenerima" className="form-control form-control-sm" disabled value={data.listPtk && ((data.listPtk.jenis_identitas_penerima + " - " + data.listPtk.nomor_identitas_penerima) || "")} id="identitasPenerima" placeholder="" />
+                                                                <input name="identitasPenerima" className="form-control form-control-sm" disabled value={(data.listPtk?.jenis_identitas_penerima + " - " + data.listPtk?.nomor_identitas_penerima) || ""} id="identitasPenerima" placeholder="" />
                                                             </div>
                                                         </div>
                                                     </div>
@@ -275,7 +410,7 @@ function DocK32() {
                                                         <div className="row">
                                                             <label className="col-sm-3 col-form-label" htmlFor="namaAngkutan">Nama</label>
                                                             <div className="col-sm-9">
-                                                                <input type="text" id="namaAngkutan" value={data.listPtk && (data.listPtk.nama_alat_angkut_terakhir || "")} disabled className="form-control form-control-sm" placeholder="Nama Angkut" />
+                                                                <input type="text" id="namaAngkutan" value={data.listPtk?.nama_alat_angkut_terakhir || ""} disabled className="form-control form-control-sm" placeholder="Nama Angkut" />
                                                             </div>
                                                         </div>
                                                     </div>
@@ -283,7 +418,7 @@ function DocK32() {
                                                         <div className="row">
                                                             <label className="col-sm-3 col-form-label" htmlFor="noAngkutan">Nomor</label>
                                                             <div className="col-sm-9">
-                                                                <input type="text" id="noAngkutan" value={data.listPtk && (data.listPtk.no_voyage_terakhir || "")} disabled className="form-control form-control-sm" placeholder="Nomor Alat Angkut" />
+                                                                <input type="text" id="noAngkutan" value={data.listPtk?.no_voyage_terakhir || ""} disabled className="form-control form-control-sm" placeholder="Nomor Alat Angkut" />
                                                             </div>
                                                         </div>
                                                     </div>
@@ -291,7 +426,7 @@ function DocK32() {
                                                         <div className="row">
                                                             <label className="col-sm-3 col-form-label" htmlFor="callSign">Call Sign</label>
                                                             <div className="col-sm-9">
-                                                                <input type="text" id="callSign" value={data.listPtk && (data.listPtk.tanda_khusus || "")} disabled className="form-control form-control-sm" placeholder="Call Sign" />
+                                                                <input type="text" id="callSign" value={data.listPtk?.tanda_khusus || ""} disabled className="form-control form-control-sm" placeholder="Call Sign" />
                                                             </div>
                                                         </div>
                                                     </div>
@@ -299,7 +434,7 @@ function DocK32() {
                                                         <div className="row">
                                                             <label className="col-sm-3 col-form-label" htmlFor="jmlKemasan">Jml Kemasan / Kontainer</label>
                                                             <div className="col-sm-9">
-                                                                <input type="text" id="jmlKemasan" value={data.listPtk && ((data.listPtk.jumlah_kemasan + " " + data.listPtk.kemasan) || "")} disabled className="form-control form-control-sm" placeholder="Jumlah Kemasan / Kontainer" />
+                                                                <input type="text" id="jmlKemasan" value={(data.listPtk?.jumlah_kemasan + " " + data.listPtk?.kemasan) || ""} disabled className="form-control form-control-sm" placeholder="Jumlah Kemasan / Kontainer" />
                                                             </div>
                                                         </div>
                                                     </div>
@@ -310,7 +445,7 @@ function DocK32() {
                                                         <div className="row">
                                                             <label className="col-sm-4 col-form-label" htmlFor="negaraAsal">Negara/Area Asal</label>
                                                             <div className="col-sm-8">
-                                                                <input type="text" id="negaraAsal" value={data.listPtk && (data.listPtk.negara_muat || "")} disabled className="form-control form-control-sm" placeholder="Negara/Area Asal" />
+                                                                <input type="text" id="negaraAsal" value={data.listPtk?.negara_muat || ""} disabled className="form-control form-control-sm" placeholder="Negara/Area Asal" />
                                                             </div>
                                                         </div>
                                                     </div>
@@ -318,7 +453,7 @@ function DocK32() {
                                                         <div className="row">
                                                             <label className="col-sm-4 col-form-label" htmlFor="negaraTujuan">Negara/Area Tujuan</label>
                                                             <div className="col-sm-8">
-                                                                <input type="text" id="negaraTujuan" value={data.listPtk && (data.listPtk.negara_bongkar || "")} disabled className="form-control form-control-sm" placeholder="Negara/Area Tujuan" />
+                                                                <input type="text" id="negaraTujuan" value={data.listPtk?.negara_bongkar || ""} disabled className="form-control form-control-sm" placeholder="Negara/Area Tujuan" />
                                                             </div>
                                                         </div>
                                                     </div>
@@ -329,7 +464,7 @@ function DocK32() {
                                                         <div className="row">
                                                             <label className="col-sm-4 col-form-label" htmlFor="tglKirim">Tanggal Muat/Pengiriman</label>
                                                             <div className="col-sm-4">
-                                                                <input type="date" id="tglKirim" value={data.listPtk && (data.listPtk.tanggal_rencana_berangkat_terakhir || "")} disabled className="form-control form-control-sm" />
+                                                                <input type="date" id="tglKirim" value={data.listPtk?.tanggal_rencana_berangkat_terakhir || ""} disabled className="form-control form-control-sm" />
                                                             </div>
                                                         </div>
                                                     </div>
@@ -383,7 +518,7 @@ function DocK32() {
                                                             <div className="col-sm-2">
                                                                 {/* <input type="datetime-local" id="tglDok32" name='tglDok32' className="form-control form-control-sm" /> */}
                                                                 <input type="datetime-local" id="tglDok32" name='tglDok32' {...register("tglDok32", {required: "Mohon isi tanggal dokumen."})} className={errors.tglDok32 ? "form-control form-control-sm is-invalid" : "form-control form-control-sm"} />
-                                                                {errors.tglDok32 && <><br/><small className="text-danger">{errors.tglDok32.message}</small></>}
+                                                                {errors.tglDok32 && <small className="text-danger">{errors.tglDok32.message}</small>}
                                                             </div>
                                                         </div>
                                                     </div>
@@ -401,6 +536,7 @@ function DocK32() {
                                                                         <label className="form-check-label" htmlFor="tdkLengkap">Tidak Lengkap</label>
                                                                         <input name="isLengkap" className={errors.isLengkap ? "form-check-input is-invalid" : "form-check-input"} value="T" {...register("isLengkap")} type="radio" id="tdkLengkap" />
                                                                     </div>
+                                                                    {errors.isLengkap && <small className="text-danger">{errors.isLengkap.message}</small>}
                                                                 </div>
                                                                 <div className='col-md-3'>
                                                                     <div className="form-check form-check-inline">
@@ -411,6 +547,7 @@ function DocK32() {
                                                                         <label className="form-check-label" htmlFor="tdkSah">Tidak Sah</label>
                                                                         <input name="isSah" className={errors.isSah ? "form-check-input is-invalid" : "form-check-input"} value="T" {...register("isSah")} type="radio" id="tdkSah" />
                                                                     </div>
+                                                                    {errors.isSah && <small className="text-danger">{errors.isSah.message}</small>}
                                                                 </div>
                                                                 <div className='col-md-3'>
                                                                     <div className="form-check form-check-inline">
@@ -421,6 +558,7 @@ function DocK32() {
                                                                         <label className="form-check-label" htmlFor="tdkBenar">Tidak Benar</label>
                                                                         <input name="isBenar" className={errors.isBenar ? "form-check-input is-invalid" : "form-check-input"} value="T" {...register("isBenar")} type="radio" id="tdkBenar" />
                                                                     </div>
+                                                                    {errors.isBenar && <small className="text-danger">{errors.isBenar.message}</small>}
                                                                 </div>
                                                             </div>
                                                         </div>
@@ -439,6 +577,7 @@ function DocK32() {
                                                                             <label className="form-check-label" htmlFor="opsi2">Tidak Setuju</label>
                                                                             <input name="putusanBongkar" className={errors.putusanBongkar ? "form-check-input is-invalid" : "form-check-input"} value="T" {...register("putusanBongkar")} type="radio" id="opsi2" />
                                                                         </div>
+                                                                        {errors.putusanBongkar && <small className="text-danger">{errors.putusanBongkar.message}</small>}
                                                                     </div>
                                                                 </div>
                                                                 <label className="col-sm-4 col-form-label" htmlFor="keterangan">Keterangan</label>
@@ -450,15 +589,7 @@ function DocK32() {
                                                                 <div className='col-sm-4 col-form-label'>Penandatangan</div>
                                                                 <div className="col-sm-6 mb-3">
                                                                     <input type="text" {...register("ttdPutusan", { required: "Mohon pilih nama penandatangan."})} className={errors.ttdPutusan ? "form-control form-control-sm is-invalid" : "form-control form-control-sm"} />
-                                                                    {/* <input type="text" className={errorsAdministratif.ttdAdminidtratif === '' ? 'form-control is-invalid' : 'form-control'} {...registerAdministratif("ttdAdminidtratif", { required: "Mohon pilih nama penandatangan."})}/> */}
-                                                                    {/* <select className={dataWatch.ttdAdminidtratif === '' ? 'form-select form-select-sm is-invalid' : 'form-select form-select-sm'} {...registerAdministratif("ttdAdminidtratif", { required: "Mohon pilih nama penandatangan."})}>
-                                                                        <option value="">--</option>
-                                                                        <option value='1'>Dilakukan penahanan dan/atau melengkapi dokumen</option>
-                                                                        <option value='2'>Dilakukan pengasingan dan pengamatan</option>
-                                                                        <option value='3'>Ditolak</option>
-                                                                        <option value='4'>Dilanjutkan pemeriksaan kesehatan</option>
-                                                                    </select> */}
-                                                                    {errors.ttdPutusan && <><br/><small className="text-danger">{errors.ttdPutusan.message}</small></>}
+                                                                    {errors.ttdPutusan && <small className="text-danger">{errors.ttdPutusan.message}</small>}
                                                                 </div>
                                                             </div>
                                                         </div>

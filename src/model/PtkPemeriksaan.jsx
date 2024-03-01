@@ -80,15 +80,14 @@ export default class PtkPemeriksaan {
         })
         
         let datasend = {
-            'id': data.idDok37b === '' ? uuid : data.idDok37b,
+            'id': data.idDok37b == '' ? uuid : data.idDok37b,
             'ptk_id': data.idPtk,
             'pn_administrasi_id': data.idDok37a,
             'nomor': data.noDok.replace("K.1.1", "K.3.7b"),
-            'tanggal': data.idDok37b === '' ? '' : data.tglDok37b,
+            'tanggal': data.tglDok37b,
             'kesimpulan': data.kesimpulan37b,
-            // 'tanggal_periksa': data.idDok37b === '' ? data.tglDok37b : '',
             'is_ujilab': data.isUjiLab,
-            'rekomendasi_id': data.rekom37b,
+            // 'rekomendasi_id': data.rekom37b,
             'user_ttd1_id': data.ttd1,
             'user_ttd2_id': data.ttd2,
             'user_id': Cookies.get("userId"), // session
@@ -115,9 +114,8 @@ export default class PtkPemeriksaan {
             'id': data.idDok37b,
             'tanggal': data.tglDok37b,
             'kesimpulan': data.kesimpulan37b,
-            // 'tanggal_periksa': data.idDok37b === '' ? data.tglDok37b : '',
             'rekomendasi_id': data.rekom37b[0],
-            'rekomendasi2_id': data.rekom37b.length === 2 ? data.rekom37b[1] : '',
+            'rekomendasi2_id': data.rekom37b.length == 2 ? data.rekom37b[1] : '',
             'user_ttd2_id': data.ttd2,
             'user_id': Cookies.get("userId"), // session
         }       
@@ -126,7 +124,6 @@ export default class PtkPemeriksaan {
           method: 'put',
           maxBodyLength: Infinity,
           url: url + 'pn-fisik/header/' + data.idDok37b,
-          // url: url + 'pn-adm',
           headers: { 
             'Content-Type': 'application/json', 
           },
@@ -210,7 +207,6 @@ export default class PtkPemeriksaan {
           data: datasend
         };
         
-        
         return axios.request(config)
       }
       
@@ -292,7 +288,7 @@ export default class PtkPemeriksaan {
       const uuid = uuidv4();
   
       let datasend = {
-        'id': data.idDok34 === '' ? uuid : data.idDok34,
+        'id': data.idDok34 == '' ? uuid : data.idDok34,
         'ptk_id': data.idPtk,
         'nomor': data.noDokumen.replace("K.1.1", "K.3.4"),
         'tanggal': data.tglDok34,
@@ -302,20 +298,20 @@ export default class PtkPemeriksaan {
         'jenis_identitas': data.jenisIdentitas,
         'nomor_identitas': data.nomorIdentitas,
         'nomor_telp': data.nomorTelepon,
-        // 'diterbitkan_di': data.diterbitkan,
+        'diterbitkan_di': data.diterbitkan,
         'user_ttd_id': data.userTtd,
         'user_id': Cookies.get("userId"), // session
       }       
       let config = {
-          method: data.idDok34 === '' ? 'post' : 'put',
+          method: data.idDok34 == '' ? 'post' : 'put',
           maxBodyLength: Infinity,
-          url: url + (data.idDok34 === '' ? 'pn-ik' : 'pn-ik/' + data.idDok34),
+          url: url + (data.idDok34 == '' ? 'pn-ik' : 'pn-ik/' + data.idDok34),
           headers: { 
             'Content-Type': 'application/json', 
           },
           data: datasend
         };
-        
+        console.log(config)
         return axios.request(config)
       }
       

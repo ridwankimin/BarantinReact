@@ -144,9 +144,9 @@ export default class PnPerlakuan {
             'nomor': data.noDokumen.replace("K.1.1", "K.5.3"),
             'tanggal': data.tglDok53,
             'jenis_tugas': data.jenisTugas,
-            'nama_dagang_mp': data.namaUmumMP,
-            'nama_ilmiah_mp': data.namaIlmiahMP,
-            'bentuk_jmlh_mp': data.bentukJmlMP,
+            // 'nama_dagang_mp': data.namaUmumMP,
+            // 'nama_ilmiah_mp': data.namaIlmiahMP,
+            // 'bentuk_jmlh_mp': data.bentukJmlMP,
             'target_perlakuan': data.targetPerlakuan,
             'ket_mp_lain': data.ketLainMP, //
             'alasan_perlakuan': data.alasanPerlakuan,

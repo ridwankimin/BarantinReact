@@ -40,10 +40,11 @@ function DocK34() {
     // const cekWatch = watch()
 
     const onSubmit = (data) => {
-        const response = modelPeriksa.pnInstalasi(data,);
+        const response = modelPeriksa.pnInstalasi(data);
         response
         .then((response) => {
             if(response.data) {
+                console.log(response.data)
                 if(response.data.status === '201') {
                     Swal.fire({
                         title: "Sukses!",
@@ -148,7 +149,7 @@ function DocK34() {
                             setValue("jenisIdentitas", response.data.data.jenis_identitas)
                             setValue("nomorIdentitas", response.data.data.nomor_identitas)
                             setValue("nomorTelepon", response.data.data.nomor_telp)
-                            // setValue("diterbitkan", response.data.data.diterbitkan_di)
+                            setValue("diterbitkan", response.data.data.diterbitkan_di)
                             setValue("userTtd", response.data.data.user_ttd_id)
                         } else {
                             setData(values => ({...values,
@@ -246,7 +247,7 @@ function DocK34() {
                             setValue("jenisIdentitas", response.data.data.jenis_identitas)
                             setValue("nomorIdentitas", response.data.data.nomor_identitas)
                             setValue("nomorTelepon", response.data.data.nomor_telp)
-                            // setValue("diterbitkan", response.data.data.diterbitkan_di)
+                            setValue("diterbitkan", response.data.data.diterbitkan_di)
                             setValue("userTtd", response.data.data.user_ttd_id)
                         } else {
                             setData(values => ({...values,
@@ -317,6 +318,9 @@ function DocK34() {
                         </div>
                     </div>
                     <form className="card-body" onSubmit={handleSubmit(onSubmit)}>
+                        <input type="hidden" name='idDok34' id='idDok34' {...register("idDok34")} />
+                        <input type="hidden" name='idPtk' id='idPtk' {...register("idPtk")} />
+                        <input type="hidden" name='noDokumen' id='noDokumen' {...register("noDokumen")} />
                         <div className="col-md-12 mt-3">
                             <div className="row mb-3">
                                 <label className="col-sm-2 col-form-label text-sm-start" htmlFor="noDok34">Nomor Dokumen</label>
@@ -560,10 +564,10 @@ function DocK34() {
                             </div>
                         </div>
                         <div className="row mt-3 mb-3">
-                            <div className='col-sm-2 form-control-label' htmlFor="ttdUser">Penandatangan<span className='text-danger'>*</span></div>
+                            <div className='col-sm-2 form-control-label' htmlFor="userTtd">Penandatangan<span className='text-danger'>*</span></div>
                             <div className="col-sm-4">
-                                <input type="text" name='ttdUser' id='ttdUser' {...register("ttdUser", {required: "Mohon pilih penandatangan."})} className={errors.ttdUser ? "form-select form-select-sm is-invalid" : "form-select form-select-sm"}/>
-                                {errors.ttdUser && <small className="text-danger">{errors.ttdUser.message}</small>}
+                                <input type="text" name='userTtd' id='userTtd' {...register("userTtd", {required: "Mohon pilih penandatangan."})} className={errors.userTtd ? "form-select form-select-sm is-invalid" : "form-select form-select-sm"}/>
+                                {errors.userTtd && <small className="text-danger">{errors.userTtd.message}</small>}
                             </div>
                             <div className='col-sm-2 form-control-label' htmlFor="diterbitkan">Diterbitkan di<span className='text-danger'>*</span></div>
                             <div className="col-sm-4">

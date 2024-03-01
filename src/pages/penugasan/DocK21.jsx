@@ -5,6 +5,7 @@ import {decode as base64_decode} from 'base-64';
 import { useForm } from 'react-hook-form';
 import PtkSurtug from '../../model/PtkSurtug';
 import PtkModel from '../../model/PtkModel';
+import Swal from 'sweetalert2';
 
 const modelSurtug = new PtkSurtug()
 const modelPemohon = new PtkModel()
@@ -29,11 +30,21 @@ function DocK21() {
         response
         .then((response) => {
             if(response.data) {
-                if(response.data.status === '201') {
-                    alert(response.data.status + " - " + response.data.message)
+                if(response.data.status == '201') {
+                    Swal.fire({
+                        title: "Sukses!",
+                        text: "Hasil analisa permohonan berhasil " + (data.idDok21 ? "diedit." : "disimpan."),
+                        icon: "success"
+                    })
                     // resetFormDetilSurtug()
                     setValue("idDok21", response.data.data.id)
                     setValue("noDok21", response.data.data.nomor)
+                } else {
+                    Swal.fire({
+                        title: "Error!",
+                        text: response.data.message,
+                        icon: "error"
+                    })
                 }
             }
         })
@@ -41,7 +52,11 @@ function DocK21() {
             if(process.env.REACT_APP_BE_ENV == "DEV") {
                 console.log(error)
             }
-            alert(error.response.status + " - " + error.response.data.message)
+            Swal.fire({
+                title: "Error!",
+                text: error.response.data.message,
+                icon: "error"
+            })
         });
     }
 
