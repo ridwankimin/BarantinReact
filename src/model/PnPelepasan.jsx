@@ -10,7 +10,7 @@ export default class PnPelepasan {
     let datasend = {
         id: data.idDok92i == '' ? uuid : data.idDok92i,
         ptk_id: data.idPtk,
-        dokumen_karantina_id: "39",
+        dokumen_karantina_id: "40",
         nomor: data.noDokumen.replace("K.1.1", "K.9.2I"),
         tanggal: data.tglDok92i,
         nomor_seri: data.noSeri,
@@ -104,7 +104,7 @@ export default class PnPelepasan {
     let datasend = {
         id: data.idDoki2 == '' ? uuid : data.idDoki2,
         ptk_id: data.idPtk,
-        dokumen_karantina_id: "46",
+        dokumen_karantina_id: "47",
         nomor: data.noDokumen.replace("K.1.1", "K.I.2"),
         tanggal: data.tglDoki2,
         nomor_seri: data.noSeri,
@@ -157,7 +157,7 @@ export default class PnPelepasan {
     let datasend = {
         'id': data.idDokKT1 == '' ? uuid : data.idDokKT1,
         'ptk_id': data.idPtk,
-        'dokumen_karantina_id': "47",
+        'dokumen_karantina_id': "48",
         'nomor': data.noDokumen.replace("K.1.1", "K.T.1"),
         'tanggal': data.tglDokKT1,
         'nomor_seri': data.noSeri,
@@ -206,7 +206,7 @@ export default class PnPelepasan {
     let datasend = {
         'id': data.idDok92t == '' ? uuid : data.idDok92t,
         'ptk_id': data.idPtk,
-        'dokumen_karantina_id': "40",
+        'dokumen_karantina_id': "41",
         'nomor': data.noDokumen.replace("K.1.1", "K.9.2T"),
         'tanggal': data.tglDok92t,
         'nomor_seri': data.noSeri,
@@ -255,7 +255,7 @@ export default class PnPelepasan {
     let datasend = {
         'id': data.idDokKT3 == '' ? uuid : data.idDokKT3,
         'ptk_id': data.idPtk,
-        'dokumen_karantina_id': "49",
+        'dokumen_karantina_id': "50",
         'nomor': data.noDokumen.replace("K.1.1", "K.T.3"),
         'tanggal': data.tglDokKT3,
         'nomor_seri': data.noSeri,
@@ -303,7 +303,7 @@ export default class PnPelepasan {
     let datasend = {
       'id': data.idDok92h == '' ? uuid : data.idDok92h,
       'ptk_id': data.idPtk,
-      'dokumen_karantina_id': "38",
+      'dokumen_karantina_id': "39",
       'nomor': data.noDokumen.replace("K.1.1", "K.9.2H"),
       'tanggal': data.tglDok92h,
       'nomor_seri': data.noSeri,
@@ -344,7 +344,7 @@ export default class PnPelepasan {
     let datasend = {
       'id': data.idDokh1 == '' ? uuid : data.idDokh1,
       'ptk_id': data.idPtk,
-      'dokumen_karantina_id': "43",
+      'dokumen_karantina_id': "44",
       'nomor': data.noDokumen.replace("K.1.1", "K.H.1"),
       'tanggal': data.tglDokh1,
       'nomor_seri': data.noSeri,
@@ -386,7 +386,7 @@ export default class PnPelepasan {
     let datasend = {
       'id': data.idDokh2 == '' ? uuid : data.idDokh2,
       'ptk_id': data.idPtk,
-      'dokumen_karantina_id': "44",
+      'dokumen_karantina_id': "45",
       'nomor': data.noDokumen.replace("K.1.1", "K.H.2"),
       'tanggal': data.tglDokh2,
       'nomor_seri': data.noSeri,
@@ -425,7 +425,7 @@ export default class PnPelepasan {
     let config = {
       method: 'get',
       maxBodyLength: Infinity,
-      url: url + (kar == 'H' ? 'pn-pelepasan-kh/' : (kar == 'T' ? 'pn-pelepasan-kt/' : 'pn-pelepasan-ki/')) + id,
+      url: url + 'pn-pelepasan-k' + kar.toLowerCase() + '/' + id,
       headers: { 
         'Content-Type': 'application/json', 
       }
@@ -433,14 +433,15 @@ export default class PnPelepasan {
     return axios.request(config)
   }
 
-  mpLain(data, kar) {
+  mpLainOrKeterangan(data, kar, dok) {
     const uuid = uuidv4()
     let datasend = {
-        id: data.idDok91 == '' ? uuid : data.idDok91,
+        id: (dok == "K.9.1" ? (data.idDok91 == '' ? uuid : data.idDok91) : (data.idDok93 == '' ? uuid : data.idDok93)),
         ptk_id: data.idPtk,
-        dokumen_karantina_id: "37",
-        nomor: data.noDokumen.replace("K.1.1", "K.9.1"),
-        tanggal: data.tglDok91,
+        dokumen_karantina_id: (dok == "K.9.1" ? "37" : "42"),
+        nomor: data.noDokumen.replace("K.1.1", dok),
+        tanggal: (dok == "K.9.1" ? data.tglDok91 : data.tglDok93),
+        keterangan_mp: (dok == "K.9.1" ? "" : data.keteranganMp),
         nomor_seri: data.noSeri,
         karantina_tujuan: (data.karantinaTujuanDepan ? data.karantinaTujuanDepan + " " : "") + data.karantinaTujuan + (data.karantinaTujuanBelakang ? " " + data.karantinaTujuanBelakang : ""),
         upt_tujuan_id: data.uptTujuan ? data.uptTujuan : "",
@@ -500,7 +501,7 @@ export default class PnPelepasan {
     let config = {
       method: data.idDok91 == '' ? 'post' : 'put',
       maxBodyLength: Infinity,
-      url: url + (data.idDok91 == '' ? 'pn-pelepasan-kh' : 'pn-pelepasan-kh/' + data.idDok91),
+      url: url + (data.idDok91 == '' ? 'pn-pelepasan-k' + kar.toLowerCase() : 'pn-pelepasan-k' + kar.toLowerCase() + "/" + data.idDok91),
       headers: { 
         'Content-Type': 'application/json', 
       },
