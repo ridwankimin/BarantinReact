@@ -2,7 +2,7 @@
 import React, {useState} from 'react'
 import DataMasukTable from '../component/tabel/DataMasukTable'
 import { useForm } from 'react-hook-form'
-import Cookies from 'js-cookie';
+// import Cookies from 'js-cookie';
 
 function datenow() {
   var today = new Date();
@@ -37,13 +37,6 @@ const onSubmitPtk = (data) => {
   setTabel(values => ({...values, "ptk": dataMasuk }));
 };
 
-function removeCookie() {
-  Cookies.remove("idPtkPage");
-  Cookies.remove("tglPtk");
-  Cookies.remove("jenisKarantina");
-  Cookies.remove("jenisForm");
-}
-
   return (
     <div className="container-xxl flex-grow-1 container-p-y">
       <h6 className="text-muted">PROSES DATA MASUK</h6>
@@ -59,7 +52,7 @@ function removeCookie() {
                             data-bs-target="#navs-justified-ppk-active"
                             aria-controls="navs-justified-ppk-active"
                             aria-selected="true">
-                            PPK Online
+                            PTK Online
                           </button>
                         </li>
                         <li className="nav-item">
@@ -114,7 +107,6 @@ function removeCookie() {
                     </div>
                     <div className="tab-content">
                       <div className="tab-pane fade show active" id="navs-justified-ppk-active" role="tabpanel">
-                        <a href={process.env.PUBLIC_URL + '/k11'} onClick={removeCookie} className='btn btn-sm btn-primary mb-3'>Tambah Baru</a>
                         <form onSubmit={handleFormPtk(onSubmitPtk)}>
                           <div className='row'>
                               <div className='col-2'>
@@ -135,6 +127,15 @@ function removeCookie() {
                                     <option value="DOK">Verifikasi</option>
                                   </select>
                               </div>
+                              <div className='col-1'>
+                                  <label htmlFor="jenisKarantina">Karantina</label>
+                                  <select name="jenisKarantina" id="jenisKarantina" {...registerPtk("jenisKarantina")} className='form-control form-control-sm'>
+                                    <option value="">-Semua-</option>
+                                    <option value="H">Hewan</option>
+                                    <option value="I">Ikan</option>
+                                    <option value="T">Tumbuhan</option>
+                                  </select>
+                              </div>
                               <div className='col-2'>
                                   <label htmlFor="jenisPermohonan">Jenis Permohonan</label>
                                   <select name="jenisPermohonan" id="jenisPermohonan" {...registerPtk("jenisPermohonan")} className='form-control form-control-sm'>
@@ -146,27 +147,10 @@ function removeCookie() {
                                     <option value="TR">Transit</option>
                                     <option value="RE">Re Ekspor</option>
                                     <option value="RI">Re Impor</option>
-                                    <option value="ST">Serah Terima</option>
+                                    {/* <option value="ST">Serah Terima</option> */}
                                   </select>
                               </div>
-                              <div className='col-1'>
-                                  <label htmlFor="jenisKarantina">Karantina</label>
-                                  <select name="jenisKarantina" id="jenisKarantina" {...registerPtk("jenisKarantina")} className='form-control form-control-sm'>
-                                    <option value="">-Semua-</option>
-                                    <option value="H">Hewan</option>
-                                    <option value="I">Ikan</option>
-                                    <option value="T">Tumbuhan</option>
-                                  </select>
-                              </div>
-                              <div className='col-2'>
-                                  <label htmlFor="jenisDokumen">Jenis Dokumen</label>
-                                  <select name="jenisDokumen" id="jenisDokumen" {...registerPtk("jenisDokumen")} className='form-control form-control-sm'>
-                                    <option value="">-Semua-</option>
-                                    <option value="PTK">PTK - Permohonan Tindakan Karantina</option>
-                                    <option value="NHI">NHI - Nota Hasil Intelejen</option>
-                                    <option value="BST">BST - Serah Terima</option>
-                                  </select>
-                              </div>
+                              <input type="hidden" name="jenisDokumen" id="jenisDokumen" value="PTK" {...registerPtk("jenisDokumen")} />
                               <div className='col-1'>
                                   <button type='submit' style={{marginTop: '13px'}} className='btn btn-success'>Filter</button>
                               </div>

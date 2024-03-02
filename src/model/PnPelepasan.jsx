@@ -8,7 +8,7 @@ export default class PnPelepasan {
   imporAreaKI(data) {
     const uuid = uuidv4()
     let datasend = {
-        id: data.idDok92i === '' ? uuid : data.idDok92i,
+        id: data.idDok92i == '' ? uuid : data.idDok92i,
         ptk_id: data.idPtk,
         dokumen_karantina_id: "39",
         nomor: data.noDokumen.replace("K.1.1", "K.9.2I"),
@@ -43,9 +43,9 @@ export default class PnPelepasan {
         user_id: Cookies.get("userId") //session
     }
     let config = {
-      method: data.idDok92i === '' ? 'post' : 'put',
+      method: data.idDok92i == '' ? 'post' : 'put',
       maxBodyLength: Infinity,
-      url: url + (data.idDok92i === '' ? 'pn-pelepasan-ki' : 'pn-pelepasan-ki/' + data.idDok92i),
+      url: url + (data.idDok92i == '' ? 'pn-pelepasan-ki' : 'pn-pelepasan-ki/' + data.idDok92i),
       // url: url + 'pn-adm',
       headers: { 
         'Content-Type': 'application/json', 
@@ -75,7 +75,7 @@ export default class PnPelepasan {
 
     const uuid = uuidv4()
     let datasend = {
-        id: data.idDok94 === '' ? uuid : data.idDok94,
+        id: data.idDok94 == '' ? uuid : data.idDok94,
         ptk_id: data.idPtk,
         nomor: data.noDokumen.replace("K.1.1", "K.9.4"),
         tanggal: data.tglDok94,
@@ -85,9 +85,9 @@ export default class PnPelepasan {
         user_id: Cookies.get("userId") //session
     }
     let config = {
-      method: data.idDok94 === '' ? 'post' : 'put',
+      method: data.idDok94 == '' ? 'post' : 'put',
       maxBodyLength: Infinity,
-      url: url + (data.idDok94 === '' ? 'pn-pengawasan' : 'pn-pengawasan/' + data.idDok94),
+      url: url + (data.idDok94 == '' ? 'pn-pengawasan' : 'pn-pengawasan/' + data.idDok94),
       headers: { 
         'Content-Type': 'application/json', 
       },
@@ -102,7 +102,7 @@ export default class PnPelepasan {
   dokelKI(data) {
     const uuid = uuidv4()
     let datasend = {
-        id: data.idDoki2 === '' ? uuid : data.idDoki2,
+        id: data.idDoki2 == '' ? uuid : data.idDoki2,
         ptk_id: data.idPtk,
         dokumen_karantina_id: "46",
         nomor: data.noDokumen.replace("K.1.1", "K.I.2"),
@@ -137,9 +137,9 @@ export default class PnPelepasan {
         user_id: Cookies.get("userId") //session
     }
     let config = {
-      method: data.idDoki2 === '' ? 'post' : 'put',
+      method: data.idDoki2 == '' ? 'post' : 'put',
       maxBodyLength: Infinity,
-      url: url + (data.idDoki2 === '' ? 'pn-pelepasan-ki' : 'pn-pelepasan-ki/' + data.idDoki2),
+      url: url + (data.idDoki2 == '' ? 'pn-pelepasan-ki' : 'pn-pelepasan-ki/' + data.idDoki2),
       // url: url + 'pn-adm',
       headers: { 
         'Content-Type': 'application/json', 
@@ -155,7 +155,7 @@ export default class PnPelepasan {
   eksporKT(data) {
     const uuid = uuidv4()
     let datasend = {
-        'id': data.idDokKT1 === '' ? uuid : data.idDokKT1,
+        'id': data.idDokKT1 == '' ? uuid : data.idDokKT1,
         'ptk_id': data.idPtk,
         'dokumen_karantina_id': "47",
         'nomor': data.noDokumen.replace("K.1.1", "K.T.1"),
@@ -186,9 +186,9 @@ export default class PnPelepasan {
         'user_id': Cookies.get("userId"), //session
     }
     let config = {
-      method: data.idDokKT1 === '' ? 'post' : 'put',
+      method: data.idDokKT1 == '' ? 'post' : 'put',
       maxBodyLength: Infinity,
-      url: url + (data.idDokKT1 === '' ? 'pn-pelepasan-kt' : 'pn-pelepasan-kt/' + data.idDokKT1),
+      url: url + (data.idDokKT1 == '' ? 'pn-pelepasan-kt' : 'pn-pelepasan-kt/' + data.idDokKT1),
       // url: url + 'pn-adm',
       headers: { 
         'Content-Type': 'application/json', 
@@ -204,7 +204,7 @@ export default class PnPelepasan {
   imporAreaKT(data) {
     const uuid = uuidv4()
     let datasend = {
-        'id': data.idDok92t === '' ? uuid : data.idDok92t,
+        'id': data.idDok92t == '' ? uuid : data.idDok92t,
         'ptk_id': data.idPtk,
         'dokumen_karantina_id': "40",
         'nomor': data.noDokumen.replace("K.1.1", "K.9.2T"),
@@ -235,9 +235,9 @@ export default class PnPelepasan {
         'user_id': Cookies.get("userId"), //session
     }
     let config = {
-      method: data.idDok92t === '' ? 'post' : 'put',
+      method: data.idDok92t == '' ? 'post' : 'put',
       maxBodyLength: Infinity,
-      url: url + (data.idDok92t === '' ? 'pn-pelepasan-kt' : 'pn-pelepasan-kt/' + data.idDok92t),
+      url: url + (data.idDok92t == '' ? 'pn-pelepasan-kt' : 'pn-pelepasan-kt/' + data.idDok92t),
       // url: url + 'pn-adm',
       headers: { 
         'Content-Type': 'application/json', 
@@ -253,7 +253,7 @@ export default class PnPelepasan {
   dokelKT(data) {
     const uuid = uuidv4()
     let datasend = {
-        'id': data.idDokKT3 === '' ? uuid : data.idDokKT3,
+        'id': data.idDokKT3 == '' ? uuid : data.idDokKT3,
         'ptk_id': data.idPtk,
         'dokumen_karantina_id': "49",
         'nomor': data.noDokumen.replace("K.1.1", "K.T.3"),
@@ -283,9 +283,9 @@ export default class PnPelepasan {
         'user_id': Cookies.get("userId"), //session
     }
     let config = {
-      method: data.idDokKT3 === '' ? 'post' : 'put',
+      method: data.idDokKT3 == '' ? 'post' : 'put',
       maxBodyLength: Infinity,
-      url: url + (data.idDokKT3 === '' ? 'pn-pelepasan-kt' : 'pn-pelepasan-kt/' + data.idDokKT3),
+      url: url + (data.idDokKT3 == '' ? 'pn-pelepasan-kt' : 'pn-pelepasan-kt/' + data.idDokKT3),
       // url: url + 'pn-adm',
       headers: { 
         'Content-Type': 'application/json', 
@@ -301,7 +301,7 @@ export default class PnPelepasan {
   imporAreaKH(data) {
     const uuid = uuidv4()
     let datasend = {
-      'id': data.idDok92h === '' ? uuid : data.idDok92h,
+      'id': data.idDok92h == '' ? uuid : data.idDok92h,
       'ptk_id': data.idPtk,
       'dokumen_karantina_id': "38",
       'nomor': data.noDokumen.replace("K.1.1", "K.9.2H"),
@@ -310,7 +310,7 @@ export default class PnPelepasan {
       'm1': data.m1,
       'm2': data.m2,
       'm3': data.m3,
-      'm_lain': data.m4 === "1" ? data.m4Lain : null,
+      'm_lain': data.m4 == "1" ? data.m4Lain : null,
       'p_teknis': "",
       'p_lab': "",
       'p_lain': data.adDeclare,
@@ -323,9 +323,9 @@ export default class PnPelepasan {
     }
 
     let config = {
-      method: data.idDok92h === '' ? 'post' : 'put',
+      method: data.idDok92h == '' ? 'post' : 'put',
       maxBodyLength: Infinity,
-      url: url + (data.idDok92h === '' ? 'pn-pelepasan-kh' : 'pn-pelepasan-kh/' + data.idDok92h),
+      url: url + (data.idDok92h == '' ? 'pn-pelepasan-kh' : 'pn-pelepasan-kh/' + data.idDok92h),
       headers: { 
         'Content-Type': 'application/json', 
       },
@@ -340,7 +340,7 @@ export default class PnPelepasan {
   eksporDokelHewanHidup(data) {
     const uuid = uuidv4()
     let datasend = {
-      'id': data.idDokh1 === '' ? uuid : data.idDokh1,
+      'id': data.idDokh1 == '' ? uuid : data.idDokh1,
       'ptk_id': data.idPtk,
       'dokumen_karantina_id': "43",
       'nomor': data.noDokumen.replace("K.1.1", "K.H.1"),
@@ -350,7 +350,7 @@ export default class PnPelepasan {
       'm1': data.m1,
       'm2': data.m2,
       'm3': data.m3,
-      'm_lain': data.m4 === "1" ? data.m4Lain : null,
+      'm_lain': data.m4 == "1" ? data.m4Lain : null,
       'p_teknis': data.p1,
       'p_lab': data.p2,
       'p_lain': data.p3,
@@ -363,14 +363,15 @@ export default class PnPelepasan {
     }
 
     let config = {
-      method: data.idDokh1 === '' ? 'post' : 'put',
+      method: data.idDokh1 == '' ? 'post' : 'put',
       maxBodyLength: Infinity,
-      url: url + (data.idDokh1 === '' ? 'pn-pelepasan-kh' : 'pn-pelepasan-kh/' + data.idDokh1),
+      url: url + (data.idDokh1 == '' ? 'pn-pelepasan-kh' : 'pn-pelepasan-kh/' + data.idDokh1),
       headers: { 
         'Content-Type': 'application/json', 
       },
       data: datasend
     };
+
     if(process.env.REACT_APP_BE_ENV == "DEV") {
       console.log("dok kh1: " + JSON.stringify(config))
     }
@@ -380,7 +381,7 @@ export default class PnPelepasan {
   eksporDokelProdukHewan(data) {
     const uuid = uuidv4()
     let datasend = {
-      'id': data.idDokh2 === '' ? uuid : data.idDokh2,
+      'id': data.idDokh2 == '' ? uuid : data.idDokh2,
       'ptk_id': data.idPtk,
       'dokumen_karantina_id': "44",
       'nomor': data.noDokumen.replace("K.1.1", "K.H.2"),
@@ -390,7 +391,7 @@ export default class PnPelepasan {
       'm1': data.m1,
       'm2': data.m2,
       'm3': data.m3,
-      'm_lain': data.m4 === "1" ? data.m4Lain : null,
+      'm_lain': data.m4 == "1" ? data.m4Lain : null,
       'p_teknis': data.p1,
       'p_lab': data.p2,
       'p_lain': data.p3,
@@ -403,9 +404,9 @@ export default class PnPelepasan {
     }
 
     let config = {
-      method: data.idDokh2 === '' ? 'post' : 'put',
+      method: data.idDokh2 == '' ? 'post' : 'put',
       maxBodyLength: Infinity,
-      url: url + (data.idDokh2 === '' ? 'pn-pelepasan-kh' : 'pn-pelepasan-kh/' + data.idDokh2),
+      url: url + (data.idDokh2 == '' ? 'pn-pelepasan-kh' : 'pn-pelepasan-kh/' + data.idDokh2),
       headers: { 
         'Content-Type': 'application/json', 
       },
@@ -421,7 +422,7 @@ export default class PnPelepasan {
     let config = {
       method: 'get',
       maxBodyLength: Infinity,
-      url: url + (kar === 'H' ? 'pn-pelepasan-kh/' : (kar === 'T' ? 'pn-pelepasan-kt/' : 'pn-pelepasan-ki/')) + id,
+      url: url + (kar == 'H' ? 'pn-pelepasan-kh/' : (kar == 'T' ? 'pn-pelepasan-kt/' : 'pn-pelepasan-ki/')) + id,
       headers: { 
         'Content-Type': 'application/json', 
       }

@@ -16,7 +16,7 @@ const modelSurtug = new PtkSurtug()
 const modelPemohon = new PtkModel()
 
 function modaAlatAngkut(e){
-    return ModaAlatAngkut.find((element) => element.id === parseInt(e))
+    return ModaAlatAngkut.find((element) => element.id == parseInt(e))
 }
 
 function DocK37a() {
@@ -36,13 +36,13 @@ function DocK37a() {
         response
         .then((response) => {
             if(response.data) {
-                if(response.data.status === '201') {
+                if(response.data.status == 201) {
                     //start save history
                     const log = new PtkHistory();
                     const resHsy = log.pushHistory(data.idPtk, "p1a", "K-3.7a", (data.idDok37a ? 'UPDATE' : 'NEW'));
                     resHsy
                     .then((response) => {
-                        if(response.data.status === '201') {
+                        if(response.data.status == 201) {
                             if(process.env.REACT_APP_BE_ENV == "DEV") {
                                 console.log("history saved")
                             }
@@ -112,14 +112,14 @@ function DocK37a() {
                     setData(values => ({...values,
                         errorPTK: ""
                     }));
-                    if(response.data.status === '200') {
+                    if(response.data.status == 200) {
                         setData(values => ({...values,
                             listPtk: response.data.data.ptk,
                             listKomoditas: response.data.data.ptk_komoditi,
                             listDokumen: response.data.data.ptk_dokumen
                         }));
                         setValueAdministratif("idPtk", base64_decode(ptkNomor[1]))
-                        setValueAdministratif("noDokumen", base64_decode(ptkNomor[2]))
+                        setValueAdministratif("noDok", base64_decode(ptkNomor[2]))
                     } else {
                         setData(values => ({...values,
                             errorPTK: "Gagal load data PTK"
@@ -154,7 +154,7 @@ function DocK37a() {
             .then((response) => {
                 if(response.data) {
                     if(typeof response.data != "string") {
-                        if(response.data.status == '200') {
+                        if(response.data.status == 200) {
                             setData(values => ({...values,
                                 errorSurtug: "",
                                 noSurtug: response.data.data[0].nomor,
@@ -189,7 +189,7 @@ function DocK37a() {
             .then((response) => {
                 if(response.data) {
                     if(typeof response.data != "string") {
-                        if(response.data.status == '200') {
+                        if(response.data.status == 200) {
                             setData(values => ({...values,
                                 errorAdmin: "",
                             }));
@@ -204,12 +204,12 @@ function DocK37a() {
                             }));
                         } else {
                             setData(values => ({...values,
-                                errorAdmin: "Gagal load data Pemeriksaan Administratif",
+                                errorAdmin: "Gagal load data Hasil Pemeriksaan Administratif",
                             }));
                         }
                     } else {
                         setData(values => ({...values,
-                            errorAdmin: "Gagal load data Pemeriksaan Administratif",
+                            errorAdmin: "Gagal load data Hasil Pemeriksaan Administratif",
                         }));
                     }
                 }
@@ -224,7 +224,7 @@ function DocK37a() {
                     }));
                 } else {
                     setData(values => ({...values,
-                        errorAdmin: "Gagal load data Pemeriksaan Administratif"
+                        errorAdmin: "Gagal load data Hasil Pemeriksaan Administratif"
                     }));
                 }
             });
@@ -240,7 +240,7 @@ function DocK37a() {
                     setData(values => ({...values,
                         errorPTK: ""
                     }));
-                    if(response.data.status === '200') {
+                    if(response.data.status == 200) {
                         setData(values => ({...values,
                             listPtk: response.data.data.ptk,
                             listKomoditas: response.data.data.ptk_komoditi,
@@ -284,7 +284,7 @@ function DocK37a() {
             .then((response) => {
                 if(response.data) {
                     if(typeof response.data != "string") {
-                        if(response.data.status == '200') {
+                        if(response.data.status == 200) {
                             setData(values => ({...values,
                                 errorSurtug: "",
                                 noSurtug: response.data.data[0].nomor,
@@ -319,7 +319,7 @@ function DocK37a() {
             .then((response) => {
                 if(response.data) {
                     if(typeof response.data != "string") {
-                        if(response.data.status == '200') {
+                        if(response.data.status == 200) {
                             setData(values => ({...values,
                                 errorAdmin: "",
                             }));
@@ -334,12 +334,12 @@ function DocK37a() {
                             }));
                         } else {
                             setData(values => ({...values,
-                                errorAdmin: "Gagal load data Pemeriksaan Administratif",
+                                errorAdmin: "Gagal load data Hasil Pemeriksaan Administratif",
                             }));
                         }
                     } else {
                         setData(values => ({...values,
-                            errorAdmin: "Gagal load data Pemeriksaan Administratif",
+                            errorAdmin: "Gagal load data Hasil Pemeriksaan Administratif",
                         }));
                     }
                 }
@@ -354,7 +354,7 @@ function DocK37a() {
                     }));
                 } else {
                     setData(values => ({...values,
-                        errorAdmin: "Gagal load data Pemeriksaan Administratif"
+                        errorAdmin: "Gagal load data Hasil Pemeriksaan Administratif"
                     }));
                 }
             });
@@ -491,17 +491,17 @@ function DocK37a() {
                                                     <div className="row">
                                                         <div className="col-md-6">
                                                             <div className="row">
-                                                                <label className="col-sm-4 col-form-label" htmlFor="daerahAsal">{data.listPtk ? (data.listPtk.permohonan === "DK" ? "Daerah" : "Negara") : ""} Asal</label>
+                                                                <label className="col-sm-4 col-form-label" htmlFor="daerahAsal">{data.listPtk ? (data.listPtk.permohonan == "DK" ? "Daerah" : "Negara") : ""} Asal</label>
                                                                 <div className="col-sm-8">
-                                                                    <input name="daerahAsal" className="form-control form-control-sm" disabled value={(data.listPtk ? (data.listPtk.permohonan === "DK" ? data.listPtk.kota_asal : data.listPtk.negara_asal) : "") || ""} id="daerahAsal" />
+                                                                    <input name="daerahAsal" className="form-control form-control-sm" disabled value={(data.listPtk ? (data.listPtk.permohonan == "DK" ? data.listPtk.kota_asal : data.listPtk.negara_asal) : "") || ""} id="daerahAsal" />
                                                                 </div>
                                                             </div>
                                                         </div>
                                                         <div className="col-md-6">
                                                             <div className="row">
-                                                                <label className="col-sm-4 col-form-label" htmlFor="daerahTujuan">{data.listPtk ? (data.listPtk.permohonan === "DK" ? "Daerah" : "Negara") : ""} Tujuan</label>
+                                                                <label className="col-sm-4 col-form-label" htmlFor="daerahTujuan">{data.listPtk ? (data.listPtk.permohonan == "DK" ? "Daerah" : "Negara") : ""} Tujuan</label>
                                                                 <div className="col-sm-8">
-                                                                    <input name="daerahTujuan" className="form-control form-control-sm" disabled value={(data.listPtk ? (data.listPtk.permohonan === "DK" ? data.listPtk.kota_tujuan : data.listPtk.negara_tujuan) : "") || ""} id="daerahTujuan" />
+                                                                    <input name="daerahTujuan" className="form-control form-control-sm" disabled value={(data.listPtk ? (data.listPtk.permohonan == "DK" ? data.listPtk.kota_tujuan : data.listPtk.negara_tujuan) : "") || ""} id="daerahTujuan" />
                                                                 </div>
                                                             </div>
                                                         </div>
@@ -529,7 +529,7 @@ function DocK37a() {
                                                             <div className="row">
                                                                 <label className="col-sm-4 col-form-label" htmlFor="tempatTransit">Tempat Transit</label>
                                                                 <div className="col-sm-8">
-                                                                    <input name="tempatTransit" className="form-control form-control-sm" disabled value={(data.listPtk ? (data.listPtk.pelabuhan_transit === null ? "-" : data.listPtk.pelabuhan_transit + ", " + data.listPtk.negara_transit) : "") || ""} id="tempatTransit" />
+                                                                    <input name="tempatTransit" className="form-control form-control-sm" disabled value={(data.listPtk ? (data.listPtk.pelabuhan_transit == null ? "-" : data.listPtk.pelabuhan_transit + ", " + data.listPtk.negara_transit) : "") || ""} id="tempatTransit" />
                                                                 </div>
                                                             </div>
                                                         </div>
@@ -648,27 +648,27 @@ function DocK37a() {
                                                     <div className="row g-3 mb-3">
                                                         <div className="col-sm-12 mb-4">
                                                             <div className="form-check">
-                                                                <label className="form-check-label" style={{backgroundColor: (dataWatch.opsiAdministratif === '1' ? '#5A8DEE' : 'transparent'), color: (dataWatch.opsiAdministratif === '1' ? 'whitesmoke' : '#677788')}} htmlFor="opsi1">Dokumen yang dipersyaratkan tidak lengkap dan/atau diragukan keabsahan dan kebenaran isinya</label>
+                                                                <label className="form-check-label" style={{backgroundColor: (dataWatch.opsiAdministratif == '1' ? '#5A8DEE' : 'transparent'), color: (dataWatch.opsiAdministratif == '1' ? 'whitesmoke' : '#677788')}} htmlFor="opsi1">Dokumen yang dipersyaratkan tidak lengkap dan/atau diragukan keabsahan dan kebenaran isinya</label>
                                                                 <input name="opsiAdministratif" className={errorsAdministratif.opsiAdministratif ? "form-check-input is-invalid" : "form-check-input"} value="1" {...registerAdministratif("opsiAdministratif", { required: "Mohon pilih pemeriksaan administratif yang sesuai."})} type="radio" id="opsi1" />
                                                             </div>
                                                             <div className="form-check">
-                                                                <label className="form-check-label" style={{backgroundColor: (dataWatch.opsiAdministratif === '2' ? '#5A8DEE' : 'transparent'), color: (dataWatch.opsiAdministratif === '2' ? 'whitesmoke' : '#677788')}} htmlFor="opsi2">Media pembawa merupakan jenis yang dilarang pemasukan/pengeluarannya ke/dari wilayah Negara Republik Indonesia/area tujuan/asal</label>
+                                                                <label className="form-check-label" style={{backgroundColor: (dataWatch.opsiAdministratif == '2' ? '#5A8DEE' : 'transparent'), color: (dataWatch.opsiAdministratif == '2' ? 'whitesmoke' : '#677788')}} htmlFor="opsi2">Media pembawa merupakan jenis yang dilarang pemasukan/pengeluarannya ke/dari wilayah Negara Republik Indonesia/area tujuan/asal</label>
                                                                 <input name="opsiAdministratif" className={errorsAdministratif.opsiAdministratif ? "form-check-input is-invalid" : "form-check-input"} value="2" {...registerAdministratif("opsiAdministratif")} type="radio" id="opsi2" />
                                                             </div>
                                                             <div className="form-check">
-                                                                <label className="form-check-label" style={{backgroundColor: (dataWatch.opsiAdministratif === '3' ? '#5A8DEE' : 'transparent'), color: (dataWatch.opsiAdministratif === '3' ? 'whitesmoke' : '#677788')}} htmlFor="opsi3">Media pembawa memerlukan tindakan pengasingan dan pengamatan</label>
+                                                                <label className="form-check-label" style={{backgroundColor: (dataWatch.opsiAdministratif == '3' ? '#5A8DEE' : 'transparent'), color: (dataWatch.opsiAdministratif == '3' ? 'whitesmoke' : '#677788')}} htmlFor="opsi3">Media pembawa memerlukan tindakan pengasingan dan pengamatan</label>
                                                                 <input name="opsiAdministratif" className={errorsAdministratif.opsiAdministratif ? "form-check-input is-invalid" : "form-check-input"} value="3" {...registerAdministratif("opsiAdministratif")} type="radio" id="opsi3" />
                                                             </div>
                                                             <div className="form-check">
-                                                                <label className="form-check-label" style={{backgroundColor: (dataWatch.opsiAdministratif === '4' ? '#5A8DEE' : 'transparent'), color: (dataWatch.opsiAdministratif === '4' ? 'whitesmoke' : '#677788')}} htmlFor="opsi4">Media pembawa tergolong pangan/pakan/SDG/PRG/agensia hayati/JAI/tumbuhan dan satwa liar/tumbuhan dan satwa langka</label>
+                                                                <label className="form-check-label" style={{backgroundColor: (dataWatch.opsiAdministratif == '4' ? '#5A8DEE' : 'transparent'), color: (dataWatch.opsiAdministratif == '4' ? 'whitesmoke' : '#677788')}} htmlFor="opsi4">Media pembawa tergolong pangan/pakan/SDG/PRG/agensia hayati/JAI/tumbuhan dan satwa liar/tumbuhan dan satwa langka</label>
                                                                 <input name="opsiAdministratif" className={errorsAdministratif.opsiAdministratif ? "form-check-input is-invalid" : "form-check-input"} value="4" {...registerAdministratif("opsiAdministratif")} type="radio" id="opsi4" />
                                                             </div>
                                                             <div className="form-check">
-                                                                <label className="form-check-label" style={{backgroundColor: (dataWatch.opsiAdministratif === '5' ? '#5A8DEE' : 'transparent'), color: (dataWatch.opsiAdministratif === '5' ? 'whitesmoke' : '#677788')}} htmlFor="opsi5">Bukan termasuk media pembawa/tidak dikenai tindakan karantina pengawasan</label>
+                                                                <label className="form-check-label" style={{backgroundColor: (dataWatch.opsiAdministratif == '5' ? '#5A8DEE' : 'transparent'), color: (dataWatch.opsiAdministratif == '5' ? 'whitesmoke' : '#677788')}} htmlFor="opsi5">Bukan termasuk media pembawa/tidak dikenai tindakan karantina pengawasan</label>
                                                                 <input name="opsiAdministratif" className={errorsAdministratif.opsiAdministratif ? "form-check-input is-invalid" : "form-check-input"} value="5" {...registerAdministratif("opsiAdministratif")} type="radio" id="opsi5" />
                                                             </div>
                                                             <div className="form-check">
-                                                                <label className="form-check-label" style={{backgroundColor: (dataWatch.opsiAdministratif === '6' ? '#5A8DEE' : 'transparent'), color: (dataWatch.opsiAdministratif === '6' ? 'whitesmoke' : '#677788')}} htmlFor="opsi6">Semua persyaratan yang diperlukan bagi pemasukan/pengeluaran media pembawa tersebut telah lengkap dan tidak diragukan keabsahan dan kebenaran isinya</label>
+                                                                <label className="form-check-label" style={{backgroundColor: (dataWatch.opsiAdministratif == '6' ? '#5A8DEE' : 'transparent'), color: (dataWatch.opsiAdministratif == '6' ? 'whitesmoke' : '#677788')}} htmlFor="opsi6">Semua persyaratan yang diperlukan bagi pemasukan/pengeluaran media pembawa tersebut telah lengkap dan tidak diragukan keabsahan dan kebenaran isinya</label>
                                                                 <input name="opsiAdministratif" className={errorsAdministratif.opsiAdministratif ? "form-check-input is-invalid" : "form-check-input"} value="6" {...registerAdministratif("opsiAdministratif")} type="radio" id="opsi6" />
                                                                 {errorsAdministratif.opsiAdministratif && <small className="text-danger">{errorsAdministratif.opsiAdministratif.message}</small>}
                                                             </div>
@@ -676,7 +676,7 @@ function DocK37a() {
                                                         <div className="row">
                                                             <div className='form-control-label'><b>Rekomendasi</b></div>
                                                             <div className="col-sm-5 mb-3">
-                                                                <select className={errorsAdministratif.rekomAdmin === '' ? 'form-select is-invalid' : 'form-select'} {...registerAdministratif("rekomAdmin", { required: "Mohon pilih rekomendasi yang sesuai."})}>
+                                                                <select className={errorsAdministratif.rekomAdmin == '' ? 'form-select is-invalid' : 'form-select'} {...registerAdministratif("rekomAdmin", { required: "Mohon pilih rekomendasi yang sesuai."})}>
                                                                     <option value="">--</option>
                                                                     <option value="11">Dilakukan penahanan</option>
                                                                     <option value="12">Dilakukan pengasingan dan pengamatan</option>
@@ -688,7 +688,7 @@ function DocK37a() {
                                                             </div>
                                                             <div className='form-control-label'><b>Penandatangan</b></div>
                                                             <div className="col-sm-5">
-                                                                <input type="text" className={errorsAdministratif.ttdAdminidtratif === '' ? 'form-control is-invalid' : 'form-control'} {...registerAdministratif("ttdAdminidtratif", { required: "Mohon pilih nama penandatangan."})}/>
+                                                                <input type="text" className={errorsAdministratif.ttdAdminidtratif == '' ? 'form-control is-invalid' : 'form-control'} {...registerAdministratif("ttdAdminidtratif", { required: "Mohon pilih nama penandatangan."})}/>
                                                                 {errorsAdministratif.ttdAdminidtratif && <small className="text-danger">{errorsAdministratif.ttdAdminidtratif.message}</small>}
                                                             </div>
                                                         </div>
@@ -704,7 +704,10 @@ function DocK37a() {
                                     <button type="submit" className="btn btn-primary me-sm-2 me-1">Simpan</button>
                                     <button type="button" className="btn btn-danger me-sm-2 me-1" onClick={handlebatal}>Batal</button>
                                     <a href={require("../../dok/k37.pdf")} rel="noopener noreferrer" target='_blank' className="btn btn-warning"><i className="bx bx-printer bx-xs"></i>&nbsp; Print</a>
-                                    <button type="button" onClick={() => navigate('/k37a')} className="btn btn-info float-end"><i className="menu-icon tf-icons bx bx-send"></i>Pemeriksaan Fisik/Kesehatan</button>
+                                    <button style={{display: (dataWatch.idDok37a ? "block" : "none")}} type='button' onClick={() => navigate(process.env.PUBLIC_URL + (dataWatch.rekomAdmin == "14" ? '/k37b' : '/k22'))} className="btn btn-info pb-1 float-end">
+                                        <span className="d-sm-inline-block d-none me-sm-1">{dataWatch.rekomAdmin == "14" ? "Pemeriksaan Fisik/Kesehatan" : "Buat Surat Tugas"}</span>
+                                        <i className="fa-solid fa-angle-right"></i>
+                                    </button>
                                 </div>
                             </div>
                         </form>

@@ -19,6 +19,9 @@ const modelPeriksa = new PtkPemeriksaan()
 const log = new PtkHistory()
 
 function DocK37b() {
+    const idPtk = Cookies.get("idPtkPage");
+    let [data,setData] = useState({})
+    
     let navigate = useNavigate();
     const {
 		register,
@@ -38,18 +41,20 @@ function DocK37b() {
 	} = useForm()
     const dataWatchHeader = watchHeader()
 
-    const onSubmitHeader = (data) => {
-        const response = modelPeriksa.ptkFisikKesehatanHeader(data);
+    const onSubmitHeader = (dataHeader) => {
+        const response = modelPeriksa.ptkFisikKesehatanHeader(dataHeader);
         response
         .then((response) => {
             if(response.data) {
-                console.log(response.data)
-                if(response.data.status == '201') {
+                if(response.data.status == 201) {
+                    setData(values => ({...values,
+                        cekSimpan37b: true
+                    }));
                     //start save history
-                    const resHsy = log.pushHistory(data.idPtk, "p1b", "K-3.7b", (data.idDok37b ? 'UPDATE' : 'NEW'));
+                    const resHsy = log.pushHistory(data.idPtk, "p1b", "K-3.7b", (dataHeader.idDok37b ? 'UPDATE' : 'NEW'));
                     resHsy
                     .then((response) => {
-                        if(response.data.status == '201') {
+                        if(response.data.status == 201) {
                             if(process.env.REACT_APP_BE_ENV == "DEV") {
                                 console.log("history saved")
                             }
@@ -69,7 +74,7 @@ function DocK37b() {
                     });
                     setValue("idDok37b", response.data.data.id)
                     setvalueHeader("idDok37b", response.data.data.id)
-                    setValue("noDok37b", response.data.data.nomor)
+                    // setValue("noDok37b", response.data.data.nomor)
                 } else {
                     Swal.fire({
                         title: "Error!",
@@ -100,12 +105,12 @@ function DocK37b() {
             response
             .then((response) => {
                 if(response.data) {
-                    if(response.data.status == '201') {
+                    if(response.data.status == 201) {
                         //start save history
                         const resHsy = log.pushHistory(data.idPtk, "p1b", "K-3.7b", (data.idDok37b ? 'put' : 'post'));
                         resHsy
                         .then((response) => {
-                            if(response.data.status === '201') {
+                            if(response.data.status == 201) {
                                 if(process.env.REACT_APP_BE_ENV == "DEV") {
                                     console.log("history saved")
                                 }
@@ -186,8 +191,6 @@ function DocK37b() {
         }));
     }
 
-    const idPtk = Cookies.get("idPtkPage");
-    let [data,setData] = useState({})
     useEffect(() => {
         if(idPtk) {
             setValue("tglDok37b", (new Date()).toLocaleString('en-CA', { hourCycle: 'h24' }).replace(',', '').slice(0,16))
@@ -206,7 +209,7 @@ function DocK37b() {
             .then((response) => {
                 if(response.data) {
                     if(typeof response.data != "string") {
-                        if(response.data.status == '200') {
+                        if(response.data.status == 200) {
                             setData(values => ({...values,
                                 errorKesehatan: ""
                             }));
@@ -221,7 +224,7 @@ function DocK37b() {
                             setvalueHeader("idDok37b", response.data.data[0].id)
                             setvalueHeader("tglDok37b", response.data.data.tanggal)
                             setvalueHeader("kesimpulan37b", response.data.data[0].kesimpulan)
-                            setvalueHeader("rekom37b", [response.data.data[0].rekomendasi_id?.toString(), response.data.data[0].rekomendasi2_id?.toString()])
+                            setvalueHeader("rekom37b", response.data.data[0].rekomendasi_id ? ([response.data.data[0].rekomendasi_id?.toString(), response.data.data[0].rekomendasi2_id?.toString()]) : [])
                             setvalueHeader("ttd2", response.data.data[0].user_ttd2_id)
                             setvalueHeader("idDok37b", response.data.data[0].id)
                             setvalueHeader("tglDok37b", response.data.data[0].tanggal)
@@ -230,7 +233,7 @@ function DocK37b() {
                             response.data.data?.map((data) => (
                                 data.target_sasaran1 ? setListKesehatan(listKesehatan => listKesehatan.concat(data)) : null 
                             ))
-                        } else if(response.data.status == '404') {
+                        } else if(response.data.status == 404) {
                             setData(values => ({...values,
                                 errorKesehatan: ""
                             }));
@@ -269,7 +272,7 @@ function DocK37b() {
             .then((response) => {
                 if(response.data) {
                     if(typeof response.data != "string") {
-                        if(response.data.status == '200') {
+                        if(response.data.status == 200) {
                             setData(values => ({...values,
                                 errorSurtug: "",
                                 noSurtug: response.data.data[0].nomor,
@@ -303,7 +306,7 @@ function DocK37b() {
                     setData(values => ({...values,
                         errorAdmin: ""
                     }));
-                    if(response.data.status === '200') {
+                    if(response.data.status == 200) {
                         setData(values => ({...values,
                             noAdmin: response.data.data.nomor,
                             tglAdmin: response.data.data.tanggal,
@@ -332,7 +335,7 @@ function DocK37b() {
                     setData(values => ({...values,
                         errorKomoditi: ""
                     }));
-                    if(res.data.status === '200') {
+                    if(res.data.status == 200) {
                         const arraySelectKomoditi = res.data.data.map(item => {
                             return {
                                 value: item.id + ";" + item.nama_umum_tercetak + ";" + item.volume_lain + ";" + item.sat_lain,
@@ -364,7 +367,7 @@ function DocK37b() {
                         setData(values => ({...values,
                             errorOptk: ""
                         }));
-                        if(res.data.status === '200') {
+                        if(res.data.status == 200) {
                             const arraySelectOPTK = res.data.data.map(item => {
                                 return {
                                     value: item.nama_umum,
@@ -396,7 +399,7 @@ function DocK37b() {
                         setData(values => ({...values,
                             errorOptk: ""
                         }));
-                        if(res.data.status === '200') {
+                        if(res.data.status == 200) {
                             const arraySelectOPTK = res.data.data.map(item => {
                                 return {
                                     value: item.uraian,
@@ -432,7 +435,7 @@ function DocK37b() {
                     setData(values => ({...values,
                         errorAdmin: ""
                     }));
-                    if(response.data.status === '200') {
+                    if(response.data.status == 200) {
                         setData(values => ({...values,
                             noAdmin: response.data.data.nomor,
                             tglAdmin: response.data.data.tanggal,
@@ -461,7 +464,7 @@ function DocK37b() {
             .then((response) => {
                 if(response.data) {
                     if(typeof response.data != "string") {
-                        if(response.data.status == '200') {
+                        if(response.data.status == 200) {
                             setData(values => ({...values,
                                 errorSurtug: "",
                                 noSurtug: response.data.data[0].nomor,
@@ -497,7 +500,7 @@ function DocK37b() {
                     setData(values => ({...values,
                         errorKomoditi: ""
                     }));
-                    if(res.data.status === '200') {
+                    if(res.data.status == 200) {
                         const arraySelectKomoditi = res.data.data.map(item => {
                             return {
                                 value: item.id + ";" + item.nama_umum_tercetak + ";" + item.volume_lain + ";" + item.sat_lain,
@@ -531,7 +534,7 @@ function DocK37b() {
                         setData(values => ({...values,
                             errorOptk: ""
                         }));
-                        if(res.data.status === '200') {
+                        if(res.data.status == 200) {
                             const arraySelectOPTK = res.data.data.map(item => {
                                 return {
                                     value: item.nama_umum,
@@ -562,7 +565,7 @@ function DocK37b() {
                         setData(values => ({...values,
                             errorOptk: ""
                         }));
-                        if(res.data.status === '200') {
+                        if(res.data.status == 200) {
                             const arraySelectOPTK = res.data.data.map(item => {
                                 return {
                                     value: item.uraian,
@@ -594,7 +597,7 @@ function DocK37b() {
             .then((response) => {
                 if(response.data) {
                     if(typeof response.data != "string") {
-                        if(response.data.status == '200') {
+                        if(response.data.status == 200) {
                             setData(values => ({...values,
                                 errorKesehatan: ""
                             }));
@@ -607,7 +610,7 @@ function DocK37b() {
                             setValue("isUjiLab", response.data.data[0].is_ujilab.toString())
                             setValue("ttd1", response.data.data[0].user_ttd1_id)
                             setvalueHeader("kesimpulan37b", response.data.data[0].kesimpulan)
-                            setvalueHeader("rekom37b", [response.data.data[0].rekomendasi_id?.toString(), response.data.data[0].rekomendasi2_id?.toString()])
+                            setvalueHeader("rekom37b", response.data.data[0].rekomendasi_id ? ([response.data.data[0].rekomendasi_id?.toString(), response.data.data[0].rekomendasi2_id?.toString()]) : [])
                             setvalueHeader("ttd2", response.data.data[0].user_ttd2_id)
                             setvalueHeader("idDok37b", response.data.data[0].id)
                             setvalueHeader("tglDok37b", response.data.data[0].tanggal)
@@ -616,7 +619,7 @@ function DocK37b() {
                             response.data.data?.map((data) => (
                                 data.target_sasaran1 ? setListKesehatan(listKesehatan => listKesehatan.concat(data)) : null 
                             ))
-                        } else if(response.data.status == '404') {
+                        } else if(response.data.status == 404) {
                             setData(values => ({...values,
                                 errorKesehatan: ""
                             }));
@@ -755,7 +758,9 @@ function DocK37b() {
                                                                         <td>{data.temuan_hasil1}</td>
                                                                         <td>{data.catatan1}</td>
                                                                         <td>
-                                                                            <button type='button' className="btn btn-xs text-danger"><i className='fa-solid fa-trash'></i></button>
+                                                                            <div className="d-grid gap-2">
+                                                                                <button type='button' className="btn btn-default btn-sm text-danger"><i className='fa-solid fa-trash'></i></button>
+                                                                            </div>
                                                                         </td>
                                                                     </tr>)
                                                                 : null))
@@ -801,7 +806,9 @@ function DocK37b() {
                                                                         <td>{data.temuan_hasil2}</td>
                                                                         <td>{data.catatan2}</td>
                                                                         <td>
-                                                                            <button type='button' className="btn btn-xs text-danger"><i className='fa-solid fa-trash'></i></button>
+                                                                            <div className="d-grid gap-2">
+                                                                                <button type='button' className="btn btn-default btn-sm text-danger"><i className='fa-solid fa-trash'></i></button>
+                                                                            </div>
                                                                         </td>
                                                                     </tr>)
                                                                 : null))
@@ -817,7 +824,7 @@ function DocK37b() {
                                                     </div>
                                                 </div>
                                                 <button type="submit" className="btn btn-sm btn-primary me-sm-2 me-1">Simpan Hasil Pemeriksaan</button>
-                                                <button type="button" className="btn btn-sm btn-danger me-sm-2 me-1">Hapus</button>
+                                                {/* <button type="button" className="btn btn-sm btn-danger me-sm-2 me-1">Hapus</button> */}
                                             </div>
                                         </div>
                                     </div>
@@ -825,7 +832,7 @@ function DocK37b() {
                             </div>
                         </div>
                     </form>
-                    <form onSubmit={handleSubmitHeader(onSubmitHeader)}>
+                    <form onSubmit={handleSubmitHeader(onSubmitHeader)} style={{display: (dataWatch.idDok37b ? "block" : "none")}}>
                         <input type="hidden" name='idDok37b' id='idDok37b' {...registerHeader("idDok37b")} />
                         <input type="hidden" name='tglDok37b' id='tglDok37b' {...registerHeader("tglDok37b")} />
                         <div className="row">
@@ -838,19 +845,19 @@ function DocK37b() {
                             <div className='col-sm-2 form-control-label'><b>Rekomendasi <span className='text-danger'>*</span></b></div>
                             <div className="col-sm-8 mb-3">
                                 <div className="form-check form-check-inline">
-                                    <input className="form-check-input" type="checkbox" name="rekom37b" id="rekom37b16" value="16" disabled={dataWatchHeader.rekom37b ? (dataWatchHeader.rekom37b.length === 2 && dataWatchHeader.rekom37b.indexOf('16') < 0 ? true : false) : false} {...registerHeader("rekom37b", { required: "Mohon pilih rekomendasi yang sesuai."})} />
+                                    <input className="form-check-input" type="checkbox" name="rekom37b" id="rekom37b16" disabled={dataWatchHeader.rekom37b?.length == 2 ? (dataWatchHeader.rekom37b.indexOf('16') < 0 ? true : false) : false} value="16" {...registerHeader("rekom37b", { required: "Mohon pilih rekomendasi yang sesuai."})} />
                                     <label className="form-check-label" htmlFor="rekom37b16">Diberi Perlakuan</label>
                                 </div>
                                 <div className="form-check form-check-inline">
-                                    <input className="form-check-input" type="checkbox" name="rekom37b" id="rekom37b17" disabled={dataWatchHeader.rekom37b ? (dataWatchHeader.rekom37b.length === 2 && dataWatchHeader.rekom37b.indexOf('17') < 0 ? true : false) : false} value="17" {...registerHeader("rekom37b")} />
+                                    <input className="form-check-input" type="checkbox" name="rekom37b" id="rekom37b17" disabled={dataWatchHeader.rekom37b?.length == 2 ? (dataWatchHeader.rekom37b.indexOf('17') < 0 ? true : false) : false} value="17" {...registerHeader("rekom37b")} />
                                     <label className="form-check-label" htmlFor="rekom37b17">Ditolak</label>
                                 </div>
                                 <div className="form-check form-check-inline">
-                                    <input className="form-check-input" type="checkbox" name="rekom37b" id="rekom37b18" disabled={dataWatchHeader.rekom37b ? (dataWatchHeader.rekom37b.length === 2 && dataWatchHeader.rekom37b.indexOf('18') < 0 ? true : false) : false} value="18" {...registerHeader("rekom37b")} />
+                                    <input className="form-check-input" type="checkbox" name="rekom37b" id="rekom37b18" disabled={dataWatchHeader.rekom37b?.length == 2 ? (dataWatchHeader.rekom37b.indexOf('18') < 0 ? true : false) : false} value="18" {...registerHeader("rekom37b")} />
                                     <label className="form-check-label" htmlFor="rekom37b18">Dimusnahkan</label>
                                 </div>
                                 <div className="form-check form-check-inline">
-                                    <input className="form-check-input" type="checkbox" name="rekom37b" id="rekom37b19" disabled={dataWatchHeader.rekom37b ? (dataWatchHeader.rekom37b.length === 2 && dataWatchHeader.rekom37b.indexOf('19') < 0 ? true : false) : false} value="19" {...registerHeader("rekom37b")} />
+                                    <input className="form-check-input" type="checkbox" name="rekom37b" id="rekom37b19" disabled={dataWatchHeader.rekom37b?.length == 2 ? (dataWatchHeader.rekom37b.indexOf('19') < 0 ? true : false) : false} value="19" {...registerHeader("rekom37b")} />
                                     <label className="form-check-label" htmlFor="rekom37b19">Dibebaskan</label>
                                 </div>
                                 {errorsHeader.rekom37b && <small className="text-danger">{errorsHeader.rekom37b.message}</small>}
@@ -868,7 +875,10 @@ function DocK37b() {
                                 <button type="submit" className="btn btn-primary me-sm-2 me-1">Simpan</button>
                                 <button type="button" className="btn btn-danger me-sm-2 me-1">Batal</button>
                                 <a href={require("../../dok/k37a.pdf")} rel="noopener noreferrer" target='_blank' className="btn btn-warning"><i className="bx bx-printer bx-xs"></i>&nbsp; Print</a>
-                                <button type="button" onClick={() => navigate('/kt1')} className="btn btn-info float-end"><i className="menu-icon tf-icons bx bx-send"></i>Pelepasan</button>
+                                <button style={{display: (data.cekSimpan37b ? "block" : "none")}} type='button' onClick={() => navigate(process.env.PUBLIC_URL + '/k22')} className="btn btn-info pb-1 float-end">
+                                    <span className="d-sm-inline-block d-none me-sm-1">Buat Surat Tugas</span>
+                                    <i className="fa-solid fa-angle-right"></i>
+                                </button>
                             </div>
                         </div>
                     </form>

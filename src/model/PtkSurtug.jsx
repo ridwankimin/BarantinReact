@@ -1,3 +1,4 @@
+/* eslint-disable eqeqeq */
 import axios from "axios";
 import Cookies from "js-cookie";
 import { v4 as uuidv4 } from 'uuid';
@@ -37,7 +38,6 @@ export default class PtkSurtug {
           },
           data: datasend
         };
-        
         
         return axios.request(config)
     }
@@ -137,26 +137,26 @@ export default class PtkSurtug {
             }
         }
         let datasend = {
-            'id': data.idDok21 === '' ? uuid : data.idDok21,
+            'id': data.idDok21 == '' ? uuid : data.idDok21,
             'ptk_id': data.idPtk,
             'nomor': data.noDokumen.replace("K.1.1", "K.2.1"),
             'tanggal': data.tglDok21,
             'rekomendasi_id': data.rekomAnalis,
+            'catatan': data.catatan,
             'user_ttd_id': data.ttdAnalis,
             'user_id': Cookies.get("userId"), //session
             'analisa_detil': arrayAnalisa
         }
 
         let config = {
-          method: 'post',
+          method: (data.idDok21 == '' ? 'post' : 'put'),
           maxBodyLength: Infinity,
-          url: url + 'ptk-analis',
+          url: url + (data.idDok21 == '' ? 'ptk-analis' : 'ptk-analis/' + data.idDok21),
           headers: { 
             'Content-Type': 'application/json', 
           },
           data: datasend
         };
-        
         
         return axios.request(config)
     }

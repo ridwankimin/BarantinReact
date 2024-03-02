@@ -6,12 +6,14 @@ import { useForm } from 'react-hook-form';
 import PtkSurtug from '../../model/PtkSurtug';
 import PtkModel from '../../model/PtkModel';
 import Swal from 'sweetalert2';
+import { useNavigate } from 'react-router-dom';
 
 const modelSurtug = new PtkSurtug()
 const modelPemohon = new PtkModel()
 
 function DocK21() {
     const idPtk = Cookies.get("idPtkPage")
+    let navigate = useNavigate()
     const jenisKar = Cookies.get("jenisKarantina")
     let [dataPtk, setDataPtk] = useState([])
 
@@ -30,7 +32,7 @@ function DocK21() {
         response
         .then((response) => {
             if(response.data) {
-                if(response.data.status == '201') {
+                if(response.data.status == 201) {
                     Swal.fire({
                         title: "Sukses!",
                         text: "Hasil analisa permohonan berhasil " + (data.idDok21 ? "diedit." : "disimpan."),
@@ -87,7 +89,7 @@ function DocK21() {
             resKom
             .then((res) => {
                 if(typeof res.data != "string") {
-                    if(res.data.status === '200') {
+                    if(res.data.status == 200) {
                         setData(values => ({...values,
                             errorPTK: "",
                         }));
@@ -122,7 +124,7 @@ function DocK21() {
             .then((response) => {
                 if(typeof response.data != "string") {
                     if(response.data) {
-                        if(response.data.status == '200') {
+                        if(response.data.status == 200) {
                             setData(values => ({...values,
                                 errorAnalisis: "",
                             }))
@@ -131,6 +133,7 @@ function DocK21() {
                             setValue("tglDok21", response.data.data[0].tanggal)
                             setValue("rekomAnalis", response.data.data[0].rekomendasi_id)
                             setValue("ttdAnalis", response.data.data[0].user_ttd_id)
+                            setValue("catatan", response.data.data[0].catatan)
                             const arrayOlah = response.data.data?.map(item => {
                                 return item.hasil_analisis_id.toString()
                             })
@@ -160,15 +163,19 @@ function DocK21() {
                             const arrayOlahText = response.data.data?.filter((element) => element.hasil_analisis_id == 37 || element.hasil_analisis_id == 38 || element.hasil_analisis_id == 39 || element.hasil_analisis_id == 40 || element.hasil_analisis_id == 41 || element.hasil_analisis_id == 42 || element.hasil_analisis_id == 43)
                             setValue("opsiNHI", arrayOlahText[0]?.hasil_analisis_id.toString())
                             setValue("opsiNHILainnya", arrayOlahText[0]?.lainnya)
+                        } else if(response.data.status == 404) {
+                            setData(values => ({...values,
+                                errorAnalisis: "",
+                            }))
                         } else {
                             setData(values => ({...values,
-                                errorAnalisis: "Gagal load data analisis",
+                                errorAnalisis: "Gagal load data history analisis",
                             }))
                         }
                     }
                 } else {
                     setData(values => ({...values,
-                        errorAnalisis: "Gagal load data analisis",
+                        errorAnalisis: "Gagal load data history analisis",
                     }))
                 }
             })
@@ -177,13 +184,13 @@ function DocK21() {
                     console.log(error)
                 }
                 if(error.response) {
-                    if(error.response.data.status === 404) {
+                    if(error.response.data.status == 404) {
                         setData(values => ({...values,
                             errorAnalisis: ""
                         }));
                     } else {
                         setData(values => ({...values,
-                            errorAnalisis: "Gagal load data analisis"
+                            errorAnalisis: "Gagal load data history analisis"
                         }));
                     }
                 }
@@ -197,7 +204,7 @@ function DocK21() {
             resKom
             .then((res) => {
                 if(typeof res.data != "string") {
-                    if(res.data.status === '200') {
+                    if(res.data.status == 200) {
                         setData(values => ({...values,
                             errorPTK: "",
                         }));
@@ -234,7 +241,7 @@ function DocK21() {
             .then((response) => {
                 if(typeof response.data != "string") {
                     if(response.data) {
-                        if(response.data.status == '200') {
+                        if(response.data.status == 200) {
                             setData(values => ({...values,
                                 errorAnalisis: "",
                             }))
@@ -243,6 +250,7 @@ function DocK21() {
                             setValue("tglDok21", response.data.data[0].tanggal)
                             setValue("rekomAnalis", response.data.data[0].rekomendasi_id)
                             setValue("ttdAnalis", response.data.data[0].user_ttd_id)
+                            setValue("catatan", response.data.data[0].catatan)
                             const arrayOlah = response.data.data?.map(item => {
                                 return item.hasil_analisis_id.toString()
                             })
@@ -272,15 +280,19 @@ function DocK21() {
                             const arrayOlahText = response.data.data?.filter((element) => element.hasil_analisis_id == 37 || element.hasil_analisis_id == 38 || element.hasil_analisis_id == 39 || element.hasil_analisis_id == 40 || element.hasil_analisis_id == 41 || element.hasil_analisis_id == 42 || element.hasil_analisis_id == 43)
                             setValue("opsiNHI", arrayOlahText[0]?.hasil_analisis_id.toString())
                             setValue("opsiNHILainnya", arrayOlahText[0]?.lainnya)
+                        } else if(response.data.status == 404) {
+                            setData(values => ({...values,
+                                errorAnalisis: "",
+                            }))
                         } else {
                             setData(values => ({...values,
-                                errorAnalisis: "Gagal load data analisis",
+                                errorAnalisis: "Gagal load data history analisis",
                             }))
                         }
                     }
                 } else {
                     setData(values => ({...values,
-                        errorAnalisis: "Gagal load data analisis",
+                        errorAnalisis: "Gagal load data history analisis",
                     }))
                 }
             })
@@ -289,13 +301,13 @@ function DocK21() {
                     console.log(error)
                 }
                 if(error.response) {
-                    if(error.response.data.status === 404) {
+                    if(error.response.data.status == 404) {
                         setData(values => ({...values,
                             errorAnalisis: ""
                         }));
                     } else {
                         setData(values => ({...values,
-                            errorAnalisis: "Gagal load data analisis"
+                            errorAnalisis: "Gagal load data history analisis"
                         }));
                     }
                 }
@@ -398,14 +410,14 @@ function DocK21() {
                                                                             <td>{data.klasifikasi}</td>
                                                                             <td>{data.nama_umum_tercetak}</td>
                                                                             <td>{data.nama_latin_tercetak}</td>
-                                                                            <td>{data.volume_netto}</td>
+                                                                            <td className='text-end'>{data.volume_netto?.toLocaleString()}</td>
                                                                             <td>{data.sat_netto}</td>
-                                                                            <td>{data.volume_bruto}</td>
+                                                                            <td className='text-end'>{data.volume_bruto?.toLocaleString()}</td>
                                                                             <td>{data.sat_bruto}</td>
-                                                                            <td>{data.volume_lain}</td>
+                                                                            <td className='text-end'>{data.volume_lain?.toLocaleString()}</td>
                                                                             <td>{data.sat_lain}</td>
-                                                                            <td>{data.jantan}</td>
-                                                                            <td>{data.betina}</td>
+                                                                            <td className='text-end'>{data.jantan?.toLocaleString()}</td>
+                                                                            <td className='text-end'>{data.betina?.toLocaleString()}</td>
                                                                         </tr>
                                                                     ))
                                                                 ) : null
@@ -431,13 +443,13 @@ function DocK21() {
                                         <div id="collapseAnalisa">
                                             <div className="accordion-body">
                                                 {/* <div className="row g-3 mb-3"> */}
-                                                <div className="col-md-12" style={{display: (jenisKar === "H" ? "block" : "none")}}>
+                                                <div className="col-md-12" style={{display: (jenisKar == "H" ? "block" : "none")}}>
                                                     <label className="col-form-label" htmlFor="mpHPHK">A. Media Pembawa HPHK</label>
                                                     <div className="row">
                                                         <div className="col-sm-3">
                                                             <div className="form-check">
                                                                 <label className="form-check-label" htmlFor="opsiOlah2H">Belum Diolah</label>
-                                                                <input name="opsiOlahH" value="2" {...register("opsiOlahH", {required: (data.jenisKarantina === "H" ? "Mohon pilih salah satu (belum/sudah diolah)" : false)})} className={errors.opsiOlahH ? "form-check-input is-invalid" : "form-check-input"} type="radio" id="opsiOlah2H" />
+                                                                <input name="opsiOlahH" value="2" {...register("opsiOlahH", {required: (data.jenisKarantina == "H" ? "Mohon pilih salah satu (belum/sudah diolah)" : false)})} className={errors.opsiOlahH ? "form-check-input is-invalid" : "form-check-input"} type="radio" id="opsiOlah2H" />
                                                             </div>
                                                             <div className="form-check">
                                                                 <label className="form-check-label" htmlFor="opsiOlah3H">Sudah Diolah</label>
@@ -445,7 +457,7 @@ function DocK21() {
                                                             </div>
                                                             <div className="form-check">
                                                                 <label className="form-check-label" htmlFor="opsiKH4">Termasuk Pangan</label>
-                                                                <input name="opsiKH" value="4" {...register("opsiKH", { required: (data.jenisKarantina === "H" ? "Mohon isi analisa minimal 1 pilihan." : false)})} className={errors.opsiKH ? "form-check-input is-invalid" : "form-check-input"} type="checkbox" id="opsiKH4" />
+                                                                <input name="opsiKH" value="4" {...register("opsiKH", { required: (data.jenisKarantina == "H" ? "Mohon isi analisa minimal 1 pilihan." : false)})} className={errors.opsiKH ? "form-check-input is-invalid" : "form-check-input"} type="checkbox" id="opsiKH4" />
                                                             </div>
                                                         </div>
                                                         <div className="col-sm-3">
@@ -491,13 +503,13 @@ function DocK21() {
                                                         {errors.opsiKH && <small className="text-danger">{errors.opsiKH.message}</small>}
                                                     </div>
                                                 </div>
-                                                <div className="col-md-12" style={{display: (jenisKar === "I" ? "block" : "none")}}>
+                                                <div className="col-md-12" style={{display: (jenisKar == "I" ? "block" : "none")}}>
                                                     <label className="col-form-label" htmlFor="mpHPIK">B. Media Pembawa HPIK</label>
                                                     <div className="row">
                                                         <div className="col-sm-3">
                                                             <div className="form-check">
                                                                 <label className="form-check-label" htmlFor="opsiOlah13I">Belum Diolah</label>
-                                                                <input name="opsiOlahI" value="13" {...register("opsiOlahI", {required: (data.jenisKarantina === "I" ? "Mohon pilih salah satu (belum/sudah diolah)" : false)})} className={errors.opsiOlahI ? "form-check-input is-invalid" : "form-check-input"} type="radio" id="opsiOlah13I" />
+                                                                <input name="opsiOlahI" value="13" {...register("opsiOlahI", {required: (data.jenisKarantina == "I" ? "Mohon pilih salah satu (belum/sudah diolah)" : false)})} className={errors.opsiOlahI ? "form-check-input is-invalid" : "form-check-input"} type="radio" id="opsiOlah13I" />
                                                             </div>
                                                             <div className="form-check">
                                                                 <label className="form-check-label" htmlFor="opsiOlah14I">Sudah Diolah</label>
@@ -505,7 +517,7 @@ function DocK21() {
                                                             </div>
                                                             <div className="form-check">
                                                                 <label className="form-check-label" htmlFor="opsiKI15">Termasuk Pangan</label>
-                                                                <input name="opsiKI" value="15" {...register("opsiKI", { required: (data.jenisKarantina === "I" ? "Mohon isi analisa minimal 1 pilihan." : false)})} className={errors.opsiKI ? "form-check-input is-invalid" : "form-check-input"} type="checkbox" id="opsiKI15" />
+                                                                <input name="opsiKI" value="15" {...register("opsiKI", { required: (data.jenisKarantina == "I" ? "Mohon isi analisa minimal 1 pilihan." : false)})} className={errors.opsiKI ? "form-check-input is-invalid" : "form-check-input"} type="checkbox" id="opsiKI15" />
                                                             </div>
                                                         </div>
                                                         <div className="col-sm-3">
@@ -551,13 +563,13 @@ function DocK21() {
                                                         {errors.opsiKI && <small className="text-danger">{errors.opsiKI.message}</small>}
                                                     </div>
                                                 </div>
-                                                <div className="col-md-12" style={{display: (jenisKar === "T" ? "block" : "none")}}>
+                                                <div className="col-md-12" style={{display: (jenisKar == "T" ? "block" : "none")}}>
                                                     <label className="col-form-label" htmlFor="mpHPHK">C. Media Pembawa OPTK</label>
                                                     <div className="row">
                                                         <div className="col-sm-4">
                                                             <div className="form-check">
                                                                 <label className="form-check-label" htmlFor="opsiOlah24T">Belum Diolah</label>
-                                                                <input name="opsiOlahT" value="24" {...register("opsiOlahT", {required: (data.jenisKarantina === "T" ? "Mohon pilih salah satu (belum/sudah diolah)" : false)})} className={errors.opsiOlahT ? "form-check-input is-invalid" : "form-check-input"} type="radio" id="opsiOlah24T" />
+                                                                <input name="opsiOlahT" value="24" {...register("opsiOlahT", {required: (data.jenisKarantina == "T" ? "Mohon pilih salah satu (belum/sudah diolah)" : false)})} className={errors.opsiOlahT ? "form-check-input is-invalid" : "form-check-input"} type="radio" id="opsiOlah24T" />
                                                             </div>
                                                             <div className="form-check">
                                                                 <label className="form-check-label" htmlFor="opsiOlah34T">Sudah diolah sampai tingkat yang tidak dapat lagi terinfestasi OPTK/OPT</label>
@@ -571,7 +583,7 @@ function DocK21() {
                                                         <div className="col-sm-3">
                                                             <div className="form-check">
                                                                 <label className="form-check-label" htmlFor="opsiKT25">Termasuk Pangan</label>
-                                                                <input name="opsiKT" value="25" {...register("opsiKT", { required: (data.jenisKarantina === "T" ? "Mohon isi analisa minimal 1 pilihan." : false)})} className={errors.opsiKT ? "form-check-input is-invalid" : "form-check-input"} type="checkbox" id="opsiKT25" />
+                                                                <input name="opsiKT" value="25" {...register("opsiKT", { required: (data.jenisKarantina == "T" ? "Mohon isi analisa minimal 1 pilihan." : false)})} className={errors.opsiKT ? "form-check-input is-invalid" : "form-check-input"} type="checkbox" id="opsiKT25" />
                                                             </div>
                                                             <div className="form-check">
                                                                 <label className="form-check-label" htmlFor="opsiKT26">Termasuk Pakan</label>
@@ -601,7 +613,7 @@ function DocK21() {
                                                             </div>
                                                             <div className="form-check">
                                                                 <label className="form-check-label" htmlFor="opsiDilarangOPTK32">Dimasukkan/dikeluarkan untuk ditanam</label>
-                                                                <input name="opsiDilarangOPTK" value="32" {...register("opsiDilarangOPTK", { required: (data.jenisKarantina === "T" ? "Mohon pilih peruntukan pemasukan/pengeluaran MP (ditanam/selain ditaman/dilarang)" : false)})} className={errors.opsiKT ? "form-check-input is-invalid" : "form-check-input"} type="radio" id="opsiDilarangOPTK32" />
+                                                                <input name="opsiDilarangOPTK" value="32" {...register("opsiDilarangOPTK", { required: (data.jenisKarantina == "T" ? "Mohon pilih peruntukan pemasukan/pengeluaran MP (ditanam/selain ditaman/dilarang)" : false)})} className={errors.opsiKT ? "form-check-input is-invalid" : "form-check-input"} type="radio" id="opsiDilarangOPTK32" />
                                                             </div>
                                                             <div className="form-check">
                                                                 <label className="form-check-label" htmlFor="opsiDilarangOPTK33">Dimasukkan/dikeluarkan selain untuk ditanam, antara lain untuk konsumsi atau pengolahan lebih lanjut</label>
@@ -636,7 +648,7 @@ function DocK21() {
                                                         <div className="col-sm-6">
                                                             <div className="form-check">
                                                                 <label className="form-check-label" htmlFor="opsiNHI37">Media Pembawa tidak dilaporkan ke Pejabat Karantina</label>
-                                                                <input name="opsiNHI" value={37} {...register("opsiNHI", { required: (data.jenisForm === "NHI" | data.jenisForm === "BST" ? "Mohon pilih analisa yang sesuai." : false)})} className={errors.opsiNHI ? "form-check-input is-invalid" : "form-check-input"} type="radio" id="opsiNHI37" />
+                                                                <input name="opsiNHI" value={37} {...register("opsiNHI", { required: (data.jenisForm == "NHI" | data.jenisForm == "BST" ? "Mohon pilih analisa yang sesuai." : false)})} className={errors.opsiNHI ? "form-check-input is-invalid" : "form-check-input"} type="radio" id="opsiNHI37" />
                                                             </div>
                                                             <div className="form-check">
                                                                 <label className="form-check-label" htmlFor="opsiNHI38">Media Pembawa tidak diserahkan ke Pejabat Karantina</label>
@@ -668,7 +680,7 @@ function DocK21() {
                                                                     </div>
                                                                 </div>
                                                                 <div className='col-sm-9'>
-                                                                    <input style={{display: (dataWatch.opsiNHI === '43' ? 'block' : 'none')}} type="text" placeholder='Lainnya..' name='opsiNHILainnya' id='opsiNHILainnya' {...register("opsiNHILainnya")} className='form-control form-control-sm' />
+                                                                    <input style={{display: (dataWatch.opsiNHI == '43' ? 'block' : 'none')}} type="text" placeholder='Lainnya..' name='opsiNHILainnya' id='opsiNHILainnya' {...register("opsiNHILainnya")} className='form-control form-control-sm' />
                                                                 </div>
                                                             </div>
                                                         </div>
@@ -679,7 +691,7 @@ function DocK21() {
                                                         <div className="row">
                                                             <div className="col-sm-5 mt-0 mb-2">
                                                             <div className='form-control-label'><b>Rekomendasi <span className='text-danger'>*</span></b></div>
-                                                                <select className={errors.rekomAnalis === '' ? 'form-select form-select-sm is-invalid' : 'form-select form-select-sm'} {...register("rekomAnalis", { required: "Mohon pilih rekomendasi yang sesuai."})}>
+                                                                <select className={errors.rekomAnalis == '' ? 'form-select form-select-sm is-invalid' : 'form-select form-select-sm'} {...register("rekomAnalis", { required: "Mohon pilih rekomendasi yang sesuai."})}>
                                                                     <option value=''>--</option>
                                                                     <option value={1}>Media Pembawa dikenai tindakan karantina</option>
                                                                     <option value={2}>Media Pembawa dikenai pengawasan</option>
@@ -698,7 +710,7 @@ function DocK21() {
                                                     </div>
                                                     {/* <div className='form-control-label'><b>Rekomendasi <span className='text-danger'>*</span></b></div>
                                                     <div className="col-sm-5 mt-0 mb-2">
-                                                        <select className={errors.rekomAnalis === '' ? 'form-select form-select-sm is-invalid' : 'form-select form-select-sm'} {...register("rekomAnalis", { required: "Mohon pilih rekomendasi yang sesuai."})}>
+                                                        <select className={errors.rekomAnalis == '' ? 'form-select form-select-sm is-invalid' : 'form-select form-select-sm'} {...register("rekomAnalis", { required: "Mohon pilih rekomendasi yang sesuai."})}>
                                                             <option value=''>--</option>
                                                             <option value={1}>Media Pembawa dikenai tindakan karantina</option>
                                                             <option value={2}>Media Pembawa dikenai pengawasan</option>
@@ -710,8 +722,8 @@ function DocK21() {
                                                     </div> */}
                                                     <div className='form-control-label'><b>Penandatangan <span className='text-danger'>*</span></b></div>
                                                     <div className="col-sm-5 mt-0">
-                                                        <input type="text" className={errors.ttdAnalis === '' ? 'form-control form-control-sm is-invalid' : 'form-control form-control-sm'} {...register("ttdAnalis", { required: "Mohon pilih nama penandatangan."})}/>
-                                                        {/* <select className={dataWatch.ttdAdminidtratif === '' ? 'form-select form-select-sm is-invalid' : 'form-select form-select-sm'} {...registerAdministratif("ttdAdminidtratif", { required: "Mohon pilih nama penandatangan."})}>
+                                                        <input type="text" className={errors.ttdAnalis == '' ? 'form-control form-control-sm is-invalid' : 'form-control form-control-sm'} {...register("ttdAnalis", { required: "Mohon pilih nama penandatangan."})}/>
+                                                        {/* <select className={dataWatch.ttdAdminidtratif == '' ? 'form-select form-select-sm is-invalid' : 'form-select form-select-sm'} {...registerAdministratif("ttdAdminidtratif", { required: "Mohon pilih nama penandatangan."})}>
                                                             <option value="">--</option>
                                                             <option value='1'>Dilakukan penahanan dan/atau melengkapi dokumen</option>
                                                             <option value='2'>Dilakukan pengasingan dan pengamatan</option>
@@ -731,6 +743,10 @@ function DocK21() {
                             <div className="col-sm-12">
                                 <button type="submit" className="btn btn-primary me-sm-2 me-1">Simpan</button>
                                 <button type="button" className="btn btn-danger me-sm-2 me-1">Batal</button>
+                                <button type='button' onClick={() => navigate(process.env.PUBLIC_URL + '/k22')} className="btn btn-info pb-1 float-end">
+                                    <span className="d-sm-inline-block d-none me-sm-1">Buat Surat Tugas</span>
+                                    <i className="fa-solid fa-angle-right"></i>
+                                </button>
                             </div>
                         </div>
                     </form>

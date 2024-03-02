@@ -12,6 +12,7 @@ import Keterangan from '../../../model/master/keterangan.json';
 import UptNew from '../../../model/master/uptNewGrouping.json';
 import SpinnerDot from '../../../component/loading/SpinnerDot';
 import Select from 'react-select';
+import Swal from 'sweetalert2';
 
 const log = new PtkHistory()
 const modelPemohon = new PtkModel()
@@ -62,11 +63,11 @@ function DocKH1() {
     })
 
     function keterangankh1() {
-        return Keterangan.filter((element) => element.dokumen === "KH-1")
+        return Keterangan.filter((element) => element.dokumen == "KH-1")
     }
 
     function listUptNew() {
-        const dataUpt = UptNew.filter((element) => element.id !== 1 & element.id !== 77 & element.id !== 78)
+        const dataUpt = UptNew.filter((element) => element.id != 1 & element.id != 77 & element.id != 78)
         
         var arrayUpt = dataUpt.map(item => {
             return {
@@ -78,11 +79,11 @@ function DocKH1() {
     }
     
     function pernyataankh1() {
-        return Keterangan.filter((element) => element.flag === "PERNYATAAN" & element.karantina === "H")
+        return Keterangan.filter((element) => element.flag == "PERNYATAAN" & element.karantina == "H")
     }
 
     function modaAlatAngkut(e){
-        return ModaAlatAngkut.find((element) => element.id === parseInt(e))
+        return ModaAlatAngkut.find((element) => element.id == parseInt(e))
     }
 
     function handleEditKomoditas(e) {
@@ -105,22 +106,38 @@ function DocKH1() {
         setLoadKomoditi(true)
         data.listKomoditas?.map((item, index) => (
             log.updateKomoditiP8(item.id, datasend[index])
-                .then((response) => {
-                    if(response.data.status === '201') {
-                        refreshListKomoditas()
-                        setLoadKomoditi(false)
-                        if(process.env.REACT_APP_BE_ENV == "DEV") {
-                            console.log("history saved")
-                        }
-                    }
-                })
-                .catch((error) => {
-                    if(process.env.REACT_APP_BE_ENV == "DEV") {
-                        console.log(error)
-                    }
+            .then((response) => {
+                if(response.data.status == 201) {
+                    refreshListKomoditas()
                     setLoadKomoditi(false)
-                    setLoadKomoditiPesan("Terjadi error pada saat simpan, mohon refresh halaman dan coba lagi.")
+                    if(process.env.REACT_APP_BE_ENV == "DEV") {
+                        console.log("history saved")
+                    }
+                    Swal.fire({
+                        icon: "success",
+                        title: "Sukses!",
+                        text: "Volume P8 berhasil disimpan (tidak ada perubahan dengan volume P1)"
+                    })
+                } else {
+                    Swal.fire({
+                        icon: "error",
+                        title: "Error!",
+                        text: response.data.status
+                    })
+                }
+            })
+            .catch((error) => {
+                setLoadKomoditi(false)
+                setLoadKomoditiPesan("Terjadi error pada saat simpan, mohon refresh halaman dan coba lagi.")
+                if(process.env.REACT_APP_BE_ENV == "DEV") {
+                    console.log(error)
+                }
+                Swal.fire({
+                    icon: "error",
+                    title: "Error!",
+                    text: error.response.data.status
                 })
+            })
             )
         )
         setLoadKomoditi(false)
@@ -133,23 +150,26 @@ function DocKH1() {
         handleSubmit,
         watch,
         formState: { errors },
-    } = useForm();
+    } = useForm({
+        defaultValues: {
+            noSeri: "*******"
+        }
+    });
 
     const cekWatch = watch()
 
     const onSubmit = (data) => {
-        // alert("Submit")
         const response = modelPelepasan.eksporDokelHewanHidup(data);
         response
         .then((response) => {
             if(response.data) {
-                if(response.data.status === '201') {
+                if(response.data.status == 201) {
                     //start save history
                     // const log = new PtkHistory();
                     const resHsy = log.pushHistory(data.idPtk, "p8", "KH.1", (data.idDokKT1 ? 'UPDATE' : 'NEW'));
                     resHsy
                     .then((response) => {
-                        if(response.data.status === '201') {
+                        if(response.data.status == 201) {
                             if(process.env.REACT_APP_BE_ENV == "DEV") {
                                 console.log("history saved")
                             }
@@ -162,9 +182,19 @@ function DocKH1() {
                     });
                     //end save history
 
-                    alert(response.data.status + " - " + response.data.message)
+                    Swal.fire({
+                        icon: "success",
+                        title: "Sukses!",
+                        text: "Sertifikat kesehatan hewan berhasil " + (data.idDokKT1 ? 'diedit' : 'disimpan')
+                    })
                     setValue("idDokh1", response.data.data.id)
                     setValue("noDokh1", response.data.data.nomor)
+                } else {
+                    Swal.fire({
+                        icon: "error",
+                        title: "Error!",
+                        text: response.data.message
+                    })
                 }
             }
         })
@@ -172,7 +202,11 @@ function DocKH1() {
             if(process.env.REACT_APP_BE_ENV == "DEV") {
                 console.log(error)
             }
-            alert(error.response.status + " - " + error.response.data.message)
+            Swal.fire({
+                icon: "error",
+                title: "Error!",
+                text: error.response.data.message
+            })
         });
     }
 
@@ -180,7 +214,7 @@ function DocKH1() {
         const resKom = modelPemohon.getKomoditiPtkId(data.noIdPtk, "H");
         resKom
         .then((res) => {
-            if(res.data.status === '200') {
+            if(res.data.status == 200) {
                 setData(values => ({...values,
                     listKomoditas: res.data.data
                 }));
@@ -219,8 +253,12 @@ function DocKH1() {
     function onSubmitMPkh1(data) {
         log.updateKomoditiP8(data.idMPkh1, data)
         .then((response) => {
-            if(response.data.status === '201') {
-                alert(response.data.status + " - " + response.data.message)
+            if(response.data.status == 201) {
+                Swal.fire({
+                    icon: "success",
+                    title: "Sukses!",
+                    text: "Volume P8 berhasil diubah"
+                })
                 resetFormKomoditikh1()
                 refreshListKomoditas()
             }
@@ -238,106 +276,151 @@ function DocKH1() {
             const tglPtk = Cookies.get("tglPtk");
             let ptkDecode = idPtk ? base64_decode(idPtk) : "";
             let ptkNomor = idPtk ? ptkDecode.split('m0R3N0r1R') : "";
+
+            setData(values => ({...values,
+                noAju: idPtk ? base64_decode(ptkNomor[0]) : "",
+                noIdPtk: idPtk ? base64_decode(ptkNomor[1]) : "",
+                noDokumen: idPtk ? base64_decode(ptkNomor[2]) : "",
+                tglDokumen: tglPtk,
+            }));
             
             const response = modelPemohon.getPtkId(base64_decode(ptkNomor[1]));
             response
             .then((response) => {
-                if(response.data.status === '200') {
-                    let kodeHSData = response.data.data.ptk_komoditi?.map(item => {
-                        return item.kode_hs
-                    })
-                    let namaUmumMP = response.data.data.ptk_komoditi?.map(item => {
-                        return item.nama_umum_tercetak
-                    })
-                    let namaIlmiahMP = response.data.data.ptk_komoditi?.map(item => {
-                        return item.nama_latin_tercetak
-                    })
-                    let VolumeMP = response.data.data.ptk_komoditi?.map(item => {
-                        return item.volume_lain + " " + item.sat_lain
-                    })
-                    // alert(response.data.message);
-                    setData(values => ({...values,
-                        noAju: idPtk ? base64_decode(ptkNomor[0]) : "",
-                        noIdPtk: idPtk ? base64_decode(ptkNomor[1]) : "",
-                        noDokumen: idPtk ? base64_decode(ptkNomor[2]) : "",
-                        tglDokumen: tglPtk,
-                        kodeHs: kodeHSData.join(";"),
-                        // mpTercetak: namaUmumMP.join(";"),
-                        listPtk: response.data.data.ptk,
-                        // listKomoditas: response.data.data.ptk_komoditi,
-                        listDokumen: response.data.data.ptk_dokumen
-                    }));
+                if(typeof response.data != "string") {
+                    if(response.data.status == 200) {
+                        setData(values => ({...values,
+                            errorPTKPage: "",
+                            // mpTercetak: namaUmumMP.join(";"),
+                            listPtk: response.data.data.ptk,
+                            // listKomoditas: response.data.data.ptk_komoditi,
+                            listDokumen: response.data.data.ptk_dokumen
+                        }));
 
-                    const resKom = modelPemohon.getKomoditiPtkId(base64_decode(ptkNomor[1]), "H");
-                    resKom
-                    .then((response) => {
-                        if(response.data.status === '200') {
-                            setData(values => ({...values,
-                                listKomoditas: response.data.data
-                            }));
-                            var arrayKomKH = response.data.data.map(item => {
-                                return {
-                                    namaUmum: item.nama_umum_tercetak,
-                                    namaLatin: item.nama_latin_tercetak,
-                                    jantanP8: item.jantan,
-                                    betinaP8: item.betina,
-                                    volumeP8: item.volume_lain,
-                                    nettoP8: item.volume_netto
+                        const resKom = modelPemohon.getKomoditiPtkId(base64_decode(ptkNomor[1]), "H");
+                        resKom
+                        .then((response) => {
+                            if(typeof response.data != "string") {
+                                if(response.data.status == 200) {
+                                    setData(values => ({...values,
+                                        errorKomoditi: "",
+                                        listKomoditas: response.data.data
+                                    }));
+                                    var arrayKomKH = response.data.data.map(item => {
+                                        return {
+                                            namaUmum: item.nama_umum_tercetak,
+                                            namaLatin: item.nama_latin_tercetak,
+                                            jantanP8: item.jantan,
+                                            betinaP8: item.betina,
+                                            volumeP8: item.volume_lain,
+                                            nettoP8: item.volume_netto
+                                        }
+                                    })
+                                    setDataSend(arrayKomKH)
+                                } else {
+                                    setData(values => ({...values,
+                                        errorKomoditi: "Gagal load data komoditas"
+                                    }));
                                 }
-                            })
-                            setDataSend(arrayKomKH)
-                        }
-                    })
-                    .catch((error) => {
-                        if(process.env.REACT_APP_BE_ENV == "DEV") {
-                            console.log(error)
-                        }
-                    });
-                    
-                    setValue("tandaKhusus", response.data.data.ptk.tanda_khusus)
-                    setValue("namaUmum", namaUmumMP.join(";"))
-                    setValue("namaIlmiah", namaIlmiahMP.join(";"))
-                    setValue("jmlTercetak", VolumeMP.join(";"))
-                    setValue("karantinaTujuan", response.data.data.ptk.negara_penerima)
-                    setValue("entryPoint", response.data.data.ptk.pelabuhan_bongkar + ", " + response.data.data.ptk.negara_bongkar)
-                    setValue("idPtk", base64_decode(ptkNomor[1]))
-                    setValue("noDokumen", base64_decode(ptkNomor[2]))
+                            } else {
+                                setData(values => ({...values,
+                                    errorKomoditi: "Gagal load data komoditas"
+                                }))
+                            }
+                        })
+                        .catch((error) => {
+                            if(process.env.REACT_APP_BE_ENV == "DEV") {
+                                console.log(error)
+                            }
+                            setData(values => ({...values,
+                                errorKomoditi: "Gagal load data komoditas"
+                            }))
+                        });
+                        
+                        setValue("tandaKhusus", response.data.data.ptk.tanda_khusus)
+                        setValue("karantinaTujuan", response.data.data.ptk.negara_penerima)
+                        setValue("entryPoint", response.data.data.ptk.pelabuhan_bongkar + ", " + response.data.data.ptk.negara_bongkar)
+                        setValue("idPtk", base64_decode(ptkNomor[1]))
+                        setValue("noDokumen", base64_decode(ptkNomor[2]))
+                    } else {
+                        setData(values => ({...values,
+                            errorPTKPage: "Gagal load data PTK",
+                            errorKomoditi: "Gagal load data komoditas"
+                        })); 
+                    }
+                } else {
+                    setData(values => ({...values,
+                        errorPTKPage: "Gagal load data PTK",
+                        errorKomoditi: "Gagal load data komoditas"
+                    })); 
                 }
             })
             .catch((error) => {
                 if(process.env.REACT_APP_BE_ENV == "DEV") {
                     console.log(error)
                 }
+                setData(values => ({...values,
+                    errorPTKPage: "Gagal load data PTK",
+                    errorKomoditi: "Gagal load data komoditas"
+                })); 
             });
 
             const resPelId = modelPelepasan.getById(base64_decode(ptkNomor[1]), "H");
             resPelId
             .then((response) => {
                 if(response.data) {
-                    if(response.data.status === '200') {
-                        setValue("idDokh1", response.data.data.id)
-                        setValue("noDokh1", response.data.data.nomor)
-                        setValue("tglDokh1", response.data.data.tanggal)
-                        setValue("noSeri", response.data.data.nomor_seri)
-                        setValue("jenisDokumen", response.data.data.status_dok)
-                        setValue("m1", response.data.data.m1 !== null ? response.data.data.m1.toString() : "")
-                        setValue("m2", response.data.data.m2 !== null ? response.data.data.m2.toString() : "")
-                        setValue("m3", response.data.data.m3 !== null ? response.data.data.m3.toString() : "")
-                        setValue("m4", response.data.data.m_lain !== null ? "1" : "")
-                        setValue("m4Lain", response.data.data.m_lain)
-                        setValue("p1", response.data.data.p_teknis)
-                        setValue("p2", response.data.data.p_lab)
-                        setValue("p3", response.data.data.p_lain)
-                        setValue("isAttach", response.data.data.is_attachment !== null ? response.data.data.is_attachment.toString() : "")
-                        setValue("ttdPutusan", response.data.data.user_ttd_id)
-                        setValue("diterbitkan", response.data.data.diterbitkan_di)
-
+                    console.log(response)
+                    if(typeof response.data != "string") {
+                        if(response.data.status == 200) {
+                            setData(values => ({...values,
+                                errorKH1Page: ""
+                            }))
+                            setValue("idDokh1", response.data.data.id)
+                            setValue("noDokh1", response.data.data.nomor)
+                            setValue("tglDokh1", response.data.data.tanggal)
+                            setValue("noSeri", response.data.data.nomor_seri)
+                            setValue("jenisDokumen", response.data.data.status_dok)
+                            setValue("m1", response.data.data.m1 !== null ? response.data.data.m1.toString() : "")
+                            setValue("m2", response.data.data.m2 !== null ? response.data.data.m2.toString() : "")
+                            setValue("m3", response.data.data.m3 !== null ? response.data.data.m3.toString() : "")
+                            setValue("m4", response.data.data.m_lain !== null ? "1" : "")
+                            setValue("m4Lain", response.data.data.m_lain)
+                            setValue("p1", response.data.data.p_teknis)
+                            setValue("p2", response.data.data.p_lab)
+                            setValue("p3", response.data.data.p_lain)
+                            setValue("isAttach", response.data.data.is_attachment !== null ? response.data.data.is_attachment.toString() : "")
+                            setValue("ttdPutusan", response.data.data.user_ttd_id)
+                            setValue("diterbitkan", response.data.data.diterbitkan_di)
+                        } else if(response.data.status == 404) {
+                            setData(values => ({...values,
+                                errorKH1Page: ""
+                            }))
+                        } else {
+                            setData(values => ({...values,
+                                errorKH1Page: "Gagal load data KH-1"
+                            }))
+                        }
+                    } else {
+                        setData(values => ({...values,
+                            errorKH1Page: "Gagal load data KH-1"
+                        }))
                     }
                 }
             })
             .catch((error) => {
                 if(process.env.REACT_APP_BE_ENV == "DEV") {
                     console.log(error)
+                }
+                if(error.response) {
+                    if(error.response.data.status == 404) {
+                        setData(values => ({...values,
+                            errorKH1Page: ""
+                        }))
+                    } else {
+                        setData(values => ({...values,
+                            errorKH1Page: "Gagal load data KH-1"
+                        }))
+                    }
                 }
             });
 
@@ -347,12 +430,27 @@ function DocKH1() {
             resSurtug
             .then((response) => {
                 if(response.data) {
-                    if(response.data.status === '200') {
+                    if(typeof response.data != "string") {
+                        if(response.data.status == 200) {
+                            setData(values => ({...values,
+                                errorSurtugPage: "",
+                                noSurtug: response.data.data[0].nomor,
+                                tglSurtug: response.data.data[0].tanggal,
+                            }));
+                            setValue("idSurtug", response.data.data[0].id)
+                        } else if(response.data.status == 404) {
+                            setData(values => ({...values,
+                                errorSurtugPage: "Surat tugas belum ada/belum dibuat"
+                            }))
+                        } else {
+                            setData(values => ({...values,
+                                errorSurtugPage: "Gagal load data surat tugas"
+                            }))
+                        }
+                    } else {
                         setData(values => ({...values,
-                            noSurtug: response.data.data[0].nomor,
-                            tglSurtug: response.data.data[0].tanggal,
-                        }));
-                        setValue("idSurtug", response.data.data[0].id)
+                            errorSurtugPage: "Gagal load data surat tugas"
+                        }))
                     }
                 }
             })
@@ -360,13 +458,224 @@ function DocKH1() {
                 if(process.env.REACT_APP_BE_ENV == "DEV") {
                     console.log(error)
                 }
+                if(error.response) {
+                    if(error.response.data.status == 404) {
+                        setData(values => ({...values,
+                            errorSurtugPage: "Surat tugas belum ada/belum dibuat"
+                        }))
+                    } else {
+                        setData(values => ({...values,
+                            errorSurtugPage: "Gagal load data surat tugas"
+                        }))
+                    }
+                }
             });
         }
     },[idPtk, setValue])
+
+    function refreshData() {
+        if(data.errorPTKPage) {
+            const response = modelPemohon.getPtkId(data.noIdPtk);
+            response
+            .then((response) => {
+                if(typeof response.data != "string") {
+                    if(response.data.status == 200) {
+                        setData(values => ({...values,
+                            errorPTKPage: "",
+                            // mpTercetak: namaUmumMP.join(";"),
+                            listPtk: response.data.data.ptk,
+                            // listKomoditas: response.data.data.ptk_komoditi,
+                            listDokumen: response.data.data.ptk_dokumen
+                        }));
+    
+                        setValue("tandaKhusus", response.data.data.ptk.tanda_khusus)
+                        setValue("karantinaTujuan", response.data.data.ptk.negara_penerima)
+                        setValue("entryPoint", response.data.data.ptk.pelabuhan_bongkar + ", " + response.data.data.ptk.negara_bongkar)
+                        setValue("idPtk", data.noIdPtk)
+                        setValue("noDokumen", data.noDokumen)
+                    } else {
+                        setData(values => ({...values,
+                            errorPTKPage: "Gagal load data PTK"
+                        })); 
+                    }
+                } else {
+                    setData(values => ({...values,
+                        errorPTKPage: "Gagal load data PTK"
+                    })); 
+                }
+            })
+            .catch((error) => {
+                if(process.env.REACT_APP_BE_ENV == "DEV") {
+                    console.log(error)
+                }
+                setData(values => ({...values,
+                    errorPTKPage: "Gagal load data PTK"
+                })); 
+            });
+        }
+
+        if(data.errorKomoditi) {
+            const resKom = modelPemohon.getKomoditiPtkId(data.noIdPtk, "H");
+            resKom
+            .then((response) => {
+                if(typeof response.data != "string") {
+                    if(response.data.status == 200) {
+                        setData(values => ({...values,
+                            errorKomoditi: "",
+                            listKomoditas: response.data.data
+                        }));
+                        var arrayKomKH = response.data.data.map(item => {
+                            return {
+                                namaUmum: item.nama_umum_tercetak,
+                                namaLatin: item.nama_latin_tercetak,
+                                jantanP8: item.jantan,
+                                betinaP8: item.betina,
+                                volumeP8: item.volume_lain,
+                                nettoP8: item.volume_netto
+                            }
+                        })
+                        setDataSend(arrayKomKH)
+                    } else {
+                        setData(values => ({...values,
+                            errorKomoditi: "Gagal load data komoditas"
+                        }));
+                    }
+                } else {
+                    setData(values => ({...values,
+                        errorKomoditi: "Gagal load data komoditas"
+                    }))
+                }
+            })
+            .catch((error) => {
+                if(process.env.REACT_APP_BE_ENV == "DEV") {
+                    console.log(error)
+                }
+                setData(values => ({...values,
+                    errorKomoditi: "Gagal load data komoditas"
+                }))
+            });
+        }
+
+        if(data.errorKH1Page) {
+            const resPelId = modelPelepasan.getById(data.noIdPtk, "H");
+            resPelId
+            .then((response) => {
+                if(response.data) {
+                    if(typeof response.data != "string") {
+                        if(response.data.status == 200) {
+                            setData(values => ({...values,
+                                errorKH1Page: ""
+                            }))
+                            setValue("idDokh1", response.data.data.id)
+                            setValue("noDokh1", response.data.data.nomor)
+                            setValue("tglDokh1", response.data.data.tanggal)
+                            setValue("noSeri", response.data.data.nomor_seri)
+                            setValue("jenisDokumen", response.data.data.status_dok)
+                            setValue("m1", response.data.data.m1 !== null ? response.data.data.m1.toString() : "")
+                            setValue("m2", response.data.data.m2 !== null ? response.data.data.m2.toString() : "")
+                            setValue("m3", response.data.data.m3 !== null ? response.data.data.m3.toString() : "")
+                            setValue("m4", response.data.data.m_lain !== null ? "1" : "")
+                            setValue("m4Lain", response.data.data.m_lain)
+                            setValue("p1", response.data.data.p_teknis)
+                            setValue("p2", response.data.data.p_lab)
+                            setValue("p3", response.data.data.p_lain)
+                            setValue("isAttach", response.data.data.is_attachment !== null ? response.data.data.is_attachment.toString() : "")
+                            setValue("ttdPutusan", response.data.data.user_ttd_id)
+                            setValue("diterbitkan", response.data.data.diterbitkan_di)
+                        } else if(response.data.status == 404) {
+                            setData(values => ({...values,
+                                errorKH1Page: ""
+                            }))
+                        } else {
+                            setData(values => ({...values,
+                                errorKH1Page: "Gagal load data KH-1"
+                            }))
+                        }
+                    } else {
+                        setData(values => ({...values,
+                            errorKH1Page: "Gagal load data KH-1"
+                        }))
+                    }
+                }
+            })
+            .catch((error) => {
+                if(process.env.REACT_APP_BE_ENV == "DEV") {
+                    console.log(error)
+                }
+                if(error.response) {
+                    if(error.response.data.status == 404) {
+                        setData(values => ({...values,
+                            errorKH1Page: ""
+                        }))
+                    } else {
+                        setData(values => ({...values,
+                            errorKH1Page: "Gagal load data KH-1"
+                        }))
+                    }
+                }
+            });
+        }
+
+        if(data.errorSurtugPage) {
+            const modelSurtug = new PtkSurtug();
+                // 1: penugasan periksa administratif
+            const resSurtug = modelSurtug.getDetilSurtugPenugasan(data.noIdPtk, 14);
+            resSurtug
+            .then((response) => {
+                if(response.data) {
+                    if(typeof response.data != "string") {
+                        if(response.data.status == 200) {
+                            setData(values => ({...values,
+                                errorSurtugPage: "",
+                                noSurtug: response.data.data[0].nomor,
+                                tglSurtug: response.data.data[0].tanggal,
+                            }));
+                            setValue("idSurtug", response.data.data[0].id)
+                        } else if(response.data.status == 404) {
+                            setData(values => ({...values,
+                                errorSurtugPage: "Surat tugas belum ada/belum dibuat"
+                            }))
+                        } else {
+                            setData(values => ({...values,
+                                errorSurtugPage: "Gagal load data surat tugas"
+                            }))
+                        }
+                    } else {
+                        setData(values => ({...values,
+                            errorSurtugPage: "Gagal load data surat tugas"
+                        }))
+                    }
+                }
+            })
+            .catch((error) => {
+                if(process.env.REACT_APP_BE_ENV == "DEV") {
+                    console.log(error)
+                }
+                if(error.response) {
+                    if(error.response.data.status == 404) {
+                        setData(values => ({...values,
+                            errorSurtugPage: "Surat tugas belum ada/belum dibuat"
+                        }))
+                    } else {
+                        setData(values => ({...values,
+                            errorSurtugPage: "Gagal load data surat tugas"
+                        }))
+                    }
+                }
+            });
+        }
+    }
   return (
     <div className="container-xxl flex-grow-1 container-p-y">
         <h4 className="py-3 breadcrumb-wrapper mb-4">
-            KH-1 <span className="fw-light" style={{color: 'blue'}}>Sertifikat Kesehatan Hewan</span>
+            KH-1 <span className="fw-light" style={{color: 'blue'}}>SERTIFIKAT KESEHATAN HEWAN</span>
+
+            <small className='float-end'>
+                <span className='text-danger'>{(data.errorPTKPage ? data.errorPTKPage + "; " : "") + (data.errorSurtugPage ? data.errorSurtugPage + "; " : "") + (data.errorKomoditi ? data.errorKomoditi + "; " : "") + (data.errorKH1Page ? data.errorKH1Page + "; " : "")}</span>
+                {data.errorPTKPage || data.errorSurtugPage || data.errorKomoditi || data.errorKH1Page ?
+                    <button type='button' className='btn btn-warning btn-xs' onClick={() => refreshData()}><i className='fa-solid fa-sync'></i> Refresh</button>
+                : ""}
+            </small>
         </h4>
 
         <div className="row">
@@ -417,7 +726,7 @@ function DocKH1() {
                                 </div>
                                 <label className="col-sm-2 col-form-label text-sm-end" htmlFor="noSeri">No Seri <span className='text-danger'>*</span></label>
                                 <div className="col-sm-2">
-                                    <input type="text" id="noSeri" name='noSeri' {...register("noSeri", {required: "Mohon isi Nomor seru."})} className={errors.noSeri ? "form-control form-control-sm is-invalid" : "form-control form-control-sm"} />
+                                    <input type="text" id="noSeri" name='noSeri' disabled {...register("noSeri", {required: "Mohon isi Nomor seri."})} className={errors.noSeri ? "form-control form-control-sm is-invalid" : "form-control form-control-sm"} />
                                     {errors.noSeri && <small className="text-danger">{errors.noSeri.message}</small>}
                                 </div>
                             </div>
@@ -504,17 +813,17 @@ function DocKH1() {
                                         <div className="row">
                                             <div className="col-md-6">
                                                 <div className="row">
-                                                    <label className="col-sm-4 col-form-label" htmlFor="daerahAsal">{data.listPtk ? (data.listPtk.permohonan === "DK" ? "Daerah" : "Negara") : ""} Asal</label>
+                                                    <label className="col-sm-4 col-form-label" htmlFor="daerahAsal">{data.listPtk ? (data.listPtk.permohonan == "DK" ? "Daerah" : "Negara") : ""} Asal</label>
                                                     <div className="col-sm-8">
-                                                        <input name="daerahAsal" className="form-control form-control-sm" disabled value={(data.listPtk ? (data.listPtk.permohonan === "DK" ? data.listPtk.kota_asal : data.listPtk.negara_asal) : "") || ""} id="daerahAsal" />
+                                                        <input name="daerahAsal" className="form-control form-control-sm" disabled value={(data.listPtk ? (data.listPtk.permohonan == "DK" ? data.listPtk.kota_asal : data.listPtk.negara_asal) : "") || ""} id="daerahAsal" />
                                                     </div>
                                                 </div>
                                             </div>
                                             <div className="col-md-6">
                                                 <div className="row">
-                                                    <label className="col-sm-4 col-form-label" htmlFor="daerahTujuan">{data.listPtk ? (data.listPtk.permohonan === "DK" ? "Daerah" : "Negara") : ""} Tujuan</label>
+                                                    <label className="col-sm-4 col-form-label" htmlFor="daerahTujuan">{data.listPtk ? (data.listPtk.permohonan == "DK" ? "Daerah" : "Negara") : ""} Tujuan</label>
                                                     <div className="col-sm-8">
-                                                        <input name="daerahTujuan" className="form-control form-control-sm" disabled value={(data.listPtk ? (data.listPtk.permohonan === "DK" ? data.listPtk.kota_tujuan : data.listPtk.negara_tujuan) : "") || ""} id="daerahTujuan" />
+                                                        <input name="daerahTujuan" className="form-control form-control-sm" disabled value={(data.listPtk ? (data.listPtk.permohonan == "DK" ? data.listPtk.kota_tujuan : data.listPtk.negara_tujuan) : "") || ""} id="daerahTujuan" />
                                                     </div>
                                                 </div>
                                             </div>
@@ -542,7 +851,7 @@ function DocKH1() {
                                                 <div className="row">
                                                     <label className="col-sm-4 col-form-label" htmlFor="tempatTransit">Tempat Transit</label>
                                                     <div className="col-sm-8">
-                                                        <input name="tempatTransit" className="form-control form-control-sm" disabled value={(data.listPtk ? (data.listPtk.pelabuhan_transit === null ? "-" : data.listPtk.pelabuhan_transit + ", " + data.listPtk.negara_transit) : "") || ""} id="tempatTransit" />
+                                                        <input name="tempatTransit" className="form-control form-control-sm" disabled value={(data.listPtk ? (data.listPtk.pelabuhan_transit == null ? "-" : data.listPtk.pelabuhan_transit + ", " + data.listPtk.negara_transit) : "") || ""} id="tempatTransit" />
                                                     </div>
                                                 </div>
                                             </div>
@@ -555,7 +864,7 @@ function DocKH1() {
                                                 </div>
                                             </div>
                                         </div>
-                                        <div className="row mb-4" style={{display: (data.listPtk ? (data.listPtk.jenis_permohonan === "DK" ? "block" : "none") : "none")}}>
+                                        <div className="row mb-4" style={{display: (data.listPtk ? (data.listPtk.jenis_permohonan == "DK" ? "block" : "none") : "none")}}>
                                             <div className="col-md-6">
                                                 <div className="row">
                                                     <label className="col-sm-4 col-form-label" htmlFor="tempatTransit">Upt Tujuan</label>
@@ -564,7 +873,7 @@ function DocKH1() {
                                                             control={control}
                                                             name={"uptTujuan"}
                                                             className="form-control form-control-sm"
-                                                            rules={{ required: (data.listPtk ? (data.listPtk.jenis_permohonan === "DK" ? "Mohon pilih UPT Tujuan." : false) : false)}}
+                                                            rules={{ required: (data.listPtk ? (data.listPtk.jenis_permohonan == "DK" ? "Mohon pilih UPT Tujuan." : false) : false)}}
                                                             render={({ field: {value, ...field } }) => (
                                                                 <Select styles={customStyles} value={value ? {id: cekWatch.uptTujuan, label: cekWatch.uptTujuanView} : ""} onChange={(e) => setValue("uptTujuan", e.value) & setValue("uptTujuanView", e.label)} placeholder={"Pilih upt tujuan.."} {...field} options={listUptNew()} />
                                                             )}
@@ -590,11 +899,11 @@ function DocKH1() {
                                         <h5 className='mb-1'><b><u>II.  Media Pembawa</u></b>
                                             {loadKomoditi ? <SpinnerDot/> : null}
                                             {data.listKomoditas ? 
-                                            (loadKomoditi ? null : <button type='button' className='btn btn-sm btn-outline-secondary' onClick={handleEditKomoditasAll} style={{marginLeft: "15px"}}><i className='fa-solid fa-check-square text-success'></i> Tidak ada perubahan</button>) : null }
+                                            (loadKomoditi ? null : <button type='button' className='btn btn-sm btn-outline-secondary' onClick={handleEditKomoditasAll} style={{marginLeft: "15px"}}><i className='fa-solid fa-check-square text-success me-sm-2 me-1'></i> Tidak ada perubahan</button>) : null }
                                             <span className='text-danger'>{loadKomoditiPesan}</span>
                                             </h5>
                                             <div className='col-md-12 mb-3'>
-                                                <div className="table-responsive text-nowrap" style={{height: "300px"}}>
+                                                <div className="table-responsive text-nowrap" style={{height: (data.listKomoditas?.length > 8 ? "300px" : "")}}>
                                                     <table className="table table-sm table-bordered table-hover table-striped dataTable">
                                                         <thead>
                                                             <tr>
@@ -665,9 +974,9 @@ function DocKH1() {
                                                         <label className="form-check-label" htmlFor={"m" + (index+1)}>
                                                             {data.deskripsi}
                                                         </label>
-                                                        {index === 3 ?
-                                                        <div className='col-md-4' style={{display: (cekWatch.m4 === '1' ? 'block' : 'none')}}>
-                                                            <input type="text" placeholder='Lainnya..' className={errors.m4Lain ? "form-control form-control-sm is-invalid ml-2" : "form-control form-control-sm ml-2"} {...register("m4Lain", {required: (cekWatch.m4 === '1' ? "Mohon isi keterangan lainnya.." : false)})} />
+                                                        {index == 3 ?
+                                                        <div className='col-md-4' style={{display: (cekWatch.m4 == '1' ? 'block' : 'none')}}>
+                                                            <input type="text" placeholder='Lainnya..' className={errors.m4Lain ? "form-control form-control-sm is-invalid ml-2" : "form-control form-control-sm ml-2"} {...register("m4Lain", {required: (cekWatch.m4 == '1' ? "Mohon isi keterangan lainnya.." : false)})} />
                                                             {errors.m4Lain && <small className="text-danger">{errors.m4Lain.message}</small>}
                                                         </div>
                                                         : null}
@@ -725,8 +1034,10 @@ function DocKH1() {
                         <div className="pt-2">
                             <div className="row">
                                 <div className="offset-sm-2 col-sm-9">
-                                    <button type="submit" className="btn btn-primary me-sm-2 me-1">Simpan</button>
-                                    <button type="button" className="btn btn-danger btn-label-secondary me-sm-2 me-1">Batal</button>
+                                    <button type="submit" className="btn btn-primary me-sm-2 me-1"><i className='fa-solid fa-save me-sm-2 me-1'></i> Simpan</button>
+                                    <button type="button" className="btn btn-danger btn-label-secondary me-sm-2 me-1"><i className='fa-solid fa-cancel me-sm-2 me-1'></i> Batal</button>
+                                    <button type="button" className="btn btn-warning btn-label-secondary me-sm-2 me-1"><i className='fa-solid fa-print me-sm-2 me-1'></i> Print</button>
+                                    <button type="button" style={{display: (cekWatch.idDokh2 ? "block" : "none")}} className="float-end btn btn-info btn-label-secondary"><i className='tf-icons fa-solid fa-paper-plane me-sm-2 me-1'></i> TTE</button>
                                 </div>
                             </div>
                         </div>
@@ -778,11 +1089,11 @@ function DocKH1() {
                                     </div>
                                 </div>
                             </div>
-                            <div className="col-6" style={{display: (data.listPtk ? (data.listPtk.jenis_media_pembawa_id === 1 ? "block" : "none") : "none")}}>
+                            <div className="col-6" style={{display: (data.listPtk ? (data.listPtk.jenis_media_pembawa_id == 1 ? "block" : "none") : "none")}}>
                                 <label className="form-label" htmlFor="jantanP8">Jumlah Jantan Akhir-P8<span className='text-danger'>*</span></label>
                                 <div className='row'>
                                     <div className="col-3" style={{paddingRight: '2px'}}>
-                                        <input type="text" name='jantanP8' id='jantanP8' value={(cekdataMPkh1.jantanP8 ? addCommas(removeNonNumeric(cekdataMPkh1.jantanP8)) : "") || ""} {...registerMPkh1("jantanP8", {required: (data.listPtk ? (data.listPtkjenis_media_pembawa_id === 1 ? "Mohon isi jumlah akhir Jantan." : false) : false)})} className={errorsMPkh1.jantanP8 ? "form-control form-control-sm is-invalid" : "form-control form-control-sm"} />
+                                        <input type="text" name='jantanP8' id='jantanP8' value={(cekdataMPkh1.jantanP8 ? addCommas(removeNonNumeric(cekdataMPkh1.jantanP8)) : "") || ""} {...registerMPkh1("jantanP8", {required: (data.listPtk ? (data.listPtkjenis_media_pembawa_id == 1 ? "Mohon isi jumlah akhir Jantan." : false) : false)})} className={errorsMPkh1.jantanP8 ? "form-control form-control-sm is-invalid" : "form-control form-control-sm"} />
                                     </div>
                                     <div className="col-2" style={{paddingLeft: '2px'}}>
                                         <input type="text" className='form-control form-control-sm' name='satuanjantanP8' id='satuanjantanP8' value={"EKR"} disabled />
@@ -790,11 +1101,11 @@ function DocKH1() {
                                 </div>
                                 {errorsMPkh1.jantanP8 && <small className="text-danger">{errorsMPkh1.jantanP8.message}</small>}
                             </div>
-                            <div className="col-6" style={{display: (data.listPtk ? (data.listPtk.jenis_media_pembawa_id === 1 ? "block" : "none") : "none")}}>
+                            <div className="col-6" style={{display: (data.listPtk ? (data.listPtk.jenis_media_pembawa_id == 1 ? "block" : "none") : "none")}}>
                                 <label className="form-label" htmlFor="betinaP8">Jumlah Betina Akhir-P8<span className='text-danger'>*</span></label>
                                 <div className='row'>
                                     <div className="col-3" style={{paddingRight: '2px'}}>
-                                        <input type="text" name='betinaP8' id='betinaP8' value={(cekdataMPkh1.betinaP8 ? addCommas(removeNonNumeric(cekdataMPkh1.betinaP8)) : "") || ""} {...registerMPkh1("betinaP8", {required: (data.listPtk ? (data.listPtkjenis_media_pembawa_id === 1 ? "Mohon isi jumlah akhir Betina." : false) : false)})} className={errorsMPkh1.betinaP8 ? "form-control form-control-sm is-invalid" : "form-control form-control-sm"} />
+                                        <input type="text" name='betinaP8' id='betinaP8' value={(cekdataMPkh1.betinaP8 ? addCommas(removeNonNumeric(cekdataMPkh1.betinaP8)) : "") || ""} {...registerMPkh1("betinaP8", {required: (data.listPtk ? (data.listPtkjenis_media_pembawa_id == 1 ? "Mohon isi jumlah akhir Betina." : false) : false)})} className={errorsMPkh1.betinaP8 ? "form-control form-control-sm is-invalid" : "form-control form-control-sm"} />
                                     </div>
                                     <div className="col-2" style={{paddingLeft: '2px'}}>
                                         <input type="text" className='form-control form-control-sm' name='satuanbetinaP8' id='satuanbetinaP8' value={"EKR"} disabled />

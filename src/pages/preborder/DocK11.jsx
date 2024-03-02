@@ -10,6 +10,7 @@ import MasterMataUang from '../../model/master/MasterMataUang'
 import NegaraJson from '../../model/master/negara.json'
 import PelabuhanJson from '../../model/master/pelabuhan.json'
 import JenisDokumenJson from '../../model/master/jenisDokumen.json'
+import JenisKemasanJson from '../../model/master/jenisKemasan.json'
 import AreaTangkapJson from '../../model/master/areaTangkap.json'
 import MasterSatuanJson from '../../model/master/satuan.json'
 import { Controller, useForm } from 'react-hook-form'
@@ -29,6 +30,15 @@ const log = new PtkHistory()
 
 const addCommas = num => num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
 const removeNonNumeric = num => num.toString().replace(/[^0-9.]/g, "");
+
+function negaraSelectByNamaEn(e) {
+    const dataNegara = NegaraJson.filter((element) => element.nama_en == e)
+    const retur = {
+        id: dataNegara[0].id,
+        value: dataNegara[0].kode + " - " + dataNegara[0].nama
+    } 
+    return retur
+}
 
 function masterSatuanJson(e) {
     const dataSatuan = MasterSatuanJson.filter((element) => (e == "H" ? element.sat_kh == "Y" : (e == "T" ? element.sat_kt == "Y" : (e == "I" ? element.sat_ki == "Y" : (element.id != null)))))
@@ -50,7 +60,27 @@ function areaTangkap() {
         }
     })
     return arrayAreaTagnkap
-    
+}
+
+function jenisKemasan() {
+    var arrayKemasan = JenisKemasanJson.map(item => {
+        return {
+            value: item.id,
+            label: item.kode + " - " + item.deskripsi,
+        }
+    })
+    return arrayKemasan
+}
+
+function jenisKemasanView(e) {
+    if(e) {
+        const dataView = JenisKemasanJson.filter((element) => element.id == parseInt(e))
+        const retur = dataView[0].kode + " - " + dataView[0].deskripsi
+        
+        return retur
+    } else {
+        return ""
+    }
 }
 
 function getViewAreaTangkap(e) {
@@ -64,7 +94,7 @@ function getViewAreaTangkap(e) {
 }
 
 function handleJenisDokumen(e) {
-    const dataJenisDokumen = JenisDokumenJson.filter((element) => (e === "H" ? element.komoditas_hewan === "1" : (e === "T" ? element.komoditas_tumbuhan === "1" : element.komoditas_ikan === "1")))
+    const dataJenisDokumen = JenisDokumenJson.filter((element) => (e == "H" ? element.komoditas_hewan == "1" : (e == "T" ? element.komoditas_tumbuhan == "1" : element.komoditas_ikan == "1")))
     var arraySelect = dataJenisDokumen.map(item => {
         return {
             value: item.id,
@@ -117,7 +147,7 @@ function DocK11() {
     let [wizardPage, setWizardPage] = useState(1);
     
     function handlePermohonan(e) {
-        if(e.target.value === 'EX') {
+        if(e.target.value == 'EX') {
             setValuePemohon("negaraPengirim", "99");
             setValuePemohon("negaraPengirimView", "ID - INDONESIA");
             setValuePemohon("negaraPenerima", "");
@@ -132,7 +162,7 @@ function DocK11() {
             setValueMP("negaraTujuanMPView", "");
             handlePelabuhan("99", "pelMuat")
             handleKota(null, "daerahAsalMP")
-        } else if(e.target.value === 'IM') {
+        } else if(e.target.value == 'IM') {
             setValuePemohon("negaraPenerima", "99");
             setValuePemohon("negaraPenerimaView", "ID - INDONESIA");
             setValuePemohon("negaraPengirim", "");
@@ -183,19 +213,19 @@ function DocK11() {
     function handleSetKomoditasSelect(e) {
         const dataKomKT = e.value;
         const dataPisahKT = dataKomKT.split(";");
-        if(cekdataDiri.mediaPembawa === "T") {
+        if(cekdataDiri.mediaPembawa == "T") {
             setValueDetilMP("komoditasMP", dataPisahKT[0])
             setValueDetilMP("namaUmum", dataPisahKT[1])
-            setValueDetilMP("namaLatin", (dataPisahKT[2] | dataPisahKT[2] === null ? dataPisahKT[2] : "-"))
-        } else if(cekdataDiri.mediaPembawa === "H") {
+            setValueDetilMP("namaLatin", (dataPisahKT[2] | dataPisahKT[2] == null ? dataPisahKT[2] : "-"))
+        } else if(cekdataDiri.mediaPembawa == "H") {
             setValueDetilMP("komoditasMPKHid", dataPisahKT[0])
             setValueDetilMP("namaUmumKH", dataPisahKT[1])
-            setValueDetilMP("namaLatinKH", (dataPisahKT[2] | dataPisahKT[2] === null ? dataPisahKT[2] : "-"))
+            setValueDetilMP("namaLatinKH", (dataPisahKT[2] | dataPisahKT[2] == null ? dataPisahKT[2] : "-"))
             // setValueDetilMP("klasifikasiMPKHid", dataPisahKT[3]) //klasifikasi KH
-        } else if(cekdataDiri.mediaPembawa === "I") {
+        } else if(cekdataDiri.mediaPembawa == "I") {
             setValueDetilMP("komoditasMPKIid", dataPisahKT[0])
             setValueDetilMP("namaUmumKI", dataPisahKT[1])
-            setValueDetilMP("namaLatinKI", (dataPisahKT[2] | dataPisahKT[2] === null ? dataPisahKT[2] : "-"))
+            setValueDetilMP("namaLatinKI", (dataPisahKT[2] | dataPisahKT[2] == null ? dataPisahKT[2] : "-"))
             // setValueDetilMP("klasifikasiMPKHid", dataPisahKT[3]) //klasifikasi KH
         }
     }
@@ -209,6 +239,13 @@ function DocK11() {
                     icon: "success",
                     title: response.data.message
                 })
+                setValueDokumen("tglDokumen" , response.data.data.doc_header.tgl_doc)
+                setValueDokumen("noDokumen" , response.data.data.doc_header.docnbr)
+                const negaraDoc = negaraSelectByNamaEn(response.data.data.doc_header.nama_ing)
+                setValueDokumen("negaraAsalDokumen" , negaraDoc.id)
+                setValueDokumen("negaraAsalDokumenView" , negaraDoc.value)
+                setValueDokumen("ketDokumen" , response.data.data.doc_header.ket_tujuan)
+                
                 setValueDokumen("cekPrior" , "1")
             } else {
                 Swal.fire({
@@ -228,21 +265,33 @@ function DocK11() {
         });
     }
     
-    function handleKemasan(e) {
-        setdataSelect(values => ({...values, [e.target.name]: <MasterKemasan/>}))
-    }
-    
     function handleBase64Upload(e) {
-        let fileReader = new FileReader();
-        let files = e.target.files;
-        setDataIdPage(values => ({...values,
-            fileDokumenUpload: e.target.value,
-        }));
-        fileReader.readAsDataURL(files[0]);
-    
-        fileReader.onload = (event) => {
-            
-            setValueDokumen("fileDokumen", event.target.result);
+        if(e.target.files[0].type != "application/pdf") {
+            Swal.fire({
+                icon: "error",
+                title: "Format file: .pdf",
+            })
+            setDataIdPage(values => ({...values,
+                fileDokumenUpload: "",
+            }));
+        } else if(e.target.files[0].size > 1048576) {
+            Swal.fire({
+                icon: "error",
+                title: "Max file: 1MB",
+            })
+            setDataIdPage(values => ({...values,
+                fileDokumenUpload: "",
+            }));
+        } else {
+            let fileReader = new FileReader();
+            let files = e.target.files;
+            setDataIdPage(values => ({...values,
+                fileDokumenUpload: e.target.value,
+            }));
+            fileReader.readAsDataURL(files[0]);
+            fileReader.onload = (event) => {
+                setValueDokumen("fileDokumen", event.target.result);
+            }
         }
     }
     
@@ -442,7 +491,7 @@ function DocK11() {
     const getListProv = useCallback(async () => {
         try {
             const response = await modelMaster.masterProv()
-            if(response.data.status === '200') {
+            if(response.data.status == '200') {
                 let dataProv = response.data.data;
                 const arraySelectProv = dataProv.map(item => {
                     return {
@@ -471,7 +520,7 @@ function DocK11() {
     const handleKota = useCallback(async (e, pel) => {
         try {
             const response = await modelMaster.masterKota(e)
-            if(response.data.status === '200') {
+            if(response.data.status == '200') {
                 let dataKota = response.data.data;
                 const arraySelectKota = dataKota.map(item => {
                 return {
@@ -495,7 +544,7 @@ function DocK11() {
 
     const handlePelabuhan = useCallback(async (e, pel) => {
         if(e && pel) {
-            const dataPelabuhan = PelabuhanJson.filter((element) => element.negara_id === parseInt(e))
+            const dataPelabuhan = PelabuhanJson.filter((element) => element.negara_id == parseInt(e))
         
             var arraySelectPelabuhan = dataPelabuhan.map(item => {
                 return {
@@ -513,8 +562,9 @@ function DocK11() {
 
     const handleKomKHIDetil = useCallback(async (e) => {
     // function handleKomKHIDetil(e) {
+        // kode hs ikan sementara pake kode hs hewann
         if(cekdataDiri.mediaPembawa && cekdataDiri.jenisMp) {
-            const resKodeHS = modelMaster.masterHS(cekdataDiri.mediaPembawa)
+            const resKodeHS = modelMaster.masterHS(cekdataDiri.mediaPembawa == "I" ? "H" : cekdataDiri.mediaPembawa)
             resKodeHS
             .then((response) => {
                 let resKodeHS = response.data.data;
@@ -528,11 +578,11 @@ function DocK11() {
             })
             .catch((error) => {
                 if(process.env.REACT_APP_BE_ENV == "DEV") {
-                console.log(error)
-            };
+                    console.log(error)
+                };
             });
     
-            if(cekdataDiri.mediaPembawa === "H") {
+            if(cekdataDiri.mediaPembawa == "H") {
                 const resKlasKH = modelMaster.masterKlasKH(e)
                 resKlasKH
                 .then((response) => {
@@ -569,7 +619,7 @@ function DocK11() {
                     };
                 });
 
-            } else if(cekdataDiri.mediaPembawa === "T") {
+            } else if(cekdataDiri.mediaPembawa == "T") {
                 const resPeruntukan = modelMaster.masterKlasKT(e)
                 resPeruntukan
                 .then((response) => {
@@ -606,7 +656,7 @@ function DocK11() {
                     };
                 });
 
-            } else if(cekdataDiri.mediaPembawa === "I") {
+            } else if(cekdataDiri.mediaPembawa == "I") {
                 const resPeruntukan = modelMaster.masterKlasKI(e)
                 resPeruntukan
                 .then((response) => {
@@ -622,7 +672,7 @@ function DocK11() {
                     const resKomKI = modelMaster.masterKomKI()
                     resKomKI
                     .then((response) => {
-                        if(response.data.status === '200') {
+                        if(response.data.status == '200') {
                             let dataKomKI = response.data.data;
                             var arrayKomKI = dataKomKI.map(item => {
                                 return {
@@ -635,14 +685,14 @@ function DocK11() {
                     })
                     .catch((error) => {
                         if(process.env.REACT_APP_BE_ENV == "DEV") {
-                console.log(error)
-            };
+                            console.log(error)
+                        };
                     });
                 })
                 .catch((error) => {
                     if(process.env.REACT_APP_BE_ENV == "DEV") {
-                console.log(error)
-            };
+                        console.log(error)
+                    };
                 });
             }
         }
@@ -659,7 +709,6 @@ function DocK11() {
             .then((response) => {
                 if(response.data.status == 201) {
                     Swal.fire({
-                        
                         icon: "success",
                         title: "Dokumen berhasil disimpan.",
                         showConfirmButton: false,
@@ -673,7 +722,6 @@ function DocK11() {
                     }));
                 } else {
                     Swal.fire({
-                        
                         icon: "error",
                         title: "Dokumen gagal disimpan.",
                         showConfirmButton: true,
@@ -683,13 +731,12 @@ function DocK11() {
             .catch((error) => {
                 if(process.env.REACT_APP_BE_ENV == "DEV") {
                     console.log(error)
-                    Swal.fire({
-                        
-                        icon: "error",
-                        title: "Dokumen gagal disimpan.",
-                        showConfirmButton: true,
-                    })
-            };
+                };
+                Swal.fire({
+                    icon: "error",
+                    title: "Dokumen gagal disimpan.",
+                    showConfirmButton: true,
+                })
         });
     }
 
@@ -699,8 +746,7 @@ function DocK11() {
             const response = modelPemohon.pushKomoditi(data, cekdataDiri.mediaPembawa);
             response
             .then((response) => {
-                
-                if(response.data.status === '201') {
+                if(response.data.status == '201') {
                     Swal.fire({
                         
                         icon: "success",
@@ -710,12 +756,13 @@ function DocK11() {
                     })
                     resetFormKomoditi();
                     dataKomoditiPtk();
+                    sumNilaiKomoditi()
                 }
             })
             .catch((error) => {
                 if(process.env.REACT_APP_BE_ENV == "DEV") {
-                console.log(error)
-            };
+                    console.log(error)
+                };
             });
         }
     };
@@ -725,7 +772,7 @@ function DocK11() {
             const response = modelPemohon.tabPemohonUpdate(data);
             response
             .then((response) => {
-                if(response.data.status === '201') {
+                if(response.data.status == '201') {
                     Swal.fire({
                         icon: "success",
                         title: "Data Pemohon berhasil disimpan.",
@@ -738,9 +785,13 @@ function DocK11() {
             })
             .catch((error) => {
                 if(process.env.REACT_APP_BE_ENV == "DEV") {
-                console.log(error)
-            };
-                alert(error.response.status + " - " + error.response.data.message)
+                    console.log(error)
+                };
+                Swal.fire({
+                    icon: "error",
+                    title: "Error!",
+                    text: error.response.data.message
+                })
             });
         } else {
             Swal.fire({
@@ -757,7 +808,7 @@ function DocK11() {
                     const response = modelPemohon.tabPemohonInsert(data);
                     response
                     .then((response) => {
-                        if(response.data.status === '201') {
+                        if(response.data.status == '201') {
                             Swal.fire({
                                 icon: "success",
                                 title: "Data Pemohon berhasil disimpan.",
@@ -800,12 +851,12 @@ function DocK11() {
                     })
                     .catch((error) => {
                         if(process.env.REACT_APP_BE_ENV == "DEV") {
-                        console.log(error)
-                    };
+                            console.log(error)
+                        };
                         Swal.fire({
                             icon: "error",
                             title: "Data Pemohon gagal disimpan.",
-                            text: response.data.status + " - " + response.data.message,
+                            text: error.response.data.status + " - " + error.response.data.message,
                             showConfirmButton: true
                         })
                     });
@@ -820,7 +871,7 @@ function DocK11() {
             const response = modelPemohon.tabPelabuhan(data);
             response
             .then((response) => {
-                if(response.data.status === '201') {
+                if(response.data.status == '201') {
                     Swal.fire({
                         icon: "success",
                         title: "Sukses!",
@@ -841,12 +892,12 @@ function DocK11() {
             })
             .catch((error) => {
                 if(process.env.REACT_APP_BE_ENV == "DEV") {
-                console.log(error)
-            };
+                    console.log(error)
+                };
                 Swal.fire({
                     icon: "error",
                     title: "Data Pelabuhan gagal disimpan.",
-                    text: response.data.status + " - " + response.data.message,
+                    text: error.response.data.status + " - " + error.response.data.message,
                     showConfirmButton: true
                 })
             });
@@ -866,7 +917,7 @@ function DocK11() {
              const response = modelPemohon.tabKomoditas(data);
             response
             .then((response) => {
-                if(response.data.status === '201') {
+                if(response.data.status == '201') {
                     Swal.fire({
                         icon: "success",
                         title: "Sukses!",
@@ -887,12 +938,12 @@ function DocK11() {
             })
             .catch((error) => {
                 if(process.env.REACT_APP_BE_ENV == "DEV") {
-                console.log(error)
-            };
+                    console.log(error)
+                };
                 Swal.fire({
                     icon: "error",
                     title: "Data Pemohon gagal disimpan.",
-                    text: response.data.status + " - " + response.data.message,
+                    text: error.response.data.message,
                     showConfirmButton: true
                 })
             });
@@ -906,7 +957,6 @@ function DocK11() {
     };
     
     const onSubmitDokPeriksa = (data) => {
-        console.log(data)
         setFormTab(values => ({...values, tab5: false}))
         setWizardPage(wizardPage + 1)
     
@@ -914,7 +964,7 @@ function DocK11() {
             const response = modelPemohon.tabTempatPeriksa(data);
             response
             .then((response) => {
-                if(response.data.status === '201') {
+                if(response.data.status == '201') {
                     Swal.fire({
                         icon: "success",
                         title: "Sukses!",
@@ -936,12 +986,12 @@ function DocK11() {
             })
             .catch((error) => {
                 if(process.env.REACT_APP_BE_ENV == "DEV") {
-                console.log(error)
-            };
+                    console.log(error)
+                };
                 Swal.fire({
                     icon: "error",
                     title: "Error!",
-                    text: error.response.status + " - " + error.response.data.message,
+                    text: error.response.data.status + " - " + error.response.data.message,
                     showConfirmButton: true
                 })
             });
@@ -961,7 +1011,7 @@ function DocK11() {
             const response = modelPemohon.tabKonfirmasi(data);
             response
             .then((response) => {
-                if(response.data.status === '201') {
+                if(response.data.status == '201') {
                     setPtkLengkap(true);
                     setValueVerify("idPtk", data.idPtk);
                     setValueVerify("noAju", data.noAju);
@@ -970,7 +1020,7 @@ function DocK11() {
                     Swal.fire({
                         icon: "success",
                         title: "Sukses!",
-                        text: response.data.message,
+                        text: "Permohonan berhasil disimpan",
                         showConfirmButton: false,
                         timer: 2000
                     })
@@ -985,12 +1035,12 @@ function DocK11() {
             })
             .catch((error) => {
                 if(process.env.REACT_APP_BE_ENV == "DEV") {
-                console.log(error)
-            };
+                    console.log(error)
+                };
                 Swal.fire({
                     icon: "error",
                     title: "Error!",
-                    text: error.response.status + " - " + error.response.data.message,
+                    text: error.response.data.status + " - " + error.response.data.message,
                     showConfirmButton: true
                 })
             });
@@ -1008,7 +1058,7 @@ function DocK11() {
             const response = modelPemohon.ptkVerify(data);
             response
             .then((response) => {
-                if(response.data.status === '201') {
+                if(response.data.status == '201') {
                     // setPtkLengkap(true);
                     Cookies.set("idPtkPage", base64_encode(
                         base64_encode(cekdataDiri.noAju) + 'm0R3N0r1R' + 
@@ -1027,18 +1077,23 @@ function DocK11() {
                     const resHsy = log.pushHistory(cekdataDiri.idPtk, "p0", "K-1.1", (dataIdPage.noPermohonan ? 'UPDATE' : 'NEW'));
                     resHsy
                     .then((response) => {
-                        if(response.data.status === '201') {
-                            console.log("history saved")
+                        if(response.data.status == '201') {
+                            if(process.env.REACT_APP_BE_ENV == "DEV") {
+                                console.log("history saved")
+                            }
                         }
                     })
                     .catch((error) => {
-                        console.log(error.response.data);
+                        if(process.env.REACT_APP_BE_ENV == "DEV") {
+                            console.log(error)
+                        }
                     });
                     //end save history
     
                     Swal.fire({
                         icon: "success",
-                        title: response.data.message,
+                        title: "Sukses!",
+                        text: "Permohonan AJU No: " + cekdataDiri.noAju + " berhasil diverifikasi",
                         showConfirmButton: false,
                         timer: 2000
                     })
@@ -1052,11 +1107,11 @@ function DocK11() {
             })
             .catch((error) => {
                 if(process.env.REACT_APP_BE_ENV == "DEV") {
-                console.log(error)
-            };
+                    console.log(error)
+                };
                 Swal.fire({
                     icon: "error",
-                    title: error.response.status + " - " + error.data.message,
+                    title: error.response.data.status + " - " + error.data.message,
                     showConfirmButton: true
                 })
             });
@@ -1074,7 +1129,7 @@ function DocK11() {
         const response = modelPemohon.pushDetilKontainer(data);
         response
         .then((response) => {
-            if(response.data.status === '201') {
+            if(response.data.status == '201') {
                 Swal.fire({
                     
                     icon: "success",
@@ -1086,7 +1141,6 @@ function DocK11() {
                 dataKontainerPtk();
             } else {
                 Swal.fire({
-                    
                     icon: "error",
                     title: "Data Kontainer gagal disimpan!",
                     showConfirmButton: true,
@@ -1095,19 +1149,20 @@ function DocK11() {
             }
         })
         .catch((error) => {
-            console.log(error.response);
+            if(process.env.REACT_APP_BE_ENV == "DEV") {
+                console.log(error)
+            }
             Swal.fire({
-                
                 icon: "error",
                 title: "Data Kontainer gagal disimpan!",
                 showConfirmButton: true,
-                text: error.data.status + " - " + error.data.message
+                text: error.response.data.status + " - " + error.response.data.message
             })
         });
     }      
 
     const handleCekSameTTD = (event) => {
-        if(event.target.checked === true) {
+        if(event.target.checked == true) {
             setValuePemohon("namaTtd", cekdataDiri.namaPemohon);
             setValuePemohon("alamatTtd", cekdataDiri.alamatPemohon);
             setValuePemohon("jenisIdentitasTtd", cekdataDiri.jenisIdentitasPemohon);
@@ -1121,17 +1176,17 @@ function DocK11() {
     }
     
     const handleCekSamePengirim = (event) => {
-        if(event.target.checked === true) {
+        if(event.target.checked == true) {
             setValuePemohon("namaPengirim", cekdataDiri.namaPemohon);
             setValuePemohon("alamatPengirim", cekdataDiri.alamatPemohon);
             setValuePemohon("jenisIdentitasPengirim", cekdataDiri.jenisIdentitasPemohon);
             setValuePemohon("noIdentitasPengirim", cekdataDiri.noIdentitasPemohon);
             setValuePemohon("nomorTlpPengirim", cekdataDiri.nomorTlp);
-            setValuePemohon("negaraPengirim", (cekdataDiri.permohonan === 'IM' ? "" : "99"));
-            setValuePemohon("provPengirim", (cekdataDiri.permohonan === 'IM' ? "" : cekdataDiri.provPemohon));
-            setValuePemohon("provPengirimView", (cekdataDiri.permohonan === 'IM' ? "" : cekdataDiri.provPemohonView));
-            setValuePemohon("kotaPengirim", (cekdataDiri.permohonan === 'IM' ? "" : cekdataDiri.kotaPemohon));
-            setValuePemohon("kotaPengirimView", (cekdataDiri.permohonan === 'IM' ? "" : cekdataDiri.kotaPemohonView));
+            setValuePemohon("negaraPengirim", (cekdataDiri.permohonan == 'IM' ? "" : "99"));
+            setValuePemohon("provPengirim", (cekdataDiri.permohonan == 'IM' ? "" : cekdataDiri.provPemohon));
+            setValuePemohon("provPengirimView", (cekdataDiri.permohonan == 'IM' ? "" : cekdataDiri.provPemohonView));
+            setValuePemohon("kotaPengirim", (cekdataDiri.permohonan == 'IM' ? "" : cekdataDiri.kotaPemohon));
+            setValuePemohon("kotaPengirimView", (cekdataDiri.permohonan == 'IM' ? "" : cekdataDiri.kotaPemohonView));
         } else {
             setValuePemohon("namaPengirim", "");
             setValuePemohon("alamatPengirim", "");
@@ -1147,17 +1202,17 @@ function DocK11() {
     }
     
     const handleCekSamePenerima = (event) => {
-        if(event.target.checked === true) {
+        if(event.target.checked == true) {
             setValuePemohon("namaPenerima", cekdataDiri.namaPemohon);
             setValuePemohon("alamatPenerima", cekdataDiri.alamatPemohon);
             setValuePemohon("jenisIdentitasPenerima", cekdataDiri.jenisIdentitasPemohon);
             setValuePemohon("noIdentitasPenerima", cekdataDiri.noIdentitasPemohon);
             setValuePemohon("nomorTlpPenerima", cekdataDiri.nomorTlp);
-            setValuePemohon("negaraPenerima", (cekdataDiri.permohonan === 'EX' ? "" : "99"));
-            setValuePemohon("provPenerima", (cekdataDiri.permohonan === 'EX' ? "" : cekdataDiri.provPemohon));
-            setValuePemohon("provPenerimaView", (cekdataDiri.permohonan === 'EX' ? "" : cekdataDiri.provPemohonView));
-            setValuePemohon("kotaPenerima", (cekdataDiri.permohonan === 'EX' ? "" : cekdataDiri.kotaPemohon));
-            setValuePemohon("kotaPenerimaView", (cekdataDiri.permohonan === 'EX' ? "" : cekdataDiri.kotaPemohonView));
+            setValuePemohon("negaraPenerima", (cekdataDiri.permohonan == 'EX' ? "" : "99"));
+            setValuePemohon("provPenerima", (cekdataDiri.permohonan == 'EX' ? "" : cekdataDiri.provPemohon));
+            setValuePemohon("provPenerimaView", (cekdataDiri.permohonan == 'EX' ? "" : cekdataDiri.provPemohonView));
+            setValuePemohon("kotaPenerima", (cekdataDiri.permohonan == 'EX' ? "" : cekdataDiri.kotaPemohon));
+            setValuePemohon("kotaPenerimaView", (cekdataDiri.permohonan == 'EX' ? "" : cekdataDiri.kotaPemohonView));
         } else {
             setValuePemohon("namaPenerima", "");
             setValuePemohon("alamatPenerima", "");
@@ -1176,52 +1231,55 @@ function DocK11() {
     let [komoditiPtk, setKomoditiPtk] = useState();
     let [dokumenPtk, setDokumenPtk] = useState();
     function dataKontainerPtk() {
-        if(wizardPage === 2) {
+        if(wizardPage == 2) {
             // const modelPemohon = new PtkModel();
             const response = modelPemohon.detilKontainerPtk(dataIdPage.noIdPtk);
-            // console.log(noIdPtk)
-
             response
             .then((res) => {
-                if(res.data.status === '200') {
+                if(res.data.status == '200') {
                     setKontainerPtk(res.data.data)
                 }
             })
             .catch((error) => {
-                console.log(error.response);
+                if(process.env.REACT_APP_BE_ENV == "DEV") {
+                    console.log(error)
+                }
             });
         }
-        console.log(kontainerPtk);
     }
     
     function dataDokumenPtk() {
-        if(wizardPage === 4) {
+        if(wizardPage == 4) {
             const response = modelPemohon.getDokumenPtkId(dataIdPage.noIdPtk);
     
             response
             .then((res) => {
-                if(res.data.status === '200') {
+                if(res.data.status == '200') {
                     setDokumenPtk(res.data.data)
                 }
             })
             .catch((error) => {
-                console.log(error.response);
+                if(process.env.REACT_APP_BE_ENV == "DEV") {
+                    console.log(error)
+                }
             });
         }
     }
     
     function dataKomoditiPtk() {
-        if(wizardPage === 3) {
+        if(wizardPage == 3) {
             const response = modelPemohon.getKomoditiPtkId(dataIdPage.noIdPtk, cekdataDiri.mediaPembawa);
     
             response
             .then((res) => {
-                if(res.data.status === '200') {
+                if(res.data.status == '200') {
                     setKomoditiPtk(res.data.data)
                 }
             })
             .catch((error) => {
-                console.log(error.response.data);
+                if(process.env.REACT_APP_BE_ENV == "DEV") {
+                    console.log(error)
+                }
             });
         }
     }
@@ -1235,12 +1293,28 @@ function DocK11() {
             setValuePemohon(pel + "View", e.label);
         }
     }
+
+    function sumNilaiKomoditi() {
+        if(komoditiPtk) {
+            if(komoditiPtk?.length > 0) {
+                var arrayNilai = komoditiPtk?.map(item => {
+                    return item.harga
+                })
+                const sum = arrayNilai.reduce((partialSum, a) => partialSum + a, 0);
+                return sum
+            } else {
+                return 0
+            }
+        } else {
+            return 0
+        }
+    }
     
     function handleEditKontainer(e) {
         const response = modelPemohon.detilKontainerId(e.target.dataset.header);
         response
         .then((res) => {
-            if(res.data.status === '200') {
+            if(res.data.status == '200') {
                 setValueKontainer("idDataKontainer", res.data.data.id)
                 setValueKontainer("idPtk", res.data.data.ptk_id)
                 setValueKontainer("noKontainer", res.data.data.nomor)
@@ -1251,7 +1325,9 @@ function DocK11() {
             }
         })
         .catch((error) => {
-            console.log(error.response.data);
+            if(process.env.REACT_APP_BE_ENV == "DEV") {
+                console.log(error)
+            }
         });
     }
 
@@ -1260,7 +1336,7 @@ function DocK11() {
         setValueDetilMP("idPtk", e.target.dataset.ptk)
         setValueDetilMP("jenisKar", cekdataDiri.mediaPembawa)
         const cell = e.target.closest('tr')
-        if(cekdataDiri.mediaPembawa === "H") {
+        if(cekdataDiri.mediaPembawa == "H") {
             setTimeout(() => {
                 setValueDetilMP("peruntukanMPKH", e.target.dataset.klas)
                 setValueDetilMP("kodeHSMpKH", cell.cells[1].innerHTML)
@@ -1278,7 +1354,7 @@ function DocK11() {
                 setValueDetilMP("nilaiBarangMPKH", cell.cells[13].innerHTML)
                 setValueDetilMP("satuanNilaiMPKH", cell.cells[14].innerHTML)
             }, 300)
-        } else if(cekdataDiri.mediaPembawa === "T") {
+        } else if(cekdataDiri.mediaPembawa == "T") {
             setdataSelect(values => ({...values, "satuanKemasanDetil": <MasterKemasan/>}))
             setTimeout(() => {
                 setValueDetilMP("peruntukanMP", e.target.dataset.klas)
@@ -1294,8 +1370,9 @@ function DocK11() {
                 setValueDetilMP("satuanNilaiMP", cell.cells[14].innerHTML)
                 setValueDetilMP("jumlahKemasanDetil", e.target.dataset.kemasan)
                 setValueDetilMP("satuanKemasanDetil", e.target.dataset.kemasansat)
+                setValueDetilMP("satuanKemasanDetilView", jenisKemasanView(e.target.dataset.kemasansat))
             },300)
-        } else if(cekdataDiri.mediaPembawa === "I") {
+        } else if(cekdataDiri.mediaPembawa == "I") {
             setTimeout(() => {
                 setValueDetilMP("peruntukanMPKI", e.target.dataset.klas)
                 setValueDetilMP("kodeHSMpKI", cell.cells[1].innerHTML)
@@ -1316,7 +1393,7 @@ function DocK11() {
         const response = modelPemohon.getDokumenId(e.target.dataset.header);
         response
         .then((res) => {
-            if(res.data.status === '200') {
+            if(res.data.status == '200') {
                 setValueDokumen("idDataDokumen", res.data.data.id)
                 setValueDokumen("idPtk", res.data.data.ptk_id)
                 setValueDokumen("noAju", dataIdPage.noAju)
@@ -1324,16 +1401,18 @@ function DocK11() {
                 setValueDokumen("jenisDokumen", res.data.data.kode_dokumen)
                 setValueDokumen("jenisDokumenView", res.data.data.kode_dokumen + " - " + res.data.data.nama_dokumen)
                 setValueDokumen("noDokumen", res.data.data.no_dokumen)
-                setValueDokumen("negaraAsalDokumen", res.data.data.negara_asal_id === null ? "" : res.data.data.negara_asal_id.toString())
+                setValueDokumen("negaraAsalDokumen", res.data.data.negara_asal_id == null ? "" : res.data.data.negara_asal_id.toString())
                 setValueDokumen("negaraAsalDokumenView", res.data.data.negara_asal)
-                setValueDokumen("kotaAsalDokumen", res.data.data.kota_kab_asal_id === null ? "" : res.data.data.kota_kab_asal_id.toString())
+                setValueDokumen("kotaAsalDokumen", res.data.data.kota_kab_asal_id == null ? "" : res.data.data.kota_kab_asal_id.toString())
                 setValueDokumen("kotaAsalDokumenView", res.data.data.kota_kab_asal)
                 setValueDokumen("ketDokumen", res.data.data.keterangan)
                 setValueDokumen("tglDokumen", res.data.data.tanggal_dokumen)
             }
         })
         .catch((error) => {
-            console.log(error.response.data);
+            if(process.env.REACT_APP_BE_ENV == "DEV") {
+                console.log(error)
+            }
         });
     }
     
@@ -1358,20 +1437,19 @@ function DocK11() {
             const response = modelPemohon.getPtkId(base64_decode(ptkNomor[1]));
             response
             .then((response) => {
-                console.log("dataTPK")
-                console.log(response.data)
-                if(response.data.status === '200') {
+                if(response.data.status == '200') {
                     handlePelabuhan(response.data.data.ptk.negara_muat_id, "pelMuat")
                     handlePelabuhan(response.data.data.ptk.negara_bongkar_id, "pelBongkar")
-                    if(response.data.data.ptk.negara_asal_id === 99) {
+                    if(response.data.data.ptk.negara_asal_id == 99) {
                         handleKota(null, "daerahAsalMP")
                     }
-                    if(response.data.data.ptk.negara_tujuan_id === 99) {
+                    if(response.data.data.ptk.negara_tujuan_id == 99) {
                         handleKota(null, "daerahTujuanMP")
                     }
 
                     if(response.data.data.ptk.jenis_karantina != null) {
-                        const resHs = modelMaster.masterHS(response.data.data.ptk.jenis_karantina)
+                        // kode hs ikan sementara pake kode hs hewan
+                        const resHs = modelMaster.masterHS(response.data.data.ptk.jenis_karantina == "I" ? "H" : response.data.data.ptk.jenis_karantina)
                         resHs
                         .then((response) => {
                             let dataHS = response.data.data;
@@ -1409,7 +1487,7 @@ function DocK11() {
                                 };
                             });
                     
-                            if(response.data.data.ptk.jenis_karantina === "H") {
+                            if(response.data.data.ptk.jenis_karantina == "H") {
                                 const resKlasKH = modelMaster.masterKlasKH(response.data.data.ptk.jenis_media_pembawa_id)
                                 resKlasKH
                                 .then((response) => {
@@ -1446,7 +1524,7 @@ function DocK11() {
                                     };
                                 });
                 
-                            } else if(response.data.data.ptk.jenis_karantina === "T") {
+                            } else if(response.data.data.ptk.jenis_karantina == "T") {
                                 const resPeruntukan = modelMaster.masterKlasKT(response.data.data.ptk.jenis_media_pembawa_id)
                                 resPeruntukan
                                 .then((response) => {
@@ -1483,7 +1561,7 @@ function DocK11() {
                                     };
                                 });
                 
-                            } else if(response.data.data.ptk.jenis_karantina === "I") {
+                            } else if(response.data.data.ptk.jenis_karantina == "I") {
                                 const resPeruntukan = modelMaster.masterKlasKI(response.data.data.ptk.jenis_media_pembawa_id)
                                 resPeruntukan
                                 .then((response) => {
@@ -1505,7 +1583,7 @@ function DocK11() {
                                 const resKomKI = modelMaster.masterKomKI()
                                 resKomKI
                                 .then((response) => {
-                                    if(response.data.status === '200') {
+                                    if(response.data.status == '200') {
                                         let dataKomKI = response.data.data;
                                         var arrayKomKI = dataKomKI?.map(item => {
                                             return {
@@ -1525,10 +1603,9 @@ function DocK11() {
                         }
                     }
 
-                    setdataSelect(values => ({...values, "jenisKemasan": <MasterKemasan/>}));
                     setdataSelect(values => ({...values, "pelMuat": {value: response.data.data.ptk.pelabuhan_muat_id, label: response.data.data.ptk.kd_pelabuhan_muat + " - " + response.data.data.ptk.pelabuhan_muat}}))
                     setdataSelect(values => ({...values, "pelBongkar": {value: response.data.data.ptk.pelabuhan_bongkar_id, label: response.data.data.ptk.kd_pelabuhan_bongkar + " - " + response.data.data.ptk.pelabuhan_bongkar}}))
-                    if(response.data.data.ptk.is_transit === 1) {
+                    if(response.data.data.ptk.is_transit == 1) {
                         setdataSelect(values => ({...values, "pelTransit": {value: response.data.data.ptk.pelabuhan_transit_id, label: response.data.data.ptk.kd_pelabuhan_transit + " - " + response.data.data.ptk.pelabuhan_transit}}))
                     }
                     setTimeout(() => {
@@ -1630,7 +1707,7 @@ function DocK11() {
                         setValuePelabuhan("tglBerangkatAkhir", response.data.data.ptk.tanggal_rencana_berangkat_terakhir);
                         setValuePelabuhan("transitOpsi", response.data.data.ptk.is_transit == null ? "" :response.data.data.ptk.is_transit.toString());
                         setValuePelabuhan("cekKontainer", response.data.data.ptk.is_kontainer == null ? "" : response.data.data.ptk.is_kontainer.toString());
-                        if(response.data.data.ptk.permohonan != null) {
+                        if(response.data.data.ptk.permohonan != "null") {
                             setFormTab(values => ({...values, tab2: false}))
                         }
                         setValuePelabuhan("sandar", response.data.data.ptk.gudang_id);
@@ -1642,10 +1719,11 @@ function DocK11() {
                         setValuePelabuhan("pelTransitView", response.data.data.ptk.kd_pelabuhan_transit == null ? "" : response.data.data.ptk.kd_pelabuhan_transit + " - " + response.data.data.ptk.pelabuhan_transit);
                         setKontainerPtk(response.data.data.ptk_kontainer)
                         
-                        if(response.data.data.ptk.is_kontainer != null) {
+                        if(response.data.data.ptk.is_kontainer != "null") {
                             setFormTab(values => ({...values, tab3: false}))
                         }
                         setValueMP("jenisKemasan", response.data.data.ptk.kemasan_id == null ? "" : response.data.data.ptk.kemasan_id.toString());
+                        setValueMP("jenisKemasanView", jenisKemasanView(response.data.data.ptk.kemasan_id));
                         setValueMP("jenisAngkut", response.data.data.ptk.is_curah == null ? "" : response.data.data.ptk.is_curah.toString());
                         setValueMP("peruntukan", response.data.data.ptk.peruntukan_id ? response.data.data.ptk.peruntukan_id.toString() : "");
                         setValueMP("merkKemasan", response.data.data.ptk.merk_kemasan);
@@ -1685,7 +1763,7 @@ function DocK11() {
                         if(response.data.data.ptk_dokumen.length > 0) {
                             setFormTab(values => ({...values, tab5: false}))
                         }
-                        if(response.data.data.ptk.no_dok_permohonan != null) {
+                        if(response.data.data.ptk.no_dok_permohonan != "null") {
                             setPtkLengkap(true);
                         }
                     }, 400) //400
@@ -1693,8 +1771,8 @@ function DocK11() {
             })
             .catch((error) => {
                 if(process.env.REACT_APP_BE_ENV == "DEV") {
-                console.log(error)
-            };
+                    console.log(error)
+                };
             });
         }
     },[idPtk, handleKota, handlePelabuhan, setValueDetilMP, setValueDokPeriksa, setValueDokumen, setValueKonfirmasi, setValueKontainer, setValueMP, setValuePelabuhan, setValuePemohon, setValueVerify])
@@ -1711,16 +1789,16 @@ function DocK11() {
                     <div className="row p-2">
                         <label className="col-sm-1 col-form-label" htmlFor="noAju">NOMOR AJU</label>
                         <div className="col-sm-4">
-                            <input type="text" className='form-control' value={dataIdPage.noAju || ""} disabled />
+                            <input autoComplete="off" type="text" className='form-control' value={dataIdPage.noAju || ""} disabled />
                         </div>
                         <label className="offset-sm-1 col-sm-2 col-form-label" htmlFor="noDok">NOMOR DOKUMEN</label>
                         <div className="col-sm-4">
-                            <input type="text" className='form-control' value={dataIdPage.noPermohonan || ""} disabled />
+                            <input autoComplete="off" type="text" className='form-control' value={dataIdPage.noPermohonan || ""} disabled />
                         </div>
                     </div>
                     <hr className='m-1' />
                     <div className="bs-stepper-header m-auto border-0">
-                        <div className={wizardPage === 1 ? "step active" : "step"} onClick={() => setWizardPage(1)} disabled={formTab.tab1}>
+                        <div className={wizardPage == 1 ? "step active" : "step"} onClick={() => setWizardPage(1)} disabled={formTab.tab1}>
                             <button type="button" className="step-trigger">
                                 <span className="bs-stepper-icon">
                                 <PersonSvg/>
@@ -1731,7 +1809,7 @@ function DocK11() {
                         <div className="line">
                             <i className="fa-solid fa-angle-right"></i>
                         </div>
-                        <div className={wizardPage === 2 ? "step active" : "step"}>
+                        <div className={wizardPage == 2 ? "step active" : "step"}>
                             <button type="button" className="step-trigger" onClick={() => setWizardPage(2)} disabled={formTab.tab2}>
                                 <span className="bs-stepper-icon">
                                 <ShipSvg/>
@@ -1742,7 +1820,7 @@ function DocK11() {
                         <div className="line">
                             <i className="fa-solid fa-angle-right"></i>
                         </div>
-                        <div className={wizardPage === 3 ? "step active" : "step"}>
+                        <div className={wizardPage == 3 ? "step active" : "step"}>
                             <button type="button" className="step-trigger" onClick={() => setWizardPage(3)} disabled={formTab.tab3}>
                                 <span className="bs-stepper-icon">
                                 <PackageSvg/>
@@ -1753,7 +1831,7 @@ function DocK11() {
                         <div className="line">
                             <i className="fa-solid fa-angle-right"></i>
                         </div>
-                        <div className={wizardPage === 4 ? "step active" : "step"}>
+                        <div className={wizardPage == 4 ? "step active" : "step"}>
                             <button type="button" className="step-trigger" onClick={() => setWizardPage(4)} disabled={formTab.tab4}>
                                 <span className="bs-stepper-icon">
                                 <DokumenSvg/>
@@ -1764,7 +1842,7 @@ function DocK11() {
                         <div className="line">
                             <i className="fa-solid fa-angle-right"></i>
                         </div>
-                        <div className={wizardPage === 5 ? "step active" : "step"}>
+                        <div className={wizardPage == 5 ? "step active" : "step"}>
                             <button type="button" className="step-trigger" onClick={() => setWizardPage(5)} disabled={formTab.tab5}>
                                 <span className="bs-stepper-icon">
                                 <ConfirmSvg/>
@@ -1774,11 +1852,11 @@ function DocK11() {
                         </div>
                     </div>
                     <div className="bs-stepper-content border-top">
-                            <div id="cardPemohon" className={wizardPage === 1 ? "content active dstepper-block" : "content"}>
+                            <div id="cardPemohon" className={wizardPage == 1 ? "content active dstepper-block" : "content"}>
                             <form className="input-form" onSubmit={handleFormPemohon(onSubmitPemohon)}>
-                                <input type="hidden" name='idPtk' {...registerPemohon("idPtk")} />
-                                <input type="hidden" name='noAju' {...registerPemohon("noAju")} />
-                                <input type="hidden" name='noPermohonan' {...registerPemohon("noPermohonan")} />
+                                <input autoComplete="off" type="hidden" name='idPtk' {...registerPemohon("idPtk")} />
+                                <input autoComplete="off" type="hidden" name='noAju' {...registerPemohon("noAju")} />
+                                <input autoComplete="off" type="hidden" name='noPermohonan' {...registerPemohon("noPermohonan")} />
         {/* <motion.div
             initial={{ x: "-100vw" }}
             animate={{ x: 0 }}
@@ -1810,7 +1888,6 @@ function DocK11() {
                                                     <select className={errorsPemohon.jenisForm ? "form-select form-select-sm is-invalid" : "form-select form-select-sm"} disabled={dataIdPage.noAju ? true : false} name="jenisForm" id="jenisForm" {...registerPemohon("jenisForm", { required: "Mohon pilih jenis form."})}>
                                                         <option value="">--</option>
                                                         <option value="PTK">Permohonan Tindakan Karantina (PTK)</option>
-                                                        <option value="NHI">Nota Hasil Intelejen (NHI)</option>
                                                         <option value="BST">Serah Terima (BST)</option>
                                                     </select>
                                                     {errorsPemohon.jenisForm && <small className="text-danger">{errorsPemohon.jenisForm.message}</small>}
@@ -1837,43 +1914,43 @@ function DocK11() {
                                             <label className="col-sm-3 col-form-label" htmlFor="jenisMp">Jenis Media Pembawa <span className='text-danger'>*</span></label>
                                             <div className="col-sm-9">
                                                 {/* <!-- Hewan --> */}
-                                                <div style={{display: cekdataDiri.mediaPembawa === 'H' ? 'block' : 'none'}}>
+                                                <div style={{display: cekdataDiri.mediaPembawa == 'H' ? 'block' : 'none'}}>
                                                     <div className="form-check form-check-inline">
-                                                        <input className="form-check-input" type="radio" onChange={(e) => handleKomKHIDetil(e.target.value)} disabled={dataIdPage.noAju ? (cekdataDiri.jenisMp == "1" ? false : true) : false} name="jenisMp" id="hidup" value="1" {...registerPemohon("jenisMp", { required: "Mohon pilih jenis media pembawa."})} />
+                                                        <input autoComplete="off" className="form-check-input" type="radio" onChange={(e) => handleKomKHIDetil(e.target.value)} disabled={dataIdPage.noAju ? (cekdataDiri.jenisMp == "1" ? false : true) : false} name="jenisMp" id="hidup" value="1" {...registerPemohon("jenisMp", { required: "Mohon pilih jenis media pembawa."})} />
                                                         <label className="form-check-label" htmlFor="hidup">Hewan Hidup</label>
                                                     </div>
                                                     <div className="form-check form-check-inline">
-                                                        <input className="form-check-input" type="radio" onChange={(e) => handleKomKHIDetil(e.target.value)} disabled={dataIdPage.noAju ? (cekdataDiri.jenisMp == "2" ? false : true) : false} name="jenisMp" id="produk" value="2" {...registerPemohon("jenisMp")} />
+                                                        <input autoComplete="off" className="form-check-input" type="radio" onChange={(e) => handleKomKHIDetil(e.target.value)} disabled={dataIdPage.noAju ? (cekdataDiri.jenisMp == "2" ? false : true) : false} name="jenisMp" id="produk" value="2" {...registerPemohon("jenisMp")} />
                                                         <label className="form-check-label" htmlFor="produk">Produk Hewan</label>
                                                     </div>
                                                     <div className="form-check form-check-inline">
-                                                        <input className="form-check-input" type="radio" onChange={(e) => handleKomKHIDetil(e.target.value)} disabled={dataIdPage.noAju ? (cekdataDiri.jenisMp == "3" ? false : true) : false} name="jenisMp" id="mpl" value="3" {...registerPemohon("jenisMp")} />
+                                                        <input autoComplete="off" className="form-check-input" type="radio" onChange={(e) => handleKomKHIDetil(e.target.value)} disabled={dataIdPage.noAju ? (cekdataDiri.jenisMp == "3" ? false : true) : false} name="jenisMp" id="mpl" value="3" {...registerPemohon("jenisMp")} />
                                                         <label className="form-check-label" htmlFor="mpl">Media Pembawa Lain</label>
                                                     </div>
                                                 </div>
                                                 {/* <!-- Ikan --> */}
-                                                <div style={{display: cekdataDiri.mediaPembawa === 'I' ? 'block' : 'none'}}>
+                                                <div style={{display: cekdataDiri.mediaPembawa == 'I' ? 'block' : 'none'}}>
                                                     <div className="form-check form-check-inline">
-                                                        <input className="form-check-input" type="radio" onChange={(e) => handleKomKHIDetil(e.target.value)} disabled={dataIdPage.noAju ? (cekdataDiri.jenisMp == "6" ? false : true) : false} name="jenisMp" id="hidupKI" value="6" {...registerPemohon("jenisMp")} />
+                                                        <input autoComplete="off" className="form-check-input" type="radio" onChange={(e) => handleKomKHIDetil(e.target.value)} disabled={dataIdPage.noAju ? (cekdataDiri.jenisMp == "6" ? false : true) : false} name="jenisMp" id="hidupKI" value="6" {...registerPemohon("jenisMp")} />
                                                         <label className="form-check-label" htmlFor="hidupKI">Ikan Hidup</label>
                                                     </div>
                                                     <div className="form-check form-check-inline">
-                                                        <input className="form-check-input" type="radio" onChange={(e) => handleKomKHIDetil(e.target.value)} disabled={dataIdPage.noAju ? (cekdataDiri.jenisMp == "7" ? false : true) : false} name="jenisMp" id="produkKI" value="7" {...registerPemohon("jenisMp")} />
+                                                        <input autoComplete="off" className="form-check-input" type="radio" onChange={(e) => handleKomKHIDetil(e.target.value)} disabled={dataIdPage.noAju ? (cekdataDiri.jenisMp == "7" ? false : true) : false} name="jenisMp" id="produkKI" value="7" {...registerPemohon("jenisMp")} />
                                                         <label className="form-check-label" htmlFor="produkKI">Produk Ikan</label>
                                                     </div>
                                                     <div className="form-check form-check-inline">
-                                                        <input className="form-check-input" type="radio" onChange={(e) => handleKomKHIDetil(e.target.value)} disabled={dataIdPage.noAju ? (cekdataDiri.jenisMp == "8" ? false : true) : false} name="jenisMp" id="mplKI" value="8" {...registerPemohon("jenisMp")} />
+                                                        <input autoComplete="off" className="form-check-input" type="radio" onChange={(e) => handleKomKHIDetil(e.target.value)} disabled={dataIdPage.noAju ? (cekdataDiri.jenisMp == "8" ? false : true) : false} name="jenisMp" id="mplKI" value="8" {...registerPemohon("jenisMp")} />
                                                         <label className="form-check-label" htmlFor="mplKI">Media Pembawa Lain</label>
                                                     </div>
                                                 </div>
                                                 {/* <!-- Tumbuhan --> */}
-                                                <div style={{display: cekdataDiri.mediaPembawa === 'T' ? 'block' : 'none'}}>
+                                                <div style={{display: cekdataDiri.mediaPembawa == 'T' ? 'block' : 'none'}}>
                                                     <div className="form-check form-check-inline">
-                                                        <input className="form-check-input" type="radio" name="jenisMp" id="benih" onChange={(e) => handleKomKHIDetil(e.target.value)} disabled={dataIdPage.noAju ? (cekdataDiri.jenisMp == "4" ? false : true) : false} value="4" {...registerPemohon("jenisMp")} />
+                                                        <input autoComplete="off" className="form-check-input" type="radio" name="jenisMp" id="benih" onChange={(e) => handleKomKHIDetil(e.target.value)} disabled={dataIdPage.noAju ? (cekdataDiri.jenisMp == "4" ? false : true) : false} value="4" {...registerPemohon("jenisMp")} />
                                                         <label className="form-check-label" htmlFor="benih">Benih</label>
                                                     </div>
                                                     <div className="form-check form-check-inline mb-3">
-                                                        <input className="form-check-input" type="radio" name="jenisMp" id="nonbenih" onChange={(e) => handleKomKHIDetil(e.target.value)} disabled={dataIdPage.noAju ? (cekdataDiri.jenisMp == "5" ? false : true) : false} value="5" {...registerPemohon("jenisMp")} />
+                                                        <input autoComplete="off" className="form-check-input" type="radio" name="jenisMp" id="nonbenih" onChange={(e) => handleKomKHIDetil(e.target.value)} disabled={dataIdPage.noAju ? (cekdataDiri.jenisMp == "5" ? false : true) : false} value="5" {...registerPemohon("jenisMp")} />
                                                         <label className="form-check-label" htmlFor="nonbenih">Non Benih</label>
                                                     </div>
                                                 </div>
@@ -1919,41 +1996,41 @@ function DocK11() {
                                     <label className="col-sm-3 col-form-label" htmlFor="statPemilik">Kepemilikan <span className='text-danger'>*</span></label>
                                     <div className="col-sm-9">
                                             <div className="form-check form-check-inline">
-                                                <input className="form-check-input" type="radio" name="statPemilik" id="statPemilik1" value="PEMILIK" {...registerPemohon("statPemilik", { required: "Mohon pilih status kepemilikan."})} />
+                                                <input autoComplete="off" className="form-check-input" type="radio" name="statPemilik" id="statPemilik1" value="PEMILIK" {...registerPemohon("statPemilik", { required: "Mohon pilih status kepemilikan."})} />
                                                 <label className="form-check-label" htmlFor="statPemilik1">Pemilik</label>
                                             </div>
                                             <div className="form-check form-check-inline">
-                                                <input className="form-check-input" type="radio" name="statPemilik" id="statPemilik0" value="PPJK"  {...registerPemohon("statPemilik")}/>
+                                                <input autoComplete="off" className="form-check-input" type="radio" name="statPemilik" id="statPemilik0" value="PPJK"  {...registerPemohon("statPemilik")}/>
                                                 <label className="form-check-label" htmlFor="statPemilik0">Yang dikuasakan</label>
                                             </div>
-                                            {errorsPemohon.statPemilik && <><br/><small className="text-danger">{errorsPemohon.statPemilik.message}</small></>}
+                                            {errorsPemohon.statPemilik && <small className="text-danger">{errorsPemohon.statPemilik.message}</small>}
                                     </div>
                                 </div>
                                 <div className="row mb-3">
-                                    <label className="col-sm-3 col-form-label" htmlFor="pJRutin">PJ Rutin <span className='text-danger'>*</span></label>
+                                    <label className="col-sm-3 col-form-label" htmlFor="pJRutin">PJ Terdaftar <span className='text-danger'>*</span></label>
                                     <div className="col-sm-9">
                                             <div className="form-check form-check-inline">
-                                                <input className="form-check-input" type="radio" name="pJRutin" id="ya" value="0" {...registerPemohon("pJRutin", { required: "Mohon pilih jenis pengguna jasa."})} />
+                                                <input autoComplete="off" className="form-check-input" type="radio" name="pJRutin" id="ya" value="0" {...registerPemohon("pJRutin", { required: "Mohon pilih jenis pengguna jasa."})} />
                                                 <label className="form-check-label" htmlFor="ya">Ya</label>
                                             </div>
                                             <div className="form-check form-check-inline">
-                                                <input className="form-check-input" type="radio" name="pJRutin" id="tidak" value="1"  {...registerPemohon("pJRutin")}/>
+                                                <input autoComplete="off" className="form-check-input" type="radio" name="pJRutin" id="tidak" value="1"  {...registerPemohon("pJRutin")}/>
                                                 <label className="form-check-label" htmlFor="tidak">Tidak</label>
                                             </div>
-                                            {errorsPemohon.pJRutin && <><br/><small className="text-danger">{errorsPemohon.pJRutin.message}</small></>}
+                                            {errorsPemohon.pJRutin && <small className="text-danger">{errorsPemohon.pJRutin.message}</small>}
                                     </div>
                                 </div>
                                 <div className="row mb-3">
                                     <label className="col-sm-3 col-form-label" htmlFor="namaPemohon">Nama <span className='text-danger'>*</span></label>
                                     <div className="col-sm-9">
-                                            <input type="text" id="namaPemohon" name="namaPemohon" {...registerPemohon("namaPemohon", { required: "Mohon isi nama pemohon."})} className={errorsPemohon.namaPemohon ? "form-control form-control-sm is-invalid" : "form-control form-control-sm"} placeholder="Nama Pemohon" />
+                                            <input autoComplete="off" type="text" id="namaPemohon" name="namaPemohon" {...registerPemohon("namaPemohon", { required: "Mohon isi nama pemohon."})} className={errorsPemohon.namaPemohon ? "form-control form-control-sm is-invalid" : "form-control form-control-sm"} placeholder="Nama Pemohon" />
                                             {errorsPemohon.namaPemohon && <small className="text-danger">{errorsPemohon.namaPemohon.message}</small>}
                                     </div>
                                 </div>
                                 <div className="row mb-3">
                                     <label className="col-sm-3 col-form-label" htmlFor="alamatPemohon">Alamat <span className='text-danger'>*</span></label>
                                     <div className="col-sm-9">
-                                        <input type="text" id="alamatPemohon" name="alamatPemohon" {...registerPemohon("alamatPemohon", { required: "Mohon isi alamat pemohon."})} className={errorsPemohon.alamatPemohon ? "form-control form-control-sm is-invalid" : "form-control form-control-sm"} placeholder="Alamat Pemohon" />
+                                        <input autoComplete="off" type="text" id="alamatPemohon" name="alamatPemohon" {...registerPemohon("alamatPemohon", { required: "Mohon isi alamat pemohon."})} className={errorsPemohon.alamatPemohon ? "form-control form-control-sm is-invalid" : "form-control form-control-sm"} placeholder="Alamat Pemohon" />
                                         {errorsPemohon.alamatPemohon && <small className="text-danger">{errorsPemohon.alamatPemohon.message}</small>}
                                     </div>
                                 </div>
@@ -1992,13 +2069,13 @@ function DocK11() {
                                 <div className="row mb-3">
                                     <label className="col-sm-3 col-form-label" htmlFor="nomorTlp">No. Telepon</label>
                                     <div className="col-sm-9">
-                                        <input type="text" name='nomorTlp' id="nomorTlp" value={cekdataDiri.nomorTlp ? removeNonNumeric(cekdataDiri.nomorTlp) : ""} {...registerPemohon("nomorTlp")} className="form-control form-control-sm" placeholder="6289898989898" />
+                                        <input autoComplete="off" type="text" name='nomorTlp' id="nomorTlp" value={cekdataDiri.nomorTlp ? removeNonNumeric(cekdataDiri.nomorTlp) : ""} {...registerPemohon("nomorTlp")} className="form-control form-control-sm" placeholder="6289898989898" />
                                     </div>
                                 </div>
                                 <div className="row mb-3">
                                     <label className="col-sm-3 col-form-label" htmlFor="nomorFax">No. Fax.</label>
                                     <div className="col-sm-9">
-                                        <input type="text" name='nomorFax' id="nomorFax" value={cekdataDiri.nomorFax ? removeNonNumeric(cekdataDiri.nomorFax) : ""} {...registerPemohon("nomorFax")} className="form-control form-control-sm" placeholder="-" />
+                                        <input autoComplete="off" type="text" name='nomorFax' id="nomorFax" value={cekdataDiri.nomorFax ? removeNonNumeric(cekdataDiri.nomorFax) : ""} {...registerPemohon("nomorFax")} className="form-control form-control-sm" placeholder="-" />
                                     </div>
                                 </div>
                                 <div className="row mb-3">
@@ -2013,7 +2090,7 @@ function DocK11() {
                                         </select>
                                     </div>
                                     <div className="col-sm-7">
-                                        <input type="text" name="noIdentitasPemohon" id="noIdentitasPemohon" value={cekdataDiri.noIdentitasPemohon ? removeNonNumeric(cekdataDiri.noIdentitasPemohon) : ""}  {...registerPemohon("noIdentitasPemohon", { required: "Mohon isi identitas pemohon."})} className={errorsPemohon.noIdentitasPemohon ? "form-control form-control-sm is-invalid" : "form-control form-control-sm"} placeholder="Nomor Identitas" />
+                                        <input autoComplete="off" type="text" name="noIdentitasPemohon" id="noIdentitasPemohon" value={cekdataDiri.noIdentitasPemohon ? removeNonNumeric(cekdataDiri.noIdentitasPemohon) : ""}  {...registerPemohon("noIdentitasPemohon", { required: "Mohon isi identitas pemohon."})} className={errorsPemohon.noIdentitasPemohon ? "form-control form-control-sm is-invalid" : "form-control form-control-sm"} placeholder="Nomor Identitas" />
                                             {errorsPemohon.noIdentitasPemohon && <small className="text-danger">{errorsPemohon.noIdentitasPemohon.message}</small>}
                                     </div>
                                     <div className="offset-sm-3 col-sm-9">
@@ -2021,7 +2098,7 @@ function DocK11() {
                                     </div>
                                 </div>
                                 <div className="form-check mt-3" style={{display: (cekdataDiri.statPemilik == "PEMILIK" ? "block" : "none")}}>
-                                    <input className="form-check-input" type="checkbox" name='samaTTD' id="samaTTD" value="1" onChange={handleCekSameTTD} />
+                                    <input autoComplete="off" className="form-check-input" type="checkbox" name='samaTTD' id="samaTTD" value="1" onChange={handleCekSameTTD} />
                                     <label className="form-check-label" htmlFor="samaTTD"> Pemohon sama dengan penandatangan dokumen. </label>
                                 </div>
                             </div>
@@ -2047,14 +2124,14 @@ function DocK11() {
                                 <div className="row mb-3">
                                     <label className="col-sm-3 col-form-label" htmlFor="namaTtd">Nama <span className='text-danger'>*</span></label>
                                     <div className="col-sm-9">
-                                        <input type="text" id="namaTtd" name="namaTtd" {...registerPemohon("namaTtd", { required: "Mohon isi nama penandatangan."})} className={errorsPemohon.namaTtd ? "form-control form-control-sm is-invalid" : "form-control form-control-sm"} placeholder="Nama Penandatangan" />
+                                        <input autoComplete="off" type="text" id="namaTtd" name="namaTtd" {...registerPemohon("namaTtd", { required: "Mohon isi nama penandatangan."})} className={errorsPemohon.namaTtd ? "form-control form-control-sm is-invalid" : "form-control form-control-sm"} placeholder="Nama Penandatangan" />
                                         {errorsPemohon.namaTtd && <small className="text-danger">{errorsPemohon.namaTtd.message}</small>}
                                     </div>
                                 </div>
                                 <div className="row mb-3">
                                     <label className="col-sm-3 col-form-label" htmlFor="alamatTtd">Alamat <span className='text-danger'>*</span></label>
                                     <div className="col-sm-9">
-                                        <input type="text" id="alamatTtd" name="alamatTtd" {...registerPemohon("alamatTtd", { required: "Mohon isi nama penandatangan."})} className={errorsPemohon.alamatTtd ? "form-control form-control-sm is-invalid" : "form-control form-control-sm"} placeholder="Alamat Penandatangan" />
+                                        <input autoComplete="off" type="text" id="alamatTtd" name="alamatTtd" {...registerPemohon("alamatTtd", { required: "Mohon isi nama penandatangan."})} className={errorsPemohon.alamatTtd ? "form-control form-control-sm is-invalid" : "form-control form-control-sm"} placeholder="Alamat Penandatangan" />
                                         {errorsPemohon.alamatTtd && <small className="text-danger">{errorsPemohon.alamatTtd.message}</small>}
                                     </div>
                                 </div>
@@ -2070,7 +2147,7 @@ function DocK11() {
                                         </select>
                                     </div>
                                     <div className="col-sm-7">
-                                        <input type="text" id="noIdentitasTtd" name="noIdentitasTtd" className={errorsPemohon.noIdentitasTtd ? "form-control form-control-sm is-invalid" : "form-control form-control-sm"} value={cekdataDiri.noIdentitasTtd ? removeNonNumeric(cekdataDiri.noIdentitasTtd) : ""} {...registerPemohon("noIdentitasTtd", { required: "Mohon isi identitas penandatangan."})} placeholder="Nomor Identitas" />
+                                        <input autoComplete="off" type="text" id="noIdentitasTtd" name="noIdentitasTtd" className={errorsPemohon.noIdentitasTtd ? "form-control form-control-sm is-invalid" : "form-control form-control-sm"} value={cekdataDiri.noIdentitasTtd ? removeNonNumeric(cekdataDiri.noIdentitasTtd) : ""} {...registerPemohon("noIdentitasTtd", { required: "Mohon isi identitas penandatangan."})} placeholder="Nomor Identitas" />
                                         {errorsPemohon.noIdentitasTtd && <small className="text-danger">{errorsPemohon.noIdentitasTtd.message}</small>}
                                     </div>
                                     <div className="offset-sm-3 col-sm-9">
@@ -2080,7 +2157,7 @@ function DocK11() {
                                 <div className="row mb-3">
                                     <label className="col-sm-3 col-form-label" htmlFor="jabatanTtd">Jabatan</label>
                                     <div className="col-sm-9">
-                                        <input type="text" id="jabatanTtd" name="jabatanTtd" {...registerPemohon("jabatanTtd")} className="form-control form-control-sm" placeholder="Jabatan" />
+                                        <input autoComplete="off" type="text" id="jabatanTtd" name="jabatanTtd" {...registerPemohon("jabatanTtd")} className="form-control form-control-sm" placeholder="Jabatan" />
                                     </div>
                                 </div>
                             </div>
@@ -2104,19 +2181,19 @@ function DocK11() {
                                 <div className="row mb-3">
                                     <label className="col-sm-3 col-form-label" htmlFor="namaCp">Nama</label>
                                     <div className="col-sm-9">
-                                        <input type="text" id="namaCp" name="namaCp" {...registerPemohon("namaCp")} className="form-control form-control-sm" placeholder="Nama Contact Person" />
+                                        <input autoComplete="off" type="text" id="namaCp" name="namaCp" {...registerPemohon("namaCp")} className="form-control form-control-sm" placeholder="Nama Contact Person" />
                                     </div>
                                 </div>
                                 <div className="row mb-3">
                                     <label className="col-sm-3 col-form-label" htmlFor="alamatCp">Alamat</label>
                                     <div className="col-sm-9">
-                                        <input type="text" id="alamatCp" name="alamatCp" {...registerPemohon("alamatCp")} className="form-control form-control-sm" placeholder="Alamat Contact Person" />
+                                        <input autoComplete="off" type="text" id="alamatCp" name="alamatCp" {...registerPemohon("alamatCp")} className="form-control form-control-sm" placeholder="Alamat Contact Person" />
                                     </div>
                                 </div>
                                 <div className="row mb-3">
                                     <label className="col-sm-3 col-form-label" htmlFor="teleponCp">Telepon</label>
                                     <div className="col-sm-9">
-                                        <input type="text" id="teleponCp" name="teleponCp" {...registerPemohon("teleponCp")} className="form-control form-control-sm" placeholder="Telepon Contact Person" />
+                                        <input autoComplete="off" type="text" id="teleponCp" name="teleponCp" {...registerPemohon("teleponCp")} className="form-control form-control-sm" placeholder="Telepon Contact Person" />
                                     </div>
                                 </div>
                             </div>
@@ -2142,14 +2219,14 @@ function DocK11() {
                                 <div className="row mb-3">
                                     <label className="col-sm-3 col-form-label" htmlFor="namaPengirim">Nama <span className='text-danger'>*</span></label>
                                     <div className="col-sm-9">
-                                        <input type="text" id="namaPengirim" name="namaPengirim" {...registerPemohon("namaPengirim", { required: "Mohon isi nama pengirim."})} className={errorsPemohon.namaPengirim ? "form-control form-control-sm is-invalid" : "form-control form-control-sm"} placeholder="Nama Pengirim" />
+                                        <input autoComplete="off" type="text" id="namaPengirim" name="namaPengirim" {...registerPemohon("namaPengirim", { required: "Mohon isi nama pengirim."})} className={errorsPemohon.namaPengirim ? "form-control form-control-sm is-invalid" : "form-control form-control-sm"} placeholder="Nama Pengirim" />
                                         {errorsPemohon.namaPengirim && <small className="text-danger">{errorsPemohon.namaPengirim.message}</small>}
                                     </div>
                                 </div>
                                 <div className="row mb-3">
                                     <label className="col-sm-3 col-form-label" htmlFor="alamatPengirim">Alamat <span className='text-danger'>*</span></label>
                                     <div className="col-sm-9">
-                                        <input type="text" id="alamatPengirim" name="alamatPengirim" {...registerPemohon("alamatPengirim", { required: "Mohon isi alamat pengirim."})} className={errorsPemohon.alamatPengirim ? "form-control form-control-sm is-invalid" : "form-control form-control-sm"} placeholder="Alamat Pengirim" />
+                                        <input autoComplete="off" type="text" id="alamatPengirim" name="alamatPengirim" {...registerPemohon("alamatPengirim", { required: "Mohon isi alamat pengirim."})} className={errorsPemohon.alamatPengirim ? "form-control form-control-sm is-invalid" : "form-control form-control-sm"} placeholder="Alamat Pengirim" />
                                         {errorsPemohon.alamatPengirim && <small className="text-danger">{errorsPemohon.alamatPengirim.message}</small>}
                                     </div>
                                 </div>
@@ -2165,7 +2242,7 @@ function DocK11() {
                                         </select>
                                     </div>
                                     <div className="col-sm-7">
-                                        <input type="text" id="noIdentitasPengirim" name="noIdentitasPengirim" value={cekdataDiri.noIdentitasPengirim ? removeNonNumeric(cekdataDiri.noIdentitasPengirim) : ""} {...registerPemohon("noIdentitasPengirim", { required: "Mohon isi identitas pengirim."})} className={errorsPemohon.noIdentitasPengirim ? "form-control form-control-sm is-invalid" : "form-control form-control-sm"} placeholder="Nomor Identitas" />
+                                        <input autoComplete="off" type="text" id="noIdentitasPengirim" name="noIdentitasPengirim" value={cekdataDiri.noIdentitasPengirim ? removeNonNumeric(cekdataDiri.noIdentitasPengirim) : ""} {...registerPemohon("noIdentitasPengirim", { required: "Mohon isi identitas pengirim."})} className={errorsPemohon.noIdentitasPengirim ? "form-control form-control-sm is-invalid" : "form-control form-control-sm"} placeholder="Nomor Identitas" />
                                         {errorsPemohon.noIdentitasPengirim && <small className="text-danger">{errorsPemohon.noIdentitasPengirim.message}</small>}
                                     </div>
                                     <div className="offset-sm-3 col-sm-9">
@@ -2175,7 +2252,7 @@ function DocK11() {
                                 <div className="row mb-3">
                                     <label className="col-sm-3 col-form-label" htmlFor="nomorTlpPengirim">No. Telepon</label>
                                     <div className="col-sm-9">
-                                        <input type="number" id="nomorTlpPengirim" name="nomorTlpPengirim" value={cekdataDiri.nomorTlpPengirim ? removeNonNumeric(cekdataDiri.nomorTlpPengirim) : ""} {...registerPemohon("nomorTlpPengirim")} className="form-control form-control-sm" placeholder="6289898989898" />
+                                        <input autoComplete="off" type="text" id="nomorTlpPengirim" name="nomorTlpPengirim" value={cekdataDiri.nomorTlpPengirim ? removeNonNumeric(cekdataDiri.nomorTlpPengirim) : ""} {...registerPemohon("nomorTlpPengirim")} className="form-control form-control-sm" placeholder="6289898989898" />
                                     </div>
                                 </div>
                                 <div className="row mb-3">
@@ -2194,7 +2271,7 @@ function DocK11() {
                                         {errorsPemohon.negaraPengirim && <small className="text-danger">{errorsPemohon.negaraPengirim.message}</small>}
                                     </div>
                                 </div>
-                                <div style={{visibility: cekdataDiri.permohonan === 'IM' ? 'hidden' : 'visible'}}>
+                                <div style={{visibility: cekdataDiri.permohonan == 'IM' ? 'hidden' : 'visible'}}>
                                     <div className="row mb-3">
                                         <label className="col-sm-3 col-form-label" htmlFor="provPengirim">Provinsi</label>
                                         <div className="col-sm-9">
@@ -2227,7 +2304,7 @@ function DocK11() {
                                     </div>
                                 </div>
                                 <div className="form-check mt-3" style={{display: (cekdataDiri.statPemilik == "PEMILIK" ? "block" : "none")}}>
-                                <input className="form-check-input" type="checkbox" name='samaPengirim' id="samaPengirim" value="1" onChange={handleCekSamePengirim} />
+                                <input autoComplete="off" className="form-check-input" type="checkbox" name='samaPengirim' id="samaPengirim" value="1" onChange={handleCekSamePengirim} />
                                 <label className="form-check-label" htmlFor="samaPengirim"> Sama dengan pemohon. </label>
                                 </div>
                             </div>
@@ -2253,14 +2330,14 @@ function DocK11() {
                                 <div className="row mb-3">
                                     <label className="col-sm-3 col-form-label" htmlFor="namaPenerima">Nama <span className='text-danger'>*</span></label>
                                     <div className="col-sm-9">
-                                        <input type="text" id="namaPenerima" name="namaPenerima" {...registerPemohon("namaPenerima", { required: "Mohon isi nama penerima."})} className={errorsPemohon.namaPenerima ? "form-control form-control-sm is-invalid" : "form-control form-control-sm"} placeholder="Nama Penerima" />
+                                        <input autoComplete="off" type="text" id="namaPenerima" name="namaPenerima" {...registerPemohon("namaPenerima", { required: "Mohon isi nama penerima."})} className={errorsPemohon.namaPenerima ? "form-control form-control-sm is-invalid" : "form-control form-control-sm"} placeholder="Nama Penerima" />
                                         {errorsPemohon.namaPenerima && <small className="text-danger">{errorsPemohon.namaPenerima.message}</small>}
                                     </div>
                                 </div>
                                 <div className="row mb-3">
                                     <label className="col-sm-3 col-form-label" htmlFor="alamatPenerima">Alamat <span className='text-danger'>*</span></label>
                                     <div className="col-sm-9">
-                                        <input type="text" id="alamatPenerima" name="alamatPenerima" {...registerPemohon("alamatPenerima", { required: "Mohon isi alamat penerima."})} className={errorsPemohon.alamatPenerima ? "form-control form-control-sm is-invalid" : "form-control form-control-sm"} placeholder="Alamat Penerima" />
+                                        <input autoComplete="off" type="text" id="alamatPenerima" name="alamatPenerima" {...registerPemohon("alamatPenerima", { required: "Mohon isi alamat penerima."})} className={errorsPemohon.alamatPenerima ? "form-control form-control-sm is-invalid" : "form-control form-control-sm"} placeholder="Alamat Penerima" />
                                         {errorsPemohon.alamatPenerima && <small className="text-danger">{errorsPemohon.alamatPenerima.message}</small>}
                                     </div>
                                 </div>
@@ -2276,7 +2353,7 @@ function DocK11() {
                                         </select>
                                     </div>
                                     <div className="col-sm-7">
-                                        <input type="text" id="noIdentitasPenerima" name="noIdentitasPenerima" value={cekdataDiri.noIdentitasPenerima ? removeNonNumeric(cekdataDiri.noIdentitasPenerima) : ""} className={errorsPemohon.noIdentitasPenerima ? "form-control form-control-sm is-invalid" : "form-control form-control-sm"} placeholder="Nomor Identitas" {...registerPemohon("noIdentitasPenerima", { required: "Mohon isi identitas penerima."})} />
+                                        <input autoComplete="off" type="text" id="noIdentitasPenerima" name="noIdentitasPenerima" value={cekdataDiri.noIdentitasPenerima ? removeNonNumeric(cekdataDiri.noIdentitasPenerima) : ""} className={errorsPemohon.noIdentitasPenerima ? "form-control form-control-sm is-invalid" : "form-control form-control-sm"} placeholder="Nomor Identitas" {...registerPemohon("noIdentitasPenerima", { required: "Mohon isi identitas penerima."})} />
                                         {errorsPemohon.noIdentitasPenerima && <small className="text-danger">{errorsPemohon.noIdentitasPenerima.message}</small>}
                                     </div>
                                     <div className="offset-sm-3 col-sm-9">
@@ -2286,7 +2363,7 @@ function DocK11() {
                                 <div className="row mb-3">
                                     <label className="col-sm-3 col-form-label" htmlFor="nomorTlpPenerima">No. Telepon</label>
                                     <div className="col-sm-9">
-                                        <input type="number" id="nomorTlpPenerima" name="nomorTlpPenerima" {...registerPemohon("nomorTlpPenerima")} value={cekdataDiri.nomorTlpPenerima ? removeNonNumeric(cekdataDiri.nomorTlpPenerima) : ""} className="form-control form-control-sm" placeholder="6289898989898" />
+                                        <input autoComplete="off" type="text" id="nomorTlpPenerima" name="nomorTlpPenerima" {...registerPemohon("nomorTlpPenerima")} value={cekdataDiri.nomorTlpPenerima ? removeNonNumeric(cekdataDiri.nomorTlpPenerima) : ""} className="form-control form-control-sm" placeholder="6289898989898" />
                                     </div>
                                 </div>
                                 <div className="row mb-3">
@@ -2305,7 +2382,7 @@ function DocK11() {
                                         {errorsPemohon.negaraPenerima && <small className="text-danger">{errorsPemohon.negaraPenerima.message}</small>}
                                     </div>
                                 </div>
-                                <div style={{visibility: cekdataDiri.permohonan === 'EX' ? 'hidden' : 'visible'}}>
+                                <div style={{visibility: cekdataDiri.permohonan == 'EX' ? 'hidden' : 'visible'}}>
                                     <div className="row mb-3">
                                         <label className="col-sm-3 col-form-label" htmlFor="provPenerima">Provinsi</label>
                                         <div className="col-sm-9">
@@ -2338,7 +2415,7 @@ function DocK11() {
                                     </div>
                                 </div>
                                 <div className="form-check mt-3" style={{display: (cekdataDiri.statPemilik == "PEMILIK" ? "block" : "none")}}>
-                                    <input className="form-check-input" type="checkbox" name='samaPenerima' id="samaPenerima" value="1" onChange={handleCekSamePenerima} />
+                                    <input autoComplete="off" className="form-check-input" type="checkbox" name='samaPenerima' id="samaPenerima" value="1" onChange={handleCekSamePenerima} />
                                     <label className="form-check-label" htmlFor="samaPenerima"> Sama dengan pemohon. </label>
                                 </div>
                             </div>
@@ -2359,691 +2436,814 @@ function DocK11() {
             {/* </motion.div> */}
             </form>
         </div>
-                            <div id="cardPelabuhan" className={wizardPage === 2 ? "content active dstepper-block" : "content"}>
-                            <form className="input-form" onSubmit={handleFormPelabuhan(onSubmitPelabuhan)}>
-                                <input type="hidden" name='idPtk' {...registerPelabuhan("idPtk")} />
-                                <input type="hidden" name='noAju' {...registerPelabuhan("noAju")} />
-                                
-                                <div className="row">
-                                    <div className="col-sm-6">
-                                        <div className="card card-action mb-4">
-                                            <div className="card-header mb-3 p-2" style={{backgroundColor: '#123138'}}>
-                                                <div className="card-action-title">
-                                                    <h5 className="mb-0 text-lightest">Pengirim - Penerima</h5>
+                    <div id="cardPelabuhan" className={wizardPage == 2 ? "content active dstepper-block" : "content"}>
+                        <form className="input-form" onSubmit={handleFormPelabuhan(onSubmitPelabuhan)}>
+                            <input autoComplete="off" type="hidden" name='idPtk' {...registerPelabuhan("idPtk")} />
+                            <input autoComplete="off" type="hidden" name='noAju' {...registerPelabuhan("noAju")} />
+                            
+                            <div className="row">
+                                <div className="col-sm-6">
+                                    <div className="card card-action mb-4">
+                                        <div className="card-header mb-3 p-2" style={{backgroundColor: '#123138'}}>
+                                            <div className="card-action-title">
+                                                <h5 className="mb-0 text-lightest">Pengirim - Penerima</h5>
+                                            </div>
+                                            <div className="card-action-element">
+                                                <ul className="list-inline mb-0">
+                                                    <li className="list-inline-item">
+                                                        <button type='button' className="btn btn-default card-collapsible text-lighter p-0"><i className="tf-icons fa-solid fa-chevron-up"></i></button>
+                                                    </li>
+                                                </ul>
+                                            </div>
+                                        </div>
+                                        <div className="collapse show">
+                                            <div className="card-body pt-0">
+                                                <div className="row mb-3">
+                                                    <label className="col-sm-3 col-form-label" htmlFor="negaraAsal">Negara Muat <span className='text-danger'>*</span></label>
+                                                    <div className="col-sm-9">
+                                                        <Controller
+                                                            control={controlPelabuhan}
+                                                            name={"negaraAsal"}
+                                                            defaultValue={""}
+                                                            className="form-control form-control-sm"
+                                                            rules={{ required: "Mohon pilih negara pelabuhan pengirim." }}
+                                                            render={({ field: { value,onChange, ...field } }) => (
+                                                                <Select styles={customStyles} placeholder={"Pilih negara muat.."} value={{id: cekdataPelabuhan.negaraAsal, label: cekdataPelabuhan.negaraAsalView}} {...field} options={cekdataDiri.permohonan != "IM" ? [{label: "ID - INDONESIA", value: 99}] : dataSelect.negaraAsal} onChange={(e) => e ? setValuePelabuhan("negaraAsal", e.value) & setValuePelabuhan("negaraAsalView", e.label) & handlePelabuhan(e.value, "pelMuat") : null} />
+                                                            )}
+                                                        />
+                                                        {errorsPelabuhan.negaraAsal && <small className="text-danger">{errorsPelabuhan.negaraAsal.message}</small>}
+                                                    </div>
                                                 </div>
-                                                <div className="card-action-element">
-                                                    <ul className="list-inline mb-0">
-                                                        <li className="list-inline-item">
-                                                            <button type='button' className="btn btn-default card-collapsible text-lighter p-0"><i className="tf-icons fa-solid fa-chevron-up"></i></button>
-                                                        </li>
-                                                    </ul>
+                                                <div className="row mb-3">
+                                                    <label className="col-sm-3 col-form-label" htmlFor="negaraTujuan">Negara Bongkar <span className='text-danger'>*</span></label>
+                                                    <div className="col-sm-9">
+                                                        <Controller
+                                                            control={controlPelabuhan}
+                                                            name={"negaraTujuan"}
+                                                            defaultValue={""}
+                                                            className="form-control form-control-sm"
+                                                            rules={{ required: "Mohon pilih negara pelabuhan pengirim." }}
+                                                            render={({ field: { value,onChange, ...field } }) => (
+                                                                <Select styles={customStyles} placeholder={"Pilih negara bongkar.."} value={{id: cekdataPelabuhan.negaraTujuan, label: cekdataPelabuhan.negaraTujuanView}} {...field} options={cekdataDiri.permohonan != "EX" ? [{value: "99", label: "ID - INDONESIA"}] : dataSelect.negaraTujuan} onChange={(e) => e ? setValuePelabuhan("negaraTujuan", e.value) & setValuePelabuhan("negaraTujuanView", e.label) & handlePelabuhan(e.value, "pelBongkar") : null} />
+                                                            )}
+                                                        />
+                                                        {errorsPelabuhan.negaraTujuan && <small className="text-danger">{errorsPelabuhan.negaraTujuan.message}</small>}
+                                                    </div>
+                                                </div>
+                                                <div className="row mb-3">
+                                                    <label className="col-sm-3 col-form-label" htmlFor="transitOpsi">Transit <span className='text-danger'>*</span></label>
+                                                    <div className="col-sm-9">
+                                                        <div className="form-check form-check-inline">
+                                                            <input autoComplete="off" className="form-check-input" type="radio" name="transitOpsi" id="transitYa" value="1"  {...registerPelabuhan("transitOpsi", { required: "Mohon pilih transit."})}/>
+                                                            <label className="form-check-label" htmlFor="transitYa">Ya</label>
+                                                        </div>
+                                                        <div className="form-check form-check-inline">
+                                                            <input autoComplete="off" className="form-check-input" type="radio" name="transitOpsi" id="transitTidak" value="0" {...registerPelabuhan("transitOpsi")} />
+                                                            <label className="form-check-label" htmlFor="transitTidak">Tidak</label>
+                                                        </div>
+                                                        {errorsPelabuhan.transitOpsi && <small className="text-danger">{errorsPelabuhan.transitOpsi.message}</small>}
+                                                    </div>
+                                                </div>
+                                                <div style={{display: cekdataPelabuhan.transitOpsi == '1' ? 'block' : 'none' }}>
+                                                <div className="row mb-3">
+                                                    <label className="col-sm-3 col-form-label" htmlFor="negaraTransit">Negara Transit</label>
+                                                    <div className="col-sm-9">
+                                                        <Controller
+                                                            control={controlPelabuhan}
+                                                            name={"negaraTransit"}
+                                                            defaultValue={""}
+                                                            className="form-control form-control-sm"
+                                                            rules={{ required: false }}
+                                                            render={({ field: { value,onChange, ...field } }) => (
+                                                                <Select styles={customStyles} placeholder={"Pilih negara transit.."} value={{id: cekdataPelabuhan.negaraTransit, label: cekdataPelabuhan.negaraTransitView}} {...field} options={dataSelect.negaraTransit} onChange={(e) => e ? setValuePelabuhan("negaraTransit", e.value) & setValuePelabuhan("negaraTransitView", e.label) & handlePelabuhan(e.value, "pelTransit") : null} />
+                                                            )}
+                                                        />
+                                                    </div>
+                                                </div>
                                                 </div>
                                             </div>
-                                            <div className="collapse show">
-                                                <div className="card-body pt-0">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div className="col-sm-6">
+                                    <div className="card card-action mb-4">
+                                        <div className="card-header mb-3 p-2" style={{backgroundColor: '#123138'}}>
+                                            <div className="card-action-title">
+                                                <h5 className="mb-0 text-lightest">Pelabuhan</h5>
+                                            </div>
+                                            <div className="card-action-element">
+                                                <ul className="list-inline mb-0">
+                                                    <li className="list-inline-item">
+                                                        <button type='button' className="btn btn-default card-collapsible text-lighter p-0"><i className="tf-icons fa-solid fa-chevron-up"></i></button>
+                                                    </li>
+                                                </ul>
+                                            </div>
+                                        </div>
+                                        <div className="collapse show">
+                                            <div className="card-body pt-0">
+                                                <div className="row mb-3">
+                                                    <label className="col-sm-3 col-form-label" htmlFor="pelMuat">Muat / Asal <span className='text-danger'>*</span></label>
+                                                    <div className="col-sm-9">
+                                                        <Controller
+                                                            control={controlPelabuhan}
+                                                            name={"pelMuat"}
+                                                            defaultValue={""}
+                                                            className="form-control form-control-sm"
+                                                            rules={{ required: "Mohon pilih pelabuhan muat/asal." }}
+                                                            render={({ field: { value,onChange, ...field } }) => (
+                                                                <Select styles={customStyles} placeholder={"Pilih pelabuhan muat/asal.."} value={{id: cekdataPelabuhan.pelMuat, label: cekdataPelabuhan.pelMuatView}} {...field} options={dataSelect.pelMuat} onChange={(e) => e ? setValuePelabuhan("pelMuat", e.value) & setValuePelabuhan("pelMuatView", e.label) : null} />
+                                                            )}
+                                                        />
+                                                        {errorsPelabuhan.pelMuat && <small className="text-danger">{errorsPelabuhan.pelMuat.message}</small>}
+                                                    </div>
+                                                </div>
+                                                <div className="row mb-3">
+                                                    <label className="col-sm-3 col-form-label" htmlFor="pelBongkar">Bongkar / Tujuan <span className='text-danger'>*</span></label>
+                                                    <div className="col-sm-9">
+                                                        <Controller
+                                                            control={controlPelabuhan}
+                                                            name={"pelBongkar"}
+                                                            defaultValue={""}
+                                                            className="form-control form-control-sm"
+                                                            rules={{ required: "Mohon pilih pelabuhan bongkar." }}
+                                                            render={({ field: { value,onChange, ...field } }) => (
+                                                                <Select styles={customStyles} placeholder={"Pilih pelabuhan bongkar.."} value={{id: cekdataPelabuhan.pelBongkar, label: cekdataPelabuhan.pelBongkarView}} {...field} options={dataSelect.pelBongkar} onChange={(e) => e ? setValuePelabuhan("pelBongkar", e.value) & setValuePelabuhan("pelBongkarView", e.label) : null} />
+                                                            )}
+                                                        />
+                                                        {errorsPelabuhan.pelBongkar && <small className="text-danger">{errorsPelabuhan.pelBongkar.message}</small>}
+                                                    </div>
+                                                </div>
+                                                <div style={{display: (cekdataDiri.permohonan == "IM" ? "block" : "none")}}>
                                                     <div className="row mb-3">
-                                                        <label className="col-sm-3 col-form-label" htmlFor="negaraAsal">Negara Muat <span className='text-danger'>*</span></label>
+                                                        <label className="col-sm-3 col-form-label" htmlFor="sandar">TPK (Border)</label>
+                                                        <div className="col-sm-9">
+                                                            <input autoComplete="off" type="text" name='sandar' id="sandar" {...registerPelabuhan("sandar")} className="form-control form-control-sm" placeholder="Lokasi Sandar" />
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div style={{display: cekdataPelabuhan.transitOpsi == '1' ? 'block' : 'none' }}>
+                                                    <div className="row mb-3">
+                                                        <label className="col-sm-3 col-form-label" htmlFor="pelTransit">Pelabuhan Transit</label>
                                                         <div className="col-sm-9">
                                                             <Controller
                                                                 control={controlPelabuhan}
-                                                                name={"negaraAsal"}
-                                                                defaultValue={""}
-                                                                className="form-control form-control-sm"
-                                                                rules={{ required: "Mohon pilih negara pelabuhan pengirim." }}
-                                                                render={({ field: { value,onChange, ...field } }) => (
-                                                                    <Select styles={customStyles} placeholder={"Pilih negara muat.."} value={{id: cekdataPelabuhan.negaraAsal, label: cekdataPelabuhan.negaraAsalView}} {...field} options={cekdataDiri.permohonan != "IM" ? [{label: "ID - INDONESIA", value: 99}] : dataSelect.negaraAsal} onChange={(e) => e ? setValuePelabuhan("negaraAsal", e.value) & setValuePelabuhan("negaraAsalView", e.label) & handlePelabuhan(e.value, "pelMuat") : null} />
-                                                                )}
-                                                            />
-                                                            {errorsPelabuhan.negaraAsal && <small className="text-danger">{errorsPelabuhan.negaraAsal.message}</small>}
-                                                        </div>
-                                                    </div>
-                                                    <div className="row mb-3">
-                                                        <label className="col-sm-3 col-form-label" htmlFor="negaraTujuan">Negara Bongkar <span className='text-danger'>*</span></label>
-                                                        <div className="col-sm-9">
-                                                            <Controller
-                                                                control={controlPelabuhan}
-                                                                name={"negaraTujuan"}
-                                                                defaultValue={""}
-                                                                className="form-control form-control-sm"
-                                                                rules={{ required: "Mohon pilih negara pelabuhan pengirim." }}
-                                                                render={({ field: { value,onChange, ...field } }) => (
-                                                                    <Select styles={customStyles} placeholder={"Pilih negara bongkar.."} value={{id: cekdataPelabuhan.negaraTujuan, label: cekdataPelabuhan.negaraTujuanView}} {...field} options={cekdataDiri.permohonan != "EX" ? [{value: "99", label: "ID - INDONESIA"}] : dataSelect.negaraTujuan} onChange={(e) => e ? setValuePelabuhan("negaraTujuan", e.value) & setValuePelabuhan("negaraTujuanView", e.label) & handlePelabuhan(e.value, "pelBongkar") : null} />
-                                                                )}
-                                                            />
-                                                            {errorsPelabuhan.negaraTujuan && <small className="text-danger">{errorsPelabuhan.negaraTujuan.message}</small>}
-                                                        </div>
-                                                    </div>
-                                                    <div className="row mb-3">
-                                                        <label className="col-sm-3 col-form-label" htmlFor="transitOpsi">Transit <span className='text-danger'>*</span></label>
-                                                        <div className="col-sm-9">
-                                                            <div className="form-check form-check-inline">
-                                                                <input className="form-check-input" type="radio" name="transitOpsi" id="transitYa" value="1"  {...registerPelabuhan("transitOpsi", { required: "Mohon pilih transit."})}/>
-                                                                <label className="form-check-label" htmlFor="transitYa">Ya</label>
-                                                            </div>
-                                                            <div className="form-check form-check-inline">
-                                                                <input className="form-check-input" type="radio" name="transitOpsi" id="transitTidak" value="0" {...registerPelabuhan("transitOpsi")} />
-                                                                <label className="form-check-label" htmlFor="transitTidak">Tidak</label>
-                                                            </div>
-                                                            {errorsPelabuhan.transitOpsi && <small className="text-danger">{errorsPelabuhan.transitOpsi.message}</small>}
-                                                        </div>
-                                                    </div>
-                                                    <div style={{display: cekdataPelabuhan.transitOpsi === '1' ? 'block' : 'none' }}>
-                                                    <div className="row mb-3">
-                                                        <label className="col-sm-3 col-form-label" htmlFor="negaraTransit">Negara Transit</label>
-                                                        <div className="col-sm-9">
-                                                            <Controller
-                                                                control={controlPelabuhan}
-                                                                name={"negaraTransit"}
+                                                                name={"pelTransit"}
                                                                 defaultValue={""}
                                                                 className="form-control form-control-sm"
                                                                 rules={{ required: false }}
                                                                 render={({ field: { value,onChange, ...field } }) => (
-                                                                    <Select styles={customStyles} placeholder={"Pilih negara transit.."} value={{id: cekdataPelabuhan.negaraTransit, label: cekdataPelabuhan.negaraTransitView}} {...field} options={dataSelect.negaraTransit} onChange={(e) => e ? setValuePelabuhan("negaraTransit", e.value) & setValuePelabuhan("negaraTransitView", e.label) & handlePelabuhan(e.value, "pelTransit") : null} />
+                                                                    <Select styles={customStyles} placeholder={"Pilih pelabuhan transit.."} value={{id: cekdataPelabuhan.pelTransit, label: cekdataPelabuhan.pelTransitView}} {...field} options={dataSelect.pelTransit} onChange={(e) => e ? setValuePelabuhan("pelTransit", e.value) & setValuePelabuhan("pelTransitView", e.label) : null} />
                                                                 )}
                                                             />
                                                         </div>
-                                                    </div>
                                                     </div>
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
-                                    <div className="col-sm-6">
-                                        <div className="card card-action mb-4">
-                                            <div className="card-header mb-3 p-2" style={{backgroundColor: '#123138'}}>
-                                                <div className="card-action-title">
-                                                    <h5 className="mb-0 text-lightest">Pelabuhan</h5>
+                                </div>
+                                <div className="col-sm-6">
+                                    <div style={{display: cekdataPelabuhan.transitOpsi == '1' ? 'block' : 'none' }}>
+                                    <div className="card card-action mb-4">
+                                        <div className="card-header mb-3 p-2" style={{backgroundColor: '#123138'}}>
+                                            <div className="card-action-title">
+                                                <h5 className="mb-0 text-lightest">Pengangkutan Sebelum Transit</h5>
+                                            </div>
+                                            <div className="card-action-element">
+                                                <ul className="list-inline mb-0">
+                                                    <li className="list-inline-item">
+                                                        <button type='button' className="btn btn-default card-collapsible text-lighter p-0"><i className="tf-icons fa-solid fa-chevron-up"></i></button>
+                                                    </li>
+                                                </ul>
+                                            </div>
+                                        </div>
+                                        <div className="collapse show">
+                                            <div className="card-body pt-0">
+                                                <div className="row mb-3">
+                                                    <label className="col-sm-3 col-form-label" htmlFor="modaTransit">Moda Transportasi</label>
+                                                    <div className="col-sm-9">
+                                                        <select name="modaTransit" id="modaTransit" {...registerPelabuhan("modaTransit")} className="form-control form-control-sm">
+                                                            <option value="">--</option>
+                                                            <option value="1">Laut</option>
+                                                            <option value="2">Kereta Api</option>
+                                                            <option value="3">Jalan Raya</option>
+                                                            <option value="4">Udara</option>
+                                                            <option value="5">POS</option>
+                                                            <option value="6">Multimoda</option>
+                                                            <option value="7">Instalansi</option>
+                                                            <option value="8">Perairan</option>
+                                                            <option value="9">Lainnya</option>
+                                                        </select>
+                                                    </div>
                                                 </div>
-                                                <div className="card-action-element">
-                                                    <ul className="list-inline mb-0">
-                                                        <li className="list-inline-item">
-                                                            <button type='button' className="btn btn-default card-collapsible text-lighter p-0"><i className="tf-icons fa-solid fa-chevron-up"></i></button>
-                                                        </li>
-                                                    </ul>
+                                                <div className="row mb-3">
+                                                    <label className="col-sm-3 col-form-label" htmlFor="tipeTransit">Tipe Transportasi</label>
+                                                    <div className="col-sm-9">
+                                                        <select id="tipeTransit" name="tipeTransit" {...registerPelabuhan("tipeTransit")} className="form-control form-control-sm">
+                                                            <option value="">--</option>
+                                                            <option value="1">Penumpang</option>
+                                                            <option value="2">Kombi</option>
+                                                            <option value="3">Kargo</option>
+                                                        </select>
+                                                    </div>
+                                                </div>
+                                                <div className="row mb-3">
+                                                    <label className="col-sm-3 col-form-label" htmlFor="namaAlatAngkutTransit">Nama Alat Angkut</label>
+                                                    <div className="col-sm-9">
+                                                        <input autoComplete="off" type="text" id="namaAlatAngkutTransit" name="namaAlatAngkutTransit" {...registerPelabuhan("namaAlatAngkutTransit")} className="form-control form-control-sm" placeholder="Nama Alat Angkut" />
+                                                    </div>
+                                                </div>
+                                                <div className="row mb-3">
+                                                    <label className="col-sm-3 col-form-label" htmlFor="nomorAlatAngkutTransit">Nomor Alat Angkut</label>
+                                                    <div className="col-sm-9">
+                                                        <input autoComplete="off" type="text" id="nomorAlatAngkutTransit" name="nomorAlatAngkutTransit" {...registerPelabuhan("nomorAlatAngkutTransit")} className="form-control form-control-sm" placeholder="Nomor Alat Angkut" />
+                                                    </div>
+                                                </div>
+                                                <div className="row mb-3">
+                                                    <label className="col-sm-3 col-form-label" htmlFor="callSignTransit">Call Sign</label>
+                                                    <div className="col-sm-9">
+                                                        <input autoComplete="off" type="text" id="callSignTransit" name="callSignTransit" {...registerPelabuhan("callSignTransit")} className="form-control form-control-sm" placeholder="Call Sign" />
+                                                    </div>
+                                                </div>
+                                                <div className="row mb-3">
+                                                    <label className="col-sm-3 col-form-label" htmlFor="benderaTransit">Bendera</label>
+                                                    <div className="col-sm-9">
+                                                        <Controller
+                                                            control={controlPelabuhan}
+                                                            name={"benderaTransit"}
+                                                            defaultValue={""}
+                                                            className="form-control form-control-sm"
+                                                            rules={{ required: false }}
+                                                            render={({ field: { value,onChange, ...field } }) => (
+                                                                <Select styles={customStyles} placeholder={"Pilih bendera kapal transit.."} value={{id: cekdataPelabuhan.benderaTransit, label: cekdataPelabuhan.benderaTransitView}} {...field} options={dataSelect.benderaTransit} onChange={(e) => e ? setValuePelabuhan("benderaTransit", e.value) & setValuePelabuhan("benderaTransitView", e.label) : null} />
+                                                            )}
+                                                        />
+                                                    </div>
+                                                </div>
+                                                <div className="row mb-3">
+                                                    <label className="col-sm-3 col-form-label" htmlFor="tglBerangkatTransit">Tgl Berangkat</label>
+                                                    <div className="col-sm-4">
+                                                        <input autoComplete="off" type="date" id="tglBerangkatTransit" name="tglBerangkatTransit" {...registerPelabuhan("tglBerangkatTransit")} className="form-control form-control-sm" placeholder="Tgl Berangkat" />
+                                                    </div>
+                                                </div>
+                                                <div className="row mb-3">
+                                                    <label className="col-sm-3 col-form-label" htmlFor="tglTibaTransit">Tgl Tiba</label>
+                                                    <div className="col-sm-4">
+                                                        <input autoComplete="off" type="date" id="tglTibaTransit" name="tglTibaTransit" {...registerPelabuhan("tglTibaTransit")} className="form-control form-control-sm" placeholder="Tgl Tiba" />
+                                                    </div>
                                                 </div>
                                             </div>
-                                            <div className="collapse show">
-                                                <div className="card-body pt-0">
-                                                    <div className="row mb-3">
-                                                        <label className="col-sm-3 col-form-label" htmlFor="pelMuat">Muat / Asal <span className='text-danger'>*</span></label>
-                                                        <div className="col-sm-9">
-                                                            <Controller
-                                                                control={controlPelabuhan}
-                                                                name={"pelMuat"}
-                                                                defaultValue={""}
-                                                                className="form-control form-control-sm"
-                                                                rules={{ required: "Mohon pilih pelabuhan muat/asal." }}
-                                                                render={({ field: { value,onChange, ...field } }) => (
-                                                                    <Select styles={customStyles} placeholder={"Pilih pelabuhan muat/asal.."} value={{id: cekdataPelabuhan.pelMuat, label: cekdataPelabuhan.pelMuatView}} {...field} options={dataSelect.pelMuat} onChange={(e) => e ? setValuePelabuhan("pelMuat", e.value) & setValuePelabuhan("pelMuatView", e.label) : null} />
-                                                                )}
+                                        </div>
+                                    </div>
+                                    </div>
+                                </div>
+                                <div className="col-sm-6">
+                                    <div className="card card-action mb-4">
+                                        <div className="card-header mb-3 p-2" style={{backgroundColor: '#123138'}}>
+                                            <div className="card-action-title">
+                                                <h5 className="mb-0 text-lightest">Pengangkutan Terakhir</h5>
+                                            </div>
+                                            <div className="card-action-element">
+                                                <ul className="list-inline mb-0">
+                                                    <li className="list-inline-item">
+                                                        <button type='button' className="btn btn-default card-collapsible text-lighter p-0"><i className="tf-icons fa-solid fa-chevron-up"></i></button>
+                                                    </li>
+                                                </ul>
+                                            </div>
+                                        </div>
+                                        <div className="collapse show">
+                                            <div className="card-body pt-0">
+                                                <div className="row mb-3">
+                                                    <label className="col-sm-3 col-form-label" htmlFor="modaAkhir">Moda Transportasi <span className='text-danger'>*</span></label>
+                                                    <div className="col-sm-9">
+                                                        <select id="modaAkhir" name="modaAkhir" {...registerPelabuhan("modaAkhir", { required: "Mohon pilih moda transportasi akhir."})} className={errorsPelabuhan.modaAkhir ? "form-control form-control-sm is-invalid" : "form-control form-control-sm"}>
+                                                            <option value="">--</option>
+                                                            <option value="1">Laut</option>
+                                                            <option value="2">Kereta Api</option>
+                                                            <option value="3">Jalan Raya</option>
+                                                            <option value="4">Udara</option>
+                                                            <option value="5">POS</option>
+                                                            <option value="6">Multimoda</option>
+                                                            <option value="7">Instalansi</option>
+                                                            <option value="8">Perairan</option>
+                                                            <option value="9">Lainnya</option>
+                                                        </select>
+                                                        {errorsPelabuhan.modaAkhir && <small className="text-danger">{errorsPelabuhan.modaAkhir.message}</small>}
+                                                        <div style={{display: cekdataPelabuhan.modaAkhir == '9' ? 'block' : 'none'}}>
+                                                            <input autoComplete="off" type="text" className='form-control form-control-sm' name='modaAkhirLainnya' id='modaAkhirLainnya' {...registerPelabuhan("modaAkhirLainnya")} placeholder='Moda Transportasi Lainnya..'
                                                             />
-                                                            {errorsPelabuhan.pelMuat && <small className="text-danger">{errorsPelabuhan.pelMuat.message}</small>}
                                                         </div>
                                                     </div>
-                                                    <div className="row mb-3">
-                                                        <label className="col-sm-3 col-form-label" htmlFor="pelBongkar">Bongkar / Tujuan <span className='text-danger'>*</span></label>
-                                                        <div className="col-sm-9">
-                                                            <Controller
-                                                                control={controlPelabuhan}
-                                                                name={"pelBongkar"}
-                                                                defaultValue={""}
-                                                                className="form-control form-control-sm"
-                                                                rules={{ required: "Mohon pilih pelabuhan bongkar." }}
-                                                                render={({ field: { value,onChange, ...field } }) => (
-                                                                    <Select styles={customStyles} placeholder={"Pilih pelabuhan bongkar.."} value={{id: cekdataPelabuhan.pelBongkar, label: cekdataPelabuhan.pelBongkarView}} {...field} options={dataSelect.pelBongkar} onChange={(e) => e ? setValuePelabuhan("pelBongkar", e.value) & setValuePelabuhan("pelBongkarView", e.label) : null} />
-                                                                )}
-                                                            />
-                                                            {errorsPelabuhan.pelBongkar && <small className="text-danger">{errorsPelabuhan.pelBongkar.message}</small>}
-                                                        </div>
+                                                </div>
+                                                <div className="row mb-3">
+                                                    <label className="col-sm-3 col-form-label" htmlFor="tipeAkhir">Tipe Transportasi</label>
+                                                    <div className="col-sm-9">
+                                                        <select id="tipeAkhir" name="tipeAkhir"  {...registerPelabuhan("tipeAkhir")} className="form-control form-control-sm">
+                                                            <option value="">--</option>
+                                                            <option value="1">Penumpang</option>
+                                                            <option value="2">Kombi</option>
+                                                            <option value="3">Kargo</option>
+                                                        </select>
                                                     </div>
-                                                    <div className="row mb-3">
-                                                        <label className="col-sm-3 col-form-label" htmlFor="sandar">TPK (Border)</label>
-                                                        <div className="col-sm-9">
-                                                            <input type="text" name='sandar' id="sandar" {...registerPelabuhan("sandar")} className="form-control form-control-sm" placeholder="Lokasi Sandar" />
-                                                        </div>
+                                                </div>
+                                                <div className="row mb-3">
+                                                    <label className="col-sm-3 col-form-label" htmlFor="namaAlatAngkutAkhir">Nama Alat Angkut <span className='text-danger'>*</span></label>
+                                                    <div className="col-sm-9">
+                                                        <input autoComplete="off" type="text" id="namaAlatAngkutAkhir" name="namaAlatAngkutAkhir" {...registerPelabuhan("namaAlatAngkutAkhir", { required: "Mohon isi nama alat angkut akhir."})} className={errorsPelabuhan.namaAlatAngkutAkhir ? "form-control form-control-sm is-invalid" : "form-control form-control-sm"} placeholder="Nama Alat Angkut" />
+                                                        {errorsPelabuhan.namaAlatAngkutAkhir && <small className="text-danger">{errorsPelabuhan.namaAlatAngkutAkhir.message}</small>}
                                                     </div>
-                                                    <div style={{display: cekdataPelabuhan.transitOpsi === '1' ? 'block' : 'none' }}>
+                                                </div>
+                                                <div className="row mb-3">
+                                                    <label className="col-sm-3 col-form-label" htmlFor="nomorAlatAngkutAkhir">Nomor Alat Angkut <span className='text-danger'>*</span></label>
+                                                    <div className="col-sm-9">
+                                                        <input autoComplete="off" type="text" id="nomorAlatAngkutAkhir" name="nomorAlatAngkutAkhir" {...registerPelabuhan("nomorAlatAngkutAkhir", { required: "Mohon isi nomor alat angkut akhir."})} className={errorsPelabuhan.nomorAlatAngkutAkhir ? "form-control form-control-sm is-invalid" : "form-control form-control-sm"} placeholder="Nomor Alat Angkut" />
+                                                        {errorsPelabuhan.nomorAlatAngkutAkhir && <small className="text-danger">{errorsPelabuhan.nomorAlatAngkutAkhir.message}</small>}
+                                                    </div>
+                                                </div>
+                                                <div className="row mb-3">
+                                                    <label className="col-sm-3 col-form-label" htmlFor="callSignAkhir">Call Sign</label>
+                                                    <div className="col-sm-9">
+                                                        <input autoComplete="off" type="text" id="callSignAkhir" name="callSignAkhir" {...registerPelabuhan("callSignAkhir")} className="form-control form-control-sm" placeholder="Call Sign" />
+                                                    </div>
+                                                </div>
+                                                <div className="row mb-3">
+                                                    <label className="col-sm-3 col-form-label" htmlFor="benderaAkhir">Bendera</label>
+                                                    <div className="col-sm-9">
+                                                        <Controller
+                                                            control={controlPelabuhan}
+                                                            name={"benderaAkhir"}
+                                                            defaultValue={""}
+                                                            className="form-control form-control-sm"
+                                                            rules={{ required: false }}
+                                                            render={({ field: { value,onChange, ...field } }) => (
+                                                                <Select styles={customStyles} placeholder={"Pilih bendera kapal akhir.."} value={{id: cekdataPelabuhan.benderaAkhir, label: cekdataPelabuhan.benderaAkhirView}} {...field} options={dataSelect.benderaAkhir} onChange={(e) => e ? setValuePelabuhan("benderaAkhir", e.value) & setValuePelabuhan("benderaAkhirView", e.label) : null} />
+                                                            )}
+                                                        />
+                                                    </div>
+                                                </div>
+                                                <div className="row mb-3">
+                                                    <label className="col-sm-3 col-form-label" htmlFor="tglBerangkatAkhir">Tgl Berangkat <span className='text-danger'>*</span></label>
+                                                    <div className="col-sm-4">
+                                                        <input autoComplete="off" type="date" id="tglBerangkatAkhir" name="tglBerangkatAkhir" {...registerPelabuhan("tglBerangkatAkhir", { required: "Mohon isi tanggal berangkat."})} className={errorsPelabuhan.tglBerangkatAkhir ? "form-control form-control-sm is-invalid" : "form-control form-control-sm"} placeholder="Tgl Berangkat" />
+                                                        {errorsPelabuhan.tglBerangkatAkhir && <small className="text-danger">{errorsPelabuhan.tglBerangkatAkhir.message}</small>}
+                                                    </div>
+                                                </div>
+                                                <div className="row mb-3">
+                                                    <label className="col-sm-3 col-form-label" htmlFor="tglTibaAkhir">Tgl Tiba <span className='text-danger'>*</span></label>
+                                                    <div className="col-sm-4">
+                                                        <input autoComplete="off" type="date" id="tglTibaAkhir" name="tglTibaAkhir" {...registerPelabuhan("tglTibaAkhir", { required: "Mohon isi tanggal tiba."})} className={errorsPelabuhan.tglTibaAkhir ? "form-control form-control-sm is-invalid" : "form-control form-control-sm"} placeholder="Tgl Tiba" />
+                                                        {errorsPelabuhan.tglTibaAkhir && <small className="text-danger">{errorsPelabuhan.tglTibaAkhir.message}</small>}
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div className="col-sm-12">
+                                    <div className="card card-action mb-4">
+                                        <div className="card-header">
+                                            <div className="card-action-title">
+                                                <span className="mb-0 me-sm-2 me-1">Menggunakan Kontainer</span>
+                                                <div className="form-check form-check-inline">
+                                                    <input autoComplete="off" className="form-check-input" type="radio" name="cekKontainer" id="kontainerYa" value="1" {...registerPelabuhan("cekKontainer", { required: "Mohon isi pilihan kontainer."})} />
+                                                    <label className="form-check-label" htmlFor="kontainerYa">Ya</label>
+                                                </div>
+                                                <div className="form-check form-check-inline">
+                                                    <input autoComplete="off" className="form-check-input" type="radio" name="cekKontainer" id="kontainerTidak" value="0" {...registerPelabuhan("cekKontainer")} />
+                                                    <label className="form-check-label" htmlFor="kontainerTidak">Tidak</label>
+                                                </div>
+                                                {errorsPelabuhan.cekKontainer && <small className="text-danger">{errorsPelabuhan.cekKontainer.message}</small>}
+                                            </div>
+                                            <div className="card-action-element">
+                                                <ul className="list-inline mb-0">
+                                                    <li className="list-inline-item">
+                                                        <button type='button' className="btn btn-default card-collapsible text-lighter p-0"><i className="tf-icons fa-solid fa-chevron-up"></i></button>
+                                                    </li>
+                                                </ul>
+                                            </div>
+                                        </div>
+                                        <div className="collapse show" style={{display: (cekdataPelabuhan.cekKontainer == '1' ? 'block' : 'none')}}>
+                                            <div className="card-body pt-0">
+                                                <div className="row g-3 mb-3">
+                                                    <div className="pb-2">
+                                                        <button type="button" className="btn btn-xs btn-primary" data-bs-toggle="modal" data-bs-target="#modKontainer">Tambah Kontainer</button>
+                                                        <button type="button" onClick={dataKontainerPtk} className="btn btn-xs btn-info float-end"><i className="menu-icon tf-icons fa-solid fa-sync"></i> Refresh Data</button>
+                                                    </div>
+                                                    <table className="table table-sm table-bordered table-hover table-striped dataTable">
+                                                        <thead style={{backgroundColor: '#123138' }}>
+                                                            <tr>
+                                                                <th className='text-lightest'>No</th>
+                                                                <th className='text-lightest'>Nomor Kontainer</th>
+                                                                <th className='text-lightest'>Size</th>
+                                                                <th className='text-lightest'>Stuff</th>
+                                                                <th className='text-lightest'>Tipe</th>
+                                                                <th className='text-lightest'>Segel</th>
+                                                                <th className='text-lightest'>Act</th>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody>
+                                                            {kontainerPtk ? (
+                                                                kontainerPtk?.map((data, index) => (
+                                                                    <tr key={index}>
+                                                                        <td>{index + 1}</td>
+                                                                        <td>{data.nomor}</td>
+                                                                        <td>{sizeKontainer[(data.ukuran_kontainer_id - 1)]}</td>
+                                                                        <td>{data.stuff_kontainer_id == 1 ? "FCL" : "LCL" }</td>
+                                                                        <td>{tipeKontainer[(data.tipe_kontainer_id - 1)]}</td>
+                                                                        <td>{data.segel}</td>
+                                                                        <td>
+                                                                            <div className="d-grid gap-2">
+                                                                                <button type="button" className="btn p-0 hide-arrow dropdown-toggle" aria-expanded="false" data-bs-toggle="dropdown">
+                                                                                    <i className="menu-icon tf-icons fa-solid fa-ellipsis-vertical"></i>
+                                                                                </button>
+                                                                                <div className="dropdown-menu">
+                                                                                    <button className="dropdown-item" type="button" data-ptk={data.ptk_id} data-header={data.id} onClick={handleEditKontainer} data-bs-toggle="modal" data-bs-target="#modKontainer"><i className="fa-solid fa-pen-to-square me-1"></i> Edit</button>
+                                                                                    <button className="dropdown-item" type='button'><i className="fa-solid fa-trash me-1"></i> Delete</button>
+                                                                                </div>
+                                                                            </div>
+                                                                        </td>
+                                                                    </tr>
+                                                                ))
+                                                            ) : null}
+                                                        </tbody>
+                                                    </table>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div className="col-12 d-flex justify-content-between">
+                                    <button type="button" className="btn btn-label-secondary" onClick={() => setWizardPage(wizardPage - 1)}>
+                                        <i className="fa-solid fa-chevron-left me-sm-2 me-1"></i>
+                                        <span className="d-sm-inline-block d-none">Sebelumnya</span>
+                                    </button>
+                                    <button type="submit" className="btn btn-primary">
+                                        <span className="d-sm-inline-block d-none me-sm-1">Simpan & Lanjutkan</span>
+                                        <i className="fa-solid fa-angle-right me-sm-2 me-1"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        </form>
+                        </div>
+
+                        <div id="cardKomoditas" className={wizardPage == 3 ? "content active dstepper-block" : "content"}>
+                            <form className="input-form" onSubmit={handleFormMP(onSubmitKomoditas)}>
+                            <input autoComplete="off" type="hidden" name='idPtk' {...registerMP("idPtk")} />
+                            <input autoComplete="off" type="hidden" name='noAju' {...registerMP("noAju")} />
+                            
+                                <div className="row">
+                                <div className="col-sm-12">
+                                    <div className="card card-action mb-4">
+                                        <div className="card-header mb-3 p-2" style={{backgroundColor: '#123138'}}>
+                                            <div className="card-action-title">
+                                                <h5 className="mb-0 text-lightest">Uraian</h5>
+                                            </div>
+                                            <div className="card-action-element">
+                                                <ul className="list-inline mb-0">
+                                                    <li className="list-inline-item">
+                                                        <button type='button' className="btn btn-default card-collapsible text-lighter p-0"><i className="tf-icons fa-solid fa-chevron-up"></i></button>
+                                                    </li>
+                                                </ul>
+                                            </div>
+                                        </div>
+                                        <div className="collapse show">
+                                            <div className="row">
+                                                <div className="col-sm-6">
+                                                    <div className="card-body pt-0">
                                                         <div className="row mb-3">
-                                                            <label className="col-sm-3 col-form-label" htmlFor="pelTransit">Pelabuhan Transit</label>
-                                                            <div className="col-sm-9">
+                                                            <label className="col-sm-3 col-form-label" htmlFor="mediaPembawa">Muatan <span className='text-danger'>*</span></label>
+                                                            <div className="col-sm-8">
+                                                                <div className="form-check form-check-inline">
+                                                                    <input autoComplete="off" className="form-check-input" type="radio" name="jenisAngkut" id="curah" value="1" {...registerMP("jenisAngkut", { required: "Mohon pilih apakah komoditas curah atau tidak."})} />
+                                                                    <label className="form-check-label" htmlFor="curah">Curah</label>
+                                                                </div>
+                                                                <div className="form-check form-check-inline">
+                                                                    <input autoComplete="off" className="form-check-input" type="radio" name="jenisAngkut" id="noncurah" value="0" {...registerMP("jenisAngkut")} />
+                                                                    <label className="form-check-label" htmlFor="noncurah">Non Curah</label>
+                                                                </div>
+                                                                {errorsMP.jenisAngkut && <div className="offset-3 col-sm-9"><small className="text-danger">{errorsMP.jenisAngkut.message}</small></div>}
+                                                            </div>
+                                                        </div>
+                                                        <div style={{display: (cekdataDiri.mediaPembawa == "I" ? "block" : "none")}}>
+                                                            <div className="row mb-3">
+                                                                <label className="col-sm-3 col-form-label" htmlFor="sumberMpTangkap">Sumber</label>
+                                                                <div className="col-sm-8">
+                                                                    <div className="form-check form-check-inline">
+                                                                        <input autoComplete="off" className="form-check-input" type="radio" name="sumberMpTangkap" id="FARM" value="FARM" {...registerMP("sumberMpTangkap", { required: (cekdataDiri.mediaPembawa == "I" ? "Mohon pilih sumber komoditas." : false)})} />
+                                                                        <label className="form-check-label" htmlFor="FARM">FARM / budidaya</label>
+                                                                    </div>
+                                                                    <div className="form-check form-check-inline">
+                                                                        <input autoComplete="off" className="form-check-input" type="radio" name="sumberMpTangkap" id="WILD" value="WILD" {...registerMP("sumberMpTangkap")} />
+                                                                        <label className="form-check-label" htmlFor="WILD">WILD / tangkap</label>
+                                                                    </div>
+                                                                    {errorsMP.sumberMpTangkap && <div className="offset-3 col-sm-9"><small className="text-danger">{errorsMP.sumberMpTangkap.message}</small></div>}
+                                                                </div>
+                                                            </div>
+                                                            <div style={{display: (cekdataMP.sumberMpTangkap == "WILD" ? "block" : "none")}}>
+                                                                <div className="row mb-3">
+                                                                    <label className="col-sm-3 col-form-label" htmlFor="areaTangkap">Area Tangkap</label>
+                                                                    <div className="col-sm-8">
+                                                                        <Controller
+                                                                            control={controlMP}
+                                                                            name={"areaTangkap"}
+                                                                            defaultValue={""}
+                                                                            className="form-control form-control-sm"
+                                                                            rules={{required: (cekdataMP.sumberMpTangkap == "WILD" ? "Mohon pilih area tangkap." : false)}}
+                                                                            render={({ field: { value,onChange, ...field } }) => (
+                                                                                <Select styles={customStyles} placeholder={"Pilih area.."}
+                                                                                value={{id: cekdataMP.areaTangkap, label: cekdataMP.areaTangkapView}}
+                                                                                {...field} options={areaTangkap()} onChange={(e) => setValueMP("areaTangkap", e.value) & setValueMP("areaTangkapView", e.label)} />
+                                                                            )}
+                                                                        />
+                                                                        {errorsMP.areaTangkap && <div className="offset-3 col-sm-9"><small className="text-danger">{errorsMP.areaTangkap.message}</small></div>}
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div className="row mb-3">
+                                                            <label className="col-sm-3 col-form-label" htmlFor="peruntukan">Peruntukan</label>
+                                                            <div className="col-sm-4">
+                                                                <select name="peruntukan" id="peruntukan" {...registerMP("peruntukan", { required: cekdataDiri.mediaPembawa == "T" ? "Mohon pilih jenis angkut." : false})} className={errorsMP.peruntukan ? "form-select form-select-sm is-invalid" : "form-select form-select-sm"}>
+                                                                    <option value="">--</option>
+                                                                    <option value="1">Ditanam/Budidaya/Peningkatan Mutu Genetik</option>
+                                                                    <option value="2">Konsumsi</option>
+                                                                    <option value="3">Penelitian</option>
+                                                                    <option value="4">Pameran/Kontes</option>
+                                                                    <option value="5">Perdagangan</option>
+                                                                    <option value="6">Bahan Baku</option>
+                                                                    <option value="7">Ornamental/Hias</option>
+                                                                    <option value="8">Lainnya</option>
+                                                                </select>
+                                                            </div>
+                                                            <div className="col-sm-5">
+                                                                <div style={{display: cekdataMP.peruntukan == '8' ? 'block' : 'none'}}>
+                                                                    <input autoComplete="off" type="text" id="peruntukanLain" name="peruntukanLain" {...registerMP("peruntukanLain", { required: cekdataMP.peruntukan == "8" ? "Mohon isi peruntukan lain." : false})} className={errorsMP.peruntukanLain ? "form-control form-control-sm is-invalid" : "form-control form-control-sm"} placeholder="Peruntukan Lainnya.." />
+                                                                </div>
+                                                            </div>
+                                                            {errorsMP.peruntukan && <div className="offset-3 col-sm-9"><small className="text-danger">{errorsMP.peruntukan.message}</small></div>}
+                                                        </div>
+                                                        <div className="row mb-3">
+                                                            <label className="col-sm-3 col-form-label" htmlFor="negaraAsalMP">Negara Asal Komoditas <span className='text-danger'>*</span></label>
+                                                            <div className="col-sm-6">
                                                                 <Controller
-                                                                    control={controlPelabuhan}
-                                                                    name={"pelTransit"}
+                                                                    control={controlMP}
+                                                                    name={"negaraAsalMP"}
+                                                                    defaultValue={""}
+                                                                    className="form-control form-control-sm"
+                                                                    rules={{ required: "Mohon pilih negara asal komoditas." }}
+                                                                    render={({ field: { value,onChange, ...field } }) => (
+                                                                        <Select styles={customStyles} placeholder={"Pilih negara.."}
+                                                                        value={{id: cekdataMP.negaraAsalMP, label: cekdataMP.negaraAsalMPView}}
+                                                                        {...field} options={cekdataDiri.permohonan != "IM" ? [{value: "99", label: "ID - INDONESIA"}] : dataSelect.negaraAsalMP} onChange={(e) => handleSelectNegKomoditas(e, "negaraAsalMP") & (e.value == '99' ? handleKota(null, "daerahAsalMP") : null)} />
+                                                                    )}
+                                                                />
+                                                            </div>
+                                                            {errorsMP.negaraAsalMP && <div className="offset-3 col-sm-9"><small className="text-danger">{errorsMP.negaraAsalMP.message}</small></div>}
+                                                        </div>
+                                                        <div className="row mb-3" style={{visibility: (cekdataMP.negaraAsalMP == 99 ? "visible" : "hidden")}}>
+                                                            <label className="col-sm-3 col-form-label" htmlFor="daerahAsalMP">Daerah Asal</label>
+                                                            <div className="col-sm-6">
+                                                                <Controller
+                                                                    control={controlMP}
+                                                                    name={"daerahAsalMP"}
                                                                     defaultValue={""}
                                                                     className="form-control form-control-sm"
                                                                     rules={{ required: false }}
                                                                     render={({ field: { value,onChange, ...field } }) => (
-                                                                        <Select styles={customStyles} placeholder={"Pilih pelabuhan transit.."} value={{id: cekdataPelabuhan.pelTransit, label: cekdataPelabuhan.pelTransitView}} {...field} options={dataSelect.pelTransit} onChange={(e) => e ? setValuePelabuhan("pelTransit", e.value) & setValuePelabuhan("pelTransitView", e.label) : null} />
+                                                                        <Select styles={customStyles} placeholder={"Pilih daerah asal.."} value={{id: cekdataMP.daerahAsalMP, label: cekdataMP.daerahAsalMPView}} {...field} options={dataSelect.daerahAsalMP} onChange={(e) => handleSelectNegKomoditas(e, "daerahAsalMP")} />
+                                                                    )}
+                                                                />
+                                                                {errorsMP.daerahAsal && <small className="text-danger">{errorsMP.daerahAsalMP.message}</small>}
+                                                            </div>
+                                                        </div>
+                                                        <div className="row mb-3">
+                                                            <label className="col-sm-3 col-form-label" htmlFor="negaraTujuanMP">Negara Tujuan Komoditas <span className='text-danger'>*</span></label>
+                                                            <div className="col-sm-6">
+                                                                <Controller
+                                                                    control={controlMP}
+                                                                    defaultValue={""}
+                                                                    name={"negaraTujuanMP"}
+                                                                    className="form-control form-control-sm"
+                                                                    rules={{ required: "Mohon pilih negara tujuan komoditas." }}
+                                                                    render={({ field: { value,onChange, ...field } }) => (
+                                                                        <Select styles={customStyles} placeholder={"Pilih negara.."} value={{id: cekdataMP.negaraTujuanMP, label: cekdataMP.negaraTujuanMPView}} {...field} options={cekdataDiri.permohonan != "EX" ? [{value: "99", label: "ID - INDONESIA"}] :dataSelect.negaraTujuanMP} onChange={(e) => handleSelectNegKomoditas(e, "negaraTujuanMP") & (e.value == '99' ? handleKota(null, "daerahTujuanMP") : null)} />
                                                                     )}
                                                                 />
                                                             </div>
+                                                            {errorsMP.negaraTujuanMP && <div className="offset-3 col-sm-9"><small className="text-danger">{errorsMP.negaraTujuanMP.message}</small></div>}
                                                         </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div className="col-sm-6">
-                                        <div style={{display: cekdataPelabuhan.transitOpsi === '1' ? 'block' : 'none' }}>
-                                        <div className="card card-action mb-4">
-                                            <div className="card-header mb-3 p-2" style={{backgroundColor: '#123138'}}>
-                                                <div className="card-action-title">
-                                                    <h5 className="mb-0 text-lightest">Pengangkutan Sebelum Transit</h5>
-                                                </div>
-                                                <div className="card-action-element">
-                                                    <ul className="list-inline mb-0">
-                                                        <li className="list-inline-item">
-                                                            <button type='button' className="btn btn-default card-collapsible text-lighter p-0"><i className="tf-icons fa-solid fa-chevron-up"></i></button>
-                                                        </li>
-                                                    </ul>
-                                                </div>
-                                            </div>
-                                            <div className="collapse show">
-                                                <div className="card-body pt-0">
-                                                    <div className="row mb-3">
-                                                        <label className="col-sm-3 col-form-label" htmlFor="modaTransit">Moda Transportasi</label>
-                                                        <div className="col-sm-9">
-                                                            <select name="modaTransit" id="modaTransit" {...registerPelabuhan("modaTransit")} className="form-control form-control-sm">
-                                                                <option value="">--</option>
-                                                                <option value="1">Laut</option>
-                                                                <option value="2">Kereta Api</option>
-                                                                <option value="3">Jalan Raya</option>
-                                                                <option value="4">Udara</option>
-                                                                <option value="5">POS</option>
-                                                                <option value="6">Multimoda</option>
-                                                                <option value="7">Instalansi</option>
-                                                                <option value="8">Perairan</option>
-                                                                <option value="9">Lainnya</option>
-                                                            </select>
-                                                        </div>
-                                                    </div>
-                                                    <div className="row mb-3">
-                                                        <label className="col-sm-3 col-form-label" htmlFor="tipeTransit">Tipe Transportasi</label>
-                                                        <div className="col-sm-9">
-                                                            <select id="tipeTransit" name="tipeTransit" {...registerPelabuhan("tipeTransit")} className="form-control form-control-sm">
-                                                                <option value="">--</option>
-                                                                <option value="1">Penumpang</option>
-                                                                <option value="2">Kombi</option>
-                                                                <option value="3">Kargo</option>
-                                                            </select>
-                                                        </div>
-                                                    </div>
-                                                    <div className="row mb-3">
-                                                        <label className="col-sm-3 col-form-label" htmlFor="namaAlatAngkutTransit">Nama Alat Angkut</label>
-                                                        <div className="col-sm-9">
-                                                            <input type="text" id="namaAlatAngkutTransit" name="namaAlatAngkutTransit" {...registerPelabuhan("namaAlatAngkutTransit")} className="form-control form-control-sm" placeholder="Nama Alat Angkut" />
-                                                        </div>
-                                                    </div>
-                                                    <div className="row mb-3">
-                                                        <label className="col-sm-3 col-form-label" htmlFor="nomorAlatAngkutTransit">Nomor Alat Angkut</label>
-                                                        <div className="col-sm-9">
-                                                            <input type="text" id="nomorAlatAngkutTransit" name="nomorAlatAngkutTransit" {...registerPelabuhan("nomorAlatAngkutTransit")} className="form-control form-control-sm" placeholder="Nomor Alat Angkut" />
-                                                        </div>
-                                                    </div>
-                                                    <div className="row mb-3">
-                                                        <label className="col-sm-3 col-form-label" htmlFor="callSignTransit">Call Sign</label>
-                                                        <div className="col-sm-9">
-                                                            <input type="text" id="callSignTransit" name="callSignTransit" {...registerPelabuhan("callSignTransit")} className="form-control form-control-sm" placeholder="Call Sign" />
-                                                        </div>
-                                                    </div>
-                                                    <div className="row mb-3">
-                                                        <label className="col-sm-3 col-form-label" htmlFor="benderaTransit">Bendera</label>
-                                                        <div className="col-sm-9">
-                                                            <Controller
-                                                                control={controlPelabuhan}
-                                                                name={"benderaTransit"}
-                                                                defaultValue={""}
-                                                                className="form-control form-control-sm"
-                                                                rules={{ required: false }}
-                                                                render={({ field: { value,onChange, ...field } }) => (
-                                                                    <Select styles={customStyles} placeholder={"Pilih bendera kapal transit.."} value={{id: cekdataPelabuhan.benderaTransit, label: cekdataPelabuhan.benderaTransitView}} {...field} options={dataSelect.benderaTransit} onChange={(e) => e ? setValuePelabuhan("benderaTransit", e.value) & setValuePelabuhan("benderaTransitView", e.label) : null} />
-                                                                )}
-                                                            />
-                                                        </div>
-                                                    </div>
-                                                    <div className="row mb-3">
-                                                        <label className="col-sm-3 col-form-label" htmlFor="tglBerangkatTransit">Tgl Berangkat</label>
-                                                        <div className="col-sm-4">
-                                                            <input type="date" id="tglBerangkatTransit" name="tglBerangkatTransit" {...registerPelabuhan("tglBerangkatTransit")} className="form-control form-control-sm" placeholder="Tgl Berangkat" />
-                                                        </div>
-                                                    </div>
-                                                    <div className="row mb-3">
-                                                        <label className="col-sm-3 col-form-label" htmlFor="tglTibaTransit">Tgl Tiba</label>
-                                                        <div className="col-sm-4">
-                                                            <input type="date" id="tglTibaTransit" name="tglTibaTransit" {...registerPelabuhan("tglTibaTransit")} className="form-control form-control-sm" placeholder="Tgl Tiba" />
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        </div>
-                                    </div>
-                                    <div className="col-sm-6">
-                                        <div className="card card-action mb-4">
-                                            <div className="card-header mb-3 p-2" style={{backgroundColor: '#123138'}}>
-                                                <div className="card-action-title">
-                                                    <h5 className="mb-0 text-lightest">Pengangkutan Terakhir</h5>
-                                                </div>
-                                                <div className="card-action-element">
-                                                    <ul className="list-inline mb-0">
-                                                        <li className="list-inline-item">
-                                                            <button type='button' className="btn btn-default card-collapsible text-lighter p-0"><i className="tf-icons fa-solid fa-chevron-up"></i></button>
-                                                        </li>
-                                                    </ul>
-                                                </div>
-                                            </div>
-                                            <div className="collapse show">
-                                                <div className="card-body pt-0">
-                                                    <div className="row mb-3">
-                                                        <label className="col-sm-3 col-form-label" htmlFor="modaAkhir">Moda Transportasi <span className='text-danger'>*</span></label>
-                                                        <div className="col-sm-9">
-                                                            <select id="modaAkhir" name="modaAkhir" {...registerPelabuhan("modaAkhir", { required: "Mohon pilih moda transportasi akhir."})} className={errorsPelabuhan.modaAkhir ? "form-control form-control-sm is-invalid" : "form-control form-control-sm"}>
-                                                                <option value="">--</option>
-                                                                <option value="1">Laut</option>
-                                                                <option value="2">Kereta Api</option>
-                                                                <option value="3">Jalan Raya</option>
-                                                                <option value="4">Udara</option>
-                                                                <option value="5">POS</option>
-                                                                <option value="6">Multimoda</option>
-                                                                <option value="7">Instalansi</option>
-                                                                <option value="8">Perairan</option>
-                                                                <option value="9">Lainnya</option>
-                                                            </select>
-                                                            {errorsPelabuhan.modaAkhir && <small className="text-danger">{errorsPelabuhan.modaAkhir.message}</small>}
-                                                            <div style={{display: cekdataPelabuhan.modaAkhir === '9' ? 'block' : 'none'}}>
-                                                                <input type="text" className='form-control form-control-sm' name='modaAkhirLainnya' id='modaAkhirLainnya' {...registerPelabuhan("modaAkhirLainnya")} placeholder='Moda Transportasi Lainnya..'
+                                                        <div className="row mb-3" style={{visibility: (cekdataMP.negaraTujuanMP == 99 ? "visible" : "hidden")}}>
+                                                            <label className="col-sm-3 col-form-label" htmlFor="daerahTujuanMP">Daerah Tujuan</label>
+                                                            <div className="col-sm-6">
+                                                                <Controller
+                                                                    control={controlMP}
+                                                                    name={"daerahTujuanMP"}
+                                                                    defaultValue={""}
+                                                                    className="form-control form-control-sm"
+                                                                    rules={{ required: false }}
+                                                                    render={({ field: { value,onChange, ...field } }) => (
+                                                                        <Select styles={customStyles} placeholder={"Pilih daerah tujuan.."} value={{id: cekdataMP.daerahTujuanMP, label: cekdataMP.daerahTujuanMPView}} {...field} options={dataSelect.daerahTujuanMP} onChange={(e) => handleSelectNegKomoditas(e, "daerahTujuanMP")} />
+                                                                    )}
                                                                 />
+                                                                {errorsMP.daerahTujuanMP && <small className="text-danger">{errorsMP.daerahTujuanMP.message}</small>}
                                                             </div>
                                                         </div>
                                                     </div>
-                                                    <div className="row mb-3">
-                                                        <label className="col-sm-3 col-form-label" htmlFor="tipeAkhir">Tipe Transportasi</label>
-                                                        <div className="col-sm-9">
-                                                            <select id="tipeAkhir" name="tipeAkhir"  {...registerPelabuhan("tipeAkhir")} className="form-control form-control-sm">
-                                                                <option value="">--</option>
-                                                                <option value="1">Penumpang</option>
-                                                                <option value="2">Kombi</option>
-                                                                <option value="3">Kargo</option>
-                                                            </select>
+                                                </div>
+                                                <div className="col-sm-6">
+                                                    <div className="card-body pt-0">
+                                                        <div className="row mb-3">
+                                                            <label className="col-sm-3 col-form-label" htmlFor="tingkatOlah">Tingkat Pengolahan</label>
+                                                            <div className="col-sm-9">
+                                                                <div className="col-sm-9">
+                                                                    <div className="form-check form-check-inline">
+                                                                        <input autoComplete="off" className="form-check-input" type="radio" name="tingkatOlah" id="sudah_olah" value="diolah" {...registerMP("tingkatOlah", { required: "Mohon isi peruntukan lain."})} />
+                                                                        <label className="form-check-label" htmlFor="sudah_olah">Sudah Diolah</label>
+                                                                    </div>
+                                                                    <div className="form-check form-check-inline">
+                                                                        <input autoComplete="off" className="form-check-input" type="radio" name="tingkatOlah" id="belum_olah" value="belum" {...registerMP("tingkatOlah")} />
+                                                                        <label className="form-check-label" htmlFor="belum_olah">Belum Olah</label>
+                                                                    </div>
+                                                                    {errorsMP.tingkatOlah && <small className="text-danger">{errorsMP.tingkatOlah.message}</small>}
+                                                                </div>
+                                                            </div>
                                                         </div>
-                                                    </div>
-                                                    <div className="row mb-3">
-                                                        <label className="col-sm-3 col-form-label" htmlFor="namaAlatAngkutAkhir">Nama Alat Angkut <span className='text-danger'>*</span></label>
-                                                        <div className="col-sm-9">
-                                                            <input type="text" id="namaAlatAngkutAkhir" name="namaAlatAngkutAkhir" {...registerPelabuhan("namaAlatAngkutAkhir", { required: "Mohon isi nama alat angkut akhir."})} className={errorsPelabuhan.namaAlatAngkutAkhir ? "form-control form-control-sm is-invalid" : "form-control form-control-sm"} placeholder="Nama Alat Angkut" />
-                                                            {errorsPelabuhan.namaAlatAngkutAkhir && <small className="text-danger">{errorsPelabuhan.namaAlatAngkutAkhir.message}</small>}
+                                                        <div className="row mb-3">
+                                                            <label className="col-sm-3 col-form-label" htmlFor="jenisKemasan">Jenis Kemasan</label>
+                                                            <div className="col-sm-5">
+                                                                <Controller
+                                                                    control={controlMP}
+                                                                    defaultValue={""}
+                                                                    name={"jenisKemasan"}
+                                                                    className="form-select form-select-sm"
+                                                                    rules={{ required: false }}
+                                                                    render={({ field: { value,onChange, ...field } }) => (
+                                                                        <Select styles={customStyles} placeholder={"Pilih Kemasan.."} value={{id: cekdataMP.jenisKemasan, label: cekdataMP.jenisKemasanView}} {...field} options={jenisKemasan()} onChange={(e) => setValueMP("jenisKemasan", e.value) & setValueMP("jenisKemasanView", e.label)} />
+                                                                    )}
+                                                                /> 
+                                                                {/* <select name="jenisKemasan" id="jenisKemasan" onClick={handleKemasan} {...registerMP("jenisKemasan")} className="form-select form-select-sm">
+                                                                    <option value="">--</option>
+                                                                    {dataSelect.jenisKemasan}
+                                                                </select> */}
+                                                            </div>
                                                         </div>
-                                                    </div>
-                                                    <div className="row mb-3">
-                                                        <label className="col-sm-3 col-form-label" htmlFor="nomorAlatAngkutAkhir">Nomor Alat Angkut <span className='text-danger'>*</span></label>
-                                                        <div className="col-sm-9">
-                                                            <input type="text" id="nomorAlatAngkutAkhir" name="nomorAlatAngkutAkhir" {...registerPelabuhan("nomorAlatAngkutAkhir", { required: "Mohon isi nomor alat angkut akhir."})} className={errorsPelabuhan.nomorAlatAngkutAkhir ? "form-control form-control-sm is-invalid" : "form-control form-control-sm"} placeholder="Nomor Alat Angkut" />
-                                                            {errorsPelabuhan.nomorAlatAngkutAkhir && <small className="text-danger">{errorsPelabuhan.nomorAlatAngkutAkhir.message}</small>}
+                                                        <div className="row mb-3">
+                                                            <label className="col-sm-3 col-form-label" htmlFor="jumlahKemasan">Jumlah Kemasan</label>
+                                                            <div className="col-sm-6">
+                                                                <input autoComplete="off" type="text" id="jumlahKemasan" name="jumlahKemasan" {...registerMP("jumlahKemasan")} value={cekdataMP.jumlahKemasan ? removeNonNumeric(cekdataMP.jumlahKemasan) : ""} className="form-control form-control-sm" placeholder="Jumlah Kemasan" />
+                                                            </div>
                                                         </div>
-                                                    </div>
-                                                    <div className="row mb-3">
-                                                        <label className="col-sm-3 col-form-label" htmlFor="callSignAkhir">Call Sign</label>
-                                                        <div className="col-sm-9">
-                                                            <input type="text" id="callSignAkhir" name="callSignAkhir" {...registerPelabuhan("callSignAkhir")} className="form-control form-control-sm" placeholder="Call Sign" />
+                                                        <div className="row mb-3">
+                                                            <label className="col-sm-3 col-form-label" htmlFor="merkKemasan">Merk Kemasan</label>
+                                                            <div className="col-sm-6">
+                                                                <input autoComplete="off" type="text" id="merkKemasan" name="merkKemasan" {...registerMP("merkKemasan")} className="form-control form-control-sm" placeholder="Merk Kemasan" />
+                                                            </div>
                                                         </div>
-                                                    </div>
-                                                    <div className="row mb-3">
-                                                        <label className="col-sm-3 col-form-label" htmlFor="benderaAkhir">Bendera</label>
-                                                        <div className="col-sm-9">
-                                                            <Controller
-                                                                control={controlPelabuhan}
-                                                                name={"benderaAkhir"}
-                                                                defaultValue={""}
-                                                                className="form-control form-control-sm"
-                                                                rules={{ required: false }}
-                                                                render={({ field: { value,onChange, ...field } }) => (
-                                                                    <Select styles={customStyles} placeholder={"Pilih bendera kapal akhir.."} value={{id: cekdataPelabuhan.benderaAkhir, label: cekdataPelabuhan.benderaAkhirView}} {...field} options={dataSelect.benderaAkhir} onChange={(e) => e ? setValuePelabuhan("benderaAkhir", e.value) & setValuePelabuhan("benderaAkhirView", e.label) : null} />
-                                                                )}
-                                                            />
+                                                        <div className="row mb-3">
+                                                            <label className="col-sm-3 col-form-label" htmlFor="tandaKemasan">Tanda pada Kemasan</label>
+                                                            <div className="col-sm-6">
+                                                                <input autoComplete="off" type="text" id="tandaKemasan" name="tandaKemasan" {...registerMP("tandaKemasan")} className="form-control form-control-sm" placeholder="Tanda Kemasan" />
+                                                            </div>
                                                         </div>
-                                                    </div>
-                                                    <div className="row mb-3">
-                                                        <label className="col-sm-3 col-form-label" htmlFor="tglBerangkatAkhir">Tgl Berangkat <span className='text-danger'>*</span></label>
-                                                        <div className="col-sm-4">
-                                                            <input type="date" id="tglBerangkatAkhir" name="tglBerangkatAkhir" {...registerPelabuhan("tglBerangkatAkhir", { required: "Mohon isi tanggal berangkat."})} className={errorsPelabuhan.tglBerangkatAkhir ? "form-control form-control-sm is-invalid" : "form-control form-control-sm"} placeholder="Tgl Berangkat" />
-                                                            {errorsPelabuhan.tglBerangkatAkhir && <small className="text-danger">{errorsPelabuhan.tglBerangkatAkhir.message}</small>}
-                                                        </div>
-                                                    </div>
-                                                    <div className="row mb-3">
-                                                        <label className="col-sm-3 col-form-label" htmlFor="tglTibaAkhir">Tgl Tiba <span className='text-danger'>*</span></label>
-                                                        <div className="col-sm-4">
-                                                            <input type="date" id="tglTibaAkhir" name="tglTibaAkhir" {...registerPelabuhan("tglTibaAkhir", { required: "Mohon isi tanggal tiba."})} className={errorsPelabuhan.tglTibaAkhir ? "form-control form-control-sm is-invalid" : "form-control form-control-sm"} placeholder="Tgl Tiba" />
-                                                            {errorsPelabuhan.tglTibaAkhir && <small className="text-danger">{errorsPelabuhan.tglTibaAkhir.message}</small>}
+                                                        <div className="row mb-3">
+                                                            <label className="col-sm-3 col-form-label" htmlFor="infoTambahan">Informasi Tambahan</label>
+                                                            <div className="col-sm-9">
+                                                                <textarea className='form-control' name="infoTambahan" id="infoTambahan" rows="2" {...registerMP("infoTambahan")}></textarea>
+                                                            </div>
                                                         </div>
                                                     </div>
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
-                                    <div className="col-sm-12">
-                                        <div className="card card-action mb-4">
-                                            <div className="card-header">
-                                                <div className="card-action-title">
-                                                    <h5 className="mb-0">Menggunakan Kontainer</h5>
-                                                    <div className="form-check form-check-inline">
-                                                        <input className="form-check-input" type="radio" name="cekKontainer" id="kontainerYa" value="1" {...registerPelabuhan("cekKontainer", { required: "Mohon isi pilihan kontainer."})} />
-                                                        <label className="form-check-label" htmlFor="kontainerYa">Ya</label>
-                                                    </div>
-                                                    <div className="form-check form-check-inline">
-                                                        <input className="form-check-input" type="radio" name="cekKontainer" id="kontainerTidak" value="0" {...registerPelabuhan("cekKontainer")} />
-                                                        <label className="form-check-label" htmlFor="kontainerTidak">Tidak</label>
-                                                    </div>
-                                                    {errorsPelabuhan.cekKontainer && <small className="text-danger">{errorsPelabuhan.cekKontainer.message}</small>}
-                                                </div>
-                                                <div className="card-action-element">
-                                                    <ul className="list-inline mb-0">
-                                                        <li className="list-inline-item">
-                                                            <button type='button' className="btn btn-default card-collapsible text-lighter p-0"><i className="tf-icons fa-solid fa-chevron-up"></i></button>
-                                                        </li>
-                                                    </ul>
-                                                </div>
+                                    <div className="card card-action mb-4">
+                                        <div className="card-header mb-3 p-2" style={{backgroundColor: '#123138'}}>
+                                            <div className="card-action-title">
+                                                <h5 className="mb-0 text-lightest">Detil Media Pembawa</h5>
                                             </div>
-                                            <div className="collapse show" style={{display: (cekdataPelabuhan.cekKontainer === '1' ? 'block' : 'none')}}>
-                                                <div className="card-body pt-0">
-                                                    <div className="row g-3 mb-3">
-                                                        <div className="pb-2">
-                                                            <button type="button" className="btn btn-xs btn-primary" data-bs-toggle="modal" data-bs-target="#modKontainer">Tambah Kontainer</button>
-                                                            <button type="button" onClick={dataKontainerPtk} className="btn btn-xs btn-info float-end"><i className="menu-icon tf-icons fa-solid fa-sync"></i> Refresh Data</button>
-                                                        </div>
-                                                        <table className="table table-sm table-bordered table-hover table-striped dataTable">
-                                                            <thead style={{backgroundColor: '#123138' }}>
-                                                                <tr>
-                                                                    <th className='text-lightest'>No</th>
-                                                                    <th className='text-lightest'>Nomor Kontainer</th>
-                                                                    <th className='text-lightest'>Size</th>
-                                                                    <th className='text-lightest'>Stuff</th>
-                                                                    <th className='text-lightest'>Tipe</th>
-                                                                    <th className='text-lightest'>Segel</th>
-                                                                    <th className='text-lightest'>Act</th>
-                                                                </tr>
-                                                            </thead>
-                                                            <tbody>
-                                                                {kontainerPtk ? (
-                                                                    kontainerPtk?.map((data, index) => (
-                                                                        <tr key={index}>
-                                                                            <td>{index + 1}</td>
-                                                                            <td>{data.nomor}</td>
-                                                                            <td>{sizeKontainer[(data.ukuran_kontainer_id - 1)]}</td>
-                                                                            <td>{data.stuff_kontainer_id === 1 ? "FCL" : "LCL" }</td>
-                                                                            <td>{tipeKontainer[(data.tipe_kontainer_id - 1)]}</td>
-                                                                            <td>{data.segel}</td>
-                                                                            <td>
-                                                                                <div className="dropdown">
-                                                                                    <button type="button" className="btn p-0 dropdown-toggle hide-arrow" data-bs-toggle="dropdown">
-                                                                                        <i className="fa-solid fa-ellipsis-vertical"></i>
-                                                                                    </button>
-                                                                                    <div className="dropdown-menu">
-                                                                                        <button className="btn btn-default dropdown-item" type="button" data-ptk={data.ptk_id} data-header={data.id} onClick={handleEditKontainer} data-bs-toggle="modal" data-bs-target="#modKontainer"><i className="fa-solid fa-pen-to-square me-1"></i> Edit</button>
-                                                                                        <button type='button' className="btn btn-default dropdown-item"><i className="fa-solid fa-trash me-1"></i> Delete</button>
-                                                                                    </div>
-                                                                                </div>
-                                                                            </td>
+                                            <div className="card-action-element">
+                                                <ul className="list-inline mb-0">
+                                                    <li className="list-inline-item">
+                                                        <button type='button' className="btn btn-default card-collapsible text-lighter p-0"><i className="tf-icons fa-solid fa-chevron-up"></i></button>
+                                                    </li>
+                                                </ul>
+                                            </div>
+                                        </div>
+                                        <div className="collapse show">
+                                            <div className="row">
+                                                <div className="col-sm-12">
+                                                    <div className="card-body pt-0">
+                                                        <div className="row g-3 mb-3">
+                                                            <div className="col-md-12">
+                                                                <button type="button" className="btn btn-xs btn-primary" data-bs-toggle={cekdataDiri.jenisMp ? "modal" : ""} data-bs-target={cekdataDiri.jenisMp ? "#modKomoditas" : ""} onClick={() => cekdataDiri.jenisMp ? resetFormKomoditi() : Swal.fire({icon: "error", title: "Mohon Pilih Jenis Media Pembawa!", showConfirmButton: true})}>Tambah Komoditas</button>
+                                                                <button type="button" className="btn btn-xs btn-info float-end"  onClick={dataKomoditiPtk}><i className="menu-icon tf-icons fa-solid fa-sync"></i> Refresh Data</button>
+                                                            </div>
+                                                            <div className="table-responsive text-nowrap" style={{height: (komoditiPtk?.length > 8 ? "300px" : "")}}>
+                                                                <table className="table table-sm table-bordered table-hover table-striped dataTable">
+                                                                    <thead>
+                                                                        <tr>
+                                                                            <th>No</th>
+                                                                            <th>Kode HS</th>
+                                                                            <th>Klasifikasi</th>
+                                                                            <th>Komoditas Umum</th>
+                                                                            <th>Komoditas En/Latin</th>
+                                                                            <th>Netto</th>
+                                                                            <th>Satuan</th>
+                                                                            <th>Bruto</th>
+                                                                            <th>Satuan</th>
+                                                                            <th>Jumlah</th>
+                                                                            <th>Satuan</th>
+                                                                            <th>Jantan</th>
+                                                                            <th>Betina</th>
+                                                                            <th>Harga</th>
+                                                                            <th>Mata Uang</th>
+                                                                            <th>Act</th>
                                                                         </tr>
-                                                                    ))
-                                                                ) : null}
-                                                            </tbody>
-                                                        </table>
+                                                                    </thead>
+                                                                    <tbody>
+                                                                        {komoditiPtk ? (komoditiPtk?.map((data, index) => (
+                                                                                    <tr key={index}>
+                                                                                        <td>{index + 1}</td>
+                                                                                        <td>{data.kode_hs}</td>
+                                                                                        <td>{data.klasifikasi}</td>
+                                                                                        <td>{data.nama_umum_tercetak}</td>
+                                                                                        <td>{data.nama_latin_tercetak}</td>
+                                                                                        <td className='text-end'>{data.volume_netto?.toLocaleString()}</td>
+                                                                                        <td>{data.sat_netto}</td>
+                                                                                        <td className='text-end'>{data.volume_bruto?.toLocaleString()}</td>
+                                                                                        <td>{data.sat_bruto}</td>
+                                                                                        <td className='text-end'>{data.volume_lain?.toLocaleString()}</td>
+                                                                                        <td>{data.sat_lain}</td>
+                                                                                        <td className='text-end'>{data.jantan?.toLocaleString()}</td>
+                                                                                        <td className='text-end'>{data.betina?.toLocaleString()}</td>
+                                                                                        <td className='text-end'>{data.harga?.toLocaleString()}</td>
+                                                                                        <td>{data.mata_uang}</td>
+                                                                                        <td>
+                                                                                            <div className="d-grid gap-2">
+                                                                                                <button type="button" className="btn p-0 hide-arrow dropdown-toggle" aria-expanded="false" data-bs-toggle="dropdown">
+                                                                                                    <i className="menu-icon tf-icons fa-solid fa-ellipsis-vertical"></i>
+                                                                                                </button>
+                                                                                                <div className="dropdown-menu">
+                                                                                                    <button className="dropdown-item" type="button" data-ptk={data.ptk_id} data-kemasan={data.jumlah_kemasan} data-kemasansat={data.kemasan_id} data-satuanlain={data.satuan_lain_id} data-kom={data.komoditas_id} data-klas={data.klasifikasi_id} data-header={data.id} data-ket={data.keterangan} onClick={handleEditKomoditas} data-bs-toggle="modal" data-bs-target="#modKomoditas"><i className="fa-solid fa-pen-to-square me-1"></i> Edit</button>
+                                                                                                    <button className="dropdown-item" type='button'><i className="fa-solid fa-trash me-1"></i> Delete</button>
+                                                                                                </div>
+                                                                                            </div>
+                                                                                        </td>
+                                                                                    </tr>
+                                                                                ))
+                                                                            ) : null
+                                                                        }
+                                                                    </tbody>
+                                                                </table>
+                                                            </div>
+                                                            <div className="row mb-3 mt-3">
+                                                                <label className="offset-sm-6 col-sm-2 col-form-label" htmlFor="nilaiBarang">Total Nilai Barang</label>
+                                                                <div className="col-sm-4">
+                                                                    <div className='row'>
+                                                                        <div className="col-8" style={{paddingRight: '2px'}}>
+                                                                            <input autoComplete="off" type="text" className='form-control form-control-sm' value={sumNilaiKomoditi() ? addCommas(removeNonNumeric(sumNilaiKomoditi())) : ""} {...registerMP("nilaiBarang")} name='nilaiBarang' id='nilaiBarang' />
+                                                                        </div>
+                                                                        <div className="col-4" style={{paddingLeft: '2px'}}>
+                                                                            <select name="satuanNilai" id="satuanNilai" value={cekdataMP.satuanNilai || "IDR"} className='form-select form-select-sm' {...registerMP("satuanNilai")}>
+                                                                                <option value="">--</option>
+                                                                                {dataSelect.satuanNilai}
+                                                                            </select>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                            <small>*Format penulisan desimal menggunakan titik ( . )</small>
+                                                        </div>
                                                     </div>
                                                 </div>
                                             </div>
                                         </div>
-                                    </div>
-                                    <div className="col-12 d-flex justify-content-between">
-                                        <button type="button" className="btn btn-label-secondary" onClick={() => setWizardPage(wizardPage - 1)}>
-                                            <i className="fa-solid fa-chevron-left  me-sm-2 me-1"></i>
-                                            <span className="d-sm-inline-block d-none">Sebelumnya</span>
-                                        </button>
-                                        <button type="submit" className="btn btn-primary">
-                                            <span className="d-sm-inline-block d-none me-sm-1">Simpan & Lanjutkan</span>
-                                            <i className="fa-solid fa-angle-right me-sm-2 me-1"></i>
-                                        </button>
                                     </div>
                                 </div>
+                                <div className="col-12 d-flex justify-content-between">
+                                    <button type="button" className="btn btn-label-secondary" onClick={() => setWizardPage(wizardPage - 1)}>
+                                        <i className="fa-solid fa-chevron-left me-sm-2 me-1"></i>
+                                        <span className="d-sm-inline-block d-none">Sebelumnya</span>
+                                    </button>
+                                    <button type="submit" className="btn btn-primary">
+                                        <span className="d-sm-inline-block d-none me-sm-1">Simpan & Lanjutkan</span>
+                                        <i className="fa-solid fa-angle-right me-sm-2 me-1"></i>
+                                    </button>
+                                </div>
+                                </div>
                             </form>
-                            </div>
+                        </div>
 
-                            <div id="cardKomoditas" className={wizardPage === 3 ? "content active dstepper-block" : "content"}>
-                                <form className="input-form" onSubmit={handleFormMP(onSubmitKomoditas)}>
-                                <input type="hidden" name='idPtk' {...registerMP("idPtk")} />
-                                <input type="hidden" name='noAju' {...registerMP("noAju")} />
-                                
-                                    <div className="row">
+                        <div id="cardDokumen" className={wizardPage == 4 ? "content active dstepper-block" : "content"}>
+                            <div className="row mb-3">
+                                <form onSubmit={handleFormDokPeriksa(onSubmitDokPeriksa)}>
+                                    <input autoComplete="off" type="hidden" name='idPtk' {...registerDokPeriksa("idPtk")} />
+                                    <input autoComplete="off" type="hidden" name='noAju' {...registerDokPeriksa("noAju")} />
                                     <div className="col-sm-12">
                                         <div className="card card-action mb-4">
                                             <div className="card-header mb-3 p-2" style={{backgroundColor: '#123138'}}>
                                                 <div className="card-action-title">
-                                                    <h5 className="mb-0 text-lightest">Uraian</h5>
-                                                </div>
-                                                <div className="card-action-element">
-                                                    <ul className="list-inline mb-0">
-                                                        <li className="list-inline-item">
-                                                            <button type='button' className="btn btn-default card-collapsible text-lighter p-0"><i className="tf-icons fa-solid fa-chevron-up"></i></button>
-                                                        </li>
-                                                    </ul>
-                                                </div>
-                                            </div>
-                                            <div className="collapse show">
-                                                <div className="row">
-                                                        <div className="col-sm-6">
-                                                            <div className="card-body pt-0">
-                                                                <div className="row mb-3">
-                                                                    <label className="col-sm-3 col-form-label" htmlFor="mediaPembawa">Muatan <span className='text-danger'>*</span></label>
-                                                                    <div className="col-sm-8">
-                                                                        <div className="form-check form-check-inline">
-                                                                            <input className="form-check-input" type="radio" name="jenisAngkut" id="curah" value="1" {...registerMP("jenisAngkut", { required: "Mohon pilih apakah komoditas curah atau tidak."})} />
-                                                                            <label className="form-check-label" htmlFor="curah">Curah</label>
-                                                                        </div>
-                                                                        <div className="form-check form-check-inline">
-                                                                            <input className="form-check-input" type="radio" name="jenisAngkut" id="noncurah" value="0" {...registerMP("jenisAngkut")} />
-                                                                            <label className="form-check-label" htmlFor="noncurah">Non Curah</label>
-                                                                        </div>
-                                                                        {errorsMP.jenisAngkut && <div className="offset-3 col-sm-9"><small className="text-danger">{errorsMP.jenisAngkut.message}</small></div>}
-                                                                    </div>
-                                                                </div>
-                                                                <div style={{display: (cekdataDiri.mediaPembawa == "I" ? "block" : "none")}}>
-                                                                    <div className="row mb-3">
-                                                                        <label className="col-sm-3 col-form-label" htmlFor="sumberMpTangkap">Sumber</label>
-                                                                        <div className="col-sm-8">
-                                                                            <div className="form-check form-check-inline">
-                                                                                <input className="form-check-input" type="radio" name="sumberMpTangkap" id="FARM" value="FARM" {...registerMP("sumberMpTangkap", { required: (cekdataDiri.mediaPembawa == "I" ? "Mohon pilih sumber komoditas." : false)})} />
-                                                                                <label className="form-check-label" htmlFor="FARM">FARM / budidaya</label>
-                                                                            </div>
-                                                                            <div className="form-check form-check-inline">
-                                                                                <input className="form-check-input" type="radio" name="sumberMpTangkap" id="WILD" value="WILD" {...registerMP("sumberMpTangkap")} />
-                                                                                <label className="form-check-label" htmlFor="WILD">WILD / tangkap</label>
-                                                                            </div>
-                                                                            {errorsMP.sumberMpTangkap && <div className="offset-3 col-sm-9"><small className="text-danger">{errorsMP.sumberMpTangkap.message}</small></div>}
-                                                                        </div>
-                                                                    </div>
-                                                                    <div className="row mb-3">
-                                                                        <label className="col-sm-3 col-form-label" htmlFor="areaTangkap">Area Tangkap</label>
-                                                                        <div className="col-sm-8">
-                                                                            <Controller
-                                                                                control={controlMP}
-                                                                                name={"areaTangkap"}
-                                                                                defaultValue={""}
-                                                                                className="form-control form-control-sm"
-                                                                                rules={{required: (cekdataMP.sumberMpTangkap == "WILD" ? "Mohon pilih area tangkap." : false)}}
-                                                                                render={({ field: { value,onChange, ...field } }) => (
-                                                                                    <Select styles={customStyles} placeholder={"Pilih area.."}
-                                                                                    value={{id: cekdataMP.areaTangkap, label: cekdataMP.areaTangkapView}}
-                                                                                    {...field} options={areaTangkap()} onChange={(e) => setValueMP("areaTangkap", e.value) & setValueMP("areaTangkapView", e.label)} />
-                                                                                )}
-                                                                            />
-                                                                            {errorsMP.areaTangkap && <div className="offset-3 col-sm-9"><small className="text-danger">{errorsMP.areaTangkap.message}</small></div>}
-                                                                        </div>
-                                                                    </div>
-                                                                </div>
-                                                                <div className="row mb-3">
-                                                                    <label className="col-sm-3 col-form-label" htmlFor="peruntukan">Peruntukan</label>
-                                                                    <div className="col-sm-4">
-                                                                        <select name="peruntukan" id="peruntukan" {...registerMP("peruntukan", { required: cekdataDiri.mediaPembawa === "T" ? "Mohon pilih jenis angkut." : false})} className={errorsMP.peruntukan ? "form-select form-select-sm is-invalid" : "form-select form-select-sm"}>
-                                                                            <option value="">--</option>
-                                                                            <option value="1">Ditanam/Budidaya/Peningkatan Mutu Genetik</option>
-                                                                            <option value="2">Konsumsi</option>
-                                                                            <option value="3">Penelitian</option>
-                                                                            <option value="4">Pameran/Kontes</option>
-                                                                            <option value="5">Perdagangan</option>
-                                                                            <option value="6">Bahan Baku</option>
-                                                                            <option value="99">Lainnya</option>
-                                                                        </select>
-                                                                    </div>
-                                                                    <div className="col-sm-5">
-                                                                        <div style={{display: cekdataMP.peruntukan === '99' ? 'block' : 'none'}}>
-                                                                            <input type="text" id="peruntukanLain" name="peruntukanLain" {...registerMP("peruntukanLain", { required: cekdataMP.peruntukan === "99" ? "Mohon isi peruntukan lain." : false})} className={errorsMP.peruntukanLain ? "form-control form-control-sm is-invalid" : "form-control form-control-sm"} placeholder="Peruntukan Lainnya.." />
-                                                                        </div>
-                                                                    </div>
-                                                                    {errorsMP.peruntukan && <div className="offset-3 col-sm-9"><small className="text-danger">{errorsMP.peruntukan.message}</small></div>}
-                                                                </div>
-                                                                <div className="row mb-3">
-                                                                    <label className="col-sm-3 col-form-label" htmlFor="negaraAsalMP">Negara Asal Komoditas <span className='text-danger'>*</span></label>
-                                                                    <div className="col-sm-6">
-                                                                        <Controller
-                                                                            control={controlMP}
-                                                                            name={"negaraAsalMP"}
-                                                                            defaultValue={""}
-                                                                            className="form-control form-control-sm"
-                                                                            rules={{ required: "Mohon pilih negara asal komoditas." }}
-                                                                            render={({ field: { value,onChange, ...field } }) => (
-                                                                                <Select styles={customStyles} placeholder={"Pilih negara.."}
-                                                                                value={{id: cekdataMP.negaraAsalMP, label: cekdataMP.negaraAsalMPView}}
-                                                                                {...field} options={cekdataDiri.permohonan != "IM" ? [{value: "99", label: "ID - INDONESIA"}] : dataSelect.negaraAsalMP} onChange={(e) => handleSelectNegKomoditas(e, "negaraAsalMP") & (e.value === '99' ? handleKota(null, "daerahAsalMP") : null)} />
-                                                                            )}
-                                                                        />
-                                                                    </div>
-                                                                    {errorsMP.negaraAsalMP && <div className="offset-3 col-sm-9"><small className="text-danger">{errorsMP.negaraAsalMP.message}</small></div>}
-                                                                </div>
-                                                                <div className="row mb-3" style={{visibility: (cekdataMP.negaraAsalMP == 99 ? "visible" : "hidden")}}>
-                                                                    <label className="col-sm-3 col-form-label" htmlFor="daerahAsalMP">Daerah Asal</label>
-                                                                    <div className="col-sm-6">
-                                                                        <Controller
-                                                                            control={controlMP}
-                                                                            name={"daerahAsalMP"}
-                                                                            defaultValue={""}
-                                                                            className="form-control form-control-sm"
-                                                                            rules={{ required: false }}
-                                                                            render={({ field: { value,onChange, ...field } }) => (
-                                                                                <Select styles={customStyles} placeholder={"Pilih daerah asal.."} value={{id: cekdataMP.daerahAsalMP, label: cekdataMP.daerahAsalMPView}} {...field} options={dataSelect.daerahAsalMP} onChange={(e) => handleSelectNegKomoditas(e, "daerahAsalMP")} />
-                                                                            )}
-                                                                        />
-                                                                        {errorsMP.daerahAsal && <small className="text-danger">{errorsMP.daerahAsalMP.message}</small>}
-                                                                    </div>
-                                                                </div>
-                                                                <div className="row mb-3">
-                                                                    <label className="col-sm-3 col-form-label" htmlFor="negaraTujuanMP">Negara Tujuan Komoditas <span className='text-danger'>*</span></label>
-                                                                    <div className="col-sm-6">
-                                                                        <Controller
-                                                                            control={controlMP}
-                                                                            defaultValue={""}
-                                                                            name={"negaraTujuanMP"}
-                                                                            className="form-control form-control-sm"
-                                                                            rules={{ required: "Mohon pilih negara tujuan komoditas." }}
-                                                                            render={({ field: { value,onChange, ...field } }) => (
-                                                                                <Select styles={customStyles} placeholder={"Pilih negara.."} value={{id: cekdataMP.negaraTujuanMP, label: cekdataMP.negaraTujuanMPView}} {...field} options={cekdataDiri.permohonan != "EX" ? [{value: "99", label: "ID - INDONESIA"}] :dataSelect.negaraTujuanMP} onChange={(e) => handleSelectNegKomoditas(e, "negaraTujuanMP") & (e.value === '99' ? handleKota(null, "daerahTujuanMP") : null)} />
-                                                                            )}
-                                                                        />
-                                                                    </div>
-                                                                    {errorsMP.negaraTujuanMP && <div className="offset-3 col-sm-9"><small className="text-danger">{errorsMP.negaraTujuanMP.message}</small></div>}
-                                                                </div>
-                                                                <div className="row mb-3" style={{visibility: (cekdataMP.negaraTujuanMP == 99 ? "visible" : "hidden")}}>
-                                                                    <label className="col-sm-3 col-form-label" htmlFor="daerahTujuanMP">Daerah Tujuan</label>
-                                                                    <div className="col-sm-6">
-                                                                        <Controller
-                                                                            control={controlMP}
-                                                                            name={"daerahTujuanMP"}
-                                                                            defaultValue={""}
-                                                                            className="form-control form-control-sm"
-                                                                            rules={{ required: false }}
-                                                                            render={({ field: { value,onChange, ...field } }) => (
-                                                                                <Select styles={customStyles} placeholder={"Pilih daerah tujuan.."} value={{id: cekdataMP.daerahTujuanMP, label: cekdataMP.daerahTujuanMPView}} {...field} options={dataSelect.daerahTujuanMP} onChange={(e) => handleSelectNegKomoditas(e, "daerahTujuanMP")} />
-                                                                            )}
-                                                                        />
-                                                                        {errorsMP.daerahTujuanMP && <small className="text-danger">{errorsMP.daerahTujuanMP.message}</small>}
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                        <div className="col-sm-6">
-                                                            <div className="card-body pt-0">
-                                                                <div className="row mb-3">
-                                                                    <label className="col-sm-3 col-form-label" htmlFor="tingkatOlah">Tingkat Pengolahan</label>
-                                                                    <div className="col-sm-9">
-                                                                        <div className="col-sm-9">
-                                                                            <div className="form-check form-check-inline">
-                                                                                <input className="form-check-input" type="radio" name="tingkatOlah" id="sudah_olah" value="diolah" {...registerMP("tingkatOlah", { required: "Mohon isi peruntukan lain."})} />
-                                                                                <label className="form-check-label" htmlFor="sudah_olah">Sudah Diolah</label>
-                                                                            </div>
-                                                                            <div className="form-check form-check-inline">
-                                                                                <input className="form-check-input" type="radio" name="tingkatOlah" id="belum_olah" value="belum" {...registerMP("tingkatOlah")} />
-                                                                                <label className="form-check-label" htmlFor="belum_olah">Belum Olah</label>
-                                                                            </div>
-                                                                            {errorsMP.tingkatOlah && <small className="text-danger">{errorsMP.tingkatOlah.message}</small>}
-                                                                        </div>
-                                                                    </div>
-                                                                </div>
-                                                                <div className="row mb-3">
-                                                                    <label className="col-sm-3 col-form-label" htmlFor="jenisKemasan">Jenis Kemasan</label>
-                                                                    <div className="col-sm-5">
-                                                                        <select name="jenisKemasan" id="jenisKemasan" onClick={handleKemasan} {...registerMP("jenisKemasan")} className="form-select form-select-sm">
-                                                                            <option value="">--</option>
-                                                                            {dataSelect.jenisKemasan}
-                                                                        </select>
-                                                                    </div>
-                                                                </div>
-                                                                <div className="row mb-3">
-                                                                    <label className="col-sm-3 col-form-label" htmlFor="jumlahKemasan">Jumlah Kemasan</label>
-                                                                    <div className="col-sm-6">
-                                                                        <input type="text" id="jumlahKemasan" name="jumlahKemasan" {...registerMP("jumlahKemasan")} value={cekdataMP.jumlahKemasan ? removeNonNumeric(cekdataMP.jumlahKemasan) : ""} className="form-control form-control-sm" placeholder="Jumlah Kemasan" />
-                                                                    </div>
-                                                                </div>
-                                                                <div className="row mb-3">
-                                                                    <label className="col-sm-3 col-form-label" htmlFor="merkKemasan">Merk Kemasan</label>
-                                                                    <div className="col-sm-6">
-                                                                        <input type="text" id="merkKemasan" name="merkKemasan" {...registerMP("merkKemasan")} className="form-control form-control-sm" placeholder="Merk Kemasan" />
-                                                                    </div>
-                                                                </div>
-                                                                <div className="row mb-3">
-                                                                    <label className="col-sm-3 col-form-label" htmlFor="tandaKemasan">Tanda pada Kemasan</label>
-                                                                    <div className="col-sm-6">
-                                                                        <input type="text" id="tandaKemasan" name="tandaKemasan" {...registerMP("tandaKemasan")} className="form-control form-control-sm" placeholder="Tanda Kemasan" />
-                                                                    </div>
-                                                                </div>
-                                                                <div className="row mb-3">
-                                                                    <label className="col-sm-3 col-form-label" htmlFor="nilaiBarang">Nilai Barang</label>
-                                                                    <div className="col-sm-9">
-                                                                        <div className='row'>
-                                                                            <div className="col-4" style={{paddingRight: '2px'}}>
-                                                                                <input type="text" className='form-control form-control-sm' value={cekdataMP.nilaiBarang ? addCommas(removeNonNumeric(cekdataMP.nilaiBarang)) : ""} {...registerMP("nilaiBarang")} name='nilaiBarang' id='nilaiBarang' />
-                                                                            </div>
-                                                                            <div className="col-4" style={{paddingLeft: '2px'}}>
-                                                                                <select name="satuanNilai" id="satuanNilai" value={cekdataMP.satuanNilai || "IDR"} className='form-select form-select-sm' {...registerMP("satuanNilai")}>
-                                                                                    <option value="">--</option>
-                                                                                    {dataSelect.satuanNilai}
-                                                                                </select>
-                                                                            </div>
-                                                                        </div>
-                                                                    </div>
-                                                                </div>
-                                                                <div className="row mb-3">
-                                                                    <label className="col-sm-3 col-form-label" htmlFor="infoTambahan">Informasi Tambahan</label>
-                                                                    <div className="col-sm-9">
-                                                                        <textarea className='form-control' name="infoTambahan" id="infoTambahan" rows="2" {...registerMP("infoTambahan")}></textarea>
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div className="card card-action mb-4">
-                                            <div className="card-header mb-3 p-2" style={{backgroundColor: '#123138'}}>
-                                                <div className="card-action-title">
-                                                    <h5 className="mb-0 text-lightest">Detil Media Pembawa</h5>
+                                                    <h5 className="mb-0 text-lightest">Detil Dokumen</h5>
                                                 </div>
                                                 <div className="card-action-element">
                                                     <ul className="list-inline mb-0">
@@ -3059,68 +3259,103 @@ function DocK11() {
                                                         <div className="card-body pt-0">
                                                             <div className="row g-3 mb-3">
                                                                 <div className="col-md-12">
-                                                                    <button type="button" className="btn btn-xs btn-primary" data-bs-toggle={cekdataDiri.jenisMp ? "modal" : ""} data-bs-target={cekdataDiri.jenisMp ? "#modKomoditas" : ""} onClick={() => cekdataDiri.jenisMp ? resetFormKomoditi() : Swal.fire({icon: "error", title: "Mohon Pilih Jenis Media Pembawa!", showConfirmButton: true})}>Tambah Komoditas</button>
-                                                                    <button type="button" className="btn btn-xs btn-info float-end"  onClick={dataKomoditiPtk}><i className="menu-icon tf-icons fa-solid fa-sync"></i> Refresh Data</button>
+                                                                    <button type="button" className="btn btn-xs btn-primary" data-bs-toggle={cekdataDiri.mediaPembawa ? "modal" : ""} data-bs-target={cekdataDiri.mediaPembawa ? "#modDokumen" : ""} onClick={cekdataDiri.mediaPembawa ? null : () => {Swal.fire({icon: "error", title: "Mohon pilih media pembawa terlebih dahulu!", showConfirmButton: true})}}>Tambah Dokumen</button>
+                                                                    <button type="button" className="btn btn-xs btn-info float-end"  onClick={dataDokumenPtk}><i className="menu-icon tf-icons fa-solid fa-sync"></i> Refresh Data</button>
                                                                 </div>
-                                                                <div className="table-responsive text-nowrap" style={{height: "300px"}}>
+                                                                <div className="text-nowrap">
                                                                     <table className="table table-sm table-bordered table-hover table-striped dataTable">
                                                                         <thead>
                                                                             <tr>
                                                                                 <th>No</th>
-                                                                                <th>Kode HS</th>
-                                                                                <th>Klasifikasi</th>
-                                                                                <th>Komoditas Umum</th>
-                                                                                <th>Komoditas En/Latin</th>
-                                                                                <th>Netto</th>
-                                                                                <th>Satuan</th>
-                                                                                <th>Bruto</th>
-                                                                                <th>Satuan</th>
-                                                                                <th>Jumlah</th>
-                                                                                <th>Satuan</th>
-                                                                                <th>Jantan</th>
-                                                                                <th>Betina</th>
-                                                                                <th>Harga</th>
-                                                                                <th>Mata Uang</th>
+                                                                                <th>Jenis Dokumen</th>
+                                                                                <th>No Dokumen</th>
+                                                                                <th>Tgl Dokumen</th>
+                                                                                <th>Asal Penerbit</th>
+                                                                                <th>Keterangan</th>
+                                                                                <th>File</th>
                                                                                 <th>Act</th>
                                                                             </tr>
                                                                         </thead>
                                                                         <tbody>
-                                                                            {komoditiPtk ? (komoditiPtk?.map((data, index) => (
-                                                                                        <tr key={index}>
-                                                                                            <td>{index + 1}</td>
-                                                                                            <td>{data.kode_hs}</td>
-                                                                                            <td>{data.klasifikasi}</td>
-                                                                                            <td>{data.nama_umum_tercetak}</td>
-                                                                                            <td>{data.nama_latin_tercetak}</td>
-                                                                                            <td>{data.volume_netto ? data.volume_netto.toLocaleString() : ""}</td>
-                                                                                            <td>{data.sat_netto}</td>
-                                                                                            <td>{data.volume_bruto ? data.volume_bruto.toLocaleString() : ""}</td>
-                                                                                            <td>{data.sat_bruto}</td>
-                                                                                            <td>{data.volume_lain ? data.volume_lain.toLocaleString() : ""}</td>
-                                                                                            <td>{data.sat_lain}</td>
-                                                                                            <td>{data.jantan}</td>
-                                                                                            <td>{data.betina}</td>
-                                                                                            <td>{data.harga ? data.harga.toLocaleString() : ""}</td>
-                                                                                            <td>{data.mata_uang}</td>
-                                                                                            <td>
-                                                                                                <div className="dropdown">
-                                                                                                    <button type="button" className="btn p-0 dropdown-toggle hide-arrow" data-bs-toggle="dropdown">
-                                                                                                        <i className="fa-solid fa-ellipsis-vertical"></i>
-                                                                                                    </button>
-                                                                                                    <div className="dropdown-menu">
-                                                                                                        <button className="btn btn-default dropdown-item" type="button" data-ptk={data.ptk_id} data-kemasan={data.jumlah_kemasan} data-kemasansat={data.kemasan_id} data-satuanlain={data.satuan_lain_id} data-kom={data.komoditas_id} data-klas={data.klasifikasi_id} data-header={data.id} data-ket={data.keterangan} onClick={handleEditKomoditas} data-bs-toggle="modal" data-bs-target="#modKomoditas"><i className="fa-solid fa-pen-to-square me-1"></i> Edit</button>
-                                                                                                        <button type='button' className="btn btn-default dropdown-item"><i className="fa-solid fa-trash me-1"></i> Delete</button>
-                                                                                                    </div>
+                                                                            {dokumenPtk ? (dokumenPtk?.map((data, index) => (
+                                                                                    <tr key={index}>
+                                                                                        <td>{index + 1}</td>
+                                                                                        <td>{data.nama_dokumen}</td>
+                                                                                        <td>{data.no_dokumen}</td>
+                                                                                        <td>{moment(data.tanggal_dokumen).format('YYYY-MM-DD')}</td>
+                                                                                        <td>{data.negara}</td>
+                                                                                        <td>{data.keterangan}</td>
+                                                                                        <td><a href={"http://localhost/api-barantin/" + data.efile} target='_blank' rel='noreferrer'>[LIHAT FILE]</a></td>
+                                                                                        <td>
+                                                                                            <div className="d-grid gap-2">
+                                                                                                <button type="button" className="btn p-0 hide-arrow dropdown-toggle" aria-expanded="false" data-bs-toggle="dropdown">
+                                                                                                    <i className="menu-icon tf-icons fa-solid fa-ellipsis-vertical"></i>
+                                                                                                </button>
+                                                                                                <div className="dropdown-menu">
+                                                                                                    <button className="dropdown-item" type="button" data-header={data.id} onClick={handleEditDokumen} data-bs-toggle="modal" data-bs-target="#modDokumen"><i className="fa-solid fa-pen-to-square me-1"></i> Edit</button>
+                                                                                                    <button className="dropdown-item" type='button'><i className="fa-solid fa-trash me-1"></i> Delete</button>
                                                                                                 </div>
-                                                                                            </td>
-                                                                                        </tr>
-                                                                                    ))
-                                                                                ) : null
-                                                                            }
+                                                                                            </div>
+                                                                                        </td>
+                                                                                    </tr>
+                                                                                ))
+                                                                            ) : null }
                                                                         </tbody>
                                                                     </table>
                                                                 </div>
-                                                                <small>*Format penulisan desimal menggunakan titik ( . )</small>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div className="card card-action mb-4">
+                                            <div className="card-header mb-3 p-2" style={{backgroundColor: '#123138'}}>
+                                                <div className="card-action-title">
+                                                    <h5 className="mb-0 text-lightest">Tempat Pemeriksaan Tindakan Karantina</h5>
+                                                </div>
+                                                <div className="card-action-element">
+                                                    <ul className="list-inline mb-0">
+                                                        <li className="list-inline-item">
+                                                            <button type='button' className="btn btn-default card-collapsible text-lighter p-0"><i className="tf-icons fa-solid fa-chevron-up"></i></button>
+                                                        </li>
+                                                    </ul>
+                                                </div>
+                                            </div>
+                                            <div className="collapse show">
+                                                <div className="row">
+                                                    <div className="col-sm-12">
+                                                        <div className="card-body pt-0">
+                                                            <div className="row g-3 mb-3">
+                                                                <div className="col-sm-12">
+                                                                    <div className="row">
+                                                                        <label className="col-sm-2 col-form-label" htmlFor="tempatPeriksaPtk">Tempat Pemeriksaan</label>
+                                                                        <div className="col-sm-4">
+                                                                            <select name="tempatPeriksaPtk" id="tempatPeriksaPtk" {...registerDokPeriksa("tempatPeriksaPtk")} className="form-control form-control-sm">
+                                                                                <option value="">--</option>
+                                                                                <option value="IK">Instalasi Karantina</option>
+                                                                                <option value="TL">Tempat Lain</option>
+                                                                                <option value="DL">Depo / Lainnya</option>
+                                                                            </select>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                                <div className="col-sm-6">
+                                                                    <div className="row">
+                                                                        <label className="col-sm-4 col-form-label" htmlFor="namaTempatPeriksaPtk">Nama Tempat</label>
+                                                                        <div className="col-sm-8">
+                                                                        <input autoComplete="off" type="text" name='namaTempatPeriksaPtk' id='namaTempatPeriksaPtk' {...registerDokPeriksa("namaTempatPeriksaPtk")} className='form-control form-control-sm' />
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                                <div className="col-sm-6">
+                                                                    <div className="row">
+                                                                        <label className="col-sm-4 col-form-label" htmlFor="alamatTempatPeriksaPtk">Alamat Tempat</label>
+                                                                        <div className="col-sm-8">
+                                                                        <input autoComplete="off" type="text" name='alamatTempatPeriksaPtk' id='alamatTempatPeriksaPtk' {...registerDokPeriksa("alamatTempatPeriksaPtk")} className='form-control form-control-sm' />
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
                                                             </div>
                                                         </div>
                                                     </div>
@@ -3134,257 +3369,114 @@ function DocK11() {
                                             <span className="d-sm-inline-block d-none">Sebelumnya</span>
                                         </button>
                                         <button type="submit" className="btn btn-primary">
-                                            <span className="d-sm-inline-block d-none me-sm-1">Simpan & Lanjutkan</span>
+                                            <span className="d-sm-inline-block d-none me-sm-1">Konfirmasi</span>
                                             <i className="fa-solid fa-angle-right me-sm-2 me-1"></i>
                                         </button>
                                     </div>
+                                </form>
+                            </div>
+                        </div>
+                        <div id="cardKonfirmasi" className={wizardPage == 5 ? "content active dstepper-block" : "content"}>
+                            <div className="row mb-3">
+                                <form onSubmit={handleFormKonfirmasi(onSubmitKonfirmasi)}>
+                                    <input autoComplete="off" type="hidden" name='idPtk' {...registerKonfirmasi("idPtk")} />
+                                    <input autoComplete="off" type="hidden" name='noAju' {...registerKonfirmasi("noAju")} />
+                                    <div className="col-12" style={{display: (cekdataDiri.permohonan == "EX" ? "block" : "none")}}>
+                                        <div className="form-check form-switch mb-2">
+                                            <input autoComplete="off" className="form-check-input" type="checkbox" id="isDraft" name='isDraft' {...registerKonfirmasi("isDraft")} />
+                                            <label className="form-check-label" htmlFor="isDraft">Aktifkan fasilitas Draft {cekdataDiri.mediaPembawa == "T" ? "PC" : "HC"}</label>
+                                        </div>
+                                        <hr />                                        
+                                    </div>
+                                    <div className="col-12 col-lg-8 offset-lg-2 text-center mb-3">
+                                        <h4 className="mt-2">Terimakasih! 😇</h4>
+                                        <p>Silahkan cek kembali kelengkapan data yang diinput!</p>
+                                        <p>
+                                            Silahkan klik tombol "Simpan & Kirim" jika data yang diinput sudah benar.
+                                        </p>
+                                    </div>
+                                    <div className="col-12 d-flex justify-content-between">
+                                        <button type="button" className="btn btn-primary btn-prev" onClick={() => setWizardPage(wizardPage - 1)}>
+                                            <i className="fa-solid fa-chevron-left me-sm-2 me-1"></i>
+                                            <span className="d-sm-inline-block d-none">Cek Kembali</span>
+                                        </button>
+                                        <button type="submit" className="btn btn-success ms-sm-n2">
+                                            <i className="fa-solid fa-save me-sm-2 me-1"></i>
+                                            <span className="d-sm-inline-block d-none me-sm-1">Simpan & Kirim</span>
+                                        </button>
                                     </div>
                                 </form>
                             </div>
-
-                            <div id="cardDokumen" className={wizardPage === 4 ? "content active dstepper-block" : "content"}>
-                                <div className="row mb-3">
-                                    <form onSubmit={handleFormDokPeriksa(onSubmitDokPeriksa)}>
-                                        <input type="hidden" name='idPtk' {...registerDokPeriksa("idPtk")} />
-                                        <input type="hidden" name='noAju' {...registerDokPeriksa("noAju")} />
-                                        <div className="col-sm-12">
-                                            <div className="card card-action mb-4">
-                                                <div className="card-header mb-3 p-2" style={{backgroundColor: '#123138'}}>
-                                                    <div className="card-action-title">
-                                                        <h5 className="mb-0 text-lightest">Detil Dokumen</h5>
-                                                    </div>
-                                                    <div className="card-action-element">
-                                                        <ul className="list-inline mb-0">
-                                                            <li className="list-inline-item">
-                                                                <button type='button' className="btn btn-default card-collapsible text-lighter p-0"><i className="tf-icons fa-solid fa-chevron-up"></i></button>
-                                                            </li>
-                                                        </ul>
-                                                    </div>
-                                                </div>
-                                                <div className="collapse show">
-                                                    <div className="row">
-                                                        <div className="col-sm-12">
-                                                            <div className="card-body pt-0">
-                                                                <div className="row g-3 mb-3">
-                                                                    <div className="col-md-12">
-                                                                        <button type="button" className="btn btn-xs btn-primary" data-bs-toggle={cekdataDiri.mediaPembawa ? "modal" : ""} data-bs-target={cekdataDiri.mediaPembawa ? "#modDokumen" : ""} onClick={cekdataDiri.mediaPembawa ? null : () => {Swal.fire({icon: "error", title: "Mohon pilih media pembawa terlebih dahulu!", showConfirmButton: true})}}>Tambah Dokumen</button>
-                                                                        <button type="button" className="btn btn-xs btn-info float-end"  onClick={dataDokumenPtk}><i className="menu-icon tf-icons fa-solid fa-sync"></i> Refresh Data</button>
-                                                                    </div>
-                                                                    <div className="text-nowrap">
-                                                                        <table className="table table-sm table-bordered table-hover table-striped dataTable">
-                                                                            <thead>
-                                                                                <tr>
-                                                                                    <th>No</th>
-                                                                                    <th>Jenis Dokumen</th>
-                                                                                    <th>No Dokumen</th>
-                                                                                    <th>Tgl Dokumen</th>
-                                                                                    <th>Asal Penerbit</th>
-                                                                                    <th>Keterangan</th>
-                                                                                    <th>File</th>
-                                                                                    <th>Act</th>
-                                                                                </tr>
-                                                                            </thead>
-                                                                            <tbody>
-                                                                                {dokumenPtk ? (dokumenPtk?.map((data, index) => (
-                                                                                        <tr key={index}>
-                                                                                            <td>{index + 1}</td>
-                                                                                            <td>{data.nama_dokumen}</td>
-                                                                                            <td>{data.no_dokumen}</td>
-                                                                                            <td>{moment(data.tanggal_dokumen).format('YYYY-MM-DD')}</td>
-                                                                                            <td>{data.negara}</td>
-                                                                                            <td>{data.keterangan}</td>
-                                                                                            <td><a href={"http://localhost/api-barantin/" + data.efile} target='_blank' rel='noreferrer'>[LIHAT FILE]</a></td>
-                                                                                            <td>
-                                                                                                <div className="dropdown">
-                                                                                                    <button type="button" className="btn p-0 dropdown-toggle hide-arrow" data-bs-toggle="dropdown">
-                                                                                                        <i className="fa-solid fa-ellipsis-vertical"></i>
-                                                                                                    </button>
-                                                                                                    <div className="dropdown-menu">
-                                                                                                        <button className="btn btn-default dropdown-item" type="button" data-header={data.id} onClick={handleEditDokumen} data-bs-toggle="modal" data-bs-target="#modDokumen"><i className="fa-solid fa-pen-to-square me-1"></i> Edit</button>
-                                                                                                        <button type='button' className="btn btn-default dropdown-item"><i className="fa-solid fa-trash me-1"></i> Delete</button>
-                                                                                                    </div>
-                                                                                                </div>
-                                                                                            </td>
-                                                                                        </tr>
-                                                                                    ))
-                                                                                ) : null }
-                                                                            </tbody>
-                                                                        </table>
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
+                            <hr />
+                            <div className="card" style={{display: (ptkLengkap ? "block" : "none")}}>
+                                <div className="card-header mb-3 p-2" style={{backgroundColor: '#123138'}}>
+                                    <div className="card-action-title">
+                                        <h5 className="mb-0 text-lightest">Verifikasi PTK</h5>
+                                    </div>
+                                </div>
+                                <div className="card-body">
+                                    <form onSubmit={handleFormVerify(onSubmitVerify)}>
+                                        <input autoComplete="off" type="hidden" name="idPtk" {...registerVerify("idPtk")} />
+                                        <input autoComplete="off" type="hidden" name="noAju" {...registerVerify("noAju")} />
+                                        <input autoComplete="off" type="hidden" name="noDokumen" {...registerVerify("noDokumen")} />
+                                        <input autoComplete="off" type="hidden" name="mediaPembawaVerif" {...registerVerify("mediaPembawaVerif")} />
+                                        <div className="col-sm-6">
+                                            <div className="form-check form-check-inline">
+                                                <input autoComplete="off" className="form-check-input" type="radio" name="opsiVerif" id="opsiVerif1" value="1" onClick={() => setValueVerify("alasanTolak", "") & setValueVerify("tglTerimaVerif", (new Date()).toLocaleString('en-CA', { hourCycle: 'h24' }).replace(',', '').slice(0,16))} {...registerVerify("opsiVerif", { required: "Mohon pilih verifikasi."})} />
+                                                <label className="form-check-label" htmlFor="opsiVerif1">Setujui PTK</label>
                                             </div>
-                                            <div className="card card-action mb-4">
-                                                <div className="card-header mb-3 p-2" style={{backgroundColor: '#123138'}}>
-                                                    <div className="card-action-title">
-                                                        <h5 className="mb-0 text-lightest">Tempat Pemeriksaan Tindakan Karantina</h5>
+                                            <div className="form-check form-check-inline">
+                                                <input autoComplete="off" className="form-check-input" type="radio" name="opsiVerif" id="opsiVerif2" value="2" onClick={() => setValueVerify("tglTerimaVerif", "") & setValueVerify("petugasVerif", "")} {...registerVerify("opsiVerif")}/>
+                                                <label className="form-check-label" htmlFor="opsiVerif2">Tolak PTK</label>
+                                            </div>
+                                            {errorsVerify.opsiVerif && <small className="text-danger">{errorsVerify.opsiVerif.message}</small>}
+                                        </div>
+                                        <br />
+                                        <div className="col-sm-4" style={{display: (cekdataVerify.opsiVerif == '2' ? 'block' : 'none')}}>
+                                            <div className="mb-3">
+                                                <label className="form-label" htmlFor="basic-default-fullname">Alasan Tolak</label>
+                                                <textarea name="alasanTolak" id="alasanTolak" rows="2" {...registerVerify("alasanTolak", { required: (cekdataVerify.opsiVerif == '2' ? "Mohon isi alasan tolak." : false)})} className={errorsVerify.alasanTolak ? "form-control form-control-sm is-invalid" : "form-control form-control-sm"}></textarea>
+                                            </div>
+                                            {errorsVerify.alasanTolak && <small className="text-danger">{errorsVerify.alasanTolak.message}</small>}
+                                        </div>
+                                        <div className="col-sm-4" style={{display: (cekdataVerify.opsiVerif == '1' ? 'block' : 'none')}}>
+                                            <div className="mb-3">
+                                                <label className="form-label" htmlFor="basic-default-fullname"><b><u>Tanda Terima Laporan PTK</u></b></label>
+                                                <div className="row mb-3">
+                                                    <label className="col-sm-5 col-form-label" htmlFor="tglTerimaVerif">Tgl Terima</label>
+                                                    <div className="col-sm-7">
+                                                        <input autoComplete="off" type="datetime-local" id="tglTerimaVerif" name="tglTerimaVerif" {...registerVerify("tglTerimaVerif", { required: (cekdataVerify.opsiVerif == '1' ? "Mohon tanggal terima." : false)})} className={errorsVerify.tglTerimaVerif ? "form-control form-control-sm is-invalid" : "form-control form-control-sm"} />
+                                                        {errorsVerify.tglTerimaVerif && <small className="text-danger">{errorsVerify.tglTerimaVerif.message}</small>}
                                                     </div>
-                                                    <div className="card-action-element">
-                                                        <ul className="list-inline mb-0">
-                                                            <li className="list-inline-item">
-                                                                <button type='button' className="btn btn-default card-collapsible text-lighter p-0"><i className="tf-icons fa-solid fa-chevron-up"></i></button>
-                                                            </li>
-                                                        </ul>
-                                                    </div>
-                                                </div>
-                                                <div className="collapse show">
-                                                    <div className="row">
-                                                        <div className="col-sm-12">
-                                                            <div className="card-body pt-0">
-                                                                <div className="row g-3 mb-3">
-                                                                    <div className="col-sm-12">
-                                                                        <div className="row">
-                                                                            <label className="col-sm-2 col-form-label" htmlFor="tempatPeriksaPtk">Tempat Pemeriksaan</label>
-                                                                            <div className="col-sm-4">
-                                                                                <select name="tempatPeriksaPtk" id="tempatPeriksaPtk" {...registerDokPeriksa("tempatPeriksaPtk")} className="form-control form-control-sm">
-                                                                                    <option value="">--</option>
-                                                                                    <option value="IK">Instalasi Karantina</option>
-                                                                                    <option value="TL">Tempat Lain</option>
-                                                                                    <option value="DL">Depo / Lainnya</option>
-                                                                                </select>
-                                                                            </div>
-                                                                        </div>
-                                                                    </div>
-                                                                    <div className="col-sm-6">
-                                                                        <div className="row">
-                                                                            <label className="col-sm-4 col-form-label" htmlFor="namaTempatPeriksaPtk">Nama Tempat</label>
-                                                                            <div className="col-sm-8">
-                                                                            <input type="text" name='namaTempatPeriksaPtk' id='namaTempatPeriksaPtk' {...registerDokPeriksa("namaTempatPeriksaPtk")} className='form-control form-control-sm' />
-                                                                            </div>
-                                                                        </div>
-                                                                    </div>
-                                                                    <div className="col-sm-6">
-                                                                        <div className="row">
-                                                                            <label className="col-sm-4 col-form-label" htmlFor="alamatTempatPeriksaPtk">Alamat Tempat</label>
-                                                                            <div className="col-sm-8">
-                                                                            <input type="text" name='alamatTempatPeriksaPtk' id='alamatTempatPeriksaPtk' {...registerDokPeriksa("alamatTempatPeriksaPtk")} className='form-control form-control-sm' />
-                                                                            </div>
-                                                                        </div>
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                        </div>
+                                                    <label className="col-sm-5 col-form-label" htmlFor="petugasVerif">Petugas Penerima</label>
+                                                    <div className="col-sm-7">
+                                                        <input autoComplete="off" type="text" id="petugasVerif" name="petugasVerif" {...registerVerify("petugasVerif", { required: (cekdataVerify.opsiVerif == '1' ? "Mohon isi nama petugas verifikasi." : false)})} className={errorsVerify.petugasVerif ? "form-control form-control-sm is-invalid" : "form-control form-control-sm"} />
+                                                        {errorsVerify.petugasVerif && <small className="text-danger">{errorsVerify.petugasVerif.message}</small>}
                                                     </div>
                                                 </div>
                                             </div>
                                         </div>
-                                        <div className="col-12 d-flex justify-content-between">
-                                            <button type="button" className="btn btn-label-secondary" onClick={() => setWizardPage(wizardPage - 1)}>
-                                                <i className="fa-solid fa-chevron-left me-sm-2 me-1"></i>
-                                                <span className="d-sm-inline-block d-none">Sebelumnya</span>
-                                            </button>
-                                            <button type="submit" className="btn btn-primary">
-                                                <span className="d-sm-inline-block d-none me-sm-1">Konfirmasi</span>
-                                                <i className="fa-solid fa-angle-right me-sm-2 me-1"></i>
-                                            </button>
+                                        <div className='row'>
+                                            <div className='col-sm-2'>
+                                                <button className='btn btn-dark' disabled={dataIdPage.noPermohonan == "" ? false : true} type='submit'>Proses PTK</button>
+                                            </div>
+                                            <div className='col-sm-2'>
+                                                <a className='btn btn-warning pb-1' href={require("../../dok/k11.pdf")} rel="noopener noreferrer" target='_blank'>
+                                                    <i className="fa-solid fa-printer fa-sm"></i>
+                                                    print
+                                                </a>
+                                            </div>
+                                            <div className='col-sm-8'>
+                                                <button type='button' onClick={() => navigate(process.env.PUBLIC_URL + '/k21')} className="btn btn-info pb-1 float-end">
+                                                    <span className="d-sm-inline-block d-none me-sm-1">Form Analisa</span>
+                                                    <i className="fa-solid fa-angle-right"></i>
+                                                </button>
+                                            </div>
                                         </div>
                                     </form>
                                 </div>
                             </div>
-                            <div id="cardKonfirmasi" className={wizardPage === 5 ? "content active dstepper-block" : "content"}>
-                                <div className="row mb-3">
-                                    <form onSubmit={handleFormKonfirmasi(onSubmitKonfirmasi)}>
-                                        <input type="hidden" name='idPtk' {...registerKonfirmasi("idPtk")} />
-                                        <input type="hidden" name='noAju' {...registerKonfirmasi("noAju")} />
-                                        <div className="col-12" style={{display: (cekdataDiri.permohonan == "EX" ? "block" : "none")}}>
-                                            <div className="form-check form-switch mb-2">
-                                                <input className="form-check-input" type="checkbox" id="isDraft" name='isDraft' {...registerKonfirmasi("isDraft")} />
-                                                <label className="form-check-label" htmlFor="isDraft">Aktifkan fasilitas Draft PC / HC</label>
-                                            </div>
-                                            <hr />                                        
-                                        </div>
-                                        <div className="col-12 col-lg-8 offset-lg-2 text-center mb-3">
-                                            <h4 className="mt-2">Terimakasih! 😇</h4>
-                                            <p>Silahkan cek kembali kelengkapan data yang diinput!</p>
-                                            <p>
-                                                Silahkan klik tombol Simpan jika data yang diinput sudah benar.
-                                            </p>
-                                        </div>
-                                        <div className="col-12 d-flex justify-content-between">
-                                            <button type="button" className="btn btn-primary btn-prev" onClick={() => setWizardPage(wizardPage - 1)}>
-                                                <i className="fa-solid fa-chevron-left me-sm-2 me-1"></i>
-                                                <span className="d-sm-inline-block d-none">Cek Kembali</span>
-                                            </button>
-                                            <button type="submit" className="btn btn-success ms-sm-n2">
-                                                <i className="fa-solid fa-save me-sm-2 me-1"></i>
-                                                <span className="d-sm-inline-block d-none me-sm-1">Simpan & Kirim</span>
-                                            </button>
-                                        </div>
-                                    </form>
-                                </div>
-                                <hr />
-                                <div className="card" style={{display: (ptkLengkap ? "block" : "none")}}>
-                                    <div className="card-header mb-3 p-2" style={{backgroundColor: '#123138'}}>
-                                        <div className="card-action-title">
-                                            <h5 className="mb-0 text-lightest">Verifikasi PTK</h5>
-                                        </div>
-                                    </div>
-                                    <div className="card-body">
-                                        <form onSubmit={handleFormVerify(onSubmitVerify)}>
-                                            <input type="hidden" name="idPtk" {...registerVerify("idPtk")} />
-                                            <input type="hidden" name="noAju" {...registerVerify("noAju")} />
-                                            <input type="hidden" name="noDokumen" {...registerVerify("noDokumen")} />
-                                            <input type="hidden" name="mediaPembawaVerif" {...registerVerify("mediaPembawaVerif")} />
-                                            <div className="col-sm-6">
-                                                <div className="form-check form-check-inline">
-                                                    <input className="form-check-input" type="radio" name="opsiVerif" id="opsiVerif1" value="1" onClick={() => setValueVerify("alasanTolak", "")} {...registerVerify("opsiVerif", { required: "Mohon pilih verifikasi."})} />
-                                                    <label className="form-check-label" htmlFor="opsiVerif1">Setujui PTK</label>
-                                                </div>
-                                                <div className="form-check form-check-inline">
-                                                    <input className="form-check-input" type="radio" name="opsiVerif" id="opsiVerif2" value="2" onClick={() => setValueVerify("tglTerimaVerif", "") & setValueVerify("petugasVerif", "")} {...registerVerify("opsiVerif")}/>
-                                                    <label className="form-check-label" htmlFor="opsiVerif2">Tolak PTK</label>
-                                                </div>
-                                                {errorsVerify.opsiVerif && <small className="text-danger">{errorsVerify.opsiVerif.message}</small>}
-                                            </div>
-                                            <br />
-                                            <div className="col-sm-4" style={{display: (cekdataVerify.opsiVerif === '2' ? 'block' : 'none')}}>
-                                                <div className="mb-3">
-                                                    <label className="form-label" htmlFor="basic-default-fullname">Alasan Tolak</label>
-                                                    <textarea name="alasanTolak" id="alasanTolak" rows="2" {...registerVerify("alasanTolak", { required: (cekdataVerify.opsiVerif === '2' ? "Mohon isi alasan tolak." : false)})} className={errorsVerify.alasanTolak ? "form-control form-control-sm is-invalid" : "form-control form-control-sm"}></textarea>
-                                                </div>
-                                                {errorsVerify.alasanTolak && <small className="text-danger">{errorsVerify.alasanTolak.message}</small>}
-                                            </div>
-                                            <div className="col-sm-4" style={{display: (cekdataVerify.opsiVerif === '1' ? 'block' : 'none')}}>
-                                                <div className="mb-3">
-                                                    <label className="form-label" htmlFor="basic-default-fullname"><b><u>Tanda Terima Laporan PTK</u></b></label>
-                                                    <div className="row mb-3">
-                                                        <label className="col-sm-5 col-form-label" htmlFor="tglTerimaVerif">Tgl Terima</label>
-                                                        <div className="col-sm-7">
-                                                            <input type="datetime-local" id="tglTerimaVerif" name="tglTerimaVerif" {...registerVerify("tglTerimaVerif", { required: (cekdataVerify.opsiVerif === '1' ? "Mohon tanggal terima." : false)})} className={errorsVerify.tglTerimaVerif ? "form-control form-control-sm is-invalid" : "form-control form-control-sm"} />
-                                                            {errorsVerify.tglTerimaVerif && <small className="text-danger">{errorsVerify.tglTerimaVerif.message}</small>}
-                                                        </div>
-                                                        <label className="col-sm-5 col-form-label" htmlFor="petugasVerif">Petugas Penerima</label>
-                                                        <div className="col-sm-7">
-                                                            <input type="text" id="petugasVerif" name="petugasVerif" {...registerVerify("petugasVerif", { required: (cekdataVerify.opsiVerif === '1' ? "Mohon isi nama petugas verifikasi." : false)})} className={errorsVerify.petugasVerif ? "form-control form-control-sm is-invalid" : "form-control form-control-sm"} />
-                                                            {errorsVerify.petugasVerif && <small className="text-danger">{errorsVerify.petugasVerif.message}</small>}
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div className='row'>
-                                                <div className='col-sm-2'>
-                                                    <button className='btn btn-dark' type='submit'>Proses PTK</button>
-                                                </div>
-                                                <div className='col-sm-2'>
-                                                    <a className='btn btn-warning pb-1' href={require("../../dok/k11.pdf")} rel="noopener noreferrer" target='_blank'>
-                                                        <i className="fa-solid fa-printer fa-sm"></i>
-                                                        print
-                                                    </a>
-                                                </div>
-                                                <div className='col-sm-8'>
-                                                    <button style={{display: (dataIdPage.noPermohonan ? 'block' : 'none')}} type='button' onClick={() => navigate("/k22")} className='btn btn-info pb-1 float-end'>
-                                                    <i className="fa-solid fa-send fa-sm"></i>
-                                                        Buat Surat Tugas
-                                                    </button>
-                                                </div>
-                                            </div>
-                                        </form>
-                                    </div>
-                                </div>
-                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -3399,8 +3491,8 @@ function DocK11() {
                         {/* <p>{editKontainer}</p> */}
                     </div>
                     <form className="row" onSubmit={handleFormKontainer(onSubmitKontainer)}>
-                            <input type="hidden" name='idDataKontainer' {...registerKontainer("idDataKontainer")} />
-                            <input type="hidden" name='idPtk' {...registerKontainer("idPtk")} />
+                            <input autoComplete="off" type="hidden" name='idDataKontainer' {...registerKontainer("idDataKontainer")} />
+                            <input autoComplete="off" type="hidden" name='idPtk' {...registerKontainer("idPtk")} />
                         <div className="col-6">
                         <label className="form-label" htmlFor="noKontainer">No Kontainer <span className='text-danger'>*</span></label>
                         <div className="input-group input-group-merge">
@@ -3459,7 +3551,7 @@ function DocK11() {
                         <div className="col-6 col-md-6">
                         <label className="form-label" htmlFor="segel">Segel</label>
                         <div className="input-group input-group-merge">
-                            <input type="text" className="form-control form-control-sm" name="segel" id="segel" {...registerKontainer("segel")}/>
+                            <input autoComplete="off" type="text" className="form-control form-control-sm" name="segel" id="segel" {...registerKontainer("segel")}/>
                         </div>
                         </div>
                         <div className="col-6 text-center mt-4">
@@ -3483,12 +3575,12 @@ function DocK11() {
                     <div className="modal-body">
                     <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     <div className="text-center mb-4">
-                        <h3>{cekdataDokumen.idDataDokumen === '' ? "Tambah Dokumen Baru" : "Edit Dokumen"}</h3>
+                        <h3>{cekdataDokumen.idDataDokumen == '' ? "Tambah Dokumen Baru" : "Edit Dokumen"}</h3>
                     </div>
                     <form className="row" onSubmit={handleFormDokumen(onSubmitDokumen)}>
-                            <input type="hidden" name='idDataDokumen' {...registerDokumen("idDataDokumen")} />
-                            <input type="hidden" name='idPtk' {...registerDokumen("idPtk")} />
-                            <input type="hidden" name='noAju' {...registerDokumen("noAju")} />
+                            <input autoComplete="off" type="hidden" name='idDataDokumen' {...registerDokumen("idDataDokumen")} />
+                            <input autoComplete="off" type="hidden" name='idPtk' {...registerDokumen("idPtk")} />
+                            <input autoComplete="off" type="hidden" name='noAju' {...registerDokumen("noAju")} />
                         <div className="col-6">
                         <label className="form-label" htmlFor="kategoriDokumen">Kategori Dokumen <span className='text-danger'>*</span></label>
                         <div className="input-group input-group-merge">
@@ -3517,9 +3609,9 @@ function DocK11() {
                         <div className="col-6">
                             <label className="form-label" htmlFor="noDokumen">No Dokumen <span className='text-danger'>*</span></label>
                             <div className="input-group input-group-merge">
-                                <input type='text' name="noDokumen" id="noDokumen" placeholder='No Dokumen..' {...registerDokumen("noDokumen", { required: "Mohon isi nomor dokumen."})} className={errorsDokumen.noDokumen ? "form-control form-control-sm is-invalid" : "form-control form-control-sm"} />
+                                <input autoComplete="off" type='text' name="noDokumen" id="noDokumen" placeholder='No Dokumen..' {...registerDokumen("noDokumen", { required: "Mohon isi nomor dokumen."})} className={errorsDokumen.noDokumen ? "form-control form-control-sm is-invalid" : "form-control form-control-sm"} />
                             </div>
-                            <input type="hidden" name='cekPrior' id='cekPrior' {...registerDokumen("cekPrior")}/>
+                            <input autoComplete="off" type="hidden" name='cekPrior' id='cekPrior' {...registerDokumen("cekPrior")}/>
                             {errorsDokumen.noDokumen && <small className="text-danger">{errorsDokumen.noDokumen.message}</small>}
                         </div>
                         <div className="col-6">
@@ -3539,7 +3631,7 @@ function DocK11() {
                         <div className="col-6">
                             <label className="form-label" htmlFor="tglDokumen">Tgl Dokumen <span className='text-danger'>*</span></label>
                             <div className="input-group input-group-merge">
-                                <input type='date' name="tglDokumen" id="tglDokumen" {...registerDokumen("tglDokumen", { required: "Mohon isi tanggal dokumen."})} className={errorsDokumen.tglDokumen ? "form-control form-control-sm is-invalid" : "form-control form-control-sm"} />
+                                <input autoComplete="off" type='date' name="tglDokumen" id="tglDokumen" {...registerDokumen("tglDokumen", { required: "Mohon isi tanggal dokumen."})} className={errorsDokumen.tglDokumen ? "form-control form-control-sm is-invalid" : "form-control form-control-sm"} />
                             </div>
                             {errorsDokumen.tglDokumen && <small className="text-danger">{errorsDokumen.tglDokumen.message}</small>}
                         </div>
@@ -3559,26 +3651,27 @@ function DocK11() {
                         <div className="col-6">
                             <label className="form-label" htmlFor="ketDokumen">Keterangan</label>
                             <div className="input-group input-group-merge">
-                                <input type='text' name="ketDokumen" id="ketDokumen" placeholder='Keterangan..' {...registerDokumen("ketDokumen")} className="form-control form-control-sm" />
+                                <input autoComplete="off" type='text' name="ketDokumen" id="ketDokumen" placeholder='Keterangan..' {...registerDokumen("ketDokumen")} className="form-control form-control-sm" />
                             </div>
                         </div>
                         <div className="col-6">
                             <label className="form-label" htmlFor="fileDokumen">Upload <span className='text-danger'>*</span></label>
                             <div className="input-group input-group-merge">
                                 <input type="hidden" name='fileDokumen' {...registerDokumen("fileDokumen", {required: "Mohon upload dokumen persyaratan yang sesuai."})} />
-                                <input type='file' name="fileDokumenUpload" id="fileDokumenUpload" value={dataIdPage.fileDokumenUpload || ""} onChange={handleBase64Upload} className="form-control form-control-sm" />
+                                <input type='file' name="fileDokumenUpload" id="fileDokumenUpload" accept="application/pdf" value={dataIdPage.fileDokumenUpload || ""} onChange={handleBase64Upload} className="form-control form-control-sm" />
                             </div>
+                            <small className='text-danger'>File: *.pdf || Max: 1MB</small>
                             {errorsDokumen.fileDokumen && <small className="text-danger">{errorsDokumen.fileDokumen.message}</small>}
                         </div>
                         <div className="col-12 text-center mt-4">
                             <button style={{display: (cekdataDokumen.jenisDokumen == "104" ? "block" : "none")}} type='button' className='btn btn-sm btn-warning' onClick={() => cekPrior()}>Cek Prior</button>
-                            <button type="submit" disabled={(cekdataDokumen.jenisDokumen == "104" && cekdataDokumen.cekPrior == "" ? true : false)} className="btn btn-sm btn-primary me-sm-3 me-1">{cekdataDokumen.idDataDokumen === '' ? "Tambah" : "Edit"}</button>
+                            <button type="submit" disabled={(cekdataDokumen.jenisDokumen == "104" && cekdataDokumen.cekPrior == "" ? true : false)} className="btn btn-sm btn-primary me-sm-3 me-1">{cekdataDokumen.idDataDokumen == '' ? "Tambah" : "Edit"}</button>
                             <button
                                 type="reset"
                                 className="btn btn-sm btn-label-secondary btn-reset me-sm-3 me-1"
                                 data-bs-dismiss="modal"
                                 aria-label="Close">
-                                Cancel
+                                Tutup
                             </button>
                         </div>
                     </form>
@@ -3592,38 +3685,39 @@ function DocK11() {
                     <div className="modal-body">
                         <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                         <div className="text-center mb-4">
-                            <h3 className="address-title">{cekdataDetilMP.idDetilMP ? "Edit" : "Tambah"} Media Pembawa {cekdataDiri.mediaPembawa === 'H' ? 'Hewan' : (cekdataDiri.mediaPembawa === 'I' ? 'Ikan' : 'Tumbuhan')}</h3>
+                            <h3 className="address-title">{cekdataDetilMP.idDetilMP ? "Edit" : "Tambah"} Media Pembawa {cekdataDiri.mediaPembawa == 'H' ? 'Hewan' : (cekdataDiri.mediaPembawa == 'I' ? 'Ikan' : 'Tumbuhan')}</h3>
                         </div>
                         <form onSubmit={handleFormDetilMP(onSubmitDetilMP)} className="row g-3">
-                        <input type="hidden" name='idDetilMP' {...registerDetilMP("idDetilMP")} />
-                        <input type="hidden" name='idPtk' {...registerDetilMP("idPtk")} />
-                        {/* <input type="hidden" name='jenisKar' {...registerDetilMP("jenisKar")} /> */}
-                        {cekdataDiri.mediaPembawa === 'T' ?
+                        <input autoComplete="off" type="hidden" name='idDetilMP' {...registerDetilMP("idDetilMP")} />
+                        <input autoComplete="off" type="hidden" name='idPtk' {...registerDetilMP("idPtk")} />
+                        {/* <input autoComplete="off" type="hidden" name='jenisKar' {...registerDetilMP("jenisKar")} /> */}
+                        {cekdataDiri.mediaPembawa == 'T' ?
                         <>
                             <div className="col-6">
-                                <label className="form-label" htmlFor="peruntukanMP">Klasifikasi</label>
+                                <label className="form-label" htmlFor="peruntukanMP">Klasifikasi<span className='text-warning'>*</span></label>
                                 <Controller
                                     control={controlDetilMP}
                                     name={"peruntukanMP"}
                                     defaultValue={""}
                                     className="form-control form-control-sm"
-                                    rules={{ required: false }}
+                                    rules={{ required: (cekdataDiri.mediaPembawa == 'T' ? "Mohon pilih klasifikasi MP" : false) }}
                                     render={({ field: { value,onChange, ...field } }) => (
                                         <Select styles={customStyles} placeholder={"Pilih klasifikasi tumbuhan.."} value={{id: cekdataDetilMP.peruntukanMP, label: cekdataDetilMP.peruntukanMPView}} {...field} onChange={(e) => setValueDetilMP("peruntukanMP", e.value) & setValueDetilMP("peruntukanMPView", e.label)} options={dataSelect.peruntukanMP} />
                                     )}
                                 />
+                                {errorsDetilMP.peruntukanMP && <small className="text-danger">{errorsDetilMP.peruntukanMP.message}</small>}
                                 <small className='text-danger'>{cekdataDetilMP.idDetilMP ? "*Tidak perlu dipilih ulang jika tidak ubah klasifikasi" : null}</small>
                             </div>
                             <div className="col-6">
                                 <label className="form-label" htmlFor="volumeNetto">Volume Netto<span className='text-danger'>*</span></label>
                                 <div className='row'>
                                     <div className="col-5" style={{paddingRight: '2px'}}>
-                                        <input type="text" name='volumeNetto' id='volumeNetto' value={cekdataDetilMP.volumeNetto ? addCommas(removeNonNumeric(cekdataDetilMP.volumeNetto)) : ""} {...registerDetilMP("volumeNetto", {required: "Mohon isi volume netto."})} className={errorsDetilMP.volumeNetto ? "form-control form-control-sm is-invalid" : "form-control form-control-sm"} />
+                                        <input autoComplete="off" type="text" name='volumeNetto' id='volumeNetto' value={cekdataDetilMP.volumeNetto ? addCommas(removeNonNumeric(cekdataDetilMP.volumeNetto)) : ""} {...registerDetilMP("volumeNetto", {required: "Mohon isi volume netto."})} className={errorsDetilMP.volumeNetto ? "form-control form-control-sm is-invalid" : "form-control form-control-sm"} />
                                     </div>
                                     <div className="col-7" style={{paddingLeft: '2px'}}>
-                                        <input type="hidden" name='satuanNetto' id='satuanNetto' {...registerDetilMP("satuanNetto")} value="1356" />
-                                        <input type="text" className='form-control form-control-sm' value='KILOGRAM' readOnly />
-                                        {/* <select name="satuanNetto" id="satuanNetto" onClick={handleMasterSatuan} data-kar={cekdataDiri.mediaPembawa === 'T' ? 'kt' : (cekdataDiri.mediaPembawa === 'H' ? 'kh' : 'ki')} {...registerDetilMP("satuanNetto", {required: "Mohon isi satuan netto."})} className={errorsKontainer.satuanNetto ? "form-control form-control-sm is-invalid" : "form-control form-control-sm"}>
+                                        <input autoComplete="off" type="hidden" name='satuanNetto' id='satuanNetto' {...registerDetilMP("satuanNetto")} value="1356" />
+                                        <input autoComplete="off" type="text" className='form-control form-control-sm' value='KILOGRAM' readOnly />
+                                        {/* <select name="satuanNetto" id="satuanNetto" onClick={handleMasterSatuan} data-kar={cekdataDiri.mediaPembawa == 'T' ? 'kt' : (cekdataDiri.mediaPembawa == 'H' ? 'kh' : 'ki')} {...registerDetilMP("satuanNetto", {required: "Mohon isi satuan netto."})} className={errorsKontainer.satuanNetto ? "form-control form-control-sm is-invalid" : "form-control form-control-sm"}>
                                             <option value="">--</option>
                                             {dataSelect.satuanNetto}
                                         </select> */}
@@ -3634,7 +3728,7 @@ function DocK11() {
                             </div>
                             <div className="col-6">
                                 <label className="form-label" htmlFor="komoditasMP">Komoditas<span className='text-danger'>*</span></label>
-                                <input type="hidden" name="komoditasMP" id="komoditasMP" {...registerDetilMP("komoditasMP", {required: "Mohon isi Komoditas."})} />
+                                <input autoComplete="off" type="hidden" name="komoditasMP" id="komoditasMP" {...registerDetilMP("komoditasMP", {required: "Mohon isi Komoditas."})} />
                                 <Controller
                                     control={controlDetilMP}
                                     name={"selectKomoditasMP"}
@@ -3652,12 +3746,12 @@ function DocK11() {
                                 <label className="form-label" htmlFor="volumeBrutto">Volume Brutto</label>
                                 <div className='row'>
                                     <div className="col-5" style={{paddingRight: '2px'}}>
-                                        <input type="text" value={cekdataDetilMP.volumeBrutto ? addCommas(removeNonNumeric(cekdataDetilMP.volumeBrutto)) : ""} {...registerDetilMP("volumeBrutto", {required: "Mohon isi volume brutto."})} className={errorsDetilMP.volumeBrutto ? "form-control form-control-sm is-invalid" : "form-control form-control-sm"} name='volumeBrutto' id='volumeBrutto' />
+                                        <input autoComplete="off" type="text" value={cekdataDetilMP.volumeBrutto ? addCommas(removeNonNumeric(cekdataDetilMP.volumeBrutto)) : ""} {...registerDetilMP("volumeBrutto", {required: "Mohon isi volume brutto."})} className={errorsDetilMP.volumeBrutto ? "form-control form-control-sm is-invalid" : "form-control form-control-sm"} name='volumeBrutto' id='volumeBrutto' />
                                     </div>
                                     <div className="col-7" style={{paddingLeft: '2px'}}>
-                                        <input type="hidden" name='satuanBrutto' id='satuanBrutto' {...registerDetilMP("satuanBrutto")} value="1356" />
-                                        <input type="text" className='form-control form-control-sm' value='KILOGRAM' readOnly />
-                                        {/* <select name="satuanBrutto" id="satuanBrutto" data-kar={cekdataDiri.mediaPembawa === 'T' ? 'kt' : (cekdataDiri.mediaPembawa === 'H' ? 'kh' : 'ki')} onClick={handleMasterSatuan} {...registerDetilMP("satuanBrutto", {required: "Mohon isi satuan brutto."})} className={errorsDetilMP.satuanBrutto ? "form-control form-control-sm is-invalid" : "form-control form-control-sm"}>
+                                        <input autoComplete="off" type="hidden" name='satuanBrutto' id='satuanBrutto' {...registerDetilMP("satuanBrutto")} value="1356" />
+                                        <input autoComplete="off" type="text" className='form-control form-control-sm' value='KILOGRAM' readOnly />
+                                        {/* <select name="satuanBrutto" id="satuanBrutto" data-kar={cekdataDiri.mediaPembawa == 'T' ? 'kt' : (cekdataDiri.mediaPembawa == 'H' ? 'kh' : 'ki')} onClick={handleMasterSatuan} {...registerDetilMP("satuanBrutto", {required: "Mohon isi satuan brutto."})} className={errorsDetilMP.satuanBrutto ? "form-control form-control-sm is-invalid" : "form-control form-control-sm"}>
                                             <option value="">--</option>
                                             {dataSelect.satuanBrutto}
                                         </select> */}
@@ -3667,24 +3761,25 @@ function DocK11() {
                                 {errorsDetilMP.satuanBrutto && <small className="text-danger">{errorsDetilMP.satuanBrutto.message}</small>}
                             </div>
                             <div className="col-6">
-                                <label className="form-label" htmlFor="kodeHSMp">Kode HS</label>
+                                <label className="form-label" htmlFor="kodeHSMp">Kode HS<span className='text-warning'>*</span></label>
                                 <Controller
                                     control={controlDetilMP}
                                     name={"kodeHSMp"}
                                     defaultValue={""}
                                     className="form-control form-control-sm"
-                                    rules={{ required: false }}
+                                    rules={{ required: "Mohon pilih kode HS" }}
                                     render={({ field: { value,onChange, ...field } }) => (
                                         <Select styles={customStyles} placeholder={"Pilih kode HS.."} value={{id: cekdataDetilMP.kodeHSMp, label: cekdataDetilMP.kodeHSMpView}} onChange={(e) => setValueDetilMP("kodeHSMp", e.value) & setValueDetilMP("kodeHSMpView", e.label)} {...field} options={dataSelect.kodeHSMp} />
                                     )}
                                 />
+                                {errorsDetilMP.kodeHSMp && <small className="text-danger">{errorsDetilMP.kodeHSMp.message}</small>}
                                 <small className='text-danger'>{cekdataDetilMP.idDetilMP ? "*Tidak perlu dipilih ulang jika tidak ubah kode HS" : null}</small>
                             </div>
                             <div className="col-6">
-                                <label className="form-label" htmlFor="volumeLain">Volume Lain</label>
+                                <label className="form-label" htmlFor="volumeLain">Volume Lain<span className='text-warning'>*</span></label>
                                 <div className='row'>
                                     <div className="col-5" style={{paddingRight: '2px'}}>
-                                        <input type="text" className='form-control form-control-sm' name='volumeLain' id='volumeLain' value={cekdataDetilMP.volumeLain ? addCommas(removeNonNumeric(cekdataDetilMP.volumeLain)) : ""} {...registerDetilMP("volumeLain")} />
+                                        <input autoComplete="off" type="text" className='form-control form-control-sm' name='volumeLain' id='volumeLain' value={cekdataDetilMP.volumeLain ? addCommas(removeNonNumeric(cekdataDetilMP.volumeLain)) : ""} {...registerDetilMP("volumeLain")} />
                                     </div>
                                     <div className="col-7" style={{paddingLeft: '2px'}}>
                                         <Controller
@@ -3698,7 +3793,7 @@ function DocK11() {
                                                 )}
                                         />
                                         {errorsDetilMP.satuanLain && <small className="text-danger">{errorsDetilMP.satuanLain.message}</small>}
-                                        {/* <select name="satuanLain" id="satuanLain" data-kar={cekdataDiri.mediaPembawa === 'T' ? 'kt' : (cekdataDiri.mediaPembawa === 'H' ? 'kh' : 'ki')} onClick={handleMasterSatuan} className='form-control form-control-sm' {...registerDetilMP("satuanLain")}>
+                                        {/* <select name="satuanLain" id="satuanLain" data-kar={cekdataDiri.mediaPembawa == 'T' ? 'kt' : (cekdataDiri.mediaPembawa == 'H' ? 'kh' : 'ki')} onClick={handleMasterSatuan} className='form-control form-control-sm' {...registerDetilMP("satuanLain")}>
                                             <option value="">--</option>
                                             {dataSelect.satuanLain}
                                         </select> */}
@@ -3707,62 +3802,75 @@ function DocK11() {
                             </div>
                             <div className="col-6">
                                 <label className="form-label" htmlFor="namaUmum">Nama Umum Tercetak</label>
-                                <input type='text' name="namaUmum" id="namaUmum" {...registerDetilMP("namaUmum")} className="form-control form-control-sm" />
+                                <input autoComplete="off" type='text' name="namaUmum" id="namaUmum" {...registerDetilMP("namaUmum")} className="form-control form-control-sm" />
                             </div>
                             <div className="col-6">
-                                <label className="form-label" htmlFor="nilaiBarangMP">Nilai Barang</label>
+                                <label className="form-label" htmlFor="nilaiBarangMP">Nilai Barang<span className='text-warning'>*</span></label>
                                 <div className='row'>
                                     <div className="col-7" style={{paddingRight: '2px'}}>
-                                        <input type="text" className='form-control form-control-sm' value={cekdataDetilMP.nilaiBarangMP ? addCommas(removeNonNumeric(cekdataDetilMP.nilaiBarangMP)) : ""} {...registerDetilMP("nilaiBarangMP")} name='nilaiBarangMP' id='nilaiBarangMP' />
+                                        <input autoComplete="off" type="text" className='form-control form-control-sm' value={cekdataDetilMP.nilaiBarangMP ? addCommas(removeNonNumeric(cekdataDetilMP.nilaiBarangMP)) : ""} {...registerDetilMP("nilaiBarangMP", {required: "Mohon isi detil nilai barang"})} name='nilaiBarangMP' id='nilaiBarangMP' />
                                     </div>
                                     <div className="col-5" style={{paddingLeft: '2px'}}>
-                                        <select name="satuanNilaiMP" id="satuanNilaiMP" value={cekdataDetilMP.satuanNilaiMP || "IDR"} className='form-control form-control-sm' {...registerDetilMP("satuanNilaiMP")}>
+                                        <select name="satuanNilaiMP" id="satuanNilaiMP" value={cekdataDetilMP.satuanNilaiMP || "IDR"} className='form-control form-control-sm' {...registerDetilMP("satuanNilaiMP", {required: "Mohonn pilih mata uang"})}>
                                             <option value="">--</option>
                                             {dataSelect.satuanNilai}
                                         </select>
                                     </div>
+                                    {errorsDetilMP.nilaiBarangMP && <small className="text-danger">{errorsDetilMP.nilaiBarangMP.message}</small>}
+                                    {errorsDetilMP.satuanNilaiMP && <small className="text-danger">{errorsDetilMP.satuanNilaiMP.message}</small>}
                                 </div>
                             </div>
                             <div className="col-6">
                                 <label className="form-label" htmlFor="namaLatin">Nama Latin Tercetak</label>
-                                <input type='text' name="namaLatin" id="namaLatin" {...registerDetilMP("namaLatin")} className="form-control form-control-sm" />
+                                <input autoComplete="off" type='text' name="namaLatin" id="namaLatin" {...registerDetilMP("namaLatin")} className="form-control form-control-sm" />
                             </div>
                             <div className="col-6">
                             <label className="form-label" htmlFor="jumlahKemasanDetil">Jumlah Kemasan</label>
                                 <div className='row'>
                                 <div className='col-4' style={{paddingRight: '2px'}}>
-                                    <input type="number" className='form-control form-control-sm' {...registerDetilMP("jumlahKemasanDetil")} name='jumlahKemasanDetil' id='jumlahKemasanDetil' />
+                                    <input autoComplete="off" type="number" className='form-control form-control-sm' {...registerDetilMP("jumlahKemasanDetil")} name='jumlahKemasanDetil' id='jumlahKemasanDetil' />
                                 </div>
                                 <div className='col-8' style={{paddingLeft: '2px'}}>
-                                    <select name="satuanKemasanDetil" id="satuanKemasanDetil" {...registerDetilMP("satuanKemasanDetil")} onClick={handleKemasan} className="form-control form-control-sm">
+                                    <Controller
+                                        control={controlDetilMP}
+                                        defaultValue={""}
+                                        name={"satuanKemasanDetil"}
+                                        className="form-select form-select-sm"
+                                        rules={{ required: false }}
+                                        render={({ field: { value,onChange, ...field } }) => (
+                                            <Select styles={customStyles} placeholder={"Pilih Kemasan.."} value={{id: cekdataMP.satuanKemasanDetil, label: cekdataMP.satuanKemasanDetilView}} {...field} options={jenisKemasan()} onChange={(e) => setValueDetilMP("satuanKemasanDetil", e.value) & setValueDetilMP("satuanKemasanDetilView", e.label)} />
+                                        )}
+                                    />
+                                    {/* <select name="satuanKemasanDetil" id="satuanKemasanDetil" {...registerDetilMP("satuanKemasanDetil")} onClick={handleKemasan} className="form-control form-control-sm">
                                         <option value="">--</option>
                                         {dataSelect.satuanKemasanDetil}
-                                    </select>
+                                    </select> */}
                                 </div>
                                 </div>
                             </div>
-                        </> : (cekdataDiri.mediaPembawa === 'H' ?
+                        </> : (cekdataDiri.mediaPembawa == 'H' ?
                         <>
                             <div className='col-12'>
                                 <div className="col-6">
-                                    <label className="form-label" htmlFor="peruntukanMP">Klasifikasi</label>
+                                    <label className="form-label" htmlFor="peruntukanMP">Klasifikasi<span className='text-warning'>*</span></label>
                                     <Controller
                                         control={controlDetilMP}
                                         name={"peruntukanMPKH"}
                                         defaultValue={""}
                                         className="form-control form-control-sm"
-                                        rules={{ required: false }}
+                                        rules={{ required: "Mohon pilih klasifikasi MP" }}
                                         render={({ field: { value,onChange, ...field } }) => (
                                             <Select styles={customStyles} placeholder={"Pilih klasifikasi Hewan.."} value={{id: cekdataDetilMP.peruntukanMPKH, label: cekdataDetilMP.peruntukanMPKHView}} {...field} onChange={(e) => setValueDetilMP("peruntukanMPKH", e.value) & setValueDetilMP("peruntukanMPKHView", e.label)} options={dataSelect.peruntukanMPKH} />
                                         )}
                                     />
+                                    {errorsDetilMP.peruntukanMPKH && <small className="text-danger">{errorsDetilMP.peruntukanMPKH.message}</small>}
                                     <small className='text-danger'>{cekdataDetilMP.idDetilMP ? "*Tidak perlu dipilih ulang jika tidak ubah klasifikasi" : null}</small>
                                 </div>
                             </div>
                             <div className="col-6">
                                 <label className="form-label" htmlFor="komoditasMPKH">Komoditas<span className='text-danger'>*</span></label>
-                                <input type="hidden" name='komoditasMPKHid' {...registerDetilMP("komoditasMPKHid")} />
-                                {/* <input type="hidden" name='klasifikasiMPKHid' {...registerDetilMP("klasifikasiMPKHid")} /> */}
+                                <input autoComplete="off" type="hidden" name='komoditasMPKHid' {...registerDetilMP("komoditasMPKHid")} />
+                                {/* <input autoComplete="off" type="hidden" name='klasifikasiMPKHid' {...registerDetilMP("klasifikasiMPKHid")} /> */}
                                 <Controller
                                     control={controlDetilMP}
                                     name={"komoditasMPKH"}
@@ -3775,14 +3883,10 @@ function DocK11() {
                                     )}
                                 />
                                 <small className='text-danger'>{cekdataDetilMP.idDetilMP ? "*Tidak perlu dipilih ulang jika tidak ubah komoditas" : null}</small>
-                                {/* <select name="komoditasMP" id="komoditasMP" data-gol={cekdataDiri.jenisMp} onClick={handleKomoditasKH} {...registerDetilMP("komoditasMP", {required: "Mohon isi Komoditas."})} className={errorsDetilMP.komoditasMP ? "form-control form-control-sm is-invalid" : "form-control form-control-sm"} >
-                                        <option value="">--</option>
-                                        {dataSelect.komoditasMP}
-                                </select> */}
                                 {errorsDetilMP.komoditasMPKH && <small className="text-danger">{errorsDetilMP.komoditasMPKH.message}</small>}
                             </div>
                             <div className="col-6">
-                                <label className="form-label" htmlFor="kodeHSMpKH">Kode HS</label>
+                                <label className="form-label" htmlFor="kodeHSMpKH">Kode HS<span className='text-warning'>*</span></label>
                                 <Controller
                                     control={controlDetilMP}
                                     name={"kodeHSMpKH"}
@@ -3793,242 +3897,229 @@ function DocK11() {
                                         <Select styles={customStyles} placeholder={"Pilih kode HS.."} value={{id: cekdataDetilMP.kodeHSMpKH, label: cekdataDetilMP.kodeHSMpKHView}} onChange={(e) => setValueDetilMP("kodeHSMpKH", e.value) & setValueDetilMP("kodeHSMpKHView", e.label)} {...field} options={dataSelect.kodeHSMp} />
                                     )}
                                 />
+                                {errorsDetilMP.kodeHSMpKH && <small className="text-danger">{errorsDetilMP.kodeHSMpKH.message}</small>}
                                 <small className='text-danger'>{cekdataDetilMP.idDetilMP ? "*Tidak perlu dipilih ulang jika tidak ubah kode HS" : null}</small>
-                                {/* <select name="kodeHSMp" id="kodeHSMp" data-kar={cekdataDiri.mediaPembawa} className="form-control form-control-sm" {...registerDetilMP("kodeHSMp")} onClick={handleMasterHS}>
-                                <option value="">--</option>
-                                {dataSelect.kodeHSMp}
-                                </select> */}
                             </div>
                             <div className="col-6">
                                 <label className="form-label" htmlFor="namaUmumKH">Nama Umum Tercetak</label>
-                                <input type='text' name="namaUmumKH" id="namaUmumKH" {...registerDetilMP("namaUmumKH")} className="form-control form-control-sm" />
+                                <input autoComplete="off" type='text' name="namaUmumKH" id="namaUmumKH" {...registerDetilMP("namaUmumKH")} className="form-control form-control-sm" />
                             </div>
                             <div className="col-6">
                                 <label className="form-label" htmlFor="namaLatinKH">Nama Latin Tercetak</label>
-                                <input type='text' name="namaLatinKH" id="namaLatinKH" {...registerDetilMP("namaLatinKH")} className="form-control form-control-sm" />
+                                <input autoComplete="off" type='text' name="namaLatinKH" id="namaLatinKH" {...registerDetilMP("namaLatinKH")} className="form-control form-control-sm" />
                             </div>
                            <div className="col-6">
-                                <label className="form-label" htmlFor="jumlahMP">Jumlah</label>
+                                <label className="form-label" htmlFor="jumlahMP">Jumlah<span className='text-warning'>*</span></label>
                                 <div className='row'>
-                                <div className='col-7' style={{paddingRight: '2px'}}>
-                                    <input type="text" value={cekdataDetilMP.jumlahMP ? addCommas(removeNonNumeric(cekdataDetilMP.jumlahMP)) : ""} {...registerDetilMP("jumlahMP", {required: "Mohon isi jumlah."})} className={errorsDetilMP.jumlahMP ? "form-control form-control-sm is-invalid" : "form-control form-control-sm"} name='jumlahMP' id='jumlahMP' />
-                                </div>
-                                <div className='col-5' style={{paddingLeft: '2px'}}>
-                                    <Controller
-                                        control={controlDetilMP}
-                                        name={"satJumlahMP"}
-                                        defaultValue={""}
-                                        className="form-control form-control-sm"
-                                        rules={{ required: "Mohon isi satuan volume." }}
-                                        render={({ field: { value,onChange, ...field } }) => (
-                                            <Select styles={customStyles} placeholder={"Pilih Satuan.."} value={{id: cekdataDetilMP.satJumlahMP, label: cekdataDetilMP.satJumlahMPView}} onChange={(e) => setValueDetilMP("satJumlahMP", e.value) & setValueDetilMP("satJumlahMPView", e.label)} {...field} options={masterSatuanJson(cekdataDiri.mediaPembawa)} />
-                                        )}
-                                    />
-                                    {errorsDetilMP.satJumlahMP && <small className="text-danger">{errorsDetilMP.satJumlahMP.message}</small>}
-                                    {/* <select name="satJumlahMP" id="satJumlahMP" data-kar={cekdataDiri.mediaPembawa === 'T' ? 'kt' : (cekdataDiri.mediaPembawa === 'H' ? 'kh' : 'ki')} onClick={handleMasterSatuan} {...registerDetilMP("satJumlahMP")} className="form-control form-control-sm">
-                                    <option value="">--</option>
-                                        {dataSelect.satJumlahMP}
-                                    </select> */}
-                                </div>
+                                    <div className='col-7' style={{paddingRight: '2px'}}>
+                                        <input autoComplete="off" type="text" value={cekdataDetilMP.jumlahMP ? addCommas(removeNonNumeric(cekdataDetilMP.jumlahMP)) : ""} {...registerDetilMP("jumlahMP", {required: "Mohon isi jumlah."})} className={errorsDetilMP.jumlahMP ? "form-control form-control-sm is-invalid" : "form-control form-control-sm"} name='jumlahMP' id='jumlahMP' />
+                                    </div>
+                                    <div className='col-5' style={{paddingLeft: '2px'}}>
+                                        <Controller
+                                            control={controlDetilMP}
+                                            name={"satJumlahMP"}
+                                            defaultValue={""}
+                                            className="form-control form-control-sm"
+                                            rules={{ required: "Mohon isi satuan volume." }}
+                                            render={({ field: { value,onChange, ...field } }) => (
+                                                <Select styles={customStyles} placeholder={"Pilih Satuan.."} value={{id: cekdataDetilMP.satJumlahMP, label: cekdataDetilMP.satJumlahMPView}} onChange={(e) => setValueDetilMP("satJumlahMP", e.value) & setValueDetilMP("satJumlahMPView", e.label)} {...field} options={masterSatuanJson(cekdataDiri.mediaPembawa)} />
+                                            )}
+                                        />
+                                        {errorsDetilMP.jumlahMP && <small className="text-danger">{errorsDetilMP.jumlahMP.message}</small>}
+                                        {errorsDetilMP.satJumlahMP && <small className="text-danger">{errorsDetilMP.satJumlahMP.message}</small>}
+                                    </div>
                                 </div>
                             </div>
-                            <div className="col-6" style={{visibility: (cekdataDiri.jenisMp === '1' ? "visible" : "hidden")}}>
+                            <div className="col-6" style={{visibility: (cekdataDiri.jenisMp == '1' ? "visible" : "hidden")}}>
                                 <label className="form-label" htmlFor="breedMP">Breed</label>
-                                <input type='text' name="breedMP" id="breedMP" {...registerDetilMP("breedMP")} className="form-control form-control-sm" />
+                                <input autoComplete="off" type='text' name="breedMP" id="breedMP" {...registerDetilMP("breedMP")} className="form-control form-control-sm" />
                             </div>
                             <div className="col-6">
-                                <label className="form-label" htmlFor="nettoMP">Netto</label>
+                                <label className="form-label" htmlFor="nettoMP">Netto<span className='text-warning'>*</span></label>
                                 <div className='row'>
-                                <div className='col-7' style={{paddingRight: '2px'}}>
-                                    <input type="text" className='form-control form-control-sm' value={cekdataDetilMP.nettoMP ? addCommas(removeNonNumeric(cekdataDetilMP.nettoMP)) : ""} {...registerDetilMP("nettoMP")} name='nettoMP' id='nettoMP' />
-                                </div>
-                                {/* ekor: 1122 || KG: 1356  */}
-                                <div className='col-5' style={{paddingLeft: '2px'}}>
-                                    {/* <input type="hidden" name='satNettoMP' id='satNettoMP' {...registerDetilMP("satNettoMP")} value={cekdataDiri.jenisMp === '1' || cekdataDiri.jenisMp === '6' ? '1122' : '1356'} />
-                                    <input type="text" className='form-control form-control-sm' value={cekdataDiri.jenisMp === '1' || cekdataDiri.jenisMp === '6' ? 'EKOR' : 'KILOGRAM'} readOnly /> */}
-                                    <input type="hidden" name='satNettoMP' id='satNettoMP' {...registerDetilMP("satNettoMP")} value="1356" />
-                                    <input type="text" className='form-control form-control-sm' value='KILOGRAM' readOnly />
-                                </div>
+                                    <div className='col-7' style={{paddingRight: '2px'}}>
+                                        <input autoComplete="off" type="text" className='form-control form-control-sm' value={cekdataDetilMP.nettoMP ? addCommas(removeNonNumeric(cekdataDetilMP.nettoMP)) : ""} {...registerDetilMP("nettoMP", {required: "Mohon isi berat netto"})} name='nettoMP' id='nettoMP' />
+                                    </div>
+                                    {/* ekor: 1122 || KG: 1356  */}
+                                    <div className='col-5' style={{paddingLeft: '2px'}}>
+                                        {/* <input autoComplete="off" type="hidden" name='satNettoMP' id='satNettoMP' {...registerDetilMP("satNettoMP")} value={cekdataDiri.jenisMp == '1' || cekdataDiri.jenisMp == '6' ? '1122' : '1356'} />
+                                        <input autoComplete="off" type="text" className='form-control form-control-sm' value={cekdataDiri.jenisMp == '1' || cekdataDiri.jenisMp == '6' ? 'EKOR' : 'KILOGRAM'} readOnly /> */}
+                                        <input autoComplete="off" type="hidden" name='satNettoMP' id='satNettoMP' {...registerDetilMP("satNettoMP")} value="1356" />
+                                        <input autoComplete="off" type="text" className='form-control form-control-sm' value='KILOGRAM' readOnly />
+                                    </div>
+                                    {errorsDetilMP.nettoMP && <small className="text-danger">{errorsDetilMP.nettoMP.message}</small>}
                                 </div>
                             </div>
                             <div className="col-6">
                                 <label className="form-label" htmlFor="nilaiBarangMPKH">Nilai Barang</label>
                                 <div className='row'>
                                     <div className="col-7" style={{paddingRight: '2px'}}>
-                                        <input type="text" className='form-control form-control-sm' value={cekdataDetilMP.nilaiBarangMPKH ? addCommas(removeNonNumeric(cekdataDetilMP.nilaiBarangMPKH)) : ""} name='nilaiBarangMPKH' id='nilaiBarangMPKH' {...registerDetilMP("nilaiBarangMPKH")} />
+                                        <input autoComplete="off" type="text" className='form-control form-control-sm' value={cekdataDetilMP.nilaiBarangMPKH ? addCommas(removeNonNumeric(cekdataDetilMP.nilaiBarangMPKH)) : ""} name='nilaiBarangMPKH' id='nilaiBarangMPKH' {...registerDetilMP("nilaiBarangMPKH", {required: "Mohon isi nilai barang"})} />
                                     </div>
                                     <div className="col-5" style={{paddingLeft: '2px'}}>
-                                        <select name="satuanNilaiMPKH" id="satuanNilaiMPKH" value={cekdataDetilMP.satuanNilaiMPKH || "IDR"} {...registerDetilMP("satuanNilaiMPKH")} className='form-control form-control-sm'>
+                                        <select name="satuanNilaiMPKH" id="satuanNilaiMPKH" value={cekdataDetilMP.satuanNilaiMPKH || "IDR"} {...registerDetilMP("satuanNilaiMPKH", {required: "Mohon isi mata uang"})} className='form-control form-control-sm'>
                                         <option value="">--</option>
                                             {dataSelect.satuanNilai}
                                         </select>
                                     </div>
+                                    {errorsDetilMP.nilaiBarangMPKH && <small className="text-danger">{errorsDetilMP.nilaiBarangMPKH.message}</small>}
+                                    {errorsDetilMP.satuanNilaiMPKH && <small className="text-danger">{errorsDetilMP.satuanNilaiMPKH.message}</small>}
                                 </div>
                             </div>
                             <div className="col-6">
-                                <label className="form-label" htmlFor="brutoMP">Bruto</label>
+                                <label className="form-label" htmlFor="brutoMP">Bruto<span className='text-warning'>*</span></label>
                                 <div className='row'>
-                                <div className='col-7' style={{paddingRight: '2px'}}>
-                                    <input type="text" value={cekdataDetilMP.brutoMP ? addCommas(removeNonNumeric(cekdataDetilMP.brutoMP)) : ""} {...registerDetilMP("brutoMP")} className='form-control form-control-sm' name='brutoMP' id='brutoMP' />
-                                </div>
-                                {/* ekor: 1122 || KG: 1356  */}
-                                <div className='col-5' style={{paddingLeft: '2px'}}>
-                                    {/* <input type="hidden" name='satBrutoMP' id='satBrutoMP' {...registerDetilMP("satBrutoMP")} value={cekdataDiri.jenisMp === '1' || cekdataDiri.jenisMp === '6' ? '1122' : '1356'} /> */}
-                                    {/* <input type="text" className='form-control form-control-sm' value={cekdataDiri.jenisMp === '1' || cekdataDiri.jenisMp === '6' ? 'EKOR' : 'KILOGRAM'} readOnly  /> */}
-                                    <input type="hidden" name='satBrutoMP' id='satBrutoMP' {...registerDetilMP("satBrutoMP")} value="1356" />
-                                    <input type="text" className='form-control form-control-sm' value="KILOGRAM" readOnly  />
-                                </div>
+                                    <div className='col-7' style={{paddingRight: '2px'}}>
+                                        <input autoComplete="off" type="text" value={cekdataDetilMP.brutoMP ? addCommas(removeNonNumeric(cekdataDetilMP.brutoMP)) : ""} {...registerDetilMP("brutoMP", {required: "Mohon isi volume bruto"})} className='form-control form-control-sm' name='brutoMP' id='brutoMP' />
+                                    </div>
+                                    {/* ekor: 1122 || KG: 1356  */}
+                                    <div className='col-5' style={{paddingLeft: '2px'}}>
+                                        <input autoComplete="off" type="hidden" name='satBrutoMP' id='satBrutoMP' {...registerDetilMP("satBrutoMP")} value="1356" />
+                                        <input autoComplete="off" type="text" className='form-control form-control-sm' value="KILOGRAM" readOnly  />
+                                    </div>
+                                    {errorsDetilMP.brutoMP && <small className="text-danger">{errorsDetilMP.brutoMP.message}</small>}
                                 </div>
                             </div>
-                            <div className="col-6" style={{display: (cekdataDiri.jenisMp === '1' ? "block" : "none")}}>
+                            <div className="col-6" style={{display: (cekdataDiri.jenisMp == '1' ? "block" : "none")}}>
                                 <div className='row'>
                                     <div className="col-4">
                                         <label className="form-label" htmlFor="jantan">Jantan (Ekor)</label>
-                                        <input type="text" id="jantan" name="jantan" value={cekdataDetilMP.jantan ? addCommas(removeNonNumeric(cekdataDetilMP.jantan)) : ""} {...registerDetilMP("jantan")} className='form-control form-control-sm' />
+                                        <input autoComplete="off" type="text" id="jantan" name="jantan" value={cekdataDetilMP.jantan ? addCommas(removeNonNumeric(cekdataDetilMP.jantan)) : ""} {...registerDetilMP("jantan")} className='form-control form-control-sm' />
                                         </div>
                                     <div className="col-4">
                                         <label className="form-label" htmlFor="betina">Betina (Ekor)</label>
-                                        <input type="text" name='betina' id='betina' value={cekdataDetilMP.betina ? addCommas(removeNonNumeric(cekdataDetilMP.betina)) : ""} {...registerDetilMP("betina")} className='form-control form-control-sm' />
+                                        <input autoComplete="off" type="text" name='betina' id='betina' value={cekdataDetilMP.betina ? addCommas(removeNonNumeric(cekdataDetilMP.betina)) : ""} {...registerDetilMP("betina")} className='form-control form-control-sm' />
                                     </div>
                                 </div>
                             </div>
-                        </> : (cekdataDiri.mediaPembawa === 'I' ?
+                        </> : (cekdataDiri.mediaPembawa == 'I' ?
                         <>
                             <div className='col-12'>
                                 <div className="col-6">
-                                    <label className="form-label" htmlFor="peruntukanMPKI">Klasifikasi</label>
+                                    <label className="form-label" htmlFor="peruntukanMPKI">Klasifikasi<span className='text-warning'>*</span></label>
                                     <Controller
                                         control={controlDetilMP}
                                         name={"peruntukanMPKI"}
                                         defaultValue={""}
                                         className="form-control form-control-sm"
-                                        rules={{ required: false }}
+                                        rules={{ required: "Mohon pilih klasifikasi MP" }}
                                         render={({ field: { value,onChange, ...field } }) => (
                                             <Select styles={customStyles} placeholder={"Pilih klasifikasi Ikan.."} value={{id: cekdataDetilMP.peruntukanMPKI, label: cekdataDetilMP.peruntukanMPKIView}} {...field} onChange={(e) => setValueDetilMP("peruntukanMPKI", e.value) & setValueDetilMP("peruntukanMPKIView", e.label)} options={dataSelect.peruntukanMPKI} />
                                         )}
                                     />
+                                    {errorsDetilMP.peruntukanMPKI && <small className="text-danger">{errorsDetilMP.peruntukanMPKI.message}</small>}
                                     <small className='text-danger'>{cekdataDetilMP.idDetilMP ? "*Tidak perlu dipilih ulang jika tidak ubah klasifikasi" : null}</small>
                                 </div>
                             </div>
                             <div className="col-6">
                                 <label className="form-label" htmlFor="komoditasMPKI">Komoditas<span className='text-danger'>*</span></label>
-                                <input type="hidden" name='komoditasMPKIid' {...registerDetilMP("komoditasMPKIid")} />
-                                {/* <input type="hidden" name='klasifikasiMPKIid' {...registerDetilMP("klasifikasiMPKIid")} /> */}
+                                <input autoComplete="off" type="hidden" name='komoditasMPKIid' {...registerDetilMP("komoditasMPKIid")} />
+                                {/* <input autoComplete="off" type="hidden" name='klasifikasiMPKIid' {...registerDetilMP("klasifikasiMPKIid")} /> */}
                                 <Controller
                                     control={controlDetilMP}
                                     name={"komoditasMPKI"}
                                     defaultValue={""}
                                     className="form-control form-control-sm"
-                                    rules={{ required: false }}
+                                    rules={{ required: "Mohon pilih komoditas" }}
                                     render={({ field: { value,onChange, ...field } }) => (
                                         <Select placeholder= 'Pilih Komoditas..' styles={customStyles}
                                          value={{id: cekdataDetilMP.komoditasMPKI, label: cekdataDetilMP.komoditasMPKIView}} onChange={(e) => setValueDetilMP("komoditasMPKI", e.value) & setValueDetilMP("komoditasMPKIView", e.label) & handleSetKomoditasSelect(e)} {...field} options={dataSelect.selectKomoditasMPKI} />
                                     )}
                                 />
                                 <small className='text-danger'>{cekdataDetilMP.idDetilMP ? "*Tidak perlu dipilih ulang jika tidak ubah komoditas" : null}</small>
-                                {/* <select name="komoditasMP" id="komoditasMP" data-gol={cekdataDiri.jenisMp} onClick={handleKomoditasKH} {...registerDetilMP("komoditasMP", {required: "Mohon isi Komoditas."})} className={errorsDetilMP.komoditasMP ? "form-control form-control-sm is-invalid" : "form-control form-control-sm"} >
-                                        <option value="">--</option>
-                                        {dataSelect.komoditasMP}
-                                </select> */}
                                 {errorsDetilMP.komoditasMPKI && <small className="text-danger">{errorsDetilMP.komoditasMPKI.message}</small>}
                             </div>
                             <div className="col-6">
-                                <label className="form-label" htmlFor="kodeHSMpKI">Kode HS</label>
+                                <label className="form-label" htmlFor="kodeHSMpKI">Kode HS<span className='text-danger'>*</span></label>
                                 <Controller
                                     control={controlDetilMP}
                                     name={"kodeHSMpKI"}
                                     defaultValue={""}
                                     className="form-control form-control-sm"
-                                    rules={{ required: false }}
+                                    rules={{ required: "Mohon isi kode HS" }}
                                     render={({ field: { value,onChange, ...field } }) => (
                                         <Select styles={customStyles} placeholder={"Pilih kode HS.."} value={{id: cekdataDetilMP.kodeHSMpKI, label: cekdataDetilMP.kodeHSMpKIView}} onChange={(e) => setValueDetilMP("kodeHSMpKI", e.value) & setValueDetilMP("kodeHSMpKIView", e.label)} {...field} options={dataSelect.kodeHSMp} />
                                     )}
                                 />
+                                {errorsDetilMP.kodeHSMpKI && <small className="text-danger">{errorsDetilMP.kodeHSMpKI.message}</small>}
                                 <small className='text-danger'>{cekdataDetilMP.idDetilMP ? "*Tidak perlu dipilih ulang jika tidak ubah kode HS" : null}</small>
-                                {/* <select name="kodeHSMp" id="kodeHSMp" data-kar={cekdataDiri.mediaPembawa} className="form-control form-control-sm" {...registerDetilMP("kodeHSMp")} onClick={handleMasterHS}>
-                                <option value="">--</option>
-                                {dataSelect.kodeHSMp}
-                                </select> */}
                             </div>
                             <div className="col-6">
                                 <label className="form-label" htmlFor="namaUmumKI">Nama Umum Tercetak</label>
-                                <input type='text' name="namaUmumKI" id="namaUmumKI" {...registerDetilMP("namaUmumKI")} className="form-control form-control-sm" />
+                                <input autoComplete="off" type='text' name="namaUmumKI" id="namaUmumKI" {...registerDetilMP("namaUmumKI")} className="form-control form-control-sm" />
                             </div>
                             <div className="col-6">
                                 <label className="form-label" htmlFor="namaLatinKI">Nama Latin Tercetak</label>
-                                <input type='text' name="namaLatinKI" id="namaLatinKI" {...registerDetilMP("namaLatinKI")} className="form-control form-control-sm" />
+                                <input autoComplete="off" type='text' name="namaLatinKI" id="namaLatinKI" {...registerDetilMP("namaLatinKI")} className="form-control form-control-sm" />
                             </div>
                             <div className="col-6">
-                                <label className="form-label" htmlFor="jumlahMPKI">Jumlah</label>
+                                <label className="form-label" htmlFor="jumlahMPKI">Jumlah<span className='text-danger'>*</span></label>
                                 <div className='row'>
-                                <div className='col-7' style={{paddingRight: '2px'}}>
-                                    <input type="text" value={cekdataDetilMP.jumlahMPKI ? addCommas(removeNonNumeric(cekdataDetilMP.jumlahMPKI)) : ""} {...registerDetilMP("jumlahMPKI", {required: "Mohon isi jumlah."})} className={errorsDetilMP.jumlahMPKI ? "form-control form-control-sm is-invalid" : "form-control form-control-sm"} name='jumlahMPKI' id='jumlahMPKI' />
-                                </div>
-                                <div className='col-5' style={{paddingLeft: '2px'}}>
-                                    <Controller
-                                        control={controlDetilMP}
-                                        name={"satJumlahMPKI"}
-                                        defaultValue={""}
-                                        className="form-control form-control-sm"
-                                        rules={{ required: "Mohon isi satuan volume." }}
-                                        render={({ field: { value,onChange, ...field } }) => (
-                                            <Select styles={customStyles} placeholder={"Pilih Satuan.."} value={{id: cekdataDetilMP.satJumlahMPKI, label: cekdataDetilMP.satJumlahMPKIView}} onChange={(e) => setValueDetilMP("satJumlahMPKI", e.value) & setValueDetilMP("satJumlahMPKIView", e.label)} {...field} options={masterSatuanJson(cekdataDiri.mediaPembawa)} />
-                                        )}
-                                    />
+                                    <div className='col-7' style={{paddingRight: '2px'}}>
+                                        <input autoComplete="off" type="text" value={cekdataDetilMP.jumlahMPKI ? addCommas(removeNonNumeric(cekdataDetilMP.jumlahMPKI)) : ""} {...registerDetilMP("jumlahMPKI", {required: "Mohon isi jumlah."})} className={errorsDetilMP.jumlahMPKI ? "form-control form-control-sm is-invalid" : "form-control form-control-sm"} name='jumlahMPKI' id='jumlahMPKI' />
+                                    </div>
+                                    <div className='col-5' style={{paddingLeft: '2px'}}>
+                                        <Controller
+                                            control={controlDetilMP}
+                                            name={"satJumlahMPKI"}
+                                            defaultValue={""}
+                                            className="form-control form-control-sm"
+                                            rules={{ required: "Mohon isi satuan volume." }}
+                                            render={({ field: { value,onChange, ...field } }) => (
+                                                <Select styles={customStyles} placeholder={"Pilih Satuan.."} value={{id: cekdataDetilMP.satJumlahMPKI, label: cekdataDetilMP.satJumlahMPKIView}} onChange={(e) => setValueDetilMP("satJumlahMPKI", e.value) & setValueDetilMP("satJumlahMPKIView", e.label)} {...field} options={masterSatuanJson(cekdataDiri.mediaPembawa)} />
+                                            )}
+                                        />
+                                    </div>
+                                    {errorsDetilMP.jumlahMPKI && <small className="text-danger">{errorsDetilMP.jumlahMPKI.message}</small>}
                                     {errorsDetilMP.satJumlahMPKI && <small className="text-danger">{errorsDetilMP.satJumlahMPKI.message}</small>}
-                                    {/* <select name="satJumlahMP" id="satJumlahMP" data-kar={cekdataDiri.mediaPembawa === 'T' ? 'kt' : (cekdataDiri.mediaPembawa === 'H' ? 'kh' : 'ki')} onClick={handleMasterSatuan} {...registerDetilMP("satJumlahMP")} className="form-control form-control-sm">
-                                    <option value="">--</option>
-                                        {dataSelect.satJumlahMP}
-                                    </select> */}
-                                </div>
                                 </div>
                             </div>
                             <div className="col-6" style={{visibility: (cekdataDiri.jenisMp == '6' ? "visible" : "hidden")}}>
                                 <label className="form-label" htmlFor="sizeIkan">Size</label>
-                                <input type='text' name="sizeIkan" id="sizeIkan" {...registerDetilMP("sizeIkan")} className="form-control form-control-sm" />
+                                <input autoComplete="off" type='text' name="sizeIkan" id="sizeIkan" {...registerDetilMP("sizeIkan")} className="form-control form-control-sm" />
                             </div>
                             <div className="col-6">
-                                <label className="form-label" htmlFor="nettoMPKI">Netto</label>
+                                <label className="form-label" htmlFor="nettoMPKI">Netto<span className='text-warning'>*</span></label>
                                 <div className='row'>
-                                <div className='col-7' style={{paddingRight: '2px'}}>
-                                    <input type="text" className='form-control form-control-sm' value={cekdataDetilMP.nettoMPKI ? addCommas(removeNonNumeric(cekdataDetilMP.nettoMPKI)) : ""} {...registerDetilMP("nettoMPKI")} name='nettoMPKI' id='nettoMPKI' />
-                                </div>
-                                {/* ekor: 1122 || KG: 1356  */}
-                                <div className='col-5' style={{paddingLeft: '2px'}}>
-                                    {/* <input type="hidden" name='satNettoMP' id='satNettoMP' {...registerDetilMP("satNettoMP")} value={cekdataDiri.jenisMp === '1' || cekdataDiri.jenisMp === '6' ? '1122' : '1356'} />
-                                    <input type="text" className='form-control form-control-sm' value={cekdataDiri.jenisMp === '1' || cekdataDiri.jenisMp === '6' ? 'EKOR' : 'KILOGRAM'} readOnly /> */}
-                                    <input type="hidden" name='satNettoMPKI' id='satNettoMPKI' {...registerDetilMP("satNettoMPKI")} value="1356" />
-                                    <input type="text" className='form-control form-control-sm' value='KILOGRAM' readOnly />
-                                </div>
+                                    <div className='col-7' style={{paddingRight: '2px'}}>
+                                        <input autoComplete="off" type="text" className='form-control form-control-sm' value={cekdataDetilMP.nettoMPKI ? addCommas(removeNonNumeric(cekdataDetilMP.nettoMPKI)) : ""} {...registerDetilMP("nettoMPKI", {required: "Mohon isi volume netto"})} name='nettoMPKI' id='nettoMPKI' />
+                                    </div>
+                                    {/* ekor: 1122 || KG: 1356  */}
+                                    <div className='col-5' style={{paddingLeft: '2px'}}>
+                                        <input autoComplete="off" type="hidden" name='satNettoMPKI' id='satNettoMPKI' {...registerDetilMP("satNettoMPKI")} value="1356" />
+                                        <input autoComplete="off" type="text" className='form-control form-control-sm' value='KILOGRAM' readOnly />
+                                    </div>
+                                    {errorsDetilMP.nettoMPKI && <small className="text-danger">{errorsDetilMP.nettoMPKI.message}</small>}
                                 </div>
                             </div>
                             <div className="col-6">
-                                <label className="form-label" htmlFor="nilaiBarangMPKI">Nilai Barang</label>
+                                <label className="form-label" htmlFor="nilaiBarangMPKI">Nilai Barang<span className='text-warning'>*</span></label>
                                 <div className='row'>
                                     <div className="col-7" style={{paddingRight: '2px'}}>
-                                        <input type="text" className='form-control form-control-sm' value={cekdataDetilMP.nilaiBarangMPKI ? addCommas(removeNonNumeric(cekdataDetilMP.nilaiBarangMPKI)) : ""} name='nilaiBarangMPKI' id='nilaiBarangMPKI' {...registerDetilMP("nilaiBarangMPKI")} />
+                                        <input autoComplete="off" type="text" className='form-control form-control-sm' value={cekdataDetilMP.nilaiBarangMPKI ? addCommas(removeNonNumeric(cekdataDetilMP.nilaiBarangMPKI)) : ""} name='nilaiBarangMPKI' id='nilaiBarangMPKI' {...registerDetilMP("nilaiBarangMPKI", {required: "Mohon isi nilai barang"})} />
                                     </div>
                                     <div className="col-5" style={{paddingLeft: '2px'}}>
-                                        <select name="satuanNilaiMPKI" id="satuanNilaiMPKI" value={cekdataDetilMP.satuanNilaiMPKI || "IDR"} {...registerDetilMP("satuanNilaiMPKI")} className='form-control form-control-sm'>
+                                        <select name="satuanNilaiMPKI" id="satuanNilaiMPKI" value={cekdataDetilMP.satuanNilaiMPKI || "IDR"} {...registerDetilMP("satuanNilaiMPKI", {required: "Mohon pilih mata uang"})} className='form-control form-control-sm'>
                                         <option value="">--</option>
                                             {dataSelect.satuanNilai}
                                         </select>
                                     </div>
+                                    {errorsDetilMP.nilaiBarangMPKI && <small className="text-danger">{errorsDetilMP.nilaiBarangMPKI.message}</small>}
+                                    {errorsDetilMP.satuanNilaiMPKI && <small className="text-danger">{errorsDetilMP.satuanNilaiMPKI.message}</small>}
                                 </div>
                             </div>
                             <div className="col-6">
-                                <label className="form-label" htmlFor="brutoMPKI">Bruto</label>
+                                <label className="form-label" htmlFor="brutoMPKI">Bruto<span className='text-warning'>*</span></label>
                                 <div className='row'>
-                                <div className='col-7' style={{paddingRight: '2px'}}>
-                                    <input type="text" value={cekdataDetilMP.brutoMPKI ? addCommas(removeNonNumeric(cekdataDetilMP.brutoMPKI)) : ""} {...registerDetilMP("brutoMPKI")} className='form-control form-control-sm' name='brutoMPKI' id='brutoMPKI' />
-                                </div>
-                                {/* ekor: 1122 || KG: 1356  */}
-                                <div className='col-5' style={{paddingLeft: '2px'}}>
-                                    {/* <input type="hidden" name='satBrutoMP' id='satBrutoMP' {...registerDetilMP("satBrutoMP")} value={cekdataDiri.jenisMp === '1' || cekdataDiri.jenisMp === '6' ? '1122' : '1356'} /> */}
-                                    {/* <input type="text" className='form-control form-control-sm' value={cekdataDiri.jenisMp === '1' || cekdataDiri.jenisMp === '6' ? 'EKOR' : 'KILOGRAM'} readOnly  /> */}
-                                    <input type="hidden" name='satBrutoMPKI' id='satBrutoMPKI' {...registerDetilMP("satBrutoMPKI")} value="1356" />
-                                    <input type="text" className='form-control form-control-sm' value="KILOGRAM" readOnly  />
-                                </div>
+                                    <div className='col-7' style={{paddingRight: '2px'}}>
+                                        <input autoComplete="off" type="text" value={cekdataDetilMP.brutoMPKI ? addCommas(removeNonNumeric(cekdataDetilMP.brutoMPKI)) : ""} {...registerDetilMP("brutoMPKI", {required: "Mohon isi volume bruto"})} className='form-control form-control-sm' name='brutoMPKI' id='brutoMPKI' />
+                                    </div>
+                                    {/* ekor: 1122 || KG: 1356  */}
+                                    <div className='col-5' style={{paddingLeft: '2px'}}>
+                                        <input autoComplete="off" type="hidden" name='satBrutoMPKI' id='satBrutoMPKI' {...registerDetilMP("satBrutoMPKI")} value="1356" />
+                                        <input autoComplete="off" type="text" className='form-control form-control-sm' value="KILOGRAM" readOnly  />
+                                    </div>
+                                    {errorsDetilMP.brutoMPKI && <small className="text-danger">{errorsDetilMP.brutoMPKI.message}</small>}
                                 </div>
                             </div>
                         </> : "Mohon pilih jenis media pembawa"))

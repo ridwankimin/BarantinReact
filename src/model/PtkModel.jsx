@@ -41,7 +41,7 @@ export default class PtkModel {
             'jenis_media_pembawa_id': data.jenisMp, // ok
             "stat_pemohon": data.statPemilik,
             
-            "is_guest": data.pJRutin, //ok           // pemohon rutin/guest: 0,1
+            "is_guest": data.pJRutin, //ok           // pemohon terdaftar = 0 / guest = 1
             'user_id': Cookies.get("userId"), //pake session
             "pengguna_jasa_id": 456, // pake session
             "calo_id": 0,

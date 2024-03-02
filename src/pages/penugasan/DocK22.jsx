@@ -6,6 +6,7 @@ import { useNavigate } from 'react-router-dom';
 import {decode as base64_decode} from 'base-64';
 import { useForm } from 'react-hook-form';
 import PtkSurtug from '../../model/PtkSurtug';
+import Swal from 'sweetalert2';
 
 const modelSurtug = new PtkSurtug()
 
@@ -38,8 +39,12 @@ function DocK22() {
                     console.log(response);
                 }
                 if(response.data) {
-                    if(response.data.status === '201') {
-                        alert(response.data.status + " - " + response.data.message)
+                    if(response.data.status == 201) {
+                        Swal.fire({
+                            icon: "success",
+                            title: "Sukses!",
+                            text: "Nomor surat tugas berhasil " + (data.idHeader ? "diedit" : "disimpan")
+                        })
                         setValueDetilSurtug("idHeader", response.data.data.id)
                         setValueHeader("idHeader", response.data.data.id)
                         setValueHeader("noSurtug", response.data.data.nomor)
@@ -49,6 +54,12 @@ function DocK22() {
                                 tglSurtug: data.tglSurtug,
                             }));
                         dataSurtugHeader()
+                    } else {
+                        Swal.fire({
+                            icon: "error",
+                            title: "Error!",
+                            text: response.data.message
+                        })
                     }
                 }
             })
@@ -56,7 +67,11 @@ function DocK22() {
                 if(process.env.REACT_APP_BE_ENV == "DEV") {
                     console.log(error)
                 }
-                alert(error.response.status + " - " + error.response.data.message)
+                Swal.fire({
+                    icon: "error",
+                    title: "Error!",
+                    text: error.response.data.message
+                })
             });
     }
     
@@ -87,8 +102,12 @@ function DocK22() {
                     console.log(response);
                 }
                 if(response.data) {
-                    if(response.data.status === '201') {
-                        alert(response.data.status + " - " + response.data.message)
+                    if(response.data.status == 201) {
+                        Swal.fire({
+                            icon: "success",
+                            title: "Sukses!",
+                            text: "Detil petugas berhasil disimpan"
+                        })
                         resetFormDetilSurtug()
                         dataSurtugDetil(data.idHeader)
                     }
@@ -98,7 +117,11 @@ function DocK22() {
                 if(process.env.REACT_APP_BE_ENV == "DEV") {
                     console.log(error)
                 }
-                alert(error.response.status + " - " + error.response.data.message)
+                Swal.fire({
+                    icon: "error",
+                    title: "Error!",
+                    text: error.response.data.message
+                })
             });
     }
 
@@ -109,7 +132,7 @@ function DocK22() {
         response
         .then((res) => {
             if(res.data) {
-                if(res.data.status === '200') {
+                if(res.data.status == '200') {
                     setListDataHeader(res.data.data)
                 }
             }
@@ -129,7 +152,7 @@ function DocK22() {
         response
         .then((res) => {
             if(res.data) {
-                if(res.data.status === '200') {
+                if(res.data.status == '200') {
                     setListDataDetil(res.data.data)
                 } else {
                     setListDataDetil()
@@ -162,15 +185,14 @@ function DocK22() {
     }
     
     function handleHeaderBaru() { 
-        setData(values => (
-            {...values, 
+        setData(values => ({...values, 
                 nomorSurtug: "",
                 tglSurtug: "",
             }));
         setValueHeader("idHeader", "")
         setValueDetilSurtug("idHeader", "")
-        setValueHeader("perihalSurtug", "")
-        setValueHeader("tglSurtug", "")
+        setValueHeader("perihalSurtug", "Pelaksanaan Tindakan Karantina")
+        setValueHeader("tglSurtug", (new Date()).toLocaleString('en-CA', { hourCycle: 'h24' }).replace(',', '').slice(0,16))
         setValueHeader("noSurtug", "")
         setValueHeader("ttdSurtug", "")
         setAddSurtug(true);
@@ -180,7 +202,6 @@ function DocK22() {
 
     useEffect(() => {
         if(idPtk) {
-            setValueHeader("tglSurtug", (new Date()).toLocaleString('en-CA', { hourCycle: 'h24' }).replace(',', '').slice(0,16))
             let ptkDecode = idPtk ? base64_decode(idPtk) : "";
             let ptkNomor = idPtk ? ptkDecode.split('m0R3N0r1R') : "";
             setData(values => ({...values,
@@ -206,12 +227,12 @@ function DocK22() {
                             }));
                         } else {
                             setData(values => ({...values,
-                                errorAnalisis: "Gagal load data analisis",
+                                errorAnalisis: "Gagal load data history analisis",
                             }))
                         }
                     } else {
                         setData(values => ({...values,
-                            errorAnalisis: "Gagal load data analisis",
+                            errorAnalisis: "Gagal load data history analisis",
                         }))
                     }
                 }
@@ -221,7 +242,7 @@ function DocK22() {
                     console.log(error)
                 }
                 setData(values => ({...values,
-                    errorAnalisis: "Gagal load data analisis",
+                    errorAnalisis: "Gagal load data history analisis",
                 }))
             });
 
@@ -230,7 +251,7 @@ function DocK22() {
             .then((res) => {
                 if(res.data) {
                     if(typeof res.data != "string") {
-                        if(res.data.status === '200') {
+                        if(res.data.status == '200') {
                             setListDataHeader(res.data.data)
                             setData(values => ({...values,
                                 errorSurtug: "",
@@ -282,12 +303,12 @@ function DocK22() {
                             setValueHeader("idAnalis", res.data.data[0].id);
                         } else {
                             setData(values => ({...values,
-                                errorAnalisis: "Gagal load data analisis else != 200",
+                                errorAnalisis: "Gagal load data history analisis else != 200",
                             }))
                         }
                     } else {
                         setData(values => ({...values,
-                            errorAnalisis: "Gagal load data analisis else string",
+                            errorAnalisis: "Gagal load data history analisis else string",
                         }))
                     }
                 }
@@ -297,7 +318,7 @@ function DocK22() {
                     console.log(error)
                 }
                 setData(values => ({...values,
-                    errorAnalisis: "Gagal load data analisis error",
+                    errorAnalisis: "Gagal load data history analisis error",
                 }))
             });
         }
@@ -417,13 +438,13 @@ function DocK22() {
                                         <td>{data.nip}</td>
                                         <td>{data.jabatan}</td>
                                         <td>
-                                            <div className="dropdown">
-                                                <button type="button" className="btn p-0 dropdown-toggle hide-arrow" data-bs-toggle="dropdown">
-                                                    <i className="fa-solid fa-ellipsis-vertical"></i>
+                                            <div className="d-grid gap-2">
+                                                <button type="button" className="btn p-0 hide-arrow dropdown-toggle" aria-expanded="false" data-bs-toggle="dropdown">
+                                                    <i className="menu-icon tf-icons fa-solid fa-ellipsis-vertical"></i>
                                                 </button>
                                                 <div className="dropdown-menu">
                                                     <button className="dropdown-item" data-key={data.id} data-ttd={data.penanda_tangan_id} type="button" onClick={handleEditHeader}><i className="fa-solid fa-pen-to-square me-1"></i> Edit</button>
-                                                    <button className="dropdown-item" href="#"><i className="fa-solid fa-trash me-1"></i> Delete</button>
+                                                    <button className="dropdown-item" type='button'><i className="fa-solid fa-trash me-1"></i> Delete</button>
                                                 </div>
                                             </div>
                                         </td>
@@ -479,7 +500,7 @@ function DocK22() {
                                     {errorsHeader.tglSurtug && <small className="text-danger">{errorsHeader.tglSurtug.message}</small>}
                                 </div>
                                 <div className="col-sm-2">
-                                    <button type="submit" className="btn btn-sm btn-primary">{dataHeader.idHeader === '' ? 'Buat Nomor Surtug' : 'Edit Surat Tugas'}</button>
+                                    <button type="submit" className="btn btn-sm btn-primary">{dataHeader.idHeader == '' ? 'Buat Nomor Surtug' : 'Edit Surat Tugas'}</button>
                                 </div>
                             {/* </div> */}
                         </form>
@@ -521,15 +542,10 @@ function DocK22() {
                                                     <td>{data.nama}</td>
                                                     <td>{data.jabatan}</td>
                                                     <td>
-                                                        <div className="dropdown">
-                                                            <button type="button" className="btn p-0 dropdown-toggle hide-arrow" data-bs-toggle="dropdown">
-                                                                {/* <i className="fa-solid fa-ellipsis-vertical"></i> */}
-                                                                <i className="fa-solid fa-trash me-1 text-danger"></i>
+                                                        <div className="d-grid gap-2">
+                                                            <button type="button" className="btn p-0 hide-arrow">
+                                                                <i className="fa-solid fa-trash text-danger"></i>
                                                             </button>
-                                                            {/* <div className="dropdown-menu">
-                                                                <button className="dropdown-item" type="button" data-bs-toggle="modal" data-bs-target="#modKontainer"><i className="fa-solid fa-pen-to-square me-1"></i> Edit</button>
-                                                                <button className="dropdown-item" href="#"> Delete</button>
-                                                            </div> */}
                                                         </div>
                                                     </td>
                                                 </tr>
@@ -540,7 +556,7 @@ function DocK22() {
                                 </div>
                             </div>
                         </div>
-                        <button type='button' onClick={() => navigate("/k37")} className='btn btn-info pb-1 float-end'>
+                        <button type='button' onClick={() => navigate(process.env.PUBLIC_URL + "/k37a")} className='btn btn-info pb-1 float-end'>
                         {/* <button type='button' style={{display: (isNomor ? 'block' : 'none')}} onClick={() => navigate("/k37")} className='btn btn-info pb-1 float-end'> */}
                         <i className="bx bx-send bx-sm"></i>
                             Pemeriksaan Administrasi

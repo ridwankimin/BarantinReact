@@ -229,13 +229,14 @@ function DataMasukTable(props) {
     function handleClick(e) {
         if(e.selectedCount === 1) {
             Swal.fire({
-                title: "Yakin?",
-                text: "Anda memilih No AJU " + e.selectedRows[0].noAju,
-                icon: "warning",
+                title: "Item dipilih",
+                text: "Karantina: " + e.selectedRows[0].karantina + " || No AJU: " + e.selectedRows[0].noAju,
+                icon: "question",
                 showCancelButton: true,
                 confirmButtonColor: "#086b06",
                 cancelButtonColor: "#d33",
-                confirmButtonText: "Ya!"
+                confirmButtonText: "Buka form PTK",
+                cancelButtonText: "Batal",
             }).then((result) => {
                 if (result.isConfirmed) {
                     Cookies.set("idPtkPage", base64_encode(base64_encode(e.selectedRows[0].noAju) + 'm0R3N0r1R' + base64_encode(e.selectedRows[0].idPtk) + "m0R3N0r1R"  + base64_encode(e.selectedRows[0].noDokumen)), {
