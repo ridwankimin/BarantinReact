@@ -213,10 +213,10 @@ export default class PnPelepasan {
         'karantina_tujuan': (data.karantinaTujuanDepan ? data.karantinaTujuanDepan + " " : "") + data.karantinaTujuan + data.karantinaTujuanBelakang,
         'entry_point': "",
         'upt_tujuan_id': "",
-        'nama_umum_tercetak': data.namaUmum,
-        'nama_ilmiah_tercetak': data.namaIlmiah,
-        'bentuk_tercetak': data.bentukTercetak, //description of packages / kemasan
-        'jumlah_tercetak': data.jmlTercetak,
+        'nama_umum_tercetak': "",
+        'nama_ilmiah_tercetak': "",
+        'bentuk_tercetak': "", //description of packages / kemasan
+        'jumlah_tercetak': "",
         'additional_declaration': "", //data.adDeclare
         'additional_information': data.keteranganTambahan,
         'pn_perlakuan_id': data.idPerlakuan,
@@ -259,7 +259,7 @@ export default class PnPelepasan {
         'nomor': data.noDokumen.replace("K.1.1", "K.T.3"),
         'tanggal': data.tglDokKT3,
         'nomor_seri': data.noSeri,
-        'karantina_tujuan': data.karantinaTujuanDepan,
+        'karantina_tujuan': "",
         'entry_point': "",
         'upt_tujuan_id': data.uptTujuan,
         'nama_umum_tercetak': "",
@@ -307,6 +307,8 @@ export default class PnPelepasan {
       'nomor': data.noDokumen.replace("K.1.1", "K.9.2H"),
       'tanggal': data.tglDok92h,
       'nomor_seri': data.noSeri,
+      'karantina_tujuan': "",
+      'upt_tujuan_id': "",
       'm1': data.m1,
       'm2': data.m2,
       'm3': data.m3,
@@ -346,6 +348,7 @@ export default class PnPelepasan {
       'nomor': data.noDokumen.replace("K.1.1", "K.H.1"),
       'tanggal': data.tglDokh1,
       'nomor_seri': data.noSeri,
+      'karantina_tujuan': "",
       'upt_tujuan_id': data.uptTujuan ? data.uptTujuan : "",
       'm1': data.m1,
       'm2': data.m2,
@@ -427,6 +430,85 @@ export default class PnPelepasan {
         'Content-Type': 'application/json', 
       }
     };
+    return axios.request(config)
+  }
+
+  mpLain(data, kar) {
+    const uuid = uuidv4()
+    let datasend = {
+        id: data.idDok91 == '' ? uuid : data.idDok91,
+        ptk_id: data.idPtk,
+        dokumen_karantina_id: "37",
+        nomor: data.noDokumen.replace("K.1.1", "K.9.1"),
+        tanggal: data.tglDok91,
+        nomor_seri: data.noSeri,
+        karantina_tujuan: (data.karantinaTujuanDepan ? data.karantinaTujuanDepan + " " : "") + data.karantinaTujuan + (data.karantinaTujuanBelakang ? " " + data.karantinaTujuanBelakang : ""),
+        upt_tujuan_id: data.uptTujuan ? data.uptTujuan : "",
+        status_dok: data.jenisDokumen, // 'WITHDRAWN','REPLACEMENT','ISSUED'
+        replaced_dok_id: "",
+        is_attachment: data.isAttach,
+        diterbitkan_di: data.diterbitkan,
+        user_ttd_id: data.ttdPutusan,
+        user_id: Cookies.get("userId") //session
+      }
+
+    if(kar == "H") {
+      datasend(values => ({...values,
+        'm1': "",
+        'm2': "",
+        'm3': "",
+        'm_lain': "",
+        'p_teknis': "",
+        'p_lab': "",
+        'p_lain': "",
+      }));
+    } else if(kar == "I") {
+      datasend(values => ({...values,
+        tgl_awal: "",
+        tgl_akhir: "",
+        tipe_usaha: "",
+        temperatur_mp: "",
+        hasil_periksa: "",
+        p1: "",
+        p2: "",
+        p3: "",
+        p4: "",
+        nama_labuji: "",
+        alamat_labuji: "",
+        attestation_a: "",
+        attestation_b: "",
+        attestation_c: "",
+        attestation_d: "",
+        attestation_lain: "",
+        attestation_free_from: "",
+        attestation_nosign: "",
+        add_information: "",
+      }));
+    } else if(kar == "T") {
+      datasend(values => ({...values,
+        additional_declaration: "", //data.adDeclare
+        additional_information: "",
+        pn_perlakuan_id: "",
+        pc_no: "", //
+        is_pc: "", //
+        is_commodity: "",
+        is_container: "",
+        ori_pc: "",
+        add_inspection: "", //data.addInspect
+      }));
+    }
+    let config = {
+      method: data.idDok91 == '' ? 'post' : 'put',
+      maxBodyLength: Infinity,
+      url: url + (data.idDok91 == '' ? 'pn-pelepasan-kh' : 'pn-pelepasan-kh/' + data.idDok91),
+      headers: { 
+        'Content-Type': 'application/json', 
+      },
+      data: datasend
+    };
+    if(process.env.REACT_APP_BE_ENV == "DEV") {
+      console.log("dok k91: " + JSON.stringify(config))
+    }
     return axios.request(config)
   }
 }
