@@ -5,7 +5,6 @@ import ShipSvg from '../../logo/svg/ShipSvg'
 import PackageSvg from '../../logo/svg/PackageSvg'
 import DokumenSvg from '../../logo/svg/DokumenSvg'
 import ConfirmSvg from '../../logo/svg/ConfirmSvg'
-import MasterKemasan from '../../model/master/MasterKemasan'
 import MasterMataUang from '../../model/master/MasterMataUang'
 import NegaraJson from '../../model/master/negara.json'
 import PelabuhanJson from '../../model/master/pelabuhan.json'
@@ -1355,7 +1354,6 @@ function DocK11() {
                 setValueDetilMP("satuanNilaiMPKH", cell.cells[14].innerHTML)
             }, 300)
         } else if(cekdataDiri.mediaPembawa == "T") {
-            setdataSelect(values => ({...values, "satuanKemasanDetil": <MasterKemasan/>}))
             setTimeout(() => {
                 setValueDetilMP("peruntukanMP", e.target.dataset.klas)
                 setValueDetilMP("volumeNetto", cell.cells[5].innerHTML)
@@ -3285,7 +3283,7 @@ function DocK11() {
                                                                                         <td>{moment(data.tanggal_dokumen).format('YYYY-MM-DD')}</td>
                                                                                         <td>{data.negara}</td>
                                                                                         <td>{data.keterangan}</td>
-                                                                                        <td><a href={"http://localhost/api-barantin/" + data.efile} target='_blank' rel='noreferrer'>[LIHAT FILE]</a></td>
+                                                                                        <td><a href={process.env.REACT_APP_BE_LINK + data.efile} target='_blank' rel='noreferrer'>[LIHAT FILE]</a></td>
                                                                                         <td>
                                                                                             <div className="d-grid gap-2">
                                                                                                 <button type="button" className="btn p-0 hide-arrow dropdown-toggle" aria-expanded="false" data-bs-toggle="dropdown">
@@ -3825,27 +3823,23 @@ function DocK11() {
                                 <input autoComplete="off" type='text' name="namaLatin" id="namaLatin" {...registerDetilMP("namaLatin")} className="form-control form-control-sm" />
                             </div>
                             <div className="col-6">
-                            <label className="form-label" htmlFor="jumlahKemasanDetil">Jumlah Kemasan</label>
+                                <label className="form-label" htmlFor="jumlahKemasanDetil">Jumlah Kemasan</label>
                                 <div className='row'>
-                                <div className='col-4' style={{paddingRight: '2px'}}>
-                                    <input autoComplete="off" type="number" className='form-control form-control-sm' {...registerDetilMP("jumlahKemasanDetil")} name='jumlahKemasanDetil' id='jumlahKemasanDetil' />
-                                </div>
-                                <div className='col-8' style={{paddingLeft: '2px'}}>
-                                    <Controller
-                                        control={controlDetilMP}
-                                        defaultValue={""}
-                                        name={"satuanKemasanDetil"}
-                                        className="form-select form-select-sm"
-                                        rules={{ required: false }}
-                                        render={({ field: { value,onChange, ...field } }) => (
-                                            <Select styles={customStyles} placeholder={"Pilih Kemasan.."} value={{id: cekdataMP.satuanKemasanDetil, label: cekdataMP.satuanKemasanDetilView}} {...field} options={jenisKemasan()} onChange={(e) => setValueDetilMP("satuanKemasanDetil", e.value) & setValueDetilMP("satuanKemasanDetilView", e.label)} />
-                                        )}
-                                    />
-                                    {/* <select name="satuanKemasanDetil" id="satuanKemasanDetil" {...registerDetilMP("satuanKemasanDetil")} onClick={handleKemasan} className="form-control form-control-sm">
-                                        <option value="">--</option>
-                                        {dataSelect.satuanKemasanDetil}
-                                    </select> */}
-                                </div>
+                                    <div className='col-4' style={{paddingRight: '2px'}}>
+                                        <input autoComplete="off" type="number" className='form-control form-control-sm' {...registerDetilMP("jumlahKemasanDetil")} name='jumlahKemasanDetil' id='jumlahKemasanDetil' />
+                                    </div>
+                                    <div className='col-8' style={{paddingLeft: '2px'}}>
+                                        <Controller
+                                            control={controlDetilMP}
+                                            defaultValue={""}
+                                            name={"satuanKemasanDetil"}
+                                            className="form-select form-select-sm"
+                                            rules={{ required: false }}
+                                            render={({ field: { value, onChange, ...field } }) => (
+                                                <Select styles={customStyles} placeholder={"Pilih Kemasan.."} value={{id: cekdataDetilMP.satuanKemasanDetil, label: cekdataDetilMP.satuanKemasanDetilView}} {...field} options={jenisKemasan()} onChange={(e) => setValueDetilMP("satuanKemasanDetil", e.value) & setValueDetilMP("satuanKemasanDetilView", e.label)} />
+                                            )}
+                                        />
+                                    </div>
                                 </div>
                             </div>
                         </> : (cekdataDiri.mediaPembawa == 'H' ?

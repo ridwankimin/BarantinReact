@@ -14,9 +14,45 @@ import ModaAlatAngkut from '../../../model/master/modaAlatAngkut.json';
 import Peruntukan from '../../../model/master/peruntukan.json';
 import UptNew from '../../../model/master/uptNewGrouping.json';
 import Select from 'react-select';
-const modelPemohon = new PtkModel();
+import Swal from 'sweetalert2';
+const modelPemohon = new PtkModel()
 const log = new PtkHistory()
-const modelPerlakuan = new PnPerlakuan();
+const modelPelepasan = new PnPelepasan()
+const modelPerlakuan = new PnPerlakuan()
+const modelSurtug = new PtkSurtug()
+
+function modaAlatAngkut(e){
+    return ModaAlatAngkut.find((element) => element.id == parseInt(e))
+}
+
+function peruntukan(e){
+    return Peruntukan.find((element) => element.id == parseInt(e))
+}
+
+function listUptNew() {
+    const dataUpt = UptNew.filter((element) => element.id != 1 & element.id != 77 & element.id != 78)
+    
+    var arrayUpt = dataUpt.map(item => {
+        return {
+            value: item.id,
+            label: item.nama,
+        }
+    })
+    return arrayUpt
+}
+
+function listUptNewById(e) {
+    if(e) {
+        const dataUpt = UptNew.filter((element) => element.id == e)
+        return dataUpt[0].nama
+    } else {
+        return ""
+    }
+}
+
+const addCommas = num => num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+const removeNonNumeric = num => num.toString().replace(/[^0-9.]/g, "");
+
 const customStyles = {
     control: (provided, state) => ({
       ...provided,
@@ -51,6 +87,7 @@ function DocKT3() {
     const idPtk = Cookies.get("idPtkPage")
     let [loadKomoditi, setLoadKomoditi] = useState(false)
     let [loadKomoditiPesan, setLoadKomoditiPesan] = useState("")
+    let [cekData, setCekData] = useState()
     let [datasend, setDataSend] = useState([])
     
     let [data, setData] = useState({
@@ -60,18 +97,6 @@ function DocKT3() {
         tglDokumen: "",
     })
 
-    function listUptNew() {
-        const dataUpt = UptNew.filter((element) => element.id !== 1 & element.id !== 77 & element.id !== 78)
-        
-        var arrayUpt = dataUpt.map(item => {
-            return {
-                value: item.id,
-                label: item.nama,
-            }
-        })
-        return arrayUpt
-    }
-
     const {
         register,
         setValue,
@@ -79,21 +104,42 @@ function DocKT3() {
         handleSubmit,
         watch,
         formState: { errors },
-    } = useForm();
+    } = useForm({
+        defaultValues: {
+            noSeri: "*******"
+        }
+    });
 
     const cekWatch = watch()
 
+    function refreshListKomoditas() {
+        const resKom = modelPemohon.getKomoditiPtkId(data.noIdPtk, "T");
+        resKom
+        .then((res) => {
+            if(res.data.status == 200) {
+                setData(values => ({...values,
+                    listKomoditas: res.data.data
+                }));
+            }
+        })
+        .catch((error) => {
+            if(process.env.REACT_APP_BE_ENV == "DEV") {
+                console.log(error)
+            }
+        });
+    }
+
     const {
-        register: registerMPKT1,
-        setValue: setValueMPKT1,
-        // control: controlMPKT1,
-        watch: watchMPKT1,
-        handleSubmit: handleFormMPKT1,
-        // reset: resetFormKomoditi,
-        formState: { errors: errorsMPKT1 },
+        register: registerMPKT3,
+        setValue: setValueMPKT3,
+        // control: controlMPKT3,
+        watch: watchMPKT3,
+        handleSubmit: handleFormMPKT3,
+        reset: resetFormKomoditi,
+        formState: { errors: errorsMPKT3 },
     } = useForm({
         defaultValues: {
-            idMPKT1: "",
+            idMPKT3: "",
             volumeNetto: "",
             volumeLain: "",
             satuanLain: "",
@@ -102,21 +148,19 @@ function DocKT3() {
           }
         })
 
-    const cekdataMPKT1 = watchMPKT1()
+    const cekdataMPKT3 = watchMPKT3()
 
     const onSubmit = (data) => {
-        const model = new PnPelepasan();
-        const response = model.dokelKT(data);
+        const response = modelPelepasan.dokelKT(data);
         response
         .then((response) => {
             if(response.data) {
-                if(response.data.status === '201') {
+                if(response.data.status == 201) {
                     //start save history
-                    // const log = new PtkHistory();
-                    const resHsy = log.pushHistory(data.idPtk, "p8", "K-T.1", (data.idDokKT1 ? 'UPDATE' : 'NEW'));
+                    const resHsy = log.pushHistory(data.idPtk, "p8", "K-T.3", (data.idDokKT3 ? 'UPDATE' : 'NEW'));
                     resHsy
                     .then((response) => {
-                        if(response.data.status === '201') {
+                        if(response.data.status == 201) {
                             if(process.env.REACT_APP_BE_ENV == "DEV") {
                                 console.log("history saved")
                             }
@@ -128,10 +172,20 @@ function DocKT3() {
                         }
                     });
                     //end save history
-
-                    alert(response.data.status + " - " + response.data.message)
-                    setValue("idDokKT1", response.data.data.id)
-                    setValue("noDokKT1", response.data.data.nomor)
+                    Swal.fire({
+                        icon: "success",
+                        title: "Sukses!",
+                        text: "Sertifikat kesehatan tumbuhan berhasil " + (data.idDokKT3 ? 'diedit' : 'disimpan')
+                    })
+                    
+                    setValue("idDokKT3", response.data.data.id)
+                    setValue("noDokKT3", response.data.data.nomor)
+                } else {
+                    Swal.fire({
+                        icon: "error",
+                        title: "Error!",
+                        text: response.data.message
+                    })
                 }
             }
         })
@@ -139,58 +193,118 @@ function DocKT3() {
             if(process.env.REACT_APP_BE_ENV == "DEV") {
                 console.log(error)
             }
-            alert(error.response.status + " - " + error.response.data.message)
+            Swal.fire({
+                icon: "error",
+                title: "Error!",
+                text: error.response.data.message
+            })
         });
     }
 
-    function modaAlatAngkut(e){
-        return ModaAlatAngkut.find((element) => element.id === parseInt(e))
-    }
-    
-    function peruntukan(e){
-        return Peruntukan.find((element) => element.id === parseInt(e))
-    }
-
-    const addCommas = num => num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-    const removeNonNumeric = num => num.toString().replace(/[^0-9.]/g, "");
 
     function handleEditKomoditasAll() {
         setLoadKomoditi(true)
         data.listKomoditas?.map((item, index) => (
             log.updateKomoditiP8(item.id, datasend[index])
-                .then((response) => {
-                    if(response.data.status === '201') {
-                        if(process.env.REACT_APP_BE_ENV == "DEV") {
-                            console.log("history saved")
-                        }
-                    }
-                })
-                .catch((error) => {
-                    setLoadKomoditi(true)
-                    setLoadKomoditiPesan("Terjadi error pada saat simpan, mohon refresh halaman dan coba lagi.")
+            .then((response) => {
+                if(response.data.status == 201) {
+                    refreshListKomoditas()
+                    setLoadKomoditi(false)
                     if(process.env.REACT_APP_BE_ENV == "DEV") {
-                        console.log(error)
+                        console.log("history saved")
                     }
+                    Swal.fire({
+                        icon: "success",
+                        title: "Sukses!",
+                        text: "Volume P8 berhasil disimpan (tidak ada perubahan dengan volume awal)"
+                    })
+                } else {
+                    Swal.fire({
+                        icon: "error",
+                        title: "Error!",
+                        text: response.data.status
+                    })
+                }
+            })
+            .catch((error) => {
+                setLoadKomoditi(false)
+                setLoadKomoditiPesan("Terjadi error pada saat simpan, mohon refresh halaman dan coba lagi.")
+                if(process.env.REACT_APP_BE_ENV == "DEV") {
+                    console.log(error)
+                }
+                Swal.fire({
+                    icon: "error",
+                    title: "Error!",
+                    text: error.response.data.status
                 })
-            )
+            }))
         )
         setLoadKomoditi(true)
     }
 
-    function onSubmitMPKT1(data) {
+    function onSubmitMPKT3(data) {
+        let cekVolume = false
+        if(parseFloat(typeof data.volumeP8 == "string" ? data.volumeP8.replace(",", "") : data.volumeP8) > parseFloat(cekData.volumeP8) || parseFloat(typeof data.nettoP8 == "string" ? data.nettoP8.replace(",", "") : data.nettoP8) > parseFloat(cekData.nettoP8)) {
+            cekVolume = false 
+        } else {
+            cekVolume = true
+        }
+
+        if(cekVolume) {
+            log.updateKomoditiP8(data.idMPKT3, data)
+            .then((response) => {
+                if(response.data.status == 201) {
+                    resetFormKomoditi()
+                    refreshListKomoditas()
+                    Swal.fire({
+                        icon: "success",
+                        title: "Sukses!",
+                        text: "Volume P8 berhasil disimpan"
+                    })
+                } else {
+                    Swal.fire({
+                        icon: "error",
+                        title: "Error!",
+                        text: response.data.message
+                    })
+                }
+            })
+            .catch((error) => {
+                if(process.env.REACT_APP_BE_ENV == "DEV") {
+                    console.log(error)
+                }
+                Swal.fire({
+                    icon: "error",
+                    title: "Error!",
+                    text: error.response.data.message
+                })
+            })
+        } else {
+            Swal.fire({
+                icon: "error",
+                title: "Error!",
+                text: "Volume input melebihi volume awal, mohon cek isian anda"
+            })
+        }
     }
 
     function handleEditKomoditas(e) {
-        setValueMPKT1("idMPKT1", e.target.dataset.header)
-        setValueMPKT1("idPtk", e.target.dataset.ptk)
-        setValueMPKT1("jenisKar", "T")
-        const cell = e.target.closest('tr')
-        setValueMPKT1("volumeNetto", cell.cells[5].innerHTML)
-        setValueMPKT1("satuanNetto", cell.cells[6].innerHTML)
-        setValueMPKT1("volumeLain", cell.cells[7].innerHTML)
-        setValueMPKT1("satuanLain", cell.cells[8].innerHTML)
-        setValueMPKT1("namaUmum", cell.cells[3].innerHTML)
-        setValueMPKT1("namaLatin", cell.cells[4].innerHTML)
+        const dataMP = data.listKomoditas?.filter((element, index) => index == e)
+        setValueMPKT3("idMPKT3", dataMP[0].id)
+        setValueMPKT3("idPtk", dataMP[0].ptk_id)
+        setValueMPKT3("jenisKar", "T")
+        setCekData(values => ({...values,
+            volumeP8: dataMP[0].volume_lain,
+            nettoP8: dataMP[0].volume_netto,
+            jantanP8: dataMP[0].jantan,
+            betinaP8: dataMP[0].betina
+        }));
+        setValueMPKT3("nettoP8", dataMP[0].volume_netto)
+        setValueMPKT3("satuanNetto", dataMP[0].sat_netto)
+        setValueMPKT3("volumeP8", dataMP[0].volume_lain)
+        setValueMPKT3("satuanLain", dataMP[0].sat_lain)
+        setValueMPKT3("namaUmum", dataMP[0].nama_umum_tercetak)
+        setValueMPKT3("namaLatin", dataMP[0].nama_latin_tercetak)
     }
 
     function handleGetDokumenPerlakuan(e) {
@@ -201,7 +315,7 @@ function DocKT3() {
                 setData(values => ({...values,
                     errorData5: false
                 }))
-                if(response.data.status === '200') {
+                if(response.data.status == 200) {
                     setValue("idPerlakuan", response.data.data[0].id)
                     setValue("tipePerlakuan", response.data.data[0].tipe_perlakuan_id)
                     setValue("tglPerlakuan", response.data.data[0].tgl_perlakuan_mulai)
@@ -210,6 +324,10 @@ function DocKT3() {
                     setValue("durasiPerlakuan", response.data.data[0].lama_papar)
                     setValue("temperatur", response.data.data[0].suhu_komoditi)
                     setValue("adInfo", response.data.data[0].ket_perlakuan_lain)
+                } else {
+                    setData(values => ({...values,
+                        errorData5: true
+                    }))
                 }
             } else {
                 setData(values => ({...values,
@@ -221,13 +339,16 @@ function DocKT3() {
             if(process.env.REACT_APP_BE_ENV == "DEV") {
                 console.log(error)
             }
-            alert(error.response.status + " - " + error.response.data.message)
+            Swal.fire({
+                icon: "error",
+                title: "Error!",
+                text: error.response.data.message
+            })
         });
     }
 
     useEffect(()=>{
         if(idPtk) {
-            // setValue("tglDokKT3", (new Date()).toLocaleString('en-CA', { timeZone: 'Asia/Jakarta', hourCycle: 'h24' }).replace(',', '').slice(0,16))
             setValue("tglDokKT3", (new Date()).toLocaleString('en-CA', { hourCycle: 'h24' }).replace(',', '').slice(0,16))
             setValue("tglBerangkat", (new Date()).toLocaleString('en-CA', { hourCycle: 'h24' }).replace(',', '').slice(0,10))
                     
@@ -235,79 +356,103 @@ function DocKT3() {
             let ptkDecode = idPtk ? base64_decode(idPtk) : "";
             let ptkNomor = idPtk ? ptkDecode.split('m0R3N0r1R') : "";
             
-            // const modelPemohon = new PtkModel();
+            setData(values => ({...values,
+                noAju: idPtk ? base64_decode(ptkNomor[0]) : "",
+                noIdPtk: idPtk ? base64_decode(ptkNomor[1]) : "",
+                noDokumen: idPtk ? base64_decode(ptkNomor[2]) : "",
+                tglDokumen: tglPtk,
+            }));
+            
             const response = modelPemohon.getPtkId(base64_decode(ptkNomor[1]));
             response
             .then((response) => {
-                if(response.data.status === '200') {
-                    let kodeHSData = response.data.data.ptk_komoditi?.map(item => {
-                        return item.kode_hs
-                    })
-                    let namaUmumMP = response.data.data.ptk_komoditi?.map(item => {
-                        return item.nama_umum_tercetak
-                    })
-                    let namaIlmiahMP = response.data.data.ptk_komoditi?.map(item => {
-                        return item.nama_latin_tercetak
-                    })
-                    let VolumeMP = response.data.data.ptk_komoditi?.map(item => {
-                        return item.volume_lain + " " + item.sat_lain
-                    })
-                    // alert(response.data.message);
-                    setData(values => ({...values,
-                        noAju: idPtk ? base64_decode(ptkNomor[0]) : "",
-                        noIdPtk: idPtk ? base64_decode(ptkNomor[1]) : "",
-                        noDokumen: idPtk ? base64_decode(ptkNomor[2]) : "",
-                        tglDokumen: tglPtk,
-                        kodeHs: kodeHSData.join(";"),
-                        // mpTercetak: namaUmumMP.join(";"),
-                        listPtk: response.data.data.ptk,
-                        listKomoditas: response.data.data.ptk_komoditi,
-                        listKontainer: response.data.data.ptk_kontainer,
-                        listDokumen: response.data.data.ptk_dokumen
-                    }));
+                if(typeof response.data != "string") {
+                    if(response.data.status == 200) {
+                        setData(values => ({...values,
+                            errorPTKPage: "",
+                            listPtk: response.data.data.ptk,
+                            listKontainer: response.data.data.ptk_kontainer,
+                            listDokumen: response.data.data.ptk_dokumen
+                        }));
+                        
+                        setValue("idPtk", base64_decode(ptkNomor[1]))
+                        setValue("noDokumen", base64_decode(ptkNomor[2]))
 
-                    var arrayKomKT = response.data.data.ptk_komoditi?.map(item => {
-                        return {
-                            namaUmum: item.nama_umum_tercetak,
-                            namaLatin: item.nama_latin_tercetak,
-                            jantan: null,
-                            betina: null,
-                            volumeP8: item.volume_lain,
-                            nettoP8: item.volume_netto
-                        }
-                    })
-                    setDataSend(arrayKomKT)
-                    
-                    setValue("tandaKhusus", response.data.data.ptk.tanda_khusus)
-                    setValue("namaUmum", namaUmumMP.join(";"))
-                    setValue("namaIlmiah", namaIlmiahMP.join(";"))
-                    setValue("bentukTercetak", response.data.data.ptk.merk_kemasan)
-                    setValue("jmlTercetak", VolumeMP.join(";"))
-                    setValue("karantinaTujuan", response.data.data.ptk.negara_penerima)
-                    // setValue("tempatKeluar", response.data.data.ptk.pelabuhan_muat)
-                    // setValue("tempatMasuk", response.data.data.ptk.pelabuhan_bongkar)
-                    setValue("idPtk", base64_decode(ptkNomor[1]))
-                    setValue("noDokumen", base64_decode(ptkNomor[2]))
+                        const resKom = modelPemohon.getKomoditiPtkId(base64_decode(ptkNomor[1]), "T");
+                        resKom
+                        .then((response) => {
+                            if(typeof response.data != "string") {
+                                if(response.data.status == 200) {
+                                    setData(values => ({...values,
+                                        errorKomoditi: "",
+                                        listKomoditas: response.data.data
+                                    }));
+                                    var arrayKomKT = response.data.data.map(item => {
+                                        return {
+                                            namaUmum: item.nama_umum_tercetak,
+                                            namaLatin: item.nama_latin_tercetak,
+                                            jantanP8: item.jantan,
+                                            betinaP8: item.betina,
+                                            volumeP8: item.volume_lain,
+                                            nettoP8: item.volume_netto
+                                        }
+                                    })
+                                    setDataSend(arrayKomKT)
+                                } else {
+                                    setData(values => ({...values,
+                                        errorKomoditi: "Gagal load data komoditas"
+                                    }));
+                                }
+                            } else {
+                                setData(values => ({...values,
+                                    errorKomoditi: "Gagal load data komoditas"
+                                }))
+                            }
+                        })
+                        .catch((error) => {
+                            if(process.env.REACT_APP_BE_ENV == "DEV") {
+                                console.log(error)
+                            }
+                            setData(values => ({...values,
+                                errorKomoditi: "Gagal load data komoditas"
+                            }))
+                        });
+                    }
+                } else {
+                    setData(values => ({...values,
+                        errorPTKPage: "Gagal load data PTK",
+                        errorKomoditi: "Gagal load data komoditas"
+                    }));
                 }
             })
             .catch((error) => {
                 if(process.env.REACT_APP_BE_ENV == "DEV") {
                     console.log(error)
                 }
+                setData(values => ({...values,
+                    errorPTKPage: "Gagal load data PTK",
+                    errorKomoditi: "Gagal load data komoditas"
+                }));
             });
             
-            const modelSurtug = new PtkSurtug();
-                // 1: penugasan periksa administratif
+            // 1: penugasan periksa administratif
             const resSurtug = modelSurtug.getDetilSurtugPenugasan(base64_decode(ptkNomor[1]), 14);
             resSurtug
             .then((response) => {
                 if(response.data) {
-                    if(response.data.status === '200') {
+                    if(typeof response.data != "string") {
+                        if(response.data.status == 200) {
+                            setData(values => ({...values,
+                                errorSurtug: "",
+                                noSurtug: response.data.data[0].nomor,
+                                tglSurtug: response.data.data[0].tanggal,
+                            }));
+                            setValue("idSurtug", response.data.data[0].id)
+                        }
+                    } else {
                         setData(values => ({...values,
-                            noSurtug: response.data.data[0].nomor,
-                            tglSurtug: response.data.data[0].tanggal,
+                            errorSurtug: "Gagal load data surat tugas"
                         }));
-                        setValue("idSurtug", response.data.data[0].id)
                     }
                 }
             })
@@ -315,16 +460,261 @@ function DocKT3() {
                 if(process.env.REACT_APP_BE_ENV == "DEV") {
                     console.log(error)
                 }
-                // alert(error.response.status + " - " + error.response.data.message)
+                if(error.response.data.status == 404) {
+                    setData(values => ({...values,
+                        errorSurtug: "Surat tugas tidak ada/belum dibuat"
+                    }));
+                } else {
+                    setData(values => ({...values,
+                        errorSurtug: "Gagal load data surat tugas"
+                    }));
+                }
+            });
+            
+            const resPelId = modelPelepasan.getById(base64_decode(ptkNomor[1]), "T");
+            resPelId
+            .then((response) => {
+                if(response.data) {
+                    if(typeof response.data != "string") {
+                        if(response.data.status == 200) {
+                            setData(values => ({...values,
+                                errorKT3: ""
+                            }))
+                            setValue("idDokKT3", response.data.data.id)
+                            setValue("noDokKT3", response.data.data.nomor)
+                            setValue("tglDokKT3", response.data.data.tanggal)
+                            setValue("noSeri", response.data.data.nomor_seri)
+                            setValue("jenisDokumen", response.data.data.status_dok)
+                            setValue("uptTujuan", response.data.data.upt_tujuan_id)
+                            setValue("uptTujuanView", response.data.data.upt_tujuan_id ? listUptNewById(response.data.data?.upt_tujuan_id) : "")
+                            
+                            setValue("adDeclare", response.data.data.additional_declaration)
+                            setValue("idPerlakuan", response.data.data.pn_perlakuan_id)
+                            setValue("replacedDokId", response.data.data.replaced_dok_id)
+
+                            setValue("isAttach", response.data.data.is_attachment != null ? response.data.data.is_attachment.toString() : "")
+                            setValue("ttdPutusan", response.data.data.user_ttd_id)
+                            setValue("diterbitkan", response.data.data.diterbitkan_di)
+                        } else if(response.data.status == 404) {
+                            setData(values => ({...values,
+                                errorKT3: ""
+                            }))
+                        } else {
+                            setData(values => ({...values,
+                                errorKT3: "Gagal load data KT-3"
+                            }))
+                        }
+                    } else {
+                        setData(values => ({...values,
+                            errorKT3: "Gagal load data KT-3"
+                        }))
+                    }
+                }
+            })
+            .catch((error) => {
+                if(process.env.REACT_APP_BE_ENV == "DEV") {
+                    console.log(error)
+                }
+                if(error.response) {
+                    if(error.response.data.status == 404) {
+                        setData(values => ({...values,
+                            errorKT3: ""
+                        }))
+                    } else {
+                        setData(values => ({...values,
+                            errorKT3: "Gagal load data KT-3"
+                        }))
+                    }
+                }
             });
         }
         
     },[idPtk, setValue])
 
+    function refreshData() {
+        if(data.errorPTKPage) {
+            const response = modelPemohon.getPtkId(data.noIdPtk)
+            response
+            .then((response) => {
+                if(typeof response.data != "string") {
+                    if(response.data.status == 200) {
+                        setData(values => ({...values,
+                            errorPTKPage: "",
+                            listPtk: response.data.data.ptk,
+                            listKontainer: response.data.data.ptk_kontainer,
+                            listDokumen: response.data.data.ptk_dokumen
+                        }));
+                        
+                        setValue("idPtk", data.noIdPtk)
+                        setValue("noDokumen", data.noDokumen)
+                    }
+                } else {
+                    setData(values => ({...values,
+                        errorPTKPage: "Gagal load data PTK",
+                    }));
+                }
+            })
+            .catch((error) => {
+                if(process.env.REACT_APP_BE_ENV == "DEV") {
+                    console.log(error)
+                }
+                setData(values => ({...values,
+                    errorPTKPage: "Gagal load data PTK",
+                }));
+            });
+        }
+
+        if(data.errorKomoditi) {
+            const resKom = modelPemohon.getKomoditiPtkId(data.noIdPtk, "T");
+            resKom
+            .then((response) => {
+                if(typeof response.data != "string") {
+                    if(response.data.status == 200) {
+                        setData(values => ({...values,
+                            errorKomoditi: "",
+                            listKomoditas: response.data.data
+                        }));
+                        var arrayKomKT = response.data.data.map(item => {
+                            return {
+                                namaUmum: item.nama_umum_tercetak,
+                                namaLatin: item.nama_latin_tercetak,
+                                jantanP8: item.jantan,
+                                betinaP8: item.betina,
+                                volumeP8: item.volume_lain,
+                                nettoP8: item.volume_netto
+                            }
+                        })
+                        setDataSend(arrayKomKT)
+                    } else {
+                        setData(values => ({...values,
+                            errorKomoditi: "Gagal load data komoditas"
+                        }));
+                    }
+                } else {
+                    setData(values => ({...values,
+                        errorKomoditi: "Gagal load data komoditas"
+                    }))
+                }
+            })
+            .catch((error) => {
+                if(process.env.REACT_APP_BE_ENV == "DEV") {
+                    console.log(error)
+                }
+                setData(values => ({...values,
+                    errorKomoditi: "Gagal load data komoditas"
+                }))
+            });
+        }
+        
+        if(data.errorSurtug) {
+            // 1: penugasan periksa administratif
+            const resSurtug = modelSurtug.getDetilSurtugPenugasan(data.noIdPtk, 14);
+            resSurtug
+            .then((response) => {
+                if(response.data) {
+                    if(typeof response.data != "string") {
+                        if(response.data.status == 200) {
+                            setData(values => ({...values,
+                                errorSurtug: "",
+                                noSurtug: response.data.data[0].nomor,
+                                tglSurtug: response.data.data[0].tanggal,
+                            }));
+                            setValue("idSurtug", response.data.data[0].id)
+                        }
+                    } else {
+                        setData(values => ({...values,
+                            errorSurtug: "Gagal load data surat tugas"
+                        }));
+                    }
+                }
+            })
+            .catch((error) => {
+                if(process.env.REACT_APP_BE_ENV == "DEV") {
+                    console.log(error)
+                }
+                if(error.response.data.status == 404) {
+                    setData(values => ({...values,
+                        errorSurtug: "Surat tugas tidak ada/belum dibuat"
+                    }));
+                } else {
+                    setData(values => ({...values,
+                        errorSurtug: "Gagal load data surat tugas"
+                    }));
+                }
+            });
+        }
+        
+        if(data.errorKT3) {
+            const resPelId = modelPelepasan.getById(data.noIdPtk, "T");
+            resPelId
+            .then((response) => {
+                if(response.data) {
+                    if(typeof response.data != "string") {
+                        if(response.data.status == 200) {
+                            setData(values => ({...values,
+                                errorKT3: ""
+                            }))
+                            setValue("idDokKT3", response.data.data.id)
+                            setValue("noDokKT3", response.data.data.nomor)
+                            setValue("tglDokKT3", response.data.data.tanggal)
+                            setValue("noSeri", response.data.data.nomor_seri)
+                            setValue("jenisDokumen", response.data.data.status_dok)
+                            setValue("uptTujuan", response.data.data.upt_tujuan_id)
+                            setValue("uptTujuanView", response.data.data.upt_tujuan_id ? listUptNewById(response.data.data?.upt_tujuan_id) : "")
+                            
+                            setValue("adDeclare", response.data.data.additional_declaration)
+                            setValue("idPerlakuan", response.data.data.pn_perlakuan_id)
+                            setValue("replacedDokId", response.data.data.replaced_dok_id)
+    
+                            setValue("isAttach", response.data.data.is_attachment != null ? response.data.data.is_attachment.toString() : "")
+                            setValue("ttdPutusan", response.data.data.user_ttd_id)
+                            setValue("diterbitkan", response.data.data.diterbitkan_di)
+                        } else if(response.data.status == 404) {
+                            setData(values => ({...values,
+                                errorKT3: ""
+                            }))
+                        } else {
+                            setData(values => ({...values,
+                                errorKT3: "Gagal load data KT-3"
+                            }))
+                        }
+                    } else {
+                        setData(values => ({...values,
+                            errorKT3: "Gagal load data KT-3"
+                        }))
+                    }
+                }
+            })
+            .catch((error) => {
+                if(process.env.REACT_APP_BE_ENV == "DEV") {
+                    console.log(error)
+                }
+                if(error.response) {
+                    if(error.response.data.status == 404) {
+                        setData(values => ({...values,
+                            errorKT3: ""
+                        }))
+                    } else {
+                        setData(values => ({...values,
+                            errorKT3: "Gagal load data KT-3"
+                        }))
+                    }
+                }
+            });
+        }
+    }
+
   return (
     <div className="container-xxl flex-grow-1 container-p-y">
         <h4 className="py-3 breadcrumb-wrapper mb-4">
             KT-3 <span className="fw-light" style={{color: 'blue'}}>SERTIFIKAT KESEHATAN TUMBUHAN ANTAR AREA</span>
+
+            <small className='float-end'>
+                <span className='text-danger'>{(data.errorPTKPage ? data.errorPTKPage + "; " : "") + (data.errorSurtug ? data.errorSurtug + "; " : "") + (data.errorKomoditi ? data.errorKomoditi + "; " : "") + (data.errorKT3 ? data.errorKT3 + "; " : "")}</span>
+                {data.errorPTKPage || data.errorSurtug || data.errorKomoditi || data.errorKT3 ?
+                    <button type='button' className='btn btn-warning btn-xs' onClick={() => refreshData()}><i className='fa-solid fa-sync'></i> Refresh</button>
+                : ""}
+            </small>
         </h4>
     
         <div className="row">
@@ -375,7 +765,7 @@ function DocKT3() {
                                 </div>
                                 <label className="col-sm-2 col-form-label text-sm-end" htmlFor="noSeri">No Seri <span className='text-danger'>*</span></label>
                                 <div className="col-sm-2">
-                                    <input type="text" id="noSeri" name='noSeri' {...register("noSeri", {required: "Mohon isi nomor seri."})} className={errors.noSeri ? "form-control form-control-sm is-invalid" : "form-control form-control-sm"} />
+                                    <input type="text" id="noSeri" name='noSeri' {...register("noSeri", {required: "Mohon isi nomor seri."})} disabled className={errors.noSeri ? "form-control form-control-sm is-invalid" : "form-control form-control-sm"} />
                                     {errors.noSeri && <small className="text-danger">{errors.noSeri.message}</small>}
                                 </div>
                             </div>
@@ -384,10 +774,10 @@ function DocKT3() {
                             <div className="row mb-3">
                                 <label className="col-sm-2 col-form-label text-sm-start" htmlFor="noDokKT3">Nomor Dokumen</label>
                                 <div className="col-sm-3">
-                                    <input type="text" id="noDokKT3" name='noDokKT3' {...register("noDokKT3")} className="form-control form-control-sm" placeholder="Nomor Dokumen K-T.1" disabled />
+                                    <input type="text" id="noDokKT3" name='noDokKT3' {...register("noDokKT3")} className="form-control form-control-sm" placeholder="Nomor Dokumen K-T.3" disabled />
                                 </div>
                                 <label className="col-sm-3 col-form-label text-sm-end" htmlFor="tglDokKT3">Tanggal <span className='text-danger'>*</span></label>
-                                <div className="col-sm-3">
+                                <div className="col-sm-2">
                                     <input type="datetime-local" id="tglDokKT3" name='tglDokKT3' {...register("tglDokKT3", {required: "Mohon isi tanggal dokumen."})} className={errors.tglDokKT3 ? "form-control form-control-sm is-invalid" : "form-control form-control-sm"} />
                                     {errors.tglDokKT3 && <small className="text-danger">{errors.tglDokKT3.message}</small>}
                                 </div>
@@ -514,15 +904,7 @@ function DocKT3() {
                                                     </div>
                                                 </div>
                                             </div>
-                                            <div className="col-md-6">
-                                                <div className="row">
-                                                    <label className="col-sm-3 col-form-label" htmlFor="tempatMasuk">UPT Asal</label>
-                                                    <div className="col-sm-9">
-                                                        <input type="text" id="tempatMasuk" value={(data.listPtk ? data.listPtk.pelabuhan_muat : "") || ""} disabled className="form-control form-control-sm" />
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div className="col-md-6">
+                                            <div className="col-md-6" style={{display: (data.listPtk?.jenis_permohonan == "DK" ? "block" : "none")}}>
                                                 <div className="row">
                                                     <label className="col-sm-3 col-form-label" htmlFor="tempatMasuk">UPT Tujuan <span className='text-danger'>*</span></label>
                                                     <div className="col-sm-9">
@@ -530,20 +912,12 @@ function DocKT3() {
                                                             control={control}
                                                             name={"uptTujuan"}
                                                             className="form-control form-control-sm"
-                                                            rules={{ required: (data.listPtk ? (data.listPtk.jenis_permohonan === "DK" ? "Mohon pilih UPT Tujuan." : false) : false)}}
-                                                            render={({ field: {value, ...field } }) => (
-                                                                <Select styles={customStyles} value={value ? {id: cekWatch.uptTujuan, label: cekWatch.uptTujuanView} : ""} onChange={(e) => setValue("uptTujuan", e.value) & setValue("uptTujuanView", e.label)} placeholder={"Pilih upt tujuan.."} {...field} options={listUptNew()} />
+                                                            rules={{ required: (data.listPtk ? (data.listPtk.jenis_permohonan == "DK" ? "Mohon pilih UPT Tujuan." : false) : false)}}
+                                                            render={({ field: {value, onChange, ...field } }) => (
+                                                                <Select styles={customStyles} value={{id: cekWatch.uptTujuan, label: cekWatch.uptTujuanView}} onChange={(e) => setValue("uptTujuan", e.value) & setValue("uptTujuanView", e.label)} placeholder={"Pilih upt tujuan.."} {...field} options={listUptNew()} />
                                                             )}
                                                         />
                                                         {errors.uptTujuan && <small className="text-danger">{errors.uptTujuan.message}</small>}
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div className="col-md-6">
-                                                <div className="row">
-                                                    <label className="col-sm-3 col-form-label" htmlFor="tempatMasuk">Wilker Asal</label>
-                                                    <div className="col-sm-9">
-                                                        <input type="text" id="tempatMasuk" value={(data.listPtk ? data.listPtk.pelabuhan_muat : "") || ""} disabled className="form-control form-control-sm" />
                                                     </div>
                                                 </div>
                                             </div>
@@ -575,7 +949,7 @@ function DocKT3() {
                                             <span className='text-danger'>{loadKomoditiPesan}</span>
                                             </h5>
                                             <div className='col-md-12 mb-3'>
-                                                <div className="table-responsive text-nowrap" style={{height: "300px"}}>
+                                                <div className="table-responsive text-nowrap" style={{height: (data.listKomoditas?.length > 8 ? "300px" : "")}}>
                                                     <table className="table table-sm table-bordered table-hover table-striped dataTable">
                                                         <thead>
                                                             <tr>
@@ -601,14 +975,14 @@ function DocKT3() {
                                                                             <td>{data.klasifikasi}</td>
                                                                             <td>{data.nama_umum_tercetak}</td>
                                                                             <td>{data.nama_latin_tercetak}</td>
-                                                                            <td>{data.volume_netto}</td>
+                                                                            <td className='text-end'>{data.volume_netto?.toLocaleString()}</td>
                                                                             <td>{data.sat_netto}</td>
-                                                                            <td>{data.volume_lain}</td>
+                                                                            <td className='text-end'>{data.volume_lain?.toLocaleString()}</td>
                                                                             <td>{data.sat_lain}</td>
-                                                                            <td>{data.volumeP8}</td>
-                                                                            <td>{data.nettoP8}</td>
+                                                                            <td className='text-end'>{data.volumeP8?.toLocaleString()}</td>
+                                                                            <td className='text-end'>{data.nettoP8?.toLocaleString()}</td>
                                                                             <td>
-                                                                                <a className="dropdown-item" href="#" type="button" onClick={handleEditKomoditas} data-header={data.id} data-ptk={data.ptk_id} data-bs-toggle="modal" data-bs-target="#modKomoditas"><i className="fa-solid fa-pen-to-square me-1"></i> Edit</a>
+                                                                                <button className="dropdown-item" type="button" onClick={() => handleEditKomoditas(index)} data-bs-toggle="modal" data-bs-target="#modKomoditas"><i className="fa-solid fa-pen-to-square me-1"></i> Edit</button>
                                                                             </td>
                                                                         </tr>
                                                                     ))
@@ -767,9 +1141,10 @@ function DocKT3() {
                         <div className="pt-2">
                             <div className="row">
                                 <div className="offset-sm-2 col-sm-9">
-                                    <button type="submit" className="btn btn-primary me-sm-2 me-1">Simpan</button>
-                                    <button type="button" className="btn btn-danger btn-label-secondary me-sm-2 me-1">Batal</button>
-                                    <a href={require("../../../dok/kt1.pdf")} rel="noopener noreferrer" target='_blank' className="btn btn-warning"><i className="bx bx-printer bx-xs"></i>&nbsp; Print</a>
+                                    <button type="submit" className="btn btn-primary me-sm-2 me-1"><i className='fa-solid fa-save me-sm-2 me-1'></i> Simpan</button>
+                                    <button type="button" className="btn btn-danger btn-label-secondary me-sm-2 me-1"><i className='fa-solid fa-cancel me-sm-2 me-1'></i> Batal</button>
+                                    <button type="button" className="btn btn-warning btn-label-secondary me-sm-2 me-1"><i className='fa-solid fa-print me-sm-2 me-1'></i> Print</button>
+                                    <button type="button" style={{display: (cekWatch.idDokKT3 ? "block" : "none")}} className="float-end btn btn-info btn-label-secondary"><i className='tf-icons fa-solid fa-paper-plane me-sm-2 me-1'></i> TTE</button>
                                 </div>
                             </div>
                         </div>
@@ -784,42 +1159,43 @@ function DocKT3() {
                     <div className="modal-body">
                         <button type="button" className="btn-close float-end" data-bs-dismiss="modal" aria-label="Close"></button>
                         <div className="text-center mb-4">
-                            <h3 className="address-title">Perubahan Media Pembawa {Cookies.get("jenisKarantina") === 'H' ? 'Hewan' : (Cookies.get("jenisKarantina") === 'I' ? 'Ikan' : 'Tumbuhan')}</h3>
+                            <h3 className="address-title">Perubahan Media Pembawa {Cookies.get("jenisKarantina") == 'H' ? 'Hewan' : (Cookies.get("jenisKarantina") == 'I' ? 'Ikan' : 'Tumbuhan')}</h3>
                         </div>
-                        <form onSubmit={handleFormMPKT1(onSubmitMPKT1)} className="row g-3">
-                        <input type="hidden" name='idMPKT1' {...registerMPKT1("idMPKT1")} />
-                        <input type="hidden" name='idPtk' {...registerMPKT1("idPtk")} />
-                        <input type="hidden" name='jenisKar' {...registerMPKT1("jenisKar")} />
+                        <form onSubmit={handleFormMPKT3(onSubmitMPKT3)} className="row g-3">
+                        <input type="hidden" name='idMPKT3' {...registerMPKT3("idMPKT3")} />
+                        <input type="hidden" name='idPtk' {...registerMPKT3("idPtk")} />
+                        <input type="hidden" name='jenisKar' {...registerMPKT3("jenisKar")} />
                             <div className="col-6">
                                 <label className="form-label" htmlFor="namaUmum">Nama Umum Tercetak</label>
-                                <input type='text' name="namaUmum" id="namaUmum" {...registerMPKT1("namaUmum")} className="form-control form-control-sm" />
+                                <input type='text' name="namaUmum" id="namaUmum" {...registerMPKT3("namaUmum")} className="form-control form-control-sm" />
                             </div>
                             <div className="col-6">
                                 <label className="form-label" htmlFor="namaLatin">Nama Latin Tercetak</label>
-                                <input type='text' name="namaLatin" id="namaLatin" {...registerMPKT1("namaLatin")} className="form-control form-control-sm" />
+                                <input type='text' name="namaLatin" id="namaLatin" {...registerMPKT3("namaLatin")} className="form-control form-control-sm" />
                             </div>
                             <div className="col-6">
-                                <label className="form-label" htmlFor="volumeNetto">Volume Netto Akhir-P8<span className='text-danger'>*</span></label>
+                                <label className="form-label" htmlFor="nettoP8">Volume Netto Akhir-P8<span className='text-danger'>*</span></label>
                                 <div className='row'>
                                     <div className="col-5" style={{paddingRight: '2px'}}>
-                                        <input type="text" name='volumeNetto' id='volumeNetto' value={cekdataMPKT1.volumeNetto ? addCommas(removeNonNumeric(cekdataMPKT1.volumeNetto)) : ""} {...registerMPKT1("volumeNetto", {required: "Mohon isi volume netto."})} className={errorsMPKT1.volumeNetto ? "form-control form-control-sm is-invalid" : "form-control form-control-sm"} />
+                                        <input type="text" name='nettoP8' id='nettoP8' value={cekdataMPKT3.nettoP8 ? addCommas(removeNonNumeric(cekdataMPKT3.nettoP8)) : ""} {...registerMPKT3("nettoP8", {required: "Mohon isi volume netto."})} className={errorsMPKT3.nettoP8 ? "form-control form-control-sm is-invalid" : "form-control form-control-sm"} />
                                     </div>
                                     <div className="col-3" style={{paddingLeft: '2px'}}>
-                                        <input type="text" className='form-control form-control-sm' name='satuanNetto' id='satuanNetto' {...registerMPKT1("satuanNetto")} disabled />
+                                        <input type="text" className='form-control form-control-sm' name='satuanNetto' id='satuanNetto' {...registerMPKT3("satuanNetto")} disabled />
                                     </div>
                                 </div>
-                                {errorsMPKT1.volumeNetto && <small className="text-danger">{errorsMPKT1.volumeNetto.message}</small>}
+                                {errorsMPKT3.nettoP8 && <small className="text-danger">{errorsMPKT3.nettoP8.message}</small>}
                             </div>
                             <div className="col-6">
-                                <label className="form-label" htmlFor="volumeLain">Volume Lain Akhir-P8</label>
+                                <label className="form-label" htmlFor="volumeP8">Volume Lain Akhir-P8</label>
                                 <div className='row'>
                                     <div className="col-5" style={{paddingRight: '2px'}}>
-                                        <input type="text" className='form-control form-control-sm' name='volumeLain' id='volumeLain' value={cekdataMPKT1.volumeLain ? addCommas(removeNonNumeric(cekdataMPKT1.volumeLain)) : ""} {...registerMPKT1("volumeLain")} />
+                                        <input type="text" className={errorsMPKT3.volumeP8 ? "form-control form-control-sm is-invalid" : "form-control form-control-sm"} name='volumeP8' id='volumeP8' value={cekdataMPKT3.volumeP8 ? addCommas(removeNonNumeric(cekdataMPKT3.volumeP8)) : ""} {...registerMPKT3("volumeP8", {required: "Mohon isi volume P8."})} />
                                     </div>
                                     <div className="col-3" style={{paddingLeft: '2px'}}>
-                                        <input type="text" className='form-control form-control-sm' name='satuanLain' id='satuanLain' {...registerMPKT1("satuanLain")} disabled />
+                                        <input type="text" className='form-control form-control-sm' name='satuanLain' id='satuanLain' {...registerMPKT3("satuanLain")} disabled />
                                     </div>
                                 </div>
+                                {errorsMPKT3.volumeP8 && <small className="text-danger">{errorsMPKT3.volumeP8.message}</small>}
                             </div>
                         <small className='text-danger'>*Format penulisan desimal menggunakan titik ( . )</small>
                         <div className="col-12 text-center">

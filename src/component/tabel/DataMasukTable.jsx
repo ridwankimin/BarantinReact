@@ -248,6 +248,9 @@ function DataMasukTable(props) {
                     Cookies.set("jenisKarantina", (e.selectedRows[0].karantina === "Tumbuhan" ? "T" : (e.selectedRows[0].karantina === "Hewan" ? "H" : "I")), {
                         expires: 7
                     });
+                    Cookies.set("jenisPermohonan", (e.selectedRows[0].jenisPermohonan == 'Ekspor' ? 'EX' : (e.selectedRows[0].jenisPermohonan === 'Impor' ? 'IM' : (e.selectedRows[0].jenisPermohonan === 'Dokel' ? 'DK' : (e.selectedRows[0].jenisPermohonan === 'Domas' ? 'DM' : (e.selectedRows[0].jenisPermohonan === 'Re Ekspor' ? 'RE' : (e.selectedRows[0].jenisPermohonan === 'Re Impor' ? 'RI' : (e.selectedRows[0].jenisPermohonan === 'Transit' ? '' : 'ST'))))))), {
+                        expires: 7
+                    });
                     Cookies.set("jenisForm", "PTK", {
                         expires: 7
                     });

@@ -21,6 +21,7 @@ const modelSurtug = new PtkSurtug()
 function DocK53() {
     const idPtk = Cookies.get("idPtkPage");
     let [loadKomoditi, setLoadKomoditi] = useState(false)
+    let [cekData, setCekData] = useState()
     let [loadKomoditiPesan, setLoadKomoditiPesan] = useState("")
     let [datasend, setDataSend] = useState([])
     let [data, setData] = useState({
@@ -39,19 +40,20 @@ function DocK53() {
         noDok53: "",
         dokKarId: "23"
     });
-    const dataWatch = watch()
+
+    const cekWatch = watch()
 
     const onSubmit = (data) => {
         const response = modelPerlakuan.sertifLaporan(data);
             response
             .then((response) => {
                 if(response.data) {
-                    if(response.data.status === '201') {
+                    if(response.data.status == 201) {
                         //start save history
                         const resHsy = log.pushHistory(data.idPtk, "p4", "K-5.3", (data.idDok53 ? 'UPDATE' : 'NEW'));
                         resHsy
                         .then((response) => {
-                            if(response.data.status === '201') {
+                            if(response.data.status == 201) {
                                 if(process.env.REACT_APP_BE_ENV == "DEV") {
                                     console.log("history saved")
                                 }
@@ -108,37 +110,75 @@ function DocK53() {
     const cekdataMPk53 = watchMPk53()
 
     function onSubmitMPk53(data) {
-        log.updateKomoditiP4(data.idMPk53, data)
-        .then((response) => {
-            if(response.data.status === '201') {
+        let cekVolume = false
+        if(data.jantanP4 || data.betinaP4 ) {
+            if(parseFloat(data.jantanP4) > parseFloat(cekData.jantanP4) || parseFloat(data.betinaP4) > parseFloat(cekData.nettoP4)) {
+                cekVolume = false
+            } else {
+                cekVolume = true
+            }
+        }
+        if(parseFloat(typeof data.volumeP4 == "string" ? data.volumeP4.replace(",", "") : data.volumeP4) > parseFloat(cekData.volumeP4) || parseFloat(typeof data.nettoP4 == "string" ? data.nettoP4.replace(",", "") : data.nettoP4) > parseFloat(cekData.nettoP4)) {
+            cekVolume = false 
+        } else {
+            cekVolume = true
+        }
+
+        if(cekVolume) {
+            log.updateKomoditiP4(data.idMPk53, data)
+            .then((response) => {
+                if(response.data.status == 201) {
+                    Swal.fire({
+                        title: "Sukses!",
+                        text: "Volume P4 berhasil diubah.",
+                        icon: "success"
+                    })
+                    resetFormKomoditikh1()
+                    refreshListKomoditas()
+                } else {
+                    Swal.fire({
+                        title: "Error!",
+                        text: response.data.message,
+                        icon: "error"
+                    })
+                }
+            })
+            .catch((error) => {
+                if(process.env.REACT_APP_BE_ENV == "DEV") {
+                    console.log(error)
+                }
                 Swal.fire({
-                    title: "Sukses!",
-                    text: "Volume P4 berhasil diubah.",
-                    icon: "success"
+                    title: "Error!",
+                    text: error.response.data.message,
+                    icon: "error"
                 })
-                resetFormKomoditikh1()
-                refreshListKomoditas()
-            }
-        })
-        .catch((error) => {
-            if(process.env.REACT_APP_BE_ENV == "DEV") {
-                console.log(error)
-            }
-        })
+            })
+        } else {
+            Swal.fire({
+                title: "Error!",
+                text: "Volume input melebihi volume awal, mohon cek isian anda",
+                icon: "error"
+            })
+        }
     }
 
     function handleEditKomoditas(e) {
-        setValueMPk53("idMPk53", e.target.dataset.headerid)
-        setValueMPk53("idPtk", e.target.dataset.ptk)
+        const dataMP = data.listKomoditas?.filter((element, index) => index == e)
+        setValueMPk53("idMPk53", dataMP[0].id)
+        setValueMPk53("idPtk", dataMP[0].ptk_id)
         setValueMPk53("jenisKar", Cookies.get("jenisKarantina"))
-        const cell = e.target.closest('tr')
-        setValueMPk53("nettoP4", cell.cells[5].innerHTML)
-        setValueMPk53("satuanNetto", cell.cells[6].innerHTML)
-        setValueMPk53("volumeP4", cell.cells[7].innerHTML)
-        setValueMPk53("satuanLain", cell.cells[8].innerHTML)
-        setValueMPk53("volumeP4", cell.cells[7].innerHTML)
-        setValueMPk53("jantanP4", cell.cells[9].innerHTML)
-        setValueMPk53("betinaP4", cell.cells[10].innerHTML)
+        setCekData(values => ({...values,
+            volumeP4: dataMP[0].volume_lain,
+            nettoP4: dataMP[0].volume_netto,
+            jantanP4: dataMP[0].jantan,
+            betinaP4: dataMP[0].betina
+        }));
+        setValueMPk53("nettoP4", dataMP[0].volume_netto)
+        setValueMPk53("satuanNetto", dataMP[0].sat_netto)
+        setValueMPk53("volumeP4", dataMP[0].volume_lain)
+        setValueMPk53("satuanLain", dataMP[0].sat_lain)
+        setValueMPk53("jantanP4", dataMP[0].jantan)
+        setValueMPk53("betinaP4", dataMP[0].betina)
     }
 
     function handleEditKomoditasAll() {
@@ -146,12 +186,23 @@ function DocK53() {
         data.listKomoditas?.map((item, index) => (
             log.updateKomoditiP4(item.id, datasend[index])
                 .then((response) => {
-                    if(response.data.status === '201') {
+                    if(response.data.status == 201) {
                         refreshListKomoditas()
                         setLoadKomoditi(false)
                         if(process.env.REACT_APP_BE_ENV == "DEV") {
                             console.log("history saved")
                         }
+                        Swal.fire({
+                            title: "Sukses!",
+                            text: "Volume P4 berhasil diubah (tidak ada perubahan dengan volume awal)",
+                            icon: "success"
+                        })
+                    } else {
+                        Swal.fire({
+                            title: "Error!",
+                            text: response.data.message,
+                            icon: "error"
+                        })
                     }
                 })
                 .catch((error) => {
@@ -160,6 +211,11 @@ function DocK53() {
                     if(process.env.REACT_APP_BE_ENV == "DEV") {
                         console.log(error)
                     }
+                    Swal.fire({
+                        title: "Error!",
+                        text: error.response.data.message,
+                        icon: "error"
+                    })
                 })
             )
         )
@@ -170,7 +226,7 @@ function DocK53() {
         const resKom = modelPemohon.getKomoditiPtkId(data.noIdPtk, Cookies.get("jenisKarantina"));
         resKom
         .then((res) => {
-            if(res.data.status === '200') {
+            if(res.data.status == 200) {
                 setData(values => ({...values,
                     listKomoditas: res.data.data
                 }));
@@ -200,7 +256,7 @@ function DocK53() {
             response
             .then((response) => {
                 if(typeof response.data != "string") {
-                    if(response.data.status == '200') {
+                    if(response.data.status == 200) {
                         setData(values => ({...values,
                             errorPtkPage: "",
                             kegiatan: response.data.data.ptk.jenis_permohonan,
@@ -230,7 +286,7 @@ function DocK53() {
                         setValue("tempatPerlakuan", response.data.data.ptk.tempat_pemeriksaan)
                         setValue("namaTempatPerlakuan", response.data.data.ptk.nama_tempat_pemeriksaan)
                         setValue("alamatTempatPerlakuan", response.data.data.ptk.alamat_tempat_pemeriksaan)
-                        setValue("jmlNoContainer", response.data.data.ptk_kontainer.length + " (" + nmrKont.join(";") +")")
+                        setValue("jmlNoContainer", response.data.data.ptk_kontainer.length + (response.data.data.ptk_kontainer.length > 0 ? " (" + nmrKont.join(";") +")" : ""))
                         setValue("idPtk", base64_decode(ptkNomor[1]))
                         setValue("noDokumen", base64_decode(ptkNomor[2]))
                         setValue("dokKarId", 23)
@@ -239,7 +295,7 @@ function DocK53() {
                         resKom
                         .then((res) => {
                             if(typeof res.data != "string") {
-                                if(res.data.status == '200') {
+                                if(res.data.status == 200) {
                                     setData(values => ({...values,
                                         errorKomoditas: "",
                                         listKomoditas: res.data.data
@@ -296,7 +352,7 @@ function DocK53() {
             .then((response) => {
                 if(typeof response.data != "string") {
                     if(response.data) {
-                        if(response.data.status == '200') {
+                        if(response.data.status == 200) {
                             setValue("idSurtug", response.data.data[0].id)
                             setData(values => ({...values,
                                 errorSurtug: "",
@@ -328,7 +384,7 @@ function DocK53() {
             resLaporan
             .then((response) => {
                 if(typeof response.data != "string") {
-                    if(response.data.status == '200') {
+                    if(response.data.status == 200) {
                         setData(values => ({...values,
                             errorData53: ""
                         }))
@@ -396,7 +452,7 @@ function DocK53() {
             response
             .then((response) => {
                 if(typeof response.data != "string") {
-                    if(response.data.status == '200') {
+                    if(response.data.status == 200) {
                         setData(values => ({...values,
                             errorPtkPage: "",
                             kegiatan: response.data.data.ptk.jenis_permohonan,
@@ -426,7 +482,7 @@ function DocK53() {
                         setValue("tempatPerlakuan", response.data.data.ptk.tempat_pemeriksaan)
                         setValue("namaTempatPerlakuan", response.data.data.ptk.nama_tempat_pemeriksaan)
                         setValue("alamatTempatPerlakuan", response.data.data.ptk.alamat_tempat_pemeriksaan)
-                        setValue("jmlNoContainer", response.data.data.ptk_kontainer.length + " (" + nmrKont.join(";") +")")
+                        setValue("jmlNoContainer", response.data.data.ptk_kontainer.length + (response.data.data.ptk_kontainer.length > 0 ? " (" + nmrKont.join(";") +")" : ""))
                         setValue("idPtk", data.noIdPtk)
                         setValue("noDokumen", data.noDokumen)
                         setValue("dokKarId", 23)
@@ -457,7 +513,7 @@ function DocK53() {
             resKom
             .then((res) => {
                 if(typeof res.data != "string") {
-                    if(res.data.status == '200') {
+                    if(res.data.status == 200) {
                         setData(values => ({...values,
                             errorKomoditas: "",
                             listKomoditas: res.data.data
@@ -494,7 +550,7 @@ function DocK53() {
             .then((response) => {
                 if(typeof response.data != "string") {
                     if(response.data) {
-                        if(response.data.status == '200') {
+                        if(response.data.status == 200) {
                             setValue("idSurtug", response.data.data[0].id)
                             setData(values => ({...values,
                                 errorSurtug: "",
@@ -528,7 +584,7 @@ function DocK53() {
             resLaporan
             .then((response) => {
                 if(typeof response.data != "string") {
-                    if(response.data.status == '200') {
+                    if(response.data.status == 200) {
                         setData(values => ({...values,
                             errorData53: ""
                         }))
@@ -778,14 +834,14 @@ function DocK53() {
                                                     <div className="row">
                                                         <div className="col-md-12 mb-3">
                                                             <h5><b><u>Detail Media Pembawa</u></b></h5>
-                                                            <h5 className='mb-1'>Jenis Media Pembawa : <b>{Cookies.get("jenisKarantina") === "H" ? "Hewan" : (Cookies.get("jenisKarantina") === "T" ? "Tumbuhan" : (Cookies.get("jenisKarantina") === "I" ? "Ikan" : ""))}</b>
+                                                            <h5 className='mb-1'>Jenis Media Pembawa : <b>{Cookies.get("jenisKarantina") == "H" ? "Hewan" : (Cookies.get("jenisKarantina") == "T" ? "Tumbuhan" : (Cookies.get("jenisKarantina") == "I" ? "Ikan" : ""))}</b>
                                                                 {loadKomoditi ? <SpinnerDot/> : null}
                                                                 {data.listKomoditas ? 
-                                                                (loadKomoditi ? null : <button type='button' className='btn btn-sm btn-outline-secondary' onClick={handleEditKomoditasAll} style={{marginLeft: "15px"}}><i className='fa-solid fa-check-square text-success'></i> Tidak ada perubahan</button>) : null }
+                                                                (loadKomoditi ? null : <button type='button' className='btn btn-sm btn-outline-secondary' onClick={handleEditKomoditasAll} style={{marginLeft: "15px"}}><i className='fa-solid fa-check-square text-success me-sm-3 me-1'></i>Tidak ada perubahan</button>) : null }
                                                                 <span className='text-danger'>{loadKomoditiPesan}</span>
                                                             </h5>
                                                             <div className='col-md-12 mb-3'>
-                                                                <div className="table-responsive text-nowrap" style={{height: "300px"}}>
+                                                                <div className="table-responsive text-nowrap" style={{height: (data.listKomoditas?.length > 8 ? "300px" : "")}}>
                                                                     <table className="table table-sm table-bordered table-hover table-striped dataTable">
                                                                         <thead>
                                                                             <tr>
@@ -826,7 +882,7 @@ function DocK53() {
                                                                                             <td>{data.jantanP4}</td>
                                                                                             <td>{data.betinaP4}</td>
                                                                                             <td>
-                                                                                                <button className="btn btn-default dropdown-item" type="button" onClick={handleEditKomoditas} data-headerid={data.id} data-ptk={data.ptk_id} data-bs-toggle="modal" data-bs-target="#modKomoditas"><i className="fa-solid fa-pen-to-square me-1"></i> Edit</button>
+                                                                                                <button className="btn btn-default dropdown-item" type="button" onClick={() => handleEditKomoditas(index)} data-bs-toggle="modal" data-bs-target="#modKomoditas"><i className="fa-solid fa-pen-to-square me-1"></i> Edit</button>
                                                                                             </td>
                                                                                         </tr>
                                                                                     ))
@@ -919,7 +975,7 @@ function DocK53() {
                                                                 </div>
                                                             </div>
                                                         </div>
-                                                        <div className="col-md-12" style={{display: (dataWatch.metodePerlakuan === "CHT" ? "block" : "none")}}>
+                                                        <div className="col-md-12" style={{display: (cekWatch.metodePerlakuan == "CHT" ? "block" : "none")}}>
                                                             <div className="row">
                                                                 <label className="col-sm-3 col-form-label" htmlFor="bahanPestisida">Bahan/Pestisida yang digunakan</label>
                                                                 <div className="col-sm-3">
@@ -1044,11 +1100,11 @@ function DocK53() {
                                                                 <label className="col-sm-2 col-form-label" htmlFor="hasilPerlakuan">Hasil Perlakuan <span className='text-danger'>*</span></label>
                                                                 <div className="col-sm-8">
                                                                     <div className="form-check">
-                                                                        <label className="form-check-label" htmlFor="bebas">Dapat dibebaskan dari {data.jenisKarantina === "H" ? "HPHK" : (data.jenisKarantina === "I" ? "HPIK" : (data.jenisKarantina === "T" ? "OPTK/OPT" : ""))}</label>
+                                                                        <label className="form-check-label" htmlFor="bebas">Dapat dibebaskan dari {data.jenisKarantina == "H" ? "HPHK" : (data.jenisKarantina == "I" ? "HPIK" : (data.jenisKarantina == "T" ? "OPTK/OPT" : ""))}</label>
                                                                         <input name="hasilPerlakuan" value="BEBAS" {...register("hasilPerlakuan", { required: "Mohon pilih hasil periksa yang sesuai."})} className={errors.hasilPerlakuan ? "form-check-input is-invalid" : "form-check-input"} type="radio" id="bebas" />
                                                                     </div>
                                                                     <div className="form-check">
-                                                                        <label className="form-check-label" htmlFor="tidak">Tidak dapat dibebaskan dari {data.jenisKarantina === "H" ? "HPHK" : (data.jenisKarantina === "I" ? "HPIK" : (data.jenisKarantina === "T" ? "OPTK/OPT" : ""))}</label>
+                                                                        <label className="form-check-label" htmlFor="tidak">Tidak dapat dibebaskan dari {data.jenisKarantina == "H" ? "HPHK" : (data.jenisKarantina == "I" ? "HPIK" : (data.jenisKarantina == "T" ? "OPTK/OPT" : ""))}</label>
                                                                         <input name="hasilPerlakuan" value="TIDAK" {...register("hasilPerlakuan")} className={errors.hasilPerlakuan ? "form-check-input is-invalid" : "form-check-input"} type="radio" id="tidak" />
                                                                     </div>
                                                                     <div className="form-check">
@@ -1103,8 +1159,10 @@ function DocK53() {
                             </div>
                             <div className="row">
                                 <div className="col-sm-12 text-center">
-                                    <button type="submit" className="btn btn-primary me-sm-2 me-1">Simpan</button>
-                                    <button type="button" className="btn btn-danger me-sm-2 me-1">Batal</button>
+                                    <button type="submit" className="btn btn-primary me-sm-2 me-1"><i className='fa-solid fa-save me-sm-2 me-1'></i> Simpan</button>
+                                    <button type="button" className="btn btn-danger btn-label-secondary me-sm-2 me-1"><i className='fa-solid fa-cancel me-sm-2 me-1'></i> Batal</button>
+                                    <button type="button" className="btn btn-warning btn-label-secondary me-sm-2 me-1"><i className='fa-solid fa-print me-sm-2 me-1'></i> Print</button>
+                                    <button type="button" style={{display: (cekWatch.idDok53 ? "block" : "none")}} className="float-end btn btn-info btn-label-secondary"><i className='tf-icons fa-solid fa-paper-plane me-sm-2 me-1'></i> TTE</button>
                                 </div>
                             </div>
                         </form>
@@ -1148,11 +1206,11 @@ function DocK53() {
                                     </div>
                                 </div>
                             </div>
-                            <div className="col-6" style={{display: (data.listPtk ? (data.listPtk.jenis_media_pembawa_id === 1 ? "block" : "none") : "none")}}>
+                            <div className="col-6" style={{display: (data.listPtk ? (data.listPtk.jenis_media_pembawa_id == 1 ? "block" : "none") : "none")}}>
                                 <label className="form-label" htmlFor="jantanP4">Jumlah Jantan P4<span className='text-danger'>*</span></label>
                                 <div className='row'>
                                     <div className="col-3" style={{paddingRight: '2px'}}>
-                                        <input type="text" name='jantanP4' id='jantanP4' value={(cekdataMPk53.jantanP4 ? addCommas(removeNonNumeric(cekdataMPk53.jantanP4)) : "") || ""} {...registerMPk53("jantanP4", {required: (data.listPtk ? (data.listPtkjenis_media_pembawa_id === 1 ? "Mohon isi jumlah akhir Jantan." : false) : false)})} className={errorsMPk53.jantanP4 ? "form-control form-control-sm is-invalid" : "form-control form-control-sm"} />
+                                        <input type="text" name='jantanP4' id='jantanP4' value={(cekdataMPk53.jantanP4 ? addCommas(removeNonNumeric(cekdataMPk53.jantanP4)) : "") || ""} {...registerMPk53("jantanP4", {required: (data.listPtk ? (data.listPtkjenis_media_pembawa_id == 1 ? "Mohon isi jumlah akhir Jantan." : false) : false)})} className={errorsMPk53.jantanP4 ? "form-control form-control-sm is-invalid" : "form-control form-control-sm"} />
                                     </div>
                                     <div className="col-2" style={{paddingLeft: '2px'}}>
                                         <input type="text" className='form-control form-control-sm' name='satuanjantanP4' id='satuanjantanP4' value={"HEA"} disabled />
@@ -1160,11 +1218,11 @@ function DocK53() {
                                 </div>
                                 {errorsMPk53.jantanP4 && <small className="text-danger">{errorsMPk53.jantanP4.message}</small>}
                             </div>
-                            <div className="col-6" style={{display: (data.listPtk ? (data.listPtk.jenis_media_pembawa_id === 1 ? "block" : "none") : "none")}}>
+                            <div className="col-6" style={{display: (data.listPtk ? (data.listPtk.jenis_media_pembawa_id == 1 ? "block" : "none") : "none")}}>
                                 <label className="form-label" htmlFor="betinaP4">Jumlah Betina P4<span className='text-danger'>*</span></label>
                                 <div className='row'>
                                     <div className="col-3" style={{paddingRight: '2px'}}>
-                                        <input type="text" name='betinaP4' id='betinaP4' value={(cekdataMPk53.betinaP4 ? addCommas(removeNonNumeric(cekdataMPk53.betinaP4)) : "") || ""} {...registerMPk53("betinaP4", {required: (data.listPtk ? (data.listPtkjenis_media_pembawa_id === 1 ? "Mohon isi jumlah akhir Betina." : false) : false)})} className={errorsMPk53.betinaP4 ? "form-control form-control-sm is-invalid" : "form-control form-control-sm"} />
+                                        <input type="text" name='betinaP4' id='betinaP4' value={(cekdataMPk53.betinaP4 ? addCommas(removeNonNumeric(cekdataMPk53.betinaP4)) : "") || ""} {...registerMPk53("betinaP4", {required: (data.listPtk ? (data.listPtkjenis_media_pembawa_id == 1 ? "Mohon isi jumlah akhir Betina." : false) : false)})} className={errorsMPk53.betinaP4 ? "form-control form-control-sm is-invalid" : "form-control form-control-sm"} />
                                     </div>
                                     <div className="col-2" style={{paddingLeft: '2px'}}>
                                         <input type="text" className='form-control form-control-sm' name='satuanbetinaP4' id='satuanbetinaP4' value={"HEA"} disabled />

@@ -25,20 +25,29 @@ const modelPeriksa = new PtkPemeriksaan()
 const addCommas = num => num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
 const removeNonNumeric = num => num.toString().replace(/[^0-9.]/g, "");
 
+function listUptNewById(e) {
+    if(e) {
+        const dataUpt = UptNew.filter((element) => element.id == e)
+        return dataUpt[0].nama
+    } else {
+        return ""
+    }
+}
+
 function modaAlatAngkut(e){
-    return ModaAlatAngkut.find((element) => element.id === parseInt(e))
+    return ModaAlatAngkut.find((element) => element.id == parseInt(e))
 }
 
 function peruntukan(e){
-    return Peruntukan.find((element) => element.id === parseInt(e))
+    return Peruntukan.find((element) => element.id == parseInt(e))
 }
 
 function keterangan92i() {
-    return Keterangan.filter((element) => element.dokumen === "K-9.2.I")
+    return Keterangan.filter((element) => element.dokumen == "K-9.2.I")
 }
 
 function listUptNew() {
-    const dataUpt = UptNew.filter((element) => element.id !== 1 & element.id !== 77 & element.id !== 78 & element.id !== Cookies.get("uptId"))
+    const dataUpt = UptNew.filter((element) => element.id != 1 & element.id != 77 & element.id != 78 & element.id != Cookies.get("uptId"))
     
     var arrayUpt = dataUpt.map(item => {
         return {
@@ -83,6 +92,7 @@ function DocKI2() {
     const idPtk = Cookies.get("idPtkPage");
     let [loadKomoditi, setLoadKomoditi] = useState(false)
     let [loadKomoditiPesan, setLoadKomoditiPesan] = useState("")
+    let [cekData, setCekData] = useState()
     let [datasend, setDataSend] = useState([])
 
     let [data, setData] = useState({
@@ -99,55 +109,73 @@ function DocKI2() {
         handleSubmit,
         watch,
         formState: { errors },
-    } = useForm();
+    } = useForm({
+        defaultValues: {
+            noSeri: "*******"
+        }
+    })
 
     const cekWatch = watch()
 
+    const dataCekKom = data.listKomoditas?.filter(item => item.volumeP8 == null || item.nettoP8 == null)
     const onSubmit = (data) => {
-        const response = modelPelepasan.dokelKI(data);
-        response
-        .then((response) => {
-            if(response.data) {
-                if(response.data.status === '201') {
-                    //start save history
-                    // const log = new PtkHistory();
-                    const resHsy = log.pushHistory(data.idPtk, "p8", "KI-2", (data.idDoki2 ? 'UPDATE' : 'NEW'));
-                    resHsy
-                    .then((response) => {
-                        if(response.data.status === '201') {
-                            if(process.env.REACT_APP_BE_ENV == "DEV") {
-                                console.log("history saved")
+        if(dataCekKom.length == 0) {
+            const response = modelPelepasan.dokelKI(data);
+            response
+            .then((response) => {
+                if(response.data) {
+                    if(response.data.status == 201) {
+                        //start save history
+                        const resHsy = log.pushHistory(data.idPtk, "p8", "KI-2", (data.idDoki2 ? 'UPDATE' : 'NEW'));
+                        resHsy
+                        .then((response) => {
+                            if(response.data.status == 201) {
+                                if(process.env.REACT_APP_BE_ENV == "DEV") {
+                                    console.log("history saved")
+                                }
                             }
-                        }
-                    })
-                    .catch((error) => {
-                        if(process.env.REACT_APP_BE_ENV == "DEV") {
-                            console.log(error.response.data);
-                        }
-                    });
-                    //end save history
-
-                    // alert(response.data.status + " - " + response.data.message)
-                    Swal.fire({
-                        title: "Sukses!",
-                        text: "Sertifikat Kesehatan Ikan dan Produk Ikan berhasil " + (data.idDoki2 ? "diedit." : "disimpan."),
-                        icon: "success"
-                    });
-                    setValue("idDoki2", response.data.data.id)
-                    setValue("noDoki2", response.data.data.nomor)
+                        })
+                        .catch((error) => {
+                            if(process.env.REACT_APP_BE_ENV == "DEV") {
+                                console.log(error.response.data);
+                            }
+                        });
+                        //end save history
+    
+                        Swal.fire({
+                            title: "Sukses!",
+                            text: "Sertifikat Kesehatan Ikan dan Produk Ikan berhasil " + (data.idDoki2 ? "diedit." : "disimpan."),
+                            icon: "success"
+                        });
+                        setValue("idDoki2", response.data.data.id)
+                        setValue("noDoki2", response.data.data.nomor)
+                    } else {
+                        Swal.fire({
+                            title: "Error!",
+                            text: response.data.message,
+                            icon: "error"
+                        });
+    
+                    }
                 }
-            }
-        })
-        .catch((error) => {
-            if(process.env.REACT_APP_BE_ENV == "DEV") {
-                console.log(error)
-            }
-            Swal.fire({
-                title: "Error!",
-                text: error.response.status + " - " + error.response.data.message,
-                icon: "error"
+            })
+            .catch((error) => {
+                if(process.env.REACT_APP_BE_ENV == "DEV") {
+                    console.log(error)
+                }
+                Swal.fire({
+                    icon: "error",
+                    title: "Error!",
+                    text: error.response.data.message
+                });
             });
-        });
+        } else {
+            Swal.fire({
+                icon: "error",
+                title: "Error!",
+                text: "Mohon isi volume P8"
+            });
+        }
     }
 
     const {
@@ -174,70 +202,114 @@ function DocKI2() {
     const cekdataMPki2 = watchMPki2()
 
     function onSubmitMPki2(data) {
-        log.updateKomoditiP8(data.idMPki2, data)
-        .then((response) => {
-            if(response.data.status === '201') {
-                // alert(response.data.status + " - " + response.data.message)
+        let cekVolume = false
+        if(parseFloat(typeof data.volumeP8 == "string" ? data.volumeP8.replace(",", "") : data.volumeP8) > parseFloat(cekData.volumeP8) || parseFloat(typeof data.nettoP8 == "string" ? data.nettoP8.replace(",", "") : data.nettoP8) > parseFloat(cekData.nettoP8)) {
+            cekVolume = false 
+        } else {
+            cekVolume = true
+        }
+        if(cekVolume) {
+            log.updateKomoditiP8(data.idMPki2, data)
+            .then((response) => {
+                if(response.data.status == 201) {
+                    Swal.fire({
+                        title: "Sukses!",
+                        text: "Volume P8 berhasil disimpan",
+                        icon: "success"
+                    });
+                    resetFormKomoditiki2()
+                    refreshListKomoditas()
+                } else {
+                    Swal.fire({
+                        icon: "error",
+                        title: "Error!",
+                        text: response.data.message
+                    })
+                }
+            })
+            .catch((error) => {
+                if(process.env.REACT_APP_BE_ENV == "DEV") {
+                    console.log(error)
+                }
                 Swal.fire({
-                    title: "Sukses!",
-                    text: "Volume P8 berhasil diupdate",
-                    icon: "success"
-                });
-                resetFormKomoditiki2()
-                refreshListKomoditas()
-            }
-        })
-        .catch((error) => {
-            if(process.env.REACT_APP_BE_ENV == "DEV") {
-                console.log(error)
-            }
-        })
+                    icon: "error",
+                    title: "Error!",
+                    text: error.response.data.message
+                })
+            })
+        } else {
+            Swal.fire({
+                icon: "error",
+                title: "Error!",
+                text: "Volume input melebihi volume awal, mohon cek isian anda"
+            })
+        }
     }
 
     function handleEditKomoditas(e) {
-        setValueMPki2("idMPki2", e.target.dataset.headerid)
-        setValueMPki2("idPtk", e.target.dataset.ptk)
+        const dataMP = data.listKomoditas?.filter((element, index) => index == e)
+        setValueMPki2("idMPki2", dataMP[0].id)
+        setValueMPki2("idPtk", dataMP[0].ptk_id)
         setValueMPki2("jenisKar", "I")
-        const cell = e.target.closest('tr')
-        setValueMPki2("nettoP8", cell.cells[5].innerHTML)
-        setValueMPki2("satuanNetto", cell.cells[6].innerHTML)
-        setValueMPki2("volumeP8", cell.cells[7].innerHTML)
-        setValueMPki2("satuanLain", cell.cells[8].innerHTML)
-        setValueMPki2("namaUmum", cell.cells[3].innerHTML)
-        setValueMPki2("namaLatin", cell.cells[4].innerHTML)
-        setValueMPki2("volumeP8", cell.cells[7].innerHTML)
+        setCekData(values => ({...values,
+            volumeP8: dataMP[0].volume_lain,
+            nettoP8: dataMP[0].volume_netto,
+            jantanP8: dataMP[0].jantan,
+            betinaP8: dataMP[0].betina
+        }));
+        setValueMPki2("nettoP8", dataMP[0].volume_netto)
+        setValueMPki2("satuanNetto", dataMP[0].sat_netto)
+        setValueMPki2("volumeP8", dataMP[0].volume_lain)
+        setValueMPki2("satuanLain", dataMP[0].sat_lain)
+        setValueMPki2("namaUmum", dataMP[0].nama_umum_tercetak)
+        setValueMPki2("namaLatin", dataMP[0].nama_latin_tercetak)
     }
 
     function handleEditKomoditasAll() {
         setLoadKomoditi(true)
         data.listKomoditas?.map((item, index) => (
             log.updateKomoditiP8(item.id, datasend[index])
-                .then((response) => {
-                    if(response.data.status === '201') {
-                        refreshListKomoditas()
-                        setLoadKomoditi(false)
-                        if(process.env.REACT_APP_BE_ENV == "DEV") {
-                            console.log("history saved")
-                        }
-                    }
-                })
-                .catch((error) => {
+            .then((response) => {
+                if(response.data.status == 201) {
+                    refreshListKomoditas()
                     setLoadKomoditi(false)
-                    setLoadKomoditiPesan("Terjadi error pada saat simpan, mohon refresh halaman dan coba lagi.")
                     if(process.env.REACT_APP_BE_ENV == "DEV") {
-                        console.log(error)
+                        console.log("history saved")
                     }
+                    Swal.fire({
+                        icon: "success",
+                        title: "Sukses!",
+                        text: "Volume P8 berhasil disimpan (tidak ada perubahan dengan volume awal)"
+                    })
+                } else {
+                    Swal.fire({
+                        icon: "error",
+                        title: "Error!",
+                        text: response.data.status
+                    })
+                }
+            })
+            .catch((error) => {
+                setLoadKomoditi(false)
+                setLoadKomoditiPesan("Terjadi error pada saat simpan, mohon refresh halaman dan coba lagi.")
+                if(process.env.REACT_APP_BE_ENV == "DEV") {
+                    console.log(error)
+                }
+                Swal.fire({
+                    icon: "error",
+                    title: "Error!",
+                    text: error.response.data.status
                 })
-            )
+            }))
         )
-        setLoadKomoditi(false)
+        setLoadKomoditi(true)
     }
 
    function refreshListKomoditas() {
-        const resKom = modelPemohon.getKomoditiPtkId(data.noIdPtk, "H");
+        const resKom = modelPemohon.getKomoditiPtkId(data.noIdPtk, "I");
         resKom
         .then((res) => {
-            if(res.data.status === '200') {
+            if(res.data.status == 200) {
                 setData(values => ({...values,
                     listKomoditas: res.data.data
                 }));
@@ -268,7 +340,6 @@ function DocKI2() {
             .then((response) => {
                 if(typeof response.data != "string") {
                     if(response.data.status == 200) {
-                        // alert(response.data.message);
                         setData(values => ({...values,
                             errorPTK: "",
                             listPtk: response.data.data.ptk,
@@ -276,7 +347,7 @@ function DocKI2() {
                             listDokumen: response.data.data.ptk_dokumen
                         }));
 
-                        const resKom = modelPemohon.getKomoditiPtkId(base64_decode(ptkNomor[1]), "H");
+                        const resKom = modelPemohon.getKomoditiPtkId(base64_decode(ptkNomor[1]), "I");
                         resKom
                         .then((res) => {
                             if(typeof res.data != "string") {
@@ -349,6 +420,8 @@ function DocKI2() {
                             setValue("tglDoki2", response.data.data.tanggal)
                             setValue("noSeri", response.data.data.nomor_seri)
                             setValue("jenisDokumen", response.data.data.status_dok)
+                            setValue("uptTujuan", response.data.data.upt_tujuan_id)
+                            setValue("uptTujuanView", response.data.data.upt_tujuan_id ? listUptNewById(response.data.data?.upt_tujuan_id) : "")
                             setValue("hasilPemeriksaan", response.data.data.hasil_periksa)
                             setValue("hasilPemeriksaanKet1", response.data.data.p1)
                             setValue("hasilPemeriksaanKet2", response.data.data.p2)
@@ -391,7 +464,7 @@ function DocKI2() {
                         setData(values => ({...values,
                             errorPeriksaFisik: ""
                         }));
-                        if(response.data.status == '200') {
+                        if(response.data.status == 200) {
                             setValue("tglPeriksaAwal", response.data.data[0].tanggal ? response.data.data[0].tanggal.slice(0, 10) : "")
                             setValue("tglPeriksaAkhir", (new Date()).toLocaleString('en-CA', { hourCycle: 'h24' }).replace(',', '').slice(0,10))
                         } else {
@@ -432,7 +505,7 @@ function DocKI2() {
                         setData(values => ({...values,
                             errorSurtug: ""
                         }));
-                        if(response.data.status === '200') {
+                        if(response.data.status == 200) {
                             setData(values => ({...values,
                                 noSurtug: response.data.data[0].nomor,
                                 tglSurtug: response.data.data[0].tanggal,
@@ -472,7 +545,6 @@ function DocKI2() {
             .then((response) => {
                 if(typeof response.data != "string") {
                     if(response.data.status == 200) {
-                        // alert(response.data.message);
                         setData(values => ({...values,
                             errorPTK: "",
                             listPtk: response.data.data.ptk,
@@ -503,7 +575,7 @@ function DocKI2() {
         }
 
         if(data.errorKomoditas) {
-            const resKom = modelPemohon.getKomoditiPtkId(data.noIdPtk, "H");
+            const resKom = modelPemohon.getKomoditiPtkId(data.noIdPtk, "I");
             resKom
             .then((res) => {
                 if(typeof res.data != "string") {
@@ -555,6 +627,8 @@ function DocKI2() {
                             setValue("tglDoki2", response.data.data.tanggal)
                             setValue("noSeri", response.data.data.nomor_seri)
                             setValue("jenisDokumen", response.data.data.status_dok)
+                            setValue("uptTujuan", response.data.data.upt_tujuan_id)
+                            setValue("uptTujuanView", response.data.data.upt_tujuan_id ? listUptNewById(response.data.data?.upt_tujuan_id) : "")
                             setValue("hasilPemeriksaan", response.data.data.hasil_periksa)
                             setValue("hasilPemeriksaanKet1", response.data.data.p1)
                             setValue("hasilPemeriksaanKet2", response.data.data.p2)
@@ -599,7 +673,7 @@ function DocKI2() {
                         setData(values => ({...values,
                             errorPeriksaFisik: ""
                         }));
-                        if(response.data.status == '200') {
+                        if(response.data.status == 200) {
                             setValue("tglPeriksaAwal", response.data.data[0].tanggal ? response.data.data[0].tanggal.slice(0, 10) : "")
                             setValue("tglPeriksaAkhir", (new Date()).toLocaleString('en-CA', { hourCycle: 'h24' }).replace(',', '').slice(0,10))
                         } else {
@@ -642,7 +716,7 @@ function DocKI2() {
                         setData(values => ({...values,
                             errorSurtug: ""
                         }));
-                        if(response.data.status === '200') {
+                        if(response.data.status == 200) {
                             setData(values => ({...values,
                                 noSurtug: response.data.data[0].nomor,
                                 tglSurtug: response.data.data[0].tanggal,
@@ -735,7 +809,7 @@ function DocKI2() {
                                 </div>
                                 <label className="col-sm-2 col-form-label text-sm-end" htmlFor="noSeri">No Seri <span className='text-danger'>*</span></label>
                                 <div className="col-sm-2">
-                                    <input type="text" id="noSeri" name='noSeri' {...register("noSeri", {required: "Mohon isi Nomor seru."})} className={errors.noSeri ? "form-control form-control-sm is-invalid" : "form-control form-control-sm"} />
+                                    <input type="text" id="noSeri" name='noSeri' disabled {...register("noSeri", {required: "Mohon isi Nomor seru."})} className={errors.noSeri ? "form-control form-control-sm is-invalid" : "form-control form-control-sm"} />
                                     {errors.noSeri && <small className="text-danger">{errors.noSeri.message}</small>}
                                 </div>
                             </div>
@@ -822,17 +896,17 @@ function DocKI2() {
                                         <div className="row">
                                             <div className="col-md-6">
                                                 <div className="row">
-                                                    <label className="col-sm-4 col-form-label" htmlFor="daerahAsal">{data.listPtk ? (data.listPtk.permohonan === "DK" ? "Daerah" : "Negara") : ""} Asal</label>
+                                                    <label className="col-sm-4 col-form-label" htmlFor="daerahAsal">{data.listPtk ? (data.listPtk.permohonan == "DK" ? "Daerah" : "Negara") : ""} Asal</label>
                                                     <div className="col-sm-8">
-                                                        <input name="daerahAsal" className="form-control form-control-sm" disabled value={data.listPtk ? (data.listPtk.permohonan === "DK" ? data.listPtk.kota_asal : data.listPtk.negara_asal) : ""} id="daerahAsal" />
+                                                        <input name="daerahAsal" className="form-control form-control-sm" disabled value={data.listPtk ? (data.listPtk.permohonan == "DK" ? data.listPtk.kota_asal : data.listPtk.negara_asal) : ""} id="daerahAsal" />
                                                     </div>
                                                 </div>
                                             </div>
                                             <div className="col-md-6">
                                                 <div className="row">
-                                                    <label className="col-sm-4 col-form-label" htmlFor="daerahTujuan">{data.listPtk ? (data.listPtk.permohonan === "DK" ? "Daerah" : "Negara") : ""} Tujuan</label>
+                                                    <label className="col-sm-4 col-form-label" htmlFor="daerahTujuan">{data.listPtk ? (data.listPtk.permohonan == "DK" ? "Daerah" : "Negara") : ""} Tujuan</label>
                                                     <div className="col-sm-8">
-                                                        <input name="daerahTujuan" className="form-control form-control-sm" disabled value={data.listPtk ? (data.listPtk.permohonan === "DK" ? data.listPtk.kota_tujuan : data.listPtk.negara_tujuan) : ""} id="daerahTujuan" />
+                                                        <input name="daerahTujuan" className="form-control form-control-sm" disabled value={data.listPtk ? (data.listPtk.permohonan == "DK" ? data.listPtk.kota_tujuan : data.listPtk.negara_tujuan) : ""} id="daerahTujuan" />
                                                     </div>
                                                 </div>
                                             </div>
@@ -860,7 +934,7 @@ function DocKI2() {
                                                 <div className="row">
                                                     <label className="col-sm-4 col-form-label" htmlFor="tempatTransit">Tempat Transit</label>
                                                     <div className="col-sm-8">
-                                                        <input name="tempatTransit" className="form-control form-control-sm" disabled value={data.listPtk ? (data.listPtk.pelabuhan_transit === null ? "-" : data.listPtk.pelabuhan_transit + ", " + data.listPtk.negara_transit) : ""} id="tempatTransit" />
+                                                        <input name="tempatTransit" className="form-control form-control-sm" disabled value={data.listPtk ? (data.listPtk.pelabuhan_transit == null ? "-" : data.listPtk.pelabuhan_transit + ", " + data.listPtk.negara_transit) : ""} id="tempatTransit" />
                                                     </div>
                                                 </div>
                                             </div>
@@ -892,7 +966,6 @@ function DocKI2() {
                                                                 name='tglPeriksaAwal'
                                                                 id='tglPeriksaAwal'
                                                                 className={errors.tglPeriksaAwal ? "form-control form-control-sm is-invalid" : "form-control form-control-sm"}
-                                                                // className="form-control form-control-sm"
                                                                 {...register("tglPeriksaAwal", {required: "Mohon isi tgl pemeriksaan tindakan Karantina Awal."})}
                                                             />
                                                             <span className="input-group-text">s/d</span>
@@ -901,7 +974,6 @@ function DocKI2() {
                                                                 name='tglPeriksaAkhir'
                                                                 id='tglPeriksaAkhir'
                                                                 className={errors.tglPeriksaAkhir ? "form-control form-control-sm is-invalid" : "form-control form-control-sm"}
-                                                                // className="form-control form-control-sm"
                                                                 {...register("tglPeriksaAkhir", {required: "Mohon isi tgl pemeriksaan tindakan Karantina Akhir."})}
                                                             />
                                                         </div>
@@ -911,16 +983,16 @@ function DocKI2() {
                                                 </div>
                                             </div>
                                         </div>
-                                        <div className="row mb-4">
-                                            <div className="col-md-6">
+                                        <div className="row mb-4" style={{display: (data.listPtk?.jenis_permohonan == "DK" ? "block" : "none")}}>
+                                            <div className="col-md-8">
                                                 <div className="row">
-                                                    <label className="col-sm-4 col-form-label" htmlFor="tempatMasuk">UPT Tujuan <span className='text-danger'>*</span></label>
+                                                    <label className="col-sm-3 col-form-label" htmlFor="tempatMasuk">UPT Tujuan <span className='text-danger'>*</span></label>
                                                     <div className="col-sm-8">
                                                     <Controller
                                                             control={control}
                                                             name={"uptTujuan"}
                                                             className="form-control form-control-sm"
-                                                            rules={{ required: (data.listPtk ? (data.listPtk.jenis_permohonan === "DK" ? "Mohon pilih UPT Tujuan." : false) : false)}}
+                                                            rules={{ required: (data.listPtk?.jenis_permohonan == "DK" ? "Mohon pilih UPT Tujuan." : false)}}
                                                             render={({ field: {value,onChange, ...field } }) => (
                                                                 <Select styles={customStyles} value={{id: cekWatch.uptTujuan, label: cekWatch.uptTujuanView}} onChange={(e) => setValue("uptTujuan", e.value) & setValue("uptTujuanView", e.label)} placeholder={"Pilih upt tujuan.."} {...field} options={listUptNew()} />
                                                             )}
@@ -951,7 +1023,7 @@ function DocKI2() {
                                             <span className='text-danger'>{loadKomoditiPesan}</span>
                                             </h5>
                                             <div className='col-md-12 mb-3'>
-                                                <div className="table-responsive text-nowrap" style={{height: "300px"}}>
+                                                <div className="table-responsive text-nowrap" style={{height: (data.listKomoditas?.length > 8 ? "300px" : "")}}>
                                                     <table className="table table-sm table-bordered table-hover table-striped dataTable">
                                                         <thead>
                                                             <tr>
@@ -977,14 +1049,14 @@ function DocKI2() {
                                                                             <td>{data.klasifikasi}</td>
                                                                             <td>{data.nama_umum_tercetak}</td>
                                                                             <td>{data.nama_latin_tercetak}</td>
-                                                                            <td>{data.volume_netto}</td>
+                                                                            <td className='text-end'>{data.volume_netto?.toLocaleString()}</td>
                                                                             <td>{data.sat_netto}</td>
-                                                                            <td>{data.volume_lain}</td>
+                                                                            <td className='text-end'>{data.volume_lain?.toLocaleString()}</td>
                                                                             <td>{data.sat_lain}</td>
-                                                                            <td>{data.volumeP8}</td>
-                                                                            <td>{data.nettoP8}</td>
+                                                                            <td className='text-end'>{data.volumeP8?.toLocaleString()}</td>
+                                                                            <td className='text-end'>{data.nettoP8?.toLocaleString()}</td>
                                                                             <td>
-                                                                                <button className="btn btn-default dropdown-item" type="button" onClick={handleEditKomoditas} data-headerid={data.id} data-ptk={data.ptk_id} data-bs-toggle="modal" data-bs-target="#modKomoditas"><i className="fa-solid fa-pen-to-square me-1"></i> Edit</button>
+                                                                                <button className="btn btn-default dropdown-item" type="button" onClick={() => handleEditKomoditas(index)} data-bs-toggle="modal" data-bs-target="#modKomoditas"><i className="fa-solid fa-pen-to-square me-1"></i> Edit</button>
                                                                             </td>
                                                                         </tr>
                                                                     ))
@@ -1063,8 +1135,10 @@ function DocKI2() {
                         <div className="pt-2">
                             <div className="row">
                                 <div className="offset-sm-2 col-sm-9">
-                                    <button type="submit" className="btn btn-primary me-sm-2 me-1">Simpan</button>
-                                    <button type="button" className="btn btn-danger btn-label-secondary me-sm-2 me-1">Batal</button>
+                                    <button type="submit" className="btn btn-primary me-sm-2 me-1"><i className='fa-solid fa-save me-sm-2 me-1'></i> Simpan</button>
+                                    <button type="button" className="btn btn-danger btn-label-secondary me-sm-2 me-1"><i className='fa-solid fa-cancel me-sm-2 me-1'></i> Batal</button>
+                                    <button type="button" className="btn btn-warning btn-label-secondary me-sm-2 me-1"><i className='fa-solid fa-print me-sm-2 me-1'></i> Print</button>
+                                    <button type="button" style={{display: (cekWatch.idDoki2 ? "block" : "none")}} className="float-end btn btn-info btn-label-secondary"><i className='tf-icons fa-solid fa-paper-plane me-sm-2 me-1'></i> TTE</button>
                                 </div>
                             </div>
                         </div>

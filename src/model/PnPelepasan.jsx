@@ -161,7 +161,7 @@ export default class PnPelepasan {
         'nomor': data.noDokumen.replace("K.1.1", "K.T.1"),
         'tanggal': data.tglDokKT1,
         'nomor_seri': data.noSeri,
-        'karantina_tujuan': (data.karantinaTujuanDepan ? data.karantinaTujuanDepan + " " : "") + data.karantinaTujuan + (data.karantinaTujuanBelakang ? " " + data.karantinaTujuanBelakang : ""),
+        'karantina_tujuan': data.karantinaTujuan,
         'entry_point': data.entryPoint,
         'upt_tujuan_id': "",
         'nama_umum_tercetak': data.namaUmum,
@@ -264,7 +264,7 @@ export default class PnPelepasan {
         'upt_tujuan_id': data.uptTujuan,
         'nama_umum_tercetak': "",
         'nama_ilmiah_tercetak': "",
-        'bentuk_tercetak': data.bentukTercetak, //description of packages / kemasan
+        'bentuk_tercetak': "", //description of packages / kemasan
         'jumlah_tercetak': "",
         'additional_declaration': data.adDeclare, //data.adDeclare
         'additional_information': "",
@@ -434,16 +434,29 @@ export default class PnPelepasan {
   }
 
   mpLainOrKeterangan(data, kar, dok) {
+    let idcek
+    let iddok
+    let tgldok
+    if(dok == "K.9.1") {
+      idcek = data.idDok91
+      iddok = "37"
+      tgldok = data.tglDok91
+    } else if(dok == "K.9.3") {
+      idcek = data.idDok93
+      iddok = "42"
+      tgldok = data.tglDok93
+    }
+    console.log(idcek)
     const uuid = uuidv4()
     let datasend = {
-        id: (dok == "K.9.1" ? (data.idDok91 == '' ? uuid : data.idDok91) : (data.idDok93 == '' ? uuid : data.idDok93)),
+        id: idcek == '' ? uuid : idcek,
         ptk_id: data.idPtk,
-        dokumen_karantina_id: (dok == "K.9.1" ? "37" : "42"),
+        dokumen_karantina_id: iddok,
         nomor: data.noDokumen.replace("K.1.1", dok),
-        tanggal: (dok == "K.9.1" ? data.tglDok91 : data.tglDok93),
-        keterangan_mp: (dok == "K.9.1" ? "" : data.keteranganMp),
+        tanggal: tgldok,
+        // keterangan_mp: dok == "K.9.1" ? "" : data.keteranganMp,
         nomor_seri: data.noSeri,
-        karantina_tujuan: (data.karantinaTujuanDepan ? data.karantinaTujuanDepan + " " : "") + data.karantinaTujuan + (data.karantinaTujuanBelakang ? " " + data.karantinaTujuanBelakang : ""),
+        karantina_tujuan: "",
         upt_tujuan_id: data.uptTujuan ? data.uptTujuan : "",
         status_dok: data.jenisDokumen, // 'WITHDRAWN','REPLACEMENT','ISSUED'
         replaced_dok_id: "",
@@ -453,55 +466,55 @@ export default class PnPelepasan {
         user_id: Cookies.get("userId") //session
       }
 
-    if(kar == "H") {
-      datasend(values => ({...values,
-        'm1': "",
-        'm2': "",
-        'm3': "",
-        'm_lain': "",
-        'p_teknis': "",
-        'p_lab': "",
-        'p_lain': "",
-      }));
-    } else if(kar == "I") {
-      datasend(values => ({...values,
-        tgl_awal: "",
-        tgl_akhir: "",
-        tipe_usaha: "",
-        temperatur_mp: "",
-        hasil_periksa: "",
-        p1: "",
-        p2: "",
-        p3: "",
-        p4: "",
-        nama_labuji: "",
-        alamat_labuji: "",
-        attestation_a: "",
-        attestation_b: "",
-        attestation_c: "",
-        attestation_d: "",
-        attestation_lain: "",
-        attestation_free_from: "",
-        attestation_nosign: "",
-        add_information: "",
-      }));
-    } else if(kar == "T") {
-      datasend(values => ({...values,
-        additional_declaration: "", //data.adDeclare
-        additional_information: "",
-        pn_perlakuan_id: "",
-        pc_no: "", //
-        is_pc: "", //
-        is_commodity: "",
-        is_container: "",
-        ori_pc: "",
-        add_inspection: "", //data.addInspect
-      }));
-    }
+    // if(kar == "H") {
+    //   datasend.push({
+    //     m1: "",
+    //     m2: "",
+    //     m3: "",
+    //     m_lain: "",
+    //     p_teknis: "",
+    //     p_lab: "",
+    //     p_lain: "",
+    //   })
+    // } else if(kar == "I") {
+    //   datasend.push({
+    //     tgl_awal: "",
+    //     tgl_akhir: "",
+    //     tipe_usaha: "",
+    //     temperatur_mp: "",
+    //     hasil_periksa: "",
+    //     p1: "",
+    //     p2: "",
+    //     p3: "",
+    //     p4: "",
+    //     nama_labuji: "",
+    //     alamat_labuji: "",
+    //     attestation_a: "",
+    //     attestation_b: "",
+    //     attestation_c: "",
+    //     attestation_d: "",
+    //     attestation_lain: "",
+    //     attestation_free_from: "",
+    //     attestation_nosign: "",
+    //     add_information: "",
+    //   })
+    // } else if(kar == "T") {
+    //   datasend.push({
+    //     additional_declaration: "", //data.adDeclare
+    //     additional_information: "",
+    //     pn_perlakuan_id: "",
+    //     pc_no: "", //
+    //     is_pc: "", //
+    //     is_commodity: "",
+    //     is_container: "",
+    //     ori_pc: "",
+    //     add_inspection: "", //data.addInspect
+    //   })
+    // }
     let config = {
-      method: data.idDok91 == '' ? 'post' : 'put',
+      method: idcek == '' ? 'post' : 'put',
       maxBodyLength: Infinity,
-      url: url + (data.idDok91 == '' ? 'pn-pelepasan-k' + kar.toLowerCase() : 'pn-pelepasan-k' + kar.toLowerCase() + "/" + data.idDok91),
+      url: url + (idcek == '' ? 'pn-pelepasan-k' + kar.toLowerCase() : 'pn-pelepasan-k' + kar.toLowerCase() + "/" + idcek),
       headers: { 
         'Content-Type': 'application/json', 
       },

@@ -52,6 +52,7 @@ const customStyles = {
 function DocKH1() {
     const idPtk = Cookies.get("idPtkPage");
     let [loadKomoditi, setLoadKomoditi] = useState(false)
+    let [cekData, setCekData] = useState()
     let [loadKomoditiPesan, setLoadKomoditiPesan] = useState("")
     let [datasend, setDataSend] = useState([])
 
@@ -87,19 +88,24 @@ function DocKH1() {
     }
 
     function handleEditKomoditas(e) {
-        setValueMPkh1("idMPkh1", e.target.dataset.headerid)
-        setValueMPkh1("idPtk", e.target.dataset.ptk)
-        setValueMPkh1("jenisKar", "H")
-        const cell = e.target.closest('tr')
-        setValueMPkh1("nettoP8", cell.cells[5].innerHTML)
-        setValueMPkh1("satuanNetto", cell.cells[6].innerHTML)
-        setValueMPkh1("volumeP8", cell.cells[7].innerHTML)
-        setValueMPkh1("satuanLain", cell.cells[8].innerHTML)
-        setValueMPkh1("namaUmum", cell.cells[3].innerHTML)
-        setValueMPkh1("namaLatin", cell.cells[4].innerHTML)
-        setValueMPkh1("volumeP8", cell.cells[7].innerHTML)
-        setValueMPkh1("jantanP8", cell.cells[9].innerHTML)
-        setValueMPkh1("betinaP8", cell.cells[10].innerHTML)
+        const dataMP = data.listKomoditas?.filter((element, index) => index == e)
+        setValueMPkh1("idMPkh1", dataMP[0].id)
+        setValueMPkh1("idPtk", dataMP[0].ptk_id)
+        setValueMPkh1("jenisKar", Cookies.get("jenisKarantina"))
+        setCekData(values => ({...values,
+            volumeP8: dataMP[0].volume_lain,
+            nettoP8: dataMP[0].volume_netto,
+            jantanP8: dataMP[0].jantan,
+            betinaP8: dataMP[0].betina
+        }));
+        setValueMPkh1("nettoP8", dataMP[0].volume_netto)
+        setValueMPkh1("satuanNetto", dataMP[0].sat_netto)
+        setValueMPkh1("volumeP8", dataMP[0].volume_lain)
+        setValueMPkh1("satuanLain", dataMP[0].sat_lain)
+        setValueMPkh1("jantanP8", dataMP[0].jantan)
+        setValueMPkh1("betinaP8", dataMP[0].betina)
+        setValueMPkh1("namaUmum", dataMP[0].nama_umum_tercetak)
+        setValueMPkh1("namaLatin", dataMP[0].nama_latin_tercetak)
     }
 
     function handleEditKomoditasAll() {
@@ -116,7 +122,7 @@ function DocKH1() {
                     Swal.fire({
                         icon: "success",
                         title: "Sukses!",
-                        text: "Volume P8 berhasil disimpan (tidak ada perubahan dengan volume P1)"
+                        text: "Volume P8 berhasil disimpan (tidak ada perubahan dengan volume awal)"
                     })
                 } else {
                     Swal.fire({
@@ -137,8 +143,7 @@ function DocKH1() {
                     title: "Error!",
                     text: error.response.data.status
                 })
-            })
-            )
+            }))
         )
         setLoadKomoditi(false)
     }
@@ -166,7 +171,7 @@ function DocKH1() {
                 if(response.data.status == 201) {
                     //start save history
                     // const log = new PtkHistory();
-                    const resHsy = log.pushHistory(data.idPtk, "p8", "KH.1", (data.idDokKT1 ? 'UPDATE' : 'NEW'));
+                    const resHsy = log.pushHistory(data.idPtk, "p8", "KH.1", (data.idDokh1 ? 'UPDATE' : 'NEW'));
                     resHsy
                     .then((response) => {
                         if(response.data.status == 201) {
@@ -185,7 +190,7 @@ function DocKH1() {
                     Swal.fire({
                         icon: "success",
                         title: "Sukses!",
-                        text: "Sertifikat kesehatan hewan berhasil " + (data.idDokKT1 ? 'diedit' : 'disimpan')
+                        text: "Sertifikat kesehatan hewan berhasil " + (data.idDokh1 ? 'diedit' : 'disimpan')
                     })
                     setValue("idDokh1", response.data.data.id)
                     setValue("noDokh1", response.data.data.nomor)
@@ -251,23 +256,54 @@ function DocKH1() {
     const cekdataMPkh1 = watchMPkh1()
 
     function onSubmitMPkh1(data) {
-        log.updateKomoditiP8(data.idMPkh1, data)
-        .then((response) => {
-            if(response.data.status == 201) {
+        let cekVolume = false
+        if((data.jantanP8 != null) || (data.betinaP8 != null) ) {
+            if((parseFloat(typeof data.jantanP8 == "string" ? data.jantanP8.replace(",", "") : data.jantanP8) > parseFloat(cekData.jantanP8)) || (parseFloat((typeof data.betinaP8 == "string" ? data.betinaP8.replace(",", "") : data.betinaP8)) > parseFloat(cekData.betinaP8))) {
+                cekVolume = false
+            } else {
+                if(parseFloat(typeof data.volumeP8 == "string" ? data.volumeP8.replace(",", "") : data.volumeP8) > parseFloat(cekData.volumeP8) || parseFloat(typeof data.nettoP8 == "string" ? data.nettoP8.replace(",", "") : data.nettoP8) > parseFloat(cekData.nettoP8)) {
+                    cekVolume = false 
+                } else {
+                    cekVolume = true
+                }
+            }
+        }
+        if(cekVolume) {
+            log.updateKomoditiP8(data.idMPkh1, data)
+            .then((response) => {
+                if(response.data.status == 201) {
+                    Swal.fire({
+                        icon: "success",
+                        title: "Sukses!",
+                        text: "Volume P8 berhasil diubah"
+                    })
+                    resetFormKomoditikh1()
+                    refreshListKomoditas()
+                } else {
+                    Swal.fire({
+                        icon: "error",
+                        title: "Error!",
+                        text: response.data.message
+                    })
+                }
+            })
+            .catch((error) => {
+                if(process.env.REACT_APP_BE_ENV == "DEV") {
+                    console.log(error)
+                }
                 Swal.fire({
-                    icon: "success",
-                    title: "Sukses!",
-                    text: "Volume P8 berhasil diubah"
+                    icon: "error",
+                    title: "Error!",
+                    text: error.response.data.message
                 })
-                resetFormKomoditikh1()
-                refreshListKomoditas()
-            }
-        })
-        .catch((error) => {
-            if(process.env.REACT_APP_BE_ENV == "DEV") {
-                console.log(error)
-            }
-        })
+            })
+        } else {
+            Swal.fire({
+                icon: "error",
+                title: "Error!",
+                text: "Volume input melebihi volume awal, mohon cek isian anda"
+            })
+        }
     }
 
     useEffect(()=>{
@@ -864,7 +900,7 @@ function DocKH1() {
                                                 </div>
                                             </div>
                                         </div>
-                                        <div className="row mb-4" style={{display: (data.listPtk ? (data.listPtk.jenis_permohonan == "DK" ? "block" : "none") : "none")}}>
+                                        <div className="row mb-4" style={{display: (data.listPtk?.jenis_permohonan == "DK" ? "block" : "none")}}>
                                             <div className="col-md-6">
                                                 <div className="row">
                                                     <label className="col-sm-4 col-form-label" htmlFor="tempatTransit">Upt Tujuan</label>
@@ -873,7 +909,7 @@ function DocKH1() {
                                                             control={control}
                                                             name={"uptTujuan"}
                                                             className="form-control form-control-sm"
-                                                            rules={{ required: (data.listPtk ? (data.listPtk.jenis_permohonan == "DK" ? "Mohon pilih UPT Tujuan." : false) : false)}}
+                                                            rules={{ required: (data.listPtk?.jenis_permohonan == "DK" ? "Mohon pilih UPT Tujuan." : false)}}
                                                             render={({ field: {value, ...field } }) => (
                                                                 <Select styles={customStyles} value={value ? {id: cekWatch.uptTujuan, label: cekWatch.uptTujuanView} : ""} onChange={(e) => setValue("uptTujuan", e.value) & setValue("uptTujuanView", e.label)} placeholder={"Pilih upt tujuan.."} {...field} options={listUptNew()} />
                                                             )}
@@ -933,18 +969,18 @@ function DocKH1() {
                                                                             <td>{data.klasifikasi}</td>
                                                                             <td>{data.nama_umum_tercetak}</td>
                                                                             <td>{data.nama_latin_tercetak}</td>
-                                                                            <td>{data.volume_netto}</td>
+                                                                            <td className='text-end'>{data.volume_netto?.toLocaleString()}</td>
                                                                             <td>{data.sat_netto}</td>
-                                                                            <td>{data.volume_lain}</td>
+                                                                            <td className='text-end'>{data.volume_lain?.toLocaleString()}</td>
                                                                             <td>{data.sat_lain}</td>
-                                                                            <td>{data.jantan}</td>
-                                                                            <td>{data.betina}</td>
-                                                                            <td>{data.volumeP8}</td>
-                                                                            <td>{data.nettoP8}</td>
-                                                                            <td>{data.jantanP8}</td>
-                                                                            <td>{data.betinaP8}</td>
+                                                                            <td className='text-end'>{data.jantan?.toLocaleString()}</td>
+                                                                            <td className='text-end'>{data.betina?.toLocaleString()}</td>
+                                                                            <td className='text-end'>{data.volumeP8?.toLocaleString()}</td>
+                                                                            <td className='text-end'>{data.nettoP8?.toLocaleString()}</td>
+                                                                            <td className='text-end'>{data.jantanP8?.toLocaleString()}</td>
+                                                                            <td className='text-end'>{data.betinaP8?.toLocaleString()}</td>
                                                                             <td>
-                                                                                <button className="btn btn-default dropdown-item" type="button" onClick={handleEditKomoditas} data-headerid={data.id} data-ptk={data.ptk_id} data-bs-toggle="modal" data-bs-target="#modKomoditas"><i className="fa-solid fa-pen-to-square me-1"></i> Edit</button>
+                                                                                <button className="btn btn-default dropdown-item" type="button" onClick={() => handleEditKomoditas(index)} data-bs-toggle="modal" data-bs-target="#modKomoditas"><i className="fa-solid fa-pen-to-square me-1"></i> Edit</button>
                                                                             </td>
                                                                         </tr>
                                                                     ))
