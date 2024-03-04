@@ -4,11 +4,53 @@ import React, { useEffect } from 'react'
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom';
 import {decode as base64_decode} from 'base-64';
-import { useForm } from 'react-hook-form';
+import { Controller, useForm } from 'react-hook-form';
 import PtkSurtug from '../../model/PtkSurtug';
 import Swal from 'sweetalert2';
+import Select from 'react-select';
+import PegawaiJson from '../../model/master/pegawaiPertanian.json'
 
 const modelSurtug = new PtkSurtug()
+
+function masterPegawai() {
+    var arrayPegawai = PegawaiJson.map(item => {
+        return {
+            value: item.id,
+            label: item.nama + " - " + item.nip,
+        }
+    })
+    return arrayPegawai
+}
+
+const customStyles = {
+    control: (provided, state) => ({
+        ...provided,
+        background: '#fff',
+        borderColor: '#D4D8DD',
+        cursor: 'text',
+        minHeight: '30px',
+        height: '30px',
+        boxShadow: state.isFocused ? null : null,
+    }),
+
+    valueContainer: (provided, state) => ({
+        ...provided,
+        height: '30px',
+        padding: '0 6px'
+    }),
+
+    input: (provided, state) => ({
+        ...provided,
+        margin: '0px',
+    }),
+    indicatorSeparator: state => ({
+        display: 'none',
+    }),
+    indicatorsContainer: (provided, state) => ({
+        ...provided,
+        height: '30px',
+    }),
+}
 
 function stringSimbol(e) {
     return <div dangerouslySetInnerHTML={{__html: e}} />;
@@ -24,6 +66,7 @@ function DocK22() {
     const {
 		register: registerHeader,
         setValue: setValueHeader,
+        control: controlHeader,
         watch: watchHeader,
 		handleSubmit: handleFormHeader,
         formState: { errors: errorsHeader },
@@ -78,6 +121,7 @@ function DocK22() {
     const {
 		register: registerDetilSurtug,
         setValue: setValueDetilSurtug,
+        control: controlDetilSurtug,
         watch: watchDetilSurtug,
 		handleSubmit: handleFormDetilSurtug,
         formState: { errors: errorsDetilSurtug },
@@ -152,6 +196,7 @@ function DocK22() {
         response
         .then((res) => {
             if(res.data) {
+                console.log(res.data)
                 if(res.data.status == '200') {
                     setListDataDetil(res.data.data)
                 } else {
@@ -168,19 +213,22 @@ function DocK22() {
     }
 
     function handleEditHeader(e) {
-        const cell = e.target.closest('tr')
+        const dataHeader = listDataHeader?.filter((item, index) => (index == e))
+        console.log(dataHeader)
+        // const cell = e.target.closest('tr')
         setData(values => (
             {...values, 
-                nomorSurtug: cell.cells[0].innerHTML,
-                tglSurtug: cell.cells[1].innerHTML,
+                nomorSurtug: dataHeader[0].nomor,
+                tglSurtug: dataHeader[0].tanggal,
             }));
-        dataSurtugDetil(e.target.dataset.key)
-        setValueHeader("idHeader", e.target.dataset.key)
-        setValueDetilSurtug("idHeader", e.target.dataset.key)
-        setValueHeader("perihalSurtug", cell.cells[2].innerHTML.replace("</div>", "").replace("<div>", ""))
-        setValueHeader("tglSurtug", cell.cells[1].innerHTML)
-        setValueHeader("noSurtug", cell.cells[0].innerHTML)
-        setValueHeader("ttdSurtug", e.target.dataset.ttd)
+        dataSurtugDetil(dataHeader[0].id)
+        setValueHeader("idHeader", dataHeader[0].id)
+        setValueDetilSurtug("idHeader", dataHeader[0].id)
+        setValueHeader("perihalSurtug", dataHeader[0].perihal)
+        setValueHeader("tglSurtug", dataHeader[0].tanggal)
+        setValueHeader("noSurtug", dataHeader[0].nomor)
+        setValueHeader("ttdSurtug", dataHeader[0].penanda_tangan_id)
+        setValueHeader("ttdSurtugView", dataHeader[0].nama + " - " + dataHeader[0].nip)
         setAddSurtug(true);
     }
     
@@ -443,7 +491,7 @@ function DocK22() {
                                                     <i className="menu-icon tf-icons fa-solid fa-ellipsis-vertical"></i>
                                                 </button>
                                                 <div className="dropdown-menu">
-                                                    <button className="dropdown-item" data-key={data.id} data-ttd={data.penanda_tangan_id} type="button" onClick={handleEditHeader}><i className="fa-solid fa-pen-to-square me-1"></i> Edit</button>
+                                                    <button className="dropdown-item" data-key={data.id} data-ttd={data.penanda_tangan_id} type="button" onClick={() => handleEditHeader(index)}><i className="fa-solid fa-pen-to-square me-1"></i> Edit</button>
                                                     <button className="dropdown-item" type='button'><i className="fa-solid fa-trash me-1"></i> Delete</button>
                                                 </div>
                                             </div>
@@ -489,9 +537,19 @@ function DocK22() {
                                     <input type="text" id="perihalSurtug" name='perihalSurtug' {...registerHeader("perihalSurtug", { required: "Mohon isi perihal surat tugas."})} className={errorsHeader.perihalSurtug ? "form-control form-control-sm is-invalid" : "form-control form-control-sm"} placeholder="Perihal" />
                                     {errorsHeader.perihalSurtug && <small className="text-danger">{errorsHeader.perihalSurtug.message}</small>}
                                 </div>
-                                <label className="col-sm-2 col-form-label" htmlFor="ttdSurtug">Penandatangan</label>
-                                <div className="col-sm-2" style={{borderRight: '0.5px solid grey'}}>  
-                                    <input type="text" id="ttdSurtug" name='ttdSurtug' {...registerHeader("ttdSurtug", { required: "Mohon isi penandatangan surat tugas."})} className={errorsHeader.ttdSurtug ? "form-control form-control-sm is-invalid" : "form-control form-control-sm"} placeholder="Penandatangan" />
+                                <label className="col-sm-1 col-form-label" htmlFor="ttdSurtug">TTD Surtug</label>
+                                <div className="col-sm-3" style={{borderRight: '0.5px solid grey'}}>
+                                    <Controller
+                                        control={controlHeader}
+                                        name={"ttdSurtug"}
+                                        defaultValue={""}
+                                        className="form-control form-control-sm"
+                                        rules={{ required: "Mohon pilih penandatangan." }}
+                                        render={({ field: { value,onChange, ...field } }) => (
+                                            <Select styles={customStyles} placeholder={"Pilih penandatangan.."} value={{id: dataHeader.ttdSurtug, label: dataHeader.ttdSurtugView}} {...field} options={masterPegawai()} onChange={(e) => setValueHeader("ttdSurtug", e.value) & setValueHeader("ttdSurtugView", e.label)} />
+                                        )}
+                                    />
+                                    {/* <input type="text" id="ttdSurtug" name='ttdSurtug' {...registerHeader("ttdSurtug", { required: "Mohon isi penandatangan surat tugas."})} className={errorsHeader.ttdSurtug ? "form-control form-control-sm is-invalid" : "form-control form-control-sm"} placeholder="Penandatangan" /> */}
                                     {errorsHeader.ttdSurtug && <small className="text-danger">{errorsHeader.ttdSurtug.message}</small>}
                                 </div>
                                 <label className="col-sm-1 col-form-label" htmlFor="tglSurtug">Tanggal</label>
@@ -530,6 +588,7 @@ function DocK22() {
                                                 <th className='text-lightest'>NIP</th>
                                                 <th className='text-lightest'>NAMA</th>
                                                 <th className='text-lightest'>JABATAN</th>
+                                                <th className='text-lightest'>PENUGASAN</th>
                                                 <th className='text-lightest'>#</th>
                                             </tr>
                                         </thead>
@@ -541,6 +600,7 @@ function DocK22() {
                                                     <td>{data.nip}</td>
                                                     <td>{data.nama}</td>
                                                     <td>{data.jabatan}</td>
+                                                    <td>{data.tugas}</td>
                                                     <td>
                                                         <div className="d-grid gap-2">
                                                             <button type="button" className="btn p-0 hide-arrow">
@@ -600,8 +660,18 @@ function DocK22() {
                                         <div className="col-md-12">
                                             <div className='row'>
                                                 <label className="col-sm-3 col-form-label text-sm-start" htmlFor="pilihPetugas">Pilih Petugas</label>
-                                                <div className="col-sm-4">
-                                                    <input type="text" name='pilihPetugas' id='pilihPetugas' {...registerDetilSurtug("pilihPetugas", { required: "Mohon pilih petugas."})} className={errorsDetilSurtug.pilihPetugas ? "form-control form-control-sm is-invalid" : "form-control form-control-sm"} />
+                                                <div className="col-sm-7">
+                                                    <Controller
+                                                        control={controlDetilSurtug}
+                                                        name={"pilihPetugas"}
+                                                        defaultValue={""}
+                                                        className="form-control form-control-sm"
+                                                        rules={{ required: "Mohon pilih petugas." }}
+                                                        render={({ field: { value,onChange, ...field } }) => (
+                                                            <Select styles={customStyles} placeholder={"Pilih petugas penerima.."} value={{id: dataDetilSurtug.pilihPetugas, label: dataDetilSurtug.pilihPetugasView}} {...field} options={masterPegawai()} onChange={(e) => setValueDetilSurtug("pilihPetugas", e.value) & setValueDetilSurtug("pilihPetugasView", e.label)} />
+                                                        )}
+                                                    />
+                                                    {/* <input type="text" name='pilihPetugas' id='pilihPetugas' {...registerDetilSurtug("pilihPetugas", { required: "Mohon pilih petugas."})} className={errorsDetilSurtug.pilihPetugas ? "form-control form-control-sm is-invalid" : "form-control form-control-sm"} /> */}
                                                     {errorsDetilSurtug.pilihPetugas && <small className="text-danger">{errorsDetilSurtug.pilihPetugas.message}</small>}
                                                 </div>
                                             </div>

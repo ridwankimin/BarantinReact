@@ -396,6 +396,7 @@ function DocK63() {
                             setData(values => ({...values,
                                 noSurtug: response.data.data[0].nomor,
                                 tglSurtug: response.data.data[0].tanggal,
+                                petugas: response.data.data
                             }));
                             setValue("idSurtug", response.data.data[0].id)
                         }
@@ -630,6 +631,7 @@ function DocK63() {
                             setData(values => ({...values,
                                 noSurtug: response.data.data[0].nomor,
                                 tglSurtug: response.data.data[0].tanggal,
+                                petugas: response.data.data
                             }));
                             setValue("idSurtug", response.data.data[0].id)
                         }
@@ -1078,7 +1080,12 @@ function DocK63() {
                                     <div className='row'>
                                         <div className='col-sm-2 col-form-label'>Penandatangan</div>
                                         <div className="col-sm-4 mb-3 pr-2">
-                                            <input type="text" {...register("ttdPutusan", { required: "Mohon pilih nama penandatangan."})} className={errors.ttdPutusan ? "form-control form-control-sm is-invalid" : "form-control form-control-sm"} />
+                                            <select className={errors.ttdPutusan == '' ? 'form-select form-select-sm is-invalid' : 'form-select form-select-sm'} name="ttdPutusan" id="ttdPutusan" {...register("ttdPutusan", { required: "Mohon pilih penandatangan."})}>
+                                                <option value="">--</option>
+                                                {data.petugas?.map((item, index) => (
+                                                    <option value={item.penanda_tangan_id} key={index}>{item.nama + " - " + item.nip}</option>
+                                                ))}
+                                            </select>
                                             {errors.ttdPutusan && <small className="text-danger">{errors.ttdPutusan.message}</small>}
                                         </div>
                                         <div className='col-sm-2 col-form-label text-sm-end'>Diterbitkan di</div>

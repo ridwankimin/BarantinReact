@@ -9,10 +9,12 @@ import { useNavigate } from 'react-router-dom';
 import PtkHistory from '../../model/PtkHistory';
 import SpinnerDot from '../../component/loading/SpinnerDot';
 import Swal from 'sweetalert2';
+import PtkSurtug from '../../model/PtkSurtug';
 
 const modelPerlakuan = new PnPerlakuan()
 const log = new PtkHistory()
 const modelPemohon = new PtkModel()
+const modelSurtug = new PtkSurtug()
 
 const addCommas = num => num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
 const removeNonNumeric = num => num.toString().replace(/[^0-9.]/g, "");
@@ -331,6 +333,47 @@ function DocK51() {
                 }
             })
 
+            // 8: penugasan Perlakuan
+            const resSurtug = modelSurtug.getDetilSurtugPenugasan(base64_decode(ptkNomor[1]), 8);
+            resSurtug
+            .then((response) => {
+                if(response.data) {
+                    if(typeof response.data != "string") {
+                        setData(values => ({...values,
+                            errorSurtug: ""
+                        }));
+                        if(response.data.status === '200') {
+                            setData(values => ({...values,
+                                noSurtug: response.data.data[0].nomor,
+                                tglSurtug: response.data.data[0].tanggal,
+                                petugas: response.data.data
+                            }));
+                            setValue("idSurtug", response.data.data[0].id)
+                        }
+                    } else {
+                        setData(values => ({...values,
+                            errorSurtug: "Gagal load data Surat Tugas"
+                        }));
+                    }
+                }
+            })
+            .catch((error) => {
+                if(process.env.REACT_APP_BE_ENV == "DEV") {
+                    console.log(error)
+                }
+                if(error.response) {
+                    if(error.response.data.status == 404) {
+                        setData(values => ({...values,
+                            errorSurtug: "Data Surat Tugas Kosong/Tidak Ada"
+                        }));
+                    } else {
+                        setData(values => ({...values,
+                            errorSurtug: "Gagal load data Surat Tugas"
+                        }));
+                    }
+                }
+            });
+
             const resLaporan = modelPerlakuan.getPtkByDokumen(base64_decode(ptkNomor[1]), 21)
             setValue("idPtk", base64_decode(ptkNomor[1]))
             resLaporan
@@ -546,6 +589,49 @@ function DocK51() {
             })
         }
 
+        if(data.errorSurtug) {
+            // 8: penugasan Perlakuan
+            const resSurtug = modelSurtug.getDetilSurtugPenugasan(data.noIdPtk, 8);
+            resSurtug
+            .then((response) => {
+                if(response.data) {
+                    if(typeof response.data != "string") {
+                        setData(values => ({...values,
+                            errorSurtug: ""
+                        }));
+                        if(response.data.status === '200') {
+                            setData(values => ({...values,
+                                noSurtug: response.data.data[0].nomor,
+                                tglSurtug: response.data.data[0].tanggal,
+                                petugas: response.data.data
+                            }));
+                            setValue("idSurtug", response.data.data[0].id)
+                        }
+                    } else {
+                        setData(values => ({...values,
+                            errorSurtug: "Gagal load data Surat Tugas"
+                        }));
+                    }
+                }
+            })
+            .catch((error) => {
+                if(process.env.REACT_APP_BE_ENV == "DEV") {
+                    console.log(error)
+                }
+                if(error.response) {
+                    if(error.response.data.status == 404) {
+                        setData(values => ({...values,
+                            errorSurtug: "Data Surat Tugas Kosong/Tidak Ada"
+                        }));
+                    } else {
+                        setData(values => ({...values,
+                            errorSurtug: "Gagal load data Surat Tugas"
+                        }));
+                    }
+                }
+            });
+        }
+
         if(data.errorData51) {
             const resLaporan = modelPerlakuan.getPtkByDokumen(data.noIdPtk, 21)
             setValue("idPtk", data.noIdPtk)
@@ -692,8 +778,8 @@ function DocK51() {
             K-5.1 <span className="fw-light" style={{color: 'blue'}}>SERTIFIKAT PERLAKUAN / TREATMENT CERTIFICATE</span>
 
             <small className='float-end'>
-                <span className='text-danger'>{(data.errorPtkPage ? data.errorPtkPage + "; " : "") + (data.errorKomoditas ? data.errorKomoditas + "; " : "") + (data.errorData53 ? data.errorData53 + "; " : "") + (data.errorData51 ? data.errorData51 + "; " : "")}</span>
-                {data.errorPtkPage || data.errorKomoditas || data.errorData53 || data.errorData51 ?
+                <span className='text-danger'>{(data.errorPtkPage ? data.errorPtkPage + "; " : "") + (data.errorKomoditas ? data.errorKomoditas + "; " : "") + (data.errorData53 ? data.errorData53 + "; " : "") + (data.errorData51 ? data.errorData51 + "; " : "") + (data.errorSurtug ? data.errorSurtug + "; " : "")}</span>
+                {data.errorPtkPage || data.errorKomoditas || data.errorData53 || data.errorData51 || data.errorSurtug ?
                     <button type='button' className='btn btn-warning btn-xs' onClick={() => refreshData()}><i className='fa-solid fa-sync'></i> Refresh</button>
                 : ""}
             </small>
@@ -1086,13 +1172,21 @@ function DocK51() {
                                             </div>
                                         </div>
                                         <div className="row" style={{marginLeft: "6px", marginTop: "30px"}}>
-                                            <label className="col-sm-2 col-form-label" htmlFor="ttdPerlakuan">Penandatangan</label>
+                                            <label className="col-sm-2 col-form-label" htmlFor="ttdPerlakuan">Penandatangan<span className='text-danger'>*</span></label>
                                             <div className="col-sm-3">
+                                                <select className={errors.ttdPerlakuan == '' ? 'form-select form-select-sm is-invalid' : 'form-select form-select-sm'} name="ttdPerlakuan" id="ttdPerlakuan" {...register("ttdPerlakuan", { required: "Mohon pilih penandatangan."})}>
+                                                    <option value="">--</option>
+                                                    {data.petugas?.map((item, index) => (
+                                                        <option value={item.penanda_tangan_id} key={index}>{item.nama + " - " + item.nip}</option>
+                                                    ))}
+                                                </select>
+                                                {errors.ttdPerlakuan && <small className="text-danger">{errors.ttdPerlakuan.message}</small>}
                                                 <input type="text" name='ttdPerlakuan' id='ttdPerlakuan' {...register("ttdPerlakuan")} className='form-control form-control-sm' />
                                             </div>
-                                            <label className="col-sm-2 col-form-label text-sm-end" htmlFor="diterbitkan">diterbitkan di</label>
-                                            <div className="col-sm-2">
-                                                <input type="text" name='diterbitkan' id='diterbitkan' {...register("diterbitkan")} className='form-control form-control-sm' />
+                                            <label className="col-sm-2 col-form-label text-sm-end" htmlFor="diterbitkan">diterbitkan di<span className='text-danger'>*</span></label>
+                                            <div className="col-sm-3 mb-3 pr-2">
+                                                <input type="text" {...register("diterbitkan", { required: "Mohon isi tempat terbit dokumen."})} className={errors.diterbitkan ? "form-control form-control-sm is-invalid" : "form-control form-control-sm"} />
+                                                {errors.diterbitkan && <small className="text-danger">{errors.diterbitkan.message}</small>}
                                             </div>
                                         </div>
                                     </div>

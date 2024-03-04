@@ -1,3 +1,4 @@
+/* eslint-disable eqeqeq */
 import axios from "axios";
 import Cookies from "js-cookie";
 import { v4 as uuidv4 } from 'uuid';
@@ -19,18 +20,18 @@ export default class PnPemusnahan {
     simpan81(data) {
         const uuid = uuidv4()
         let datasend = {
-            'id': data.idDok81 === '' ? uuid : data.idDok81,
+            'id': data.idDok81 == '' ? uuid : data.idDok81,
             'ptk_id': data.idPtk,
             'dokumen_karantina_id': "35",
             'pn_pemusnahan_id': "",
             'nomor': data.noDokumen.replace("K.1.1", "K.8.1"),
             'tanggal': data.tglDok81,
-            'alasan1': data.a1 === '' ? '0' : data.a1,
-            'alasan2': data.a2 === '' ? '0' : data.a2,
-            'alasan3': data.a3 === '' ? '0' : data.a3,
-            'alasan4': data.a4 === '' ? '0' : data.a4,
-            'alasan5': data.a5 === '' ? '0' : data.a5,
-            'alasan6': data.a6 === '' ? '0' : data.a6,
+            'alasan1': data.a1 == '' ? '0' : data.a1,
+            'alasan2': data.a2 == '' ? '0' : data.a2,
+            'alasan3': data.a3 == '' ? '0' : data.a3,
+            'alasan4': data.a4 == '' ? '0' : data.a4,
+            'alasan5': data.a5 == '' ? '0' : data.a5,
+            'alasan6': data.a6 == '' ? '0' : data.a6,
             'alasan_lain': data.a7 ? data.a7Lain : null,
             'maks_pemusnahan': data.maksMusnah,
             'petugas_pelaksana': "",
@@ -43,20 +44,21 @@ export default class PnPemusnahan {
             'otoritas_pelabuhan': data.otban,
             'kepala_kantor_bc': data.kaBc,
             'nama_pengelola': data.namaPengelola,
-            'tgl_dikeluarkan': data.tglDok81,
+            // 'tgl_dikeluarkan': data.tglDok81,
             'user_id': Cookies.get("userId"),
             'saksi': ""
         }
         
         let config = {
-            method: data.idDok81 === '' ? 'post' : 'put',
+            method: data.idDok81 == '' ? 'post' : 'put',
             maxBodyLength: Infinity,
-            url: url + (data.idDok81 === '' ? 'pn-musnah' : 'pn-musnah/' + data.idDok81),
+            url: url + (data.idDok81 == '' ? 'pn-musnah' : 'pn-musnah/' + data.idDok81),
             headers: { 
               'Content-Type': 'application/json', 
             },
             data: datasend
           };
+          console.log(JSON.stringify(config))
           return axios.request(config)
     }
     
@@ -66,7 +68,7 @@ export default class PnPemusnahan {
         const saksi = listSaksi?.map((item, index) => {
             return {
                 id : uuidv4(),
-                pn_pemusnahan_id: data.idDok82 === '' ? uuid : data.idDok82,
+                pn_pemusnahan_id: data.idDok82 == '' ? uuid : data.idDok82,
                 urut: (index + 1),
                 nama: item.nama,
                 is_pemilik: item.isPemilik,
@@ -76,10 +78,10 @@ export default class PnPemusnahan {
         })
 
         let datasend = {
-            'id': data.idDok82 === '' ? uuid : data.idDok82,
+            'id': data.idDok82 == '' ? uuid : data.idDok82,
             'ptk_id': data.idPtk,
             'dokumen_karantina_id': "36",
-            'pn_pemusnahan_id': "e7afa091-5eca-4239-b513-9d2cbc1d91c4",
+            'pn_pemusnahan_id': data.idDok81,
             'nomor': data.noDokumen.replace("K.1.1", "K.8.2"),
             'tanggal': data.tglDok82,
             'alasan1': "",
@@ -101,15 +103,15 @@ export default class PnPemusnahan {
             'otoritas_pelabuhan': "",
             'kepala_kantor_bc': "",
             'nama_pengelola': "",
-            'tgl_dikeluarkan': data.tglDok82,
+            // 'tgl_dikeluarkan': data.tglDok82,
             'user_id': Cookies.get("userId"),
             'saksi': saksi
         }
         
         let config = {
-            method: data.idDok82 === '' ? 'post' : 'put',
+            method: data.idDok82 == '' ? 'post' : 'put',
             maxBodyLength: Infinity,
-            url: url + (data.idDok82 === '' ? 'pn-musnah' : 'pn-musnah/' + data.idDok82),
+            url: url + (data.idDok82 == '' ? 'pn-musnah' : 'pn-musnah/' + data.idDok82),
             headers: { 
               'Content-Type': 'application/json', 
             },

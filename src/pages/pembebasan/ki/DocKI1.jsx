@@ -800,7 +800,7 @@ function DocKI1() {
                                                 <div className="row">
                                                     <label className="col-sm-4 col-form-label" htmlFor="namaPengirim">Nama</label>
                                                     <div className="col-sm-8">
-                                                        <input type="text" id="namaPengirim" value={data.listPtk ? (data.listPtk.nama_pengirim) : ""} disabled className="form-control form-control-sm" placeholder="Nama Pengirim" />
+                                                        <input type="text" id="namaPengirim" value={data.listPtk?.nama_pengirim || ""} disabled className="form-control form-control-sm" placeholder="Nama Pengirim" />
                                                     </div>
                                                 </div>
                                             </div>
@@ -809,7 +809,7 @@ function DocKI1() {
                                                 <div className="row">
                                                     <label className="col-sm-4 col-form-label" htmlFor="namaPenerima">Nama</label>
                                                     <div className="col-sm-8">
-                                                        <input type="text" id="namaPenerima" value={data.listPtk ? (data.listPtk.nama_penerima) : ""} disabled className="form-control form-control-sm" placeholder="Nama Penerima" />
+                                                        <input type="text" id="namaPenerima" value={data.listPtk?.nama_penerima || ""} disabled className="form-control form-control-sm" placeholder="Nama Penerima" />
                                                     </div>
                                                 </div>
                                             </div>

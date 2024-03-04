@@ -9,6 +9,8 @@ import PtkPemeriksaan from '../../model/PtkPemeriksaan';
 import PtkHistory from '../../model/PtkHistory';
 import PtkModel from '../../model/PtkModel';
 import ModaAlatAngkut from '../../model/master/modaAlatAngkut.json'
+import HasilAnalisis from '../../model/master/hasilAnalisis.json'
+import Rekomendasi from '../../model/master/rekomendasi.json'
 import Swal from 'sweetalert2';
 
 const model = new PtkPemeriksaan()
@@ -17,6 +19,14 @@ const modelPemohon = new PtkModel()
 
 function modaAlatAngkut(e){
     return ModaAlatAngkut.find((element) => element.id == parseInt(e))
+}
+
+function rekomendasiAnalisis(e){
+    return Rekomendasi.find((element) => element.id == parseInt(e))
+}
+
+function hasilAnalisis(e){
+    return HasilAnalisis.find((element) => element.id == parseInt(e))
 }
 
 function DocK37a() {
@@ -147,6 +157,53 @@ function DocK37a() {
                     }
                 }
             });
+
+            const response21 = modelSurtug.getAnalisByPtk(base64_decode(ptkNomor[1]));
+            response21
+            .then((response) => {
+                if(response.data) {
+                    if(typeof response.data != "string") {
+                        if(response.data.status == 200) {
+                            const dataRekom = response.data.data?.map(item => {
+                                return item.rekomendasi_id.toString()
+                            })
+                            setData(values => ({...values,
+                                errorAnalisis: "",
+                                listAnalisis: response.data.data,
+                                rekomendasiAnalisisId: dataRekom[0]
+                            }))
+                        }  else if(response.data.status == 404) {
+                            setData(values => ({...values,
+                                errorAnalisis: "Analisis permohonan belum ada",
+                            }))
+                        } else {
+                            setData(values => ({...values,
+                                errorAnalisis: "Gagal load data history analisis",
+                            }))
+                        }
+                    }
+                } else {
+                    setData(values => ({...values,
+                        errorAnalisis: "Gagal load data history analisis",
+                    }))
+                }
+            })
+            .catch((error) => {
+                if(process.env.REACT_APP_BE_ENV == "DEV") {
+                    console.log(error)
+                }
+                if(error.response) {
+                    if(error.response.data.status == 404) {
+                        setData(values => ({...values,
+                            errorAnalisis: ""
+                        }));
+                    } else {
+                        setData(values => ({...values,
+                            errorAnalisis: "Gagal load data history analisis"
+                        }));
+                    }
+                }
+            });
             
             // 1: penugasan periksa administratif
             const responseSurtug = modelSurtug.getDetilSurtugPenugasan(base64_decode(ptkNomor[1]), 1);
@@ -159,7 +216,9 @@ function DocK37a() {
                                 errorSurtug: "",
                                 noSurtug: response.data.data[0].nomor,
                                 tglSurtug: response.data.data[0].tanggal,
+                                petugas: response.data.data
                             }));
+                            setValueAdministratif("ttdAdminidtratif", response.data.data[0].penanda_tangan_id)
                             setValueAdministratif("idPtk", base64_decode(ptkNomor[1]))
                             setValueAdministratif("noDok", base64_decode(ptkNomor[2]))
                             setValueAdministratif("idSurtug", response.data.data[0].id)
@@ -289,7 +348,10 @@ function DocK37a() {
                                 errorSurtug: "",
                                 noSurtug: response.data.data[0].nomor,
                                 tglSurtug: response.data.data[0].tanggal,
+                                namaPetugas: response.data.data[0].nama,
+                                nipPetugas: response.data.data[0].nip,
                             }));
+                            setValueAdministratif("ttdAdminidtratif", response.data.data[0].penanda_tangan_id)
                             setValueAdministratif("idSurtug", response.data.data[0].id)
                         } else {
                             setData(values => ({...values,
@@ -366,8 +428,8 @@ function DocK37a() {
             K-3.7a <span className="fw-light" style={{color: 'blue'}}>LAPORAN HASIL PEMERIKSAAN ADMINISTRATIF DAN KESESUAIAN DOKUMEN</span>
             
             <small className='float-end'>
-                <span className='text-danger'>{(data.errorPTK ? data.errorPTK + "; " : "") + (data.errorAdmin ? data.errorAdmin + "; " : "") + (data.errorSurtug ? data.errorSurtug + "; " : "")}</span>
-                {data.errorPTK || data.errorAdmin || data.errorSurtug ?
+                <span className='text-danger'>{(data.errorPTK ? data.errorPTK + "; " : "") + (data.errorAdmin ? data.errorAdmin + "; " : "") + (data.errorSurtug ? data.errorSurtug + "; " : "") + (data.errorAnalisis ? data.errorAnalisis + "; " : "")}</span>
+                {data.errorPTK || data.errorAdmin || data.errorSurtug || data.errorAnalisis ?
                     <button type='button' className='btn btn-warning btn-xs' onClick={() => refreshData()}><i className='fa-solid fa-sync'></i> Refresh</button>
                 : ""}
             </small>
@@ -595,6 +657,18 @@ function DocK37a() {
                                                             </div>
                                                         </div>
                                                     </div>
+                                                    <hr />
+                                                    <div className="row">
+                                                        <div className='col-md-12 mb-3'>
+                                                            <h6 className='mb-0'><u><b>Hasil Analisis Permohonan/Serah Terima MP/NHI</b></u></h6>
+                                                            <ul>
+                                                                {data.listAnalisis?.map((item, index) => (
+                                                                    <li key={index}>{hasilAnalisis(item.hasil_analisis_id)?.deskripsi}</li>
+                                                                ))}
+                                                            </ul>
+                                                            <p className='mb-0'>Rekomendasi: <b>{rekomendasiAnalisis(data.rekomendasiAnalisisId)?.nama}</b></p>
+                                                        </div>
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
@@ -624,7 +698,7 @@ function DocK37a() {
                                                                                         <td>{index + 1}</td>
                                                                                         <td>{data.nama_dokumen}</td>
                                                                                         <td>{data.no_dokumen}</td>
-                                                                                        <td><a href={"http://localhost/api-barantin/" + data.efile} target='_blank' rel='noreferrer'>{data.efile}</a></td>
+                                                                                        <td><a href={process.env.REACT_APP_BE_LINK + data.efile} target='_blank' rel='noreferrer'>{data.efile}</a></td>
                                                                                     </tr>
                                                                                 ))
                                                                             ) : null
@@ -688,7 +762,11 @@ function DocK37a() {
                                                             </div>
                                                             <div className='form-control-label'><b>Penandatangan</b></div>
                                                             <div className="col-sm-5">
-                                                                <input type="text" className={errorsAdministratif.ttdAdminidtratif == '' ? 'form-control is-invalid' : 'form-control'} {...registerAdministratif("ttdAdminidtratif", { required: "Mohon pilih nama penandatangan."})}/>
+                                                                <select className={errorsAdministratif.ttdAdminidtratif == '' ? 'form-select is-invalid' : 'form-select'} name="ttdAdminidtratif" id="ttdAdminidtratif" {...registerAdministratif("ttdAdminidtratif", { required: "Mohon pilih nama penandatangan."})}>
+                                                                    {data.petugas?.map((item, index) => (
+                                                                        <option value={item.penanda_tangan_id} key={index} defaultValue={dataWatch.ttdAdminidtratif}>{item.nama + " - " + item.nip}</option>
+                                                                    ))}
+                                                                </select>
                                                                 {errorsAdministratif.ttdAdminidtratif && <small className="text-danger">{errorsAdministratif.ttdAdminidtratif.message}</small>}
                                                             </div>
                                                         </div>

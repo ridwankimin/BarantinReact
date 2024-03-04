@@ -10,6 +10,7 @@ import NegaraJson from '../../model/master/negara.json'
 import PelabuhanJson from '../../model/master/pelabuhan.json'
 import JenisDokumenJson from '../../model/master/jenisDokumen.json'
 import JenisKemasanJson from '../../model/master/jenisKemasan.json'
+import PegawaiJson from '../../model/master/pegawaiPertanian.json'
 import AreaTangkapJson from '../../model/master/areaTangkap.json'
 import MasterSatuanJson from '../../model/master/satuan.json'
 import { Controller, useForm } from 'react-hook-form'
@@ -59,6 +60,16 @@ function areaTangkap() {
         }
     })
     return arrayAreaTagnkap
+}
+
+function masterPegawai() {
+    var arrayPegawai = PegawaiJson.map(item => {
+        return {
+            value: item.id,
+            label: item.nama + " - " + item.nip,
+        }
+    })
+    return arrayPegawai
 }
 
 function jenisKemasan() {
@@ -449,6 +460,7 @@ function DocK11() {
     const {
         register: registerVerify,
         setValue: setValueVerify,
+        control: controlVerify,
         watch: watchVerify,
         handleSubmit: handleFormVerify,
         formState: { errors: errorsVerify },
@@ -1449,6 +1461,7 @@ function DocK11() {
             const response = modelPemohon.getPtkId(base64_decode(ptkNomor[1]));
             response
             .then((response) => {
+                console.log(response)
                 if(response.data.status == 200) {
                     handlePelabuhan(response.data.data.ptk.negara_muat_id, "pelMuat")
                     handlePelabuhan(response.data.data.ptk.negara_bongkar_id, "pelBongkar")
@@ -1744,7 +1757,16 @@ function DocK11() {
                         setValueMP("areaTangkapView", response.data.data.ptk.area_tangkap_id == null ? "" : getViewAreaTangkap(response.data.data.ptk.area_tangkap_id));
                         setValueMP("jumlahKemasan", response.data.data.ptk.jumlah_kemasan);
                         setValueMP("tandaKemasan", response.data.data.ptk.tanda_khusus);
-                        setValueMP("nilaiBarang", response.data.data.ptk.nilai_barang);
+                        let sumVol
+                        if(response.data.data.ptk_komoditi?.length > 0) {
+                            var arrayNilai = response.data.data.ptk_komoditi?.map(item => {
+                                return item.harga
+                            })
+                            sumVol = arrayNilai.reduce((partialSum, a) => partialSum + a, 0);
+                        } else {
+                            sumVol = 0
+                        }
+                        setValueMP("nilaiBarang", response.data.data.ptk.nilai_barang == null ? sumVol : response.data.data.ptk.nilai_barang);
                         setValueMP("satuanNilai", response.data.data.ptk.mata_uang == null ? "IDR" : response.data.data.ptk.mata_uang);
                         setValueMP("negaraAsalMP", response.data.data.ptk.negara_asal_id == null ? "" : response.data.data.ptk.negara_asal_id);
                         setValueMP("negaraAsalMPView", response.data.data.ptk.kd_negara_asal == null ? "" : response.data.data.ptk.kd_negara_asal + " - " + response.data.data.ptk.negara_asal);
@@ -3214,7 +3236,7 @@ function DocK11() {
                                                                 <div className="col-sm-4">
                                                                     <div className='row'>
                                                                         <div className="col-8" style={{paddingRight: '2px'}}>
-                                                                            <input autoComplete="off" type="text" className='form-control form-control-sm' value={cekdataDetilMP.nilaiBarang ? addCommas(removeNonNumeric(cekdataDetilMP.nilaiBarang)) : ""} {...registerMP("nilaiBarang")} name='nilaiBarang' id='nilaiBarang' />
+                                                                            <input autoComplete="off" type="text" className='form-control form-control-sm' value={cekdataMP.nilaiBarang ? addCommas(removeNonNumeric(cekdataMP.nilaiBarang)) : ""} {...registerMP("nilaiBarang")} name='nilaiBarang' id='nilaiBarang' />
                                                                         </div>
                                                                         <div className="col-4" style={{paddingLeft: '2px'}}>
                                                                             <select name="satuanNilai" id="satuanNilai" value={cekdataMP.satuanNilai || "IDR"} className='form-select form-select-sm' {...registerMP("satuanNilai")}>
@@ -3452,18 +3474,30 @@ function DocK11() {
                                             </div>
                                             {errorsVerify.alasanTolak && <small className="text-danger">{errorsVerify.alasanTolak.message}</small>}
                                         </div>
-                                        <div className="col-sm-4" style={{display: (cekdataVerify.opsiVerif == '1' ? 'block' : 'none')}}>
+                                        <div className="col-sm-6" style={{display: (cekdataVerify.opsiVerif == '1' ? 'block' : 'none')}}>
                                             <div className="mb-3">
                                                 <label className="form-label" htmlFor="basic-default-fullname"><b><u>Tanda Terima Laporan PTK</u></b></label>
                                                 <div className="row mb-3">
-                                                    <label className="col-sm-5 col-form-label" htmlFor="tglTerimaVerif">Tgl Terima</label>
-                                                    <div className="col-sm-7">
+                                                    <label className="col-sm-3 col-form-label" htmlFor="tglTerimaVerif">Tgl Terima</label>
+                                                    <div className="col-sm-4">
                                                         <input autoComplete="off" type="datetime-local" id="tglTerimaVerif" name="tglTerimaVerif" {...registerVerify("tglTerimaVerif", { required: (cekdataVerify.opsiVerif == '1' ? "Mohon tanggal terima." : false)})} className={errorsVerify.tglTerimaVerif ? "form-control form-control-sm is-invalid" : "form-control form-control-sm"} />
                                                         {errorsVerify.tglTerimaVerif && <small className="text-danger">{errorsVerify.tglTerimaVerif.message}</small>}
                                                     </div>
-                                                    <label className="col-sm-5 col-form-label" htmlFor="petugasVerif">Petugas Penerima</label>
+                                                </div>
+                                                <div className="row mb-3">
+                                                    <label className="col-sm-3 col-form-label" htmlFor="petugasVerif">Petugas Penerima</label>
                                                     <div className="col-sm-7">
-                                                        <input autoComplete="off" type="text" id="petugasVerif" name="petugasVerif" {...registerVerify("petugasVerif", { required: (cekdataVerify.opsiVerif == '1' ? "Mohon isi nama petugas verifikasi." : false)})} className={errorsVerify.petugasVerif ? "form-control form-control-sm is-invalid" : "form-control form-control-sm"} />
+                                                    <Controller
+                                                        control={controlVerify}
+                                                        name={"petugasVerif"}
+                                                        defaultValue={""}
+                                                        className="form-control form-control-sm"
+                                                        rules={{ required: "Mohon pilih petugas." }}
+                                                        render={({ field: { value,onChange, ...field } }) => (
+                                                            <Select styles={customStyles} placeholder={"Pilih petugas penerima.."} value={{id: cekdataVerify.petugasVerif, label: cekdataVerify.petugasVerifView}} {...field} options={masterPegawai()} onChange={(e) => setValueVerify("petugasVerif", e.value) & setValueVerify("petugasVerifView", e.label)} />
+                                                        )}
+                                                    />
+                                                        {/* <input autoComplete="off" type="text" id="petugasVerif" name="petugasVerif" {...registerVerify("petugasVerif", { required: (cekdataVerify.opsiVerif == '1' ? "Mohon isi nama petugas verifikasi." : false)})} className={errorsVerify.petugasVerif ? "form-control form-control-sm is-invalid" : "form-control form-control-sm"} /> */}
                                                         {errorsVerify.petugasVerif && <small className="text-danger">{errorsVerify.petugasVerif.message}</small>}
                                                     </div>
                                                 </div>

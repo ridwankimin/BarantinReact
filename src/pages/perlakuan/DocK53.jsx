@@ -358,6 +358,7 @@ function DocK53() {
                                 errorSurtug: "",
                                 noSurtug: response.data.data[0].nomor,
                                 tglSurtug: response.data.data[0].tanggal,
+                                petugas: response.data.data
                             }));
                         } else {
                             setData(values => ({...values,
@@ -556,6 +557,7 @@ function DocK53() {
                                 errorSurtug: "",
                                 noSurtug: response.data.data[0].nomor,
                                 tglSurtug: response.data.data[0].tanggal,
+                                petugas: response.data.data
                             }));
                         } else {
                             setData(values => ({...values,
@@ -1145,13 +1147,21 @@ function DocK53() {
                                             </div>
                                         </div>
                                         <div className="row" style={{marginLeft: "6px", marginTop: "30px"}}>
-                                            <label className="col-sm-2 col-form-label" htmlFor="ttdPerlakuan">Penandatangan</label>
+                                            <label className="col-sm-2 col-form-label" htmlFor="ttdPerlakuan">Penandatangan<span className='text-danger'>*</span></label>
                                             <div className="col-sm-3">
+                                                <select className={errors.ttdPerlakuan == '' ? 'form-select form-select-sm is-invalid' : 'form-select form-select-sm'} name="ttdPerlakuan" id="ttdPerlakuan" {...register("ttdPerlakuan", { required: "Mohon pilih penandatangan."})}>
+                                                    <option value="">--</option>
+                                                    {data.petugas?.map((item, index) => (
+                                                        <option value={item.penanda_tangan_id} key={index}>{item.nama + " - " + item.nip}</option>
+                                                    ))}
+                                                </select>
+                                                {errors.ttdPerlakuan && <small className="text-danger">{errors.ttdPerlakuan.message}</small>}
                                                 <input type="text" name='ttdPerlakuan' id='ttdPerlakuan' {...register("ttdPerlakuan")} className='form-control form-control-sm' />
                                             </div>
-                                            <label className="col-sm-2 col-form-label text-sm-end" htmlFor="diterbitkan">diterbitkan di</label>
-                                            <div className="col-sm-2">
-                                                <input type="text" name='diterbitkan' id='diterbitkan' {...register("diterbitkan")} className='form-control form-control-sm' />
+                                            <label className="col-sm-2 col-form-label text-sm-end" htmlFor="diterbitkan">diterbitkan di<span className='text-danger'>*</span></label>
+                                            <div className="col-sm-3 mb-3 pr-2">
+                                                <input type="text" {...register("diterbitkan", { required: "Mohon isi tempat terbit dokumen."})} className={errors.diterbitkan ? "form-control form-control-sm is-invalid" : "form-control form-control-sm"} />
+                                                {errors.diterbitkan && <small className="text-danger">{errors.diterbitkan.message}</small>}
                                             </div>
                                         </div>
                                     </div>

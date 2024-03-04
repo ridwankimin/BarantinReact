@@ -2,14 +2,56 @@
 import Cookies from 'js-cookie';
 import React, { useEffect, useState } from 'react';
 import {decode as base64_decode} from 'base-64';
-import { useForm } from 'react-hook-form';
+import { Controller, useForm } from 'react-hook-form';
 import PtkSurtug from '../../model/PtkSurtug';
 import PtkModel from '../../model/PtkModel';
 import Swal from 'sweetalert2';
 import { useNavigate } from 'react-router-dom';
+import PegawaiJson from '../../model/master/pegawaiPertanian.json'
+import Select from 'react-select';
 
 const modelSurtug = new PtkSurtug()
 const modelPemohon = new PtkModel()
+
+function masterPegawai() {
+    var arrayPegawai = PegawaiJson.map(item => {
+        return {
+            value: item.id,
+            label: item.nama + " - " + item.nip,
+        }
+    })
+    return arrayPegawai
+}
+
+const customStyles = {
+    control: (provided, state) => ({
+        ...provided,
+        background: '#fff',
+        borderColor: '#D4D8DD',
+        cursor: 'text',
+        minHeight: '30px',
+        height: '30px',
+        boxShadow: state.isFocused ? null : null,
+    }),
+
+    valueContainer: (provided, state) => ({
+        ...provided,
+        height: '30px',
+        padding: '0 6px'
+    }),
+
+    input: (provided, state) => ({
+        ...provided,
+        margin: '0px',
+    }),
+    indicatorSeparator: state => ({
+        display: 'none',
+    }),
+    indicatorsContainer: (provided, state) => ({
+        ...provided,
+        height: '30px',
+    }),
+}
 
 function DocK21() {
     const idPtk = Cookies.get("idPtkPage")
@@ -20,6 +62,7 @@ function DocK21() {
     const {
         register,
         setValue,
+        control,
         handleSubmit,
         watch,
         formState: { errors },
@@ -454,7 +497,6 @@ function DocK21() {
                                         </h2>
                                         <div id="collapseAnalisa">
                                             <div className="accordion-body">
-                                                {/* <div className="row g-3 mb-3"> */}
                                                 <div className="col-md-12" style={{display: (jenisKar == "H" ? "block" : "none")}}>
                                                     <label className="col-form-label" htmlFor="mpHPHK">A. Media Pembawa HPHK</label>
                                                     <div className="row">
@@ -734,14 +776,17 @@ function DocK21() {
                                                     </div> */}
                                                     <div className='form-control-label'><b>Penandatangan <span className='text-danger'>*</span></b></div>
                                                     <div className="col-sm-5 mt-0">
-                                                        <input type="text" className={errors.ttdAnalis == '' ? 'form-control form-control-sm is-invalid' : 'form-control form-control-sm'} {...register("ttdAnalis", { required: "Mohon pilih nama penandatangan."})}/>
-                                                        {/* <select className={dataWatch.ttdAdminidtratif == '' ? 'form-select form-select-sm is-invalid' : 'form-select form-select-sm'} {...registerAdministratif("ttdAdminidtratif", { required: "Mohon pilih nama penandatangan."})}>
-                                                            <option value="">--</option>
-                                                            <option value='1'>Dilakukan penahanan dan/atau melengkapi dokumen</option>
-                                                            <option value='2'>Dilakukan pengasingan dan pengamatan</option>
-                                                            <option value='3'>Ditolak</option>
-                                                            <option value='4'>Dilanjutkan pemeriksaan kesehatan</option>
-                                                        </select> */}
+                                                        <Controller
+                                                            control={control}
+                                                            name={"ttdAnalis"}
+                                                            defaultValue={""}
+                                                            className="form-control form-control-sm"
+                                                            rules={{ required: "Mohon pilih petugas." }}
+                                                            render={({ field: { value,onChange, ...field } }) => (
+                                                                <Select styles={customStyles} placeholder={"Pilih petugas penerima.."} value={{id: dataWatch.ttdAnalis, label: dataWatch.ttdAnalisView}} {...field} options={masterPegawai()} onChange={(e) => setValue("ttdAnalis", e.value) & setValue("ttdAnalisView", e.label)} />
+                                                            )}
+                                                        />
+                                                        {/* <input type="text" className={errors.ttdAnalis == '' ? 'form-control form-control-sm is-invalid' : 'form-control form-control-sm'} {...register("ttdAnalis", { required: "Mohon pilih nama penandatangan."})}/> */}
                                                         {errors.ttdAnalis && <small className="text-danger">{errors.ttdAnalis.message}</small>}
                                                     </div>
                                                 </div>

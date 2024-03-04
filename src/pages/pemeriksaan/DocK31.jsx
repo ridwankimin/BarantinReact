@@ -283,7 +283,6 @@ function DocK31() {
                                                         <thead>
                                                             <tr>
                                                                 <th>No</th>
-                                                                {/* <th>Kode HS</th> */}
                                                                 <th>Klasifikasi</th>
                                                                 <th>Komoditas Umum</th>
                                                                 <th>Komoditas En/Latin</th>
@@ -301,7 +300,6 @@ function DocK31() {
                                                             {data.listKomoditas ? (data.listKomoditas?.map((data, index) => (
                                                                         <tr key={index}>
                                                                             <td>{index + 1}</td>
-                                                                            {/* <td>{data.kode_hs}</td> */}
                                                                             <td>{data.klasifikasi}</td>
                                                                             <td>{data.nama_umum_tercetak}</td>
                                                                             <td>{data.nama_latin_tercetak}</td>
@@ -477,7 +475,7 @@ function DocK31() {
                                                                         <td>{index + 1}</td>
                                                                         <td>{data.nama_dokumen}</td>
                                                                         <td>{data.no_dokumen}</td>
-                                                                        <td><a href={"http://localhost/api-barantin/" + data.efile} target='_blank' rel='noreferrer'>{data.efile}</a></td>
+                                                                        <td><a href={process.env.REACT_APP_BE_LINK + data.efile} target='_blank' rel='noreferrer'>{data.efile}</a></td>
                                                                     </tr>
                                                                 ))
                                                             ) : null

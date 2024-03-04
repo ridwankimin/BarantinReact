@@ -391,6 +391,7 @@ function DocK92i() {
                             setData(values => ({...values,
                                 noSurtug: response.data.data[0].nomor,
                                 tglSurtug: response.data.data[0].tanggal,
+                                petugas: response.data.data
                             }));
                             setValue("idSurtug", response.data.data[0].id)
                         }
@@ -598,6 +599,7 @@ function DocK92i() {
                             setData(values => ({...values,
                                 noSurtug: response.data.data[0].nomor,
                                 tglSurtug: response.data.data[0].tanggal,
+                                petugas: response.data.data
                             }));
                             setValue("idSurtug", response.data.data[0].id)
                         }

@@ -277,6 +277,7 @@ function DocK37b() {
                                 errorSurtug: "",
                                 noSurtug: response.data.data[0].nomor,
                                 tglSurtug: response.data.data[0].tanggal,
+                                petugas: response.data.data
                             }));
                         } else {
                             setData(values => ({...values,
@@ -469,6 +470,7 @@ function DocK37b() {
                                 errorSurtug: "",
                                 noSurtug: response.data.data[0].nomor,
                                 tglSurtug: response.data.data[0].tanggal,
+                                petugas: response.data.data
                             }));
                         } else {
                             setData(values => ({...values,
@@ -819,7 +821,12 @@ function DocK37b() {
                                                 <div className="row mb-3">
                                                     <div className='col-sm-2 form-control-label' htmlFor="ttd1"><b>Penandatangan<span className='text-danger'>*</span></b></div>
                                                     <div className="col-sm-4">
-                                                        <input type="text" name='ttd1' id='ttd1' {...register("ttd1", {required: "Mohon pilih penandatangan."})} className={errors.ttd1 ? "form-select form-select-sm is-invalid" : "form-select form-select-sm"}/>
+                                                        <select className={errors.ttd1 == '' ? 'form-select form-select-sm is-invalid' : 'form-select form-select-sm'} name="ttd1" id="ttd1" {...register("ttd1", { required: "Mohon pilih penandatangan."})}>
+                                                            {data.petugas?.map((item, index) => (
+                                                                <option value={item.penanda_tangan_id} key={index} defaultValue={dataWatch.ttd1}>{item.nama + " - " + item.nip}</option>
+                                                            ))}
+                                                        </select>
+                                                        {/* <input type="text" name='ttd1' id='ttd1' {...register("ttd1", {required: "Mohon pilih penandatangan."})} className={errors.ttd1 ? "form-select form-select-sm is-invalid" : "form-select form-select-sm"}/> */}
                                                         {errors.ttd1 && <small className="text-danger">{errors.ttd1.message}</small>}
                                                     </div>
                                                 </div>
@@ -866,7 +873,11 @@ function DocK37b() {
                         <div className="row mb-3">
                             <div className='col-sm-2 form-control-label'><b>Penandatangan <span className='text-danger'>*</span></b></div>
                             <div className="col-sm-4">
-                                <input type="text" name='ttd2' id='ttd2' {...registerHeader("ttd2", {required: (dataWatchHeader.idDok37b ? "Mohon pilih penandatangan." : false)})} className={errorsHeader.ttd2 ? "form-control form-control-sm is-invalid" : "form-control form-control-sm"} />
+                                <select className={errorsHeader.ttd2 == '' ? 'form-select form-select-sm is-invalid' : 'form-select form-select-sm'} name="ttd2" id="ttd2" {...registerHeader("ttd2", { required: "Mohon pilih penandatangan."})}>
+                                    {data.petugas?.map((item, index) => (
+                                        <option value={item.penanda_tangan_id} key={index} defaultValue={dataWatchHeader.ttd2}>{item.nama + " - " + item.nip}</option>
+                                    ))}
+                                </select>
                                 {errorsHeader.ttd2 && <small className="text-danger">{errorsHeader.ttd2.message}</small>}
                             </div>
                         </div>
