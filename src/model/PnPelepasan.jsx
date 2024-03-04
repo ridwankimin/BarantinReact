@@ -151,6 +151,59 @@ export default class PnPelepasan {
     }
     return axios.request(config)
   }
+  
+  eksporKI(data) {
+    const uuid = uuidv4()
+    let datasend = {
+        id: data.idDoki1 == '' ? uuid : data.idDoki1,
+        ptk_id: data.idPtk,
+        dokumen_karantina_id: "46",
+        nomor: data.noDokumen.replace("K.1.1", "K.I.1"),
+        tanggal: data.tglDoki1,
+        nomor_seri: data.noSeri,
+        karantina_tujuan: "",
+        upt_tujuan_id: "",
+        tgl_awal: "",
+        tgl_akhir: "",
+        tipe_usaha: "", //PABRIK, UNIT_USAHA, LAINNYA
+        temperatur_mp: "", //LIVE, FRONZEN, CHILLED
+        hasil_periksa: "",
+        p1: "",
+        p2: "",
+        p3: "",
+        p4: "",
+        nama_labuji: data.namaLabUji,
+        alamat_labuji: data.alamatLabUji,
+        attestation_a: data.attestation1,
+        attestation_b: data.attestation2,
+        attestation_c: data.attestation3,
+        attestation_d: data.attestation4,
+        attestation_lain: data.attestation5 == "1" ? data.attestationLain : "",
+        attestation_free_from: data.attestationFreeFrom == "1" ? data.attestationFreeFromText : "",
+        attestation_nosign: data.attestationNoSign == "1" ? data.attestationNoSignText : "",
+        add_information: data.addInfo,
+        status_dok: data.jenisDokumen,
+        replaced_dok_id: "", // nanti data.idDokReplaced
+        is_attachment: data.isAttach,
+        diterbitkan_di: data.diterbitkan,
+        user_ttd_id: data.ttdPutusan,
+        user_id: Cookies.get("userId") //session
+    }
+    let config = {
+      method: data.idDoki1 == '' ? 'post' : 'put',
+      maxBodyLength: Infinity,
+      url: url + (data.idDoki1 == '' ? 'pn-pelepasan-ki' : 'pn-pelepasan-ki/' + data.idDoki1),
+      // url: url + 'pn-adm',
+      headers: { 
+        'Content-Type': 'application/json', 
+      },
+      data: datasend
+    };
+    if(process.env.REACT_APP_BE_ENV == "DEV") {
+      console.log("dok ki1: " + JSON.stringify(config))
+    }
+    return axios.request(config)
+  }
 
   eksporKT(data) {
     const uuid = uuidv4()

@@ -150,4 +150,44 @@
 "flag":"KETERANGAN",
 "karantina":"I",
 "dokumen":"K-9.2.I"
+},
+{ 
+"id":20,
+"deskripsi":"Produk dari setiap batch / Komoditas dari populasi tersebut di atas telah diproses, diinspeksi dan dinilai dalam kondisi yang telah disetujui oleh dan di bawah kendali Otoritas Kompeten",
+"deskripsi_en":"The Product from each batch  / Commodity from population  *) described above have been processed, inspected and graded in (an) establishment(s) that has been approved by and under control of the Competent Authority",
+"flag":"KETERANGAN",
+"karantina":"I",
+"dokumen":"KI-1"
+},
+{ 
+"id":21,
+"deskripsi":"telah ditangani,  disiapkan atau diproses, diidentifikasi, disimpan dan ditransportasikan sesuai persyaratan sanitasi  dan HACCP yang diterapkan  secara  konsisten dan sesuai dengan persyaratan yang ditetapkan Codex Code of Practice  for Fish  and Fishery Products (CAC / RCP 52-2003)",
+"deskripsi_en":"have been handled,  prepared or processed,  identified, stored and transported under a competent HACCP and sanitary programme consistently implemented and in accordance with the requirements laid down in Codex Code of Practice for Fish and Fishery Products (CAC/RCP 52-2003)",
+"flag":"KETERANGAN",
+"karantina":"I",
+"dokumen":"KI-1"
+},
+{ 
+"id":22,
+"deskripsi":"Produk dari setiap batch / Komoditas dari populasi dinyatakan bebas dari penyakit berdasarkan pengambilan sampel dan metode pengujian yang diakui oleh World Organisation for Animal Health (WOAH) dan pada saat pemeriksaan:",
+"deskripsi_en":"The Product from each batch / Commodity from population *) has been found to be free of disease based on sampling and testing method recognized by the World Organisation for Animal Health (WOAH) for demonstrating absence of disease and inspected according to the appropiate procedures and subsequently found, at the time of inspection:",
+"flag":"KETERANGAN",
+"karantina":"I",
+"dokumen":"KI-1"
+},
+{ 
+"id":23,
+"deskripsi":"produk non konsumsi telah ditangani, disiapkan atau diproses, disimpan, ditransportasikan berdasarkan prinsip biosekuriti",
+"deskripsi_en":"For non edible products have been handled, prepared or processed, stored, transported based on  biosecurity principles",
+"flag":"KETERANGAN",
+"karantina":"I",
+"dokumen":"KI-1"
+},
+{ 
+"id":24,
+"deskripsi":"keterangan lainnya",
+"deskripsi_en":"Other details",
+"flag":"KETERANGAN",
+"karantina":"I",
+"dokumen":"KI-1"
 }]
