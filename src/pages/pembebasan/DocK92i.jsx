@@ -52,11 +52,11 @@ function DocK92i() {
         register,
         setValue,
         handleSubmit,
-        // watch,
+        watch,
         formState: { errors },
     } = useForm();
 
-    // const cekWatch = watch()
+    const cekWatch = watch()
 
     const onSubmit = (data) => {
         const response = modelPelepasan.imporAreaKI(data);
@@ -378,7 +378,7 @@ function DocK92i() {
                 }
             });
 
-            // 1: penugasan periksa administratif
+            // 14: pembebasan seluruh
             const resSurtug = modelSurtug.getDetilSurtugPenugasan(base64_decode(ptkNomor[1]), 14);
             resSurtug
             .then((response) => {
@@ -586,7 +586,7 @@ function DocK92i() {
         }
 
         if(data.errorSurtug) {
-            // 1: penugasan periksa administratif
+            // 14: pembebasan seluruh
             const resSurtug = modelSurtug.getDetilSurtugPenugasan(data.noIdPtk, 14);
             resSurtug
             .then((response) => {
@@ -958,7 +958,12 @@ function DocK92i() {
                         <div className='row'>
                             <div className='col-sm-2 col-form-label'>Penandatangan</div>
                             <div className="col-sm-3 mb-3 pr-2">
-                                <input type="text" {...register("ttdPutusan", { required: "Mohon pilih nama penandatangan."})} className={errors.ttdPutusan ? "form-control form-control-sm is-invalid" : "form-control form-control-sm"} />
+                                <select className={errors.ttdPutusan == '' ? 'form-select form-select-sm is-invalid' : 'form-select form-select-sm'} name="ttdPutusan" id="ttdPutusan" {...register("ttdPutusan", { required: "Mohon pilih penandatangan."})}>
+                                    {data.petugas?.map((item, index) => (
+                                        <option value={item.penanda_tangan_id} key={index} defaultValue={cekWatch.ttdPutusan}>{item.nama + " - " + item.nip}</option>
+                                    ))}
+                                </select>
+                                {/* <input type="text" {...register("ttdPutusan", { required: "Mohon pilih nama penandatangan."})} className={errors.ttdPutusan ? "form-control form-control-sm is-invalid" : "form-control form-control-sm"} /> */}
                                 {errors.ttdPutusan && <small className="text-danger">{errors.ttdPutusan.message}</small>}
                             </div>
                             <div className='col-sm-2 col-form-label text-sm-end'>Diterbitkan di</div>
