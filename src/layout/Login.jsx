@@ -74,14 +74,18 @@ function Login() {
                                     <input className="form-control" value={password} onChange={(e) => setPassword(e.target.value)} type="password" name="password" id="password" placeholder="Password" autoComplete="off" required />
                                 </div>
                                 <h4 className='mb-0'><u>Level User</u></h4>
-                                <div className="form">
-                                    <label style={{marginRight: "20px"}}><input type="radio" name="e" /> Kepala</label>
-                                    <label style={{marginRight: "20px"}}><input type="radio" name="e" /> Admin</label>
-                                    <label style={{marginRight: "20px"}}><input type="radio" name="e" /> Supervisor</label>
-                                    <label style={{marginRight: "20px"}}><input type="radio" name="e" /> Analyzing Point</label>
-                                    <label style={{marginRight: "20px"}}><input type="radio" name="e" /> Gakkum</label>
-                                    <label style={{marginRight: "20px"}}><input type="radio" name="e" /> Bendahara</label>
-                                    <label style={{marginRight: "20px", marginBottom: "20px"}}><input type="radio" name="e" /> Fungsional</label>
+                                <div className="row">
+                                    <div className='offset-md-1 col-md-5' style={{textAlign: "left"}}>
+                                        <label style={{marginRight: "20px"}}><input type="radio" name="e" /> Kepala</label>
+                                        <label style={{marginRight: "20px"}}><input type="radio" name="e" /> Supervisor</label>
+                                        <label style={{marginRight: "20px"}}><input type="radio" name="e" /> Analyzing Point</label>
+                                        <label style={{marginRight: "20px", marginBottom: "20px"}}><input type="radio" name="e" /> Fungsional</label>
+                                    </div>
+                                    <div className='offset-md-1 col-md-5' style={{textAlign: "left"}}>
+                                        <label style={{marginRight: "20px"}}><input type="radio" name="e" /> Admin</label>
+                                        <label style={{marginRight: "20px"}}><input type="radio" name="e" /> Gakkum</label>
+                                        <label style={{marginRight: "20px"}}><input type="radio" name="e" /> Bendahara</label>
+                                    </div>
                                 </div>
                                 <button type="submit" className="btn signin">Log in</button>
                             </form>
