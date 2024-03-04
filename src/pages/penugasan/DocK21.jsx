@@ -90,9 +90,15 @@ function DocK21() {
             .then((res) => {
                 if(typeof res.data != "string") {
                     if(res.data.status == 200) {
-                        setData(values => ({...values,
-                            errorPTK: "",
-                        }));
+                        if(res.data.data.ptk?.status_ptk == 1) {
+                            setData(values => ({...values,
+                                errorPTK: "",
+                            }));
+                        } else {
+                            setData(values => ({...values,
+                                errorPTK: "PTK belun diverifikasi, mohon cek data PTK NO " + base64_decode(ptkNomor[0]),
+                            }));
+                        }
                         setDataPtk(values => ({...values,
                             listPtk: res.data.data.ptk,
                             listKontainer: res.data.data.ptk_kontainer,
@@ -122,8 +128,8 @@ function DocK21() {
             const response21 = modelSurtug.getAnalisByPtk(base64_decode(ptkNomor[1]));
             response21
             .then((response) => {
-                if(typeof response.data != "string") {
-                    if(response.data) {
+                if(response.data) {
+                    if(typeof response.data != "string") {
                         if(response.data.status == 200) {
                             setData(values => ({...values,
                                 errorAnalisis: "",
@@ -205,9 +211,15 @@ function DocK21() {
             .then((res) => {
                 if(typeof res.data != "string") {
                     if(res.data.status == 200) {
-                        setData(values => ({...values,
-                            errorPTK: "",
-                        }));
+                        if(res.data.data.ptk?.status_ptk == 1) {
+                            setData(values => ({...values,
+                                errorPTK: "",
+                            }));
+                        } else {
+                            setData(values => ({...values,
+                                errorPTK: "PTK belun diverifikasi, mohon cek data PTK NO " + data.noAju,
+                            }));
+                        }
                         setDataPtk(values => ({...values,
                             listPtk: res.data.data.ptk,
                             listKontainer: res.data.data.ptk_kontainer,
@@ -239,8 +251,8 @@ function DocK21() {
             const response21 = modelSurtug.getAnalisByPtk(data.idPtk);
             response21
             .then((response) => {
-                if(typeof response.data != "string") {
-                    if(response.data) {
+                if(response.data) {
+                    if(typeof response.data != "string") {
                         if(response.data.status == 200) {
                             setData(values => ({...values,
                                 errorAnalisis: "",

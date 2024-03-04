@@ -173,7 +173,7 @@
   
   label {
     display:inline-flex;
-    align-items:left;
+    align-items:center;
     gap:10px;
     margin:5px 0;
     cursor: pointer;

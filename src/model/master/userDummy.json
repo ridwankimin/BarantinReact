@@ -1132,4 +1132,13 @@
 "nama_upt":"Balai Karantina Hewan, Ikan dan Tumbuhan Papua Barat Daya ",
 "nama_satpel":"UPT Induk",
 "username":"pbdkt"
+},
+{
+"id":127,
+"id_upt":1000,
+"kode_upt":"10",
+"kode_satpel":"1000",
+"nama_upt":"Kantor Pusat",
+"nama_satpel":"UPT Induk",
+"username":"seto"
 }]

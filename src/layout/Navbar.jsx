@@ -20,12 +20,12 @@ function Navbar(props) {
         Cookies.set("ketMenu", e.target.dataset.i18n)
     }
 
-    // function removeCookie() {
-    //     Cookies.remove("idPtkPage");
-    //     Cookies.remove("tglPtk");
-    //     Cookies.remove("jenisKarantina");
-    //     Cookies.remove("jenisForm");
-    // }
+    function removeCookie() {
+        Cookies.remove("idPtkPage");
+        Cookies.remove("tglPtk");
+        Cookies.remove("jenisKarantina");
+        Cookies.remove("jenisForm");
+    }
 
     function handleSubMenuOpen(e) {
         if(e.target.dataset.i18n === ketSubMenu || ketSubMenu === "") {
@@ -68,7 +68,7 @@ function Navbar(props) {
                 </button>
                 <ul className="menu-sub">
                     <li className={location.pathname.split("/")[2] === 'k11' ? "menu-item active" : "menu-item"}>
-                        <div type="button" onClick={() => navigate(process.env.PUBLIC_URL + '/k11')} className="menu-link" title='PERMOHONAN TINDAKAN KARANTINA DAN PENGAWASAN DAN/ATAU PENGENDALIAN SERTA BERITA ACARA SERAH TERIMA MEDIA PEMBAWA DI TEMPAT PEMASUKAN, PENGELUARAN DAN/ATAU TRANSIT'>
+                        <div type="button" onClick={() => navigate(process.env.PUBLIC_URL + '/k11') & removeCookie()} className="menu-link" title='PERMOHONAN TINDAKAN KARANTINA DAN PENGAWASAN DAN/ATAU PENGENDALIAN SERTA BERITA ACARA SERAH TERIMA MEDIA PEMBAWA DI TEMPAT PEMASUKAN, PENGELUARAN DAN/ATAU TRANSIT'>
                             <div data-i18n="K-1.1">K-1.1</div>
                         </div>
                     </li>

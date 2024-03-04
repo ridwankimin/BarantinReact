@@ -233,7 +233,7 @@ function DocK11() {
         const response = modelPemohon.cekPrior(base64_encode(cekdataDokumen.noDokumen))
         response
         .then((response) => {
-            if(response.data.status == '200') {
+            if(response.data.status == 200) {
                 Swal.fire({
                     icon: "success",
                     title: response.data.message
@@ -273,10 +273,10 @@ function DocK11() {
             setDataIdPage(values => ({...values,
                 fileDokumenUpload: "",
             }));
-        } else if(e.target.files[0].size > 1048576) {
+        } else if(e.target.files[0].size > 2097152) {
             Swal.fire({
                 icon: "error",
-                title: "Max file: 1MB",
+                title: "Max file: 2MB",
             })
             setDataIdPage(values => ({...values,
                 fileDokumenUpload: "",
@@ -490,7 +490,7 @@ function DocK11() {
     const getListProv = useCallback(async () => {
         try {
             const response = await modelMaster.masterProv()
-            if(response.data.status == '200') {
+            if(response.data.status == 200) {
                 let dataProv = response.data.data;
                 const arraySelectProv = dataProv.map(item => {
                     return {
@@ -519,7 +519,7 @@ function DocK11() {
     const handleKota = useCallback(async (e, pel) => {
         try {
             const response = await modelMaster.masterKota(e)
-            if(response.data.status == '200') {
+            if(response.data.status == 200) {
                 let dataKota = response.data.data;
                 const arraySelectKota = dataKota.map(item => {
                 return {
@@ -671,7 +671,7 @@ function DocK11() {
                     const resKomKI = modelMaster.masterKomKI()
                     resKomKI
                     .then((response) => {
-                        if(response.data.status == '200') {
+                        if(response.data.status == 200) {
                             let dataKomKI = response.data.data;
                             var arrayKomKI = dataKomKI.map(item => {
                                 return {
@@ -740,29 +740,43 @@ function DocK11() {
     }
 
     const onSubmitDetilMP = (data) => {
-    
-        if(cekdataDiri.mediaPembawa) {
-            const response = modelPemohon.pushKomoditi(data, cekdataDiri.mediaPembawa);
-            response
-            .then((response) => {
-                if(response.data.status == '201') {
-                    Swal.fire({
-                        
-                        icon: "success",
-                        title: "Detil Media Pembawa berhasil disimpan.",
-                        showConfirmButton: false,
-                        timer: 2000
-                    })
-                    resetFormKomoditi();
-                    dataKomoditiPtk();
-                    sumNilaiKomoditi()
-                }
+        let cekNilai
+        if(cekdataDiri.mediaPembawa == "T") {
+            cekNilai = data.nilaiBarangMP?.length 
+        } else if(cekdataDiri.mediaPembawa == "H"){
+            cekNilai = data.nilaiBarangMPKH?.length 
+        } else if(cekdataDiri.mediaPembawa == "I"){
+            cekNilai = data.nilaiBarangMPKI?.length 
+        }
+        if(cekNilai >= 4) {
+            if(cekdataDiri.mediaPembawa) {
+                const response = modelPemohon.pushKomoditi(data, cekdataDiri.mediaPembawa);
+                response
+                .then((response) => {
+                    if(response.data.status == 201) {
+                        Swal.fire({
+                            icon: "success",
+                            title: "Detil Media Pembawa berhasil disimpan.",
+                            showConfirmButton: false,
+                            timer: 2000
+                        })
+                        resetFormKomoditi();
+                        dataKomoditiPtk();
+                        setValueDetilMP("nilaiBarang", sumNilaiKomoditi())
+                    }
+                })
+                .catch((error) => {
+                    if(process.env.REACT_APP_BE_ENV == "DEV") {
+                        console.log(error)
+                    };
+                });
+            }
+        } else {
+            Swal.fire({
+                icon: "error",
+                title: "Error!",
+                text: "Nilai minimal 4 digit"
             })
-            .catch((error) => {
-                if(process.env.REACT_APP_BE_ENV == "DEV") {
-                    console.log(error)
-                };
-            });
         }
     };
 
@@ -771,7 +785,7 @@ function DocK11() {
             const response = modelPemohon.tabPemohonUpdate(data);
             response
             .then((response) => {
-                if(response.data.status == '201') {
+                if(response.data.status == 201) {
                     Swal.fire({
                         icon: "success",
                         title: "Data Pemohon berhasil disimpan.",
@@ -807,7 +821,7 @@ function DocK11() {
                     const response = modelPemohon.tabPemohonInsert(data);
                     response
                     .then((response) => {
-                        if(response.data.status == '201') {
+                        if(response.data.status == 201) {
                             Swal.fire({
                                 icon: "success",
                                 title: "Data Pemohon berhasil disimpan.",
@@ -870,7 +884,7 @@ function DocK11() {
             const response = modelPemohon.tabPelabuhan(data);
             response
             .then((response) => {
-                if(response.data.status == '201') {
+                if(response.data.status == 201) {
                     Swal.fire({
                         icon: "success",
                         title: "Sukses!",
@@ -916,7 +930,7 @@ function DocK11() {
              const response = modelPemohon.tabKomoditas(data);
             response
             .then((response) => {
-                if(response.data.status == '201') {
+                if(response.data.status == 201) {
                     Swal.fire({
                         icon: "success",
                         title: "Sukses!",
@@ -963,7 +977,7 @@ function DocK11() {
             const response = modelPemohon.tabTempatPeriksa(data);
             response
             .then((response) => {
-                if(response.data.status == '201') {
+                if(response.data.status == 201) {
                     Swal.fire({
                         icon: "success",
                         title: "Sukses!",
@@ -1010,7 +1024,7 @@ function DocK11() {
             const response = modelPemohon.tabKonfirmasi(data);
             response
             .then((response) => {
-                if(response.data.status == '201') {
+                if(response.data.status == 201) {
                     setPtkLengkap(true);
                     setValueVerify("idPtk", data.idPtk);
                     setValueVerify("noAju", data.noAju);
@@ -1057,7 +1071,7 @@ function DocK11() {
             const response = modelPemohon.ptkVerify(data);
             response
             .then((response) => {
-                if(response.data.status == '201') {
+                if(response.data.status == 201) {
                     // setPtkLengkap(true);
                     Cookies.set("idPtkPage", base64_encode(
                         base64_encode(cekdataDiri.noAju) + 'm0R3N0r1R' + 
@@ -1076,7 +1090,7 @@ function DocK11() {
                     const resHsy = log.pushHistory(cekdataDiri.idPtk, "p0", "K-1.1", (dataIdPage.noPermohonan ? 'UPDATE' : 'NEW'));
                     resHsy
                     .then((response) => {
-                        if(response.data.status == '201') {
+                        if(response.data.status == 201) {
                             if(process.env.REACT_APP_BE_ENV == "DEV") {
                                 console.log("history saved")
                             }
@@ -1128,7 +1142,7 @@ function DocK11() {
         const response = modelPemohon.pushDetilKontainer(data);
         response
         .then((response) => {
-            if(response.data.status == '201') {
+            if(response.data.status == 201) {
                 Swal.fire({
                     
                     icon: "success",
@@ -1235,7 +1249,7 @@ function DocK11() {
             const response = modelPemohon.detilKontainerPtk(dataIdPage.noIdPtk);
             response
             .then((res) => {
-                if(res.data.status == '200') {
+                if(res.data.status == 200) {
                     setKontainerPtk(res.data.data)
                 }
             })
@@ -1253,7 +1267,7 @@ function DocK11() {
     
             response
             .then((res) => {
-                if(res.data.status == '200') {
+                if(res.data.status == 200) {
                     setDokumenPtk(res.data.data)
                 }
             })
@@ -1271,7 +1285,7 @@ function DocK11() {
     
             response
             .then((res) => {
-                if(res.data.status == '200') {
+                if(res.data.status == 200) {
                     setKomoditiPtk(res.data.data)
                 }
             })
@@ -1313,7 +1327,7 @@ function DocK11() {
         const response = modelPemohon.detilKontainerId(e.target.dataset.header);
         response
         .then((res) => {
-            if(res.data.status == '200') {
+            if(res.data.status == 200) {
                 setValueKontainer("idDataKontainer", res.data.data.id)
                 setValueKontainer("idPtk", res.data.data.ptk_id)
                 setValueKontainer("noKontainer", res.data.data.nomor)
@@ -1391,7 +1405,7 @@ function DocK11() {
         const response = modelPemohon.getDokumenId(e.target.dataset.header);
         response
         .then((res) => {
-            if(res.data.status == '200') {
+            if(res.data.status == 200) {
                 setValueDokumen("idDataDokumen", res.data.data.id)
                 setValueDokumen("idPtk", res.data.data.ptk_id)
                 setValueDokumen("noAju", dataIdPage.noAju)
@@ -1435,7 +1449,7 @@ function DocK11() {
             const response = modelPemohon.getPtkId(base64_decode(ptkNomor[1]));
             response
             .then((response) => {
-                if(response.data.status == '200') {
+                if(response.data.status == 200) {
                     handlePelabuhan(response.data.data.ptk.negara_muat_id, "pelMuat")
                     handlePelabuhan(response.data.data.ptk.negara_bongkar_id, "pelBongkar")
                     if(response.data.data.ptk.negara_asal_id == 99) {
@@ -1581,7 +1595,7 @@ function DocK11() {
                                 const resKomKI = modelMaster.masterKomKI()
                                 resKomKI
                                 .then((response) => {
-                                    if(response.data.status == '200') {
+                                    if(response.data.status == 200) {
                                         let dataKomKI = response.data.data;
                                         var arrayKomKI = dataKomKI?.map(item => {
                                             return {
@@ -1761,8 +1775,9 @@ function DocK11() {
                         if(response.data.data.ptk_dokumen.length > 0) {
                             setFormTab(values => ({...values, tab5: false}))
                         }
-                        if(response.data.data.ptk.no_dok_permohonan != "null") {
-                            setPtkLengkap(true);
+                        
+                        if(response.data.data.ptk.status_ptk == 9 || response.data.data.ptk.status_ptk == 1) {
+                            setPtkLengkap(true)
                         }
                     }, 400) //400
                 }
@@ -2280,7 +2295,7 @@ function DocK11() {
                                                 className="form-control form-control-sm"
                                                 rules={{ required: false }}
                                                 render={({ field: { value,onChange, ...field } }) => (
-                                                    <Select styles={customStyles} placeholder={"Pilih provinsi pengirim.."} value={{id: cekdataDiri.provPengirim, label: cekdataDiri.provPengirimView}} {...field} options={dataSelect.provPengirim} onChange={(e) => handleSelectPemohon(e, "provPengirim")} />
+                                                    <Select styles={customStyles} placeholder={"Pilih provinsi pengirim.."} value={{id: cekdataDiri.provPengirim, label: cekdataDiri.provPengirimView}} {...field} options={dataSelect.provPengirim} onChange={(e) => handleSelectPemohon(e, "provPengirim") & handleKota(e.value, "kotaPengirim")} />
                                                 )}
                                             />
                                         </div>
@@ -3199,7 +3214,7 @@ function DocK11() {
                                                                 <div className="col-sm-4">
                                                                     <div className='row'>
                                                                         <div className="col-8" style={{paddingRight: '2px'}}>
-                                                                            <input autoComplete="off" type="text" className='form-control form-control-sm' value={sumNilaiKomoditi() ? addCommas(removeNonNumeric(sumNilaiKomoditi())) : ""} {...registerMP("nilaiBarang")} name='nilaiBarang' id='nilaiBarang' />
+                                                                            <input autoComplete="off" type="text" className='form-control form-control-sm' value={cekdataDetilMP.nilaiBarang ? addCommas(removeNonNumeric(cekdataDetilMP.nilaiBarang)) : ""} {...registerMP("nilaiBarang")} name='nilaiBarang' id='nilaiBarang' />
                                                                         </div>
                                                                         <div className="col-4" style={{paddingLeft: '2px'}}>
                                                                             <select name="satuanNilai" id="satuanNilai" value={cekdataMP.satuanNilai || "IDR"} className='form-select form-select-sm' {...registerMP("satuanNilai")}>
@@ -3456,7 +3471,7 @@ function DocK11() {
                                         </div>
                                         <div className='row'>
                                             <div className='col-sm-2'>
-                                                <button className='btn btn-dark' disabled={dataIdPage.noPermohonan == "" ? false : true} type='submit'>Proses PTK</button>
+                                                <button className='btn btn-dark' type='submit'>Proses PTK</button>
                                             </div>
                                             <div className='col-sm-2'>
                                                 <a className='btn btn-warning pb-1' href={require("../../dok/k11.pdf")} rel="noopener noreferrer" target='_blank'>
@@ -3658,7 +3673,7 @@ function DocK11() {
                                 <input type="hidden" name='fileDokumen' {...registerDokumen("fileDokumen", {required: "Mohon upload dokumen persyaratan yang sesuai."})} />
                                 <input type='file' name="fileDokumenUpload" id="fileDokumenUpload" accept="application/pdf" value={dataIdPage.fileDokumenUpload || ""} onChange={handleBase64Upload} className="form-control form-control-sm" />
                             </div>
-                            <small className='text-danger'>File: *.pdf || Max: 1MB</small>
+                            <small className='text-danger'>File: *.pdf || Max: 2MB</small>
                             {errorsDokumen.fileDokumen && <small className="text-danger">{errorsDokumen.fileDokumen.message}</small>}
                         </div>
                         <div className="col-12 text-center mt-4">

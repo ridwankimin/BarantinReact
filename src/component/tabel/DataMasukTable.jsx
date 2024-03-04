@@ -142,6 +142,7 @@ const columns = [
 function DataMasukTable(props) {
     let navigate = useNavigate();
     let [dataTable, setDataTable] = useState({});
+    let [dataTableBE, setDataTableBE] = useState({});
     let model = useMemo(() => new PtkModel(), []);
     const [filterText, setFilterText] = React.useState('');
 
@@ -150,6 +151,7 @@ function DataMasukTable(props) {
             const response = await model.getPtkList(props.dataIn)
             if(response.data.status == '200') {
                 const dataReturn = response.data.data;
+                setDataTableBE(response.data.data)
                 const arrayData = dataReturn.map((item, index) => {
                     return {
                         id: index + 1,
@@ -239,16 +241,21 @@ function DataMasukTable(props) {
                 cancelButtonText: "Batal",
             }).then((result) => {
                 if (result.isConfirmed) {
+                    const dataPTK = dataTableBE?.filter((element) => element.no_aju == e.selectedRows[0].noAju)
+                    
+                    Cookies.set("statusPtk", dataPTK[0].status_ptk, {
+                        expires: 7,
+                    });
                     Cookies.set("idPtkPage", base64_encode(base64_encode(e.selectedRows[0].noAju) + 'm0R3N0r1R' + base64_encode(e.selectedRows[0].idPtk) + "m0R3N0r1R"  + base64_encode(e.selectedRows[0].noDokumen)), {
                         expires: 7,
                     });
                     Cookies.set("tglPtk", e.selectedRows[0].tglDokumen, {
                         expires: 7
                     });
-                    Cookies.set("jenisKarantina", (e.selectedRows[0].karantina === "Tumbuhan" ? "T" : (e.selectedRows[0].karantina === "Hewan" ? "H" : "I")), {
+                    Cookies.set("jenisKarantina", dataPTK[0].jenis_karantina, {
                         expires: 7
                     });
-                    Cookies.set("jenisPermohonan", (e.selectedRows[0].jenisPermohonan == 'Ekspor' ? 'EX' : (e.selectedRows[0].jenisPermohonan === 'Impor' ? 'IM' : (e.selectedRows[0].jenisPermohonan === 'Dokel' ? 'DK' : (e.selectedRows[0].jenisPermohonan === 'Domas' ? 'DM' : (e.selectedRows[0].jenisPermohonan === 'Re Ekspor' ? 'RE' : (e.selectedRows[0].jenisPermohonan === 'Re Impor' ? 'RI' : (e.selectedRows[0].jenisPermohonan === 'Transit' ? '' : 'ST'))))))), {
+                    Cookies.set("jenisPermohonan", dataPTK[0].jenis_permohonan, {
                         expires: 7
                     });
                     Cookies.set("jenisForm", "PTK", {
