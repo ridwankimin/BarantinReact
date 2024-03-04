@@ -64,7 +64,7 @@ function Login() {
                     <div className="col-md-offset-4 col-md-4 col-sm-offset-3 col-sm-6">
                         <div className="form-container" style={{textAlign: 'center'}}>
                             <form className="form-horizontal" onSubmit={handleFormLogin}>
-                                <img className='mb-4' style={{width: "100%"}} src={logbar} alt="BARANTIN" height="80px" />
+                                <img className='mb-3' style={{width: "100%"}} src={logbar} alt="BARANTIN" height="80px" />
                                 <div className="form-group">
                                     <span className="input-icon"><i className="fa fa-user"></i></span>
                                     <input className="form-control" value={user} onChange={(e) => setUser(e.target.value)} type="text" name="username" id="username" placeholder="Username" autoComplete="off" required />
@@ -72,6 +72,16 @@ function Login() {
                                 <div className="form-group">
                                     <span className="input-icon"><i className="fa fa-lock"></i></span>
                                     <input className="form-control" value={password} onChange={(e) => setPassword(e.target.value)} type="password" name="password" id="password" placeholder="Password" autoComplete="off" required />
+                                </div>
+                                <h4 className='mb-0'><u>Level User</u></h4>
+                                <div className="form">
+                                    <label style={{marginRight: "20px"}}><input type="radio" name="e" /> Kepala</label>
+                                    <label style={{marginRight: "20px"}}><input type="radio" name="e" /> Admin</label>
+                                    <label style={{marginRight: "20px"}}><input type="radio" name="e" /> Supervisor</label>
+                                    <label style={{marginRight: "20px"}}><input type="radio" name="e" /> Analyzing Point</label>
+                                    <label style={{marginRight: "20px"}}><input type="radio" name="e" /> Gakkum</label>
+                                    <label style={{marginRight: "20px"}}><input type="radio" name="e" /> Bendahara</label>
+                                    <label style={{marginRight: "20px", marginBottom: "20px"}}><input type="radio" name="e" /> Fungsional</label>
                                 </div>
                                 <button type="submit" className="btn signin">Log in</button>
                             </form>
