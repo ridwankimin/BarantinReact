@@ -119,7 +119,7 @@ export default class PtkModel {
             'user_id': Cookies.get("userId"), // ok pake session
             "pengguna_jasa_id": 456, // ok pake session
             "calo_id": 0,
-            "upt_id": 1,
+            "upt_id": Cookies.get("uptId"),
             "kode_satpel": Cookies.get("kodeSatpel"), // ok pake session
             "nama_pemohon": data.namaPemohon,
             "jenis_identitas_pemohon": data.jenisIdentitasPemohon,
