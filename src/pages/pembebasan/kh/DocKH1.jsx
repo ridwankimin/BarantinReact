@@ -13,6 +13,8 @@ import UptNew from '../../../model/master/uptNewGrouping.json';
 import SpinnerDot from '../../../component/loading/SpinnerDot';
 import Select from 'react-select';
 import Swal from 'sweetalert2';
+import { useNavigate } from 'react-router';
+import PrintKh1 from '../../../dok/PrintKh1'
 
 const log = new PtkHistory()
 const modelPemohon = new PtkModel()
@@ -52,6 +54,7 @@ const customStyles = {
   };
 
 function DocKH1() {
+    const navigate = new useNavigate()
     const idPtk = Cookies.get("idPtkPage");
     let [loadKomoditi, setLoadKomoditi] = useState(false)
     let [cekData, setCekData] = useState()
@@ -1077,7 +1080,7 @@ function DocKH1() {
                                 <div className="offset-sm-2 col-sm-9">
                                     <button type="submit" className="btn btn-primary me-sm-2 me-1"><i className='fa-solid fa-save me-sm-2 me-1'></i> Simpan</button>
                                     <button type="button" className="btn btn-danger btn-label-secondary me-sm-2 me-1"><i className='fa-solid fa-cancel me-sm-2 me-1'></i> Batal</button>
-                                    <button type="button" className="btn btn-warning btn-label-secondary me-sm-2 me-1"><i className='fa-solid fa-print me-sm-2 me-1'></i> Print</button>
+                                    <button type="button" className="btn btn-warning btn-label-secondary me-sm-2 me-1" onClick={() => window.location.href =  PrintKh1}><i className='fa-solid fa-print me-sm-2 me-1' ></i> Print</button>
                                     <button type="button" style={{display: (cekWatch.idDokh1 ? "block" : "none")}} className="float-end btn btn-info btn-label-secondary"><i className='tf-icons fa-solid fa-paper-plane me-sm-2 me-1'></i> TTE</button>
                                 </div>
                             </div>

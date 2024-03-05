@@ -1,0 +1,86 @@
+@page {
+    size: A4;
+    margin: 0;
+  }
+
+#{
+    font-family: "Bookman Old Style", Georgia, serif;
+    width: 210mm;
+    min-height: 297mm;
+    margin: 10mm auto;
+  }
+
+  
+.judul1 {
+    font-size: 14px;
+    font-weight: 600;
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+.noseri p{
+ text-align: right;
+}
+    
+
+.judul2 {
+    font-size: 12px;
+    font-weight: 600;
+    font-family: Arial, Helvetica, sans-serif;
+    font-style: italic;
+}
+.judul3 {
+    font-size: 16px;
+    font-weight: 600;
+    font-family: Arial, Helvetica, sans-serif;
+    font-style: italic;
+}
+
+.center {
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    width: 50%;
+  }
+.dasar p {
+    font-size: 14px;
+    text-align: justify;
+  }
+
+  #tabel {
+    font-family: "Bookman Old Style", Georgia, serif;
+    border-collapse: collapse;
+    width: 100%;
+    margin-bottom: 5px;
+    
+  }
+  
+  #tabel td, #tabel th {
+    border: 1px solid #0a0000;
+    padding: 2px;
+    
+  }
+  .bintang {
+    font-size: 10px;
+  }
+
+.qusto 
+{
+    float: left;
+    margin-left: 5px;
+    margin-top: 0px;
+}
+#hala2 {
+    padding: 5px;
+    font-family: Arial, Helvetica, sans-serif;
+    border-collapse: collapse;
+    width: 100%;
+    margin-bottom: 5px;
+}
+
+#hala2 td, #hal2 th {
+    border: 1px solid #0a0000;
+    padding: 5px;
+  }
+  
+  
+

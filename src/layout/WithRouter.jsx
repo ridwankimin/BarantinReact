@@ -56,6 +56,15 @@ function WithRouter() {
           <Route path={process.env.PUBLIC_URL + "/kt2"} element={<Wrapper page="/kt2" />} />
           <Route path={process.env.PUBLIC_URL + "/kt3"} element={<Wrapper page="/kt3" />} />
           <Route path={process.env.PUBLIC_URL + "/kt4"} element={<Wrapper page="/kt4" />} />
+          <Route path={process.env.PUBLIC_URL + "/k11c"} element={<Wrapper page="/k11c" />} />
+          <Route path={process.env.PUBLIC_URL + "/kh1c"} element={<Wrapper page="/kh1c" />} />
+          <Route path={process.env.PUBLIC_URL + "/kh2c"} element={<Wrapper page="/kh2c" />} />
+          <Route path={process.env.PUBLIC_URL + "/ki1c"} element={<Wrapper page="/ki1c" />} />
+          <Route path={process.env.PUBLIC_URL + "/ki2c"} element={<Wrapper page="/ki2c" />} />
+          <Route path={process.env.PUBLIC_URL + "/k92hc"} element={<Wrapper page="/k92hc" />} />
+          <Route path={process.env.PUBLIC_URL + "/k92ic"} element={<Wrapper page="/k92ic" />} />
+          <Route path={process.env.PUBLIC_URL + "/k92tc"} element={<Wrapper page="/k92tc" />} />
+
         </Routes>
       </BrowserRouter>
   )

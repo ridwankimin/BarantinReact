@@ -1,0 +1,108 @@
+.all{
+  
+  }
+  
+.judul {
+    font-size: 20px;
+    font-weight: 400;
+  }
+  .nomor {
+    text-align: center;
+    font-weight: 400;
+    font-size: 20px;
+  }
+  .kepada{
+    font-size: 16px;
+    line-height: 0.3;
+    margin-left: 50px;
+  }
+  .numberrr{
+    margin-left: 35px;
+    line-height: 0.3;
+    
+  }
+  .ident p {
+    line-height: 0.3;
+    margin-left: 50px;
+    
+  }
+  .mohon p {
+    margin-left: 35px;
+  
+  }
+  #kolkanan {
+    width: 18% ;
+  }
+  .untukan {
+    width: 50%;
+  }
+  table {
+    width: 100%;
+    border: 1px solid black;
+  }
+ 
+  
+  #customers {
+    font-family: Arial, Helvetica, sans-serif;
+    border-collapse: collapse;
+    width: 100%;
+    margin-bottom: 5px;
+  }
+  
+  #customers td, #customers th {
+    border: 1px solid #0a0000;
+    padding: 5px;
+  }
+  
+  #customers tr:hover {background-color: #ddd;}
+  
+  .wrap {
+    display: flex;
+    justify-content: left;
+    margin-bottom: 5px;
+    
+  }
+  .wrap td{
+    border: 1px solid #0a0000;
+   padding: 5px;
+   vertical-align: top;
+  text-align: left;
+  }
+.tkiri td {
+    width: 50%;
+}
+  
+  table {
+    border: 1px solid #555;
+  }
+  .wrip{
+    margin-bottom: 5px;
+  }
+  .wrip td{
+    border: 1px solid #0a0000;
+    padding: 5px;
+    vertical-align: top;
+    text-align: left;
+  }
+  .tkanan {
+    border: 1px solid #0a0000;
+    padding: 5px;
+  }
+  .tkanan td {
+    width: 50%;
+  }
+.wrup{
+    margin-bottom: 10px;
+}
+  .wrup td{
+   
+    padding: 5px;
+    vertical-align: top;
+    text-align: left;
+  }
+  .wrep td{
+    vertical-align: top;
+    text-align: left;
+  }
+ 
+ 

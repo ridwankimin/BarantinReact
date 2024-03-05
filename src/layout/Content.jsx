@@ -58,6 +58,14 @@ import DocK53 from '../pages/perlakuan/DocK53';
 import DocK54 from '../pages/perlakuan/DocK54';
 import DocK55 from '../pages/perlakuan/DocK55';
 import DocK37b from '../pages/pemeriksaan/DocK37b';
+import PrintK11 from '../dok/PrintK11';
+import PrintKh1 from '../dok/PrintKh1';
+import PrintKh2 from '../dok/PrintKh2';
+import PrintK91 from '../dok/PrintK91';
+import PrintK92h from '../dok/PrintK92h';
+import PrintK92i from '../dok/PrintK92i';
+import PrintK92t from '../dok/PrintK92t';
+
 // import DataDiri1 from '../component/DocK11/DataDiri1';
 
 
@@ -163,6 +171,14 @@ function Content(props) {
       return <DocKT3 />
     } else if(props.page == "/kt4") {
       return <DocKT4 />
+    } else if(props.page == "/k11c") {
+      return <PrintK11 />
+    } else if(props.page == "/kh1c") {
+      return <PrintKh1 />
+    } else if(props.page == "/k91c") {
+      return <PrintK91 />
+    } else if(props.page == "/k92hc") {
+      return <PrintK92h />
     }
   }
   return (

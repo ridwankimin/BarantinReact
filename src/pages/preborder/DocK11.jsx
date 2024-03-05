@@ -3508,7 +3508,7 @@ function DocK11() {
                                                 <button className='btn btn-dark' type='submit'>Proses PTK</button>
                                             </div>
                                             <div className='col-sm-2'>
-                                                <a className='btn btn-warning pb-1' href={require("../../dok/k11.pdf")} rel="noopener noreferrer" target='_blank'>
+                                                <a className='btn btn-warning pb-1' onClick={() => navigate(process.env.PUBLIC_URL + '/k11c')} rel="noopener noreferrer" target='_blank'>
                                                     <i className="fa-solid fa-printer fa-sm"></i>
                                                     print
                                                 </a>
