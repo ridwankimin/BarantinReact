@@ -773,8 +773,26 @@ function DocK11() {
                             timer: 2000
                         })
                         resetFormKomoditi();
-                        dataKomoditiPtk();
-                        setValueMP("nilaiBarang", sumNilaiKomoditi())
+                        // dataKomoditiPtk();
+                        const response = modelPemohon.getKomoditiPtkId(dataIdPage.noIdPtk, cekdataDiri.mediaPembawa);
+                        response
+                        .then((res) => {
+                            if(res.data.status == 200) {
+                                setKomoditiPtk(res.data.data)
+                                if(res.data.data?.length > 0) {
+                                    var arrayNilai = komoditiPtk?.map(item => {
+                                        return item.harga
+                                    })
+                                    const sum = arrayNilai.reduce((partialSum, a) => partialSum + a, 0);
+                                    setValueMP("nilaiBarang", sum)
+                                }
+                            }
+                        })
+                        .catch((error) => {
+                            if(process.env.REACT_APP_BE_ENV == "DEV") {
+                                console.log(error)
+                            }
+                        });
                     }
                 })
                 .catch((error) => {
@@ -1319,21 +1337,21 @@ function DocK11() {
         }
     }
 
-    function sumNilaiKomoditi() {
-        if(komoditiPtk) {
-            if(komoditiPtk?.length > 0) {
-                var arrayNilai = komoditiPtk?.map(item => {
-                    return item.harga
-                })
-                const sum = arrayNilai.reduce((partialSum, a) => partialSum + a, 0);
-                return sum
-            } else {
-                return 0
-            }
-        } else {
-            return 0
-        }
-    }
+    // function sumNilaiKomoditi() {
+    //     if(komoditiPtk) {
+    //         if(komoditiPtk?.length > 0) {
+    //             var arrayNilai = komoditiPtk?.map(item => {
+    //                 return item.harga
+    //             })
+    //             const sum = arrayNilai.reduce((partialSum, a) => partialSum + a, 0);
+    //             return sum
+    //         } else {
+    //             return 0
+    //         }
+    //     } else {
+    //         return 0
+    //     }
+    // }
     
     function handleEditKontainer(e) {
         const response = modelPemohon.detilKontainerId(e.target.dataset.header);
