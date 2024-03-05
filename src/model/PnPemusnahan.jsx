@@ -5,13 +5,17 @@ import { v4 as uuidv4 } from 'uuid';
 const url = process.env.REACT_APP_BE_LINK;
 
 export default class PnPemusnahan {
-    getByPtkId(idPtk) {
+    getByPtkId(idPtk, dok) {
         let config = {
-            method: 'get',
+            method: 'post',
             maxBodyLength: Infinity,
-            url: url + 'pn-musnah/' + idPtk,
+            url: url + 'pn-musnah/dok/',
             headers: { 
               'Content-Type': 'application/json', 
+            },
+            data: {
+              ptk_id: idPtk,
+              dokumen_karantina_id: dok
             }
           };
           return axios.request(config)
@@ -44,6 +48,7 @@ export default class PnPemusnahan {
             'otoritas_pelabuhan': data.otban,
             'kepala_kantor_bc': data.kaBc,
             'nama_pengelola': data.namaPengelola,
+            // 'is_attachment': data.isAttach,
             // 'tgl_dikeluarkan': data.tglDok81,
             'user_id': Cookies.get("userId"),
             'saksi': ""
@@ -58,7 +63,6 @@ export default class PnPemusnahan {
             },
             data: datasend
           };
-          console.log(JSON.stringify(config))
           return axios.request(config)
     }
     
@@ -99,7 +103,7 @@ export default class PnPemusnahan {
             'metode_musnah': data.metodeMusnah,
             'diterbitkan_di': data.diterbitkan,
             'user_ttd_id': data.ttdPutusan,
-            // 'otoritas': data.otoritas ? data.otoritas.toUpperCase() : "",
+            // 'is_attachment': data.isAttach,
             'otoritas_pelabuhan': "",
             'kepala_kantor_bc': "",
             'nama_pengelola': "",

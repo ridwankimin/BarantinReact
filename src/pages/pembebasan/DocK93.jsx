@@ -1081,7 +1081,7 @@ function DocK93() {
                                             <div className='mb-1'>
                                                 {loadKomoditi ? <SpinnerDot/> : null}
                                                 {data.listKomoditas ? 
-                                                (loadKomoditi ? null : <button type='button' className='btn btn-sm btn-outline-secondary' onClick={handleEditKomoditasAll} style={{marginLeft: "15px"}}><i className='fa-solid fa-check-square text-success'></i> Tidak ada perubahan</button>) : null }
+                                                (loadKomoditi ? null : <button type='button' className='btn btn-sm btn-outline-secondary' onClick={handleEditKomoditasAll} style={{marginLeft: "15px"}}><i className='fa-solid fa-check-square text-success me-sm-2 me-1'></i> Tidak ada perubahan</button>) : null }
                                                 <span className='text-danger'>{loadKomoditiPesan}</span>
                                             </div>
                                             <div className='col-md-12 mb-3'>

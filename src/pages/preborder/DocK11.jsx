@@ -774,7 +774,7 @@ function DocK11() {
                         })
                         resetFormKomoditi();
                         dataKomoditiPtk();
-                        setValueDetilMP("nilaiBarang", sumNilaiKomoditi())
+                        setValueMP("nilaiBarang", sumNilaiKomoditi())
                     }
                 })
                 .catch((error) => {

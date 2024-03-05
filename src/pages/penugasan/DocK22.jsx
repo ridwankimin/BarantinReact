@@ -616,12 +616,12 @@ function DocK22() {
                                 </div>
                             </div>
                         </div>
-                        <button type='button' onClick={() => navigate(process.env.PUBLIC_URL + "/k37a")} className='btn btn-info pb-1 float-end'>
-                        {/* <button type='button' style={{display: (isNomor ? 'block' : 'none')}} onClick={() => navigate("/k37")} className='btn btn-info pb-1 float-end'> */}
-                        <i className="bx bx-send bx-sm"></i>
-                            Pemeriksaan Administrasi
-                        </button>
-                        {/* <button className='btn btn-info float-end'>Pemeriksaan Administrasi</button> */}
+                        {listDataDetil?.some(item => item.penugasan_id == 1) == true ? 
+                            (<button type='button' onClick={() => navigate(process.env.PUBLIC_URL + "/k37a")} className='btn btn-info pb-1 float-end'>
+                            <i className="bx bx-send bx-sm"></i>
+                                Pemeriksaan Administrasi
+                            </button>)
+                        : ""}
                     </div>
                 </div>
             </div>
