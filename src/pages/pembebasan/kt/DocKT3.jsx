@@ -494,7 +494,7 @@ function DocKT3() {
                             setValue("replacedDokId", response.data.data.replaced_dok_id)
 
                             setValue("isAttach", response.data.data.is_attachment != null ? response.data.data.is_attachment.toString() : "")
-                            setValue("ttdPutusan", response.data.data.user_ttd_id)
+                            setValue("ttdPutusan", response.data.data.user_ttd_id?.toString())
                             setValue("diterbitkan", response.data.data.diterbitkan_di)
                         } else if(response.data.status == 404) {
                             setData(values => ({...values,
@@ -669,7 +669,7 @@ function DocKT3() {
                             setValue("replacedDokId", response.data.data.replaced_dok_id)
     
                             setValue("isAttach", response.data.data.is_attachment != null ? response.data.data.is_attachment.toString() : "")
-                            setValue("ttdPutusan", response.data.data.user_ttd_id)
+                            setValue("ttdPutusan", response.data.data.user_ttd_id?.toString())
                             setValue("diterbitkan", response.data.data.diterbitkan_di)
                         } else if(response.data.status == 404) {
                             setData(values => ({...values,

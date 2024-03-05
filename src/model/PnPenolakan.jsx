@@ -44,12 +44,18 @@ export default class PnPenolakan {
             'diwajibkan2': data.diwajibkan2,
             'diwajibkan3': data.diwajibkan3,
             'diwajibkan4': data.diwajibkan4,
+            'specify1': "",
+            'specify2': "",
+            'specify3': "",
+            'specify4': "",
+            'specify5': "",
             'rekomendasi_id': "",
             'information': "",
             'diterbitkan_di': data.diterbitkan,
             'user_ttd_id': data.ttdPutusan,
-            // 'is_attachment': data.isAttach,
+            'is_attachment': data.isAttach,
             'tembusan': data.otban,
+            'dikuasakan_negara': data.dikuasakan,
             // 'otoritas_pelabuhan': data.otban,
             // 'kepala_kantor_bc': data.kaBc,
             // 'nama_pengelola': data.namaPengelola,
@@ -71,6 +77,7 @@ export default class PnPenolakan {
         },
         data: datasend
         };
+        console.log(JSON.stringify(datasend))
         return axios.request(config)
     }
     
@@ -112,10 +119,16 @@ export default class PnPenolakan {
             'diwajibkan3': "",
             'diwajibkan4': "",
             'rekomendasi_id': "",
+            'specify1': "",
+            'specify2': "",
+            'specify3': "",
+            'specify4': "",
+            'specify5': "",
+            'dikuasakan_negara': "",
             'information': "",
             'diterbitkan_di': data.diterbitkan,
             'user_ttd_id': data.ttdPutusan,
-            // 'is_attachment': data.isAttach,
+            'is_attachment': data.isAttach,
             'tembusan': "",
             // 'otoritas_pelabuhan': data.otban,
             // 'kepala_kantor_bc': data.kaBc,

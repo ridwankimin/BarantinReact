@@ -476,6 +476,7 @@ function DocK22() {
                                 </tr>
                             </thead>
                             <tbody>
+                            {console.log(listDataHeader)}
                             {listDataHeader ? (
                                 listDataHeader?.map((data, index) => (
                                     <tr key={index}>

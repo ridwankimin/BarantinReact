@@ -274,6 +274,7 @@ function DocK33() {
                             setData(values => ({...values,
                                 noSurtug: response.data.data[0].nomor,
                                 tglSurtug: response.data.data[0].tanggal,
+                                petugas: response.data.data
                             }));
                             setValue("idSurtug", response.data.data[0].id)
                         } else {
@@ -337,7 +338,7 @@ function DocK33() {
                         setValue("catatan", response.data.data[0].catatan)
                         setValue("namaPemilik", response.data.data[0].nama_pemilik)
                         setValue("nikPemilik", response.data.data[0].nik_pemilik)
-                        setValue("ttdUser", response.data.data[0].user_ttd_id)
+                        setValue("ttdUser", response.data.data[0].user_ttd_id?.toString())
                         setListDetilSampel(response.data.data)
                     } else {
                         setData(values => ({...values,
@@ -478,6 +479,7 @@ function DocK33() {
                             setData(values => ({...values,
                                 noSurtug: response.data.data[0].nomor,
                                 tglSurtug: response.data.data[0].tanggal,
+                                petugas: response.data.data
                             }));
                             setValue("idSurtug", response.data.data[0].id)
                         }
@@ -539,7 +541,7 @@ function DocK33() {
                         setValue("catatan", response.data.data[0].catatan)
                         setValue("namaPemilik", response.data.data[0].nama_pemilik)
                         setValue("nikPemilik", response.data.data[0].nik_pemilik)
-                        setValue("ttdUser", response.data.data[0].user_ttd_id)
+                        setValue("ttdUser", response.data.data[0].user_ttd_id?.toString())
                         setListDetilSampel(response.data.data)
                     } else {
                         setData(values => ({...values,

@@ -15,15 +15,15 @@ import SpinnerDot from '../../component/loading/SpinnerDot';
 import Swal from 'sweetalert2';
 
 function modaAlatAngkut(e){
-    return ModaAlatAngkut.find((element) => element.id === parseInt(e))
+    return ModaAlatAngkut.find((element) => element.id == parseInt(e))
 }
 
 function alasan() {
-    return Alasan.filter((element) => element.dok_id === 29)
+    return Alasan.filter((element) => element.dok_id == 29)
 }
 
 // function pemberitahuan() {
-//     return Pemberitahuan.filter((element) => element.dok_id === 29)
+//     return Pemberitahuan.filter((element) => element.dok_id == 29)
 // }
 
 const addCommas = num => num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
@@ -32,6 +32,7 @@ const removeNonNumeric = num => num.toString().replace(/[^0-9.]/g, "");
 const log = new PtkHistory()
 const modelPemohon = new PtkModel()
 const modelPenolakan = new PnPenolakan()
+const modelSurtug = new PtkSurtug()
 
 function DocK71() {
     const idPtk = Cookies.get("idPtkPage");
@@ -57,22 +58,22 @@ function DocK71() {
     const cekWatch = watch()
 
     function logicPemberitahuan(e) {
-        if(e.target.name === "diwajibkan1") {
+        if(e.target.name == "diwajibkan1") {
             setValue("diwajibkan2", "")
             setValue("diwajibkan3", "")
             setValue("diwajibkan4", "")
             // return (cekWatch.diwajibkan2 || cekWatch.diwajibkan3 || cekWatch.diwajibkan4 ? false : true)
-        } else if(e.target.name === "diwajibkan2") {
+        } else if(e.target.name == "diwajibkan2") {
             setValue("diwajibkan1", "")
             setValue("diwajibkan3", "")
             setValue("diwajibkan4", "")
             // return (cekWatch.diwajibkan1 || cekWatch.diwajibkan3 || cekWatch.diwajibkan4 ? false : true)
-        } else if(e.target.name === "diwajibkan3") {
+        } else if(e.target.name == "diwajibkan3") {
             setValue("diwajibkan1", "")
             setValue("diwajibkan2", "")
             setValue("diwajibkan4", "")
             // return (cekWatch.diwajibkan1 || cekWatch.diwajibkan2 || cekWatch.diwajibkan4 ? false : true)
-        } else if(e.target.name === "diwajibkan4") {
+        } else if(e.target.name == "diwajibkan4") {
             setValue("diwajibkan1", "")
             setValue("diwajibkan2", "")
             setValue("diwajibkan3", "")
@@ -85,11 +86,11 @@ function DocK71() {
         response
         .then((response) => {
             if(response.data) {
-                if(response.data.status === '201') {
+                if(response.data.status == 201) {
                     const resHsy = log.pushHistory(data.idPtk, "p6", "K-7.1", (data.idDok71 ? 'UPDATE' : 'NEW'));
                     resHsy
                     .then((response) => {
-                        if(response.data.status === '201') {
+                        if(response.data.status == 201) {
                             if(process.env.REACT_APP_BE_ENV == "DEV") {
                                 console.log("history saved")
                             }
@@ -118,7 +119,7 @@ function DocK71() {
                 console.log(error)
             }
             Swal.fire({
-                title: "Error " + error.response.status,
+                title: "Error!",
                 text: error.response.data.message,
                 icon: "error"
             });
@@ -150,7 +151,7 @@ function DocK71() {
     function onSubmitMPk71(data) {
         log.updateKomoditiP6(data.idMPk71, data)
         .then((response) => {
-            if(response.data.status === '201') {
+            if(response.data.status == 201) {
                 Swal.fire({
                     title: "Sukses!",
                     text: "Volume P6 berhasil diupdate.",
@@ -189,7 +190,7 @@ function DocK71() {
         data.listKomoditas?.map((item, index) => (
             log.updateKomoditiP6(item.id, datasend[index])
                 .then((response) => {
-                    if(response.data.status === '201') {
+                    if(response.data.status == 201) {
                         refreshListKomoditas()
                         setLoadKomoditi(false)
                         if(process.env.REACT_APP_BE_ENV == "DEV") {
@@ -213,7 +214,7 @@ function DocK71() {
         const resKom = modelPemohon.getKomoditiPtkId(data.noIdPtk, Cookies.get("jenisKarantina"));
         resKom
         .then((res) => {
-            if(res.data.status === '200') {
+            if(res.data.status == 200) {
                 setData(values => ({...values,
                     listKomoditas: res.data.data
                 }));
@@ -249,7 +250,7 @@ function DocK71() {
                             listPtk: response.data.data.ptk,
                             listDokumen: response.data.data.ptk_dokumen
                         }));
-                        setValue("namaPemilik", (response.data.data.ptk.jenis_permohonan === "IM" || response.data.data.ptk.jenis_permohonan === "DM" ? response.data.data.ptk.nama_penerima : response.data.data.ptk.nama_pengirim )) 
+                        setValue("namaPemilik", (response.data.data.ptk.jenis_permohonan == "IM" || response.data.data.ptk.jenis_permohonan == "DM" ? response.data.data.ptk.nama_penerima : response.data.data.ptk.nama_pengirim )) 
 
                         const resKom = modelPemohon.getKomoditiPtkId(base64_decode(ptkNomor[1]), Cookies.get("jenisKarantina"));
                         resKom
@@ -300,7 +301,7 @@ function DocK71() {
                     console.log(error)
                 }
                 if(error.response) {
-                    if(error.response.data.status === 404) {
+                    if(error.response.data.status == 404) {
                         setData(values => ({...values,
                             errorPTK: "Data PTK Kosong/Tidak ada",
                             errorKomoditas: "Gagal load data Komoditas"
@@ -322,7 +323,7 @@ function DocK71() {
                         setData(values => ({...values,
                             errorPenolakan: ""
                         }));
-                        if(response.data.status === '200') {
+                        if(response.data.status == 200) {
                             setValue("idDok71", response.data.data[0].id)
                             setValue("idPtk", response.data.data[0].ptk_id)
                             setValue("idSurtug", response.data.data[0].ptk_surat_tugas_id)
@@ -375,9 +376,8 @@ function DocK71() {
                 }
             });
 
-            const modelSurtug = new PtkSurtug();
-                // 9: penugasan Penolakan
-            const resSurtug = modelSurtug.getDetilSurtugPenugasan(base64_decode(ptkNomor[1]), 9);
+            // 9: penugasan Penolakan
+            const resSurtug = modelSurtug.getDetilSurtugPenugasan(base64_decode(ptkNomor[1]), 10);
             resSurtug
             .then((response) => {
                 if(response.data) {
@@ -385,7 +385,7 @@ function DocK71() {
                         setData(values => ({...values,
                             errorSurtug: ""
                         }));
-                        if(response.data.status === '200') {
+                        if(response.data.status == 200) {
                             setData(values => ({...values,
                                 noSurtug: response.data.data[0].nomor,
                                 tglSurtug: response.data.data[0].tanggal,
@@ -425,13 +425,13 @@ function DocK71() {
             response
             .then((response) => {
                 if(typeof response.data != "string") {
-                    if(response.data.status === '200') {
+                    if(response.data.status == 200) {
                         setData(values => ({...values,
                             errorPTK: "",
                             listPtk: response.data.data.ptk,
                             listDokumen: response.data.data.ptk_dokumen
                         }));
-                        setValue("namaPemilik", (response.data.data.ptk.jenis_permohonan === "IM" || response.data.data.ptk.jenis_permohonan === "DM" ? response.data.data.ptk.nama_penerima : response.data.data.ptk.nama_pengirim )) 
+                        setValue("namaPemilik", (response.data.data.ptk.jenis_permohonan == "IM" || response.data.data.ptk.jenis_permohonan == "DM" ? response.data.data.ptk.nama_penerima : response.data.data.ptk.nama_pengirim )) 
     
                         setValue("idPtk", data.noIdPtk)
                         setValue("noDokumen", data.noDokumen)
@@ -448,7 +448,7 @@ function DocK71() {
                     console.log(error)
                 }
                 if(error.response) {
-                    if(error.response.data.status === "404") {
+                    if(error.response.data.status == "404") {
                         setData(values => ({...values,
                             errorPTK: "Data PTK Kosong/Tidak ada",
                             errorKomoditas: "Gagal load data Komoditas"
@@ -468,7 +468,7 @@ function DocK71() {
             resKom
             .then((res) => {
                 if(typeof res.data != "string") {
-                    if(res.data.status === '200') {
+                    if(res.data.status == 200) {
                         setData(values => ({...values,
                             errorKomoditas: "",
                             listKomoditas: res.data.data
@@ -508,7 +508,7 @@ function DocK71() {
                         setData(values => ({...values,
                             errorPenolakan: ""
                         }));
-                        if(response.data.status === '200') {
+                        if(response.data.status == 200) {
                             setValue("idDok71", response.data.data[0].id)
                             setValue("idPtk", response.data.data[0].ptk_id)
                             setValue("idSurtug", response.data.data[0].ptk_surat_tugas_id)
@@ -549,7 +549,7 @@ function DocK71() {
                     console.log(error)
                 }
                 if(error.response) {
-                    if(error.response.data.status === "404") {
+                    if(error.response.data.status == "404") {
                         setData(values => ({...values,
                             errorPenolakan: "",
                         }));
@@ -563,9 +563,8 @@ function DocK71() {
         }
 
         if(data.errorSurtug) {
-            const modelSurtug = new PtkSurtug();
-                // 9: penugasan Penolakan
-            const resSurtug = modelSurtug.getDetilSurtugPenugasan(data.noIdPtk, 9);
+            // 10: penugasan Penolakan
+            const resSurtug = modelSurtug.getDetilSurtugPenugasan(data.noIdPtk, 10);
             resSurtug
             .then((response) => {
                 if(response.data) {
@@ -573,7 +572,7 @@ function DocK71() {
                         setData(values => ({...values,
                             errorSurtug: ""
                         }));
-                        if(response.data.status === '200') {
+                        if(response.data.status == 200) {
                             setData(values => ({...values,
                                 noSurtug: response.data.data[0].nomor,
                                 tglSurtug: response.data.data[0].tanggal,
@@ -681,19 +680,19 @@ function DocK71() {
                                                 <div className="row">
                                                     <label className="col-sm-4 col-form-label" htmlFor="namaPemohon">Nama</label>
                                                     <div className="col-sm-8">
-                                                        <input type="text" id="namaPemohon" value={(data.listPtk && (data.listPtk.jenis_permohonan === "IM" || data.listPtk.jenis_permohonan === "DM" ? data.listPtk.nama_penerima : data.listPtk.nama_pengirim )) || ""} disabled className="form-control form-control-sm" placeholder="Nama Pemilik" />
+                                                        <input type="text" id="namaPemohon" value={(data.listPtk && (data.listPtk.jenis_permohonan == "IM" || data.listPtk.jenis_permohonan == "DM" ? data.listPtk.nama_penerima : data.listPtk.nama_pengirim )) || ""} disabled className="form-control form-control-sm" placeholder="Nama Pemilik" />
                                                     </div>
                                                 </div>
                                                 <div className="row">
                                                     <label className="col-sm-4 col-form-label" htmlFor="alamatPemilik">Alamat</label>
                                                     <div className="col-sm-8">
-                                                        <input type="text" id="alamatPemilik" value={(data.listPtk && (data.listPtk.jenis_permohonan === "IM" || data.listPtk.jenis_permohonan === "DM" ? data.listPtk.alamat_penerima : data.listPtk.alamat_pengirim)) || ""} disabled className="form-control form-control-sm" placeholder="Nama Pemilik" />
+                                                        <input type="text" id="alamatPemilik" value={(data.listPtk && (data.listPtk.jenis_permohonan == "IM" || data.listPtk.jenis_permohonan == "DM" ? data.listPtk.alamat_penerima : data.listPtk.alamat_pengirim)) || ""} disabled className="form-control form-control-sm" placeholder="Nama Pemilik" />
                                                     </div>
                                                 </div>
                                                 <div className="row">
                                                     <label className="col-sm-4 col-form-label" htmlFor="identitasPemilik">Identitas</label>
                                                     <div className="col-sm-8">
-                                                        <input name="identitasPemilik" className="form-control form-control-sm" disabled value={(data.listPtk && (data.listPtk.jenis_permohonan === "IM" || data.listPtk.jenis_permohonan === "DM" ? data.listPtk.jenis_identitas_penerima + " - " + data.listPtk.nomor_identitas_penerima : data.listPtk.jenis_identitas_pengirim + " - " + data.listPtk.nomor_identitas_pengirim)) || ""} id="identitasPemilik" placeholder="Identitas Pemilik" />
+                                                        <input name="identitasPemilik" className="form-control form-control-sm" disabled value={(data.listPtk && (data.listPtk.jenis_permohonan == "IM" || data.listPtk.jenis_permohonan == "DM" ? data.listPtk.jenis_identitas_penerima + " - " + data.listPtk.nomor_identitas_penerima : data.listPtk.jenis_identitas_pengirim + " - " + data.listPtk.nomor_identitas_pengirim)) || ""} id="identitasPemilik" placeholder="Identitas Pemilik" />
                                                     </div>
                                                 </div>
                                             </div>
@@ -702,17 +701,17 @@ function DocK71() {
                                         <div className="row">
                                             <div className="col-md-6">
                                                 <div className="row">
-                                                    <label className="col-sm-4 col-form-label" htmlFor="daerahAsal">{data.listPtk ? (data.listPtk.permohonan === "DK" ? "Daerah" : "Negara") : ""} Asal</label>
+                                                    <label className="col-sm-4 col-form-label" htmlFor="daerahAsal">{data.listPtk ? (data.listPtk.permohonan == "DK" ? "Daerah" : "Negara") : ""} Asal</label>
                                                     <div className="col-sm-8">
-                                                        <input name="daerahAsal" className="form-control form-control-sm" disabled value={(data.listPtk ? (data.listPtk.permohonan === "DK" ? data.listPtk.kota_asal : data.listPtk.negara_asal) : "") || ""} id="daerahAsal" />
+                                                        <input name="daerahAsal" className="form-control form-control-sm" disabled value={(data.listPtk ? (data.listPtk.permohonan == "DK" ? data.listPtk.kota_asal : data.listPtk.negara_asal) : "") || ""} id="daerahAsal" />
                                                     </div>
                                                 </div>
                                             </div>
                                             <div className="col-md-6">
                                                 <div className="row">
-                                                    <label className="col-sm-4 col-form-label" htmlFor="daerahTujuan">{data.listPtk ? (data.listPtk.permohonan === "DK" ? "Daerah" : "Negara") : ""} Tujuan</label>
+                                                    <label className="col-sm-4 col-form-label" htmlFor="daerahTujuan">{data.listPtk ? (data.listPtk.permohonan == "DK" ? "Daerah" : "Negara") : ""} Tujuan</label>
                                                     <div className="col-sm-8">
-                                                        <input name="daerahTujuan" className="form-control form-control-sm" disabled value={(data.listPtk ? (data.listPtk.permohonan === "DK" ? data.listPtk.kota_tujuan : data.listPtk.negara_tujuan) : "") || ""} id="daerahTujuan" />
+                                                        <input name="daerahTujuan" className="form-control form-control-sm" disabled value={(data.listPtk ? (data.listPtk.permohonan == "DK" ? data.listPtk.kota_tujuan : data.listPtk.negara_tujuan) : "") || ""} id="daerahTujuan" />
                                                     </div>
                                                 </div>
                                             </div>
@@ -740,7 +739,7 @@ function DocK71() {
                                                 <div className="row">
                                                     <label className="col-sm-4 col-form-label" htmlFor="tempatTransit">Tempat Transit</label>
                                                     <div className="col-sm-8">
-                                                        <input name="tempatTransit" className="form-control form-control-sm" disabled value={(data.listPtk ? (data.listPtk.pelabuhan_transit === null ? "-" : data.listPtk.pelabuhan_transit + ", " + data.listPtk.negara_transit) : "") || ""} id="tempatTransit" />
+                                                        <input name="tempatTransit" className="form-control form-control-sm" disabled value={(data.listPtk ? (data.listPtk.pelabuhan_transit == null ? "-" : data.listPtk.pelabuhan_transit + ", " + data.listPtk.negara_transit) : "") || ""} id="tempatTransit" />
                                                     </div>
                                                 </div>
                                             </div>
@@ -766,7 +765,7 @@ function DocK71() {
                                 <div id="collapseMP">
                                     <div className="accordion-body">
                                         <div className="row">
-                                            <h5 className='mb-1'>Jenis Media Pembawa : <b>{Cookies.get("jenisKarantina") === "H" ? "Hewan" : (Cookies.get("jenisKarantina") === "T" ? "Tumbuhan" : (Cookies.get("jenisKarantina") === "I" ? "Ikan" : ""))}</b>
+                                            <h5 className='mb-1'>Jenis Media Pembawa : <b>{Cookies.get("jenisKarantina") == "H" ? "Hewan" : (Cookies.get("jenisKarantina") == "T" ? "Tumbuhan" : (Cookies.get("jenisKarantina") == "I" ? "Ikan" : ""))}</b>
                                                 {loadKomoditi ? <SpinnerDot/> : null}
                                                 {data.listKomoditas ? 
                                                 (loadKomoditi ? null : <button type='button' className='btn btn-sm btn-outline-secondary' onClick={handleEditKomoditasAll} style={{marginLeft: "15px"}}><i className='fa-solid fa-check-square text-success'></i> Tidak ada perubahan</button>) : null }
@@ -841,7 +840,7 @@ function DocK71() {
                                             <div className="form-check" key={index}>
                                                 <label className="form-check-label" htmlFor={"alasanTolak" + item.id}>{item.deskripsi}</label>
                                                 <input className="form-check-input" type="checkbox" name={"alasanTolak" + (index + 1)} id={"alasanTolak" + item.id} value="1" {...register("alasanTolak" + (index + 1))} />
-                                                {index === 8 && cekWatch.alasanTolak9 === "1" ? 
+                                                {index == 8 && cekWatch.alasanTolak9 == "1" ? 
                                                     <input type="text" className='form-control form-control-sm' style={{width: "450px"}} placeholder='Lainnya..' {...register("alasanTolakLain")} />
                                                 : ""}
                                             </div>
@@ -869,6 +868,16 @@ function DocK71() {
                                         <div className="form-check">
                                             <label className="form-check-label"  htmlFor={"diwajibkan4"}><b>tidak</b> mengirim media pembawa tersebut ke negara/area tujuan.</label>
                                             <input className="form-check-input" type="checkbox" name={"diwajibkan4"} id={"diwajibkan4"} onClick={(e) => logicPemberitahuan(e)} value="1" {...register("diwajibkan4")} />
+                                        </div>
+                                        <hr />
+                                        <span className="mb-0 me-sm-2 me-1">Dikuasakan negara</span>
+                                        <div className="form-check form-check-inline">
+                                            <input autoComplete="off" className="form-check-input" type="radio" name="dikuasakan" id="dikuasakan1" value="1" {...register("dikuasakan")} />
+                                            <label className="form-check-label" htmlFor="dikuasakan1">Ya</label>
+                                        </div>
+                                        <div className="form-check form-check-inline">
+                                            <input autoComplete="off" className="form-check-input" type="radio" name="dikuasakan" id="dikuasakan0" value="0" {...register("dikuasakan")} />
+                                            <label className="form-check-label" htmlFor="dikuasakan0">Tidak</label>
                                         </div>
                                     </div>
                                 </div>
@@ -988,11 +997,11 @@ function DocK71() {
                                     </div>
                                 </div>
                             </div>
-                            <div className="col-6" style={{display: (data.listPtk ? (data.listPtk.jenis_media_pembawa_id === 1 ? "block" : "none") : "none")}}>
+                            <div className="col-6" style={{display: (data.listPtk ? (data.listPtk.jenis_media_pembawa_id == 1 ? "block" : "none") : "none")}}>
                                 <label className="form-label" htmlFor="jantanP6">Jumlah Jantan P6<span className='text-danger'>*</span></label>
                                 <div className='row'>
                                     <div className="col-3" style={{paddingRight: '2px'}}>
-                                        <input type="text" name='jantanP6' id='jantanP6' value={(cekdataMPk71.jantanP6 ? addCommas(removeNonNumeric(cekdataMPk71.jantanP6)) : "") || ""} {...registerMPk71("jantanP6", {required: (data.listPtk ? (data.listPtkjenis_media_pembawa_id === 1 ? "Mohon isi jumlah akhir Jantan." : false) : false)})} className={errorsMPk71.jantanP6 ? "form-control form-control-sm is-invalid" : "form-control form-control-sm"} />
+                                        <input type="text" name='jantanP6' id='jantanP6' value={(cekdataMPk71.jantanP6 ? addCommas(removeNonNumeric(cekdataMPk71.jantanP6)) : "") || ""} {...registerMPk71("jantanP6", {required: (data.listPtk ? (data.listPtkjenis_media_pembawa_id == 1 ? "Mohon isi jumlah akhir Jantan." : false) : false)})} className={errorsMPk71.jantanP6 ? "form-control form-control-sm is-invalid" : "form-control form-control-sm"} />
                                     </div>
                                     <div className="col-2" style={{paddingLeft: '2px'}}>
                                         <input type="text" className='form-control form-control-sm' name='satuanjantanP6' id='satuanjantanP6' value={"HEA"} disabled />
@@ -1000,11 +1009,11 @@ function DocK71() {
                                 </div>
                                 {errorsMPk71.jantanP6 && <small className="text-danger">{errorsMPk71.jantanP6.message}</small>}
                             </div>
-                            <div className="col-6" style={{display: (data.listPtk ? (data.listPtk.jenis_media_pembawa_id === 1 ? "block" : "none") : "none")}}>
+                            <div className="col-6" style={{display: (data.listPtk ? (data.listPtk.jenis_media_pembawa_id == 1 ? "block" : "none") : "none")}}>
                                 <label className="form-label" htmlFor="betinaP6">Jumlah Betina P6<span className='text-danger'>*</span></label>
                                 <div className='row'>
                                     <div className="col-3" style={{paddingRight: '2px'}}>
-                                        <input type="text" name='betinaP6' id='betinaP6' value={(cekdataMPk71.betinaP6 ? addCommas(removeNonNumeric(cekdataMPk71.betinaP6)) : "") || ""} {...registerMPk71("betinaP6", {required: (data.listPtk ? (data.listPtkjenis_media_pembawa_id === 1 ? "Mohon isi jumlah akhir Betina." : false) : false)})} className={errorsMPk71.betinaP6 ? "form-control form-control-sm is-invalid" : "form-control form-control-sm"} />
+                                        <input type="text" name='betinaP6' id='betinaP6' value={(cekdataMPk71.betinaP6 ? addCommas(removeNonNumeric(cekdataMPk71.betinaP6)) : "") || ""} {...registerMPk71("betinaP6", {required: (data.listPtk ? (data.listPtkjenis_media_pembawa_id == 1 ? "Mohon isi jumlah akhir Betina." : false) : false)})} className={errorsMPk71.betinaP6 ? "form-control form-control-sm is-invalid" : "form-control form-control-sm"} />
                                     </div>
                                     <div className="col-2" style={{paddingLeft: '2px'}}>
                                         <input type="text" className='form-control form-control-sm' name='satuanbetinaP6' id='satuanbetinaP6' value={"HEA"} disabled />

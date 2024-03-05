@@ -279,7 +279,7 @@ function DocK92h() {
                         setValue("m4Lain", response.data.data.m_lain)
                         setValue("adDeclare", response.data.data.p_lain)
                         setValue("isAttach", response.data.data.is_attachment !== null ? response.data.data.is_attachment.toString() : "")
-                        setValue("ttdPutusan", response.data.data.user_ttd_id)
+                        setValue("ttdPutusan", response.data.data.user_ttd_id?.toString())
                         setValue("diterbitkan", response.data.data.diterbitkan_di)
 
                     }

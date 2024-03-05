@@ -22,11 +22,13 @@ function DocK31() {
         register,
         setValue,
         handleSubmit,
-        // watch,
+        watch,
         formState: { errors },
     } = useForm({
         noDok31: ""
     });
+
+    const cekWatch = watch()
 
     const onSubmit = (data) => {
         const response = modelPeriksa.pnBongkar31(data);
@@ -122,7 +124,7 @@ function DocK31() {
                         setValue("noDok31", response.data.data.nomor)
                         setValue("tglDok31", response.data.data.tanggal)
                         setValue("putusanBongkar", response.data.data.setuju_bongkar_muat)
-                        setValue("ttdPutusan", response.data.data.user_ttd_id)
+                        setValue("ttdPutusan", response.data.data.user_ttd_id?.toString())
                     } else {
                         setData(values => ({...values,
                             errorBongkar: "Gagal load data Surat Bongkar MP",
@@ -200,7 +202,7 @@ function DocK31() {
                         setValue("noDok31", response.data.data.nomor)
                         setValue("tglDok31", response.data.data.tanggal)
                         setValue("putusanBongkar", response.data.data.setuju_bongkar_muat)
-                        setValue("ttdPutusan", response.data.data.user_ttd_id)
+                        setValue("ttdPutusan", response.data.data.user_ttd_id?.toString())
                     } else {
                         setData(values => ({...values,
                             errorBongkar: "Gagal load data Surat Bongkar MP",
@@ -530,7 +532,12 @@ function DocK31() {
                                                                 </div>
                                                                 <div className='col-sm-4 col-form-label'>Penandatangan</div>
                                                                 <div className="col-sm-6 mb-3">
-                                                                    <input type="text" {...register("ttdPutusan", { required: "Mohon pilih nama penandatangan."})} className={errors.ttdPutusan ? "form-control form-control-sm is-invalid" : "form-control form-control-sm"} />
+                                                                    <select className={errors.ttdPutusan == '' ? 'form-select form-select-sm is-invalid' : 'form-select form-select-sm'} name="ttdPutusan" id="ttdPutusan" {...register("ttdPutusan", { required: "Mohon pilih penandatangan."})}>
+                                                                        {data.petugas?.map((item, index) => (
+                                                                            <option value={item.penanda_tangan_id} key={index} defaultValue={cekWatch.ttdPutusan}>{item.nama + " - " + item.nip}</option>
+                                                                        ))}
+                                                                    </select>
+                                                                    {/* <input type="text" {...register("ttdPutusan", { required: "Mohon pilih nama penandatangan."})} className={errors.ttdPutusan ? "form-control form-control-sm is-invalid" : "form-control form-control-sm"} /> */}
                                                                     {/* <input type="text" className={errorsAdministratif.ttdAdminidtratif === '' ? 'form-control is-invalid' : 'form-control'} {...registerAdministratif("ttdAdminidtratif", { required: "Mohon pilih nama penandatangan."})}/> */}
                                                                     {/* <select className={dataWatch.ttdAdminidtratif === '' ? 'form-select form-select-sm is-invalid' : 'form-select form-select-sm'} {...registerAdministratif("ttdAdminidtratif", { required: "Mohon pilih nama penandatangan."})}>
                                                                         <option value="">--</option>

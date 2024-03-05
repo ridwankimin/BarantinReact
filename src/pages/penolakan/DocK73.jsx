@@ -26,6 +26,7 @@ const removeNonNumeric = num => num.toString().replace(/[^0-9.]/g, "");
 const log = new PtkHistory()
 const modelPemohon = new PtkModel()
 const modelPenolakan = new PnPenolakan()
+const modelSurtug = new PtkSurtug()
 
 function DocK73() {
     const idPtk = Cookies.get("idPtkPage");
@@ -408,9 +409,7 @@ function DocK73() {
                 }
             });
 
-            const modelSurtug = new PtkSurtug();
-                // 9: penugasan Penolakan
-            const resSurtug = modelSurtug.getDetilSurtugPenugasan(base64_decode(ptkNomor[1]), 9);
+            const resSurtug = modelSurtug.getDetilSurtugPenugasan(base64_decode(ptkNomor[1]), 10);
             resSurtug
             .then((response) => {
                 if(response.data) {
@@ -665,9 +664,7 @@ function DocK73() {
         }
 
         if(data.errorSurtug) {
-            const modelSurtug = new PtkSurtug();
-                // 9: penugasan Penolakan
-            const resSurtug = modelSurtug.getDetilSurtugPenugasan(data.noIdPtk, 9);
+            const resSurtug = modelSurtug.getDetilSurtugPenugasan(data.noIdPtk, 10);
             resSurtug
             .then((response) => {
                 if(response.data) {

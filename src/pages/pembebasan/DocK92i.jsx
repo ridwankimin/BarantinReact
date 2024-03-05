@@ -310,7 +310,7 @@ function DocK92i() {
                             setValue("hasilPemeriksaanKet3", response.data.data.p3)
                             setValue("hasilPemeriksaanKet4", response.data.data.p4)
                             setValue("isAttach", response.data.data.is_attachment)
-                            setValue("ttdPutusan", response.data.data.user_ttd_id)
+                            setValue("ttdPutusan", response.data.data.user_ttd_id?.toString())
                             setValue("diterbitkan", response.data.data.diterbitkan_di)
 
                         }
@@ -517,7 +517,7 @@ function DocK92i() {
                             setValue("hasilPemeriksaanKet3", response.data.data.p3)
                             setValue("hasilPemeriksaanKet4", response.data.data.p4)
                             setValue("isAttach", response.data.data.is_attachment)
-                            setValue("ttdPutusan", response.data.data.user_ttd_id)
+                            setValue("ttdPutusan", response.data.data.user_ttd_id?.toString())
                             setValue("diterbitkan", response.data.data.diterbitkan_di)
     
                         }

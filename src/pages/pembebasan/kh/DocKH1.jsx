@@ -473,7 +473,7 @@ function DocKH1() {
                             setValue("p2", response.data.data.p_lab)
                             setValue("p3", response.data.data.p_lain)
                             setValue("isAttach", response.data.data.is_attachment !== null ? response.data.data.is_attachment.toString() : "")
-                            setValue("ttdPutusan", response.data.data.user_ttd_id)
+                            setValue("ttdPutusan", response.data.data.user_ttd_id?.toString())
                             setValue("diterbitkan", response.data.data.diterbitkan_di)
                         } else if(response.data.status == 404) {
                             setData(values => ({...values,
@@ -617,7 +617,7 @@ function DocKH1() {
                             setValue("p2", response.data.data.p_lab)
                             setValue("p3", response.data.data.p_lain)
                             setValue("isAttach", response.data.data.is_attachment !== null ? response.data.data.is_attachment.toString() : "")
-                            setValue("ttdPutusan", response.data.data.user_ttd_id)
+                            setValue("ttdPutusan", response.data.data.user_ttd_id?.toString())
                             setValue("diterbitkan", response.data.data.diterbitkan_di)
                         } else if(response.data.status == 404) {
                             setData(values => ({...values,

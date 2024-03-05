@@ -127,7 +127,7 @@ function DocK32() {
                         setValue("isSah", response.data.data.is_sah)
                         setValue("keterangan", response.data.data.keterangan)
                         setValue("putusanBongkar", response.data.data.setuju_bongkar_muat)
-                        setValue("ttdPutusan", response.data.data.user_ttd_id)
+                        setValue("ttdPutusan", response.data.data.user_ttd_id?.toString())
                     } else if(response.data.status == '404') {
                         setData(values => ({...values,
                             errorMuat: "",
@@ -213,7 +213,7 @@ function DocK32() {
                         setValue("isSah", response.data.data.is_sah)
                         setValue("keterangan", response.data.data.keterangan)
                         setValue("putusanBongkar", response.data.data.setuju_bongkar_muat)
-                        setValue("ttdPutusan", response.data.data.user_ttd_id)
+                        setValue("ttdPutusan", response.data.data.user_ttd_id?.toString())
                     } else if(response.data.status == '404') {
                         setData(values => ({...values,
                             errorMuat: "",
