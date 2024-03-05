@@ -8,34 +8,11 @@ moment.locale("en");
 
 class PrintKh1 extends Component {
 
-  moveEvent = ({ event, start, end, isAllDay: droppedOnAllDaySlot }) => {
-    const { events } = this.state;
-    console.log(events);
-    const idx = events.indexOf(event);
-    let allDay = event.allDay;
-
-
-    if (!event.allDay && droppedOnAllDaySlot) {
-      allDay = true;
-    } else if (event.allDay && !droppedOnAllDaySlot) {
-      allDay = false;
-    }
-
-    const updatedEvent = { ...event, start, end, allDay };
-
-    const nextEvents = [...events];
-    nextEvents.splice(idx, 1, updatedEvent);
-
-    this.setState({
-      events: nextEvents
-    });
-  };
-
   // Generate the pdf based on a component
   printToPdf = () => {
       const input = document.getElementById('hal1');
       const input2 = document.getElementById('hal2');
-      const pdf = new jsPDF();
+      const pdf = new jsPDF({compress: true});
       html2canvas(input)
         .then((canvas) => {
           const imgData = canvas.toDataURL('image/png');
@@ -59,7 +36,39 @@ class PrintKh1 extends Component {
               const imgX = (pdfWidth - imgWidth * ratio)/2;
               const imgY = 5;
               pdf.addImage(imgData2,'PNG',imgX,imgY,imgWidth*ratio,imgHeight*ratio);
-              pdf.save("k92h.pdf");
+              var out = pdf.output('blob');
+              var file = new Blob([out], {type: 'application/pdf'});
+              var fileURL = URL.createObjectURL(file);
+              let fileReader = new FileReader();
+              fileReader.readAsDataURL(file);
+              fileReader.onload = (event) => {
+                  console.log(event.target.result);
+              }
+              window.open(fileURL);
+              // var base = pdf.output('datauristring')
+              // console.log(base)
+              
+            //   var reader = new FileReader();
+            //   let base64data
+            //   reader.readAsDataURL(out); 
+            //   reader.onloadend = function() { // for blob to base64
+            //       base64data = reader.result; 
+            //       console.log("base64 data is ");               
+            //       console.log(base64data );
+            //       var file = new Blob([out], {type: 'application/pdf'});
+            //       var fileURL = URL.createObjectURL(file);
+            //       window.open(fileURL);
+            //       // window.open(encodeURI(base64data));
+            //       // var fileURL = window.URL.createObjectURL(base64data);
+            //       // let tab = window.open();
+            //       // // tab.location.href = fileURL;
+            //       // tab.document.write(fileURL)
+            //       // var image = new pdf();
+            //       // image.src = base64data
+
+            //       // var w = window.open("");
+            //       // w.document.write(base64data);
+            //   }
             })
           ;
         })

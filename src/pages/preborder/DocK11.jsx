@@ -753,12 +753,16 @@ function DocK11() {
 
     const onSubmitDetilMP = (data) => {
         let cekNilai
+        let nilaiMp
         if(cekdataDiri.mediaPembawa == "T") {
-            cekNilai = data.nilaiBarangMP?.length 
+            cekNilai = data.nilaiBarangMP?.length
+            nilaiMp = data.nilaiBarangMP 
         } else if(cekdataDiri.mediaPembawa == "H"){
             cekNilai = data.nilaiBarangMPKH?.length 
+            nilaiMp = data.nilaiBarangMPKH
         } else if(cekdataDiri.mediaPembawa == "I"){
             cekNilai = data.nilaiBarangMPKI?.length 
+            nilaiMp = data.nilaiBarangMPKI
         }
         if(cekNilai >= 4) {
             if(cekdataDiri.mediaPembawa) {
@@ -779,13 +783,7 @@ function DocK11() {
                         .then((res) => {
                             if(res.data.status == 200) {
                                 setKomoditiPtk(res.data.data)
-                                if(res.data.data?.length > 0) {
-                                    var arrayNilai = komoditiPtk?.map(item => {
-                                        return item.harga
-                                    })
-                                    const sum = arrayNilai.reduce((partialSum, a) => partialSum + a, 0);
-                                    setValueMP("nilaiBarang", sum)
-                                }
+                                setValueMP("nilaiBarang", nilaiMp + cekdataMP.nilaiBarang)
                             }
                         })
                         .catch((error) => {
