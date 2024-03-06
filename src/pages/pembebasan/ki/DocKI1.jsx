@@ -951,19 +951,19 @@ function DocKI1() {
                                                     <label className="col-sm-4 col-form-label" htmlFor="status">Status Usaha</label>
                                                     <div className="col-sm-8">
                                                         <div className="form-check">
-                                                            <input className="form-check-input" type="radio" value="" id="status1" />
+                                                            <input className="form-check-input" type="radio" name='statusUsaha' value="" id="status1" />
                                                             <label className="form-check-label" htmlFor="status1">
                                                                 Pabrik Pengolahan/budidaya
                                                             </label>
                                                         </div>
                                                         <div className="form-check">
-                                                            <input className="form-check-input" type="radio" value="" id="status2" />
+                                                            <input className="form-check-input" type="radio" name='statusUsaha' value="" id="status2" />
                                                             <label className="form-check-label" htmlFor="status2">
                                                                 Unit Usaha Perikanan (UUP)
                                                             </label>
                                                         </div>
                                                         <div className="form-check">
-                                                            <input className="form-check-input" type="radio" value="" id="status3" />
+                                                            <input className="form-check-input" type="radio" name='statusUsaha' value="" id="status3" />
                                                             <div className="input-group mb-3">
                                                                 <label className="form-check-label" htmlFor="status3">
                                                                     Lainnya&nbsp;&nbsp;&nbsp;
@@ -977,19 +977,19 @@ function DocKI1() {
                                                     <label className="col-sm-4 col-form-label" htmlFor="temperatur">Temperatur Komoditas</label>
                                                     <div className="col-sm-8">
                                                         <div className="form-check form-check-inline">
-                                                            <input className="form-check-input" type="radio" value="" id="temperatur1" />
+                                                            <input className="form-check-input" type="radio" name='temperatur' value="" id="temperatur1" />
                                                             <label className="form-check-label" htmlFor="temperatur1">
                                                                 ambient (live)
                                                             </label>
                                                         </div>
                                                         <div className="form-check form-check-inline">
-                                                            <input className="form-check-input" type="radio" value="" id="temperatur2" />
+                                                            <input className="form-check-input" type="radio" name='temperatur' value="" id="temperatur2" />
                                                             <label className="form-check-label" htmlFor="temperatur2">
                                                                 frozen / beku
                                                             </label>
                                                         </div>
                                                         <div className="form-check form-check-inline">
-                                                            <input className="form-check-input" type="radio" value="" id="temperatur3" />
+                                                            <input className="form-check-input" type="radio" name='temperatur' value="" id="temperatur3" />
                                                             <label className="form-check-label" htmlFor="temperatur3">
                                                                 chilled / dingin
                                                             </label>
@@ -1002,25 +1002,25 @@ function DocKI1() {
                                                     <label className="col-sm-4 col-form-label" htmlFor="sumber">Sumber</label>
                                                     <div className="col-sm-8">
                                                         <div className="form-check form-check-inline">
-                                                            <input className="form-check-input" type="radio" value="" id="sumber1" />
+                                                            <input className="form-check-input" type="radio" name='sumberMP' value="" id="sumber1" />
                                                             <label className="form-check-label" htmlFor="sumber1">
                                                                 farm-raised / budidaya
                                                             </label>
                                                         </div>
                                                         <div className="form-check form-check-inline">
-                                                            <input className="form-check-input" type="radio" value="" id="sumber2" />
+                                                            <input className="form-check-input" type="radio" name='sumberMP' value="" id="sumber2" />
                                                             <label className="form-check-label" htmlFor="sumber2">
                                                                 wild-caught / tangkapan liar
                                                             </label>
                                                         </div>
                                                     </div>
                                                 </div>
-                                                <div className="row mb-3">
+                                                {/* <div className="row mb-3">
                                                     <label className="col-sm-4 col-form-label" htmlFor="area_tangkapan">Area Tangkapan</label>
                                                     <div className="col-sm-8">
-                                                        <input type="text" id="area_tangkapan" className="form-control form-control-sm" placeholder="Area Tangkapan" />
+                                                        <input type="text" id="area_tangkapan" name='AreaTangkap' className="form-control form-control-sm" placeholder="Area Tangkapan" />
                                                     </div>
-                                                </div>
+                                                </div> */}
                                             </div>
                                         </div>
                                         <hr />
@@ -1198,10 +1198,16 @@ function DocKI1() {
                             </div>
                         </div>
                         <div className='row mb-3'>
-                            <div className="offset-sm-2 col-sm-6">
+                            <div className="offset-sm-2 col-sm-4">
                                 <div className="form-check form-check-inline">
                                     <input className="form-check-input" type="checkbox" name="isAttach" id="isAttach" value="1" {...register("isAttach")} />
                                     <label className="form-check-label" htmlFor="isAttach">Attachment</label>
+                                </div>
+                            </div>
+                            <div className="col-sm-4">
+                                <div className="form-check form-check-inline">
+                                    <input className="form-check-input" type="checkbox" name="isDokPC" id="isDokPC" value="1" {...register("isDokPC")} />
+                                    <label className="form-check-label" htmlFor="isDokPC">Diperlukan dokumen PC</label>
                                 </div>
                             </div>
                         </div>
@@ -1213,7 +1219,6 @@ function DocKI1() {
                                         <option value={item.penanda_tangan_id} key={index} defaultValue={cekWatch.ttdPutusan}>{item.nama + " - " + item.nip}</option>
                                     ))}
                                 </select>
-                                {/* <input type="text" {...register("ttdPutusan", { required: "Mohon pilih nama penandatangan."})} className={errors.ttdPutusan ? "form-control form-control-sm is-invalid" : "form-control form-control-sm"} /> */}
                                 {errors.ttdPutusan && <small className="text-danger">{errors.ttdPutusan.message}</small>}
                             </div>
                             <div className='col-sm-2 col-form-label text-sm-end'>Diterbitkan di</div>

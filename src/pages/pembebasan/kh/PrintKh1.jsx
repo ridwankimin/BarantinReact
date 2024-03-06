@@ -1,4 +1,4 @@
-import React, { Component, Children } from "react";
+import React, { Component } from "react";
 import moment from "moment";
 import html2canvas from "html2canvas";
 import garuda from '../../../logo/barantins.png'
@@ -54,14 +54,7 @@ class PrintKh1 extends Component {
         })
   };
 
-  ColoredDateCellWrapper = ({ children, value }) =>
-    React.cloneElement(Children.only(children), {
-      style: {
-        ...children.style,
-        backgroundColor: "red"
-      }
-    });
-
+ 
   render() {
     console.log("dataCetak")
     console.log(this.props.dataCetak)

@@ -131,7 +131,6 @@ export default class PtkHistory {
       },
       data: datasend
     };
-    
     return axios.request(config)
   }
   

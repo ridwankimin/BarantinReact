@@ -736,16 +736,16 @@ function DocK74() {
                                                                     <td>{data.klasifikasi}</td>
                                                                     <td>{data.nama_umum_tercetak}</td>
                                                                     <td>{data.nama_latin_tercetak}</td>
-                                                                    <td>{data.volume_netto}</td>
+                                                                    <td className='text-end'>{data.volume_netto?.toLocaleString()}</td>
                                                                     <td>{data.sat_netto}</td>
-                                                                    <td>{data.volume_lain}</td>
+                                                                    <td className='text-end'>{data.volume_lain?.toLocaleString()}</td>
                                                                     <td>{data.sat_lain}</td>
-                                                                    <td>{data.jantan}</td>
-                                                                    <td>{data.betina}</td>
-                                                                    <td>{data.volumeP6}</td>
-                                                                    <td>{data.nettoP6}</td>
-                                                                    <td>{data.jantanP6}</td>
-                                                                    <td>{data.betinaP6}</td>
+                                                                    <td className='text-end'>{data.jantan?.toLocaleString()}</td>
+                                                                    <td className='text-end'>{data.betina?.toLocaleString()}</td>
+                                                                    <td className='text-end'>{data.volumeP6?.toLocaleString()}</td>
+                                                                    <td className='text-end'>{data.nettoP6?.toLocaleString()}</td>
+                                                                    <td className='text-end'>{data.jantanP6?.toLocaleString()}</td>
+                                                                    <td className='text-end'>{data.betinaP6?.toLocaleString()}</td>
                                                                 </tr>
                                                             ))
                                                         ) : null

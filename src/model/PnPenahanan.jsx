@@ -1,3 +1,4 @@
+/* eslint-disable eqeqeq */
 import axios from "axios";
 import Cookies from "js-cookie";
 import { v4 as uuidv4 } from 'uuid';
@@ -23,7 +24,7 @@ export default class PnPenahanan {
     save61(data) {
         const uuid = uuidv4()
         let datasend = {
-            'id': data.idDok61 === '' ? uuid : data.idDok61,
+            'id': data.idDok61 == '' ? uuid : data.idDok61,
             'ptk_id': data.idPtk,
             'dokumen_karantina_id': "26",
             'ptk_surat_tugas_id': data.idSurtug,
@@ -58,9 +59,9 @@ export default class PnPenahanan {
             'user_id': Cookies.get("userId"), //session
         }
         let config = {
-        method: data.idDok61 === '' ? 'post' : 'put',
+        method: data.idDok61 == '' ? 'post' : 'put',
         maxBodyLength: Infinity,
-        url: url + (data.idDok61 === '' ? 'pn-tahan' : 'pn-tahan/' + data.idDok61),
+        url: url + (data.idDok61 == '' ? 'pn-tahan' : 'pn-tahan/' + data.idDok61),
         // url: url + 'pn-adm',
         headers: { 
             'Content-Type': 'application/json', 
@@ -73,7 +74,7 @@ export default class PnPenahanan {
     save62(data, id61) {
         const uuid = uuidv4()
         let datasend = {
-            'id': data.idDok62 === '' ? uuid : data.idDok62,
+            'id': data.idDok62 == '' ? uuid : data.idDok62,
             'ptk_id': data.idPtk,
             'dokumen_karantina_id': "27",
             'ptk_surat_tugas_id': data.idSurtug,
@@ -108,9 +109,9 @@ export default class PnPenahanan {
             'user_id': Cookies.get("userId"), //session
         }
         let config = {
-        method: data.idDok62 === '' ? 'post' : 'put',
+        method: data.idDok62 == '' ? 'post' : 'put',
         maxBodyLength: Infinity,
-        url: url + (data.idDok62 === '' ? 'pn-tahan' : 'pn-tahan/' + data.idDok62),
+        url: url + (data.idDok62 == '' ? 'pn-tahan' : 'pn-tahan/' + data.idDok62),
         // url: url + 'pn-adm',
         headers: { 
             'Content-Type': 'application/json', 
@@ -123,7 +124,7 @@ export default class PnPenahanan {
     save63(data) {
         const uuid = uuidv4()
         let datasend = {
-            'id': data.idDok63 === '' ? uuid : data.idDok63,
+            'id': data.idDok63 == '' ? uuid : data.idDok63,
             'ptk_id': data.idPtk,
             'dokumen_karantina_id': "28",
             'ptk_surat_tugas_id': data.idSurtug,
@@ -158,9 +159,9 @@ export default class PnPenahanan {
             'user_id': Cookies.get("userId"), //session
         }
         let config = {
-        method: data.idDok63 === '' ? 'post' : 'put',
+        method: data.idDok63 == '' ? 'post' : 'put',
         maxBodyLength: Infinity,
-        url: url + (data.idDok63 === '' ? 'pn-tahan' : 'pn-tahan/' + data.idDok63),
+        url: url + (data.idDok63 == '' ? 'pn-tahan' : 'pn-tahan/' + data.idDok63),
         // url: url + 'pn-adm',
         headers: { 
             'Content-Type': 'application/json', 
