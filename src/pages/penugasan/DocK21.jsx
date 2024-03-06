@@ -438,7 +438,7 @@ function DocK21() {
                                         </h2>
                                         <div id="collapseInfoMP">
                                             <div className="accordion-body">
-                                                <div className="table-responsive text-nowrap">
+                                                <div className="table-responsive text-nowrap" style={{height: (dataPtk.listKomoditas?.length > 8 ? "300px" : "")}}>
                                                     <table className="table table-sm table-bordered table-hover table-striped dataTable">
                                                         <thead>
                                                             <tr>

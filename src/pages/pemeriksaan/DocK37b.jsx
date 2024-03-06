@@ -735,7 +735,7 @@ function DocK37b() {
                                                         <a href='https://esps.karantina.pertanian.go.id/elab' rel="noreferrer" target='_blank' className='btn btn-info btn-sm'><i className="menu-icon tf-icons fa-solid fa-download"></i>Data elab Barantin</a>
                                                     </div>
                                                 </h5>
-                                                <div className="text-wrap mb-3">
+                                                <div className="table-responsive text-nowrap" style={{height: (listKesehatan?.length > 8 ? "300px" : "")}}>
                                                     <table className="table table-sm table-bordered table-hover table-striped dataTable">
                                                         <thead>
                                                             <tr>
@@ -783,7 +783,7 @@ function DocK37b() {
                                                     </h5>
                                                 </div>
                                                 <h5 title='Pengawasan dan Pengendalian Pangan/Pakan/SDG/PRG/Agensia Hayati/JAI/Tumbuhan dan Satwa Liar/Tumbuhan dan Satwa Langka'><u><b>B. Pengawasan dan Pengendalian</b></u></h5>
-                                                <div className="text-nowrap mb-4">
+                                                <div className="table-responsive text-nowrap" style={{height: (listKesehatan?.length > 8 ? "300px" : "")}}>
                                                     <table className="table table-sm table-bordered table-hover table-striped dataTable">
                                                         <thead>
                                                             <tr>

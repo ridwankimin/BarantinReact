@@ -697,7 +697,7 @@ function DocK74() {
                                         </div>
                                         <hr />
                                         <h5><b><u>Description of Comodities</u></b></h5>
-                                        <div className="table-responsive text-nowrap" style={{height: "300px"}}>
+                                        <div className="table-responsive text-nowrap" style={{height: (data.listKomoditas?.length > 8 ? "300px" : "")}}>
                                             <table className="table table-sm table-bordered table-hover table-striped dataTable">
                                                 <thead>
                                                     <tr>

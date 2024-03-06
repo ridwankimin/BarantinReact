@@ -6,18 +6,63 @@ import PtkModel from '../../model/PtkModel';
 import PnPemusnahan from '../../model/PnPemusnahan';
 import {decode as base64_decode} from 'base-64';
 import SpinnerDot from '../../component/loading/SpinnerDot';
-import { useForm } from 'react-hook-form';
+import { Controller, useForm } from 'react-hook-form';
 import PtkSurtug from '../../model/PtkSurtug';
+import Swal from 'sweetalert2';
+import PegawaiJson from '../../model/master/pegawaiPertanian.json'
+import Select from 'react-select';
+
+const customStyles = {
+    control: (provided, state) => ({
+        ...provided,
+        background: '#fff',
+        borderColor: '#D4D8DD',
+        cursor: 'text',
+        minHeight: '30px',
+        height: '30px',
+        boxShadow: state.isFocused ? null : null,
+    }),
+
+    valueContainer: (provided, state) => ({
+        ...provided,
+        height: '30px',
+        padding: '0 6px'
+    }),
+
+    input: (provided, state) => ({
+        ...provided,
+        margin: '0px',
+    }),
+    indicatorSeparator: state => ({
+        display: 'none',
+    }),
+    indicatorsContainer: (provided, state) => ({
+        ...provided,
+        height: '30px',
+    }),
+}
 
 const log = new PtkHistory()
 const modelPemohon = new PtkModel()
 const modelPemusnahan = new PnPemusnahan()
+const modelSurtug = new PtkSurtug()
 const addCommas = num => num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
 const removeNonNumeric = num => num.toString().replace(/[^0-9.]/g, "");
+
+function masterPegawaiPelaksana() {
+    var arrayPegawai = PegawaiJson.map(item => {
+        return {
+            value: item.nama + " - " + item.nip,
+            label: item.nama + " - " + item.nip,
+        }
+    })
+    return arrayPegawai
+}
 
 function DocK82() {
     const idPtk = Cookies.get("idPtkPage");
     let [loadKomoditi, setLoadKomoditi] = useState(false)
+    let [cekData, setCekData] = useState()
     let [loadKomoditiPesan, setLoadKomoditiPesan] = useState("")
     let [datasend, setDataSend] = useState([])
     let [arraySaksi, setArraySaksi] = useState([])
@@ -32,24 +77,29 @@ function DocK82() {
     })
 
     function handleEditKomoditas(e) {
-        setValueMPk82("idMPk82", e.target.dataset.headerid)
-        setValueMPk82("idPtk", e.target.dataset.ptk)
-        setValueMPk82("jenisKar", "H")
-        const cell = e.target.closest('tr')
-        setValueMPk82("nettoP7", cell.cells[5].innerHTML)
-        setValueMPk82("satuanNetto", cell.cells[6].innerHTML)
-        setValueMPk82("volumeP7", cell.cells[7].innerHTML)
-        setValueMPk82("satuanLain", cell.cells[8].innerHTML)
-        setValueMPk82("namaUmum", cell.cells[3].innerHTML)
-        setValueMPk82("namaLatin", cell.cells[4].innerHTML)
-        setValueMPk82("volumeP7", cell.cells[7].innerHTML)
-        setValueMPk82("jantanP7", cell.cells[9].innerHTML)
-        setValueMPk82("betinaP7", cell.cells[10].innerHTML)
+        const dataMP = data.listKomoditas?.filter((element, index) => index == e)
+        setValueMPk82("idMPk82", dataMP[0].id)
+        setValueMPk82("idPtk", dataMP[0].ptk_id)
+        setValueMPk82("jenisKar", Cookies.get("jenisKarantina"))
+        setCekData(values => ({...values,
+            volumeP7: dataMP[0].volume_lain,
+            nettoP7: dataMP[0].volume_netto,
+            jantanP7: dataMP[0].jantan,
+            betinaP7: dataMP[0].betina
+        }));
+        setValueMPk82("nettoP7", dataMP[0].volume_netto)
+        setValueMPk82("satuanNetto", dataMP[0].sat_netto)
+        setValueMPk82("volumeP7", dataMP[0].volume_lain)
+        setValueMPk82("satuanLain", dataMP[0].sat_lain)
+        setValueMPk82("jantanP7", dataMP[0].jantan)
+        setValueMPk82("betinaP7", dataMP[0].betina)
+        setValueMPk82("namaUmum", dataMP[0].nama_umum_tercetak)
+        setValueMPk82("namaLatin", dataMP[0].nama_latin_tercetak)
     }
 
     // function handleEditSaksi(text) {
     //     setArraySaksi({
-    //         data: arraySaksi.map((el, index) => (index === 0 ? Object.assign({}, el.jabatan, { text }) : el))
+    //         data: arraySaksi.map((el, index) => (index == 0 ? Object.assign({}, el.jabatan, { text }) : el))
     //     })
     // }
 
@@ -63,7 +113,11 @@ function DocK82() {
                 jabatan: editSaksi.jabatan
              }]);
         } else {
-            alert("Maksimal saksi: 8 orang!")
+            Swal.fire({
+                icon: "error",
+                title: "Error!",
+                text: "Maksimal saksi: 8 orang!"
+            });
         }
         resetEditSaksi()
     }
@@ -82,7 +136,7 @@ function DocK82() {
         const resKom = modelPemohon.getKomoditiPtkId(data.noIdPtk, "H");
         resKom
         .then((res) => {
-            if(res.data.status === '200') {
+            if(res.data.status == 200) {
                 setData(values => ({...values,
                     listKomoditas: res.data.data
                 }));
@@ -99,73 +153,110 @@ function DocK82() {
         setLoadKomoditi(true)
         data.listKomoditas?.map((item, index) => (
             log.updateKomoditiP7(item.id, datasend[index])
-                .then((response) => {
-                    if(response.data.status === '201') {
-                        refreshListKomoditas()
-                        setLoadKomoditi(false)
-                        if(process.env.REACT_APP_BE_ENV == "DEV") {
-                            console.log("history saved")
-                        }
-                    }
-                })
-                .catch((error) => {
+            .then((response) => {
+                if(response.data.status == 201) {
+                    refreshListKomoditas()
                     setLoadKomoditi(false)
-                    setLoadKomoditiPesan("Terjadi error pada saat simpan, mohon refresh halaman dan coba lagi.")
                     if(process.env.REACT_APP_BE_ENV == "DEV") {
-                        console.log(error)
+                        console.log("history saved")
                     }
+                    Swal.fire({
+                        icon: "success",
+                        title: "Sukses!",
+                        text: "Volume P7 berhasil disimpan (tidak ada perubahan dengan volume awal)"
+                    })
+                } else {
+                    Swal.fire({
+                        icon: "error",
+                        title: "Error!",
+                        text: response.data.status
+                    })
+                }
+            })
+            .catch((error) => {
+                setLoadKomoditi(false)
+                setLoadKomoditiPesan("Terjadi error pada saat simpan, mohon refresh halaman dan coba lagi.")
+                if(process.env.REACT_APP_BE_ENV == "DEV") {
+                    console.log(error)
+                }
+                Swal.fire({
+                    icon: "error",
+                    title: "Error!",
+                    text: error.response.data.status
                 })
-            )
+            }))
         )
-        setLoadKomoditi(false)
+        setLoadKomoditi(true)
     }
 
     const {
         register,
         setValue,
+        control,
         handleSubmit,
-        // watch,
+        watch,
         formState: { errors },
     } = useForm();
 
-    // const cekWatch = watch()
+    const cekWatch = watch()
 
+    const dataCekKom = data.listKomoditas?.filter(item => item.volumeP7 == null || item.nettoP7 == null)
+    const dataCekKomJanBen = data.listKomoditas?.filter(item => (item.jantan != null && item.jantanP7 == null) || (item.betina != null && item.betinaP7 == null))
     const onSubmit = (data) => {
-        const response = modelPemusnahan.simpan82(data, arraySaksi);
-        response
-        .then((response) => {
-            if(response.data) {
-                if(response.data.status === '201') {
-                    //start save history
-                    // const log = new PtkHistory();
-                    const resHsy = log.pushHistory(data.idPtk, "p8", "K-8.2", (data.idDok82 ? 'UPDATE' : 'NEW'));
-                    resHsy
-                    .then((response) => {
-                        if(response.data.status === '201') {
-                            if(process.env.REACT_APP_BE_ENV == "DEV") {
-                                console.log("history saved")
+        if(dataCekKom.length == 0 && dataCekKomJanBen.length == 0) {
+            const response = modelPemusnahan.simpan82(data, arraySaksi);
+            response
+            .then((response) => {
+                if(response.data) {
+                    console.log(response.data)
+                    if(response.data.status == 201) {
+                        //start save history
+                        const resHsy = log.pushHistory(data.idPtk, "p8", "K-8.2", (data.idDok82 ? 'UPDATE' : 'NEW'));
+                        resHsy
+                        .then((response) => {
+                            if(response.data.status == 201) {
+                                if(process.env.REACT_APP_BE_ENV == "DEV") {
+                                    console.log("history saved")
+                                }
                             }
-                        }
-                    })
-                    .catch((error) => {
-                        if(process.env.REACT_APP_BE_ENV == "DEV") {
-                            console.log(error)
-                        }
-                    });
-                    //end save history
-
-                    alert(response.data.status + " - " + response.data.message)
-                    setValue("idDok82", response.data.data.id)
-                    setValue("noDok82", response.data.data.nomor)
+                        })
+                        .catch((error) => {
+                            if(process.env.REACT_APP_BE_ENV == "DEV") {
+                                console.log(error)
+                            }
+                        });
+                        //end save history
+                        Swal.fire({
+                            icon: "success",
+                            title: "Sukses!",
+                            text: "Berita acara pemusnahan berhasil" + (data.idDok82 ? 'diedit' : 'disimpan')
+                        });
+                    } else {
+                        Swal.fire({
+                            icon: "error",
+                            title: "Error!",
+                            text: response.data.status
+                        });
+                    }
                 }
-            }
-        })
-        .catch((error) => {
-            if(process.env.REACT_APP_BE_ENV == "DEV") {
-                console.log(error)
-            }
-            alert(error.response.status + " - " + error.response.data.message)
-        });
+            })
+            .catch((error) => {
+                if(process.env.REACT_APP_BE_ENV == "DEV") {
+                    console.log(error)
+                }
+                Swal.fire({
+                    icon: "error",
+                    title: "Error!",
+                    text: error.response.data.status
+                });
+            });
+        } else {
+            Swal.fire({
+                icon: "error",
+                title: "Error!",
+                text: "Mohon isi volume P7"
+            });
+        }
     }
 
     const {
@@ -174,7 +265,7 @@ function DocK82() {
         // control: controlMPk82,
         watch: watchMPk82,
         handleSubmit: handleFormMPk82,
-        // reset: resetFormKomoditikh1,
+        reset: resetFormKomoditik82,
         formState: { errors: errorsMPk82 },
     } = useForm({
         defaultValues: {
@@ -190,6 +281,60 @@ function DocK82() {
     const cekdataMPk82 = watchMPk82()
 
     function onSubmitMPk82(data) {
+        let cekVolume = false
+        if((data.jantanP7 != null) || (data.betinaP7 != null) ) {
+            if((parseFloat(typeof data.jantanP7 == "string" ? data.jantanP7.replace(",", "") : data.jantanP7) > parseFloat(cekData.jantanP7)) || (parseFloat((typeof data.betinaP7 == "string" ? data.betinaP7.replace(",", "") : data.betinaP7)) > parseFloat(cekData.betinaP7))) {
+                cekVolume = false
+            } else {
+                if(parseFloat(typeof data.volumeP7 == "string" ? data.volumeP7.replace(",", "") : data.volumeP7) > parseFloat(cekData.volumeP7) || parseFloat(typeof data.nettoP7 == "string" ? data.nettoP7.replace(",", "") : data.nettoP7) > parseFloat(cekData.nettoP7)) {
+                    cekVolume = false 
+                } else {
+                    cekVolume = true
+                }
+            }
+        } else {
+            if(parseFloat(typeof data.volumeP7 == "string" ? data.volumeP7.replace(",", "") : data.volumeP7) > parseFloat(cekData.volumeP7) || parseFloat(typeof data.nettoP7 == "string" ? data.nettoP7.replace(",", "") : data.nettoP7) > parseFloat(cekData.nettoP7)) {
+                cekVolume = false 
+            } else {
+                cekVolume = true
+            }
+        }
+        if(cekVolume) {
+            log.updateKomoditiP7(data.idMPk82, data)
+            .then((response) => {
+                if(response.data.status == 201) {
+                    Swal.fire({
+                        icon: "success",
+                        title: "Sukses!",
+                        text: "Volume P7 berhasil diubah"
+                    })
+                    resetFormKomoditik82()
+                    refreshListKomoditas()
+                } else {
+                    Swal.fire({
+                        icon: "error",
+                        title: "Error!",
+                        text: response.data.message
+                    })
+                }
+            })
+            .catch((error) => {
+                if(process.env.REACT_APP_BE_ENV == "DEV") {
+                    console.log(error)
+                }
+                Swal.fire({
+                    icon: "error",
+                    title: "Error!",
+                    text: error.response.data.message
+                })
+            })
+        } else {
+            Swal.fire({
+                icon: "error",
+                title: "Error!",
+                text: "Volume input melebihi volume awal, mohon cek isian anda"
+            })
+        }
     }
 
     useEffect(()=>{
@@ -199,99 +344,126 @@ function DocK82() {
             let ptkDecode = idPtk ? base64_decode(idPtk) : "";
             let ptkNomor = idPtk ? ptkDecode.split('m0R3N0r1R') : "";
             
+            setData(values => ({...values,
+                noAju: idPtk ? base64_decode(ptkNomor[0]) : "",
+                noIdPtk: idPtk ? base64_decode(ptkNomor[1]) : "",
+                noDokumen: idPtk ? base64_decode(ptkNomor[2]) : "",
+                tglDokumen: tglPtk,
+            }));
+
             const response = modelPemohon.getPtkId(base64_decode(ptkNomor[1]));
             response
             .then((response) => {
-                if(response.data.status === '200') {
-                    let kodeHSData = response.data.data.ptk_komoditi?.map(item => {
-                        return item.kode_hs
-                    })
-                    let namaUmumMP = response.data.data.ptk_komoditi?.map(item => {
-                        return item.nama_umum_tercetak
-                    })
-                    let namaIlmiahMP = response.data.data.ptk_komoditi?.map(item => {
-                        return item.nama_latin_tercetak
-                    })
-                    let VolumeMP = response.data.data.ptk_komoditi?.map(item => {
-                        return item.volume_lain + " " + item.sat_lain
-                    })
-                    // alert(response.data.message);
-                    setData(values => ({...values,
-                        noAju: idPtk ? base64_decode(ptkNomor[0]) : "",
-                        noIdPtk: idPtk ? base64_decode(ptkNomor[1]) : "",
-                        noDokumen: idPtk ? base64_decode(ptkNomor[2]) : "",
-                        tglDokumen: tglPtk,
-                        kodeHs: kodeHSData.join(";"),
-                        // mpTercetak: namaUmumMP.join(";"),
-                        listPtk: response.data.data.ptk,
-                        // listKomoditas: response.data.data.ptk_komoditi,
-                        listDokumen: response.data.data.ptk_dokumen
-                    }));
-                    // setArraySaksi([])
-                    if(arraySaksi.length === 0) {
-                        setArraySaksi([...arraySaksi, { 
-                            nama: (response.data.data.ptk.jenis_permohonan === 'IM' | response.data.data.ptk.jenis_permohonan === 'DM' ? response.data.data.ptk.nama_penerima : response.data.data.ptk.nama_pengirim),
-                            alamat: (response.data.data.ptk.jenis_permohonan === 'IM' | response.data.data.ptk.jenis_permohonan === 'DM' ? response.data.data.ptk.alamat_penerima : response.data.data.ptk.alamat_pengirim),
-                            identitas: (response.data.data.ptk.jenis_permohonan === 'IM' | response.data.data.ptk.jenis_permohonan === 'DM' ? response.data.data.ptk.jenis_identitas_penerima + " - " + response.data.data.ptk.nomor_identitas_penerima : response.data.data.ptk.jenis_identitas_pengirim + " - " + response.data.data.ptk.nomor_identitas_pengirim),
-                            isPemilik: 1,
-                            jabatan: "",
-                        }]);
-                    }
+                if(typeof response.data != "string") {
+                    if(response.data.status == 200) {
+                        setData(values => ({...values,
+                            errorPTK: "",
+                            listPtk: response.data.data.ptk,
+                            listDokumen: response.data.data.ptk_dokumen
+                        }));
+                        // setArraySaksi([])
+                        if(arraySaksi.length == 0) {
+                            setArraySaksi([...arraySaksi, { 
+                                nama: (response.data.data.ptk.jenis_permohonan == 'IM' | response.data.data.ptk.jenis_permohonan == 'DM' ? response.data.data.ptk.nama_penerima : response.data.data.ptk.nama_pengirim),
+                                alamat: (response.data.data.ptk.jenis_permohonan == 'IM' | response.data.data.ptk.jenis_permohonan == 'DM' ? response.data.data.ptk.alamat_penerima : response.data.data.ptk.alamat_pengirim),
+                                identitas: (response.data.data.ptk.jenis_permohonan == 'IM' | response.data.data.ptk.jenis_permohonan == 'DM' ? response.data.data.ptk.jenis_identitas_penerima + " - " + response.data.data.ptk.nomor_identitas_penerima : response.data.data.ptk.jenis_identitas_pengirim + " - " + response.data.data.ptk.nomor_identitas_pengirim),
+                                isPemilik: 1,
+                                jabatan: "",
+                            }]);
+                        }
 
-                    const resKom = modelPemohon.getKomoditiPtkId(base64_decode(ptkNomor[1]), Cookies.get("jenisKarantina"));
-                    resKom
-                    .then((res) => {
-                        if(res.data.status === '200') {
-                            setData(values => ({...values,
-                                listKomoditas: res.data.data
-                            }));
-                            var arrayKomKH = res.data.data.map(item => {
-                                return {
-                                    jantanP7: item.jantan,
-                                    betinaP7: item.betina,
-                                    volumeP7: item.volume_lain,
-                                    nettoP7: item.volume_netto
+                        const resKom = modelPemohon.getKomoditiPtkId(base64_decode(ptkNomor[1]), Cookies.get("jenisKarantina"));
+                        resKom
+                        .then((res) => {
+                            if(typeof res.data != "string") {
+                                if(res.data.status == 200) {
+                                    setData(values => ({...values,
+                                        errorKomoditas: "",
+                                        listKomoditas: res.data.data
+                                    }));
+                                    var arrayKomKH = res.data.data.map(item => {
+                                        return {
+                                            jantanP7: item.jantan,
+                                            betinaP7: item.betina,
+                                            volumeP7: item.volume_lain,
+                                            nettoP7: item.volume_netto
+                                        }
+                                    })
+                                    setDataSend(arrayKomKH)
+                                } else {
+                                    setData(values => ({...values,
+                                        errorKomoditas: "Gagal load data komoditas"
+                                    }));
                                 }
-                            })
-                            setDataSend(arrayKomKH)
-                        }
-                    })
-                    .catch((error) => {
-                        if(process.env.REACT_APP_BE_ENV == "DEV") {
-                            console.log(error)
-                        }
-                    });
-                    
-                    setValue("tandaKhusus", response.data.data.ptk.tanda_khusus)
-                    setValue("namaUmum", namaUmumMP.join(";"))
-                    setValue("namaIlmiah", namaIlmiahMP.join(";"))
-                    setValue("jmlTercetak", VolumeMP.join(";"))
-                    setValue("karantinaTujuan", response.data.data.ptk.negara_penerima)
-                    setValue("entryPoint", response.data.data.ptk.pelabuhan_bongkar + ", " + response.data.data.ptk.negara_bongkar)
-                    setValue("idPtk", base64_decode(ptkNomor[1]))
-                    setValue("noDokumen", base64_decode(ptkNomor[2]))
+                            } else {
+                                setData(values => ({...values,
+                                    errorKomoditas: "Gagal load data komoditas"
+                                }));
+                            }
+                        })
+                        .catch((error) => {
+                            if(process.env.REACT_APP_BE_ENV == "DEV") {
+                                console.log(error)
+                            }
+                            setData(values => ({...values,
+                                errorKomoditas: "Gagal load data komoditas"
+                            }));
+                        });
+                        
+                        setValue("tandaKhusus", response.data.data.ptk.tanda_khusus)
+                        setValue("karantinaTujuan", response.data.data.ptk.negara_penerima)
+                        setValue("entryPoint", response.data.data.ptk.pelabuhan_bongkar + ", " + response.data.data.ptk.negara_bongkar)
+                        setValue("idPtk", base64_decode(ptkNomor[1]))
+                        setValue("noDokumen", base64_decode(ptkNomor[2]))
+                    } else {
+                        setData(values => ({...values,
+                            errorPTK: "Gagal load data PTK",
+                            errorKomoditas: "Gagal load data komoditas"
+                        }));
+                    }
+                } else {
+                    setData(values => ({...values,
+                        errorPTK: "Gagal load data PTK",
+                        errorKomoditas: "Gagal load data komoditas"
+                    }));
                 }
             })
             .catch((error) => {
                 if(process.env.REACT_APP_BE_ENV == "DEV") {
                     console.log(error)
                 }
+                setData(values => ({...values,
+                    errorPTK: "Gagal load data PTK",
+                    errorKomoditas: "Gagal load data komoditas"
+                }));
             });
         
-            const modelSurtug = new PtkSurtug();
-                // 1: penugasan periksa administratif
             const resSurtug = modelSurtug.getDetilSurtugPenugasan(base64_decode(ptkNomor[1]), 11);
             resSurtug
             .then((response) => {
                 if(response.data) {
-                    if(response.data.status === '200') {
-                        // console.log(response.data.data[0])
+                    if(typeof response.data != "string") {
+                        if(response.data.status == 200) {
+                            // console.log(response.data.data[0])
+                            setData(values => ({...values,
+                                noSurtug: response.data.data[0].nomor,
+                                tglSurtug: response.data.data[0].tanggal,
+                                petugas: response.data.data
+                            }));
+                            setValue("idSurtug", response.data.data[0].id)
+                        } else if(response.data.status == 404) {
+                            setData(values => ({...values,
+                                errorSurtug: "Surat tugas tidak ada / belum dibuat",
+                            }));
+                        } else {
+                            setData(values => ({...values,
+                                errorSurtug: "Gagal load data surat tugas",
+                            }));
+                        }
+                    } else {
                         setData(values => ({...values,
-                            noSurtug: response.data.data[0].nomor,
-                            tglSurtug: response.data.data[0].tanggal,
-                            petugas: response.data.data
+                            errorSurtug: "Gagal load data surat tugas",
                         }));
-                        setValue("idSurtug", response.data.data[0].id)
                     }
                 }
             })
@@ -299,15 +471,358 @@ function DocK82() {
                 if(process.env.REACT_APP_BE_ENV == "DEV") {
                     console.log(error)
                 }
-                // alert(error.response.status + " - " + error.response.data.message)
+                if(error.response.data.status == 404) {
+                    setData(values => ({...values,
+                        errorSurtug: "Surat tugas tidak ada / belum dibuat",
+                    }));
+                } else {
+                    setData(values => ({...values,
+                        errorSurtug: "Gagal load data surat tugas",
+                    }));
+                }
+            });
+
+            const response81 = modelPemusnahan.getByPtkId(base64_decode(ptkNomor[1]), 35);
+            response81
+            .then((response) => {
+                if(response.data) {
+                    if(typeof response.data != "string") {
+                        if(response.data.status == 200) {
+                            setData(values => ({...values,
+                                errorMusnah81: "",
+                            }));
+                            setValue("idDok81", response.data.data[0].id)
+                        } else if(response.data.status == 404) {
+                            setData(values => ({...values,
+                                errorMusnah81: "Surat pemusnahan tidak ada/belum dibuat",
+                            }));
+                        } else {
+                            setData(values => ({...values,
+                                errorMusnah81: "Gagal load data history surat pemusnahan",
+                            }));
+                        }
+                    } else {
+                        setData(values => ({...values,
+                            errorMusnah81: "Gagal load data history surat pemusnahan",
+                        }));
+                    }
+                }
+            })
+            .catch((error) => {
+                if(process.env.REACT_APP_BE_ENV == "DEV") {
+                    console.log(error)
+                }
+                if(error.response.data.status == 404) {
+                    setData(values => ({...values,
+                        errorMusnah81: "Surat pemusnahan tidak ada/belum dibuat",
+                    }));
+                } else {
+                    setData(values => ({...values,
+                        errorMusnah81: "Gagal load data history surat pemusnahan",
+                    }));
+                }
+            });
+
+            const response82 = modelPemusnahan.getByPtkId(base64_decode(ptkNomor[1]), 36);
+            response82
+            .then((response) => {
+                if(response.data) {
+                    console.log(response)
+                    if(typeof response.data != "string") {
+                        if(response.data.status == 200) {
+                            setData(values => ({...values,
+                                errorMusnah82: "",
+                            }));
+                            setValue("idDok82", response.data.data[0].id)
+                            setValue("noDok82", response.data.data[0].nomor)
+                            setValue("tglDok82", response.data.data[0].tanggal)
+                            setValue("maksMusnah", response.data.data[0].maks_pemusnahan)
+                            setValue("pelaksanaMusnah", response.data.data[0].petugas_pelaksana + " - " + response.data.data[0].nip_pelaksana)
+                            
+                            setValue("lokasiMusnah", response.data.data[0].tempat_musnah)
+                            setValue("metodeMusnah", response.data.data[0].metode_musnah)
+                            
+                            setValue("diterbitkan", response.data.data[0].diterbitkan_di)
+                            setValue("ttdPutusan", response.data.data[0].user_ttd_id?.toString())
+                            setArraySaksi(response.data.data)
+                        } else if(response.data.status == 404) {
+                            setData(values => ({...values,
+                                errorMusnah81: "",
+                            }));
+                        } else {
+                            setData(values => ({...values,
+                                errorMusnah81: "Gagal load data history berita acara pemusnahan",
+                            }));
+                        }
+                    } else {
+                        setData(values => ({...values,
+                            errorMusnah81: "Gagal load data history berita acara pemusnahan",
+                        }));
+                    }
+                }
+            })
+            .catch((error) => {
+                if(process.env.REACT_APP_BE_ENV == "DEV") {
+                    console.log(error)
+                }
+                if(error.response.data.status == 404) {
+                    setData(values => ({...values,
+                        errorMusnah82: "",
+                    }));
+                } else {
+                    setData(values => ({...values,
+                        errorMusnah82: "Gagal load data history berita acara pemusnahan",
+                    }));
+                }
             });
         }
     },[idPtk, setValue, arraySaksi])
 
+    function refreshData() {
+        if(data.errorPTK) {
+            const response = modelPemohon.getPtkId(data.noIdPtk);
+            response
+            .then((response) => {
+                if(typeof response.data != "string") {
+                    if(response.data.status == 200) {
+                        setData(values => ({...values,
+                            errorPTK: "",
+                            listPtk: response.data.data.ptk,
+                            listDokumen: response.data.data.ptk_dokumen
+                        }));
+                        // setArraySaksi([])
+                        if(arraySaksi.length == 0) {
+                            setArraySaksi([...arraySaksi, { 
+                                nama: (response.data.data.ptk.jenis_permohonan == 'IM' | response.data.data.ptk.jenis_permohonan == 'DM' ? response.data.data.ptk.nama_penerima : response.data.data.ptk.nama_pengirim),
+                                alamat: (response.data.data.ptk.jenis_permohonan == 'IM' | response.data.data.ptk.jenis_permohonan == 'DM' ? response.data.data.ptk.alamat_penerima : response.data.data.ptk.alamat_pengirim),
+                                identitas: (response.data.data.ptk.jenis_permohonan == 'IM' | response.data.data.ptk.jenis_permohonan == 'DM' ? response.data.data.ptk.jenis_identitas_penerima + " - " + response.data.data.ptk.nomor_identitas_penerima : response.data.data.ptk.jenis_identitas_pengirim + " - " + response.data.data.ptk.nomor_identitas_pengirim),
+                                isPemilik: 1,
+                                jabatan: "",
+                            }]);
+                        }
+    
+                        setValue("tandaKhusus", response.data.data.ptk.tanda_khusus)
+                        setValue("karantinaTujuan", response.data.data.ptk.negara_penerima)
+                        setValue("entryPoint", response.data.data.ptk.pelabuhan_bongkar + ", " + response.data.data.ptk.negara_bongkar)
+                        setValue("idPtk", data.noIdPtk)
+                        setValue("noDokumen", data.noDokumen)
+                    } else {
+                        setData(values => ({...values,
+                            errorPTK: "Gagal load data PTK",
+                        }));
+                    }
+                } else {
+                    setData(values => ({...values,
+                        errorPTK: "Gagal load data PTK",
+                    }));
+                }
+            })
+            .catch((error) => {
+                if(process.env.REACT_APP_BE_ENV == "DEV") {
+                    console.log(error)
+                }
+                setData(values => ({...values,
+                    errorPTK: "Gagal load data PTK",
+                }));
+            });
+        }
+
+        if(data.errorKomoditas) {
+            const resKom = modelPemohon.getKomoditiPtkId(data.noIdPtk, Cookies.get("jenisKarantina"));
+            resKom
+            .then((res) => {
+                if(typeof res.data != "string") {
+                    if(res.data.status == 200) {
+                        setData(values => ({...values,
+                            errorKomoditas: "",
+                            listKomoditas: res.data.data
+                        }));
+                        var arrayKomKH = res.data.data.map(item => {
+                            return {
+                                jantanP7: item.jantan,
+                                betinaP7: item.betina,
+                                volumeP7: item.volume_lain,
+                                nettoP7: item.volume_netto
+                            }
+                        })
+                        setDataSend(arrayKomKH)
+                    } else {
+                        setData(values => ({...values,
+                            errorKomoditas: "Gagal load data komoditas"
+                        }));
+                    }
+                } else {
+                    setData(values => ({...values,
+                        errorKomoditas: "Gagal load data komoditas"
+                    }));
+                }
+            })
+            .catch((error) => {
+                if(process.env.REACT_APP_BE_ENV == "DEV") {
+                    console.log(error)
+                }
+                setData(values => ({...values,
+                    errorKomoditas: "Gagal load data komoditas"
+                }));
+            });
+        }
+    
+        if(data.errorSurtug) {
+            const resSurtug = modelSurtug.getDetilSurtugPenugasan(data.noIdPtk, 11);
+            resSurtug
+            .then((response) => {
+                if(response.data) {
+                    if(typeof response.data != "string") {
+                        if(response.data.status == 200) {
+                            // console.log(response.data.data[0])
+                            setData(values => ({...values,
+                                noSurtug: response.data.data[0].nomor,
+                                tglSurtug: response.data.data[0].tanggal,
+                                petugas: response.data.data
+                            }));
+                            setValue("idSurtug", response.data.data[0].id)
+                        } else if(response.data.status == 404) {
+                            setData(values => ({...values,
+                                errorSurtug: "Surat tugas tidak ada / belum dibuat",
+                            }));
+                        } else {
+                            setData(values => ({...values,
+                                errorSurtug: "Gagal load data surat tugas",
+                            }));
+                        }
+                    } else {
+                        setData(values => ({...values,
+                            errorSurtug: "Gagal load data surat tugas",
+                        }));
+                    }
+                }
+            })
+            .catch((error) => {
+                if(process.env.REACT_APP_BE_ENV == "DEV") {
+                    console.log(error)
+                }
+                if(error.response.data.status == 404) {
+                    setData(values => ({...values,
+                        errorSurtug: "Surat tugas tidak ada / belum dibuat",
+                    }));
+                } else {
+                    setData(values => ({...values,
+                        errorSurtug: "Gagal load data surat tugas",
+                    }));
+                }
+            });
+        }
+
+        if(data.errorMusnah81) {
+            const response81 = modelPemusnahan.getByPtkId(data.noIdPtk, 35);
+            response81
+            .then((response) => {
+                if(response.data) {
+                    if(typeof response.data != "string") {
+                        if(response.data.status == 200) {
+                            setData(values => ({...values,
+                                errorMusnah81: "",
+                            }));
+                            setValue("idDok81", response.data.data[0].id)
+                        } else if(response.data.status == 404) {
+                            setData(values => ({...values,
+                                errorMusnah81: "Surat pemusnahan tidak ada/belum dibuat",
+                            }));
+                        } else {
+                            setData(values => ({...values,
+                                errorMusnah81: "Gagal load data history surat pemusnahan",
+                            }));
+                        }
+                    } else {
+                        setData(values => ({...values,
+                            errorMusnah81: "Gagal load data history surat pemusnahan",
+                        }));
+                    }
+                }
+            })
+            .catch((error) => {
+                if(process.env.REACT_APP_BE_ENV == "DEV") {
+                    console.log(error)
+                }
+                if(error.response.data.status == 404) {
+                    setData(values => ({...values,
+                        errorMusnah81: "Surat pemusnahan tidak ada/belum dibuat",
+                    }));
+                } else {
+                    setData(values => ({...values,
+                        errorMusnah81: "Gagal load data history surat pemusnahan",
+                    }));
+                }
+            });
+        }
+
+        if(data.errorMusnah82) {
+            const response82 = modelPemusnahan.getByPtkId(data.noIdPtk, 36);
+            response82
+            .then((response) => {
+                if(response.data) {
+                    console.log(response)
+                    if(typeof response.data != "string") {
+                        if(response.data.status == 200) {
+                            setData(values => ({...values,
+                                errorMusnah82: "",
+                            }));
+                            setValue("idDok82", response.data.data[0].id)
+                            setValue("noDok82", response.data.data[0].nomor)
+                            setValue("tglDok82", response.data.data[0].tanggal)
+                            setValue("maksMusnah", response.data.data[0].maks_pemusnahan)
+                            setValue("pelaksanaMusnah", response.data.data[0].petugas_pelaksana + " - " + response.data.data[0].nip_pelaksana)
+                            
+                            setValue("lokasiMusnah", response.data.data[0].tempat_musnah)
+                            setValue("metodeMusnah", response.data.data[0].metode_musnah)
+                            
+                            setValue("diterbitkan", response.data.data[0].diterbitkan_di)
+                            setValue("ttdPutusan", response.data.data[0].user_ttd_id?.toString())
+                            setArraySaksi(response.data.data)
+                        } else if(response.data.status == 404) {
+                            setData(values => ({...values,
+                                errorMusnah81: "",
+                            }));
+                        } else {
+                            setData(values => ({...values,
+                                errorMusnah81: "Gagal load data history berita acara pemusnahan",
+                            }));
+                        }
+                    } else {
+                        setData(values => ({...values,
+                            errorMusnah81: "Gagal load data history berita acara pemusnahan",
+                        }));
+                    }
+                }
+            })
+            .catch((error) => {
+                if(process.env.REACT_APP_BE_ENV == "DEV") {
+                    console.log(error)
+                }
+                if(error.response.data.status == 404) {
+                    setData(values => ({...values,
+                        errorMusnah82: "",
+                    }));
+                } else {
+                    setData(values => ({...values,
+                        errorMusnah82: "Gagal load data history berita acara pemusnahan",
+                    }));
+                }
+            });
+        }
+    }
+
   return (
     <div className="container-xxl flex-grow-1 container-p-y">
     <h4 className="py-3 breadcrumb-wrapper mb-4">
-        K-8.2 <span className="fw-light" style={{color: 'blue'}}>Berita Acara Pemusnahan</span>
+        K-8.2 <span className="fw-light" style={{color: 'blue'}}>BERITA ACARA PEMUSNAHAN</span>
+
+        <small className='float-end'>
+            <span className='text-danger'>{(data.errorPTK ? data.errorPTK + "; " : "") + (data.errorKomoditas ? data.errorKomoditas + "; " : "") + (data.errorMusnah81 ? data.errorMusnah81 + "; " : "") + (data.errorMusnah82 ? data.errorMusnah82 + "; " : "") + (data.errorSurtug ? data.errorSurtug + "; " : "")}</span>
+            {data.errorPTK || data.errorKomoditas || data.errorMusnah81 || data.errorMusnah82 || data.errorSurtug ?
+                <button type='button' className='btn btn-warning btn-xs' onClick={() => refreshData()}><i className='fa-solid fa-sync'></i> Refresh</button>
+            : ""}
+        </small>
     </h4>
 
     <div className="row">
@@ -340,6 +855,7 @@ function DocK82() {
                 </div>
                 <form className="card-body" onSubmit={handleSubmit(onSubmit)}>
                     <input type="hidden" id='idDok82' {...register("idDok82")} />
+                    <input type="hidden" id='idDok81' {...register("idDok81")} />
                     <input type="hidden" id='idPtk' {...register("idPtk")} />
                     <input type="hidden" id='noDokumen' {...register("noDokumen")} />
                     <div className="col-md-12 mt-3">
@@ -378,19 +894,19 @@ function DocK82() {
                                             <div className="row">
                                                 <label className="col-sm-4 col-form-label" htmlFor="namaPemohon">Nama</label>
                                                 <div className="col-sm-8">
-                                                    <input type="text" id="namaPemohon" value={data.listPtk && (arraySaksi.length > 0 ? arraySaksi[0].nama : "" || "")} disabled className="form-control form-control-sm" placeholder="Nama Pengirim" />
+                                                    <input type="text" id="namaPemohon" value={arraySaksi?.length > 0 ? arraySaksi[0].nama : ""} disabled className="form-control form-control-sm" placeholder="Nama Pengirim" />
                                                 </div>
                                             </div>
                                             <div className="row">
                                                 <label className="col-sm-4 col-form-label" htmlFor="alamatPemohon">Alamat</label>
                                                 <div className="col-sm-8">
-                                                    <input type="text" id="alamatPemohon" value={data.listPtk && (arraySaksi.length > 0 ? arraySaksi[0].alamat : "" || "")} disabled className="form-control form-control-sm" placeholder="Nama Pengirim" />
+                                                    <input type="text" id="alamatPemohon" value={arraySaksi?.length > 0 ? arraySaksi[0].alamat : ""} disabled className="form-control form-control-sm" placeholder="Nama Pengirim" />
                                                 </div>
                                             </div>
                                             <div className="row">
                                                 <label className="col-sm-4 col-form-label" htmlFor="identitasPemohon">Identitas</label>
                                                 <div className="col-sm-8">
-                                                    <input name="identitastPemohon" className="form-control form-control-sm" disabled value={data.listPtk && ((arraySaksi.length > 0 ? arraySaksi[0].identitas : "") || "")} id="identitasPemohon" placeholder="" />
+                                                    <input name="identitastPemohon" className="form-control form-control-sm" disabled value={arraySaksi?.length > 0 ? arraySaksi[0].identitas : ""} id="identitasPemohon" placeholder="" />
                                                 </div>
                                             </div>
                                         </div>
@@ -399,17 +915,17 @@ function DocK82() {
                                     <div className="row">
                                         <div className="col-md-6">
                                             <div className="row">
-                                                <label className="col-sm-4 col-form-label" htmlFor="daerahAsal">{data.listPtk ? (data.listPtk.permohonan === "DK" ? "Daerah" : "Negara") : ""} Asal</label>
+                                                <label className="col-sm-4 col-form-label" htmlFor="daerahAsal">{data.listPtk ? (data.listPtk.permohonan == "DK" ? "Daerah" : "Negara") : ""} Asal</label>
                                                 <div className="col-sm-8">
-                                                    <input name="daerahAsal" className="form-control form-control-sm" disabled value={data.listPtk && ((data.listPtk.permohonan === "DK" ? data.listPtk.kota_asal : data.listPtk.negara_asal) || "")} id="daerahAsal" />
+                                                    <input name="daerahAsal" className="form-control form-control-sm" disabled value={(data.listPtk?.permohonan == "DK" ? data.listPtk?.kota_asal : data.listPtk?.negara_asal) || ""} id="daerahAsal" />
                                                 </div>
                                             </div>
                                         </div>
                                         <div className="col-md-6">
                                             <div className="row">
-                                                <label className="col-sm-4 col-form-label" htmlFor="daerahTujuan">{data.listPtk ? (data.listPtk.permohonan === "DK" ? "Daerah" : "Negara") : ""} Tujuan</label>
+                                                <label className="col-sm-4 col-form-label" htmlFor="daerahTujuan">{data.listPtk ? (data.listPtk.permohonan == "DK" ? "Daerah" : "Negara") : ""} Tujuan</label>
                                                 <div className="col-sm-8">
-                                                    <input name="daerahTujuan" className="form-control form-control-sm" disabled value={data.listPtk && ((data.listPtk.permohonan === "DK" ? data.listPtk.kota_tujuan : data.listPtk.negara_tujuan) || "")} id="daerahTujuan" />
+                                                    <input name="daerahTujuan" className="form-control form-control-sm" disabled value={(data.listPtk?.permohonan == "DK" ? data.listPtk?.kota_tujuan : data.listPtk?.negara_tujuan) || ""} id="daerahTujuan" />
                                                 </div>
                                             </div>
                                         </div>
@@ -419,7 +935,7 @@ function DocK82() {
                                             <div className="row">
                                                 <label className="col-sm-4 col-form-label" htmlFor="tempatKeluar">Tempat Pengeluaran / Tgl Berangkat</label>
                                                 <div className="col-sm-8">
-                                                    <input name="tempatKeluar" className="form-control form-control-sm" disabled value={data.listPtk && ((data.listPtk.pelabuhan_muat + " / " + data.listPtk.tanggal_rencana_berangkat_terakhir) || "")} id="tempatKeluar" />
+                                                    <input name="tempatKeluar" className="form-control form-control-sm" disabled value={(data.listPtk?.pelabuhan_muat + " / " + data.listPtk?.tanggal_rencana_berangkat_terakhir) || ""} id="tempatKeluar" />
                                                 </div>
                                             </div>
                                         </div>
@@ -427,7 +943,7 @@ function DocK82() {
                                             <div className="row">
                                                 <label className="col-sm-4 col-form-label" htmlFor="tempatMasuk">Tempat Pemasukan / Tgl Tiba</label>
                                                 <div className="col-sm-8">
-                                                    <input name="tempatMasuk" className="form-control form-control-sm" disabled value={data.listPtk && ((data.listPtk.pelabuhan_bongkar + " / " + data.listPtk.tanggal_rencana_tiba_terakhir) || "")} id="tempatMasuk" />
+                                                    <input name="tempatMasuk" className="form-control form-control-sm" disabled value={(data.listPtk?.pelabuhan_bongkar + " / " + data.listPtk?.tanggal_rencana_tiba_terakhir) || ""} id="tempatMasuk" />
                                                 </div>
                                             </div>
                                         </div>
@@ -452,7 +968,7 @@ function DocK82() {
                                             <span className='text-danger'>{loadKomoditiPesan}</span>
                                         </span>
                                         <div className='col-md-12 mb-3'>
-                                            <div className="table-responsive text-nowrap" style={{height: "300px"}}>
+                                            <div className="table-responsive text-nowrap" style={{height: (data.listKomoditas?.length > 8 ? "300px" : "")}}>
                                                 <table className="table table-sm table-bordered table-hover table-striped dataTable">
                                                     <thead>
                                                         <tr>
@@ -482,18 +998,18 @@ function DocK82() {
                                                                         <td>{data.klasifikasi}</td>
                                                                         <td>{data.nama_umum_tercetak}</td>
                                                                         <td>{data.nama_latin_tercetak}</td>
-                                                                        <td>{data.volume_netto}</td>
+                                                                        <td className='text-end'>{data.volume_netto?.toLocaleString()}</td>
                                                                         <td>{data.sat_netto}</td>
-                                                                        <td>{data.volume_lain}</td>
+                                                                        <td className='text-end'>{data.volume_lain?.toLocaleString()}</td>
                                                                         <td>{data.sat_lain}</td>
-                                                                        <td>{data.jantan}</td>
-                                                                        <td>{data.betina}</td>
-                                                                        <td>{data.volumeP7}</td>
-                                                                        <td>{data.nettoP7}</td>
-                                                                        <td>{data.jantanP7}</td>
-                                                                        <td>{data.betinaP7}</td>
+                                                                        <td className='text-end'>{data.jantan?.toLocaleString()}</td>
+                                                                        <td className='text-end'>{data.betina?.toLocaleString()}</td>
+                                                                        <td className='text-end'>{data.volumeP7?.toLocaleString()}</td>
+                                                                        <td className='text-end'>{data.nettoP7?.toLocaleString()}</td>
+                                                                        <td className='text-end'>{data.jantanP7?.toLocaleString()}</td>
+                                                                        <td className='text-end'>{data.betinaP7?.toLocaleString()}</td>
                                                                         <td>
-                                                                            <button className="btn btn-default dropdown-item" type="button" onClick={handleEditKomoditas} data-headerid={data.id} data-ptk={data.ptk_id} data-bs-toggle="modal" data-bs-target="#modKomoditas"><i className="fa-solid fa-pen-to-square me-1"></i> Edit</button>
+                                                                            <button className="btn btn-default dropdown-item" type="button" onClick={() => handleEditKomoditas(index)} data-bs-toggle="modal" data-bs-target="#modKomoditas"><i className="fa-solid fa-pen-to-square me-1"></i> Edit</button>
                                                                         </td>
                                                                     </tr>
                                                                 ))
@@ -517,13 +1033,13 @@ function DocK82() {
                                 <div className="accordion-body">
                                     <div className="row">
                                         <div className="row">
-                                            <label className="col-sm-2 col-form-label" htmlFor="tempatKeluar">Laporan {data.listPtk ? (data.listPtk.permohonan === "DK" | data.listPtk.permohonan === "EX" ? "Pengeluaran" : "Pemasukan") : ""} MP  / Tgl</label>
+                                            <label className="col-sm-2 col-form-label" htmlFor="tempatKeluar">Laporan {data.listPtk ? (data.listPtk.permohonan == "DK" | data.listPtk.permohonan == "EX" ? "Pengeluaran" : "Pemasukan") : ""} MP  / Tgl</label>
                                             <div className="col-sm-4">
-                                                <input name="tempatKeluar" className="form-control form-control-sm" disabled value={data.listPtk && ((data.listPtk.pelabuhan_muat + " / " + data.listPtk.tanggal_rencana_berangkat_terakhir) || "")} id="tempatKeluar" />
+                                                <input name="tempatKeluar" className="form-control form-control-sm" disabled value={(data.listPtk?.pelabuhan_muat + " / " + data.listPtk?.tanggal_rencana_berangkat_terakhir) || ""} id="tempatKeluar" />
                                             </div>
                                             <label className="col-sm-2 col-form-label" htmlFor="tempatKeluar">No Surat Pemusnahan / Tgl</label>
                                             <div className="col-sm-4">
-                                                <input name="tempatKeluar" className="form-control form-control-sm" disabled value={data.listPtk && ((data.listPtk.pelabuhan_muat + " / " + data.listPtk.tanggal_rencana_berangkat_terakhir) || "")} id="tempatKeluar" />
+                                                <input name="tempatKeluar" className="form-control form-control-sm" disabled value={(data.listPtk?.pelabuhan_muat + " / " + data.listPtk?.tanggal_rencana_berangkat_terakhir) || ""} id="tempatKeluar" />
                                             </div>
                                         </div>
                                     </div>
@@ -545,7 +1061,16 @@ function DocK82() {
                                             <div className='row'>
                                                 <label className="col-sm-4 col-form-label" htmlFor="pelaksanaMusnah">Pelaksana Pemusnahan</label>
                                                 <div className="col-sm-8">
-                                                    <input name="pelaksanaMusnah" id="pelaksanaMusnah" {...register("pelaksanaMusnah")} className="form-control form-control-sm" />
+                                                    <Controller
+                                                        control={control}
+                                                        name={"pelaksanaMusnah"}
+                                                        defaultValue={""}
+                                                        className="form-control form-control-sm"
+                                                        rules={{ required: "Mohon pilih pelaksana pemusnahan." }}
+                                                        render={({ field: { value,onChange, ...field } }) => (
+                                                            <Select styles={customStyles} placeholder={"Pilih pelaksana.."} value={{id: cekWatch.pelaksanaMusnah, label: cekWatch.pelaksanaMusnah}} {...field} options={masterPegawaiPelaksana()} onChange={(e) => setValue("pelaksanaMusnah", e.value)} />
+                                                        )}
+                                                    />
                                                 </div>
                                             </div>
                                         </div>
@@ -553,32 +1078,34 @@ function DocK82() {
                                         <div className='col-sm-12'>
                                             <h5><u>Saksi-saksi</u>  
                                             <button type='button' className='btn btn-sm btn-outline-dark' style={{marginLeft: "20px"}} data-bs-toggle="modal" data-bs-target="#modSaksi"><i className='fa-solid fa-plus-circle'></i> Tambah</button></h5>
-                                            <table className="table table-sm table-bordered table-hover table-striped dataTable">
-                                                <thead>
-                                                    <tr>
-                                                        <th>No</th>
-                                                        <th>Nama</th>
-                                                        <th>Alamat</th>
-                                                        <th>Jabatan/Pekerjaan</th>
-                                                        <th>Act</th>
-                                                    </tr>
-                                                </thead>
-                                                <tbody>
-                                                    {arraySaksi ? (
-                                                        arraySaksi.map((item,index) => (
-                                                            <tr key={index}>
-                                                                <td>{index+1}</td>
-                                                                <td>{item.nama + (item.isPemilik ? " (Pemilik)" : "")}</td>
-                                                                <td>{item.alamat}</td>
-                                                                <td>{index === 0 ? <input type='text' value={item.jabatan} onChange={(e) => {item.jabatan = e.target.value; setArraySaksi([...arraySaksi])}} style={{border:0, borderBottom: "1px dotted black"}} /> : item.jabatan}</td>
-                                                                <td>
-                                                                    {index === 0 ? "#" : <button type='button' className="btn btn-default text-danger"><i className="fa-solid fa-trash me-1"></i> Delete</button>}
-                                                                </td>
-                                                            </tr>
-                                                        ))
-                                                    ) : null}
-                                                </tbody>
-                                            </table>
+                                            <div className="table-responsive text-nowrap">
+                                                <table className="table table-sm table-bordered table-hover table-striped dataTable">
+                                                    <thead>
+                                                        <tr>
+                                                            <th>No</th>
+                                                            <th>Nama</th>
+                                                            <th>Alamat</th>
+                                                            <th>Jabatan/Pekerjaan</th>
+                                                            <th>Act</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        {arraySaksi ? (
+                                                            arraySaksi.map((item,index) => (
+                                                                <tr key={index}>
+                                                                    <td>{index+1}</td>
+                                                                    <td>{item.nama + (item.isPemilik ? " (Pemilik)" : "")}</td>
+                                                                    <td>{item.alamat}</td>
+                                                                    <td>{index == 0 ? <input type='text' value={item.jabatan || ""} onChange={(e) => {item.jabatan = e.target.value; setArraySaksi([...arraySaksi])}} style={{border:0, borderBottom: "1px dotted black"}} /> : item.jabatan}</td>
+                                                                    <td>
+                                                                        {index == 0 ? "#" : <button type='button' className="btn btn-default text-danger"><i className="fa-solid fa-trash me-1"></i> Delete</button>}
+                                                                    </td>
+                                                                </tr>
+                                                            ))
+                                                        ) : null}
+                                                    </tbody>
+                                                </table>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
@@ -678,11 +1205,11 @@ function DocK82() {
                                 </div>
                             </div>
                         </div>
-                        <div className="col-6" style={{display: (data.listPtk ? (data.listPtk.jenis_media_pembawa_id === 1 ? "block" : "none") : "none")}}>
+                        <div className="col-6" style={{display: (data.listPtk ? (data.listPtk.jenis_media_pembawa_id == 1 ? "block" : "none") : "none")}}>
                             <label className="form-label" htmlFor="jantanP7">Jumlah Jantan Akhir-P7<span className='text-danger'>*</span></label>
                             <div className='row'>
                                 <div className="col-3" style={{paddingRight: '2px'}}>
-                                    <input type="text" name='jantanP7' id='jantanP7' value={cekdataMPk82.jantanP7 ? addCommas(removeNonNumeric(cekdataMPk82.jantanP7)) : ""} {...registerMPk82("jantanP7", {required: (data.listPtk ? (data.listPtkjenis_media_pembawa_id === 1 ? "Mohon isi jumlah akhir Jantan." : false) : false)})} className={errorsMPk82.jantanP7 ? "form-control form-control-sm is-invalid" : "form-control form-control-sm"} />
+                                    <input type="text" name='jantanP7' id='jantanP7' value={cekdataMPk82.jantanP7 ? addCommas(removeNonNumeric(cekdataMPk82.jantanP7)) : ""} {...registerMPk82("jantanP7", {required: (data.listPtk ? (data.listPtkjenis_media_pembawa_id == 1 ? "Mohon isi jumlah akhir Jantan." : false) : false)})} className={errorsMPk82.jantanP7 ? "form-control form-control-sm is-invalid" : "form-control form-control-sm"} />
                                 </div>
                                 <div className="col-2" style={{paddingLeft: '2px'}}>
                                     <input type="text" className='form-control form-control-sm' name='satuanjantanP7' id='satuanjantanP7' value={"EKR"} disabled />
@@ -690,11 +1217,11 @@ function DocK82() {
                             </div>
                             {errorsMPk82.jantanP7 && <small className="text-danger">{errorsMPk82.jantanP7.message}</small>}
                         </div>
-                        <div className="col-6" style={{display: (data.listPtk ? (data.listPtk.jenis_media_pembawa_id === 1 ? "block" : "none") : "none")}}>
+                        <div className="col-6" style={{display: (data.listPtk ? (data.listPtk.jenis_media_pembawa_id == 1 ? "block" : "none") : "none")}}>
                             <label className="form-label" htmlFor="betinaP7">Jumlah Betina Akhir-P7<span className='text-danger'>*</span></label>
                             <div className='row'>
                                 <div className="col-3" style={{paddingRight: '2px'}}>
-                                    <input type="text" name='betinaP7' id='betinaP7' value={cekdataMPk82.betinaP7 ? addCommas(removeNonNumeric(cekdataMPk82.betinaP7)) : ""} {...registerMPk82("betinaP7", {required: (data.listPtk ? (data.listPtkjenis_media_pembawa_id === 1 ? "Mohon isi jumlah akhir Betina." : false) : false)})} className={errorsMPk82.betinaP7 ? "form-control form-control-sm is-invalid" : "form-control form-control-sm"} />
+                                    <input type="text" name='betinaP7' id='betinaP7' value={cekdataMPk82.betinaP7 ? addCommas(removeNonNumeric(cekdataMPk82.betinaP7)) : ""} {...registerMPk82("betinaP7", {required: (data.listPtk ? (data.listPtkjenis_media_pembawa_id == 1 ? "Mohon isi jumlah akhir Betina." : false) : false)})} className={errorsMPk82.betinaP7 ? "form-control form-control-sm is-invalid" : "form-control form-control-sm"} />
                                 </div>
                                 <div className="col-2" style={{paddingLeft: '2px'}}>
                                     <input type="text" className='form-control form-control-sm' name='satuanbetinaP7' id='satuanbetinaP7' value={"EKR"} disabled />
@@ -732,15 +1259,15 @@ function DocK82() {
                         <div className="row mb-3">
                             <label className="col-sm-3 col-form-label" htmlFor="namaSaksi">Nama</label>
                             <div className="col-sm-8">
-                                <input type="text" className='form-control form-control-sm' id='namaSaksi' name='namaSaksi' disabled={editSaksi.index === "0" ? true : false} value={editSaksi.nama} onChange={(e) => setEditSaksi(values => ({...values, nama: e.target.value}))} />
+                                <input type="text" className='form-control form-control-sm' id='namaSaksi' name='namaSaksi' disabled={editSaksi.index == "0" ? true : false} value={editSaksi.nama || ""} onChange={(e) => setEditSaksi(values => ({...values, nama: e.target.value}))} />
                             </div>
                             <label className="col-sm-3 col-form-label" htmlFor="alamatSaksi">Alamat</label>
                             <div className="col-sm-8">
-                                <input type="text" className='form-control form-control-sm' id='alamatSaksi' name='alamatSaksi' disabled={editSaksi.index === "0" ? true : false} value={editSaksi.alamat} onChange={(e) => setEditSaksi(values => ({...values, alamat: e.target.value}))} />
+                                <input type="text" className='form-control form-control-sm' id='alamatSaksi' name='alamatSaksi' disabled={editSaksi.index == "0" ? true : false} value={editSaksi.alamat || ""} onChange={(e) => setEditSaksi(values => ({...values, alamat: e.target.value}))} />
                             </div>
                             <label className="col-sm-3 col-form-label" htmlFor="jabatanSaksi">Jabatan</label>
                             <div className="col-sm-8">
-                                <input type="text" className='form-control form-control-sm' id='jabatanSaksi' name='jabatanSaksi' value={editSaksi.jabatan} onChange={(e) => setEditSaksi(values => ({...values, jabatan: e.target.value}))} />
+                                <input type="text" className='form-control form-control-sm' id='jabatanSaksi' name='jabatanSaksi' value={editSaksi.jabatan || ""} onChange={(e) => setEditSaksi(values => ({...values, jabatan: e.target.value}))} />
                             </div>
                         </div>
                         <div className="col-12 text-center">

@@ -74,7 +74,6 @@ function DocK22() {
     const dataHeader = watchHeader()
 
     const onSubmitHeader = (data) => {
-        const modelSurtug = new PtkSurtug();
         const response = modelSurtug.simpanHeader(data);
             response
             .then((response) => {
@@ -91,12 +90,31 @@ function DocK22() {
                         setValueDetilSurtug("idHeader", response.data.data.id)
                         setValueHeader("idHeader", response.data.data.id)
                         setValueHeader("noSurtug", response.data.data.nomor)
-                        setData(values => (
-                            {...values, 
-                                nomorSurtug: response.data.data.nomor,
-                                tglSurtug: data.tglSurtug,
-                            }));
-                        dataSurtugHeader()
+                        setData(values => ({...values, 
+                            nomorSurtug: response.data.data.nomor,
+                            tglSurtug: data.tglSurtug,
+                        }));
+
+                        const responseDet = modelSurtug.getDetilByHeader(response.data.data.id);
+                        responseDet
+                        .then((res) => {
+                            if(res.data) {
+                                console.log(res.data)
+                                if(res.data.status == 200) {
+                                    setListDataDetil(res.data.data)
+                                } else {
+                                    setListDataDetil([])
+                                }
+                            }
+                        })
+                        .catch((error) => {
+                            if(process.env.REACT_APP_BE_ENV == "DEV") {
+                                console.log(error)
+                            }
+                            setListDataDetil([])
+                        });
+                        // dataSurtugHeader()
+                        
                     } else {
                         Swal.fire({
                             icon: "error",
@@ -138,7 +156,6 @@ function DocK22() {
     
     const onSubmitDetilSurtug = (data) => {
         // console.log(data)
-        const modelSurtug = new PtkSurtug();
         const response = modelSurtug.simpanDetil(data);
             response
             .then((response) => {
@@ -169,38 +186,36 @@ function DocK22() {
             });
     }
 
-    function dataSurtugHeader() {
-        const modelSurtug = new PtkSurtug();
-        const response = modelSurtug.getDetilSurtugPenugasan(data.idPtk, "");
+    // function dataSurtugHeader() {
+    //     const response = modelSurtug.getDetilSurtugPenugasan(data.idPtk, "");
     
-        response
-        .then((res) => {
-            if(res.data) {
-                if(res.data.status == '200') {
-                    setListDataHeader(res.data.data)
-                }
-            }
-        })
-        .catch((error) => {
-            if(process.env.REACT_APP_BE_ENV == "DEV") {
-                console.log(error)
-            }
-            setListDataHeader()
-        });
-    }
+    //     response
+    //     .then((res) => {
+    //         if(res.data) {
+    //             if(res.data.status == 200) {
+    //                 setListDataHeader(res.data.data)
+    //             }
+    //         }
+    //     })
+    //     .catch((error) => {
+    //         if(process.env.REACT_APP_BE_ENV == "DEV") {
+    //             console.log(error)
+    //         }
+    //         setListDataHeader([])
+    //     });
+    // }
 
     function dataSurtugDetil(id) {
-        const modelSurtug = new PtkSurtug();
         const response = modelSurtug.getDetilByHeader(id);
 
         response
         .then((res) => {
             if(res.data) {
                 console.log(res.data)
-                if(res.data.status == '200') {
+                if(res.data.status == 200) {
                     setListDataDetil(res.data.data)
                 } else {
-                    setListDataDetil()
+                    setListDataDetil([])
                 }
             }
         })
@@ -208,7 +223,7 @@ function DocK22() {
             if(process.env.REACT_APP_BE_ENV == "DEV") {
                 console.log(error)
             }
-            setListDataDetil()
+            setListDataDetil([])
         });
     }
 
@@ -237,12 +252,14 @@ function DocK22() {
                 nomorSurtug: "",
                 tglSurtug: "",
             }));
+        setListDataDetil([])
         setValueHeader("idHeader", "")
         setValueDetilSurtug("idHeader", "")
         setValueHeader("perihalSurtug", "Pelaksanaan Tindakan Karantina")
         setValueHeader("tglSurtug", (new Date()).toLocaleString('en-CA', { hourCycle: 'h24' }).replace(',', '').slice(0,16))
         setValueHeader("noSurtug", "")
         setValueHeader("ttdSurtug", "")
+        
         setAddSurtug(true);
     }
 
@@ -266,7 +283,7 @@ function DocK22() {
             .then((res) => {
                 if(res.data) {
                     if(typeof res.data != "string") {
-                        if(res.data.status == '200') {
+                        if(res.data.status == 200) {
                             setValueHeader("idAnalis", res.data.data[0].id);
                             setData(values => ({...values,
                                 errorAnalisis: "",
@@ -299,7 +316,7 @@ function DocK22() {
             .then((res) => {
                 if(res.data) {
                     if(typeof res.data != "string") {
-                        if(res.data.status == '200') {
+                        if(res.data.status == 200) {
                             setListDataHeader(res.data.data)
                             setData(values => ({...values,
                                 errorSurtug: "",
@@ -377,7 +394,7 @@ function DocK22() {
             .then((res) => {
                 if(res.data) {
                     if(typeof res.data != "string") {
-                        if(res.data.status == '200') {
+                        if(res.data.status == 200) {
                             setData(values => ({...values,
                                 errorSurtug: "",
                             }))
@@ -463,45 +480,46 @@ function DocK22() {
                     <div className="card-body pt-0">
                         <button className='btn btn-sm btn-primary' onClick={handleHeaderBaru}><i className="bx bx-plus bx-xs"></i> Buat Surat Tugas Baru</button>
                         <div className="row p-2">
-                        <table className="table table-sm table-bordered table-hover table-striped mt-2">
-                            <thead>
-                                <tr>
-                                    <th className='text-lightest'>NOMOR</th>
-                                    <th className='text-lightest'>TANGGAL</th>
-                                    <th className='text-lightest'>PERIHAL</th>
-                                    <th className='text-lightest'>PENANDATANGAN</th>
-                                    <th className='text-lightest'>NIP</th>
-                                    <th className='text-lightest'>JABATAN</th>
-                                    <th className='text-lightest'>#</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                            {console.log(listDataHeader)}
-                            {listDataHeader ? (
-                                listDataHeader?.map((data, index) => (
-                                    <tr key={index}>
-                                        <td>{data.nomor}</td>
-                                        <td>{data.tanggal}</td>
-                                        <td>{stringSimbol(data.perihal)}</td>
-                                        <td>{data.nama}</td>
-                                        <td>{data.nip}</td>
-                                        <td>{data.jabatan}</td>
-                                        <td>
-                                            <div className="d-grid gap-2">
-                                                <button type="button" className="btn p-0 hide-arrow dropdown-toggle" aria-expanded="false" data-bs-toggle="dropdown">
-                                                    <i className="menu-icon tf-icons fa-solid fa-ellipsis-vertical"></i>
-                                                </button>
-                                                <div className="dropdown-menu">
-                                                    <button className="dropdown-item" data-key={data.id} data-ttd={data.penanda_tangan_id} type="button" onClick={() => handleEditHeader(index)}><i className="fa-solid fa-pen-to-square me-1"></i> Edit</button>
-                                                    <button className="dropdown-item" type='button'><i className="fa-solid fa-trash me-1"></i> Delete</button>
-                                                </div>
-                                            </div>
-                                        </td>
-                                    </tr>
-                                ))
-                            ) : null}
-                            </tbody>
-                        </table>
+                            <div className="table-responsive text-nowrap" style={{height: (listDataHeader?.length > 8 ? "300px" : "")}}>
+                                <table className="table table-sm table-bordered table-hover table-striped mt-2">
+                                    <thead>
+                                        <tr>
+                                            <th className='text-lightest'>NOMOR</th>
+                                            <th className='text-lightest'>TANGGAL</th>
+                                            <th className='text-lightest'>PERIHAL</th>
+                                            <th className='text-lightest'>PENANDATANGAN</th>
+                                            <th className='text-lightest'>NIP</th>
+                                            <th className='text-lightest'>JABATAN</th>
+                                            <th className='text-lightest'>#</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                    {listDataHeader ? (
+                                        listDataHeader?.map((data, index) => (
+                                            <tr key={index}>
+                                                <td>{data.nomor}</td>
+                                                <td>{data.tanggal}</td>
+                                                <td>{stringSimbol(data.perihal)}</td>
+                                                <td>{data.nama}</td>
+                                                <td>{data.nip}</td>
+                                                <td>{data.jabatan}</td>
+                                                <td>
+                                                    <div className="d-grid gap-2">
+                                                        <button type="button" className="btn p-0 hide-arrow dropdown-toggle" aria-expanded="false" data-bs-toggle="dropdown">
+                                                            <i className="menu-icon tf-icons fa-solid fa-ellipsis-vertical"></i>
+                                                        </button>
+                                                        <div className="dropdown-menu">
+                                                            <button className="dropdown-item" data-key={data.id} data-ttd={data.penanda_tangan_id} type="button" onClick={() => handleEditHeader(index)}><i className="fa-solid fa-pen-to-square me-1"></i> Edit</button>
+                                                            <button className="dropdown-item" type='button'><i className="fa-solid fa-trash me-1"></i> Delete</button>
+                                                        </div>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                        ))
+                                    ) : null}
+                                    </tbody>
+                                </table>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -581,39 +599,41 @@ function DocK22() {
                             <div className="collapse show">
                                 <div className="card-body pt-0">
                                     <button type="button" className="btn btn-xs btn-primary" data-bs-toggle="modal" data-bs-target="#modPetugas">Tambah Petugas</button>
-                                    <button type="button" className="btn btn-xs btn-info float-end"><i className="menu-icon tf-icons bx bx-sync"></i> Refresh Data</button>
-                                    <table className="table table-sm table-bordered table-hover table-striped mt-2">
-                                        <thead>
-                                            <tr>
-                                                <th className='text-lightest'>No</th>
-                                                <th className='text-lightest'>NIP</th>
-                                                <th className='text-lightest'>NAMA</th>
-                                                <th className='text-lightest'>JABATAN</th>
-                                                <th className='text-lightest'>PENUGASAN</th>
-                                                <th className='text-lightest'>#</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                        {listDataDetil ? (
-                                            listDataDetil?.map((data, index) => (
-                                                <tr key={index}>
-                                                    <td>{index+1}</td>
-                                                    <td>{data.nip}</td>
-                                                    <td>{data.nama}</td>
-                                                    <td>{data.jabatan}</td>
-                                                    <td>{data.tugas}</td>
-                                                    <td>
-                                                        <div className="d-grid gap-2">
-                                                            <button type="button" className="btn p-0 hide-arrow">
-                                                                <i className="fa-solid fa-trash text-danger"></i>
-                                                            </button>
-                                                        </div>
-                                                    </td>
+                                    {/* <button type="button" className="btn btn-xs btn-info float-end"><i className="menu-icon tf-icons bx bx-sync"></i> Refresh Data</button> */}
+                                    <div className="table-responsive text-nowrap">
+                                        <table className="table table-sm table-bordered table-hover table-striped mt-2">
+                                            <thead>
+                                                <tr>
+                                                    <th className='text-lightest'>No</th>
+                                                    <th className='text-lightest'>NIP</th>
+                                                    <th className='text-lightest'>NAMA</th>
+                                                    <th className='text-lightest'>JABATAN</th>
+                                                    <th className='text-lightest'>PENUGASAN</th>
+                                                    <th className='text-lightest'>#</th>
                                                 </tr>
-                                            ))
-                                        ) : null}
-                                        </tbody>
-                                    </table>
+                                            </thead>
+                                            <tbody>
+                                            {listDataDetil ? (
+                                                listDataDetil?.map((data, index) => (
+                                                    <tr key={index}>
+                                                        <td>{index+1}</td>
+                                                        <td>{data.nip}</td>
+                                                        <td>{data.nama}</td>
+                                                        <td>{data.jabatan}</td>
+                                                        <td>{data.tugas}</td>
+                                                        <td>
+                                                            <div className="d-grid gap-2">
+                                                                <button type="button" className="btn p-0 hide-arrow">
+                                                                    <i className="fa-solid fa-trash text-danger"></i>
+                                                                </button>
+                                                            </div>
+                                                        </td>
+                                                    </tr>
+                                                ))
+                                            ) : null}
+                                            </tbody>
+                                        </table>
+                                    </div>
                                 </div>
                             </div>
                         </div>

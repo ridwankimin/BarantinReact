@@ -1007,32 +1007,34 @@ function DocK91() {
                                         </div>
                                         <div className="row mb-4">
                                             <h5 className='mb-1'><b>Detil Kontainer : {data.listKontainer?.length} kontainer</b></h5>
-                                            <table className="table table-sm table-bordered table-hover table-striped dataTable m-1" style={{height: (data.listKontainer?.length > 8 ? "300px" : "")}}>
-                                                <thead style={{backgroundColor: '#123138' }}>
-                                                    <tr>
-                                                        <th className='text-lightest'>No</th>
-                                                        <th className='text-lightest'>Nomor Kontainer</th>
-                                                        <th className='text-lightest'>Size</th>
-                                                        <th className='text-lightest'>Stuff</th>
-                                                        <th className='text-lightest'>Tipe</th>
-                                                        <th className='text-lightest'>Segel</th>
-                                                    </tr>
-                                                </thead>
-                                                <tbody>
-                                                    {data.listKontainer ? (
-                                                        data.listKontainer?.map((data, index) => (
-                                                            <tr key={index}>
-                                                                <td>{index + 1}</td>
-                                                                <td>{data.nomor}</td>
-                                                                <td>{data.ukuran}</td>
-                                                                <td>{data.stuff}</td>
-                                                                <td>{data.tipe}</td>
-                                                                <td>{data.segel}</td>
-                                                            </tr>
-                                                        ))
-                                                    ) : null}
-                                                </tbody>
-                                            </table>
+                                            <div className="table-responsive text-nowrap" style={{height: (data.listKontainer?.length > 8 ? "300px" : "")}}>
+                                                <table className="table table-sm table-bordered table-hover table-striped dataTable m-1">
+                                                    <thead style={{backgroundColor: '#123138' }}>
+                                                        <tr>
+                                                            <th className='text-lightest'>No</th>
+                                                            <th className='text-lightest'>Nomor Kontainer</th>
+                                                            <th className='text-lightest'>Size</th>
+                                                            <th className='text-lightest'>Stuff</th>
+                                                            <th className='text-lightest'>Tipe</th>
+                                                            <th className='text-lightest'>Segel</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        {data.listKontainer ? (
+                                                            data.listKontainer?.map((data, index) => (
+                                                                <tr key={index}>
+                                                                    <td>{index + 1}</td>
+                                                                    <td>{data.nomor}</td>
+                                                                    <td>{data.ukuran}</td>
+                                                                    <td>{data.stuff}</td>
+                                                                    <td>{data.tipe}</td>
+                                                                    <td>{data.segel}</td>
+                                                                </tr>
+                                                            ))
+                                                        ) : null}
+                                                    </tbody>
+                                                </table>
+                                            </div>
                                         </div>
                                         <div className="row mb-4">
                                             <h5 className='mb-1'><b>Detil Dokumen : {data.listDokumen?.length} dokumen</b></h5>

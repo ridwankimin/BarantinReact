@@ -1037,7 +1037,7 @@ function DocK72() {
                                                 <span className='text-danger'>{loadKomoditiPesan}</span>
                                             </h5>
                                             <div className='col-md-12 mb-3'>
-                                                <div className="table-responsive text-nowrap" style={{height: "300px"}}>
+                                                <div className="table-responsive text-nowrap" style={{height: (data.listKomoditas?.length > 8 ? "300px" : "")}}>
                                                     <table className="table table-sm table-bordered table-hover table-striped dataTable">
                                                         <thead>
                                                             <tr>
@@ -1149,32 +1149,34 @@ function DocK72() {
                                         <div className='col-sm-12'>
                                             <h5><u>Daftar Saksi</u>  
                                             <button type='button' className='btn btn-sm btn-outline-dark' style={{marginLeft: "20px"}} data-bs-toggle="modal" data-bs-target="#modSaksi"><i className='fa-solid fa-plus-circle'></i> Tambah</button></h5>
-                                            <table className="table table-sm table-bordered table-hover table-striped dataTable">
-                                                <thead>
-                                                    <tr>
-                                                        <th>No</th>
-                                                        <th>Nama</th>
-                                                        <th>Alamat</th>
-                                                        <th>Jabatan/Pekerjaan</th>
-                                                        <th>Act</th>
-                                                    </tr>
-                                                </thead>
-                                                <tbody>
-                                                    {arraySaksi ? (
-                                                        arraySaksi.map((item,index) => (
-                                                            <tr key={index}>
-                                                                <td>{index+1}</td>
-                                                                <td>{item.nama + (item.isPemilik == "1" ? " (Pemilik)" : "")}</td>
-                                                                <td>{item.alamat}</td>
-                                                                <td>{index === 0 ? <input type='text' value={item.jabatan || ""} onChange={(e) => {item.jabatan = e.target.value; setArraySaksi([...arraySaksi])}} style={{border:0, borderBottom: "1px dotted black"}} /> : item.jabatan}</td>
-                                                                <td>
-                                                                    {index === 0 ? "#" : <button type='button' className="btn btn-default text-danger"><i className="fa-solid fa-trash me-1"></i> Delete</button>}
-                                                                </td>
-                                                            </tr>
-                                                        ))
-                                                    ) : null}
-                                                </tbody>
-                                            </table>
+                                            <div className="table-responsive text-nowrap">
+                                                <table className="table table-sm table-bordered table-hover table-striped dataTable">
+                                                    <thead>
+                                                        <tr>
+                                                            <th>No</th>
+                                                            <th>Nama</th>
+                                                            <th>Alamat</th>
+                                                            <th>Jabatan/Pekerjaan</th>
+                                                            <th>Act</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        {arraySaksi ? (
+                                                            arraySaksi.map((item,index) => (
+                                                                <tr key={index}>
+                                                                    <td>{index+1}</td>
+                                                                    <td>{item.nama + (item.isPemilik == "1" ? " (Pemilik)" : "")}</td>
+                                                                    <td>{item.alamat}</td>
+                                                                    <td>{index === 0 ? <input type='text' value={item.jabatan || ""} onChange={(e) => {item.jabatan = e.target.value; setArraySaksi([...arraySaksi])}} style={{border:0, borderBottom: "1px dotted black"}} /> : item.jabatan}</td>
+                                                                    <td>
+                                                                        {index === 0 ? "#" : <button type='button' className="btn btn-default text-danger"><i className="fa-solid fa-trash me-1"></i> Delete</button>}
+                                                                    </td>
+                                                                </tr>
+                                                            ))
+                                                        ) : null}
+                                                    </tbody>
+                                                </table>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>

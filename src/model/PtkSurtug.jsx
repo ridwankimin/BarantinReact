@@ -184,7 +184,8 @@ export default class PtkSurtug {
           'Content-Type': 'application/json', 
         },
         data: {
-          ptk_surtug_header_id: id
+          ptk_surtug_header_id: id,
+          ptk_surtug_petugas_id: ""
         }
       };
       

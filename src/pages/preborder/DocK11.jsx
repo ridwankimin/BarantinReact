@@ -1931,7 +1931,8 @@ function DocK11() {
                         <div className="collapse show">
                             <div className="card-body pt-0 pb-0">
                                 <div className="row mb-3">
-                                    <div className="col-sm-12">
+                                    <input type="hidden" value="PTK" name='jenisForm' id='jenisForm' {...registerPemohon("jenisForm")} />
+                                    {/* <div className="col-sm-12">
                                         <div className="col-sm-5">
                                             <div className="row">
                                                 <label className="col-sm-4 col-form-label" htmlFor="jenisForm">Jenis Form <span className='text-danger'>*</span></label>
@@ -1945,7 +1946,7 @@ function DocK11() {
                                                 </div>
                                             </div>
                                         </div>
-                                    </div>
+                                    </div> */}
                                     <div className="col-sm-5">
                                         <div className="row mb-3">
                                             <label className="col-sm-4 col-form-label" htmlFor="mediaPembawa">Media Pembawa <span className='text-danger'>*</span></label>
@@ -2473,7 +2474,7 @@ function DocK11() {
                         </div>
                     </div>
                 </div>
-                <div className="col-12 d-flex justify-content-between">
+                <div className="col-md-12 d-flex justify-content-between">
                     <button type="button" className="btn btn-label-secondary" disabled>
                         <i className="fa-solid fa-chevron-left me-sm-2 me-1"></i>
                         <span className="d-sm-inline-block d-none">Sebelumnya</span>
@@ -2880,50 +2881,52 @@ function DocK11() {
                                                         <button type="button" className="btn btn-xs btn-primary" data-bs-toggle="modal" data-bs-target="#modKontainer">Tambah Kontainer</button>
                                                         <button type="button" onClick={dataKontainerPtk} className="btn btn-xs btn-info float-end"><i className="menu-icon tf-icons fa-solid fa-sync"></i> Refresh Data</button>
                                                     </div>
-                                                    <table className="table table-sm table-bordered table-hover table-striped dataTable">
-                                                        <thead style={{backgroundColor: '#123138' }}>
-                                                            <tr>
-                                                                <th className='text-lightest'>No</th>
-                                                                <th className='text-lightest'>Nomor Kontainer</th>
-                                                                <th className='text-lightest'>Size</th>
-                                                                <th className='text-lightest'>Stuff</th>
-                                                                <th className='text-lightest'>Tipe</th>
-                                                                <th className='text-lightest'>Segel</th>
-                                                                <th className='text-lightest'>Act</th>
-                                                            </tr>
-                                                        </thead>
-                                                        <tbody>
-                                                            {kontainerPtk ? (
-                                                                kontainerPtk?.map((data, index) => (
-                                                                    <tr key={index}>
-                                                                        <td>{index + 1}</td>
-                                                                        <td>{data.nomor}</td>
-                                                                        <td>{sizeKontainer[(data.ukuran_kontainer_id - 1)]}</td>
-                                                                        <td>{data.stuff_kontainer_id == 1 ? "FCL" : "LCL" }</td>
-                                                                        <td>{tipeKontainer[(data.tipe_kontainer_id - 1)]}</td>
-                                                                        <td>{data.segel}</td>
-                                                                        <td>
-                                                                            <div className="d-grid gap-2">
-                                                                                <button type="button" className="btn p-0 hide-arrow dropdown-toggle" aria-expanded="false" data-bs-toggle="dropdown">
-                                                                                    <i className="menu-icon tf-icons fa-solid fa-ellipsis-vertical"></i>
-                                                                                </button>
-                                                                                <div className="dropdown-menu">
-                                                                                    <button className="dropdown-item" type="button" data-ptk={data.ptk_id} data-header={data.id} onClick={handleEditKontainer} data-bs-toggle="modal" data-bs-target="#modKontainer"><i className="fa-solid fa-pen-to-square me-1"></i> Edit</button>
-                                                                                    <button className="dropdown-item" type='button'><i className="fa-solid fa-trash me-1"></i> Delete</button>
+                                                    <div className="table-responsive text-nowrap" style={{height: (kontainerPtk?.length > 8 ? "300px" : "")}}>
+                                                        <table className="table table-sm table-bordered table-hover table-striped dataTable">
+                                                            <thead style={{backgroundColor: '#123138' }}>
+                                                                <tr>
+                                                                    <th className='text-lightest'>No</th>
+                                                                    <th className='text-lightest'>Nomor Kontainer</th>
+                                                                    <th className='text-lightest'>Size</th>
+                                                                    <th className='text-lightest'>Stuff</th>
+                                                                    <th className='text-lightest'>Tipe</th>
+                                                                    <th className='text-lightest'>Segel</th>
+                                                                    <th className='text-lightest'>Act</th>
+                                                                </tr>
+                                                            </thead>
+                                                            <tbody>
+                                                                {kontainerPtk ? (
+                                                                    kontainerPtk?.map((data, index) => (
+                                                                        <tr key={index}>
+                                                                            <td>{index + 1}</td>
+                                                                            <td>{data.nomor}</td>
+                                                                            <td>{sizeKontainer[(data.ukuran_kontainer_id - 1)]}</td>
+                                                                            <td>{data.stuff_kontainer_id == 1 ? "FCL" : "LCL" }</td>
+                                                                            <td>{tipeKontainer[(data.tipe_kontainer_id - 1)]}</td>
+                                                                            <td>{data.segel}</td>
+                                                                            <td>
+                                                                                <div className="d-grid gap-2">
+                                                                                    <button type="button" className="btn p-0 hide-arrow dropdown-toggle" aria-expanded="false" data-bs-toggle="dropdown">
+                                                                                        <i className="menu-icon tf-icons fa-solid fa-ellipsis-vertical"></i>
+                                                                                    </button>
+                                                                                    <div className="dropdown-menu">
+                                                                                        <button className="dropdown-item" type="button" data-ptk={data.ptk_id} data-header={data.id} onClick={handleEditKontainer} data-bs-toggle="modal" data-bs-target="#modKontainer"><i className="fa-solid fa-pen-to-square me-1"></i> Edit</button>
+                                                                                        <button className="dropdown-item" type='button'><i className="fa-solid fa-trash me-1"></i> Delete</button>
+                                                                                    </div>
                                                                                 </div>
-                                                                            </div>
-                                                                        </td>
-                                                                    </tr>
-                                                                ))
-                                                            ) : null}
-                                                        </tbody>
-                                                    </table>
+                                                                            </td>
+                                                                        </tr>
+                                                                    ))
+                                                                ) : null}
+                                                            </tbody>
+                                                        </table>
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
-                                <div className="col-12 d-flex justify-content-between">
+                                <div className="col-md-12 d-flex justify-content-between">
                                     <button type="button" className="btn btn-label-secondary" onClick={() => setWizardPage(wizardPage - 1)}>
                                         <i className="fa-solid fa-chevron-left me-sm-2 me-1"></i>
                                         <span className="d-sm-inline-block d-none">Sebelumnya</span>
@@ -3251,10 +3254,10 @@ function DocK11() {
                                                                 <label className="offset-sm-6 col-sm-2 col-form-label" htmlFor="nilaiBarang">Total Nilai Barang</label>
                                                                 <div className="col-sm-4">
                                                                     <div className='row'>
-                                                                        <div className="col-8" style={{paddingRight: '2px'}}>
+                                                                        <div className="col-md-8" style={{paddingRight: '2px'}}>
                                                                             <input autoComplete="off" type="text" className='form-control form-control-sm' value={cekdataMP.nilaiBarang ? addCommas(removeNonNumeric(cekdataMP.nilaiBarang)) : ""} {...registerMP("nilaiBarang")} name='nilaiBarang' id='nilaiBarang' />
                                                                         </div>
-                                                                        <div className="col-4" style={{paddingLeft: '2px'}}>
+                                                                        <div className="col-md-4" style={{paddingLeft: '2px'}}>
                                                                             <select name="satuanNilai" id="satuanNilai" value={cekdataMP.satuanNilai || "IDR"} className='form-select form-select-sm' {...registerMP("satuanNilai")}>
                                                                                 <option value="">--</option>
                                                                                 {dataSelect.satuanNilai}
@@ -3271,7 +3274,7 @@ function DocK11() {
                                         </div>
                                     </div>
                                 </div>
-                                <div className="col-12 d-flex justify-content-between">
+                                <div className="col-md-12 d-flex justify-content-between">
                                     <button type="button" className="btn btn-label-secondary" onClick={() => setWizardPage(wizardPage - 1)}>
                                         <i className="fa-solid fa-chevron-left me-sm-2 me-1"></i>
                                         <span className="d-sm-inline-block d-none">Sebelumnya</span>
@@ -3313,7 +3316,7 @@ function DocK11() {
                                                                     <button type="button" className="btn btn-xs btn-primary" data-bs-toggle={cekdataDiri.mediaPembawa ? "modal" : ""} data-bs-target={cekdataDiri.mediaPembawa ? "#modDokumen" : ""} onClick={cekdataDiri.mediaPembawa ? null : () => {Swal.fire({icon: "error", title: "Mohon pilih media pembawa terlebih dahulu!", showConfirmButton: true})}}>Tambah Dokumen</button>
                                                                     <button type="button" className="btn btn-xs btn-info float-end"  onClick={dataDokumenPtk}><i className="menu-icon tf-icons fa-solid fa-sync"></i> Refresh Data</button>
                                                                 </div>
-                                                                <div className="text-nowrap">
+                                                                <div className="table-responsive text-nowrap" style={{height: (dokumenPtk?.length > 8 ? "300px" : "")}}>
                                                                     <table className="table table-sm table-bordered table-hover table-striped dataTable">
                                                                         <thead>
                                                                             <tr>
@@ -3414,7 +3417,7 @@ function DocK11() {
                                             </div>
                                         </div>
                                     </div>
-                                    <div className="col-12 d-flex justify-content-between">
+                                    <div className="col-md-12 d-flex justify-content-between">
                                         <button type="button" className="btn btn-label-secondary" onClick={() => setWizardPage(wizardPage - 1)}>
                                             <i className="fa-solid fa-chevron-left me-sm-2 me-1"></i>
                                             <span className="d-sm-inline-block d-none">Sebelumnya</span>
@@ -3432,21 +3435,21 @@ function DocK11() {
                                 <form onSubmit={handleFormKonfirmasi(onSubmitKonfirmasi)}>
                                     <input autoComplete="off" type="hidden" name='idPtk' {...registerKonfirmasi("idPtk")} />
                                     <input autoComplete="off" type="hidden" name='noAju' {...registerKonfirmasi("noAju")} />
-                                    <div className="col-12" style={{display: (cekdataDiri.permohonan == "EX" ? "block" : "none")}}>
+                                    <div className="col-md-12" style={{display: (cekdataDiri.permohonan == "EX" ? "block" : "none")}}>
                                         <div className="form-check form-switch mb-2">
                                             <input autoComplete="off" className="form-check-input" type="checkbox" id="isDraft" name='isDraft' {...registerKonfirmasi("isDraft")} />
                                             <label className="form-check-label" htmlFor="isDraft">Aktifkan fasilitas Draft {cekdataDiri.mediaPembawa == "T" ? "PC" : "HC"}</label>
                                         </div>
                                         <hr />                                        
                                     </div>
-                                    <div className="col-12 col-lg-8 offset-lg-2 text-center mb-3">
+                                    <div className="col-md-12 col-lg-8 offset-lg-2 text-center mb-3">
                                         <h4 className="mt-2">Terimakasih! 😇</h4>
                                         <p>Silahkan cek kembali kelengkapan data yang diinput!</p>
                                         <p>
                                             Silahkan klik tombol "Simpan & Kirim" jika data yang diinput sudah benar.
                                         </p>
                                     </div>
-                                    <div className="col-12 d-flex justify-content-between">
+                                    <div className="col-md-12 d-flex justify-content-between">
                                         <button type="button" className="btn btn-primary btn-prev" onClick={() => setWizardPage(wizardPage - 1)}>
                                             <i className="fa-solid fa-chevron-left me-sm-2 me-1"></i>
                                             <span className="d-sm-inline-block d-none">Cek Kembali</span>
@@ -3556,7 +3559,7 @@ function DocK11() {
                     <form className="row" onSubmit={handleFormKontainer(onSubmitKontainer)}>
                             <input autoComplete="off" type="hidden" name='idDataKontainer' {...registerKontainer("idDataKontainer")} />
                             <input autoComplete="off" type="hidden" name='idPtk' {...registerKontainer("idPtk")} />
-                        <div className="col-6">
+                        <div className="col-md-6">
                         <label className="form-label" htmlFor="noKontainer">No Kontainer <span className='text-danger'>*</span></label>
                         <div className="input-group input-group-merge">
                             <input
@@ -3569,7 +3572,7 @@ function DocK11() {
                         </div>
                         {errorsKontainer.noKontainer && <small className="text-danger">{errorsKontainer.noKontainer.message}</small>}
                         </div>
-                        <div className="col-6 col-md-6">
+                        <div className="col-md-6 col-md-6">
                         <label className="form-label" htmlFor="tipeKontainer">Tipe Kontainer <span className='text-danger'>*</span></label>
                         <div className="input-group input-group-merge">
                             <select name="tipeKontainer" id="tipeKontainer" {...registerKontainer("tipeKontainer", { required: "Mohon pilih tipe kontainer."})} className={errorsKontainer.tipeKontainer ? "form-control form-control-sm is-invalid" : "form-control form-control-sm"}>
@@ -3585,7 +3588,7 @@ function DocK11() {
                         </div>
                         {errorsKontainer.tipeKontainer && <small className="text-danger">{errorsKontainer.tipeKontainer.message}</small>}
                         </div>
-                        <div className="col-6 col-md-6">
+                        <div className="col-md-6 col-md-6">
                         <label className="form-label" htmlFor="ukuranKontainer">Ukuran Kontainer <span className='text-danger'>*</span></label>
                         <div className="input-group input-group-merge">
                             <select name="ukuranKontainer" id="ukuranKontainer" {...registerKontainer("ukuranKontainer", { required: "Mohon pilih ukuran kontainer."})} className={errorsKontainer.ukuranKontainer ? "form-control form-control-sm is-invalid" : "form-control form-control-sm"}>
@@ -3601,7 +3604,7 @@ function DocK11() {
                         </div>
                         {errorsKontainer.ukuranKontainer && <small className="text-danger">{errorsKontainer.ukuranKontainer.message}</small>}
                         </div>
-                        <div className="col-6 col-md-6">
+                        <div className="col-md-6 col-md-6">
                         <label className="form-label" htmlFor="stuffKontainer">Stuff Kontainer</label>
                         <div className="input-group input-group-merge">
                             <select name="stuffKontainer" id="stuffKontainer" {...registerKontainer("stuffKontainer")} className="form-control form-control-sm">
@@ -3611,13 +3614,13 @@ function DocK11() {
                             </select>
                         </div>
                         </div>
-                        <div className="col-6 col-md-6">
+                        <div className="col-md-6 col-md-6">
                         <label className="form-label" htmlFor="segel">Segel</label>
                         <div className="input-group input-group-merge">
                             <input autoComplete="off" type="text" className="form-control form-control-sm" name="segel" id="segel" {...registerKontainer("segel")}/>
                         </div>
                         </div>
-                        <div className="col-6 text-center mt-4">
+                        <div className="col-md-6 text-center mt-4">
                         <button type="submit" className="btn btn-sm btn-primary me-sm-3 me-1">{cekDataKontainer.idDataKontainer ? "Edit" : "Tambah"}</button>
                         <button
                             type="reset"
@@ -3641,21 +3644,21 @@ function DocK11() {
                         <h3>{cekdataDokumen.idDataDokumen == '' ? "Tambah Dokumen Baru" : "Edit Dokumen"}</h3>
                     </div>
                     <form className="row" onSubmit={handleFormDokumen(onSubmitDokumen)}>
-                            <input autoComplete="off" type="hidden" name='idDataDokumen' {...registerDokumen("idDataDokumen")} />
-                            <input autoComplete="off" type="hidden" name='idPtk' {...registerDokumen("idPtk")} />
-                            <input autoComplete="off" type="hidden" name='noAju' {...registerDokumen("noAju")} />
-                        <div className="col-6">
-                        <label className="form-label" htmlFor="kategoriDokumen">Kategori Dokumen <span className='text-danger'>*</span></label>
-                        <div className="input-group input-group-merge">
-                            <select name="kategoriDokumen" id="kategoriDokumen"{...registerDokumen("kategoriDokumen", { required: "Mohon pilih kategori dokumen."})} className={errorsDokumen.kategoriDokumen ? "form-control form-control-sm is-invalid" : "form-control form-control-sm"}>
-                                <option value="">--</option>
-                                <option value="S">Dokumen Persyaratan</option>
-                                <option value="P">Dokumen Pendukung</option>
-                            </select>
+                        <input autoComplete="off" type="hidden" name='idDataDokumen' {...registerDokumen("idDataDokumen")} />
+                        <input autoComplete="off" type="hidden" name='idPtk' {...registerDokumen("idPtk")} />
+                        <input autoComplete="off" type="hidden" name='noAju' {...registerDokumen("noAju")} />
+                        <div className="col-md-6">
+                            <label className="form-label" htmlFor="kategoriDokumen">Kategori Dokumen <span className='text-danger'>*</span></label>
+                            <div className="input-group input-group-merge">
+                                <select name="kategoriDokumen" id="kategoriDokumen"{...registerDokumen("kategoriDokumen", { required: "Mohon pilih kategori dokumen."})} className={errorsDokumen.kategoriDokumen ? "form-control form-control-sm is-invalid" : "form-control form-control-sm"}>
+                                    <option value="">--</option>
+                                    <option value="S">Dokumen Persyaratan</option>
+                                    <option value="P">Dokumen Pendukung</option>
+                                </select>
+                            </div>
+                            {errorsDokumen.kategoriDokumen && <small className="text-danger">{errorsDokumen.kategoriDokumen.message}</small>}
                         </div>
-                        {errorsDokumen.kategoriDokumen && <small className="text-danger">{errorsDokumen.kategoriDokumen.message}</small>}
-                        </div>
-                        <div className="col-6">
+                        <div className="col-md-6">
                             <label className="form-label" htmlFor="jenisDokumen">Jenis Dokumen <span className='text-danger'>*</span></label>
                             <Controller
                                 control={controlDokumen}
@@ -3669,7 +3672,7 @@ function DocK11() {
                             />
                             {errorsDokumen.jenisDokumen && <small className="text-danger">{errorsDokumen.jenisDokumen.message}</small>}
                         </div>
-                        <div className="col-6">
+                        <div className="col-md-6">
                             <label className="form-label" htmlFor="noDokumen">No Dokumen <span className='text-danger'>*</span></label>
                             <div className="input-group input-group-merge">
                                 <input autoComplete="off" type='text' name="noDokumen" id="noDokumen" placeholder='No Dokumen..' {...registerDokumen("noDokumen", { required: "Mohon isi nomor dokumen."})} className={errorsDokumen.noDokumen ? "form-control form-control-sm is-invalid" : "form-control form-control-sm"} />
@@ -3677,7 +3680,7 @@ function DocK11() {
                             <input autoComplete="off" type="hidden" name='cekPrior' id='cekPrior' {...registerDokumen("cekPrior")}/>
                             {errorsDokumen.noDokumen && <small className="text-danger">{errorsDokumen.noDokumen.message}</small>}
                         </div>
-                        <div className="col-6">
+                        <div className="col-md-6">
                             <label className="form-label" htmlFor="negaraAsalDokumen">Negara Penerbit <span className='text-danger'>*</span></label>
                             <Controller
                                 control={controlDokumen}
@@ -3691,14 +3694,14 @@ function DocK11() {
                             />
                             {errorsDokumen.negaraAsalDokumen && <small className="text-danger">{errorsDokumen.negaraAsalDokumen.message}</small>}
                         </div>
-                        <div className="col-6">
+                        <div className="col-md-6">
                             <label className="form-label" htmlFor="tglDokumen">Tgl Dokumen <span className='text-danger'>*</span></label>
                             <div className="input-group input-group-merge">
                                 <input autoComplete="off" type='date' name="tglDokumen" id="tglDokumen" {...registerDokumen("tglDokumen", { required: "Mohon isi tanggal dokumen."})} className={errorsDokumen.tglDokumen ? "form-control form-control-sm is-invalid" : "form-control form-control-sm"} />
                             </div>
                             {errorsDokumen.tglDokumen && <small className="text-danger">{errorsDokumen.tglDokumen.message}</small>}
                         </div>
-                        <div className="col-6" style={{visibility: (cekdataDokumen.negaraAsalDokumen == 99 ? 'visible' : 'hidden')}}>
+                        <div className="col-md-6" style={{visibility: (cekdataDokumen.negaraAsalDokumen == 99 ? 'visible' : 'hidden')}}>
                             <label className="form-label" htmlFor="kotaAsalDokumen">Kota Penerbit</label>
                             <Controller
                                 control={controlDokumen}
@@ -3711,13 +3714,13 @@ function DocK11() {
                                 )}
                             />
                         </div>
-                        <div className="col-6">
+                        <div className="col-md-6">
                             <label className="form-label" htmlFor="ketDokumen">Keterangan</label>
                             <div className="input-group input-group-merge">
                                 <input autoComplete="off" type='text' name="ketDokumen" id="ketDokumen" placeholder='Keterangan..' {...registerDokumen("ketDokumen")} className="form-control form-control-sm" />
                             </div>
                         </div>
-                        <div className="col-6">
+                        <div className="col-md-6">
                             <label className="form-label" htmlFor="fileDokumen">Upload <span className='text-danger'>*</span></label>
                             <div className="input-group input-group-merge">
                                 <input type="hidden" name='fileDokumen' {...registerDokumen("fileDokumen", {required: "Mohon upload dokumen persyaratan yang sesuai."})} />
@@ -3726,7 +3729,7 @@ function DocK11() {
                             <small className='text-danger'>File: *.pdf || Max: 2MB</small>
                             {errorsDokumen.fileDokumen && <small className="text-danger">{errorsDokumen.fileDokumen.message}</small>}
                         </div>
-                        <div className="col-12 text-center mt-4">
+                        <div className="col-md-12 text-center mt-4">
                             <button style={{display: (cekdataDokumen.jenisDokumen == "104" ? "block" : "none")}} type='button' className='btn btn-sm btn-warning' onClick={() => cekPrior()}>Cek Prior</button>
                             <button type="submit" disabled={(cekdataDokumen.jenisDokumen == "104" && cekdataDokumen.cekPrior == "" ? true : false)} className="btn btn-sm btn-primary me-sm-3 me-1">{cekdataDokumen.idDataDokumen == '' ? "Tambah" : "Edit"}</button>
                             <button
@@ -3753,10 +3756,9 @@ function DocK11() {
                         <form onSubmit={handleFormDetilMP(onSubmitDetilMP)} className="row g-3">
                         <input autoComplete="off" type="hidden" name='idDetilMP' {...registerDetilMP("idDetilMP")} />
                         <input autoComplete="off" type="hidden" name='idPtk' {...registerDetilMP("idPtk")} />
-                        {/* <input autoComplete="off" type="hidden" name='jenisKar' {...registerDetilMP("jenisKar")} /> */}
                         {cekdataDiri.mediaPembawa == 'T' ?
                         <>
-                            <div className="col-6">
+                            <div className="col-md-6">
                                 <label className="form-label" htmlFor="peruntukanMP">Klasifikasi<span className='text-warning'>*</span></label>
                                 <Controller
                                     control={controlDetilMP}
@@ -3771,13 +3773,13 @@ function DocK11() {
                                 {errorsDetilMP.peruntukanMP && <small className="text-danger">{errorsDetilMP.peruntukanMP.message}</small>}
                                 <small className='text-danger'>{cekdataDetilMP.idDetilMP ? "*Tidak perlu dipilih ulang jika tidak ubah klasifikasi" : null}</small>
                             </div>
-                            <div className="col-6">
+                            <div className="col-md-6">
                                 <label className="form-label" htmlFor="volumeNetto">Volume Netto<span className='text-danger'>*</span></label>
                                 <div className='row'>
-                                    <div className="col-5" style={{paddingRight: '2px'}}>
+                                    <div className="col-md-5" style={{paddingRight: '2px'}}>
                                         <input autoComplete="off" type="text" name='volumeNetto' id='volumeNetto' value={cekdataDetilMP.volumeNetto ? addCommas(removeNonNumeric(cekdataDetilMP.volumeNetto)) : ""} {...registerDetilMP("volumeNetto", {required: "Mohon isi volume netto."})} className={errorsDetilMP.volumeNetto ? "form-control form-control-sm is-invalid" : "form-control form-control-sm"} />
                                     </div>
-                                    <div className="col-7" style={{paddingLeft: '2px'}}>
+                                    <div className="col-md-7" style={{paddingLeft: '2px'}}>
                                         <input autoComplete="off" type="hidden" name='satuanNetto' id='satuanNetto' {...registerDetilMP("satuanNetto")} value="1356" />
                                         <input autoComplete="off" type="text" className='form-control form-control-sm' value='KILOGRAM' readOnly />
                                         {/* <select name="satuanNetto" id="satuanNetto" onClick={handleMasterSatuan} data-kar={cekdataDiri.mediaPembawa == 'T' ? 'kt' : (cekdataDiri.mediaPembawa == 'H' ? 'kh' : 'ki')} {...registerDetilMP("satuanNetto", {required: "Mohon isi satuan netto."})} className={errorsKontainer.satuanNetto ? "form-control form-control-sm is-invalid" : "form-control form-control-sm"}>
@@ -3789,7 +3791,7 @@ function DocK11() {
                                 {errorsDetilMP.volumeNetto && <small className="text-danger">{errorsDetilMP.volumeNetto.message}</small>}
                                 {errorsDetilMP.satuanNetto && <small className="text-danger">{errorsDetilMP.satuanNetto.message}</small>}
                             </div>
-                            <div className="col-6">
+                            <div className="col-md-6">
                                 <label className="form-label" htmlFor="komoditasMP">Komoditas<span className='text-danger'>*</span></label>
                                 <input autoComplete="off" type="hidden" name="komoditasMP" id="komoditasMP" {...registerDetilMP("komoditasMP", {required: "Mohon isi Komoditas."})} />
                                 <Controller
@@ -3805,13 +3807,13 @@ function DocK11() {
                                 <small className='text-danger'>{cekdataDetilMP.idDetilMP ? "*Tidak perlu dipilih ulang jika tidak ubah komoditas" : null}</small>
                                 {errorsDetilMP.komoditasMP && <small className="text-danger">{errorsDetilMP.komoditasMP.message}</small>}
                             </div>
-                            <div className="col-6">
+                            <div className="col-md-6">
                                 <label className="form-label" htmlFor="volumeBrutto">Volume Brutto</label>
                                 <div className='row'>
-                                    <div className="col-5" style={{paddingRight: '2px'}}>
+                                    <div className="col-md-5" style={{paddingRight: '2px'}}>
                                         <input autoComplete="off" type="text" value={cekdataDetilMP.volumeBrutto ? addCommas(removeNonNumeric(cekdataDetilMP.volumeBrutto)) : ""} {...registerDetilMP("volumeBrutto", {required: "Mohon isi volume brutto."})} className={errorsDetilMP.volumeBrutto ? "form-control form-control-sm is-invalid" : "form-control form-control-sm"} name='volumeBrutto' id='volumeBrutto' />
                                     </div>
-                                    <div className="col-7" style={{paddingLeft: '2px'}}>
+                                    <div className="col-md-7" style={{paddingLeft: '2px'}}>
                                         <input autoComplete="off" type="hidden" name='satuanBrutto' id='satuanBrutto' {...registerDetilMP("satuanBrutto")} value="1356" />
                                         <input autoComplete="off" type="text" className='form-control form-control-sm' value='KILOGRAM' readOnly />
                                         {/* <select name="satuanBrutto" id="satuanBrutto" data-kar={cekdataDiri.mediaPembawa == 'T' ? 'kt' : (cekdataDiri.mediaPembawa == 'H' ? 'kh' : 'ki')} onClick={handleMasterSatuan} {...registerDetilMP("satuanBrutto", {required: "Mohon isi satuan brutto."})} className={errorsDetilMP.satuanBrutto ? "form-control form-control-sm is-invalid" : "form-control form-control-sm"}>
@@ -3823,7 +3825,7 @@ function DocK11() {
                                 {errorsDetilMP.volumeBrutto && <small className="text-danger">{errorsDetilMP.volumeBrutto.message}</small>}
                                 {errorsDetilMP.satuanBrutto && <small className="text-danger">{errorsDetilMP.satuanBrutto.message}</small>}
                             </div>
-                            <div className="col-6">
+                            <div className="col-md-6">
                                 <label className="form-label" htmlFor="kodeHSMp">Kode HS<span className='text-warning'>*</span></label>
                                 <Controller
                                     control={controlDetilMP}
@@ -3838,13 +3840,13 @@ function DocK11() {
                                 {errorsDetilMP.kodeHSMp && <small className="text-danger">{errorsDetilMP.kodeHSMp.message}</small>}
                                 <small className='text-danger'>{cekdataDetilMP.idDetilMP ? "*Tidak perlu dipilih ulang jika tidak ubah kode HS" : null}</small>
                             </div>
-                            <div className="col-6">
+                            <div className="col-md-6">
                                 <label className="form-label" htmlFor="volumeLain">Volume Lain<span className='text-warning'>*</span></label>
                                 <div className='row'>
-                                    <div className="col-5" style={{paddingRight: '2px'}}>
+                                    <div className="col-md-5" style={{paddingRight: '2px'}}>
                                         <input autoComplete="off" type="text" className='form-control form-control-sm' name='volumeLain' id='volumeLain' value={cekdataDetilMP.volumeLain ? addCommas(removeNonNumeric(cekdataDetilMP.volumeLain)) : ""} {...registerDetilMP("volumeLain")} />
                                     </div>
-                                    <div className="col-7" style={{paddingLeft: '2px'}}>
+                                    <div className="col-md-7" style={{paddingLeft: '2px'}}>
                                         <Controller
                                             control={controlDetilMP}
                                             name={"satuanLain"}
@@ -3863,17 +3865,17 @@ function DocK11() {
                                     </div>
                                 </div>
                             </div>
-                            <div className="col-6">
+                            <div className="col-md-6">
                                 <label className="form-label" htmlFor="namaUmum">Nama Umum Tercetak</label>
                                 <input autoComplete="off" type='text' name="namaUmum" id="namaUmum" {...registerDetilMP("namaUmum")} className="form-control form-control-sm" />
                             </div>
-                            <div className="col-6">
+                            <div className="col-md-6">
                                 <label className="form-label" htmlFor="nilaiBarangMP">Nilai Barang<span className='text-warning'>*</span></label>
                                 <div className='row'>
-                                    <div className="col-7" style={{paddingRight: '2px'}}>
+                                    <div className="col-md-7" style={{paddingRight: '2px'}}>
                                         <input autoComplete="off" type="text" className='form-control form-control-sm' value={cekdataDetilMP.nilaiBarangMP ? addCommas(removeNonNumeric(cekdataDetilMP.nilaiBarangMP)) : ""} {...registerDetilMP("nilaiBarangMP", {required: "Mohon isi detil nilai barang"})} name='nilaiBarangMP' id='nilaiBarangMP' />
                                     </div>
-                                    <div className="col-5" style={{paddingLeft: '2px'}}>
+                                    <div className="col-md-5" style={{paddingLeft: '2px'}}>
                                         <select name="satuanNilaiMP" id="satuanNilaiMP" value={cekdataDetilMP.satuanNilaiMP || "IDR"} className='form-control form-control-sm' {...registerDetilMP("satuanNilaiMP", {required: "Mohonn pilih mata uang"})}>
                                             <option value="">--</option>
                                             {dataSelect.satuanNilai}
@@ -3883,17 +3885,17 @@ function DocK11() {
                                     {errorsDetilMP.satuanNilaiMP && <small className="text-danger">{errorsDetilMP.satuanNilaiMP.message}</small>}
                                 </div>
                             </div>
-                            <div className="col-6">
+                            <div className="col-md-6">
                                 <label className="form-label" htmlFor="namaLatin">Nama Latin Tercetak</label>
                                 <input autoComplete="off" type='text' name="namaLatin" id="namaLatin" {...registerDetilMP("namaLatin")} className="form-control form-control-sm" />
                             </div>
-                            <div className="col-6">
+                            <div className="col-md-6">
                                 <label className="form-label" htmlFor="jumlahKemasanDetil">Jumlah Kemasan</label>
                                 <div className='row'>
-                                    <div className='col-4' style={{paddingRight: '2px'}}>
+                                    <div className='col-md-4' style={{paddingRight: '2px'}}>
                                         <input autoComplete="off" type="number" className='form-control form-control-sm' {...registerDetilMP("jumlahKemasanDetil")} name='jumlahKemasanDetil' id='jumlahKemasanDetil' />
                                     </div>
-                                    <div className='col-8' style={{paddingLeft: '2px'}}>
+                                    <div className='col-md-8' style={{paddingLeft: '2px'}}>
                                         <Controller
                                             control={controlDetilMP}
                                             defaultValue={""}
@@ -3909,8 +3911,8 @@ function DocK11() {
                             </div>
                         </> : (cekdataDiri.mediaPembawa == 'H' ?
                         <>
-                            <div className='col-12'>
-                                <div className="col-6">
+                            <div className='col-md-12'>
+                                <div className="col-md-6">
                                     <label className="form-label" htmlFor="peruntukanMP">Klasifikasi<span className='text-warning'>*</span></label>
                                     <Controller
                                         control={controlDetilMP}
@@ -3926,7 +3928,7 @@ function DocK11() {
                                     <small className='text-danger'>{cekdataDetilMP.idDetilMP ? "*Tidak perlu dipilih ulang jika tidak ubah klasifikasi" : null}</small>
                                 </div>
                             </div>
-                            <div className="col-6">
+                            <div className="col-md-6">
                                 <label className="form-label" htmlFor="komoditasMPKH">Komoditas<span className='text-danger'>*</span></label>
                                 <input autoComplete="off" type="hidden" name='komoditasMPKHid' {...registerDetilMP("komoditasMPKHid")} />
                                 {/* <input autoComplete="off" type="hidden" name='klasifikasiMPKHid' {...registerDetilMP("klasifikasiMPKHid")} /> */}
@@ -3944,7 +3946,7 @@ function DocK11() {
                                 <small className='text-danger'>{cekdataDetilMP.idDetilMP ? "*Tidak perlu dipilih ulang jika tidak ubah komoditas" : null}</small>
                                 {errorsDetilMP.komoditasMPKH && <small className="text-danger">{errorsDetilMP.komoditasMPKH.message}</small>}
                             </div>
-                            <div className="col-6">
+                            <div className="col-md-6">
                                 <label className="form-label" htmlFor="kodeHSMpKH">Kode HS<span className='text-warning'>*</span></label>
                                 <Controller
                                     control={controlDetilMP}
@@ -3959,21 +3961,21 @@ function DocK11() {
                                 {errorsDetilMP.kodeHSMpKH && <small className="text-danger">{errorsDetilMP.kodeHSMpKH.message}</small>}
                                 <small className='text-danger'>{cekdataDetilMP.idDetilMP ? "*Tidak perlu dipilih ulang jika tidak ubah kode HS" : null}</small>
                             </div>
-                            <div className="col-6">
+                            <div className="col-md-6">
                                 <label className="form-label" htmlFor="namaUmumKH">Nama Umum Tercetak</label>
                                 <input autoComplete="off" type='text' name="namaUmumKH" id="namaUmumKH" {...registerDetilMP("namaUmumKH")} className="form-control form-control-sm" />
                             </div>
-                            <div className="col-6">
+                            <div className="col-md-6">
                                 <label className="form-label" htmlFor="namaLatinKH">Nama Latin Tercetak</label>
                                 <input autoComplete="off" type='text' name="namaLatinKH" id="namaLatinKH" {...registerDetilMP("namaLatinKH")} className="form-control form-control-sm" />
                             </div>
-                           <div className="col-6">
+                           <div className="col-md-6">
                                 <label className="form-label" htmlFor="jumlahMP">Jumlah<span className='text-warning'>*</span></label>
                                 <div className='row'>
-                                    <div className='col-7' style={{paddingRight: '2px'}}>
+                                    <div className='col-md-7' style={{paddingRight: '2px'}}>
                                         <input autoComplete="off" type="text" value={cekdataDetilMP.jumlahMP ? addCommas(removeNonNumeric(cekdataDetilMP.jumlahMP)) : ""} {...registerDetilMP("jumlahMP", {required: "Mohon isi jumlah."})} className={errorsDetilMP.jumlahMP ? "form-control form-control-sm is-invalid" : "form-control form-control-sm"} name='jumlahMP' id='jumlahMP' />
                                     </div>
-                                    <div className='col-5' style={{paddingLeft: '2px'}}>
+                                    <div className='col-md-5' style={{paddingLeft: '2px'}}>
                                         <Controller
                                             control={controlDetilMP}
                                             name={"satJumlahMP"}
@@ -3989,18 +3991,18 @@ function DocK11() {
                                     </div>
                                 </div>
                             </div>
-                            <div className="col-6" style={{visibility: (cekdataDiri.jenisMp == '1' ? "visible" : "hidden")}}>
+                            <div className="col-md-6" style={{visibility: (cekdataDiri.jenisMp == '1' ? "visible" : "hidden")}}>
                                 <label className="form-label" htmlFor="breedMP">Breed</label>
                                 <input autoComplete="off" type='text' name="breedMP" id="breedMP" {...registerDetilMP("breedMP")} className="form-control form-control-sm" />
                             </div>
-                            <div className="col-6">
+                            <div className="col-md-6">
                                 <label className="form-label" htmlFor="nettoMP">Netto<span className='text-warning'>*</span></label>
                                 <div className='row'>
-                                    <div className='col-7' style={{paddingRight: '2px'}}>
+                                    <div className='col-md-7' style={{paddingRight: '2px'}}>
                                         <input autoComplete="off" type="text" className='form-control form-control-sm' value={cekdataDetilMP.nettoMP ? addCommas(removeNonNumeric(cekdataDetilMP.nettoMP)) : ""} {...registerDetilMP("nettoMP", {required: "Mohon isi berat netto"})} name='nettoMP' id='nettoMP' />
                                     </div>
                                     {/* ekor: 1122 || KG: 1356  */}
-                                    <div className='col-5' style={{paddingLeft: '2px'}}>
+                                    <div className='col-md-5' style={{paddingLeft: '2px'}}>
                                         {/* <input autoComplete="off" type="hidden" name='satNettoMP' id='satNettoMP' {...registerDetilMP("satNettoMP")} value={cekdataDiri.jenisMp == '1' || cekdataDiri.jenisMp == '6' ? '1122' : '1356'} />
                                         <input autoComplete="off" type="text" className='form-control form-control-sm' value={cekdataDiri.jenisMp == '1' || cekdataDiri.jenisMp == '6' ? 'EKOR' : 'KILOGRAM'} readOnly /> */}
                                         <input autoComplete="off" type="hidden" name='satNettoMP' id='satNettoMP' {...registerDetilMP("satNettoMP")} value="1356" />
@@ -4009,13 +4011,13 @@ function DocK11() {
                                     {errorsDetilMP.nettoMP && <small className="text-danger">{errorsDetilMP.nettoMP.message}</small>}
                                 </div>
                             </div>
-                            <div className="col-6">
+                            <div className="col-md-6">
                                 <label className="form-label" htmlFor="nilaiBarangMPKH">Nilai Barang</label>
                                 <div className='row'>
-                                    <div className="col-7" style={{paddingRight: '2px'}}>
+                                    <div className="col-md-7" style={{paddingRight: '2px'}}>
                                         <input autoComplete="off" type="text" className='form-control form-control-sm' value={cekdataDetilMP.nilaiBarangMPKH ? addCommas(removeNonNumeric(cekdataDetilMP.nilaiBarangMPKH)) : ""} name='nilaiBarangMPKH' id='nilaiBarangMPKH' {...registerDetilMP("nilaiBarangMPKH", {required: "Mohon isi nilai barang"})} />
                                     </div>
-                                    <div className="col-5" style={{paddingLeft: '2px'}}>
+                                    <div className="col-md-5" style={{paddingLeft: '2px'}}>
                                         <select name="satuanNilaiMPKH" id="satuanNilaiMPKH" value={cekdataDetilMP.satuanNilaiMPKH || "IDR"} {...registerDetilMP("satuanNilaiMPKH", {required: "Mohon isi mata uang"})} className='form-control form-control-sm'>
                                         <option value="">--</option>
                                             {dataSelect.satuanNilai}
@@ -4025,27 +4027,27 @@ function DocK11() {
                                     {errorsDetilMP.satuanNilaiMPKH && <small className="text-danger">{errorsDetilMP.satuanNilaiMPKH.message}</small>}
                                 </div>
                             </div>
-                            <div className="col-6">
+                            <div className="col-md-6">
                                 <label className="form-label" htmlFor="brutoMP">Bruto<span className='text-warning'>*</span></label>
                                 <div className='row'>
-                                    <div className='col-7' style={{paddingRight: '2px'}}>
+                                    <div className='col-md-7' style={{paddingRight: '2px'}}>
                                         <input autoComplete="off" type="text" value={cekdataDetilMP.brutoMP ? addCommas(removeNonNumeric(cekdataDetilMP.brutoMP)) : ""} {...registerDetilMP("brutoMP", {required: "Mohon isi volume bruto"})} className='form-control form-control-sm' name='brutoMP' id='brutoMP' />
                                     </div>
                                     {/* ekor: 1122 || KG: 1356  */}
-                                    <div className='col-5' style={{paddingLeft: '2px'}}>
+                                    <div className='col-md-5' style={{paddingLeft: '2px'}}>
                                         <input autoComplete="off" type="hidden" name='satBrutoMP' id='satBrutoMP' {...registerDetilMP("satBrutoMP")} value="1356" />
                                         <input autoComplete="off" type="text" className='form-control form-control-sm' value="KILOGRAM" readOnly  />
                                     </div>
                                     {errorsDetilMP.brutoMP && <small className="text-danger">{errorsDetilMP.brutoMP.message}</small>}
                                 </div>
                             </div>
-                            <div className="col-6" style={{display: (cekdataDiri.jenisMp == '1' ? "block" : "none")}}>
+                            <div className="col-md-6" style={{display: (cekdataDiri.jenisMp == '1' ? "block" : "none")}}>
                                 <div className='row'>
-                                    <div className="col-4">
+                                    <div className="col-md-4">
                                         <label className="form-label" htmlFor="jantan">Jantan (Ekor)</label>
                                         <input autoComplete="off" type="text" id="jantan" name="jantan" value={cekdataDetilMP.jantan ? addCommas(removeNonNumeric(cekdataDetilMP.jantan)) : ""} {...registerDetilMP("jantan")} className='form-control form-control-sm' />
                                         </div>
-                                    <div className="col-4">
+                                    <div className="col-md-4">
                                         <label className="form-label" htmlFor="betina">Betina (Ekor)</label>
                                         <input autoComplete="off" type="text" name='betina' id='betina' value={cekdataDetilMP.betina ? addCommas(removeNonNumeric(cekdataDetilMP.betina)) : ""} {...registerDetilMP("betina")} className='form-control form-control-sm' />
                                     </div>
@@ -4053,8 +4055,8 @@ function DocK11() {
                             </div>
                         </> : (cekdataDiri.mediaPembawa == 'I' ?
                         <>
-                            <div className='col-12'>
-                                <div className="col-6">
+                            <div className='col-md-12'>
+                                <div className="col-md-6">
                                     <label className="form-label" htmlFor="peruntukanMPKI">Klasifikasi<span className='text-warning'>*</span></label>
                                     <Controller
                                         control={controlDetilMP}
@@ -4070,7 +4072,7 @@ function DocK11() {
                                     <small className='text-danger'>{cekdataDetilMP.idDetilMP ? "*Tidak perlu dipilih ulang jika tidak ubah klasifikasi" : null}</small>
                                 </div>
                             </div>
-                            <div className="col-6">
+                            <div className="col-md-6">
                                 <label className="form-label" htmlFor="komoditasMPKI">Komoditas<span className='text-danger'>*</span></label>
                                 <input autoComplete="off" type="hidden" name='komoditasMPKIid' {...registerDetilMP("komoditasMPKIid")} />
                                 {/* <input autoComplete="off" type="hidden" name='klasifikasiMPKIid' {...registerDetilMP("klasifikasiMPKIid")} /> */}
@@ -4088,7 +4090,7 @@ function DocK11() {
                                 <small className='text-danger'>{cekdataDetilMP.idDetilMP ? "*Tidak perlu dipilih ulang jika tidak ubah komoditas" : null}</small>
                                 {errorsDetilMP.komoditasMPKI && <small className="text-danger">{errorsDetilMP.komoditasMPKI.message}</small>}
                             </div>
-                            <div className="col-6">
+                            <div className="col-md-6">
                                 <label className="form-label" htmlFor="kodeHSMpKI">Kode HS<span className='text-danger'>*</span></label>
                                 <Controller
                                     control={controlDetilMP}
@@ -4103,21 +4105,21 @@ function DocK11() {
                                 {errorsDetilMP.kodeHSMpKI && <small className="text-danger">{errorsDetilMP.kodeHSMpKI.message}</small>}
                                 <small className='text-danger'>{cekdataDetilMP.idDetilMP ? "*Tidak perlu dipilih ulang jika tidak ubah kode HS" : null}</small>
                             </div>
-                            <div className="col-6">
+                            <div className="col-md-6">
                                 <label className="form-label" htmlFor="namaUmumKI">Nama Umum Tercetak</label>
                                 <input autoComplete="off" type='text' name="namaUmumKI" id="namaUmumKI" {...registerDetilMP("namaUmumKI")} className="form-control form-control-sm" />
                             </div>
-                            <div className="col-6">
+                            <div className="col-md-6">
                                 <label className="form-label" htmlFor="namaLatinKI">Nama Latin Tercetak</label>
                                 <input autoComplete="off" type='text' name="namaLatinKI" id="namaLatinKI" {...registerDetilMP("namaLatinKI")} className="form-control form-control-sm" />
                             </div>
-                            <div className="col-6">
+                            <div className="col-md-6">
                                 <label className="form-label" htmlFor="jumlahMPKI">Jumlah<span className='text-danger'>*</span></label>
                                 <div className='row'>
-                                    <div className='col-7' style={{paddingRight: '2px'}}>
+                                    <div className='col-md-7' style={{paddingRight: '2px'}}>
                                         <input autoComplete="off" type="text" value={cekdataDetilMP.jumlahMPKI ? addCommas(removeNonNumeric(cekdataDetilMP.jumlahMPKI)) : ""} {...registerDetilMP("jumlahMPKI", {required: "Mohon isi jumlah."})} className={errorsDetilMP.jumlahMPKI ? "form-control form-control-sm is-invalid" : "form-control form-control-sm"} name='jumlahMPKI' id='jumlahMPKI' />
                                     </div>
-                                    <div className='col-5' style={{paddingLeft: '2px'}}>
+                                    <div className='col-md-5' style={{paddingLeft: '2px'}}>
                                         <Controller
                                             control={controlDetilMP}
                                             name={"satJumlahMPKI"}
@@ -4133,31 +4135,31 @@ function DocK11() {
                                     {errorsDetilMP.satJumlahMPKI && <small className="text-danger">{errorsDetilMP.satJumlahMPKI.message}</small>}
                                 </div>
                             </div>
-                            <div className="col-6" style={{visibility: (cekdataDiri.jenisMp == '6' ? "visible" : "hidden")}}>
+                            <div className="col-md-6" style={{visibility: (cekdataDiri.jenisMp == '6' ? "visible" : "hidden")}}>
                                 <label className="form-label" htmlFor="sizeIkan">Size</label>
                                 <input autoComplete="off" type='text' name="sizeIkan" id="sizeIkan" {...registerDetilMP("sizeIkan")} className="form-control form-control-sm" />
                             </div>
-                            <div className="col-6">
+                            <div className="col-md-6">
                                 <label className="form-label" htmlFor="nettoMPKI">Netto<span className='text-warning'>*</span></label>
                                 <div className='row'>
-                                    <div className='col-7' style={{paddingRight: '2px'}}>
+                                    <div className='col-md-7' style={{paddingRight: '2px'}}>
                                         <input autoComplete="off" type="text" className='form-control form-control-sm' value={cekdataDetilMP.nettoMPKI ? addCommas(removeNonNumeric(cekdataDetilMP.nettoMPKI)) : ""} {...registerDetilMP("nettoMPKI", {required: "Mohon isi volume netto"})} name='nettoMPKI' id='nettoMPKI' />
                                     </div>
                                     {/* ekor: 1122 || KG: 1356  */}
-                                    <div className='col-5' style={{paddingLeft: '2px'}}>
+                                    <div className='col-md-5' style={{paddingLeft: '2px'}}>
                                         <input autoComplete="off" type="hidden" name='satNettoMPKI' id='satNettoMPKI' {...registerDetilMP("satNettoMPKI")} value="1356" />
                                         <input autoComplete="off" type="text" className='form-control form-control-sm' value='KILOGRAM' readOnly />
                                     </div>
                                     {errorsDetilMP.nettoMPKI && <small className="text-danger">{errorsDetilMP.nettoMPKI.message}</small>}
                                 </div>
                             </div>
-                            <div className="col-6">
+                            <div className="col-md-6">
                                 <label className="form-label" htmlFor="nilaiBarangMPKI">Nilai Barang<span className='text-warning'>*</span></label>
                                 <div className='row'>
-                                    <div className="col-7" style={{paddingRight: '2px'}}>
+                                    <div className="col-md-7" style={{paddingRight: '2px'}}>
                                         <input autoComplete="off" type="text" className='form-control form-control-sm' value={cekdataDetilMP.nilaiBarangMPKI ? addCommas(removeNonNumeric(cekdataDetilMP.nilaiBarangMPKI)) : ""} name='nilaiBarangMPKI' id='nilaiBarangMPKI' {...registerDetilMP("nilaiBarangMPKI", {required: "Mohon isi nilai barang"})} />
                                     </div>
-                                    <div className="col-5" style={{paddingLeft: '2px'}}>
+                                    <div className="col-md-5" style={{paddingLeft: '2px'}}>
                                         <select name="satuanNilaiMPKI" id="satuanNilaiMPKI" value={cekdataDetilMP.satuanNilaiMPKI || "IDR"} {...registerDetilMP("satuanNilaiMPKI", {required: "Mohon pilih mata uang"})} className='form-control form-control-sm'>
                                         <option value="">--</option>
                                             {dataSelect.satuanNilai}
@@ -4167,14 +4169,14 @@ function DocK11() {
                                     {errorsDetilMP.satuanNilaiMPKI && <small className="text-danger">{errorsDetilMP.satuanNilaiMPKI.message}</small>}
                                 </div>
                             </div>
-                            <div className="col-6">
+                            <div className="col-md-6">
                                 <label className="form-label" htmlFor="brutoMPKI">Bruto<span className='text-warning'>*</span></label>
                                 <div className='row'>
-                                    <div className='col-7' style={{paddingRight: '2px'}}>
+                                    <div className='col-md-7' style={{paddingRight: '2px'}}>
                                         <input autoComplete="off" type="text" value={cekdataDetilMP.brutoMPKI ? addCommas(removeNonNumeric(cekdataDetilMP.brutoMPKI)) : ""} {...registerDetilMP("brutoMPKI", {required: "Mohon isi volume bruto"})} className='form-control form-control-sm' name='brutoMPKI' id='brutoMPKI' />
                                     </div>
                                     {/* ekor: 1122 || KG: 1356  */}
-                                    <div className='col-5' style={{paddingLeft: '2px'}}>
+                                    <div className='col-md-5' style={{paddingLeft: '2px'}}>
                                         <input autoComplete="off" type="hidden" name='satBrutoMPKI' id='satBrutoMPKI' {...registerDetilMP("satBrutoMPKI")} value="1356" />
                                         <input autoComplete="off" type="text" className='form-control form-control-sm' value="KILOGRAM" readOnly  />
                                     </div>
@@ -4184,7 +4186,7 @@ function DocK11() {
                         </> : "Mohon pilih jenis media pembawa"))
                         }
                         <small className='text-danger'>*Format penulisan desimal menggunakan titik ( . )</small>
-                        <div className="col-12 text-center">
+                        <div className="col-md-12 text-center">
                             <button type="submit" className="btn btn-primary me-sm-3 me-1">{cekdataDetilMP.idDetilMP ? "Edit" : "Tambah"}</button>
                             <button
                             type="reset"

@@ -121,54 +121,64 @@ function DocK81() {
 
     const cekWatch = watch()
 
+    const dataCekKom = data.listKomoditas?.filter(item => item.volumeP7 == null || item.nettoP7 == null)
+    const dataCekKomJanBen = data.listKomoditas?.filter(item => (item.jantan != null && item.jantanP7 == null) || (item.betina != null && item.betinaP7 == null))
     const onSubmit = (data) => {
-        const response = modelPemusnahan.simpan81(data);
-        response
-        .then((response) => {
-            if(response.data) {
-                if(response.data.status == 201) {
-                    //start save history
-                    const resHsy = log.pushHistory(data.idPtk, "P7", "K-8.1", (data.idDok81 ? 'UPDATE' : 'NEW'));
-                    resHsy
-                    .then((response) => {
-                        if(response.data.status == 201) {
-                            if(process.env.REACT_APP_BE_ENV == "DEV") {
-                                console.log("history saved")
+        if(dataCekKom.length == 0 && dataCekKomJanBen.length == 0) {
+            const response = modelPemusnahan.simpan81(data);
+            response
+            .then((response) => {
+                if(response.data) {
+                    if(response.data.status == 201) {
+                        //start save history
+                        const resHsy = log.pushHistory(data.idPtk, "P7", "K-8.1", (data.idDok81 ? 'UPDATE' : 'NEW'));
+                        resHsy
+                        .then((response) => {
+                            if(response.data.status == 201) {
+                                if(process.env.REACT_APP_BE_ENV == "DEV") {
+                                    console.log("history saved")
+                                }
                             }
-                        }
-                    })
-                    .catch((error) => {
-                        if(process.env.REACT_APP_BE_ENV == "DEV") {
-                            console.log(error)
-                        }
-                    });
-                    //end save history
-                    Swal.fire({
-                        icon: "success",
-                        title: "Sukses!",
-                        text: "Surat Pemusnahan berhasil " + (data.idDok81 ? 'diubah' : 'disimpan')
-                    })
-                    setValue("idDok81", response.data.data.id)
-                    setValue("noDok81", response.data.data.nomor)
-                } else {
-                    Swal.fire({
-                        icon: "error",
-                        title: "Error!",
-                        text: response.data.message
-                    })
+                        })
+                        .catch((error) => {
+                            if(process.env.REACT_APP_BE_ENV == "DEV") {
+                                console.log(error)
+                            }
+                        });
+                        //end save history
+                        Swal.fire({
+                            icon: "success",
+                            title: "Sukses!",
+                            text: "Surat Pemusnahan berhasil " + (data.idDok81 ? 'diubah' : 'disimpan')
+                        })
+                        setValue("idDok81", response.data.data.id)
+                        setValue("noDok81", response.data.data.nomor)
+                    } else {
+                        Swal.fire({
+                            icon: "error",
+                            title: "Error!",
+                            text: response.data.message
+                        })
+                    }
                 }
-            }
-        })
-        .catch((error) => {
-            if(process.env.REACT_APP_BE_ENV == "DEV") {
-                console.log(error)
-            }
+            })
+            .catch((error) => {
+                if(process.env.REACT_APP_BE_ENV == "DEV") {
+                    console.log(error)
+                }
+                Swal.fire({
+                    icon: "error",
+                    title: "Error!",
+                    text: error.response.data.message
+                })
+            });
+        } else {
             Swal.fire({
                 icon: "error",
                 title: "Error!",
-                text: error.response.data.message
-            })
-        });
+                text: "Mohon isi volume P7"
+            });
+        }
     }
 
     const {
@@ -203,6 +213,12 @@ function DocK81() {
                 } else {
                     cekVolume = true
                 }
+            }
+        } else {
+            if(parseFloat(typeof data.volumeP7 == "string" ? data.volumeP7.replace(",", "") : data.volumeP7) > parseFloat(cekData.volumeP7) || parseFloat(typeof data.nettoP7 == "string" ? data.nettoP7.replace(",", "") : data.nettoP7) > parseFloat(cekData.nettoP7)) {
+                cekVolume = false 
+            } else {
+                cekVolume = true
             }
         }
         if(cekVolume) {
@@ -508,109 +524,113 @@ function DocK81() {
             });
         }
 
-        const resSurtug = modelSurtug.getDetilSurtugPenugasan(data.noIdPtk, 11);
-        resSurtug
-        .then((response) => {
-            if(response.data) {
-                if(typeof response.data != "string") {
-                    if(response.data.status == 200) {
-                        // console.log(response.data.data[0])
-                        setData(values => ({...values,
-                            errorSurtug: "",
-                            noSurtug: response.data.data[0].nomor,
-                            tglSurtug: response.data.data[0].tanggal,
-                            petugas: response.data.data
-                        }));
-                        setValue("idSurtug", response.data.data[0].id)
-                    } else if(response.data.status == 404) {
-                        setData(values => ({...values,
-                            errorSurtug: "Surat tugas tidak ada / belum dibuat",
-                        }));
+        if(data.errorSurtug) {
+            const resSurtug = modelSurtug.getDetilSurtugPenugasan(data.noIdPtk, 11);
+            resSurtug
+            .then((response) => {
+                if(response.data) {
+                    if(typeof response.data != "string") {
+                        if(response.data.status == 200) {
+                            // console.log(response.data.data[0])
+                            setData(values => ({...values,
+                                errorSurtug: "",
+                                noSurtug: response.data.data[0].nomor,
+                                tglSurtug: response.data.data[0].tanggal,
+                                petugas: response.data.data
+                            }));
+                            setValue("idSurtug", response.data.data[0].id)
+                        } else if(response.data.status == 404) {
+                            setData(values => ({...values,
+                                errorSurtug: "Surat tugas tidak ada / belum dibuat",
+                            }));
+                        } else {
+                            setData(values => ({...values,
+                                errorSurtug: "Gagal load data surat tugas",
+                            }));
+                        }
                     } else {
                         setData(values => ({...values,
                             errorSurtug: "Gagal load data surat tugas",
                         }));
                     }
+                }
+            })
+            .catch((error) => {
+                if(process.env.REACT_APP_BE_ENV == "DEV") {
+                    console.log(error)
+                }
+                if(error.response.data.status == 404) {
+                    setData(values => ({...values,
+                        errorSurtug: "Surat tugas tidak ada / belum dibuat",
+                    }));
                 } else {
                     setData(values => ({...values,
                         errorSurtug: "Gagal load data surat tugas",
                     }));
                 }
-            }
-        })
-        .catch((error) => {
-            if(process.env.REACT_APP_BE_ENV == "DEV") {
-                console.log(error)
-            }
-            if(error.response.data.status == 404) {
-                setData(values => ({...values,
-                    errorSurtug: "Surat tugas tidak ada / belum dibuat",
-                }));
-            } else {
-                setData(values => ({...values,
-                    errorSurtug: "Gagal load data surat tugas",
-                }));
-            }
-        });
+            });
+        }
 
-        const response81 = modelPemusnahan.getByPtkId(data.noIdPtk, 35);
-        response81
-        .then((response) => {
-            if(response.data) {
-                console.log(response)
-                if(typeof response.data != "string") {
-                    if(response.data.status == 200) {
-                        setData(values => ({...values,
-                            errorMusnah81: "",
-                        }));
-                        setValue("idDok81", response.data.data[0].id)
-                        setValue("noDok81", response.data.data[0].nomor)
-                        setValue("tglDok81", response.data.data[0].tanggal)
-                        setValue("a1", response.data.data[0].alasan1)
-                        setValue("a2", response.data.data[0].alasan2)
-                        setValue("a3", response.data.data[0].alasan3)
-                        setValue("a4", response.data.data[0].alasan4)
-                        setValue("a5", response.data.data[0].alasan5)
-                        setValue("a6", response.data.data[0].alasan6)
-                        setValue("a7", response.data.data[0].alasan_lain == null ? "" : "1")
-                        setValue("a7Lain", response.data.data[0].alasan_lain)
-                        setValue("maksMusnah", response.data.data[0].maks_pemusnahan)
-                        setValue("lokasiMp", response.data.data[0].lokasi_mp)
-                        setValue("diterbitkan", response.data.data[0].diterbitkan_di)
-                        setValue("ttdPutusan", response.data.data[0].user_ttd_id?.toString())
-                        setValue("otban", response.data.data[0].otoritas_pelabuhan)
-                        setValue("kaBc", response.data.data[0].kepala_kantor_bc)
-                        setValue("namaPengelola", response.data.data[0].nama_pengelola)
-                    } else if(response.data.status == 404) {
-                        setData(values => ({...values,
-                            errorMusnah81: "",
-                        }));
+        if(data.errorMusnah81) {
+            const response81 = modelPemusnahan.getByPtkId(data.noIdPtk, 35);
+            response81
+            .then((response) => {
+                if(response.data) {
+                    console.log(response)
+                    if(typeof response.data != "string") {
+                        if(response.data.status == 200) {
+                            setData(values => ({...values,
+                                errorMusnah81: "",
+                            }));
+                            setValue("idDok81", response.data.data[0].id)
+                            setValue("noDok81", response.data.data[0].nomor)
+                            setValue("tglDok81", response.data.data[0].tanggal)
+                            setValue("a1", response.data.data[0].alasan1)
+                            setValue("a2", response.data.data[0].alasan2)
+                            setValue("a3", response.data.data[0].alasan3)
+                            setValue("a4", response.data.data[0].alasan4)
+                            setValue("a5", response.data.data[0].alasan5)
+                            setValue("a6", response.data.data[0].alasan6)
+                            setValue("a7", response.data.data[0].alasan_lain == null ? "" : "1")
+                            setValue("a7Lain", response.data.data[0].alasan_lain)
+                            setValue("maksMusnah", response.data.data[0].maks_pemusnahan)
+                            setValue("lokasiMp", response.data.data[0].lokasi_mp)
+                            setValue("diterbitkan", response.data.data[0].diterbitkan_di)
+                            setValue("ttdPutusan", response.data.data[0].user_ttd_id?.toString())
+                            setValue("otban", response.data.data[0].otoritas_pelabuhan)
+                            setValue("kaBc", response.data.data[0].kepala_kantor_bc)
+                            setValue("namaPengelola", response.data.data[0].nama_pengelola)
+                        } else if(response.data.status == 404) {
+                            setData(values => ({...values,
+                                errorMusnah81: "",
+                            }));
+                        } else {
+                            setData(values => ({...values,
+                                errorMusnah81: "Gagal load data history surat pemusnahan",
+                            }));
+                        }
                     } else {
                         setData(values => ({...values,
                             errorMusnah81: "Gagal load data history surat pemusnahan",
                         }));
                     }
+                }
+            })
+            .catch((error) => {
+                if(process.env.REACT_APP_BE_ENV == "DEV") {
+                    console.log(error)
+                }
+                if(error.response.data.status == 404) {
+                    setData(values => ({...values,
+                        errorMusnah81: "",
+                    }));
                 } else {
                     setData(values => ({...values,
                         errorMusnah81: "Gagal load data history surat pemusnahan",
                     }));
                 }
-            }
-        })
-        .catch((error) => {
-            if(process.env.REACT_APP_BE_ENV == "DEV") {
-                console.log(error)
-            }
-            if(error.response.data.status == 404) {
-                setData(values => ({...values,
-                    errorMusnah81: "",
-                }));
-            } else {
-                setData(values => ({...values,
-                    errorMusnah81: "Gagal load data history surat pemusnahan",
-                }));
-            }
-        });
+            });
+        }
     }
 
   return (
@@ -619,8 +639,8 @@ function DocK81() {
             K-8.1 <span className="fw-light" style={{color: 'blue'}}>SURAT PEMUSNAHAN</span>
 
             <small className='float-end'>
-                <span className='text-danger'>{(data.errorPTK ? data.errorPTK + "; " : "") + (data.errorKomoditas ? data.errorKomoditas + "; " : "") + (data.errorki2 ? data.errorki2 + "; " : "") + (data.errorPeriksaFisik ? data.errorPeriksaFisik + "; " : "") + (data.errorSurtug ? data.errorSurtug + "; " : "")}</span>
-                {data.errorPTK || data.errorKomoditas || data.errorki2 || data.errorPeriksaFisik || data.errorSurtug ?
+                <span className='text-danger'>{(data.errorPTK ? data.errorPTK + "; " : "") + (data.errorKomoditas ? data.errorKomoditas + "; " : "") + (data.errorMusnah81 ? data.errorMusnah81 + "; " : "") + (data.errorSurtug ? data.errorSurtug + "; " : "")}</span>
+                {data.errorPTK || data.errorKomoditas || data.errorMusnah81 || data.errorSurtug ?
                     <button type='button' className='btn btn-warning btn-xs' onClick={() => refreshData()}><i className='fa-solid fa-sync'></i> Refresh</button>
                 : ""}
             </small>
@@ -778,7 +798,7 @@ function DocK81() {
                                                 <span className='text-danger'>{loadKomoditiPesan}</span>
                                             </span>
                                             <div className='col-md-12 mb-3'>
-                                                <div className="table-responsive text-nowrap" style={{height: "300px"}}>
+                                                <div className="table-responsive text-nowrap" style={{height: (data.listKomoditas?.length > 8 ? "300px" : "")}}>
                                                     <table className="table table-sm table-bordered table-hover table-striped dataTable">
                                                         <thead>
                                                             <tr>

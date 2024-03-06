@@ -883,7 +883,7 @@ function DocK73() {
                                                 <span className='text-danger'>{loadKomoditiPesan}</span>
                                             </h5>
                                             <div className='col-md-12 mb-3'>
-                                                <div className="table-responsive text-nowrap" style={{height: "300px"}}>
+                                                <div className="table-responsive text-nowrap" style={{height: (data.listKomoditas?.length > 8 ? "300px" : "")}}>
                                                     <table className="table table-sm table-bordered table-hover table-striped dataTable">
                                                         <thead>
                                                             <tr>
