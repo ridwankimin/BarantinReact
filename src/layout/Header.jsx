@@ -76,12 +76,12 @@ function Header(props) {
                             <li>
                                 <div className="dropdown-divider"></div>
                             </li>
-                            <li>
+                            {/* <li>
                                 <button type='button' className="dropdown-item">
                                     <i className="bx bx-cog me-2"></i>
                                     <span className="align-middle">Settings Satpel</span>
                                 </button>
-                            </li>
+                            </li> */}
                             <li>
                                 <div className="dropdown-divider"></div>
                             </li>
