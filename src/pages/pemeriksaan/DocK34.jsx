@@ -27,6 +27,27 @@ function DocK34() {
         tglDokumen: "",
     })
 
+    let [dataSegel,setDataSegel] = useState({})
+    let [dataSegelArray,setDataSegelArray] = useState([])
+    function handleSubmitSegel(e) {
+        e.preventDefault();
+        setDataSegelArray([...dataSegelArray, { 
+            jenisSegel: dataSegel.jenisSegel,
+            nomorSegel: dataSegel.nomorSegel,
+            nomorKontainer: dataSegel.nomorKontainer
+        }]);
+        resetDataSegel()
+    }
+    
+    function resetDataSegel() {
+        setDataSegel(values => ({...values,
+            jenisSegel: "",
+            nomorSegel: "",
+            nomorKontainer: ""
+        }));
+        document.getElementById("jenisSegel").focus()
+    }
+
     const {
         register,
         setValue,
@@ -557,6 +578,11 @@ function DocK34() {
                                                         <input type="text" id="nomorTelepon" name="nomorTelepon" className="form-control form-control-sm" placeholder="628898888888.." {...register("nomorTelepon")} />
                                                     </div>
                                                 </div>
+                                                <div className="row">
+                                                <div className="offset-sm-4 col-sm-4">
+                                                    <button type='button' className='btn rounded-pill btn-secondary' data-bs-toggle="modal" data-bs-target="#modSegel"><i className='fa-solid fa-link me-sm-2 me-1'></i>Segel Karantina</button>
+                                                </div>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
@@ -578,6 +604,83 @@ function DocK34() {
                         <button type="submit" className="btn btn-primary me-sm-2 me-1">Simpan</button>
                         <button type="button" className="btn btn-danger me-sm-2 me-1">Hapus</button>
                     </form>
+                </div>
+            </div>
+        </div>
+
+        <div className="modal fade" id="modSegel" tabIndex="-1">
+            <div className="modal-dialog">
+                <div className="modal-content p-3 pb-1">
+                    <div className="modal-body">
+                        <button type="button" className="btn-close float-end" data-bs-dismiss="modal" aria-label="Close"></button>
+                        <div className="text-center mb-4">
+                            <h3 className="address-title">Tambah Segel</h3>
+                        </div>
+                        <form onSubmit={handleSubmitSegel}>
+                            <div className="row mb-3">
+                                <label className="col-sm-3 col-form-label" htmlFor="jenisSegel">Jenis Segel</label>
+                                <div className="col-sm-8">
+                                    <select name="jenisSegel" id="jenisSegel" className='form-select form-select-sm' value={dataSegel.jenisSegel || ""} onChange={(e) => setDataSegel(values => ({...values, jenisSegel: e.target.value}))}>
+                                        <option value="">--</option>
+                                        <option value="KERTAS">Segel Kertas</option>
+                                        <option value="LAKBAN">Segel Lakban</option>
+                                        <option value="PLASTIK">Segel Plastik atau Segel Locis (Pull Tight Seals)</option>
+                                        <option value="PEMBATAS">Segel Pembatas / Garis Karantina</option>
+                                        <option value="KUNCI">Kunci</option>
+                                        <option value="BOTOL">Segel Botol</option>
+                                    </select>
+                                </div>
+                                <label className="col-sm-3 col-form-label" htmlFor="nomorSegel">Nomor Segel</label>
+                                <div className="col-sm-8">
+                                    <input type="text" placeholder='Nomor Segel..' className='form-control form-control-sm' id='nomorSegel' name='nomorSegel' value={dataSegel.nomorSegel || ""} onChange={(e) => setDataSegel(values => ({...values, nomorSegel: e.target.value}))} />
+                                </div>
+                                <label className="col-sm-3 col-form-label" htmlFor="nomorKontainer">Nomor Kontainer</label>
+                                <div className="col-sm-8">
+                                    <input type="text" placeholder='Nomor Kontainer..' className='form-control form-control-sm' id='nomorKontainer' name='nomorKontainer' value={dataSegel.nomorKontainer || ""} onChange={(e) => setDataSegel(values => ({...values, nomorKontainer: e.target.value}))} />
+                                </div>
+                            </div>
+                            <div className="col-12 text-center mb-3">
+                                <button type="submit" className="btn btn-sm btn-primary me-sm-3 me-1">Tambah</button>
+                                <button
+                                type="reset"
+                                className="btn btn-sm btn-label-secondary"
+                                data-bs-dismiss="modal"
+                                aria-label="Close">
+                                Tutup
+                                </button>
+                            </div>
+                            <div className='col-sm-12'>
+                                <div className="table-responsive text-nowrap" style={{height: (dataSegelArray?.length > 8 ? "300px" : "")}}>
+                                    <table className="table table-sm table-bordered table-hover table-striped dataTable">
+                                        <thead>
+                                            <tr>
+                                                <th>No</th>
+                                                <th>Jenis Segel</th>
+                                                <th>Nomor Segel</th>
+                                                <th>Kontainer</th>
+                                                <th>Act</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            {dataSegelArray?.length > 0  ? (
+                                                dataSegelArray?.map((item,index) => (
+                                                    <tr key={index}>
+                                                        <td>{index+1}</td>
+                                                        <td>{item.jenisSegel}</td>
+                                                        <td>{item.nomorSegel}</td>
+                                                        <td>{item.nomorKontainer}</td>
+                                                        <td>
+                                                            <button type='button' className="btn btn-default text-danger"><i className="fa-solid fa-trash"></i></button>
+                                                        </td>
+                                                    </tr>
+                                                ))
+                                            ) : null}
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
                 </div>
             </div>
         </div>

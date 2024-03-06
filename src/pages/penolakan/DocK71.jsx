@@ -48,6 +48,27 @@ function DocK71() {
         tglDokumen: "",
     })
 
+    let [dataSegel,setDataSegel] = useState({})
+    let [dataSegelArray,setDataSegelArray] = useState([])
+    function handleSubmitSegel(e) {
+        e.preventDefault();
+        setDataSegelArray([...dataSegelArray, { 
+            jenisSegel: dataSegel.jenisSegel,
+            nomorSegel: dataSegel.nomorSegel,
+            nomorKontainer: dataSegel.nomorKontainer
+        }]);
+        resetDataSegel()
+    }
+    
+    function resetDataSegel() {
+        setDataSegel(values => ({...values,
+            jenisSegel: "",
+            nomorSegel: "",
+            nomorKontainer: ""
+        }));
+        document.getElementById("jenisSegel").focus()
+    }
+
     const {
         register,
         setValue,
@@ -954,21 +975,21 @@ function DocK71() {
                             </div>
                             <h5><u>Tembusan</u></h5>
                             <div className="row">
-                                <div className="col-md-12">
+                                <div className="col-md-8">
                                     <ol>
                                         <li>
                                             <div className='row mb-2'>
                                                 <label className='col-sm-2' htmlFor="otoritas">Otoritas</label>
-                                                <div className='col-sm-3'>
+                                                <div className='col-sm-7'>
                                                     <div className='input-group'>
-                                                        <div className='col-sm-4'>
+                                                        <div className='col-sm-2'>
                                                             <select name="otoritas" id="otoritas" {...register("otoritas")} className='form-control form-control-sm'>
                                                                 <option value="">--</option>
                                                                 <option value="Pelabuhan">Pelabuhan</option>
                                                                 <option value="Bandara">Bandara</option>
                                                             </select>
                                                         </div>
-                                                        <div className='col-sm-8'>
+                                                        <div className='col-sm-5'>
                                                             <input type="text" className='col-sm-4 form-control form-control-sm' id='otban' name='otban' {...register("otban")} />
                                                         </div>
                                                     </div>
@@ -978,7 +999,7 @@ function DocK71() {
                                         <li>
                                             <div className='row mb-2'>
                                                 <label className='col-sm-2' htmlFor="otoritas">Kepala Kantor BC</label>
-                                                <div className='col-sm-3'>
+                                                <div className='col-sm-4'>
                                                     <input type="text" className='form-control form-control-sm' id='kaBc' name='kaBc' {...register("kaBc")} />
                                                 </div>
                                             </div>
@@ -986,17 +1007,20 @@ function DocK71() {
                                         <li>
                                             <div className='row mb-2'>
                                                 <label className='col-sm-2' htmlFor="otoritas">Pengelola {cekWatch.otoritas}</label>
-                                                <div className='col-sm-3'>
+                                                <div className='col-sm-4'>
                                                     <input type="text" className='form-control form-control-sm' id='namaPengelola' name='namaPengelola' {...register("namaPengelola")} />
                                                 </div>
                                             </div>
                                         </li>
                                     </ol>
-                                    <hr className="my-4 mx-n4" />
                                 </div>
+                                <div className="col-sm-4">
+                                    <button type='button' className='btn rounded-pill btn-secondary' data-bs-toggle="modal" data-bs-target="#modSegel"><i className='fa-solid fa-link me-sm-2 me-1'></i>Segel Karantina</button>
+                                </div>
+                                    <hr className="my-4 mx-n4" />
                             </div>
                             <div className='row mb-3'>
-                                <div className="offset-sm-2 col-sm-6">
+                                <div className="offset-sm-2 col-sm-3">
                                     <div className="form-check form-check-inline">
                                         <input className="form-check-input" type="checkbox" name="isAttach" id="isAttach" value="1" {...register("isAttach")} />
                                         <label className="form-check-label" htmlFor="isAttach">Attachment</label>
@@ -1028,6 +1052,83 @@ function DocK71() {
                             </div>
                         </div>
                     </form>
+                </div>
+            </div>
+        </div>
+
+        <div className="modal fade" id="modSegel" tabIndex="-1">
+            <div className="modal-dialog">
+                <div className="modal-content p-3 pb-1">
+                    <div className="modal-body">
+                        <button type="button" className="btn-close float-end" data-bs-dismiss="modal" aria-label="Close"></button>
+                        <div className="text-center mb-4">
+                            <h3 className="address-title">Tambah Segel</h3>
+                        </div>
+                        <form onSubmit={handleSubmitSegel}>
+                            <div className="row mb-3">
+                                <label className="col-sm-3 col-form-label" htmlFor="jenisSegel">Jenis Segel</label>
+                                <div className="col-sm-8">
+                                    <select name="jenisSegel" id="jenisSegel" className='form-select form-select-sm' value={dataSegel.jenisSegel || ""} onChange={(e) => setDataSegel(values => ({...values, jenisSegel: e.target.value}))}>
+                                        <option value="">--</option>
+                                        <option value="KERTAS">Segel Kertas</option>
+                                        <option value="LAKBAN">Segel Lakban</option>
+                                        <option value="PLASTIK">Segel Plastik atau Segel Locis (Pull Tight Seals)</option>
+                                        <option value="PEMBATAS">Segel Pembatas / Garis Karantina</option>
+                                        <option value="KUNCI">Kunci</option>
+                                        <option value="BOTOL">Segel Botol</option>
+                                    </select>
+                                </div>
+                                <label className="col-sm-3 col-form-label" htmlFor="nomorSegel">Nomor Segel</label>
+                                <div className="col-sm-8">
+                                    <input type="text" placeholder='Nomor Segel..' className='form-control form-control-sm' id='nomorSegel' name='nomorSegel' value={dataSegel.nomorSegel || ""} onChange={(e) => setDataSegel(values => ({...values, nomorSegel: e.target.value}))} />
+                                </div>
+                                <label className="col-sm-3 col-form-label" htmlFor="nomorKontainer">Nomor Kontainer</label>
+                                <div className="col-sm-8">
+                                    <input type="text" placeholder='Nomor Kontainer..' className='form-control form-control-sm' id='nomorKontainer' name='nomorKontainer' value={dataSegel.nomorKontainer || ""} onChange={(e) => setDataSegel(values => ({...values, nomorKontainer: e.target.value}))} />
+                                </div>
+                            </div>
+                            <div className="col-12 text-center mb-3">
+                                <button type="submit" className="btn btn-sm btn-primary me-sm-3 me-1">Tambah</button>
+                                <button
+                                type="reset"
+                                className="btn btn-sm btn-label-secondary"
+                                data-bs-dismiss="modal"
+                                aria-label="Close">
+                                Tutup
+                                </button>
+                            </div>
+                            <div className='col-sm-12'>
+                                <div className="table-responsive text-nowrap" style={{height: (dataSegelArray?.length > 8 ? "300px" : "")}}>
+                                    <table className="table table-sm table-bordered table-hover table-striped dataTable">
+                                        <thead>
+                                            <tr>
+                                                <th>No</th>
+                                                <th>Jenis Segel</th>
+                                                <th>Nomor Segel</th>
+                                                <th>Kontainer</th>
+                                                <th>Act</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            {dataSegelArray?.length > 0  ? (
+                                                dataSegelArray?.map((item,index) => (
+                                                    <tr key={index}>
+                                                        <td>{index+1}</td>
+                                                        <td>{item.jenisSegel}</td>
+                                                        <td>{item.nomorSegel}</td>
+                                                        <td>{item.nomorKontainer}</td>
+                                                        <td>
+                                                            <button type='button' className="btn btn-default text-danger"><i className="fa-solid fa-trash"></i></button>
+                                                        </td>
+                                                    </tr>
+                                                ))
+                                            ) : null}
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
                 </div>
             </div>
         </div>

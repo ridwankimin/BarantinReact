@@ -21,6 +21,8 @@ const log = new PtkHistory()
 function DocK37b() {
     const idPtk = Cookies.get("idPtkPage");
     let [data,setData] = useState({})
+    let [dataSegel,setDataSegel] = useState({})
+    let [dataSegelArray,setDataSegelArray] = useState([])
     
     let navigate = useNavigate();
     const {
@@ -151,6 +153,25 @@ function DocK37b() {
                     icon: "error"
                 });
             });
+    }
+
+    function handleSubmitSegel(e) {
+        e.preventDefault();
+        setDataSegelArray([...dataSegelArray, { 
+            jenisSegel: dataSegel.jenisSegel,
+            nomorSegel: dataSegel.nomorSegel,
+            nomorKontainer: dataSegel.nomorKontainer
+        }]);
+        resetDataSegel()
+    }
+    
+    function resetDataSegel() {
+        setDataSegel(values => ({...values,
+            jenisSegel: "",
+            nomorSegel: "",
+            nomorKontainer: ""
+        }));
+        document.getElementById("jenisSegel").focus()
     }
     
     function submitModKesehatan(e) {
@@ -668,305 +689,385 @@ function DocK37b() {
             </small>
         </h4>
 
-    <div className="row">
-        <div className="col-xxl">
-            <div className="card card-action mb-4">
-                <div className="card-header mb-2 p-2" style={{backgroundColor: '#123138'}}>
-                    <div className="card-action-title text-lightest">
-                        <div className='row'>
-                            <label className="col-sm-1 col-form-label text-sm-end" htmlFor="noDok"><b>No PTK</b></label>
-                            <div className="col-sm-3">
-                                <input type="text" id="noDok" value={data.noDokumen || ""} className="form-control form-control-sm" placeholder="Nomor Dokumen PTK" disabled />
-                            </div>
-                            <label className="col-sm-2 col-form-label text-sm-end" htmlFor="noAdmin"><b>NO P. Administratif</b></label>
-                            <div className="col-sm-3">
-                                <input type="text" id='noAdmin' value={data.noAdmin || ""} className='form-control form-control-sm' disabled/>
-                            </div>
-                            <label className="col-sm-1 col-form-label" htmlFor="tglAdmin"><b>TANGGAL</b></label>
-                            <div className="col-sm-2">
-                                <input type="text" id='tglAdmin' value={data.tglAdmin || ""} className='form-control form-control-sm' disabled/>
-                            </div>
-                        </div>
-                    </div>
-                    <div className="card-action-element">
-                        <ul className="list-inline mb-0">
-                            <li className="list-inline-item">
-                                <button type='button' className="btn btn-default card-collapsible text-lighter p-0"><i className="tf-icons fa-solid fa-chevron-up"></i></button>
-                            </li>
-                        </ul>
-                    </div>
-                </div>
-                <div className="card-body">
-                    <form onSubmit={handleSubmit(onSubmit)}>
-                        <input type="hidden" name='idDok37b' {...register("idDok37b")} />
-                        <input type="hidden" name='ptkId' {...register("ptkId")} />
-                        <input type="hidden" name='idDok37a' {...register("idDok37a")} />
-                        <input type="hidden" name='noDok' {...register("noDok")} />
-                        <div className="col-md-12 mt-3">
-                            <div className="row mb-3">
-                                <label className="col-sm-2 col-form-label text-sm-center" htmlFor="noDok37b">Nomor Dokumen</label>
+        <div className="row">
+            <div className="col-xxl">
+                <div className="card card-action mb-4">
+                    <div className="card-header mb-2 p-2" style={{backgroundColor: '#123138'}}>
+                        <div className="card-action-title text-lightest">
+                            <div className='row'>
+                                <label className="col-sm-1 col-form-label text-sm-end" htmlFor="noDok"><b>No PTK</b></label>
                                 <div className="col-sm-3">
-                                    <input type="text" id="noDok37b" name='noDok37b' className="form-control form-control-sm" {...register("noDok37b")} placeholder="Nomor Dokumen K-3.7b" disabled />
+                                    <input type="text" id="noDok" value={data.noDokumen || ""} className="form-control form-control-sm" placeholder="Nomor Dokumen PTK" disabled />
                                 </div>
-                                <label className="col-sm-2 col-form-label text-sm-center" htmlFor="tglDok37b">Tanggal<span className='text-danger'>*</span></label>
+                                <label className="col-sm-2 col-form-label text-sm-end" htmlFor="noAdmin"><b>NO P. Administratif</b></label>
+                                <div className="col-sm-3">
+                                    <input type="text" id='noAdmin' value={data.noAdmin || ""} className='form-control form-control-sm' disabled/>
+                                </div>
+                                <label className="col-sm-1 col-form-label" htmlFor="tglAdmin"><b>TANGGAL</b></label>
                                 <div className="col-sm-2">
-                                    <input type="datetime-local" id="tglDok37b" name='tglDok37b' onChange={(e) => setvalueHeader("tglDok37b", e.target.value)} {...register("tglDok37b", {required: (dataWatch.tglDok37b ? "Mohon isi tanggal dokumen." : false)})} className={errors.tglDok37b ? "form-control form-control-sm is-invalid" : "form-control form-control-sm"} />
-                                    {errors.tglDok37b && <small className="text-danger">{errors.tglDok37b.message}</small>}
+                                    <input type="text" id='tglAdmin' value={data.tglAdmin || ""} className='form-control form-control-sm' disabled/>
                                 </div>
                             </div>
                         </div>
-                        <div className="row my-4">
-                            <div className="col">
-                                <div className="accordion" id="collapseSection">
-                                    <div className="card">
-                                        <h2 className="accordion-header" id="headerExporter">
-                                            <button className="accordion-button" type="button" style={{backgroundColor: '#123138'}} data-bs-toggle="collapse" data-bs-target="#collapseExporter" aria-expanded="true" aria-controls="collapseExporter">
-                                                <h5 className='text-lightest mb-0'>Hasil Pemeriksaan</h5>
-                                            </button>
-                                        </h2>
-                                        <div id="collapseExporter">
-                                            <div className="accordion-body">
-                                                <button type='button' className='btn btn-sm btn-info mb-3' data-bs-toggle="modal" data-bs-target="#modKesehatan" style={{marginLeft: "15px"}}>Tambah Data</button>
-                                                <h5>
-                                                    <u><b>
-                                                        A. Pemeriksaan Fisik/Kesehatan, Pemeriksaan HPHK/HPIK/OPTK
-                                                    </b></u>
-                                                    <div className="float-end">
-                                                        <a href='https://esps.karantina.pertanian.go.id/elab' rel="noreferrer" target='_blank' className='btn btn-info btn-sm'><i className="menu-icon tf-icons fa-solid fa-download"></i>Data elab Barantin</a>
-                                                    </div>
-                                                </h5>
-                                                <div className="table-responsive text-nowrap" style={{height: (listKesehatan?.length > 8 ? "300px" : "")}}>
-                                                    <table className="table table-sm table-bordered table-hover table-striped dataTable">
-                                                        <thead>
-                                                            <tr>
-                                                                <th>No</th>
-                                                                <th>Nama MP</th>
-                                                                <th>Jumlah MP</th>
-                                                                <th>Target/Sasaran</th>
-                                                                <th>Metode</th>
-                                                                <th>Temuan</th>
-                                                                <th>Catatan</th>
-                                                                <th>Act</th>
-                                                            </tr>
-                                                        </thead>
-                                                        <tbody>
-                                                            {listKesehatan ? (listKesehatan.map((data, index) => (data.target_sasaran1 ?
-                                                                    (<tr key={index}>
-                                                                        <td>{index + 1}</td>
-                                                                        <td>{data.nama_umum_tercetak}</td>
-                                                                        <td>{data.volume_lain + " " + data.satuan_lain}</td>
-                                                                        <td>{data.target_sasaran1}</td>
-                                                                        <td>{data.metode1}</td>
-                                                                        <td>{data.temuan_hasil1}</td>
-                                                                        <td>{data.catatan1}</td>
-                                                                        <td>
-                                                                            <div className="d-grid gap-2">
-                                                                                <button type='button' className="btn btn-default btn-sm text-danger"><i className='fa-solid fa-trash'></i></button>
-                                                                            </div>
-                                                                        </td>
-                                                                    </tr>)
-                                                                : null))
-                                                            ) : null }
-                                                        </tbody>
-                                                    </table>
-                                                </div>
-                                                <div>
-                                                    <h5>Perlu uji lab ?
-                                                        <div className="form-check form-check-inline" style={{marginLeft:"10px"}}>
-                                                            <input className="form-check-input" type="radio" name="isUjiLab" id="ya" value={1} {...register("isUjiLab")} />
-                                                            <label className="form-check-label mt-1" htmlFor="ya">Ya</label>
-                                                        </div>
-                                                        <div className="form-check form-check-inline">
-                                                            <input className="form-check-input" type="radio" name="isUjiLab" id="tidak" value={0}  {...register("isUjiLab")}/>
-                                                            <label className="form-check-label mt-1" htmlFor="tidak">Tidak</label>
+                        <div className="card-action-element">
+                            <ul className="list-inline mb-0">
+                                <li className="list-inline-item">
+                                    <button type='button' className="btn btn-default card-collapsible text-lighter p-0"><i className="tf-icons fa-solid fa-chevron-up"></i></button>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div className="card-body">
+                        <form onSubmit={handleSubmit(onSubmit)}>
+                            <input type="hidden" name='idDok37b' {...register("idDok37b")} />
+                            <input type="hidden" name='ptkId' {...register("ptkId")} />
+                            <input type="hidden" name='idDok37a' {...register("idDok37a")} />
+                            <input type="hidden" name='noDok' {...register("noDok")} />
+                            <div className="col-md-12 mt-3">
+                                <div className="row mb-3">
+                                    <label className="col-sm-2 col-form-label text-sm-center" htmlFor="noDok37b">Nomor Dokumen</label>
+                                    <div className="col-sm-3">
+                                        <input type="text" id="noDok37b" name='noDok37b' className="form-control form-control-sm" {...register("noDok37b")} placeholder="Nomor Dokumen K-3.7b" disabled />
+                                    </div>
+                                    <label className="col-sm-2 col-form-label text-sm-center" htmlFor="tglDok37b">Tanggal<span className='text-danger'>*</span></label>
+                                    <div className="col-sm-2">
+                                        <input type="datetime-local" id="tglDok37b" name='tglDok37b' onChange={(e) => setvalueHeader("tglDok37b", e.target.value)} {...register("tglDok37b", {required: (dataWatch.tglDok37b ? "Mohon isi tanggal dokumen." : false)})} className={errors.tglDok37b ? "form-control form-control-sm is-invalid" : "form-control form-control-sm"} />
+                                        {errors.tglDok37b && <small className="text-danger">{errors.tglDok37b.message}</small>}
+                                    </div>
+                                </div>
+                            </div>
+                            <div className="row my-4">
+                                <div className="col">
+                                    <div className="accordion" id="collapseSection">
+                                        <div className="card">
+                                            <h2 className="accordion-header" id="headerExporter">
+                                                <button className="accordion-button" type="button" style={{backgroundColor: '#123138'}} data-bs-toggle="collapse" data-bs-target="#collapseExporter" aria-expanded="true" aria-controls="collapseExporter">
+                                                    <h5 className='text-lightest mb-0'>Hasil Pemeriksaan</h5>
+                                                </button>
+                                            </h2>
+                                            <div id="collapseExporter">
+                                                <div className="accordion-body">
+                                                    <button type='button' className='btn btn-sm btn-info mb-3' data-bs-toggle="modal" data-bs-target="#modKesehatan" style={{marginLeft: "15px"}}>Tambah Data</button>
+                                                    <h5>
+                                                        <u><b>
+                                                            A. Pemeriksaan Fisik/Kesehatan, Pemeriksaan HPHK/HPIK/OPTK
+                                                        </b></u>
+                                                        <div className="float-end">
+                                                            <a href='https://esps.karantina.pertanian.go.id/elab' rel="noreferrer" target='_blank' className='btn btn-info btn-sm'><i className="menu-icon tf-icons fa-solid fa-download"></i>Data elab Barantin</a>
                                                         </div>
                                                     </h5>
-                                                </div>
-                                                <h5 title='Pengawasan dan Pengendalian Pangan/Pakan/SDG/PRG/Agensia Hayati/JAI/Tumbuhan dan Satwa Liar/Tumbuhan dan Satwa Langka'><u><b>B. Pengawasan dan Pengendalian</b></u></h5>
-                                                <div className="table-responsive text-nowrap" style={{height: (listKesehatan?.length > 8 ? "300px" : "")}}>
-                                                    <table className="table table-sm table-bordered table-hover table-striped dataTable">
-                                                        <thead>
-                                                            <tr>
-                                                                <th>No</th>
-                                                                <th>Nama MP</th>
-                                                                <th>Jumlah MP</th>
-                                                                <th>Target/Sasaran</th>
-                                                                <th>Metode</th>
-                                                                <th>Temuan</th>
-                                                                <th>Catatan</th>
-                                                                <th>Act</th>
-                                                            </tr>
-                                                        </thead>
-                                                        <tbody>
-                                                        {listKesehatan ? (listKesehatan.map((data, index) => (data.target_sasaran2 ?
-                                                                    (<tr key={index}>
-                                                                        <td>{index + 1}</td>
-                                                                        <td>{data.nama_umum_tercetak}</td>
-                                                                        <td>{data.volume_lain + " " + data.satuan_lain}</td>
-                                                                        <td>{data.target_sasaran2}</td>
-                                                                        <td>{data.metode2}</td>
-                                                                        <td>{data.temuan_hasil2}</td>
-                                                                        <td>{data.catatan2}</td>
-                                                                        <td>
-                                                                            <div className="d-grid gap-2">
-                                                                                <button type='button' className="btn btn-default btn-sm text-danger"><i className='fa-solid fa-trash'></i></button>
-                                                                            </div>
-                                                                        </td>
-                                                                    </tr>)
-                                                                : null))
-                                                            ) : null }
-                                                        </tbody>
-                                                    </table>
-                                                </div>
-                                                <div className="row mb-3">
-                                                    <div className='col-sm-2 form-control-label' htmlFor="ttd1"><b>Penandatangan<span className='text-danger'>*</span></b></div>
-                                                    <div className="col-sm-4">
-                                                        <select className={errors.ttd1 == '' ? 'form-select form-select-sm is-invalid' : 'form-select form-select-sm'} name="ttd1" id="ttd1" {...register("ttd1", { required: "Mohon pilih penandatangan."})}>
-                                                            {data.petugas?.map((item, index) => (
-                                                                <option value={item.penanda_tangan_id} key={index} defaultValue={dataWatch.ttd1}>{item.nama + " - " + item.nip}</option>
-                                                            ))}
-                                                        </select>
-                                                        {/* <input type="text" name='ttd1' id='ttd1' {...register("ttd1", {required: "Mohon pilih penandatangan."})} className={errors.ttd1 ? "form-select form-select-sm is-invalid" : "form-select form-select-sm"}/> */}
-                                                        {errors.ttd1 && <small className="text-danger">{errors.ttd1.message}</small>}
+                                                    <div className="table-responsive text-nowrap" style={{height: (listKesehatan?.length > 8 ? "300px" : "")}}>
+                                                        <table className="table table-sm table-bordered table-hover table-striped dataTable">
+                                                            <thead>
+                                                                <tr>
+                                                                    <th>No</th>
+                                                                    <th>Nama MP</th>
+                                                                    <th>Jumlah MP</th>
+                                                                    <th>Target/Sasaran</th>
+                                                                    <th>Metode</th>
+                                                                    <th>Temuan</th>
+                                                                    <th>Catatan</th>
+                                                                    <th>Act</th>
+                                                                </tr>
+                                                            </thead>
+                                                            <tbody>
+                                                                {listKesehatan ? (listKesehatan.map((data, index) => (data.target_sasaran1 ?
+                                                                        (<tr key={index}>
+                                                                            <td>{index + 1}</td>
+                                                                            <td>{data.nama_umum_tercetak}</td>
+                                                                            <td>{data.volume_lain + " " + data.satuan_lain}</td>
+                                                                            <td>{data.target_sasaran1}</td>
+                                                                            <td>{data.metode1}</td>
+                                                                            <td>{data.temuan_hasil1}</td>
+                                                                            <td>{data.catatan1}</td>
+                                                                            <td>
+                                                                                <div className="d-grid gap-2">
+                                                                                    <button type='button' className="btn btn-default btn-sm text-danger"><i className='fa-solid fa-trash'></i></button>
+                                                                                </div>
+                                                                            </td>
+                                                                        </tr>)
+                                                                    : null))
+                                                                ) : null }
+                                                            </tbody>
+                                                        </table>
                                                     </div>
+                                                    <div>
+                                                        <h5>Perlu uji lab ?
+                                                            <div className="form-check form-check-inline" style={{marginLeft:"10px"}}>
+                                                                <input className="form-check-input" type="radio" name="isUjiLab" id="ya" value={1} {...register("isUjiLab")} />
+                                                                <label className="form-check-label mt-1" htmlFor="ya">Ya</label>
+                                                            </div>
+                                                            <div className="form-check form-check-inline">
+                                                                <input className="form-check-input" type="radio" name="isUjiLab" id="tidak" value={0}  {...register("isUjiLab")}/>
+                                                                <label className="form-check-label mt-1" htmlFor="tidak">Tidak</label>
+                                                            </div>
+                                                        </h5>
+                                                    </div>
+                                                    <h5 title='Pengawasan dan Pengendalian Pangan/Pakan/SDG/PRG/Agensia Hayati/JAI/Tumbuhan dan Satwa Liar/Tumbuhan dan Satwa Langka'><u><b>B. Pengawasan dan Pengendalian</b></u></h5>
+                                                    <div className="table-responsive text-nowrap" style={{height: (listKesehatan?.length > 8 ? "300px" : "")}}>
+                                                        <table className="table table-sm table-bordered table-hover table-striped dataTable">
+                                                            <thead>
+                                                                <tr>
+                                                                    <th>No</th>
+                                                                    <th>Nama MP</th>
+                                                                    <th>Jumlah MP</th>
+                                                                    <th>Target/Sasaran</th>
+                                                                    <th>Metode</th>
+                                                                    <th>Temuan</th>
+                                                                    <th>Catatan</th>
+                                                                    <th>Act</th>
+                                                                </tr>
+                                                            </thead>
+                                                            <tbody>
+                                                            {listKesehatan ? (listKesehatan.map((data, index) => (data.target_sasaran2 ?
+                                                                        (<tr key={index}>
+                                                                            <td>{index + 1}</td>
+                                                                            <td>{data.nama_umum_tercetak}</td>
+                                                                            <td>{data.volume_lain + " " + data.satuan_lain}</td>
+                                                                            <td>{data.target_sasaran2}</td>
+                                                                            <td>{data.metode2}</td>
+                                                                            <td>{data.temuan_hasil2}</td>
+                                                                            <td>{data.catatan2}</td>
+                                                                            <td>
+                                                                                <div className="d-grid gap-2">
+                                                                                    <button type='button' className="btn btn-default btn-sm text-danger"><i className='fa-solid fa-trash'></i></button>
+                                                                                </div>
+                                                                            </td>
+                                                                        </tr>)
+                                                                    : null))
+                                                                ) : null }
+                                                            </tbody>
+                                                        </table>
+                                                    </div>
+                                                    <div className="row mb-3">
+                                                        <div className='col-sm-2 form-control-label' htmlFor="ttd1"><b>Penandatangan<span className='text-danger'>*</span></b></div>
+                                                        <div className="col-sm-4">
+                                                            <select className={errors.ttd1 == '' ? 'form-select form-select-sm is-invalid' : 'form-select form-select-sm'} name="ttd1" id="ttd1" {...register("ttd1", { required: "Mohon pilih penandatangan."})}>
+                                                                {data.petugas?.map((item, index) => (
+                                                                    <option value={item.penanda_tangan_id} key={index} defaultValue={dataWatch.ttd1}>{item.nama + " - " + item.nip}</option>
+                                                                ))}
+                                                            </select>
+                                                            {/* <input type="text" name='ttd1' id='ttd1' {...register("ttd1", {required: "Mohon pilih penandatangan."})} className={errors.ttd1 ? "form-select form-select-sm is-invalid" : "form-select form-select-sm"}/> */}
+                                                            {errors.ttd1 && <small className="text-danger">{errors.ttd1.message}</small>}
+                                                        </div>
+                                                    </div>
+                                                    <button type="submit" className="btn btn-sm btn-primary me-sm-2 me-1">Simpan Hasil Pemeriksaan</button>
+                                                    {/* <button type="button" className="btn btn-sm btn-danger me-sm-2 me-1">Hapus</button> */}
                                                 </div>
-                                                <button type="submit" className="btn btn-sm btn-primary me-sm-2 me-1">Simpan Hasil Pemeriksaan</button>
-                                                {/* <button type="button" className="btn btn-sm btn-danger me-sm-2 me-1">Hapus</button> */}
                                             </div>
                                         </div>
                                     </div>
                                 </div>
                             </div>
-                        </div>
-                    </form>
-                    <form onSubmit={handleSubmitHeader(onSubmitHeader)} style={{display: (dataWatch.idDok37b ? "block" : "none")}}>
-                        <input type="hidden" name='idDok37b' id='idDok37b' {...registerHeader("idDok37b")} />
-                        <input type="hidden" name='tglDok37b' id='tglDok37b' {...registerHeader("tglDok37b")} />
-                        <div className="row">
-                            <div className='col-sm-2 form-control-label'><b>Kesimpulan</b></div>
-                            <div className="col-sm-3 mb-3">
-                                <textarea name="kesimpulan37b" id="kesimpulan37b" rows="2" {...registerHeader("kesimpulan37b")} className='form-control form-control-sm'></textarea>
-                            </div>
-                        </div>
-                        <div className="row">
-                            <div className='col-sm-2 form-control-label'><b>Rekomendasi <span className='text-danger'>*</span></b></div>
-                            <div className="col-sm-8 mb-3">
-                                <div className="form-check form-check-inline">
-                                    <input className="form-check-input" type="checkbox" name="rekom37b" id="rekom37b16" disabled={dataWatchHeader.rekom37b?.length == 2 ? (dataWatchHeader.rekom37b.indexOf('16') < 0 ? true : false) : false} value="16" {...registerHeader("rekom37b", { required: "Mohon pilih rekomendasi yang sesuai."})} />
-                                    <label className="form-check-label" htmlFor="rekom37b16">Diberi Perlakuan</label>
+                        </form>
+                        <form onSubmit={handleSubmitHeader(onSubmitHeader)} style={{display: (dataWatch.idDok37b ? "block" : "none")}}>
+                            <input type="hidden" name='idDok37b' id='idDok37b' {...registerHeader("idDok37b")} />
+                            <input type="hidden" name='tglDok37b' id='tglDok37b' {...registerHeader("tglDok37b")} />
+                            <div className="row">
+                                <div className='col-sm-2 form-control-label'><b>Kesimpulan</b></div>
+                                <div className="col-sm-3 mb-3">
+                                    <textarea name="kesimpulan37b" id="kesimpulan37b" rows="2" {...registerHeader("kesimpulan37b")} className='form-control form-control-sm'></textarea>
                                 </div>
-                                <div className="form-check form-check-inline">
-                                    <input className="form-check-input" type="checkbox" name="rekom37b" id="rekom37b17" disabled={dataWatchHeader.rekom37b?.length == 2 ? (dataWatchHeader.rekom37b.indexOf('17') < 0 ? true : false) : false} value="17" {...registerHeader("rekom37b")} />
-                                    <label className="form-check-label" htmlFor="rekom37b17">Ditolak</label>
+                                <div className="offset-sm-4 col-sm-2">
+                                    <button type='button' className='btn rounded-pill btn-secondary' data-bs-toggle="modal" data-bs-target="#modSegel"><i className='fa-solid fa-link me-sm-2 me-1'></i>Segel Karantina</button>
                                 </div>
-                                <div className="form-check form-check-inline">
-                                    <input className="form-check-input" type="checkbox" name="rekom37b" id="rekom37b18" disabled={dataWatchHeader.rekom37b?.length == 2 ? (dataWatchHeader.rekom37b.indexOf('18') < 0 ? true : false) : false} value="18" {...registerHeader("rekom37b")} />
-                                    <label className="form-check-label" htmlFor="rekom37b18">Dimusnahkan</label>
+                            </div>
+                            <div className="row">
+                                <div className='col-sm-2 form-control-label'><b>Rekomendasi <span className='text-danger'>*</span></b></div>
+                                <div className="col-sm-8 mb-3">
+                                    <div className="form-check form-check-inline">
+                                        <input className="form-check-input" type="checkbox" name="rekom37b" id="rekom37b16" disabled={dataWatchHeader.rekom37b?.length == 2 ? (dataWatchHeader.rekom37b.indexOf('16') < 0 ? true : false) : false} value="16" {...registerHeader("rekom37b", { required: "Mohon pilih rekomendasi yang sesuai."})} />
+                                        <label className="form-check-label" htmlFor="rekom37b16">Diberi Perlakuan</label>
+                                    </div>
+                                    <div className="form-check form-check-inline">
+                                        <input className="form-check-input" type="checkbox" name="rekom37b" id="rekom37b17" disabled={dataWatchHeader.rekom37b?.length == 2 ? (dataWatchHeader.rekom37b.indexOf('17') < 0 ? true : false) : false} value="17" {...registerHeader("rekom37b")} />
+                                        <label className="form-check-label" htmlFor="rekom37b17">Ditolak</label>
+                                    </div>
+                                    <div className="form-check form-check-inline">
+                                        <input className="form-check-input" type="checkbox" name="rekom37b" id="rekom37b18" disabled={dataWatchHeader.rekom37b?.length == 2 ? (dataWatchHeader.rekom37b.indexOf('18') < 0 ? true : false) : false} value="18" {...registerHeader("rekom37b")} />
+                                        <label className="form-check-label" htmlFor="rekom37b18">Dimusnahkan</label>
+                                    </div>
+                                    <div className="form-check form-check-inline">
+                                        <input className="form-check-input" type="checkbox" name="rekom37b" id="rekom37b19" disabled={dataWatchHeader.rekom37b?.length == 2 ? (dataWatchHeader.rekom37b.indexOf('19') < 0 ? true : false) : false} value="19" {...registerHeader("rekom37b")} />
+                                        <label className="form-check-label" htmlFor="rekom37b19">Dibebaskan</label>
+                                    </div>
+                                    {errorsHeader.rekom37b && <small className="text-danger">{errorsHeader.rekom37b.message}</small>}
                                 </div>
-                                <div className="form-check form-check-inline">
-                                    <input className="form-check-input" type="checkbox" name="rekom37b" id="rekom37b19" disabled={dataWatchHeader.rekom37b?.length == 2 ? (dataWatchHeader.rekom37b.indexOf('19') < 0 ? true : false) : false} value="19" {...registerHeader("rekom37b")} />
-                                    <label className="form-check-label" htmlFor="rekom37b19">Dibebaskan</label>
+                            </div>
+                            <div className="row mb-3">
+                                <div className='col-sm-2 form-control-label'><b>Penandatangan <span className='text-danger'>*</span></b></div>
+                                <div className="col-sm-4">
+                                    <select className={errorsHeader.ttd2 == '' ? 'form-select form-select-sm is-invalid' : 'form-select form-select-sm'} name="ttd2" id="ttd2" {...registerHeader("ttd2", { required: "Mohon pilih penandatangan."})}>
+                                        {data.petugas?.map((item, index) => (
+                                            <option value={item.penanda_tangan_id} key={index} defaultValue={dataWatchHeader.ttd2}>{item.nama + " - " + item.nip}</option>
+                                        ))}
+                                    </select>
+                                    {errorsHeader.ttd2 && <small className="text-danger">{errorsHeader.ttd2.message}</small>}
                                 </div>
-                                {errorsHeader.rekom37b && <small className="text-danger">{errorsHeader.rekom37b.message}</small>}
                             </div>
-                        </div>
-                        <div className="row mb-3">
-                            <div className='col-sm-2 form-control-label'><b>Penandatangan <span className='text-danger'>*</span></b></div>
-                            <div className="col-sm-4">
-                                <select className={errorsHeader.ttd2 == '' ? 'form-select form-select-sm is-invalid' : 'form-select form-select-sm'} name="ttd2" id="ttd2" {...registerHeader("ttd2", { required: "Mohon pilih penandatangan."})}>
-                                    {data.petugas?.map((item, index) => (
-                                        <option value={item.penanda_tangan_id} key={index} defaultValue={dataWatchHeader.ttd2}>{item.nama + " - " + item.nip}</option>
-                                    ))}
-                                </select>
-                                {errorsHeader.ttd2 && <small className="text-danger">{errorsHeader.ttd2.message}</small>}
+                            <div className="row">
+                                <div className="col-sm-12">
+                                    <button type="submit" className="btn btn-primary me-sm-2 me-1">Simpan</button>
+                                    <button type="button" className="btn btn-danger me-sm-2 me-1">Batal</button>
+                                    <a href={require("../../dok/k37a.pdf")} rel="noopener noreferrer" target='_blank' className="btn btn-warning"><i className="bx bx-printer bx-xs"></i>&nbsp; Print</a>
+                                    <button style={{display: (data.cekSimpan37b ? "block" : "none")}} type='button' onClick={() => navigate(process.env.PUBLIC_URL + '/k22')} className="btn btn-info pb-1 float-end">
+                                        <span className="d-sm-inline-block d-none me-sm-1">Buat Surat Tugas</span>
+                                        <i className="fa-solid fa-angle-right"></i>
+                                    </button>
+                                </div>
                             </div>
-                        </div>
-                        <div className="row">
-                            <div className="col-sm-12">
-                                <button type="submit" className="btn btn-primary me-sm-2 me-1">Simpan</button>
-                                <button type="button" className="btn btn-danger me-sm-2 me-1">Batal</button>
-                                <a href={require("../../dok/k37a.pdf")} rel="noopener noreferrer" target='_blank' className="btn btn-warning"><i className="bx bx-printer bx-xs"></i>&nbsp; Print</a>
-                                <button style={{display: (data.cekSimpan37b ? "block" : "none")}} type='button' onClick={() => navigate(process.env.PUBLIC_URL + '/k22')} className="btn btn-info pb-1 float-end">
-                                    <span className="d-sm-inline-block d-none me-sm-1">Buat Surat Tugas</span>
-                                    <i className="fa-solid fa-angle-right"></i>
-                                </button>
-                            </div>
-                        </div>
-                    </form>
+                        </form>
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
-    <div className="modal fade" id="modKesehatan" tabIndex="-1" aria-hidden="true">
-        <div className="modal-dialog modal-dialog-centered1 modal-simple modal-xl">
-            <div className="modal-content p-1">
-                <div className="modal-body">
-                    <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                    <div className="text-center mb-4">
-                        <h4>Tambah Data Pemeriksaan Fisik/Kesehatan</h4>
-                    </div>
-                    <form onSubmit={submitModKesehatan}>
-                        <div className='row'>
-                            <div className='col-sm-12 mb-3'>
-                                <div className="row">
-                                    <label className="form-label col-sm-2" style={{marginTop: "10px"}} htmlFor="mpPeriksa"><b>Media Pembawa</b></label>
-                                    <div className='col-sm-4'>
-                                        <Select defaultValue={data.mpPeriksaView} value={data.mpPeriksaView || ""} options={dataSelect.komoditas} onChange={(e) => setData(values => ({...values, mpPeriksa: e.value})) & setData(values => ({...values, mpPeriksaView: e}))} />
+        <div className="modal fade" id="modKesehatan" tabIndex="-1" aria-hidden="true">
+            <div className="modal-dialog modal-dialog-centered1 modal-simple modal-xl">
+                <div className="modal-content p-1">
+                    <div className="modal-body">
+                        <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        <div className="text-center mb-4">
+                            <h4>Tambah Data Pemeriksaan Fisik/Kesehatan</h4>
+                        </div>
+                        <form onSubmit={submitModKesehatan}>
+                            <div className='row'>
+                                <div className='col-sm-12 mb-3'>
+                                    <div className="row">
+                                        <label className="form-label col-sm-2" style={{marginTop: "10px"}} htmlFor="mpPeriksa"><b>Media Pembawa</b></label>
+                                        <div className='col-sm-4'>
+                                            <Select defaultValue={data.mpPeriksaView} value={data.mpPeriksaView || ""} options={dataSelect.komoditas} onChange={(e) => setData(values => ({...values, mpPeriksa: e.value})) & setData(values => ({...values, mpPeriksaView: e}))} />
+                                        </div>   
+                                    </div>
+                                </div>
+                                <hr />
+                                <div className='col-sm-6 mb-3' style={{borderRight: "1px grey solid"}}>
+                                    <h5>A. Pemeriksaan Fisik/Kesehatan</h5>
+                                    <div className="mb-2">
+                                        <label className="form-label" htmlFor="targetPeriksa">Target / Sasaran</label>
+                                        <Select defaultValue={data.valueTargetPeriksa} value={data.valueTargetPeriksa || ""} options={dataSelect.masterOPTK} onChange={(e) => setData(values => ({...values, targetPeriksa: Array.isArray(e) ? (e.map(x => x.value).join(";")) : [], valueTargetPeriksa: e})) } isMulti />
+                                    </div>   
+                                    <div className="mb-2">
+                                        <label className="form-label" htmlFor="metodePeriksa">Metode</label>
+                                        <textarea name="metodePeriksa" id="metodePeriksa" rows="2" value={data.metodePeriksa || ""} onChange={(e) => setData(values => ({...values, metodePeriksa: e.target.value}))} placeholder="Metode Periksa" className="form-control form-control-sm"></textarea>
+                                    </div>   
+                                    <div className="mb-2">
+                                        <label className="form-label" htmlFor="temuanPeriksa">Temuan</label>
+                                        <Select defaultValue={data.valueTemuanPeriksa} value={data.valueTemuanPeriksa || ""} options={dataSelect.masterOPTK} onChange={(e) => setData(values => ({...values, temuanPeriksa: Array.isArray(e) ? (e.map(x => x.value).join(";")) : [], valueTemuanPeriksa: e})) } isMulti />
+                                    </div>   
+                                    <div className="mb-3">
+                                        <label className="form-label" htmlFor="catatanPeriksa">Catatan</label>
+                                        <textarea className="form-control form-control-sm" name="catatanPeriksa" id="catatanPeriksa" placeholder='Catatan..' value={data.catatanPeriksa || ""} onChange={(e) => setData(values => ({...values, catatanPeriksa: e.target.value}))} rows="2"></textarea>
+                                    </div>
+                                </div>
+                                <div className='col-sm-6'>
+                                    <h5>B. Pengawasan dan Pengendalian</h5>
+                                    <div className="mb-2">
+                                        <label className="form-label" htmlFor="targetWasdal">Target / Sasaran</label>
+                                        <input type="text" className="form-control" id="targetWasdal" value={data.targetWasdal || ""} onChange={(e) => setData(values => ({...values, targetWasdal: e.target.value}))} placeholder="Target / Sasaran" />
+                                    </div>   
+                                    <div className="mb-2">
+                                        <label className="form-label" htmlFor="metodeWasdal">Metode</label>
+                                        <input type="text" className="form-control" id="metodeWasdal" value={data.metodeWasdal || ""} onChange={(e) => setData(values => ({...values, metodeWasdal: e.target.value}))} placeholder="Metode.." />
+                                    </div>   
+                                    <div className="mb-2">
+                                        <label className="form-label" htmlFor="temuanWasdal">Temuan</label>
+                                        <input type="text" className="form-control" id="temuanWasdal" value={data.temuanWasdal || ""} onChange={(e) => setData(values => ({...values, temuanWasdal: e.target.value}))} placeholder="Temuan.." />
+                                    </div>
+                                    <div className="mb-3">
+                                        <label className="form-label" htmlFor="catatanWasdal">Catatan</label>
+                                        <textarea className="form-control" name="catatanWasdal" id="catatanWasdal" value={data.catatanWasdal || ""} onChange={(e) => setData(values => ({...values, catatanWasdal: e.target.value}))} placeholder='Catatan..' rows="2"></textarea>
+                                    </div>
+                                </div>
+                                <div className='row'>
+                                    <div className='col-sm-12 text-center'>
+                                        <button type="submit" className="btn btn-primary me-sm-2 me-1">Simpan</button>
+                                        <button type="button" className="btn btn-danger me-sm-2 me-1" data-bs-dismiss="modal" aria-label="Close">Tutup</button>
                                     </div>   
                                 </div>
                             </div>
-                            <hr />
-                            <div className='col-sm-6 mb-3' style={{borderRight: "1px grey solid"}}>
-                                <h5>A. Pemeriksaan Fisik/Kesehatan</h5>
-                                <div className="mb-2">
-                                    <label className="form-label" htmlFor="targetPeriksa">Target / Sasaran</label>
-                                    <Select defaultValue={data.valueTargetPeriksa} value={data.valueTargetPeriksa || ""} options={dataSelect.masterOPTK} onChange={(e) => setData(values => ({...values, targetPeriksa: Array.isArray(e) ? (e.map(x => x.value).join(";")) : [], valueTargetPeriksa: e})) } isMulti />
-                                </div>   
-                                <div className="mb-2">
-                                    <label className="form-label" htmlFor="metodePeriksa">Metode</label>
-                                    <textarea name="metodePeriksa" id="metodePeriksa" rows="2" value={data.metodePeriksa || ""} onChange={(e) => setData(values => ({...values, metodePeriksa: e.target.value}))} placeholder="Metode Periksa" className="form-control form-control-sm"></textarea>
-                                </div>   
-                                <div className="mb-2">
-                                    <label className="form-label" htmlFor="temuanPeriksa">Temuan</label>
-                                    <Select defaultValue={data.valueTemuanPeriksa} value={data.valueTemuanPeriksa || ""} options={dataSelect.masterOPTK} onChange={(e) => setData(values => ({...values, temuanPeriksa: Array.isArray(e) ? (e.map(x => x.value).join(";")) : [], valueTemuanPeriksa: e})) } isMulti />
-                                </div>   
-                                <div className="mb-3">
-                                    <label className="form-label" htmlFor="catatanPeriksa">Catatan</label>
-                                    <textarea className="form-control form-control-sm" name="catatanPeriksa" id="catatanPeriksa" placeholder='Catatan..' value={data.catatanPeriksa || ""} onChange={(e) => setData(values => ({...values, catatanPeriksa: e.target.value}))} rows="2"></textarea>
-                                </div>
-                            </div>
-                            <div className='col-sm-6'>
-                                <h5>B. Pengawasan dan Pengendalian</h5>
-                                <div className="mb-2">
-                                    <label className="form-label" htmlFor="targetWasdal">Target / Sasaran</label>
-                                    <input type="text" className="form-control" id="targetWasdal" value={data.targetWasdal || ""} onChange={(e) => setData(values => ({...values, targetWasdal: e.target.value}))} placeholder="Target / Sasaran" />
-                                </div>   
-                                <div className="mb-2">
-                                    <label className="form-label" htmlFor="metodeWasdal">Metode</label>
-                                    <input type="text" className="form-control" id="metodeWasdal" value={data.metodeWasdal || ""} onChange={(e) => setData(values => ({...values, metodeWasdal: e.target.value}))} placeholder="Metode.." />
-                                </div>   
-                                <div className="mb-2">
-                                    <label className="form-label" htmlFor="temuanWasdal">Temuan</label>
-                                    <input type="text" className="form-control" id="temuanWasdal" value={data.temuanWasdal || ""} onChange={(e) => setData(values => ({...values, temuanWasdal: e.target.value}))} placeholder="Temuan.." />
-                                </div>
-                                <div className="mb-3">
-                                    <label className="form-label" htmlFor="catatanWasdal">Catatan</label>
-                                    <textarea className="form-control" name="catatanWasdal" id="catatanWasdal" value={data.catatanWasdal || ""} onChange={(e) => setData(values => ({...values, catatanWasdal: e.target.value}))} placeholder='Catatan..' rows="2"></textarea>
-                                </div>
-                            </div>
-                            <div className='row'>
-                                <div className='col-sm-12 text-center'>
-                                    <button type="submit" className="btn btn-primary me-sm-2 me-1">Simpan</button>
-                                    <button type="button" className="btn btn-danger me-sm-2 me-1" data-bs-dismiss="modal" aria-label="Close">Tutup</button>
-                                </div>   
-                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div className="modal fade" id="modSegel" tabIndex="-1">
+            <div className="modal-dialog">
+                <div className="modal-content p-3 pb-1">
+                    <div className="modal-body">
+                        <button type="button" className="btn-close float-end" data-bs-dismiss="modal" aria-label="Close"></button>
+                        <div className="text-center mb-4">
+                            <h3 className="address-title">Tambah Segel</h3>
                         </div>
-                    </form>
+                        <form onSubmit={handleSubmitSegel}>
+                            <div className="row mb-3">
+                                <label className="col-sm-3 col-form-label" htmlFor="jenisSegel">Jenis Segel</label>
+                                <div className="col-sm-8">
+                                    <select name="jenisSegel" id="jenisSegel" className='form-select form-select-sm' value={dataSegel.jenisSegel || ""} onChange={(e) => setDataSegel(values => ({...values, jenisSegel: e.target.value}))}>
+                                        <option value="">--</option>
+                                        <option value="KERTAS">Segel Kertas</option>
+                                        <option value="LAKBAN">Segel Lakban</option>
+                                        <option value="PLASTIK">Segel Plastik atau Segel Locis (Pull Tight Seals)</option>
+                                        <option value="PEMBATAS">Segel Pembatas / Garis Karantina</option>
+                                        <option value="KUNCI">Kunci</option>
+                                        <option value="BOTOL">Segel Botol</option>
+                                    </select>
+                                </div>
+                                <label className="col-sm-3 col-form-label" htmlFor="nomorSegel">Nomor Segel</label>
+                                <div className="col-sm-8">
+                                    <input type="text" placeholder='Nomor Segel..' className='form-control form-control-sm' id='nomorSegel' name='nomorSegel' value={dataSegel.nomorSegel || ""} onChange={(e) => setDataSegel(values => ({...values, nomorSegel: e.target.value}))} />
+                                </div>
+                                <label className="col-sm-3 col-form-label" htmlFor="nomorKontainer">Nomor Kontainer</label>
+                                <div className="col-sm-8">
+                                    <input type="text" placeholder='Nomor Kontainer..' className='form-control form-control-sm' id='nomorKontainer' name='nomorKontainer' value={dataSegel.nomorKontainer || ""} onChange={(e) => setDataSegel(values => ({...values, nomorKontainer: e.target.value}))} />
+                                </div>
+                            </div>
+                            <div className="col-12 text-center mb-3">
+                                <button type="submit" className="btn btn-sm btn-primary me-sm-3 me-1">Tambah</button>
+                                <button
+                                type="reset"
+                                className="btn btn-sm btn-label-secondary"
+                                data-bs-dismiss="modal"
+                                aria-label="Close">
+                                Tutup
+                                </button>
+                            </div>
+                            <div className='col-sm-12'>
+                                <div className="table-responsive text-nowrap" style={{height: (dataSegelArray?.length > 8 ? "300px" : "")}}>
+                                    <table className="table table-sm table-bordered table-hover table-striped dataTable">
+                                        <thead>
+                                            <tr>
+                                                <th>No</th>
+                                                <th>Jenis Segel</th>
+                                                <th>Nomor Segel</th>
+                                                <th>Kontainer</th>
+                                                <th>Act</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            {dataSegelArray?.length > 0  ? (
+                                                dataSegelArray?.map((item,index) => (
+                                                    <tr key={index}>
+                                                        <td>{index+1}</td>
+                                                        <td>{item.jenisSegel}</td>
+                                                        <td>{item.nomorSegel}</td>
+                                                        <td>{item.nomorKontainer}</td>
+                                                        <td>
+                                                            <button type='button' className="btn btn-default text-danger"><i className="fa-solid fa-trash"></i></button>
+                                                        </td>
+                                                    </tr>
+                                                ))
+                                            ) : null}
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
-</div>
   )
 }
 
