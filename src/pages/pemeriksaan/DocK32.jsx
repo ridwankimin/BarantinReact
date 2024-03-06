@@ -33,7 +33,7 @@ function DocK32() {
         response
         .then((response) => {
             if(response.data) {
-                if(response.data.status === '201') {
+                if(response.data.status === 201) {
                     Swal.fire({
                         title: "Sukses!",
                         text: "Surat Persetujuan/Penolakan Muat berhasil " + (data.idDok32 ? "diedit." : "disimpan."),
@@ -82,7 +82,7 @@ function DocK32() {
             response
             .then((response) => {
                 if(typeof response.data != "string") {
-                    if(response.data.status == '200') {
+                    if(response.data.status == 200) {
                         setData(values => ({...values,
                             errorPTK: "",
                             listPtk: response.data.data.ptk,
@@ -115,7 +115,7 @@ function DocK32() {
             response32
             .then((response) => {
                 if(typeof response.data != "string") {
-                    if(response.data.status == '200') {
+                    if(response.data.status == 200) {
                         setData(values => ({...values,
                             errorMuat: "",
                         }));
@@ -166,7 +166,7 @@ function DocK32() {
             response
             .then((response) => {
                 if(typeof response.data != "string") {
-                    if(response.data.status == '200') {
+                    if(response.data.status == 200) {
                         setData(values => ({...values,
                             errorPTK: "",
                             listPtk: response.data.data.ptk,
@@ -201,7 +201,7 @@ function DocK32() {
             response32
             .then((response) => {
                 if(typeof response.data != "string") {
-                    if(response.data.status == '200') {
+                    if(response.data.status == 200) {
                         setData(values => ({...values,
                             errorMuat: "",
                         }));

@@ -12,7 +12,7 @@ const modelPemohon = new PtkModel()
 const modelPeriksa = new PtkPemeriksaan()
 
 function modaAlatAngkut(e){
-    return ModaAlatAngkut.find((element) => element.id === parseInt(e))
+    return ModaAlatAngkut.find((element) => element.id == parseInt(e))
 }
 
 const addCommas = num => num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
@@ -66,7 +66,7 @@ function DocK34() {
         .then((response) => {
             if(response.data) {
                 console.log(response.data)
-                if(response.data.status === '201') {
+                if(response.data.status == 201) {
                     Swal.fire({
                         title: "Sukses!",
                         text: "Surat Perintah Masuk Instalasi berhasil " + (data.idDok34 ? "diedit." : "disimpan."),
@@ -116,7 +116,7 @@ function DocK34() {
                     setData(values => ({...values,
                         errorPTK: ""
                     }));
-                    if(response.data.status === '200') {
+                    if(response.data.status == 200) {
                         setData(values => ({...values,
                             listPtk: response.data.data.ptk,
                             listKomoditas: response.data.data.ptk_komoditi,
@@ -140,7 +140,7 @@ function DocK34() {
                     console.log(error)
                 }
                 if(error.response) {
-                    if(error.response.data.status === 404) {
+                    if(error.response.data.status == 404) {
                         setData(values => ({...values,
                             errorPTK: "Data PTK Kosong/Tidak Ada"
                         }));
@@ -160,7 +160,7 @@ function DocK34() {
                         setData(values => ({...values,
                             errorInstalasi: ""
                         }));
-                        if(response.data.status === '200') {
+                        if(response.data.status == 200) {
                             setValue("idDok34", response.data.data.id)
                             setValue("noDok34", response.data.data.nomor)
                             setValue("tglDok34", response.data.data.tanggal)
@@ -189,7 +189,7 @@ function DocK34() {
                     console.log(error)
                 }
                 if(error.response) {
-                    if(error.response.data.status === 404) {
+                    if(error.response.data.status == 404) {
                         setData(values => ({...values,
                             errorInstalasi: ""
                         }));
@@ -212,7 +212,7 @@ function DocK34() {
                     setData(values => ({...values,
                         errorPTK: ""
                     }));
-                    if(response.data.status === '200') {
+                    if(response.data.status == 200) {
                         setData(values => ({...values,
                             listPtk: response.data.data.ptk,
                             listKomoditas: response.data.data.ptk_komoditi,
@@ -236,7 +236,7 @@ function DocK34() {
                     console.log(error)
                 }
                 if(error.response) {
-                    if(error.response.data.status === 404) {
+                    if(error.response.data.status == 404) {
                         setData(values => ({...values,
                             errorPTK: "Data PTK Kosong/Tidak Ada"
                         }));
@@ -258,7 +258,7 @@ function DocK34() {
                         setData(values => ({...values,
                             errorInstalasi: ""
                         }));
-                        if(response.data.status === '200') {
+                        if(response.data.status == 200) {
                             setValue("idDok34", response.data.data.id)
                             setValue("noDok34", response.data.data.nomor)
                             setValue("tglDok34", response.data.data.tanggal)
@@ -287,7 +287,7 @@ function DocK34() {
                     console.log(error)
                 }
                 if(error.response) {
-                    if(error.response.data.status === 404) {
+                    if(error.response.data.status == 404) {
                         setData(values => ({...values,
                             errorInstalasi: ""
                         }));
@@ -425,17 +425,17 @@ function DocK34() {
                                             <h5 className='mb-2'><b><u>Informasi Pemasukan / Pengeluaran</u></b></h5>
                                             <div className="col-md-6">
                                                 <div className="row">
-                                                    <label className="col-sm-4 col-form-label" htmlFor="daerahAsal">{data.listPtk ? (data.listPtk.permohonan === "DK" ? "Daerah" : "Negara") : ""} Asal</label>
+                                                    <label className="col-sm-4 col-form-label" htmlFor="daerahAsal">{data.listPtk ? (data.listPtk.permohonan == "DK" ? "Daerah" : "Negara") : ""} Asal</label>
                                                     <div className="col-sm-8">
-                                                        <input name="daerahAsal" className="form-control form-control-sm" disabled value={(data.listPtk ? (data.listPtk.permohonan === "DK" ? data.listPtk.kota_asal : data.listPtk.negara_asal) : "") || ""} id="daerahAsal" />
+                                                        <input name="daerahAsal" className="form-control form-control-sm" disabled value={(data.listPtk ? (data.listPtk.permohonan == "DK" ? data.listPtk.kota_asal : data.listPtk.negara_asal) : "") || ""} id="daerahAsal" />
                                                     </div>
                                                 </div>
                                             </div>
                                             <div className="col-md-6">
                                                 <div className="row">
-                                                    <label className="col-sm-4 col-form-label" htmlFor="daerahTujuan">{data.listPtk ? (data.listPtk.permohonan === "DK" ? "Daerah" : "Negara") : ""} Tujuan</label>
+                                                    <label className="col-sm-4 col-form-label" htmlFor="daerahTujuan">{data.listPtk ? (data.listPtk.permohonan == "DK" ? "Daerah" : "Negara") : ""} Tujuan</label>
                                                     <div className="col-sm-8">
-                                                        <input name="daerahTujuan" className="form-control form-control-sm" disabled value={(data.listPtk ? (data.listPtk.permohonan === "DK" ? data.listPtk.kota_tujuan : data.listPtk.negara_tujuan) : "") || ""} id="daerahTujuan" />
+                                                        <input name="daerahTujuan" className="form-control form-control-sm" disabled value={(data.listPtk ? (data.listPtk.permohonan == "DK" ? data.listPtk.kota_tujuan : data.listPtk.negara_tujuan) : "") || ""} id="daerahTujuan" />
                                                     </div>
                                                 </div>
                                             </div>
@@ -463,7 +463,7 @@ function DocK34() {
                                                 <div className="row">
                                                     <label className="col-sm-4 col-form-label" htmlFor="tempatTransit">Tempat Transit</label>
                                                     <div className="col-sm-8">
-                                                        <input name="tempatTransit" className="form-control form-control-sm" disabled value={(data.listPtk ? (data.listPtk.pelabuhan_transit === null ? "-" : data.listPtk.pelabuhan_transit + ", " + data.listPtk.negara_transit) : "") || ""} id="tempatTransit" />
+                                                        <input name="tempatTransit" className="form-control form-control-sm" disabled value={(data.listPtk ? (data.listPtk.pelabuhan_transit == null ? "-" : data.listPtk.pelabuhan_transit + ", " + data.listPtk.negara_transit) : "") || ""} id="tempatTransit" />
                                                     </div>
                                                 </div>
                                             </div>

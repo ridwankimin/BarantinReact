@@ -454,7 +454,6 @@ function DocKH1() {
             resPelId
             .then((response) => {
                 if(response.data) {
-                    console.log(response)
                     if(typeof response.data != "string") {
                         if(response.data.status == 200) {
                             setData(values => ({...values,

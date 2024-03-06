@@ -342,7 +342,7 @@ function DocK51() {
                         setData(values => ({...values,
                             errorSurtug: ""
                         }));
-                        if(response.data.status === '200') {
+                        if(response.data.status == 200) {
                             setData(values => ({...values,
                                 noSurtug: response.data.data[0].nomor,
                                 tglSurtug: response.data.data[0].tanggal,
@@ -599,7 +599,7 @@ function DocK51() {
                         setData(values => ({...values,
                             errorSurtug: ""
                         }));
-                        if(response.data.status === '200') {
+                        if(response.data.status == 200) {
                             setData(values => ({...values,
                                 noSurtug: response.data.data[0].nomor,
                                 tglSurtug: response.data.data[0].tanggal,

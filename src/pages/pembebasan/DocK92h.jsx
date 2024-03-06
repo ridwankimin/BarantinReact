@@ -46,13 +46,13 @@ function DocK92h() {
         response
         .then((response) => {
             if(response.data) {
-                if(response.data.status === '201') {
+                if(response.data.status == 201) {
                     //start save history
                     // const log = new PtkHistory();
                     const resHsy = log.pushHistory(data.idPtk, "p8", "K-9.2.H", (data.idDokKT1 ? 'UPDATE' : 'NEW'));
                     resHsy
                     .then((response) => {
-                        if(response.data.status === '201') {
+                        if(response.data.status == 201) {
                             if(process.env.REACT_APP_BE_ENV == "DEV") {
                                 console.log("history saved")
                             }
@@ -105,7 +105,7 @@ function DocK92h() {
     function onSubmitMPk92h(data) {
         log.updateKomoditiP8(data.idMPk92h, data)
         .then((response) => {
-            if(response.data.status === '201') {
+            if(response.data.status == 201) {
                 alert(response.data.status + " - " + response.data.message)
                 resetFormKomoditik92h()
                 refreshListKomoditas()
@@ -119,11 +119,11 @@ function DocK92h() {
     }
 
     function keterangan92h() {
-        return Keterangan.filter((element) => element.dokumen === "K-9.2.H")
+        return Keterangan.filter((element) => element.dokumen == "K-9.2.H")
     }
 
     function modaAlatAngkut(e){
-        return ModaAlatAngkut.find((element) => element.id === parseInt(e))
+        return ModaAlatAngkut.find((element) => element.id == parseInt(e))
     }
 
     function handleEditKomoditas(e) {
@@ -147,7 +147,7 @@ function DocK92h() {
         data.listKomoditas?.map((item, index) => (
             log.updateKomoditiP8(item.id, datasend[index])
                 .then((response) => {
-                    if(response.data.status === '201') {
+                    if(response.data.status == 201) {
                         refreshListKomoditas()
                         setLoadKomoditi(false)
                         if(process.env.REACT_APP_BE_ENV == "DEV") {
@@ -171,7 +171,7 @@ function DocK92h() {
         const resKom = modelPemohon.getKomoditiPtkId(data.noIdPtk, "H");
         resKom
         .then((res) => {
-            if(res.data.status === '200') {
+            if(res.data.status == 200) {
                 setData(values => ({...values,
                     listKomoditas: res.data.data
                 }));
@@ -194,7 +194,7 @@ function DocK92h() {
             const response = modelPemohon.getPtkId(base64_decode(ptkNomor[1]));
             response
             .then((response) => {
-                if(response.data.status === '200') {
+                if(response.data.status == 200) {
                     let kodeHSData = response.data.data.ptk_komoditi?.map(item => {
                         return item.kode_hs
                     })
@@ -223,7 +223,7 @@ function DocK92h() {
                     const resKom = modelPemohon.getKomoditiPtkId(base64_decode(ptkNomor[1]), "H");
                     resKom
                     .then((res) => {
-                        if(res.data.status === '200') {
+                        if(res.data.status == 200) {
                             setData(values => ({...values,
                                 listKomoditas: res.data.data
                             }));
@@ -266,7 +266,7 @@ function DocK92h() {
             resPelId
             .then((response) => {
                 if(response.data) {
-                    if(response.data.status === '200') {
+                    if(response.data.status == 200) {
                         setValue("idDok92h", response.data.data.id)
                         setValue("noDok92h", response.data.data.nomor)
                         setValue("tglDok92h", response.data.data.tanggal)
@@ -297,7 +297,7 @@ function DocK92h() {
             resSurtug
             .then((response) => {
                 if(response.data) {
-                    if(response.data.status === '200') {
+                    if(response.data.status == 200) {
                         setData(values => ({...values,
                             noSurtug: response.data.data[0].nomor,
                             tglSurtug: response.data.data[0].tanggal,
@@ -457,17 +457,17 @@ function DocK92h() {
                                         <div className="row">
                                             <div className="col-md-6">
                                                 <div className="row">
-                                                    <label className="col-sm-4 col-form-label" htmlFor="daerahAsal">{data.listPtk ? (data.listPtk.permohonan === "DK" ? "Daerah" : "Negara") : ""} Asal</label>
+                                                    <label className="col-sm-4 col-form-label" htmlFor="daerahAsal">{data.listPtk ? (data.listPtk.permohonan == "DK" ? "Daerah" : "Negara") : ""} Asal</label>
                                                     <div className="col-sm-8">
-                                                        <input name="daerahAsal" className="form-control form-control-sm" disabled value={data.listPtk && ((data.listPtk.permohonan === "DK" ? data.listPtk.kota_asal : data.listPtk.negara_asal) || "")} id="daerahAsal" />
+                                                        <input name="daerahAsal" className="form-control form-control-sm" disabled value={data.listPtk && ((data.listPtk.permohonan == "DK" ? data.listPtk.kota_asal : data.listPtk.negara_asal) || "")} id="daerahAsal" />
                                                     </div>
                                                 </div>
                                             </div>
                                             <div className="col-md-6">
                                                 <div className="row">
-                                                    <label className="col-sm-4 col-form-label" htmlFor="daerahTujuan">{data.listPtk ? (data.listPtk.permohonan === "DK" ? "Daerah" : "Negara") : ""} Tujuan</label>
+                                                    <label className="col-sm-4 col-form-label" htmlFor="daerahTujuan">{data.listPtk ? (data.listPtk.permohonan == "DK" ? "Daerah" : "Negara") : ""} Tujuan</label>
                                                     <div className="col-sm-8">
-                                                        <input name="daerahTujuan" className="form-control form-control-sm" disabled value={data.listPtk && ((data.listPtk.permohonan === "DK" ? data.listPtk.kota_tujuan : data.listPtk.negara_tujuan) || "")} id="daerahTujuan" />
+                                                        <input name="daerahTujuan" className="form-control form-control-sm" disabled value={data.listPtk && ((data.listPtk.permohonan == "DK" ? data.listPtk.kota_tujuan : data.listPtk.negara_tujuan) || "")} id="daerahTujuan" />
                                                     </div>
                                                 </div>
                                             </div>
@@ -495,7 +495,7 @@ function DocK92h() {
                                                 <div className="row">
                                                     <label className="col-sm-4 col-form-label" htmlFor="tempatTransit">Tempat Transit</label>
                                                     <div className="col-sm-8">
-                                                        <input name="tempatTransit" className="form-control form-control-sm" disabled value={data.listPtk && ((data.listPtk.pelabuhan_transit === null ? "-" : data.listPtk.pelabuhan_transit + ", " + data.listPtk.negara_transit) || "")} id="tempatTransit" />
+                                                        <input name="tempatTransit" className="form-control form-control-sm" disabled value={data.listPtk && ((data.listPtk.pelabuhan_transit == null ? "-" : data.listPtk.pelabuhan_transit + ", " + data.listPtk.negara_transit) || "")} id="tempatTransit" />
                                                     </div>
                                                 </div>
                                             </div>
@@ -599,9 +599,9 @@ function DocK92h() {
                                                         <label className="form-check-label" htmlFor={"m" + data.id}>
                                                             {data.deskripsi}
                                                         </label>
-                                                        {data.id === 4 ?
-                                                        <div className='col-md-4' style={{display: (cekWatch.m4 === '1' ? 'block' : 'none')}}>
-                                                            <input type="text" placeholder='Lainnya..' className={errors.m4Lain ? "form-control form-control-sm is-invalid ml-2" : "form-control form-control-sm ml-2"} {...register("m4Lain", {required: (cekWatch.m4 === '1' ? "Mohon isi keterangan lainnya.." : false)})} />
+                                                        {data.id == 4 ?
+                                                        <div className='col-md-4' style={{display: (cekWatch.m4 == '1' ? 'block' : 'none')}}>
+                                                            <input type="text" placeholder='Lainnya..' className={errors.m4Lain ? "form-control form-control-sm is-invalid ml-2" : "form-control form-control-sm ml-2"} {...register("m4Lain", {required: (cekWatch.m4 == '1' ? "Mohon isi keterangan lainnya.." : false)})} />
                                                             {errors.m4Lain && <small className="text-danger">{errors.m4Lain.message}</small>}
                                                         </div>
                                                         : null}
@@ -710,11 +710,11 @@ function DocK92h() {
                                     </div>
                                 </div>
                             </div>
-                            <div className="col-6" style={{display: (data.listPtk ? (data.listPtk.jenis_media_pembawa_id === 1 ? "block" : "none") : "none")}}>
+                            <div className="col-6" style={{display: (data.listPtk ? (data.listPtk.jenis_media_pembawa_id == 1 ? "block" : "none") : "none")}}>
                                 <label className="form-label" htmlFor="jantanP8">Jumlah Jantan Akhir-P8<span className='text-danger'>*</span></label>
                                 <div className='row'>
                                     <div className="col-3" style={{paddingRight: '2px'}}>
-                                        <input type="text" name='jantanP8' id='jantanP8' value={cekdataMPk92h.jantanP8 ? addCommas(removeNonNumeric(cekdataMPk92h.jantanP8)) : ""} {...registerMPk92h("jantanP8", {required: (data.listPtk ? (data.listPtkjenis_media_pembawa_id === 1 ? "Mohon isi jumlah akhir Jantan." : false) : false)})} className={errorsMPk92h.jantanP8 ? "form-control form-control-sm is-invalid" : "form-control form-control-sm"} />
+                                        <input type="text" name='jantanP8' id='jantanP8' value={cekdataMPk92h.jantanP8 ? addCommas(removeNonNumeric(cekdataMPk92h.jantanP8)) : ""} {...registerMPk92h("jantanP8", {required: (data.listPtk ? (data.listPtkjenis_media_pembawa_id == 1 ? "Mohon isi jumlah akhir Jantan." : false) : false)})} className={errorsMPk92h.jantanP8 ? "form-control form-control-sm is-invalid" : "form-control form-control-sm"} />
                                     </div>
                                     <div className="col-2" style={{paddingLeft: '2px'}}>
                                         <input type="text" className='form-control form-control-sm' name='satuanjantanP8' id='satuanjantanP8' value={"EKR"} disabled />
@@ -722,11 +722,11 @@ function DocK92h() {
                                 </div>
                                 {errorsMPk92h.jantanP8 && <small className="text-danger">{errorsMPk92h.jantanP8.message}</small>}
                             </div>
-                            <div className="col-6" style={{display: (data.listPtk ? (data.listPtk.jenis_media_pembawa_id === 1 ? "block" : "none") : "none")}}>
+                            <div className="col-6" style={{display: (data.listPtk ? (data.listPtk.jenis_media_pembawa_id == 1 ? "block" : "none") : "none")}}>
                                 <label className="form-label" htmlFor="betinaP8">Jumlah Betina Akhir-P8<span className='text-danger'>*</span></label>
                                 <div className='row'>
                                     <div className="col-3" style={{paddingRight: '2px'}}>
-                                        <input type="text" name='betinaP8' id='betinaP8' value={cekdataMPk92h.betinaP8 ? addCommas(removeNonNumeric(cekdataMPk92h.betinaP8)) : ""} {...registerMPk92h("betinaP8", {required: (data.listPtk ? (data.listPtkjenis_media_pembawa_id === 1 ? "Mohon isi jumlah akhir Betina." : false) : false)})} className={errorsMPk92h.betinaP8 ? "form-control form-control-sm is-invalid" : "form-control form-control-sm"} />
+                                        <input type="text" name='betinaP8' id='betinaP8' value={cekdataMPk92h.betinaP8 ? addCommas(removeNonNumeric(cekdataMPk92h.betinaP8)) : ""} {...registerMPk92h("betinaP8", {required: (data.listPtk ? (data.listPtkjenis_media_pembawa_id == 1 ? "Mohon isi jumlah akhir Betina." : false) : false)})} className={errorsMPk92h.betinaP8 ? "form-control form-control-sm is-invalid" : "form-control form-control-sm"} />
                                     </div>
                                     <div className="col-2" style={{paddingLeft: '2px'}}>
                                         <input type="text" className='form-control form-control-sm' name='satuanbetinaP8' id='satuanbetinaP8' value={"EKR"} disabled />

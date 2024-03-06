@@ -78,7 +78,7 @@ export default class PnPenolakan {
         },
         data: datasend
         };
-        console.log(JSON.stringify(config))
+        
         return axios.request(config)
     }
     
@@ -152,7 +152,7 @@ export default class PnPenolakan {
         },
         data: datasend
         };
-        console.log(JSON.stringify(config))
+        
         return axios.request(config)
     }
     
@@ -214,7 +214,7 @@ export default class PnPenolakan {
         },
         data: datasend
         };
-        console.log(JSON.stringify(config))
+        
         return axios.request(config)
     }
     

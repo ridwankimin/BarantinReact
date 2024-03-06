@@ -499,7 +499,6 @@ export default class PnPelepasan {
       iddok = "42"
       tgldok = data.tglDok93
     }
-    console.log(idcek)
     const uuid = uuidv4()
     let datasend = {
         id: idcek == '' ? uuid : idcek,

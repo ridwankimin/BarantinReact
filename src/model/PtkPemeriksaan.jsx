@@ -311,7 +311,6 @@ export default class PtkPemeriksaan {
           },
           data: datasend
         };
-        console.log(config)
         return axios.request(config)
       }
       

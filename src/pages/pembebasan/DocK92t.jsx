@@ -66,13 +66,13 @@ function DocK92t() {
         response
         .then((response) => {
             if(response.data) {
-                if(response.data.status === '201') {
+                if(response.data.status == 201) {
                     //start save history
                     const log = new PtkHistory();
                     const resHsy = log.pushHistory(data.idPtk, "p8", "K-9.2t", (data.idDok92t ? 'UPDATE' : 'NEW'));
                     resHsy
                     .then((response) => {
-                        if(response.data.status === '201') {
+                        if(response.data.status == 201) {
                             if(process.env.REACT_APP_BE_ENV == "DEV") {
                                 console.log("history saved")
                             }
@@ -117,7 +117,7 @@ function DocK92t() {
         data.listKomoditas?.map((item, index) => (
             log.updateKomoditiP8(item.id, datasend[index])
                 .then((response) => {
-                    if(response.data.status === '201') {
+                    if(response.data.status == 201) {
                         if(process.env.REACT_APP_BE_ENV == "DEV") {
                             console.log("history saved")
                         }
@@ -146,7 +146,7 @@ function DocK92t() {
             const response = modelPemohon.getPtkId(base64_decode(ptkNomor[1]));
             response
             .then((response) => {
-                if(response.data.status === '200') {
+                if(response.data.status == 200) {
                     let kodeHSData = response.data.data.ptk_komoditi?.map(item => {
                         return item.kode_hs
                     })
@@ -206,7 +206,7 @@ function DocK92t() {
             resSurtug
             .then((response) => {
                 if(response.data) {
-                    if(response.data.status === '200') {
+                    if(response.data.status == 200) {
                         setData(values => ({...values,
                             noSurtug: response.data.data[0].nomor,
                             tglSurtug: response.data.data[0].tanggal,
@@ -664,7 +664,7 @@ function DocK92t() {
                     <div className="modal-body">
                         <button type="button" className="btn-close float-end" data-bs-dismiss="modal" aria-label="Close"></button>
                         <div className="text-center mb-4">
-                            <h3 className="address-title">Perubahan Media Pembawa {Cookies.get("jenisKarantina") === 'H' ? 'Hewan' : (Cookies.get("jenisKarantina") === 'I' ? 'Ikan' : 'Tumbuhan')}</h3>
+                            <h3 className="address-title">Perubahan Media Pembawa {Cookies.get("jenisKarantina") == 'H' ? 'Hewan' : (Cookies.get("jenisKarantina") == 'I' ? 'Ikan' : 'Tumbuhan')}</h3>
                         </div>
                         <form onSubmit={handleFormMPK92t(onSubmitMPK92t)} className="row g-3">
                         <input type="hidden" name='idMPK92t' {...registerMPK92t("idMPK92t")} />

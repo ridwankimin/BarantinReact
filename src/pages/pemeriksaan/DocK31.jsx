@@ -35,7 +35,7 @@ function DocK31() {
         response
         .then((response) => {
             if(response.data) {
-                if(response.data.status === '201') {
+                if(response.data.status === 200) {
                     Swal.fire({
                         title: "Sukses!",
                         text: "Surat Persetujuan/Penolakan Bongkar berhasil " + (data.idDok31 ? "diedit." : "disimpan."),
@@ -83,7 +83,7 @@ function DocK31() {
             response
             .then((response) => {
                 if(typeof response.data != "string") {
-                    if(response.data.status == '200') {
+                    if(response.data.status == 200) {
                         setData(values => ({...values,
                             errorPTK: "",
                             listPtk: response.data.data.ptk,
@@ -116,7 +116,7 @@ function DocK31() {
             response31
             .then((response) => {
                 if(typeof response.data != "string") {
-                    if(response.data.status === '200') {
+                    if(response.data.status === 200) {
                         setData(values => ({...values,
                             errorBongkar: "",
                         }))
@@ -159,7 +159,7 @@ function DocK31() {
             response
             .then((response) => {
                 if(typeof response.data != "string") {
-                    if(response.data.status == '200') {
+                    if(response.data.status == 200) {
                         setData(values => ({...values,
                             errorPTK: "",
                             listPtk: response.data.data.ptk,
@@ -194,7 +194,7 @@ function DocK31() {
             response31
             .then((response) => {
                 if(typeof response.data != "string") {
-                    if(response.data.status === '200') {
+                    if(response.data.status === 200) {
                         setData(values => ({...values,
                             errorBongkar: "",
                         }))

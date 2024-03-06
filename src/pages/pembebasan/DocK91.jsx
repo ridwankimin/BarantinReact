@@ -336,7 +336,6 @@ function DocK91() {
             .then((response) => {
                 if(typeof response.data != "string") {
                     if(response.data.status == 200) {
-                        console.log(response.data.data)
                         setData(values => ({...values,
                             errorPTK: "",
                             listPtk: response.data.data.ptk,

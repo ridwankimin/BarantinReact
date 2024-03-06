@@ -24,15 +24,15 @@ const addCommas = num => num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
 const removeNonNumeric = num => num.toString().replace(/[^0-9.]/g, "");
 
 function modaAlatAngkut(e){
-    return ModaAlatAngkut.find((element) => element.id === parseInt(e))
+    return ModaAlatAngkut.find((element) => element.id == parseInt(e))
 }
 
 function peruntukan(e){
-    return Peruntukan.find((element) => element.id === parseInt(e))
+    return Peruntukan.find((element) => element.id == parseInt(e))
 }
 
 function keterangan92i() {
-    return Keterangan.filter((element) => element.dokumen === "K-9.2.I")
+    return Keterangan.filter((element) => element.dokumen == "K-9.2.I")
 }
 
 function DocK92i() {
@@ -63,13 +63,13 @@ function DocK92i() {
         response
         .then((response) => {
             if(response.data) {
-                if(response.data.status === '201') {
+                if(response.data.status == 201) {
                     //start save history
                     // const log = new PtkHistory();
                     const resHsy = log.pushHistory(data.idPtk, "p8", "K-9.2.I", (data.idDok92i ? 'UPDATE' : 'NEW'));
                     resHsy
                     .then((response) => {
-                        if(response.data.status === '201') {
+                        if(response.data.status == 201) {
                             if(process.env.REACT_APP_BE_ENV == "DEV") {
                                 console.log("history saved")
                             }
@@ -131,7 +131,7 @@ function DocK92i() {
     function onSubmitMPk92i(data) {
         log.updateKomoditiP8(data.idMPk92i, data)
         .then((response) => {
-            if(response.data.status === '201') {
+            if(response.data.status == 201) {
                 // alert(response.data.status + " - " + response.data.message)
                 Swal.fire({
                     title: "Sukses!",
@@ -168,7 +168,7 @@ function DocK92i() {
         data.listKomoditas?.map((item, index) => (
             log.updateKomoditiP8(item.id, datasend[index])
                 .then((response) => {
-                    if(response.data.status === '201') {
+                    if(response.data.status == 201) {
                         refreshListKomoditas()
                         setLoadKomoditi(false)
                         if(process.env.REACT_APP_BE_ENV == "DEV") {
@@ -192,7 +192,7 @@ function DocK92i() {
         const resKom = modelPemohon.getKomoditiPtkId(data.noIdPtk, "H");
         resKom
         .then((res) => {
-            if(res.data.status === '200') {
+            if(res.data.status == 200) {
                 setData(values => ({...values,
                     listKomoditas: res.data.data
                 }));
@@ -346,7 +346,7 @@ function DocK92i() {
                         setData(values => ({...values,
                             errorPeriksaFisik: ""
                         }));
-                        if(response.data.status == '200') {
+                        if(response.data.status == 200) {
                             setValue("tglPeriksaAwal", response.data.data[0].tanggal ? response.data.data[0].tanggal.slice(0, 10) : "")
                             setValue("tglPeriksaAkhir", (new Date()).toLocaleString('en-CA', { hourCycle: 'h24' }).replace(',', '').slice(0,10))
                         } else {
@@ -387,7 +387,7 @@ function DocK92i() {
                         setData(values => ({...values,
                             errorSurtug: ""
                         }));
-                        if(response.data.status === '200') {
+                        if(response.data.status == 200) {
                             setData(values => ({...values,
                                 noSurtug: response.data.data[0].nomor,
                                 tglSurtug: response.data.data[0].tanggal,
@@ -552,7 +552,7 @@ function DocK92i() {
                         setData(values => ({...values,
                             errorPeriksaFisik: ""
                         }));
-                        if(response.data.status == '200') {
+                        if(response.data.status == 200) {
                             setValue("tglPeriksaAwal", response.data.data[0].tanggal ? response.data.data[0].tanggal.slice(0, 10) : "")
                             setValue("tglPeriksaAkhir", (new Date()).toLocaleString('en-CA', { hourCycle: 'h24' }).replace(',', '').slice(0,10))
                         } else {
@@ -595,7 +595,7 @@ function DocK92i() {
                         setData(values => ({...values,
                             errorSurtug: ""
                         }));
-                        if(response.data.status === '200') {
+                        if(response.data.status == 200) {
                             setData(values => ({...values,
                                 noSurtug: response.data.data[0].nomor,
                                 tglSurtug: response.data.data[0].tanggal,
@@ -776,17 +776,17 @@ function DocK92i() {
                                         <div className="row">
                                             <div className="col-md-6">
                                                 <div className="row">
-                                                    <label className="col-sm-4 col-form-label" htmlFor="daerahAsal">{data.listPtk ? (data.listPtk.permohonan === "DK" ? "Daerah" : "Negara") : ""} Asal</label>
+                                                    <label className="col-sm-4 col-form-label" htmlFor="daerahAsal">{data.listPtk ? (data.listPtk.permohonan == "DK" ? "Daerah" : "Negara") : ""} Asal</label>
                                                     <div className="col-sm-8">
-                                                        <input name="daerahAsal" className="form-control form-control-sm" disabled value={data.listPtk ? (data.listPtk.permohonan === "DK" ? data.listPtk.kota_asal : data.listPtk.negara_asal) : ""} id="daerahAsal" />
+                                                        <input name="daerahAsal" className="form-control form-control-sm" disabled value={data.listPtk ? (data.listPtk.permohonan == "DK" ? data.listPtk.kota_asal : data.listPtk.negara_asal) : ""} id="daerahAsal" />
                                                     </div>
                                                 </div>
                                             </div>
                                             <div className="col-md-6">
                                                 <div className="row">
-                                                    <label className="col-sm-4 col-form-label" htmlFor="daerahTujuan">{data.listPtk ? (data.listPtk.permohonan === "DK" ? "Daerah" : "Negara") : ""} Tujuan</label>
+                                                    <label className="col-sm-4 col-form-label" htmlFor="daerahTujuan">{data.listPtk ? (data.listPtk.permohonan == "DK" ? "Daerah" : "Negara") : ""} Tujuan</label>
                                                     <div className="col-sm-8">
-                                                        <input name="daerahTujuan" className="form-control form-control-sm" disabled value={data.listPtk ? (data.listPtk.permohonan === "DK" ? data.listPtk.kota_tujuan : data.listPtk.negara_tujuan) : ""} id="daerahTujuan" />
+                                                        <input name="daerahTujuan" className="form-control form-control-sm" disabled value={data.listPtk ? (data.listPtk.permohonan == "DK" ? data.listPtk.kota_tujuan : data.listPtk.negara_tujuan) : ""} id="daerahTujuan" />
                                                     </div>
                                                 </div>
                                             </div>
@@ -814,7 +814,7 @@ function DocK92i() {
                                                 <div className="row">
                                                     <label className="col-sm-4 col-form-label" htmlFor="tempatTransit">Tempat Transit</label>
                                                     <div className="col-sm-8">
-                                                        <input name="tempatTransit" className="form-control form-control-sm" disabled value={data.listPtk ? (data.listPtk.pelabuhan_transit === null ? "-" : data.listPtk.pelabuhan_transit + ", " + data.listPtk.negara_transit) : ""} id="tempatTransit" />
+                                                        <input name="tempatTransit" className="form-control form-control-sm" disabled value={data.listPtk ? (data.listPtk.pelabuhan_transit == null ? "-" : data.listPtk.pelabuhan_transit + ", " + data.listPtk.negara_transit) : ""} id="tempatTransit" />
                                                     </div>
                                                 </div>
                                             </div>

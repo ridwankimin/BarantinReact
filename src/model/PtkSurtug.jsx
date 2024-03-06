@@ -171,7 +171,6 @@ export default class PtkSurtug {
         },
       };
       // 
-      console.log(config)
       return axios.request(config)
     }
 

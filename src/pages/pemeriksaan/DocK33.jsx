@@ -110,7 +110,7 @@ function DocK33() {
         response
         .then((response) => {
             if(response.data) {
-                if(response.data.status === '201') {
+                if(response.data.status == 201) {
                     Swal.fire({
                         title: "Sukses!",
                         text: "Berita Acara Pengambilan Contoh berhasil " + (data.idDok33 ? "diedit." : "disimpan."),
@@ -178,7 +178,7 @@ function DocK33() {
                     setData(values => ({...values,
                         errorPTK: ""
                     }));
-                    if(response.data.status === '200') {
+                    if(response.data.status == 200) {
                         setData(values => ({...values,
                             listPtk: response.data.data.ptk,
                             listKomoditas: response.data.data.ptk_komoditi,
@@ -229,7 +229,7 @@ function DocK33() {
                         setData(values => ({...values,
                             errorAdmin: ""
                         }));
-                        if(response.data.status === '200') {
+                        if(response.data.status == 200) {
                             setValue("idDok37a", response.data.data.id)
                             setValue("noDok37a", response.data.data.nomor)
                             setValue("tglDok37a", response.data.data.tanggal)
@@ -270,7 +270,7 @@ function DocK33() {
                         setData(values => ({...values,
                             errorSurtug: ""
                         }));
-                        if(response.data.status === '200') {
+                        if(response.data.status == 200) {
                             setData(values => ({...values,
                                 noSurtug: response.data.data[0].nomor,
                                 tglSurtug: response.data.data[0].tanggal,
@@ -313,7 +313,7 @@ function DocK33() {
                     setData(values => ({...values,
                         errorSampling: ""
                     }));
-                    if(response.data.status === '200') {
+                    if(response.data.status == 200) {
                         setValue("idPtk", response.data.data[0].id)
                         setValue("noDok33", response.data.data[0].nomor)
                         setValue("tglDok33", response.data.data[0].tanggal)
@@ -379,7 +379,7 @@ function DocK33() {
                     setData(values => ({...values,
                         errorPTK: ""
                     }));
-                    if(response.data.status === '200') {
+                    if(response.data.status == 200) {
                         setData(values => ({...values,
                             listPtk: response.data.data.ptk,
                             listKomoditas: response.data.data.ptk_komoditi,
@@ -432,7 +432,7 @@ function DocK33() {
                         setData(values => ({...values,
                             errorAdmin: ""
                         }));
-                        if(response.data.status === '200') {
+                        if(response.data.status == 200) {
                             setValue("idDok37a", response.data.data.id)
                             setValue("noDok37a", response.data.data.nomor)
                             setValue("tglDok37a", response.data.data.tanggal)
@@ -475,7 +475,7 @@ function DocK33() {
                         setData(values => ({...values,
                             errorSurtug: ""
                         }));
-                        if(response.data.status === '200') {
+                        if(response.data.status == 200) {
                             setData(values => ({...values,
                                 noSurtug: response.data.data[0].nomor,
                                 tglSurtug: response.data.data[0].tanggal,
@@ -516,7 +516,7 @@ function DocK33() {
                     setData(values => ({...values,
                         errorSampling: ""
                     }));
-                    if(response.data.status === '200') {
+                    if(response.data.status == 200) {
                         setValue("idPtk", response.data.data[0].id)
                         setValue("noDok33", response.data.data[0].nomor)
                         setValue("tglDok33", response.data.data[0].tanggal)

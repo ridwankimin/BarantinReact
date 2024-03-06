@@ -42,11 +42,11 @@ class PrintKh1 extends Component {
               window.open(fileURL);
               
               //CREATE BASE64 PDF
-              let fileReader = new FileReader();
-              fileReader.readAsDataURL(file);
-              fileReader.onload = (event) => {
-                  console.log(event.target.result);
-              }
+              // let fileReader = new FileReader();
+              // fileReader.readAsDataURL(file);
+              // fileReader.onload = (event) => {
+              //     console.log(event.target.result);
+              // }
               //END CREATE BASE64 PDF
 
             })
@@ -56,8 +56,8 @@ class PrintKh1 extends Component {
 
  
   render() {
-    console.log("dataCetak")
-    console.log(this.props.dataCetak)
+    // console.log("dataCetak")
+    // console.log(this.props.dataCetak)
     const cetak = this.props.dataCetak
     return (
       <div>
