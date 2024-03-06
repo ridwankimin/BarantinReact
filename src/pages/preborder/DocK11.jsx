@@ -2127,7 +2127,7 @@ function DocK11() {
                                 <div className="row mb-3">
                                     <label className="col-sm-3 col-form-label" htmlFor="nomorFax">No. Fax.</label>
                                     <div className="col-sm-9">
-                                        <input autoComplete="off" type="text" name='nomorFax' id="nomorFax" value={cekdataDiri.nomorFax ? removeNonNumeric(cekdataDiri.nomorFax) : ""} {...registerPemohon("nomorFax")} className="form-control form-control-sm" placeholder="-" />
+                                        <input autoComplete="off" type="text" name='nomorFax' id="nomorFax" value={cekdataDiri.nomorFax ? removeNonNumeric(cekdataDiri.nomorFax) : ""} {...registerPemohon("nomorFax")} className="form-control form-control-sm" placeholder="0" />
                                     </div>
                                 </div>
                                 <div className="row mb-3">

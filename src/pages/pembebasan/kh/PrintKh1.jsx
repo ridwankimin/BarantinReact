@@ -39,51 +39,19 @@ class PrintKh1 extends Component {
               var out = pdf.output('blob');
               var file = new Blob([out], {type: 'application/pdf'});
               var fileURL = URL.createObjectURL(file);
+              window.open(fileURL);
+              
+              //CREATE BASE64 PDF
               let fileReader = new FileReader();
               fileReader.readAsDataURL(file);
               fileReader.onload = (event) => {
                   console.log(event.target.result);
               }
-              window.open(fileURL);
-              // var base = pdf.output('datauristring')
-              // console.log(base)
-              
-            //   var reader = new FileReader();
-            //   let base64data
-            //   reader.readAsDataURL(out); 
-            //   reader.onloadend = function() { // for blob to base64
-            //       base64data = reader.result; 
-            //       console.log("base64 data is ");               
-            //       console.log(base64data );
-            //       var file = new Blob([out], {type: 'application/pdf'});
-            //       var fileURL = URL.createObjectURL(file);
-            //       window.open(fileURL);
-            //       // window.open(encodeURI(base64data));
-            //       // var fileURL = window.URL.createObjectURL(base64data);
-            //       // let tab = window.open();
-            //       // // tab.location.href = fileURL;
-            //       // tab.document.write(fileURL)
-            //       // var image = new pdf();
-            //       // image.src = base64data
+              //END CREATE BASE64 PDF
 
-            //       // var w = window.open("");
-            //       // w.document.write(base64data);
-            //   }
             })
           ;
         })
-    // html2canvas(document.getElementById("print_to_pdf")).then(canvas => {
-    //   var data = canvas.toDataURL();
-    //   var pdfExportSetting = {
-    //     content: [
-    //       {
-    //         image: data,
-    //         width: 500
-    //       }
-    //     ]
-    //   };
-    //   pdfMake.createPdf(pdfExportSetting).download("test_file.pdf");
-    // });
   };
 
   ColoredDateCellWrapper = ({ children, value }) =>

@@ -167,6 +167,8 @@ function Content(props) {
   }
   return (
     <>
+    {/* <div className='col-md-3 m-4 mb-0 float-end'>
+          </div> */}
       {navigate()}
     </>
     // <BrowserRouter>
