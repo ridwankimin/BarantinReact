@@ -110,7 +110,7 @@ function DocK82() {
                 isPemilik: 0,
                 nama: editSaksi.nama,
                 alamat: editSaksi.alamat,
-                jabatan: editSaksi.jabatan
+                jabatan_pekerjaan: editSaksi.jabatan_pekerjaan
              }]);
         } else {
             Swal.fire({
@@ -127,7 +127,7 @@ function DocK82() {
             index: "",
             nama: "",
             alamat: "",
-            jabatan: ""
+            jabatan_pekerjaan: ""
         }));
         // setIndexSaksi("")
     }
@@ -229,7 +229,7 @@ function DocK82() {
                         Swal.fire({
                             icon: "success",
                             title: "Sukses!",
-                            text: "Berita acara pemusnahan berhasil" + (data.idDok82 ? 'diedit' : 'disimpan')
+                            text: "Berita acara pemusnahan berhasil " + (data.idDok82 ? 'diedit' : 'disimpan')
                         });
                     } else {
                         Swal.fire({
@@ -368,7 +368,7 @@ function DocK82() {
                                 alamat: (response.data.data.ptk.jenis_permohonan == 'IM' | response.data.data.ptk.jenis_permohonan == 'DM' ? response.data.data.ptk.alamat_penerima : response.data.data.ptk.alamat_pengirim),
                                 identitas: (response.data.data.ptk.jenis_permohonan == 'IM' | response.data.data.ptk.jenis_permohonan == 'DM' ? response.data.data.ptk.jenis_identitas_penerima + " - " + response.data.data.ptk.nomor_identitas_penerima : response.data.data.ptk.jenis_identitas_pengirim + " - " + response.data.data.ptk.nomor_identitas_pengirim),
                                 isPemilik: 1,
-                                jabatan: "",
+                                jabatan_pekerjaan: "",
                             }]);
                         }
 
@@ -446,6 +446,7 @@ function DocK82() {
                         if(response.data.status == 200) {
                             // console.log(response.data.data[0])
                             setData(values => ({...values,
+                                errorSurtug: "",
                                 noSurtug: response.data.data[0].nomor,
                                 tglSurtug: response.data.data[0].tanggal,
                                 petugas: response.data.data
@@ -597,7 +598,7 @@ function DocK82() {
                                 alamat: (response.data.data.ptk.jenis_permohonan == 'IM' | response.data.data.ptk.jenis_permohonan == 'DM' ? response.data.data.ptk.alamat_penerima : response.data.data.ptk.alamat_pengirim),
                                 identitas: (response.data.data.ptk.jenis_permohonan == 'IM' | response.data.data.ptk.jenis_permohonan == 'DM' ? response.data.data.ptk.jenis_identitas_penerima + " - " + response.data.data.ptk.nomor_identitas_penerima : response.data.data.ptk.jenis_identitas_pengirim + " - " + response.data.data.ptk.nomor_identitas_pengirim),
                                 isPemilik: 1,
-                                jabatan: "",
+                                jabatan_pekerjaan: "",
                             }]);
                         }
     
@@ -676,6 +677,7 @@ function DocK82() {
                         if(response.data.status == 200) {
                             // console.log(response.data.data[0])
                             setData(values => ({...values,
+                                errorSurtug: "",
                                 noSurtug: response.data.data[0].nomor,
                                 tglSurtug: response.data.data[0].tanggal,
                                 petugas: response.data.data
@@ -1077,7 +1079,7 @@ function DocK82() {
                                         <hr />
                                         <div className='col-sm-12'>
                                             <h5><u>Saksi-saksi</u>  
-                                            <button type='button' className='btn btn-sm btn-outline-dark' style={{marginLeft: "20px"}} data-bs-toggle="modal" data-bs-target="#modSaksi"><i className='fa-solid fa-plus-circle'></i> Tambah</button></h5>
+                                            <button type='button' className='btn btn-sm btn-outline-dark' style={{marginLeft: "20px"}} data-bs-toggle="modal" data-bs-target="#modSaksi"><i className='fa-solid fa-plus-circle me-sm-2 me-2'></i> Tambah</button></h5>
                                             <div className="table-responsive text-nowrap">
                                                 <table className="table table-sm table-bordered table-hover table-striped dataTable">
                                                     <thead>
@@ -1096,7 +1098,7 @@ function DocK82() {
                                                                     <td>{index+1}</td>
                                                                     <td>{item.nama + (item.isPemilik ? " (Pemilik)" : "")}</td>
                                                                     <td>{item.alamat}</td>
-                                                                    <td>{index == 0 ? <input type='text' value={item.jabatan || ""} onChange={(e) => {item.jabatan = e.target.value; setArraySaksi([...arraySaksi])}} style={{border:0, borderBottom: "1px dotted black"}} /> : item.jabatan}</td>
+                                                                    <td>{index == 0 ? <input type='text' value={item.jabatan_pekerjaan || ""} onChange={(e) => {item.jabatan_pekerjaan = e.target.value; setArraySaksi([...arraySaksi])}} style={{border:0, borderBottom: "1px dotted black"}} /> : item.jabatan_pekerjaan}</td>
                                                                     <td>
                                                                         {index == 0 ? "#" : <button type='button' className="btn btn-default text-danger"><i className="fa-solid fa-trash me-1"></i> Delete</button>}
                                                                     </td>
@@ -1267,7 +1269,7 @@ function DocK82() {
                             </div>
                             <label className="col-sm-3 col-form-label" htmlFor="jabatanSaksi">Jabatan</label>
                             <div className="col-sm-8">
-                                <input type="text" className='form-control form-control-sm' id='jabatanSaksi' name='jabatanSaksi' value={editSaksi.jabatan || ""} onChange={(e) => setEditSaksi(values => ({...values, jabatan: e.target.value}))} />
+                                <input type="text" className='form-control form-control-sm' id='jabatanSaksi' name='jabatanSaksi' value={editSaksi.jabatan_pekerjaan || ""} onChange={(e) => setEditSaksi(values => ({...values, jabatan_pekerjaan: e.target.value}))} />
                             </div>
                         </div>
                         <div className="col-12 text-center">

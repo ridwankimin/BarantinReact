@@ -37,6 +37,7 @@ const modelSurtug = new PtkSurtug()
 function DocK71() {
     const idPtk = Cookies.get("idPtkPage");
     let [loadKomoditi, setLoadKomoditi] = useState(false)
+    let [cekData, setCekData] = useState()
     let [loadKomoditiPesan, setLoadKomoditiPesan] = useState("")
     let [datasend, setDataSend] = useState([])
 
@@ -81,50 +82,60 @@ function DocK71() {
         }
     }
 
+    const dataCekKom = data.listKomoditas?.filter(item => item.volumeP6 == null || item.nettoP6 == null)
+    const dataCekKomJanBen = data.listKomoditas?.filter(item => (item.jantan != null && item.jantanP6 == null) || (item.betina != null && item.betinaP6 == null))
     function onSubmit(data) {
-        const response = modelPenolakan.save71(data);
-        response
-        .then((response) => {
-            if(response.data) {
-                if(response.data.status == 201) {
-                    const resHsy = log.pushHistory(data.idPtk, "p6", "K-7.1", (data.idDok71 ? 'UPDATE' : 'NEW'));
-                    resHsy
-                    .then((response) => {
-                        if(response.data.status == 201) {
-                            if(process.env.REACT_APP_BE_ENV == "DEV") {
-                                console.log("history saved")
+        if(dataCekKom.length == 0 && dataCekKomJanBen.length == 0) {
+            const response = modelPenolakan.save71(data);
+            response
+            .then((response) => {
+                if(response.data) {
+                    if(response.data.status == 201) {
+                        const resHsy = log.pushHistory(data.idPtk, "p6", "K-7.1", (data.idDok71 ? 'UPDATE' : 'NEW'));
+                        resHsy
+                        .then((response) => {
+                            if(response.data.status == 201) {
+                                if(process.env.REACT_APP_BE_ENV == "DEV") {
+                                    console.log("history saved")
+                                }
                             }
-                        }
-                    })
-                    .catch((error) => {
-                        if(process.env.REACT_APP_BE_ENV == "DEV") {
-                            console.log(error)
-                        }
-                    });
-                    //end save history
+                        })
+                        .catch((error) => {
+                            if(process.env.REACT_APP_BE_ENV == "DEV") {
+                                console.log(error)
+                            }
+                        });
+                        //end save history
 
-                    // alert(response.data.status + " - " + response.data.message)
-                    Swal.fire({
-                        title: "Sukses!",
-                        text: "Surat Penolakan berhasil " + (data.idDok71 ? "diedit." : "disimpan."),
-                        icon: "success"
-                    });
-                    setValue("idDok71", response.data.data.id)
-                    setValue("noDok71", response.data.data.nomor)
+                        // alert(response.data.status + " - " + response.data.message)
+                        Swal.fire({
+                            title: "Sukses!",
+                            text: "Surat Penolakan berhasil " + (data.idDok71 ? "diedit." : "disimpan."),
+                            icon: "success"
+                        });
+                        setValue("idDok71", response.data.data.id)
+                        setValue("noDok71", response.data.data.nomor)
+                    }
                 }
-            }
-        })
-        .catch((error) => {
-            if(process.env.REACT_APP_BE_ENV == "DEV") {
-                console.log(error)
-            }
-            Swal.fire({
-                title: "Error!",
-                text: error.response.data.message,
-                icon: "error"
+            })
+            .catch((error) => {
+                if(process.env.REACT_APP_BE_ENV == "DEV") {
+                    console.log(error)
+                }
+                Swal.fire({
+                    title: "Error!",
+                    text: error.response.data.message,
+                    icon: "error"
+                });
+                // alert(error.response.status + " - " + error.response.data.message)
             });
-            // alert(error.response.status + " - " + error.response.data.message)
-        });
+        } else {
+            Swal.fire({
+                icon: "error",
+                title: "Error!",
+                text: "Mohon isi volume P6"
+            });
+        }
     }
 
     const {
@@ -149,65 +160,124 @@ function DocK71() {
     const cekdataMPk71 = watchMPk71()
 
     function onSubmitMPk71(data) {
-        log.updateKomoditiP6(data.idMPk71, data)
-        .then((response) => {
-            if(response.data.status == 201) {
+        let cekVolume = false
+        if((data.jantanP6 != null) || (data.betinaP6 != null) ) {
+            if((parseFloat(typeof data.jantanP6 == "string" ? data.jantanP6.replace(",", "") : data.jantanP6) > parseFloat(cekData.jantanP6)) || (parseFloat((typeof data.betinaP6 == "string" ? data.betinaP6.replace(",", "") : data.betinaP6)) > parseFloat(cekData.betinaP6))) {
+                cekVolume = false
+            } else {
+                if(parseFloat(typeof data.volumeP6 == "string" ? data.volumeP6.replace(",", "") : data.volumeP6) > parseFloat(cekData.volumeP6) || parseFloat(typeof data.nettoP6 == "string" ? data.nettoP6.replace(",", "") : data.nettoP6) > parseFloat(cekData.nettoP6)) {
+                    cekVolume = false 
+                } else {
+                    cekVolume = true
+                }
+            }
+        } else {
+            if(parseFloat(typeof data.volumeP6 == "string" ? data.volumeP6.replace(",", "") : data.volumeP6) > parseFloat(cekData.volumeP6) || parseFloat(typeof data.nettoP6 == "string" ? data.nettoP6.replace(",", "") : data.nettoP6) > parseFloat(cekData.nettoP6)) {
+                cekVolume = false 
+            } else {
+                cekVolume = true
+            }
+        }
+        if(cekVolume) {
+            log.updateKomoditiP6(data.idMPk71, data)
+            .then((response) => {
+                if(response.data.status == 201) {
+                    Swal.fire({
+                        title: "Sukses!",
+                        text: "Volume P6 berhasil diupdate.",
+                        icon: "success"
+                    });
+                    // alert(response.data.status + " - " + response.data.message)
+                    resetFormKomoditikh1()
+                    refreshListKomoditas()
+                    // window.$('#modKomoditas').modal('hide')
+                    // document.getElementById("modKomoditas").modal('hide')
+                } else {
+                    Swal.fire({
+                        icon: "error",
+                        title: "Error!",
+                        text: response.data.message
+                    })
+                }
+            })
+            .catch((error) => {
+                if(process.env.REACT_APP_BE_ENV == "DEV") {
+                    console.log(error)
+                }
                 Swal.fire({
-                    title: "Sukses!",
-                    text: "Volume P6 berhasil diupdate.",
-                    icon: "success"
-                });
-                // alert(response.data.status + " - " + response.data.message)
-                resetFormKomoditikh1()
-                refreshListKomoditas()
-                // window.$('#modKomoditas').modal('hide')
-                // document.getElementById("modKomoditas").modal('hide')
-            }
-        })
-        .catch((error) => {
-            if(process.env.REACT_APP_BE_ENV == "DEV") {
-                console.log(error)
-            }
-        })
+                    icon: "error",
+                    title: "Error!",
+                    text: error.response.data.message
+                })
+            })
+        } else {
+            Swal.fire({
+                icon: "error",
+                title: "Error!",
+                text: "Volume input melebihi volume awal, mohon cek isian anda"
+            })
+        }
     }
 
     function handleEditKomoditas(e) {
-        setValueMPk71("idMPk71", e.target.dataset.headerid)
-        setValueMPk71("idPtk", e.target.dataset.ptk)
+        const dataMP = data.listKomoditas?.filter((element, index) => index == e)
+        setValueMPk71("idMPk71", dataMP[0].id)
+        setValueMPk71("idPtk", dataMP[0].ptk_id)
         setValueMPk71("jenisKar", Cookies.get("jenisKarantina"))
-        const cell = e.target.closest('tr')
-        setValueMPk71("nettoP6", cell.cells[5].innerHTML)
-        setValueMPk71("satuanNetto", cell.cells[6].innerHTML)
-        setValueMPk71("volumeP6", cell.cells[7].innerHTML)
-        setValueMPk71("satuanLain", cell.cells[8].innerHTML)
-        setValueMPk71("volumeP6", cell.cells[7].innerHTML)
-        setValueMPk71("jantanP6", cell.cells[9].innerHTML)
-        setValueMPk71("betinaP6", cell.cells[10].innerHTML)
+        setCekData(values => ({...values,
+            volumeP6: dataMP[0].volume_lain,
+            nettoP6: dataMP[0].volume_netto,
+            jantanP6: dataMP[0].jantan,
+            betinaP6: dataMP[0].betina
+        }));
+        setValueMPk71("nettoP6", dataMP[0].volume_netto)
+        setValueMPk71("satuanNetto", dataMP[0].sat_netto)
+        setValueMPk71("volumeP6", dataMP[0].volume_lain)
+        setValueMPk71("satuanLain", dataMP[0].sat_lain)
+        setValueMPk71("jantanP6", dataMP[0].jantan)
+        setValueMPk71("betinaP6", dataMP[0].betina)
+        setValueMPk71("namaUmum", dataMP[0].nama_umum_tercetak)
+        setValueMPk71("namaLatin", dataMP[0].nama_latin_tercetak)
     }
 
     function handleEditKomoditasAll() {
         setLoadKomoditi(true)
         data.listKomoditas?.map((item, index) => (
             log.updateKomoditiP6(item.id, datasend[index])
-                .then((response) => {
-                    if(response.data.status == 201) {
-                        refreshListKomoditas()
-                        setLoadKomoditi(false)
-                        if(process.env.REACT_APP_BE_ENV == "DEV") {
-                            console.log("history saved")
-                        }
-                    }
-                })
-                .catch((error) => {
+            .then((response) => {
+                if(response.data.status == 201) {
+                    refreshListKomoditas()
                     setLoadKomoditi(false)
-                    setLoadKomoditiPesan("Terjadi error pada saat simpan, mohon refresh halaman dan coba lagi.")
                     if(process.env.REACT_APP_BE_ENV == "DEV") {
-                        console.log(error)
+                        console.log("history saved")
                     }
+                    Swal.fire({
+                        icon: "success",
+                        title: "Sukses!",
+                        text: "Volume P6 berhasil disimpan (tidak ada perubahan dengan volume awal)"
+                    })
+                } else {
+                    Swal.fire({
+                        icon: "error",
+                        title: "Error!",
+                        text: response.data.status
+                    })
+                }
+            })
+            .catch((error) => {
+                setLoadKomoditi(false)
+                setLoadKomoditiPesan("Terjadi error pada saat simpan, mohon refresh halaman dan coba lagi.")
+                if(process.env.REACT_APP_BE_ENV == "DEV") {
+                    console.log(error)
+                }
+                Swal.fire({
+                    icon: "error",
+                    title: "Error!",
+                    text: error.response.data.status
                 })
-            )
+            }))
         )
-        setLoadKomoditi(false)
+        setLoadKomoditi(true)
     }
 
     function refreshListKomoditas() {
@@ -345,12 +415,12 @@ function DocK71() {
                             setValue("diwajibkan3", response.data.data[0].diwajibkan3)
                             setValue("diwajibkan4", response.data.data[0].diwajibkan4)
                             setValue("diterbitkan", response.data.data[0].diterbitkan_di)
-                            setValue("ttdPutusan", response.data.data[0].user_ttd_id)
-                            setValue("otban", response.data.data[0].tembusan)
-                            // setValue("isAttach", response.data.data[0].is_attachment)
-                            // setValue("otban", response.data.data[0].otoritas_pelabuhan)
-                            // setValue("kaBc", response.data.data[0].kepala_kantor_bc)
-                            // setValue("namaPengelola", response.data.data[0].nama_pengelola)
+                            setValue("ttdPutusan", response.data.data[0].user_ttd_id?.toString())
+                            // setValue("otban", response.data.data[0].tembusan)
+                            setValue("isAttach", response.data.data[0].is_attachment)
+                            setValue("otban", response.data.data[0].otoritas_pelabuhan)
+                            setValue("kaBc", response.data.data[0].kepala_kantor_bc)
+                            setValue("namaPengelola", response.data.data[0].nama_pengelola)
                         }
                     } else {
                         setData(values => ({...values,
@@ -530,12 +600,12 @@ function DocK71() {
                             setValue("diwajibkan3", response.data.data[0].diwajibkan3)
                             setValue("diwajibkan4", response.data.data[0].diwajibkan4)
                             setValue("diterbitkan", response.data.data[0].diterbitkan_di)
-                            setValue("ttdPutusan", response.data.data[0].user_ttd_id)
+                            setValue("ttdPutusan", response.data.data[0].user_ttd_id?.toString())
                             setValue("otban", response.data.data[0].tembusan)
-                            // setValue("isAttach", response.data.data[0].is_attachment)
-                            // setValue("otban", response.data.data[0].otoritas_pelabuhan)
-                            // setValue("kaBc", response.data.data[0].kepala_kantor_bc)
-                            // setValue("namaPengelola", response.data.data[0].nama_pengelola)
+                            setValue("isAttach", response.data.data[0].is_attachment)
+                            setValue("otban", response.data.data[0].otoritas_pelabuhan)
+                            setValue("kaBc", response.data.data[0].kepala_kantor_bc)
+                            setValue("namaPengelola", response.data.data[0].nama_pengelola)
                         }
                     } else {
                         setData(values => ({...values,
@@ -608,7 +678,7 @@ function DocK71() {
   return (
     <div className="container-xxl flex-grow-1 container-p-y">
         <h4 className="py-3 breadcrumb-wrapper mb-4">
-            K-7.1 <span className="fw-light" style={{color: 'blue'}}>(Surat Penolakan)</span>
+            K-7.1 <span className="fw-light" style={{color: 'blue'}}>SURAT PENOLAKAN</span>
             
             <small className='float-end'>
                 <span className='text-danger'>{(data.errorPTK ? data.errorPTK + "; " : "") + (data.errorKomoditas ? data.errorKomoditas + "; " : "") + (data.errorPenolakan ? data.errorPenolakan + "; " : "") + (data.errorSurtug ? data.errorSurtug + "; " : "")}</span>
@@ -768,7 +838,7 @@ function DocK71() {
                                             <h5 className='mb-1'>Jenis Media Pembawa : <b>{Cookies.get("jenisKarantina") == "H" ? "Hewan" : (Cookies.get("jenisKarantina") == "T" ? "Tumbuhan" : (Cookies.get("jenisKarantina") == "I" ? "Ikan" : ""))}</b>
                                                 {loadKomoditi ? <SpinnerDot/> : null}
                                                 {data.listKomoditas ? 
-                                                (loadKomoditi ? null : <button type='button' className='btn btn-sm btn-outline-secondary' onClick={handleEditKomoditasAll} style={{marginLeft: "15px"}}><i className='fa-solid fa-check-square text-success'></i> Tidak ada perubahan</button>) : null }
+                                                (loadKomoditi ? null : <button type='button' className='btn btn-sm btn-outline-secondary' onClick={handleEditKomoditasAll} style={{marginLeft: "15px"}}><i className='fa-solid fa-check-square text-success me-sm-2 me-1'></i> Tidak ada perubahan</button>) : null }
                                                 <span className='text-danger'>{loadKomoditiPesan}</span>
                                             </h5>
                                             <div className='col-md-12 mb-3'>
@@ -802,18 +872,18 @@ function DocK71() {
                                                                             <td>{data.klasifikasi}</td>
                                                                             <td>{data.nama_umum_tercetak}</td>
                                                                             <td>{data.nama_latin_tercetak}</td>
-                                                                            <td>{data.volume_netto}</td>
+                                                                            <td className='text-end'>{data.volume_netto?.toLocaleString()}</td>
                                                                             <td>{data.sat_netto}</td>
-                                                                            <td>{data.volume_lain}</td>
+                                                                            <td className='text-end'>{data.volume_lain?.toLocaleString()}</td>
                                                                             <td>{data.sat_lain}</td>
-                                                                            <td>{data.jantan}</td>
-                                                                            <td>{data.betina}</td>
-                                                                            <td>{data.volumeP6}</td>
-                                                                            <td>{data.nettoP6}</td>
-                                                                            <td>{data.jantanP6}</td>
-                                                                            <td>{data.betinaP6}</td>
+                                                                            <td className='text-end'>{data.jantan?.toLocaleString()}</td>
+                                                                            <td className='text-end'>{data.betina?.toLocaleString()}</td>
+                                                                            <td className='text-end'>{data.volumeP6?.toLocaleString()}</td>
+                                                                            <td className='text-end'>{data.nettoP6?.toLocaleString()}</td>
+                                                                            <td className='text-end'>{data.jantanP6?.toLocaleString()}</td>
+                                                                            <td className='text-end'>{data.betinaP6?.toLocaleString()}</td>
                                                                             <td>
-                                                                                <button className="btn btn-default dropdown-item" type="button" onClick={handleEditKomoditas} data-headerid={data.id} data-ptk={data.ptk_id} data-bs-toggle="modal" data-bs-target="#modKomoditas"><i className="fa-solid fa-pen-to-square me-1"></i> Edit</button>
+                                                                                <button className="btn btn-default dropdown-item" type="button" onClick={() => handleEditKomoditas(index)} data-bs-toggle="modal" data-bs-target="#modKomoditas"><i className="fa-solid fa-pen-to-square me-1"></i> Edit</button>
                                                                             </td>
                                                                         </tr>
                                                                     ))

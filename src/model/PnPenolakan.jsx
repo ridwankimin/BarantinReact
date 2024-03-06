@@ -1,3 +1,4 @@
+/* eslint-disable eqeqeq */
 import axios from "axios";
 import Cookies from "js-cookie";
 import { v4 as uuidv4 } from 'uuid';
@@ -23,7 +24,7 @@ export default class PnPenolakan {
     save71(data) {
         const uuid = uuidv4()
         let datasend = {
-            'id': data.idDok71 === '' ? uuid : data.idDok71,
+            'id': data.idDok71 == '' ? uuid : data.idDok71,
             'ptk_id': data.idPtk,
             'dokumen_karantina_id': "29",
             'ptk_surat_tugas_id': data.idSurtug,
@@ -54,11 +55,11 @@ export default class PnPenolakan {
             'diterbitkan_di': data.diterbitkan,
             'user_ttd_id': data.ttdPutusan,
             'is_attachment': data.isAttach,
-            'tembusan': data.otban,
+            // 'tembusan': data.otban,
             'dikuasakan_negara': data.dikuasakan,
-            // 'otoritas_pelabuhan': data.otban,
-            // 'kepala_kantor_bc': data.kaBc,
-            // 'nama_pengelola': data.namaPengelola,
+            'otoritas_pelabuhan': data.otban,
+            'kepala_kantor_bc': data.kaBc,
+            'nama_pengelola': data.namaPengelola,
             'permohonan_perpanjangan_id': "",
             'status_perpanjangan': "",
             'tgl_dikeluarkan': "",
@@ -68,16 +69,16 @@ export default class PnPenolakan {
             'saksi': ""
         }
         let config = {
-        method: data.idDok71 === '' ? 'post' : 'put',
+        method: data.idDok71 == '' ? 'post' : 'put',
         maxBodyLength: Infinity,
-        url: url + (data.idDok71 === '' ? 'pn-tolak' : 'pn-tolak/' + data.idDok71),
+        url: url + (data.idDok71 == '' ? 'pn-tolak' : 'pn-tolak/' + data.idDok71),
         // url: url + 'pn-adm',
         headers: { 
             'Content-Type': 'application/json', 
         },
         data: datasend
         };
-        console.log(JSON.stringify(datasend))
+        console.log(JSON.stringify(config))
         return axios.request(config)
     }
     
@@ -87,17 +88,17 @@ export default class PnPenolakan {
         const saksi = listSaksi?.map((item, index) => {
             return {
                 id : uuidv4(),
-                pn_pemusnahan_id: data.idDok72 === '' ? uuid : data.idDok72,
+                pn_pemusnahan_id: data.idDok72 == '' ? uuid : data.idDok72,
                 urut: (index + 1),
                 nama: item.nama,
                 is_pemilik: item.isPemilik,
                 alamat: item.alamat,
-                jabatan_pekerjaan: item.jabatan
+                jabatan_pekerjaan: item.jabatan_pekerjaan
             }
         })
 
         let datasend = {
-            'id': data.idDok72 === '' ? uuid : data.idDok72,
+            'id': data.idDok72 == '' ? uuid : data.idDok72,
             'ptk_id': data.idPtk,
             'dokumen_karantina_id': "30",
             'ptk_surat_tugas_id': data.idSurtug,
@@ -129,10 +130,10 @@ export default class PnPenolakan {
             'diterbitkan_di': data.diterbitkan,
             'user_ttd_id': data.ttdPutusan,
             'is_attachment': data.isAttach,
-            'tembusan': "",
-            // 'otoritas_pelabuhan': data.otban,
-            // 'kepala_kantor_bc': data.kaBc,
-            // 'nama_pengelola': data.namaPengelola,
+            // 'tembusan': "",
+            'otoritas_pelabuhan': "",
+            'kepala_kantor_bc': "",
+            'nama_pengelola': "",
             'permohonan_perpanjangan_id': "",
             'status_perpanjangan': "",
             'tgl_dikeluarkan': "",
@@ -142,15 +143,16 @@ export default class PnPenolakan {
             'saksi': saksi
         }
         let config = {
-        method: data.idDok72 === '' ? 'post' : 'put',
+        method: data.idDok72 == '' ? 'post' : 'put',
         maxBodyLength: Infinity,
-        url: url + (data.idDok72 === '' ? 'pn-tolak' : 'pn-tolak/' + data.idDok72),
+        url: url + (data.idDok72 == '' ? 'pn-tolak' : 'pn-tolak/' + data.idDok72),
         // url: url + 'pn-adm',
         headers: { 
             'Content-Type': 'application/json', 
         },
         data: datasend
         };
+        console.log(JSON.stringify(config))
         return axios.request(config)
     }
     
@@ -158,7 +160,7 @@ export default class PnPenolakan {
         const uuid = uuidv4()
         
         let datasend = {
-            'id': data.idDok73 === '' ? uuid : data.idDok73,
+            'id': data.idDok73 == '' ? uuid : data.idDok73,
             'ptk_id': data.idPtk,
             'dokumen_karantina_id': "31",
             'ptk_surat_tugas_id': data.idSurtug,
@@ -180,14 +182,20 @@ export default class PnPenolakan {
             'diwajibkan3': "",
             'diwajibkan4': "",
             'rekomendasi_id': "",
+            'specify1': "",
+            'specify2': "",
+            'specify3': "",
+            'specify4': "",
+            'specify5': "",
+            'dikuasakan_negara': "",
             'diterbitkan_di': data.diterbitkan,
             'user_ttd_id': data.ttdPutusan,
-            // 'is_attachment': data.isAttach,
-            'tembusan': "",
+            'is_attachment': data.isAttach,
+            // 'tembusan': "",
             'information': "",
-            // 'otoritas_pelabuhan': data.otban,
-            // 'kepala_kantor_bc': data.kaBc,
-            // 'nama_pengelola': data.namaPengelola,
+            'otoritas_pelabuhan': "",
+            'kepala_kantor_bc': "",
+            'nama_pengelola': "",
             'permohonan_perpanjangan_id': "",
             'status_perpanjangan': "",
             'tgl_dikeluarkan': "",
@@ -197,15 +205,16 @@ export default class PnPenolakan {
             'saksi': ""
         }
         let config = {
-        method: data.idDok73 === '' ? 'post' : 'put',
+        method: data.idDok73 == '' ? 'post' : 'put',
         maxBodyLength: Infinity,
-        url: url + (data.idDok73 === '' ? 'pn-tolak' : 'pn-tolak/' + data.idDok73),
+        url: url + (data.idDok73 == '' ? 'pn-tolak' : 'pn-tolak/' + data.idDok73),
         // url: url + 'pn-adm',
         headers: { 
             'Content-Type': 'application/json', 
         },
         data: datasend
         };
+        console.log(JSON.stringify(config))
         return axios.request(config)
     }
     
@@ -213,7 +222,7 @@ export default class PnPenolakan {
         const uuid = uuidv4()
         
         let datasend = {
-            'id': data.idDok74 === '' ? uuid : data.idDok74,
+            'id': data.idDok74 == '' ? uuid : data.idDok74,
             'ptk_id': data.idPtk,
             'dokumen_karantina_id': "32",
             'ptk_surat_tugas_id': data.idSurtug,
@@ -234,20 +243,21 @@ export default class PnPenolakan {
             'diwajibkan2': "",
             'diwajibkan3': "",
             'diwajibkan4': "",
-            'specify1': data.nnc1 === "1" ? data.textNnc1 : "",
-            'specify2': data.nnc2 === "1" ? data.textNnc2 : "",
-            'specify3': data.nnc3 === "1" ? data.textNnc3 : "",
-            'specify4': data.nnc4 === "1" ? data.textNnc4 : "",
-            'specify5': data.nnc5 === "1" ? data.textNnc5 : "",
+            'specify1': data.nnc1 == "1" ? data.textNnc1 : "",
+            'specify2': data.nnc2 == "1" ? data.textNnc2 : "",
+            'specify3': data.nnc3 == "1" ? data.textNnc3 : "",
+            'specify4': data.nnc4 == "1" ? data.textNnc4 : "",
+            'specify5': data.nnc5 == "1" ? data.textNnc5 : "",
+            'dikuasakan_negara': "",
             'rekomendasi_id': data.rekomendasi,
             'diterbitkan_di': data.diterbitkan,
             'user_ttd_id': data.ttdPutusan,
             'is_attachment': data.isAttach,
-            'tembusan': "",
+            // 'tembusan': "",
             'information': "",
-            // 'otoritas_pelabuhan': data.otban,
-            // 'kepala_kantor_bc': data.kaBc,
-            // 'nama_pengelola': data.namaPengelola,
+            'otoritas_pelabuhan': "",
+            'kepala_kantor_bc': "",
+            'nama_pengelola': "",
             'permohonan_perpanjangan_id': "",
             'status_perpanjangan': "",
             'tgl_dikeluarkan': "",
@@ -257,9 +267,9 @@ export default class PnPenolakan {
             'saksi': ""
         }
         let config = {
-        method: data.idDok74 === '' ? 'post' : 'put',
+        method: data.idDok74 == '' ? 'post' : 'put',
         maxBodyLength: Infinity,
-        url: url + (data.idDok74 === '' ? 'pn-tolak' : 'pn-tolak/' + data.idDok74),
+        url: url + (data.idDok74 == '' ? 'pn-tolak' : 'pn-tolak/' + data.idDok74),
         // url: url + 'pn-adm',
         headers: { 
             'Content-Type': 'application/json', 

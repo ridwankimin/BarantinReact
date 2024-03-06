@@ -12,7 +12,7 @@ import Swal from 'sweetalert2';
 import PtkSurtug from '../../model/PtkSurtug';
 
 function modaAlatAngkut(e){
-    return ModaAlatAngkut.find((element) => element.id === parseInt(e))
+    return ModaAlatAngkut.find((element) => element.id == parseInt(e))
 }
 
 const log = new PtkHistory()
@@ -45,11 +45,11 @@ function DocK74() {
         response
         .then((response) => {
             if(response.data) {
-                if(response.data.status === '201') {
+                if(response.data.status == 201) {
                     const resHsy = log.pushHistory(data.idPtk, "p6", "K-7.4", (data.idDok74 ? 'UPDATE' : 'NEW'));
                     resHsy
                     .then((response) => {
-                        if(response.data.status == '201') {
+                        if(response.data.status == 201) {
                             if(process.env.REACT_APP_BE_ENV == "DEV") {
                                 console.log("history saved")
                             }
@@ -65,7 +65,7 @@ function DocK74() {
                     // alert(response.data.status + " - " + response.data.message)
                     Swal.fire({
                         title: "Sukses!",
-                        text: "Laporan Hasil Penolakan berhasil " + (data.idDok73 ? "diedit." : "disimpan."),
+                        text: "Dokumen NNC berhasil " + (data.idDok74 ? "diedit." : "disimpan."),
                         icon: "success"
                     });
                     setValue("idDok74", response.data.data.id)
@@ -192,7 +192,7 @@ function DocK74() {
                             setValue("isAttach", response.data.data[0].is_attachment)
                             setValue("consignmentDetil", response.data.data[0].consignment_detil)
                             setValue("diterbitkan", response.data.data[0].diterbitkan_di)
-                            setValue("ttdPutusan", response.data.data[0].user_ttd_id)
+                            setValue("ttdPutusan", response.data.data[0].user_ttd_id?.toString())
                         }
                     } else {
                         setData(values => ({...values,
@@ -264,16 +264,18 @@ function DocK74() {
             .then((response) => {
                 if(response.data) {
                     if(typeof response.data != "string") {
-                        setData(values => ({...values,
-                            errorSurtug: ""
-                        }));
-                        if(response.data.status === '200') {
+                        if(response.data.status == 200) {
                             setData(values => ({...values,
+                                errorSurtug: "",
                                 noSurtug: response.data.data[0].nomor,
                                 tglSurtug: response.data.data[0].tanggal,
                                 petugas: response.data.data
                             }));
                             setValue("idSurtug", response.data.data[0].id)
+                        } else if(response.data.status == 404){
+                            setData(values => ({...values,
+                                errorSurtug: "Surat Tugas tidak ada/belum dibuat"
+                            }));
                         }
                     } else {
                         setData(values => ({...values,
@@ -289,7 +291,7 @@ function DocK74() {
                 if(error.response) {
                     if(error.response.data.status == 404) {
                         setData(values => ({...values,
-                            errorSurtug: "Data Surat Tugas Kosong/Tidak Ada"
+                            errorSurtug: "Surat Tugas tidak ada/belum dibuat"
                         }));
                     } else {
                         setData(values => ({...values,
@@ -376,7 +378,7 @@ function DocK74() {
                         setData(values => ({...values,
                             errorPenolakan: ""
                         }));
-                        if(response.data.status == '200') {
+                        if(response.data.status == 200) {
                             setValue("idDok71", response.data.data[0].id)
                             setValue("noDok71", response.data.data[0].nomor)
                             setValue("tglDok71", response.data.data[0].tanggal)
@@ -423,6 +425,7 @@ function DocK74() {
                             setValue("idDok74", response.data.data[0].id)
                             setValue("noDok74", response.data.data[0].nomor)
                             setValue("tglDok74", response.data.data[0].tanggal)
+                            setValue("toNPPO", response.data.data[0].kepada)
                             setValue("nnc1", response.data.data[0].specify1 == null ? "" : "1")
                             setValue("nnc2", response.data.data[0].specify2 == null ? "" : "1")
                             setValue("nnc3", response.data.data[0].specify3 == null ? "" : "1")
@@ -433,9 +436,12 @@ function DocK74() {
                             setValue("textNnc3", response.data.data[0].specify3 == null ? "" : response.data.data[0].specify3)
                             setValue("textNnc4", response.data.data[0].specify4 == null ? "" : response.data.data[0].specify4)
                             setValue("textNnc5", response.data.data[0].specify5 == null ? "" : response.data.data[0].specify5)
-                            setValue("rekomendasi", response.data.data[0].rekomendasi_id)
+                            setValue("rekomendasi", response.data.data[0].rekomendasi_id != null ? response.data.data[0].rekomendasi_id.toString() : "")
+                            setValue("entirePartial", response.data.data[0].consignment)
+                            setValue("isAttach", response.data.data[0].is_attachment)
+                            setValue("consignmentDetil", response.data.data[0].consignment_detil)
                             setValue("diterbitkan", response.data.data[0].diterbitkan_di)
-                            setValue("ttdPutusan", response.data.data[0].user_ttd_id)
+                            setValue("ttdPutusan", response.data.data[0].user_ttd_id?.toString())
                         }
                     } else {
                         setData(values => ({...values,
@@ -469,13 +475,17 @@ function DocK74() {
                         setData(values => ({...values,
                             errorSurtug: ""
                         }));
-                        if(response.data.status === '200') {
+                        if(response.data.status == 200) {
                             setData(values => ({...values,
                                 noSurtug: response.data.data[0].nomor,
                                 tglSurtug: response.data.data[0].tanggal,
                                 petugas: response.data.data
                             }));
                             setValue("idSurtug", response.data.data[0].id)
+                        } else if(response.data.status == 404) {
+                            setData(values => ({...values,
+                                errorSurtug: "Surat Tugas tidak ada/belum dibuat"
+                            }));
                         }
                     } else {
                         setData(values => ({...values,
@@ -489,9 +499,9 @@ function DocK74() {
                     console.log(error)
                 }
                 if(error.response) {
-                    if(error.response.data.status === "404") {
+                    if(error.response.data.status == 404) {
                         setData(values => ({...values,
-                            errorSurtug: "Data Surat Tugas Kosong/Tidak Ada"
+                            errorSurtug: "Surat Tugas tidak ada/belum dibuat"
                         }));
                     } else {
                         setData(values => ({...values,
@@ -505,7 +515,7 @@ function DocK74() {
   return (
     <div className="container-xxl flex-grow-1 container-p-y">
         <h4 className="py-3 breadcrumb-wrapper mb-4">
-            K-7.4 <span className="fw-light" style={{color: 'blue'}}>(NOTIFICATION OF NON-COMPLIANCE)</span>
+            K-7.4 <span className="fw-light" style={{color: 'blue'}}>NOTIFICATION OF NON-COMPLIANCE</span>
 
             <small className='float-end'>
                 <span className='text-danger'>{(data.errorPTK ? data.errorPTK + "; " : "") + (data.errorKomoditas ? data.errorKomoditas + "; " : "") + (data.errorPenolakan ? data.errorPenolakan + "; " : "") + (data.errorNnc ? data.errorNnc + "; " : "") + (data.errorSurtug ? data.errorSurtug + "; " : "")}</span>
@@ -663,7 +673,7 @@ function DocK74() {
                                                 <div className="row">
                                                     <label className="col-sm-4 col-form-label" htmlFor="tempatTransit">Transit</label>
                                                     <div className="col-sm-8">
-                                                        <input name="tempatTransit" className="form-control form-control-sm" disabled value={(data.listPtk && (data.listPtk.pelabuhan_transit === null ? "-" : (data.listPtk.pelabuhan_transit + ", " + data.listPtk.negara_transit))) || ""} id="tempatTransit" />
+                                                        <input name="tempatTransit" className="form-control form-control-sm" disabled value={(data.listPtk && (data.listPtk.pelabuhan_transit == null ? "-" : (data.listPtk.pelabuhan_transit + ", " + data.listPtk.negara_transit))) || ""} id="tempatTransit" />
                                                     </div>
                                                 </div>
                                             </div>

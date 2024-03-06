@@ -16,9 +16,10 @@ function Footer(props) {
             right: "45px",
             position: "fixed",
             zIndex: 99999999,
-            display: (location.pathname.split("/")[2] == 'datam' || location.pathname.split("/")[2] == '' ? "none" : "block")
+            display: (location.pathname.split("/")[2] == 'datam' || location.pathname.split("/")[2] == '' || location.pathname.split("/")[2] == undefined ? "none" : "block")
             }}>
-                <button type='button' onClick={() => navigate(-1)} style={{backgroundColor: "#123138"}} className='btn rounded-pill text-lightest'><i className='fa-solid fa-chevron-left me-sm-2 me-1'></i> Kembali</button>
+                <button type='button' onClick={() => navigate(-1)} style={{backgroundColor: "#123138"}} className='btn rounded-pill text-lightest  me-sm-1 me-1'><i className='fa-solid fa-chevron-left me-sm-2 me-1'></i> Prev</button>
+                <button type='button' onClick={() => navigate(+1)} style={{backgroundColor: "#123138"}} className='btn rounded-pill text-lightest'>Next &nbsp;<i className='fa-solid fa-chevron-right'></i></button>
         </div>
 
         <div className="content-wrapper">
