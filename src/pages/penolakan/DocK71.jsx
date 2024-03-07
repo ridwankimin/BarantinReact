@@ -1015,7 +1015,7 @@ function DocK71() {
                                     </ol>
                                 </div>
                                 <div className="col-sm-4">
-                                    <button type='button' className='btn rounded-pill btn-secondary' data-bs-toggle="modal" data-bs-target="#modSegel"><i className='fa-solid fa-link me-sm-2 me-1'></i>Segel Karantina</button>
+                                    <button type='button' className='btn rounded-pill btn-secondary' data-bs-toggle="modal" data-bs-target="#modSegel"><i className='fa-solid fa-folder-tree me-sm-2 me-1'></i>Segel Karantina</button>
                                 </div>
                                     <hr className="my-4 mx-n4" />
                             </div>

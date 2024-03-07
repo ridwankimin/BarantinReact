@@ -1,93 +1,123 @@
-import React, { Component } from "react";
+import React, { useState } from "react";
 import moment from "moment";
 import html2canvas from "html2canvas";
-import garuda from '../../../logo/barantins.png'
+import garuda from '../../../logo/garuda.png'
 import jsPDF from "jspdf";
+import SpinnerDot from "../../loading/SpinnerDot";
+import Swal from "sweetalert2";
 
 moment.locale("en");
 
-class PrintKh1 extends Component {
+function makeid(length) {
+    let result = '';
+    const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+    const charactersLength = characters.length;
+    let counter = 0;
+    while (counter < length) {
+        result += characters.charAt(Math.floor(Math.random() * charactersLength));
+      counter += 1;
+    }
+    return result;
+  }
 
-  // Generate the pdf based on a component
-  printToPdf = () => {
-      const input = document.getElementById('hal1');
-      const input2 = document.getElementById('hal2');
-      const pdf = new jsPDF({compress: true});
-      html2canvas(input)
-        .then((canvas) => {
-          const imgData = canvas.toDataURL('image/png');
-          const pdfWidth = pdf.internal.pageSize.getWidth();
-          const pdfHeight = pdf.internal.pageSize.getHeight();
-          const imgWidth = canvas.width;
-          const imgHeight = canvas.height;
-          const ratio = Math.min(pdfWidth / imgWidth, pdfHeight / imgHeight);
-          const imgX = (pdfWidth - imgWidth * ratio)/2;
-          const imgY = 5;
-          pdf.addImage(imgData,'PNG',imgX,imgY,imgWidth*ratio,imgHeight*ratio);
-          pdf.addPage();
-          html2canvas(input2)
-            .then((canvas2) => {
-              const imgData2 = canvas2.toDataURL('image/png');
-              const pdfWidth = pdf.internal.pageSize.getWidth();
-              const pdfHeight = pdf.internal.pageSize.getHeight();
-              const imgWidth = canvas2.width;
-              const imgHeight = canvas2.height;
-              const ratio = Math.min(pdfWidth / imgWidth, pdfHeight / imgHeight);
-              const imgX = (pdfWidth - imgWidth * ratio)/2;
-              const imgY = 5;
-              pdf.addImage(imgData2,'PNG',imgX,imgY,imgWidth*ratio,imgHeight*ratio);
-              var out = pdf.output('blob');
-              var file = new Blob([out], {type: 'application/pdf'});
-              var fileURL = URL.createObjectURL(file);
-              window.open(fileURL);
-              
-              //CREATE BASE64 PDF
-              // let fileReader = new FileReader();
-              // fileReader.readAsDataURL(file);
-              // fileReader.onload = (event) => {
-              //     console.log(event.target.result);
-              // }
-              //END CREATE BASE64 PDF
+function PrintKh2(props) {
+    let [isLoading, setIsLoading] = useState(false)
+    let [noSeri, setNoSeri] = useState(false)
+    const cetak = props.dataCetak
+    
+    
+    const printToPdf = () => {
+        setIsLoading(true)
+        const input = document.getElementById('hal1');
+        const input2 = document.getElementById('hal2');
+        const pdf = new jsPDF({compress: true});
+        html2canvas(input)
+          .then((canvas) => {
+            const imgData = canvas.toDataURL('image/png');
+            const pdfWidth = pdf.internal.pageSize.getWidth();
+            const pdfHeight = pdf.internal.pageSize.getHeight();
+            const imgWidth = canvas.width;
+            const imgHeight = canvas.height;
+            const ratio = Math.min(pdfWidth / imgWidth, pdfHeight / imgHeight);
+            const imgX = (pdfWidth - imgWidth * ratio)/2;
+            const imgY = 5;
+            pdf.addImage(imgData,'PNG',imgX,imgY,imgWidth*ratio,imgHeight*ratio);
+            pdf.addPage();
+            html2canvas(input2)
+              .then((canvas2) => {
+                const imgData2 = canvas2.toDataURL('image/png');
+                const pdfWidth = pdf.internal.pageSize.getWidth();
+                const pdfHeight = pdf.internal.pageSize.getHeight();
+                const imgWidth = canvas2.width;
+                const imgHeight = canvas2.height;
+                const ratio = Math.min(pdfWidth / imgWidth, pdfHeight / imgHeight);
+                const imgX = (pdfWidth - imgWidth * ratio)/2;
+                const imgY = 5;
+                pdf.addImage(imgData2,'PNG',imgX,imgY,imgWidth*ratio,imgHeight*ratio);
+                var out = pdf.output('blob');
+                var file = new Blob([out], {type: 'application/pdf'});
+                var fileURL = URL.createObjectURL(file);
+                window.open(fileURL);
+                setIsLoading(false)
+                //CREATE BASE64 PDF
+                // let fileReader = new FileReader();
+                // fileReader.readAsDataURL(file);
+                // fileReader.onload = (event) => {
+                //     console.log(event.target.result);
+                // }
+                //END CREATE BASE64 PDF
+    
+              })
+            ;
+          })
+    };
 
-            })
-          ;
+    function kirimTTE() {
+        setNoSeri(makeid(7))
+        Swal.fire({
+            icon: "success",
+            title: "Sukses!",
+            text: "Berhasil kirim ke TTE"
         })
-  };
-
- 
-  render() {
-    // console.log("dataCetak")
-    // console.log(this.props.dataCetak)
-    const cetak = this.props.dataCetak
-    return (
-      <div>
-        <button onClick={this.printToPdf} style={{ backgroundColor: "green" }}>
-          Print It
-        </button>
+    }
+  return (
+    <div className="container-xxl flex-grow-1 container-p-y">
+        {isLoading ? <SpinnerDot/> : 
+            (noSeri ? 
+            (<button onClick={printToPdf} className="btn btn-warning me-sm-2 me-1"><i className="fa-solid fa-print me-sm-2 me-1"></i>
+                Preview
+            </button>)
+                : 
+            <button onClick={kirimTTE} className="btn btn-info me-sm-2 me-1"><i className="fa-solid fa-paper-plane me-sm-2 me-1"></i>
+                Kirim ke TTE
+            </button>)
+        }
         <br />
         <hr />
         <br />
-        <span id="print_to_pdf">
-        <div className="container-xxl flex-grow-1 container-p-y">
     <h4 className="py-3 breadcrumb-wrapper mb-4">
         KH.1 <span className="text-muted fw-light">(SERTIFIKAT KESEHATAN HEWAN)</span>
     </h4>
- 
+
+    {/* <!-- Multi Column with Form Separator --> */}
     <div className="row">
+        
+        {/* <!-- Form Separator --> */}
         <div className="col-xxl">
             <div className="card mb-4" >
+                {/* <!-- <h5 className="card-header">Form Separator</h5> --> */}
                 <div className="container" id="hal1">
                 <div className="row text-end">
                   <p>&nbsp;</p>
-                        <h2> KH-1</h2>
+                        <h2> KH-2</h2>
                     </div>
 <p style={{textAlign: 'center'}}><img style={{display: 'block', marginLeft: 'auto', marginRight: 'auto'}} src={garuda} alt="garuda" width="100" height="100" /></p>
 <p style={{textAlign: 'center',fontSize:16}}><strong>REPUBLIK INDONESIA</strong> <br /><strong>BADAN KARANTINA INDONESIA</strong></p>
 <p style={{textAlign: 'center', fontSize:12}}><em><strong>REPUBLIC OF INDONESIA</strong></em><br /><em><strong>INDONESIAN QUARANTINE AGENCY</strong></em></p>
-<p style={{textAlign: 'right'}}>No: 01901932019</p>
-<p style={{textAlign: 'center',fontSize:16}}><strong>SERTIFIKAT KESEHATAN HEWAN</strong> <br /><strong><em>ANIMAL HEALTH CERTIFICATE </em></strong></p>
-<p style={{textAlign: 'center'}}>Nomor: {cetak.dataKH1?.nomor}<br /><em>Number</em></p>
-<p style={{textAlign: 'justify'}}>Berdasarkan Undang-Undang Nomor 21 Tahun 2019 tentang Karantina Hewan, Ikan, dan Tumbuhan dan Peraturan Pemerintah Nomor 29 Tahun 2023 tentang Peraturan Pelaksanaa Undang-Undang Nomor 21 Tahun 2019 tentang Karantina Hewan, Ikan, dan Tumbuhan, serta menindaklanjuti Permohonan Tindakan Karantina dan Pengawasan dan/atau Pengendalian Serta Berita Acara Serah Terima Media Pembawa Di Tempat Pemasukan, Pengeluaran dan/atau Transit Nomor &hellip;&hellip;&hellip;&hellip;. Tanggal&hellip;&hellip;&hellip;&hellip;&hellip;, ternyata media pembawa tersebut di bawah ini:</p>
+<p style={{textAlign: 'right'}}>No: {noSeri || cetak.dataKH1?.nomor_seri}</p>
+<p style={{textAlign: 'center',fontSize:16}}><strong>SERTIFIKAT SANITASI PRODUK HEWAN</strong> <br /><strong><em>SANITARY CERTIFICATE OF ANIMAL PRODUCT </em></strong></p>
+<p style={{textAlign: 'center'}}>Nomor:..{cetak.dataKH2?.nomor}<br /><em>Number</em></p>
+<p style={{textAlign: 'justify'}}>Berdasarkan Permohonan Tindakan Karantina dan/atau Pengawasan terhadap Pemasukan/Pengeluaran/Transit*) Media Pembawa Nomor .....................Tanggal .............................,</p>
 <p><strong>I. Rincian Keterangan</strong><br /><em>&nbsp; &nbsp; Detail of Description</em></p>
 <table style={{borderCollapse: 'collapse', width: '99.2978%', height: '158px'}} border="1" id="tabel">
 <tbody>
@@ -143,16 +173,16 @@ class PrintKh1 extends Component {
 </tr>
 </tbody>
 </table>
-<p>**: &nbsp;- Untuk hewan disebutkan bangsa, jenis kelamin, umur, dan keterangan lain;<br /><em>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp;For animal(s)</em><em>,</em> <em>the </em><em>breed, gender, age, and other description</em><em> shall be stated</em></p>
 
+<p>**: &nbsp;- Jumlah ditulis berat netto dan berat brutto;<br /><em>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp;Quantity shall be written in brutto weight and netto weight</em><br />&nbsp; &nbsp; &nbsp; &nbsp;- Untuk produk hewan, disebutkan jenis kemasan, identitas kemasan, dan keterangan lain.<br /><em>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp;For animal product</em><em>, the </em><em>packaging type, packaging identity, and other description</em><em> shall be stated </em></p>
 <p>Berdasarkan hasil tindakan karantina yang telah dilakukan, dengan ini menerangkan bahwa*** ) :<br /><em>Based on quarantine measure, hereby explains that:</em> <br />
 
-<input type="checkbox" />&nbsp;Telah memenuhi seluruh dokumen karantina hewan yang dipersyaratkan;<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<em>Has fulfilled all required animal quarantine documents</em> <br />
-<input type="checkbox" />&nbsp;Dalam keadaan sehat dan baik serta telah memenuhi persyaratan sanitasi; <br />&nbsp;&nbsp;&nbsp;<em>Is (are) healthy and in good condition and </em><em>has (have) fulfilled</em><em> the sanitary requirements</em> <br />
-<input type="checkbox" />&nbsp;Telah memenuhi seluruh dokumen lain yang dipersyaratkan;<br />&nbsp;&nbsp;&nbsp;<em>Has fulfilled</em><em> all </em><em>require</em><em>d </em><em>others document</em><em>s</em> <br />
+<input type="checkbox" />&nbsp;Produk hewan tersebut di atas telah dilakukan tindakan, tidak ditemukan HPHK.<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<em>The animal product as stated above has (have) been conducted with quaratine measures, is (are) not infected of animal quarantine pets and diseases</em> <br />
+<input type="checkbox" />&nbsp;Produk Hewan tersebut di atas dalam keadaan sanitasi baik, kemasan utuh, tidak terjadi perubahan sifat, tidak terkontaminasi, dan dinilai tidak membahayakan kesehatan hewan dan/atau manusia. <br />&nbsp;&nbsp;&nbsp;<em>The animal product as stated above is (are) in good sanitation, intact in packaging, no change in characteristics, not contaminated, and is (are) considered not endangering animal and/or human health.</em> <br />
+<input type="checkbox" />&nbsp;Produk Hewan tersebut di atas telah memenuhi persyaratan dokumen lain.<br />&nbsp;&nbsp;&nbsp;<em>The animal products mentioned above have met the requirements of other documents</em> <br />
 <input type="checkbox" />&nbsp;Lainnya: ......<br />&nbsp;&nbsp;&nbsp;<em>Others</em><br /></p>
 
-<p>*)&nbsp; Beri tanda ✓ pada kotak yang sesuai<br />&nbsp; &nbsp; &nbsp; &nbsp; <em>Tick to the appropriate box(es)</em></p>
+<p>***)&nbsp; Beri tanda &#10003; pada kotak yang sesuai<br />&nbsp; &nbsp; &nbsp; &nbsp; <em>Tick to the appropriate box(es)</em></p>
 <table style={{borderCollapse: 'collapse', width: '100%'}} border="1" id="tabel">
 <tbody>
 <tr>
@@ -165,7 +195,7 @@ Di <br />At
 <p>Nama <br /><em>Name</em></p>
 <p>NIP&emsp; &emsp; &emsp;&emsp; &emsp; &emsp; &emsp; &emsp; &emsp; &emsp; &emsp; &emsp; &emsp; &emsp; &emsp; &emsp; &emsp; &emsp; Tanda tangan<br /><em>IQV&emsp; &emsp; &emsp; &emsp; &emsp; &emsp; &emsp; &emsp; &emsp; &emsp; &emsp; &emsp; &emsp; &emsp; &emsp; &emsp; &emsp; &emsp; Signature&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;</em></p>
 </td>
-<td style={{width: '25%'}}>&nbsp;</td>
+<td style={{width: '25%',verticalAlign:'top'}}>Stempel <br /><em>Stamp</em></td>
 </tr>
 </tbody>
 </table>
@@ -185,11 +215,11 @@ Di <br />At
                 <tr>
                 <td style={{width: '100%'}}>
                     <p>&nbsp;</p>
-                <p><input type="checkbox" />Pemenuhan persyaratan teknis negara tujuan (Untuk Media Pembawa Ekspor) <br /><em>The fulfillment of technical requirements of the country of destination (for the export carrier)</em></p>
+                <p><input type="checkbox" />&nbsp;Pemenuhan persyaratan teknis negara tujuan (Untuk Media Pembawa Ekspor) <br /><em>The fulfillment of technical requirements of the country of destination (for the export carrier)</em></p>
                 <p>&nbsp;</p>
-                <p><input type="checkbox" />Hasil Pemeriksaan Laboratorium (dilampirkan hasil pengujian) <br /> <em> Result(s) of Laboratory Testing (the result (s) is/are attached)</em></p>
+                <p><input type="checkbox" />&nbsp;Hasil Pemeriksaan Laboratorium (dilampirkan hasil pengujian) <br /> <em> Result(s) of Laboratory Testing (the result (s) is/are attached)</em></p>
                 <p>&nbsp;</p>
-                <p><input type="checkbox" />Lainnya <br /><em>Others</em></p>
+                <p><input type="checkbox" />&nbsp;Lainnya <br /><em>Others</em></p>
                 <p>&nbsp;</p>
                 <p>&nbsp;</p>
                 </td>
@@ -208,7 +238,7 @@ Di <br />At
                 </tr>
                 <tr>
                 <td style={{width: '20%', textAlign: 'left'}} colSpan="2">
-                <p>Nama : &nbsp; {cetak.petugas?.length > 0 ? cetak.petugas[0].nama : ""} <br /><em>Name</em></p>
+                <p>Nama : <br /><em>Name</em></p>
                 <p>&nbsp;</p>
                 <p>NIP :<br /><em> IQV</em></p>
                 </td>
@@ -236,19 +266,11 @@ Di <br />At
                 </table>
                 
               </div>
-              {/* <div className="container">
-                  <div className="row-md-1 ">
-                          <button className="btn btn-primary" onClick={printDocument}>Cetak Pelepasan</button>    
-                  </div>
-              </div> */}
             </div>
         </div>
     </div>
 </div>
-        </span>
-      </div>
-    );
-  }
+  )
 }
 
-export default PrintKh1
+export default PrintKh2

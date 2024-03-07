@@ -13,7 +13,7 @@ import UptNew from '../../../model/master/uptNewGrouping.json';
 import SpinnerDot from '../../../component/loading/SpinnerDot';
 import Select from 'react-select';
 import Swal from 'sweetalert2';
-import PrintKh1 from './PrintKh1';
+import PrintKh1 from '../../../component/cetak/pembebasan/PrintKh1';
 
 const log = new PtkHistory()
 const modelPemohon = new PtkModel()

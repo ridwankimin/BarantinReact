@@ -580,7 +580,7 @@ function DocK34() {
                                                 </div>
                                                 <div className="row">
                                                 <div className="offset-sm-4 col-sm-4">
-                                                    <button type='button' className='btn rounded-pill btn-secondary' data-bs-toggle="modal" data-bs-target="#modSegel"><i className='fa-solid fa-link me-sm-2 me-1'></i>Segel Karantina</button>
+                                                    <button type='button' className='btn rounded-pill btn-secondary' data-bs-toggle="modal" data-bs-target="#modSegel"><i className='fa-solid fa-folder-tree me-sm-2 me-1'></i>Segel Karantina</button>
                                                 </div>
                                                 </div>
                                             </div>

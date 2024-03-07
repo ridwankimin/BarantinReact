@@ -117,12 +117,12 @@ function Navbar(props) {
                     </li>
                 </ul>
             </li>
-            <li className='menu-item'>
+            {/* <li className='menu-item'>
                 <div type="button" onClick={() => navigate(process.env.PUBLIC_URL + '/seal')} style={{backgroundColor: "#123138"}} className="w-100 text-sm-start menu-link text-lightest" data-i18n="Pemeriksaan">
                     <i className="menu-icon tf-icons fa-solid fa-folder-tree"></i>
                     <div data-i18n="Pemeriksaan">Segel Karantina</div>
                 </div>
-            </li>
+            </li> */}
             <li className={(ketMenu === 'Pemeriksaan' && menuOpen === true) || location.pathname.split("/")[2] === 'k31' || location.pathname.split("/")[2] === 'k32' || location.pathname.split("/")[2] === 'k33' || location.pathname.split("/")[2] === 'k34' || location.pathname.split("/")[2] === 'k35' || location.pathname.split("/")[2] === 'k36' || location.pathname.split("/")[2] === 'k37b' || location.pathname.split("/")[2] === 'k37a' || location.pathname.split("/")[2] === 'k38' || location.pathname.split("/")[2] === 'k39' || location.pathname.split("/")[2] === 'k310' ? 'menu-item open menu-item-animating open' : 'menu-item menu-item-animating menu-item-closing'}>
                 <button type='button' style={{backgroundColor: "#123138"}} className="w-100 text-sm-start menu-link menu-toggle text-lightest" data-i18n="Pemeriksaan" onClick={handleMenuOpen}>
                     <i className="menu-icon tf-icons fa-solid fa-magnifying-glass"></i>

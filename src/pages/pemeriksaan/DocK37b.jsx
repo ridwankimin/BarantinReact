@@ -869,7 +869,7 @@ function DocK37b() {
                                     <textarea name="kesimpulan37b" id="kesimpulan37b" rows="2" {...registerHeader("kesimpulan37b")} className='form-control form-control-sm'></textarea>
                                 </div>
                                 <div className="offset-sm-4 col-sm-2">
-                                    <button type='button' className='btn rounded-pill btn-secondary' data-bs-toggle="modal" data-bs-target="#modSegel"><i className='fa-solid fa-link me-sm-2 me-1'></i>Segel Karantina</button>
+                                    <button type='button' className='btn rounded-pill btn-secondary' data-bs-toggle="modal" data-bs-target="#modSegel"><i className='fa-solid fa-folder-tree me-sm-2 me-1'></i>Segel Karantina</button>
                                 </div>
                             </div>
                             <div className="row">

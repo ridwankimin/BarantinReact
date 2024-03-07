@@ -240,7 +240,7 @@ function DocK74() {
                             if(error.response) {
                                 if(error.response.status == 404) {
                                     Swal.fire("Surat Penolakan tidak ada/Belum dibuat. Mohon buat Surat Penolakan dahulu!")
-                                    navigate("/k71")
+                                    navigate(process.env.PUBLIC_URL + "/k71")
                                 } else {
                                     setData(values => ({...values,
                                         errorPenolakan: "Gagal load data Surat Penolakan",
@@ -402,7 +402,7 @@ function DocK74() {
                 if(error.response) {
                     if(error.response.status == 404) {
                         Swal.fire("Surat Penolakan tidak ada/Belum dibuat. Mohon buat Surat Penolakan dahulu!")
-                        navigate("/k71")
+                        navigate(process.env.PUBLIC_URL + "/k71")
                     } else {
                         setData(values => ({...values,
                             errorPenolakan: "Gagal load data Surat Penolakan",
