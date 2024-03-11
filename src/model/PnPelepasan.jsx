@@ -2,7 +2,8 @@
 import axios from "axios";
 import Cookies from "js-cookie";
 import { v4 as uuidv4 } from 'uuid';
-const url = process.env.REACT_APP_BE_LINK;
+// const url = process.env.REACT_APP_BE_LINK;
+const url = import.meta.env.VITE_BE_LINK;
 
 export default class PnPelepasan {
   imporAreaKI(data) {
@@ -52,7 +53,7 @@ export default class PnPelepasan {
       },
       data: datasend
     };
-    if(process.env.REACT_APP_BE_ENV == "DEV") {
+    if(import.meta.env.VITE_BE_ENV == "DEV") {
         console.log("dok k921: " + JSON.stringify(config))
     }
     return axios.request(config)
@@ -93,7 +94,7 @@ export default class PnPelepasan {
       },
       data: datasend
     };
-    if(process.env.REACT_APP_BE_ENV == "DEV") {
+    if(import.meta.env.VITE_BE_ENV == "DEV") {
       console.log("dok k94: " + JSON.stringify(config))
     }
     return axios.request(config)
@@ -146,7 +147,7 @@ export default class PnPelepasan {
       },
       data: datasend
     };
-    if(process.env.REACT_APP_BE_ENV == "DEV") {
+    if(import.meta.env.VITE_BE_ENV == "DEV") {
       console.log("dok ki2: " + JSON.stringify(config))
     }
     return axios.request(config)
@@ -199,7 +200,7 @@ export default class PnPelepasan {
       },
       data: datasend
     };
-    if(process.env.REACT_APP_BE_ENV == "DEV") {
+    if(import.meta.env.VITE_BE_ENV == "DEV") {
       console.log("dok ki1: " + JSON.stringify(config))
     }
     return axios.request(config)
@@ -248,7 +249,7 @@ export default class PnPelepasan {
       },
       data: datasend
     };
-    if(process.env.REACT_APP_BE_ENV == "DEV") {
+    if(import.meta.env.VITE_BE_ENV == "DEV") {
       console.log("dok kt1: " + JSON.stringify(config))
     }
     return axios.request(config)
@@ -297,7 +298,7 @@ export default class PnPelepasan {
       },
       data: datasend
     };
-    if(process.env.REACT_APP_BE_ENV == "DEV") {
+    if(import.meta.env.VITE_BE_ENV == "DEV") {
       console.log("dok kt1: " + JSON.stringify(config))
     }
     return axios.request(config)
@@ -345,7 +346,7 @@ export default class PnPelepasan {
       },
       data: datasend
     };
-    if(process.env.REACT_APP_BE_ENV == "DEV") {
+    if(import.meta.env.VITE_BE_ENV == "DEV") {
       console.log("dok kt3: " + JSON.stringify(config))
     }
     return axios.request(config)
@@ -386,7 +387,7 @@ export default class PnPelepasan {
       },
       data: datasend
     };
-    if(process.env.REACT_APP_BE_ENV == "DEV") {
+    if(import.meta.env.VITE_BE_ENV == "DEV") {
       console.log("dok kt92h: " + JSON.stringify(config))
     }
     return axios.request(config)
@@ -428,7 +429,7 @@ export default class PnPelepasan {
       data: datasend
     };
 
-    if(process.env.REACT_APP_BE_ENV == "DEV") {
+    if(import.meta.env.VITE_BE_ENV == "DEV") {
       console.log("dok kh1: " + JSON.stringify(config))
     }
     return axios.request(config)
@@ -468,7 +469,7 @@ export default class PnPelepasan {
       },
       data: datasend
     };
-    if(process.env.REACT_APP_BE_ENV == "DEV") {
+    if(import.meta.env.VITE_BE_ENV == "DEV") {
       console.log("dok kh2: " + JSON.stringify(config))
     }
     return axios.request(config)
@@ -572,7 +573,7 @@ export default class PnPelepasan {
       },
       data: datasend
     };
-    if(process.env.REACT_APP_BE_ENV == "DEV") {
+    if(import.meta.env.VITE_BE_ENV == "DEV") {
       console.log("dok k91: " + JSON.stringify(config))
     }
     return axios.request(config)

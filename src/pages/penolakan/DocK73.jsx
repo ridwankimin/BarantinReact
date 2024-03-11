@@ -66,13 +66,13 @@ function DocK73() {
                         resHsy
                         .then((response) => {
                             if(response.data.status == 201) {
-                                if(process.env.REACT_APP_BE_ENV == "DEV") {
+                                if(import.meta.env.VITE_BE_ENV == "DEV") {
                                     console.log("history saved")
                                 }
                             }
                         })
                         .catch((error) => {
-                            if(process.env.REACT_APP_BE_ENV == "DEV") {
+                            if(import.meta.env.VITE_BE_ENV == "DEV") {
                                 console.log(error)
                             }
                         });
@@ -90,7 +90,7 @@ function DocK73() {
                 }
             })
             .catch((error) => {
-                if(process.env.REACT_APP_BE_ENV == "DEV") {
+                if(import.meta.env.VITE_BE_ENV == "DEV") {
                     console.log(error)
                 }
                 Swal.fire({
@@ -166,7 +166,7 @@ function DocK73() {
                 }
             })
             .catch((error) => {
-                if(process.env.REACT_APP_BE_ENV == "DEV") {
+                if(import.meta.env.VITE_BE_ENV == "DEV") {
                     console.log(error)
                 }
                 Swal.fire({
@@ -213,7 +213,7 @@ function DocK73() {
                 if(response.data.status == 201) {
                     refreshListKomoditas()
                     setLoadKomoditi(false)
-                    if(process.env.REACT_APP_BE_ENV == "DEV") {
+                    if(import.meta.env.VITE_BE_ENV == "DEV") {
                         console.log("history saved")
                     }
                     Swal.fire({
@@ -232,7 +232,7 @@ function DocK73() {
             .catch((error) => {
                 setLoadKomoditi(false)
                 setLoadKomoditiPesan("Terjadi error pada saat simpan, mohon refresh halaman dan coba lagi.")
-                if(process.env.REACT_APP_BE_ENV == "DEV") {
+                if(import.meta.env.VITE_BE_ENV == "DEV") {
                     console.log(error)
                 }
                 Swal.fire({
@@ -256,7 +256,7 @@ function DocK73() {
             }
         })
         .catch((error) => {
-            if(process.env.REACT_APP_BE_ENV == "DEV") {
+            if(import.meta.env.VITE_BE_ENV == "DEV") {
                 console.log(error)
             }
         });
@@ -313,7 +313,7 @@ function DocK73() {
                             }
                         })
                         .catch((error) => {
-                            if(process.env.REACT_APP_BE_ENV == "DEV") {
+                            if(import.meta.env.VITE_BE_ENV == "DEV") {
                                 console.log(error)
                             }
                             setData(values => ({...values,
@@ -332,7 +332,7 @@ function DocK73() {
                 }
             })
             .catch((error) => {
-                if(process.env.REACT_APP_BE_ENV == "DEV") {
+                if(import.meta.env.VITE_BE_ENV == "DEV") {
                     console.log(error)
                 }
                 if(error.response) {
@@ -385,7 +385,7 @@ function DocK73() {
                 }
             })
             .catch((error) => {
-                if(process.env.REACT_APP_BE_ENV == "DEV") {
+                if(import.meta.env.VITE_BE_ENV == "DEV") {
                     console.log(error)
                 }
                 if(error.response) {
@@ -435,7 +435,7 @@ function DocK73() {
                                 }
                             })
                             .catch((error) => {
-                                if(process.env.REACT_APP_BE_ENV == "DEV") {
+                                if(import.meta.env.VITE_BE_ENV == "DEV") {
                                     console.log(error)
                                 }
                                 if(error.response) {
@@ -459,13 +459,13 @@ function DocK73() {
                 }
             })
             .catch((error) => {
-                if(process.env.REACT_APP_BE_ENV == "DEV") {
+                if(import.meta.env.VITE_BE_ENV == "DEV") {
                     console.log(error)
                 }
                 if(error.response) {
                     if(error.response.data.status == 404) {
                         Swal.fire("Berita Acara Penolakan tidak ada/Belum dibuat. Mohon buat Berita Acara Penolakan dahulu!");
-                        navigate(process.env.PUBLIC_URL + '/k72')
+                        navigate('/k72')
                     } else {
                         setData(values => ({...values,
                             errorBAPenolakan: "Gagal load data Berita Acara Penolakan",
@@ -498,7 +498,7 @@ function DocK73() {
                 }
             })
             .catch((error) => {
-                if(process.env.REACT_APP_BE_ENV == "DEV") {
+                if(import.meta.env.VITE_BE_ENV == "DEV") {
                     console.log(error)
                 }
                 if(error.response) {
@@ -540,7 +540,7 @@ function DocK73() {
                 }
             })
             .catch((error) => {
-                if(process.env.REACT_APP_BE_ENV == "DEV") {
+                if(import.meta.env.VITE_BE_ENV == "DEV") {
                     console.log(error)
                 }
                 if(error.response) {
@@ -584,7 +584,7 @@ function DocK73() {
                 }
             })
             .catch((error) => {
-                if(process.env.REACT_APP_BE_ENV == "DEV") {
+                if(import.meta.env.VITE_BE_ENV == "DEV") {
                     console.log(error)
                 }
                 setData(values => ({...values,
@@ -629,7 +629,7 @@ function DocK73() {
                 }
             })
             .catch((error) => {
-                if(process.env.REACT_APP_BE_ENV == "DEV") {
+                if(import.meta.env.VITE_BE_ENV == "DEV") {
                     console.log(error)
                 }
                 if(error.response) {
@@ -670,7 +670,7 @@ function DocK73() {
                 }
             })
             .catch((error) => {
-                if(process.env.REACT_APP_BE_ENV == "DEV") {
+                if(import.meta.env.VITE_BE_ENV == "DEV") {
                     console.log(error)
                 }
                 if(error.response) {
@@ -711,7 +711,7 @@ function DocK73() {
                 }
             })
             .catch((error) => {
-                if(process.env.REACT_APP_BE_ENV == "DEV") {
+                if(import.meta.env.VITE_BE_ENV == "DEV") {
                     console.log(error)
                 }
                 if(error.response) {
@@ -753,7 +753,7 @@ function DocK73() {
                 }
             })
             .catch((error) => {
-                if(process.env.REACT_APP_BE_ENV == "DEV") {
+                if(import.meta.env.VITE_BE_ENV == "DEV") {
                     console.log(error)
                 }
                 if(error.response) {

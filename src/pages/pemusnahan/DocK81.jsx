@@ -65,7 +65,7 @@ function DocK81() {
             }
         })
         .catch((error) => {
-            if(process.env.REACT_APP_BE_ENV == "DEV") {
+            if(import.meta.env.VITE_BE_ENV == "DEV") {
                 console.log(error)
             }
         });
@@ -79,7 +79,7 @@ function DocK81() {
                 if(response.data.status == 201) {
                     refreshListKomoditas()
                     setLoadKomoditi(false)
-                    if(process.env.REACT_APP_BE_ENV == "DEV") {
+                    if(import.meta.env.VITE_BE_ENV == "DEV") {
                         console.log("history saved")
                     }
                     Swal.fire({
@@ -98,7 +98,7 @@ function DocK81() {
             .catch((error) => {
                 setLoadKomoditi(false)
                 setLoadKomoditiPesan("Terjadi error pada saat simpan, mohon refresh halaman dan coba lagi.")
-                if(process.env.REACT_APP_BE_ENV == "DEV") {
+                if(import.meta.env.VITE_BE_ENV == "DEV") {
                     console.log(error)
                 }
                 Swal.fire({
@@ -135,13 +135,13 @@ function DocK81() {
                         resHsy
                         .then((response) => {
                             if(response.data.status == 201) {
-                                if(process.env.REACT_APP_BE_ENV == "DEV") {
+                                if(import.meta.env.VITE_BE_ENV == "DEV") {
                                     console.log("history saved")
                                 }
                             }
                         })
                         .catch((error) => {
-                            if(process.env.REACT_APP_BE_ENV == "DEV") {
+                            if(import.meta.env.VITE_BE_ENV == "DEV") {
                                 console.log(error)
                             }
                         });
@@ -163,7 +163,7 @@ function DocK81() {
                 }
             })
             .catch((error) => {
-                if(process.env.REACT_APP_BE_ENV == "DEV") {
+                if(import.meta.env.VITE_BE_ENV == "DEV") {
                     console.log(error)
                 }
                 Swal.fire({
@@ -241,7 +241,7 @@ function DocK81() {
                 }
             })
             .catch((error) => {
-                if(process.env.REACT_APP_BE_ENV == "DEV") {
+                if(import.meta.env.VITE_BE_ENV == "DEV") {
                     console.log(error)
                 }
                 Swal.fire({
@@ -317,7 +317,7 @@ function DocK81() {
                             }
                         })
                         .catch((error) => {
-                            if(process.env.REACT_APP_BE_ENV == "DEV") {
+                            if(import.meta.env.VITE_BE_ENV == "DEV") {
                                 console.log(error)
                             }
                             setData(values => ({...values,
@@ -339,7 +339,7 @@ function DocK81() {
                 }
             })
             .catch((error) => {
-                if(process.env.REACT_APP_BE_ENV == "DEV") {
+                if(import.meta.env.VITE_BE_ENV == "DEV") {
                     console.log(error)
                 }
                 setData(values => ({...values,
@@ -379,7 +379,7 @@ function DocK81() {
                 }
             })
             .catch((error) => {
-                if(process.env.REACT_APP_BE_ENV == "DEV") {
+                if(import.meta.env.VITE_BE_ENV == "DEV") {
                     console.log(error)
                 }
                 if(error.response.data.status == 404) {
@@ -437,7 +437,7 @@ function DocK81() {
                 }
             })
             .catch((error) => {
-                if(process.env.REACT_APP_BE_ENV == "DEV") {
+                if(import.meta.env.VITE_BE_ENV == "DEV") {
                     console.log(error)
                 }
                 if(error.response.data.status == 404) {
@@ -479,7 +479,7 @@ function DocK81() {
                 }
             })
             .catch((error) => {
-                if(process.env.REACT_APP_BE_ENV == "DEV") {
+                if(import.meta.env.VITE_BE_ENV == "DEV") {
                     console.log(error)
                 }
                 setData(values => ({...values,
@@ -515,7 +515,7 @@ function DocK81() {
                 }
             })
             .catch((error) => {
-                if(process.env.REACT_APP_BE_ENV == "DEV") {
+                if(import.meta.env.VITE_BE_ENV == "DEV") {
                     console.log(error)
                 }
                 setData(values => ({...values,
@@ -556,7 +556,7 @@ function DocK81() {
                 }
             })
             .catch((error) => {
-                if(process.env.REACT_APP_BE_ENV == "DEV") {
+                if(import.meta.env.VITE_BE_ENV == "DEV") {
                     console.log(error)
                 }
                 if(error.response.data.status == 404) {
@@ -617,7 +617,7 @@ function DocK81() {
                 }
             })
             .catch((error) => {
-                if(process.env.REACT_APP_BE_ENV == "DEV") {
+                if(import.meta.env.VITE_BE_ENV == "DEV") {
                     console.log(error)
                 }
                 if(error.response.data.status == 404) {

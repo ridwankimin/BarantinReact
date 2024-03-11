@@ -200,7 +200,7 @@ function DataMasukTable(props) {
                 setDataTable();
             }
         } catch (error) {
-            if(process.env.REACT_APP_BE_ENV == "DEV") {
+            if(import.meta.env.VITE_BE_ENV == "DEV") {
                 console.log(error)
             }
             setDataTable();
@@ -262,7 +262,7 @@ function DataMasukTable(props) {
                         expires: 7
                     });
                     // window.onload(
-                        navigate(process.env.PUBLIC_URL + '/k11')
+                        navigate('/k11')
                     // )
                     window.location.reload()
                 }

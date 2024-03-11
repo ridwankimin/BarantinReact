@@ -11,7 +11,7 @@ function setLoginUser(e) {
 }
 
 function Login() {
-    require('./styleLogin.css')
+    import('./styleLogin.css')
     let [user, setUser] = useState("")
     let [password, setPassword] = useState("")
     

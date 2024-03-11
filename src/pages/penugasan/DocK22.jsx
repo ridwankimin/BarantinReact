@@ -77,7 +77,7 @@ function DocK22() {
         const response = modelSurtug.simpanHeader(data);
             response
             .then((response) => {
-                if(process.env.ENV == "DEV") {
+                if(import.meta.env.VITE_BE_ENV == "DEV") {
                     console.log(response);
                 }
                 if(response.data) {
@@ -108,7 +108,7 @@ function DocK22() {
                             }
                         })
                         .catch((error) => {
-                            if(process.env.REACT_APP_BE_ENV == "DEV") {
+                            if(import.meta.env.VITE_BE_ENV == "DEV") {
                                 console.log(error)
                             }
                             setListDataDetil([])
@@ -125,7 +125,7 @@ function DocK22() {
                 }
             })
             .catch((error) => {
-                if(process.env.REACT_APP_BE_ENV == "DEV") {
+                if(import.meta.env.VITE_BE_ENV == "DEV") {
                     console.log(error)
                 }
                 Swal.fire({
@@ -159,7 +159,7 @@ function DocK22() {
         const response = modelSurtug.simpanDetil(data);
             response
             .then((response) => {
-                if(process.env.REACT_APP_BE_ENV == "DEV") {
+                if(import.meta.env.VITE_BE_ENV == "DEV") {
                     console.log(response);
                 }
                 if(response.data) {
@@ -175,7 +175,7 @@ function DocK22() {
                 }
             })
             .catch((error) => {
-                if(process.env.REACT_APP_BE_ENV == "DEV") {
+                if(import.meta.env.VITE_BE_ENV == "DEV") {
                     console.log(error)
                 }
                 Swal.fire({
@@ -198,7 +198,7 @@ function DocK22() {
     //         }
     //     })
     //     .catch((error) => {
-    //         if(process.env.REACT_APP_BE_ENV == "DEV") {
+    //         if(import.meta.env.VITE_BE_ENV == "DEV") {
     //             console.log(error)
     //         }
     //         setListDataHeader([])
@@ -220,7 +220,7 @@ function DocK22() {
             }
         })
         .catch((error) => {
-            if(process.env.REACT_APP_BE_ENV == "DEV") {
+            if(import.meta.env.VITE_BE_ENV == "DEV") {
                 console.log(error)
             }
             setListDataDetil([])
@@ -303,7 +303,7 @@ function DocK22() {
                 }
             })
             .catch((error) => {
-                if(process.env.REACT_APP_BE_ENV == "DEV") {
+                if(import.meta.env.VITE_BE_ENV == "DEV") {
                     console.log(error)
                 }
                 setData(values => ({...values,
@@ -334,7 +334,7 @@ function DocK22() {
                 }
             })
             .catch((error) => {
-                if(process.env.REACT_APP_BE_ENV == "DEV") {
+                if(import.meta.env.VITE_BE_ENV == "DEV") {
                     console.log(error)
                 }
                 if(error.response.data.status == 404) {
@@ -379,7 +379,7 @@ function DocK22() {
                 }
             })
             .catch((error) => {
-                if(process.env.REACT_APP_BE_ENV == "DEV") {
+                if(import.meta.env.VITE_BE_ENV == "DEV") {
                     console.log(error)
                 }
                 setData(values => ({...values,
@@ -412,7 +412,7 @@ function DocK22() {
                 }
             })
             .catch((error) => {
-                if(process.env.REACT_APP_BE_ENV == "DEV") {
+                if(import.meta.env.VITE_BE_ENV == "DEV") {
                     console.log(error)
                 }
                 if(error.response.data.status == 404) {
@@ -638,7 +638,7 @@ function DocK22() {
                             </div>
                         </div>
                         {listDataDetil?.some(item => item.penugasan_id == 1) == true ? 
-                            (<button type='button' onClick={() => navigate(process.env.PUBLIC_URL + "/k37a")} className='btn btn-info pb-1 float-end'>
+                            (<button type='button' onClick={() => navigate("/k37a")} className='btn btn-info pb-1 float-end'>
                             <i className="bx bx-send bx-sm"></i>
                                 Pemeriksaan Administrasi
                             </button>)

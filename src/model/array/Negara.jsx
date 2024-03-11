@@ -12,7 +12,7 @@ function  Negara() {
          const response = await master.masterNegara()
          setDataNegara(response.data.data)
      } catch (error) {
-        if(process.env.REACT_APP_BE_ENV == "DEV") {
+        if(import.meta.env.VITE_BE_ENV == "DEV") {
             console.log(error)
         }
          setDataNegara([])

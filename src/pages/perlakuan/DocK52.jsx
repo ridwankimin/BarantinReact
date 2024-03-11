@@ -57,13 +57,13 @@ function DocK52() {
                     resHsy
                     .then((response) => {
                         if(response.data.status == 201) {
-                            if(process.env.REACT_APP_BE_ENV == "DEV") {
+                            if(import.meta.env.VITE_BE_ENV == "DEV") {
                                 console.log("history saved")
                             }
                         }
                     })
                     .catch((error) => {
-                        if(process.env.REACT_APP_BE_ENV == "DEV") {
+                        if(import.meta.env.VITE_BE_ENV == "DEV") {
                             console.log(error)
                         }
                     });
@@ -86,7 +86,7 @@ function DocK52() {
             }
         })
         .catch((error) => {
-            if(process.env.REACT_APP_BE_ENV == "DEV") {
+            if(import.meta.env.VITE_BE_ENV == "DEV") {
                 console.log(error)
             }
             Swal.fire({
@@ -153,7 +153,7 @@ function DocK52() {
                 }
             })
             .catch((error) => {
-                if(process.env.REACT_APP_BE_ENV == "DEV") {
+                if(import.meta.env.VITE_BE_ENV == "DEV") {
                     console.log(error)
                 }
                 Swal.fire({
@@ -198,7 +198,7 @@ function DocK52() {
                     if(response.data.status == 201) {
                         refreshListKomoditas()
                         setLoadKomoditi(false)
-                        if(process.env.REACT_APP_BE_ENV == "DEV") {
+                        if(import.meta.env.VITE_BE_ENV == "DEV") {
                             console.log("history saved")
                         }
                         Swal.fire({
@@ -217,7 +217,7 @@ function DocK52() {
                 .catch((error) => {
                     setLoadKomoditi(false)
                     setLoadKomoditiPesan("Terjadi error pada saat simpan, mohon refresh halaman dan coba lagi.")
-                    if(process.env.REACT_APP_BE_ENV == "DEV") {
+                    if(import.meta.env.VITE_BE_ENV == "DEV") {
                         console.log(error)
                     }
                     Swal.fire({
@@ -242,7 +242,7 @@ function DocK52() {
             }
         })
         .catch((error) => {
-            if(process.env.REACT_APP_BE_ENV == "DEV") {
+            if(import.meta.env.VITE_BE_ENV == "DEV") {
                 console.log(error)
             }
         });
@@ -308,7 +308,7 @@ function DocK52() {
                             }
                         })
                         .catch((error) => {
-                            if(process.env.REACT_APP_BE_ENV == "DEV") {
+                            if(import.meta.env.VITE_BE_ENV == "DEV") {
                                 console.log(error)
                             }
                             setData(values => ({...values,
@@ -330,7 +330,7 @@ function DocK52() {
             })
             .catch((error) => {
                 // setData()
-                if(process.env.REACT_APP_BE_ENV == "DEV") {
+                if(import.meta.env.VITE_BE_ENV == "DEV") {
                     console.log(error)
                 }
                 setData(values => ({...values,
@@ -364,7 +364,7 @@ function DocK52() {
                 }
             })
             .catch((error) => {
-                if(process.env.REACT_APP_BE_ENV == "DEV") {
+                if(import.meta.env.VITE_BE_ENV == "DEV") {
                     console.log(error)
                 }
                 if(error.response) {
@@ -427,7 +427,7 @@ function DocK52() {
             })
             .catch((error) => {
                 // setData()
-                if(process.env.REACT_APP_BE_ENV == "DEV") {
+                if(import.meta.env.VITE_BE_ENV == "DEV") {
                     console.log(error)
                 }
                 if(error.response.data.status == 404) {
@@ -479,7 +479,7 @@ function DocK52() {
                                     text: "Laporan Hasil Perlakuan belum dibuat.\nMohon buat laporan perlakuan terlebih dahulu!",
                                     icon: "warning"
                                 })
-                                navigate(process.env.PUBLIC_URL + '/k53')
+                                navigate('/k53')
                             }
                         } else {
                             setData(values => ({...values,
@@ -489,7 +489,7 @@ function DocK52() {
                     })
                     .catch((error) => {
                         // setData()
-                        if(process.env.REACT_APP_BE_ENV == "DEV") {
+                        if(import.meta.env.VITE_BE_ENV == "DEV") {
                             console.log(error)
                         }
                         if(error.response.status == 404) {
@@ -498,7 +498,7 @@ function DocK52() {
                                 text: "Laporan Hasil Perlakuan belum dibuat.\nMohon buat laporan perlakuan terlebih dahulu!",
                                 icon: "warning"
                             })
-                            navigate(process.env.PUBLIC_URL + '/k53')
+                            navigate('/k53')
                         } else {
                             setData(values => ({...values,
                                 errorData53: "Gagal load data laporan hasil perlakuan"
@@ -549,7 +549,7 @@ function DocK52() {
             })
             .catch((error) => {
                 // setData()
-                if(process.env.REACT_APP_BE_ENV == "DEV") {
+                if(import.meta.env.VITE_BE_ENV == "DEV") {
                     console.log(error)
                 }
                 setData(values => ({...values,
@@ -585,7 +585,7 @@ function DocK52() {
                 }
             })
             .catch((error) => {
-                if(process.env.REACT_APP_BE_ENV == "DEV") {
+                if(import.meta.env.VITE_BE_ENV == "DEV") {
                     console.log(error)
                 }
                 setData(values => ({...values,
@@ -620,7 +620,7 @@ function DocK52() {
                 }
             })
             .catch((error) => {
-                if(process.env.REACT_APP_BE_ENV == "DEV") {
+                if(import.meta.env.VITE_BE_ENV == "DEV") {
                     console.log(error)
                 }
                 if(error.response) {
@@ -684,7 +684,7 @@ function DocK52() {
             })
             .catch((error) => {
                 // setData()
-                if(process.env.REACT_APP_BE_ENV == "DEV") {
+                if(import.meta.env.VITE_BE_ENV == "DEV") {
                     console.log(error)
                 }
                 if(error.response.data.status == 404) {
@@ -744,7 +744,7 @@ function DocK52() {
                             text: "Laporan Hasil Perlakuan belum dibuat.\nMohon buat laporan perlakuan terlebih dahulu!",
                             icon: "warning"
                         })
-                        navigate(process.env.PUBLIC_URL + '/k53')
+                        navigate( '/k53')
                     }
                 } else {
                     setData(values => ({...values,
@@ -754,7 +754,7 @@ function DocK52() {
             })
             .catch((error) => {
                 // setData()
-                if(process.env.REACT_APP_BE_ENV == "DEV") {
+                if(import.meta.env.VITE_BE_ENV == "DEV") {
                     console.log(error)
                 }
                 if(error.response.status == 404) {
@@ -763,7 +763,7 @@ function DocK52() {
                         text: "Laporan Hasil Perlakuan belum dibuat.\nMohon buat laporan perlakuan terlebih dahulu!",
                         icon: "warning"
                     })
-                    navigate(process.env.PUBLIC_URL + '/k53')
+                    navigate('/k53')
                 } else {
                     setData(values => ({...values,
                         errorData53: "Gagal load data laporan hasil perlakuan"

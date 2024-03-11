@@ -57,13 +57,13 @@ function DocK37b() {
                     resHsy
                     .then((response) => {
                         if(response.data.status == 201) {
-                            if(process.env.REACT_APP_BE_ENV == "DEV") {
+                            if(import.meta.env.VITE_BE_ENV == "DEV") {
                                 console.log("history saved")
                             }
                         }
                     })
                     .catch((error) => {
-                        if(process.env.REACT_APP_BE_ENV == "DEV") {
+                        if(import.meta.env.VITE_BE_ENV == "DEV") {
                             console.log(error)
                         }
                     });
@@ -87,7 +87,7 @@ function DocK37b() {
             }
         })
         .catch((error) => {
-            if(process.env.REACT_APP_BE_ENV == "DEV") {
+            if(import.meta.env.VITE_BE_ENV == "DEV") {
                 console.log(error)
             }
             Swal.fire({
@@ -113,13 +113,13 @@ function DocK37b() {
                         resHsy
                         .then((response) => {
                             if(response.data.status == 201) {
-                                if(process.env.REACT_APP_BE_ENV == "DEV") {
+                                if(import.meta.env.VITE_BE_ENV == "DEV") {
                                     console.log("history saved")
                                 }
                             }
                         })
                         .catch((error) => {
-                            if(process.env.REACT_APP_BE_ENV == "DEV") {
+                            if(import.meta.env.VITE_BE_ENV == "DEV") {
                                 console.log(error)
                             }
                         });
@@ -144,7 +144,7 @@ function DocK37b() {
                 }
             })
             .catch((error) => {
-                if(process.env.REACT_APP_BE_ENV == "DEV") {
+                if(import.meta.env.VITE_BE_ENV == "DEV") {
                     console.log(error)
                 }
                 Swal.fire({
@@ -271,7 +271,7 @@ function DocK37b() {
                 }
             })
             .catch((error) => {
-                if(process.env.REACT_APP_BE_ENV == "DEV") {
+                if(import.meta.env.VITE_BE_ENV == "DEV") {
                     console.log(error)
                 }
                 if(error.response) {
@@ -313,7 +313,7 @@ function DocK37b() {
                 }
             })
             .catch((error) => {
-                if(process.env.REACT_APP_BE_ENV == "DEV") {
+                if(import.meta.env.VITE_BE_ENV == "DEV") {
                     console.log(error)
                 }
                 setData(values => ({...values,
@@ -342,7 +342,7 @@ function DocK37b() {
                 }
             })
             .catch((error) => {
-                if(process.env.REACT_APP_BE_ENV == "DEV") {
+                if(import.meta.env.VITE_BE_ENV == "DEV") {
                     console.log(error)
                 }
                 setData(values => ({...values,
@@ -373,7 +373,7 @@ function DocK37b() {
                 }
             })
             .catch((error) => {
-                if(process.env.REACT_APP_BE_ENV == "DEV") {
+                if(import.meta.env.VITE_BE_ENV == "DEV") {
                     console.log(error)
                 }
                 setData(values => ({...values,
@@ -405,7 +405,7 @@ function DocK37b() {
                     }
                 })
                 .catch((error) => {
-                    if(process.env.REACT_APP_BE_ENV == "DEV") {
+                    if(import.meta.env.VITE_BE_ENV == "DEV") {
                         console.log(error)
                     }
                     setData(values => ({...values,
@@ -437,7 +437,7 @@ function DocK37b() {
                     }
                 })
                 .catch((error) => {
-                    if(process.env.REACT_APP_BE_ENV == "DEV") {
+                    if(import.meta.env.VITE_BE_ENV == "DEV") {
                         console.log(error)
                     }
                     setData(values => ({...values,
@@ -471,7 +471,7 @@ function DocK37b() {
                 }
             })
             .catch((error) => {
-                if(process.env.REACT_APP_BE_ENV == "DEV") {
+                if(import.meta.env.VITE_BE_ENV == "DEV") {
                     console.log(error)
                 }
                 setData(values => ({...values,
@@ -506,7 +506,7 @@ function DocK37b() {
                 }
             })
             .catch((error) => {
-                if(process.env.REACT_APP_BE_ENV == "DEV") {
+                if(import.meta.env.VITE_BE_ENV == "DEV") {
                     console.log(error)
                 }
                 setData(values => ({...values,
@@ -539,7 +539,7 @@ function DocK37b() {
                 }
             })
             .catch((error) => {
-                if(process.env.REACT_APP_BE_ENV == "DEV") {
+                if(import.meta.env.VITE_BE_ENV == "DEV") {
                     console.log(error)
                 }
                 setData(values => ({...values,
@@ -573,7 +573,7 @@ function DocK37b() {
                     }
                 })
                 .catch((error) => {
-                    if(process.env.REACT_APP_BE_ENV == "DEV") {
+                    if(import.meta.env.VITE_BE_ENV == "DEV") {
                         console.log(error)
                     }
                     setData(values => ({...values,
@@ -604,7 +604,7 @@ function DocK37b() {
                     }
                 })
                 .catch((error) => {
-                    if(process.env.REACT_APP_BE_ENV == "DEV") {
+                    if(import.meta.env.VITE_BE_ENV == "DEV") {
                         console.log(error)
                     }
                     setData(values => ({...values,
@@ -659,7 +659,7 @@ function DocK37b() {
                 }
             })
             .catch((error) => {
-                if(process.env.REACT_APP_BE_ENV == "DEV") {
+                if(import.meta.env.VITE_BE_ENV == "DEV") {
                     console.log(error)
                 }
                 if(error.response) {
@@ -910,7 +910,7 @@ function DocK37b() {
                                     <button type="submit" className="btn btn-primary me-sm-2 me-1">Simpan</button>
                                     <button type="button" className="btn btn-danger me-sm-2 me-1">Batal</button>
                                     <a href={require("../../dok/k37a.pdf")} rel="noopener noreferrer" target='_blank' className="btn btn-warning"><i className="bx bx-printer bx-xs"></i>&nbsp; Print</a>
-                                    <button style={{display: (data.cekSimpan37b ? "block" : "none")}} type='button' onClick={() => navigate(process.env.PUBLIC_URL + '/k22')} className="btn btn-info pb-1 float-end">
+                                    <button style={{display: (data.cekSimpan37b ? "block" : "none")}} type='button' onClick={() => navigate('/k22')} className="btn btn-info pb-1 float-end">
                                         <span className="d-sm-inline-block d-none me-sm-1">Buat Surat Tugas</span>
                                         <i className="fa-solid fa-angle-right"></i>
                                     </button>
