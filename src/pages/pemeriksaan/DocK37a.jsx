@@ -53,13 +53,13 @@ function DocK37a() {
                     resHsy
                     .then((response) => {
                         if(response.data.status == 201) {
-                            if(process.env.REACT_APP_BE_ENV == "DEV") {
+                            if(import.meta.env.VITE_BE_ENV == "DEV") {
                                 console.log("history saved")
                             }
                         }
                     })
                     .catch((error) => {
-                        if(process.env.REACT_APP_BE_ENV == "DEV") {
+                        if(import.meta.env.VITE_BE_ENV == "DEV") {
                             console.log(error)
                         }
                     });
@@ -82,7 +82,7 @@ function DocK37a() {
             }
         })
         .catch((error) => {
-            if(process.env.REACT_APP_BE_ENV == "DEV") {
+            if(import.meta.env.VITE_BE_ENV == "DEV") {
                 console.log(error)
             }
             Swal.fire({
@@ -142,7 +142,7 @@ function DocK37a() {
                 }
             })
             .catch((error) => {
-                if(process.env.REACT_APP_BE_ENV == "DEV") {
+                if(import.meta.env.VITE_BE_ENV == "DEV") {
                     console.log(error)
                 }
                 if(error.response) {
@@ -189,7 +189,7 @@ function DocK37a() {
                 }
             })
             .catch((error) => {
-                if(process.env.REACT_APP_BE_ENV == "DEV") {
+                if(import.meta.env.VITE_BE_ENV == "DEV") {
                     console.log(error)
                 }
                 if(error.response) {
@@ -235,7 +235,7 @@ function DocK37a() {
                 }
             })
             .catch((error) => {
-                if(process.env.REACT_APP_BE_ENV == "DEV") {
+                if(import.meta.env.VITE_BE_ENV == "DEV") {
                     console.log(error)
                 }
                 setData(values => ({...values,
@@ -274,7 +274,7 @@ function DocK37a() {
                 }
             })
             .catch((error) => {
-                if(process.env.REACT_APP_BE_ENV == "DEV") {
+                if(import.meta.env.VITE_BE_ENV == "DEV") {
                     console.log(error)
                 }
                 if(error.response.data.status == 404) {
@@ -319,7 +319,7 @@ function DocK37a() {
                 }
             })
             .catch((error) => {
-                if(process.env.REACT_APP_BE_ENV == "DEV") {
+                if(import.meta.env.VITE_BE_ENV == "DEV") {
                     console.log(error)
                 }
                 if(error.response) {
@@ -366,7 +366,7 @@ function DocK37a() {
                 }
             })
             .catch((error) => {
-                if(process.env.REACT_APP_BE_ENV == "DEV") {
+                if(import.meta.env.VITE_BE_ENV == "DEV") {
                     console.log(error)
                 }
                 setData(values => ({...values,
@@ -407,7 +407,7 @@ function DocK37a() {
                 }
             })
             .catch((error) => {
-                if(process.env.REACT_APP_BE_ENV == "DEV") {
+                if(import.meta.env.VITE_BE_ENV == "DEV") {
                     console.log(error)
                 }
                 if(error.response.data.status == 404) {
@@ -698,7 +698,7 @@ function DocK37a() {
                                                                                         <td>{index + 1}</td>
                                                                                         <td>{data.nama_dokumen}</td>
                                                                                         <td>{data.no_dokumen}</td>
-                                                                                        <td><a href={process.env.REACT_APP_BE_LINK + data.efile} target='_blank' rel='noreferrer'>{data.efile}</a></td>
+                                                                                        <td><a href={import.meta.env.VITE_BE_LINK + data.efile} target='_blank' rel='noreferrer'>{data.efile}</a></td>
                                                                                     </tr>
                                                                                 ))
                                                                             ) : null
@@ -782,7 +782,7 @@ function DocK37a() {
                                     <button type="submit" className="btn btn-primary me-sm-2 me-1">Simpan</button>
                                     <button type="button" className="btn btn-danger me-sm-2 me-1" onClick={handlebatal}>Batal</button>
                                     <a href={require("../../dok/k37.pdf")} rel="noopener noreferrer" target='_blank' className="btn btn-warning"><i className="bx bx-printer bx-xs"></i>&nbsp; Print</a>
-                                    <button style={{display: (dataWatch.idDok37a ? "block" : "none")}} type='button' onClick={() => navigate(process.env.PUBLIC_URL + (dataWatch.rekomAdmin == "14" ? '/k37b' : '/k22'))} className="btn btn-info pb-1 float-end">
+                                    <button style={{display: (dataWatch.idDok37a ? "block" : "none")}} type='button' onClick={() => navigate((dataWatch.rekomAdmin == "14" ? '/k37b' : '/k22'))} className="btn btn-info pb-1 float-end">
                                         <span className="d-sm-inline-block d-none me-sm-1">{dataWatch.rekomAdmin == "14" ? "Pemeriksaan Fisik/Kesehatan" : "Buat Surat Tugas"}</span>
                                         <i className="fa-solid fa-angle-right"></i>
                                     </button>

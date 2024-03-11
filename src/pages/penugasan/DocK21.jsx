@@ -94,7 +94,7 @@ function DocK21() {
             }
         })
         .catch((error) => {
-            if(process.env.REACT_APP_BE_ENV == "DEV") {
+            if(import.meta.env.VITE_BE_ENV == "DEV") {
                 console.log(error)
             }
             Swal.fire({
@@ -160,7 +160,7 @@ function DocK21() {
                 }
             })
             .catch((error) => {
-                if(process.env.REACT_APP_BE_ENV == "DEV") {
+                if(import.meta.env.VITE_BE_ENV == "DEV") {
                     console.log(error)
                 }
                 setData(values => ({...values,
@@ -229,7 +229,7 @@ function DocK21() {
                 }
             })
             .catch((error) => {
-                if(process.env.REACT_APP_BE_ENV == "DEV") {
+                if(import.meta.env.VITE_BE_ENV == "DEV") {
                     console.log(error)
                 }
                 if(error.response) {
@@ -281,7 +281,7 @@ function DocK21() {
                 }
             })
             .catch((error) => {
-                if(process.env.REACT_APP_BE_ENV == "DEV") {
+                if(import.meta.env.VITE_BE_ENV == "DEV") {
                     console.log(error)
                 }
                 setData(values => ({...values,
@@ -352,7 +352,7 @@ function DocK21() {
                 }
             })
             .catch((error) => {
-                if(process.env.REACT_APP_BE_ENV == "DEV") {
+                if(import.meta.env.VITE_BE_ENV == "DEV") {
                     console.log(error)
                 }
                 if(error.response) {
@@ -800,7 +800,7 @@ function DocK21() {
                             <div className="col-sm-12">
                                 <button type="submit" className="btn btn-primary me-sm-2 me-1">Simpan</button>
                                 <button type="button" className="btn btn-danger me-sm-2 me-1">Batal</button>
-                                <button type='button' onClick={() => navigate(process.env.PUBLIC_URL + '/k22')} className="btn btn-info pb-1 float-end">
+                                <button type='button' onClick={() => navigate('/k22')} className="btn btn-info pb-1 float-end">
                                     <span className="d-sm-inline-block d-none me-sm-1">Buat Surat Tugas</span>
                                     <i className="fa-solid fa-angle-right"></i>
                                 </button>

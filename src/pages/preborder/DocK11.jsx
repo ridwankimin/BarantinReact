@@ -145,7 +145,7 @@ const customStyles = {
 }
 
 function DocK11() {
-    require("../../assets/vendor/libs/bs-stepper/bs-stepper.css")
+    import("../../assets/vendor/libs/bs-stepper/bs-stepper.css")
     // require("../../assets/vendor/libs/bs-stepper/bs-stepper.js")
     
     let navigate = useNavigate();
@@ -265,7 +265,7 @@ function DocK11() {
             }
         })
         .catch((error) => {
-            if(process.env.REACT_APP_BE_ENV == "DEV") {
+            if(import.meta.env.VITE_BE_ENV == "DEV") {
                 console.log(error)
             }
             Swal.fire({
@@ -515,7 +515,7 @@ function DocK11() {
                 setdataSelect(values => ({...values, provPenerima: arraySelectProv }))
             }
         } catch (error) {
-            if(process.env.REACT_APP_BE_ENV == "DEV") {
+            if(import.meta.env.VITE_BE_ENV == "DEV") {
                 console.log(error)
             }
             setdataSelect(values => ({...values, provPemohon: [] }))
@@ -542,7 +542,7 @@ function DocK11() {
                 setdataSelect(values => ({...values, [pel]: arraySelectKota}))
             }
         } catch (error) {
-        if(process.env.REACT_APP_BE_ENV == "DEV") {
+        if(import.meta.env.VITE_BE_ENV == "DEV") {
                 console.log(error)
             }
         setdataSelect(values => ({...values, [pel]: []}))
@@ -588,7 +588,7 @@ function DocK11() {
                 setdataSelect(values => ({...values, "kodeHSMp": arrayKodeHS}));
             })
             .catch((error) => {
-                if(process.env.REACT_APP_BE_ENV == "DEV") {
+                if(import.meta.env.VITE_BE_ENV == "DEV") {
                     console.log(error)
                 };
             });
@@ -619,13 +619,13 @@ function DocK11() {
                         setdataSelect(values => ({...values, "selectKomoditasMPKH": arrayKomKH}));
                     })
                     .catch((error) => {
-                        if(process.env.REACT_APP_BE_ENV == "DEV") {
+                        if(import.meta.env.VITE_BE_ENV == "DEV") {
                             console.log(error)
                         };
                     });
                 })
                 .catch((error) => {
-                    if(process.env.REACT_APP_BE_ENV == "DEV") {
+                    if(import.meta.env.VITE_BE_ENV == "DEV") {
                         console.log(error)
                     };
                 });
@@ -656,13 +656,13 @@ function DocK11() {
                         setdataSelect(values => ({...values, "selectKomoditasMP": arrayKomKT}))
                     })
                     .catch((error) => {
-                        if(process.env.REACT_APP_BE_ENV == "DEV") {
+                        if(import.meta.env.VITE_BE_ENV == "DEV") {
                             console.log(error)
                         };
                     });
                 })
                 .catch((error) => {
-                    if(process.env.REACT_APP_BE_ENV == "DEV") {
+                    if(import.meta.env.VITE_BE_ENV == "DEV") {
                         console.log(error)
                     };
                 });
@@ -695,13 +695,13 @@ function DocK11() {
                         }
                     })
                     .catch((error) => {
-                        if(process.env.REACT_APP_BE_ENV == "DEV") {
+                        if(import.meta.env.VITE_BE_ENV == "DEV") {
                             console.log(error)
                         };
                     });
                 })
                 .catch((error) => {
-                    if(process.env.REACT_APP_BE_ENV == "DEV") {
+                    if(import.meta.env.VITE_BE_ENV == "DEV") {
                         console.log(error)
                     };
                 });
@@ -740,7 +740,7 @@ function DocK11() {
                 }
             })
             .catch((error) => {
-                if(process.env.REACT_APP_BE_ENV == "DEV") {
+                if(import.meta.env.VITE_BE_ENV == "DEV") {
                     console.log(error)
                 };
                 Swal.fire({
@@ -783,18 +783,18 @@ function DocK11() {
                         .then((res) => {
                             if(res.data.status == 200) {
                                 setKomoditiPtk(res.data.data)
-                                setValueMP("nilaiBarang", nilaiMp + cekdataMP.nilaiBarang)
+                                setValueMP("nilaiBarang", parseFloat(nilaiMp) + parseFloat(cekdataMP.nilaiBarang))
                             }
                         })
                         .catch((error) => {
-                            if(process.env.REACT_APP_BE_ENV == "DEV") {
+                            if(import.meta.env.VITE_BE_ENV == "DEV") {
                                 console.log(error)
                             }
                         });
                     }
                 })
                 .catch((error) => {
-                    if(process.env.REACT_APP_BE_ENV == "DEV") {
+                    if(import.meta.env.VITE_BE_ENV == "DEV") {
                         console.log(error)
                     };
                 });
@@ -825,7 +825,7 @@ function DocK11() {
                 }
             })
             .catch((error) => {
-                if(process.env.REACT_APP_BE_ENV == "DEV") {
+                if(import.meta.env.VITE_BE_ENV == "DEV") {
                     console.log(error)
                 };
                 Swal.fire({
@@ -891,7 +891,7 @@ function DocK11() {
                         setWizardPage(wizardPage + 1)
                     })
                     .catch((error) => {
-                        if(process.env.REACT_APP_BE_ENV == "DEV") {
+                        if(import.meta.env.VITE_BE_ENV == "DEV") {
                             console.log(error)
                         };
                         Swal.fire({
@@ -932,7 +932,7 @@ function DocK11() {
                 }
             })
             .catch((error) => {
-                if(process.env.REACT_APP_BE_ENV == "DEV") {
+                if(import.meta.env.VITE_BE_ENV == "DEV") {
                     console.log(error)
                 };
                 Swal.fire({
@@ -978,7 +978,7 @@ function DocK11() {
                 }
             })
             .catch((error) => {
-                if(process.env.REACT_APP_BE_ENV == "DEV") {
+                if(import.meta.env.VITE_BE_ENV == "DEV") {
                     console.log(error)
                 };
                 Swal.fire({
@@ -1026,7 +1026,7 @@ function DocK11() {
                 }
             })
             .catch((error) => {
-                if(process.env.REACT_APP_BE_ENV == "DEV") {
+                if(import.meta.env.VITE_BE_ENV == "DEV") {
                     console.log(error)
                 };
                 Swal.fire({
@@ -1075,7 +1075,7 @@ function DocK11() {
                 }
             })
             .catch((error) => {
-                if(process.env.REACT_APP_BE_ENV == "DEV") {
+                if(import.meta.env.VITE_BE_ENV == "DEV") {
                     console.log(error)
                 };
                 Swal.fire({
@@ -1119,13 +1119,13 @@ function DocK11() {
                     resHsy
                     .then((response) => {
                         if(response.data.status == 201) {
-                            if(process.env.REACT_APP_BE_ENV == "DEV") {
+                            if(import.meta.env.VITE_BE_ENV == "DEV") {
                                 console.log("history saved")
                             }
                         }
                     })
                     .catch((error) => {
-                        if(process.env.REACT_APP_BE_ENV == "DEV") {
+                        if(import.meta.env.VITE_BE_ENV == "DEV") {
                             console.log(error)
                         }
                     });
@@ -1147,7 +1147,7 @@ function DocK11() {
                 }
             })
             .catch((error) => {
-                if(process.env.REACT_APP_BE_ENV == "DEV") {
+                if(import.meta.env.VITE_BE_ENV == "DEV") {
                     console.log(error)
                 };
                 Swal.fire({
@@ -1190,7 +1190,7 @@ function DocK11() {
             }
         })
         .catch((error) => {
-            if(process.env.REACT_APP_BE_ENV == "DEV") {
+            if(import.meta.env.VITE_BE_ENV == "DEV") {
                 console.log(error)
             }
             Swal.fire({
@@ -1282,7 +1282,7 @@ function DocK11() {
                 }
             })
             .catch((error) => {
-                if(process.env.REACT_APP_BE_ENV == "DEV") {
+                if(import.meta.env.VITE_BE_ENV == "DEV") {
                     console.log(error)
                 }
             });
@@ -1300,7 +1300,7 @@ function DocK11() {
                 }
             })
             .catch((error) => {
-                if(process.env.REACT_APP_BE_ENV == "DEV") {
+                if(import.meta.env.VITE_BE_ENV == "DEV") {
                     console.log(error)
                 }
             });
@@ -1318,7 +1318,7 @@ function DocK11() {
                 }
             })
             .catch((error) => {
-                if(process.env.REACT_APP_BE_ENV == "DEV") {
+                if(import.meta.env.VITE_BE_ENV == "DEV") {
                     console.log(error)
                 }
             });
@@ -1366,7 +1366,7 @@ function DocK11() {
             }
         })
         .catch((error) => {
-            if(process.env.REACT_APP_BE_ENV == "DEV") {
+            if(import.meta.env.VITE_BE_ENV == "DEV") {
                 console.log(error)
             }
         });
@@ -1450,7 +1450,7 @@ function DocK11() {
             }
         })
         .catch((error) => {
-            if(process.env.REACT_APP_BE_ENV == "DEV") {
+            if(import.meta.env.VITE_BE_ENV == "DEV") {
                 console.log(error)
             }
         });
@@ -1503,7 +1503,7 @@ function DocK11() {
                             setdataSelect(values => ({...values, "kodeHSMp": arrayDataHS}));
                         })
                         .catch((error) => {
-                            if(process.env.REACT_APP_BE_ENV == "DEV") {
+                            if(import.meta.env.VITE_BE_ENV == "DEV") {
                                 console.log(error)
                             };
                         });
@@ -1523,7 +1523,7 @@ function DocK11() {
                                 setdataSelect(values => ({...values, "kodeHSMp": arrayKodeHS}));
                             })
                             .catch((error) => {
-                                if(process.env.REACT_APP_BE_ENV == "DEV") {
+                                if(import.meta.env.VITE_BE_ENV == "DEV") {
                                     console.log(error)
                                 };
                             });
@@ -1542,7 +1542,7 @@ function DocK11() {
                                     setdataSelect(values => ({...values, "peruntukanMPKH": arraySelectKlasKH}));
                                 })
                                 .catch((error) => {
-                                    if(process.env.REACT_APP_BE_ENV == "DEV") {
+                                    if(import.meta.env.VITE_BE_ENV == "DEV") {
                                         console.log(error)
                                     };
                                 });
@@ -1560,7 +1560,7 @@ function DocK11() {
                                     setdataSelect(values => ({...values, "selectKomoditasMPKH": arrayKomKH}));
                                 })
                                 .catch((error) => {
-                                    if(process.env.REACT_APP_BE_ENV == "DEV") {
+                                    if(import.meta.env.VITE_BE_ENV == "DEV") {
                                         console.log(error)
                                     };
                                 });
@@ -1579,7 +1579,7 @@ function DocK11() {
                                     setdataSelect(values => ({...values, "peruntukanMP": arraySelectKlasKT}))
                                 })
                                 .catch((error) => {
-                                    if(process.env.REACT_APP_BE_ENV == "DEV") {
+                                    if(import.meta.env.VITE_BE_ENV == "DEV") {
                                         console.log(error)
                                     };
                                 });
@@ -1597,7 +1597,7 @@ function DocK11() {
                                     setdataSelect(values => ({...values, "selectKomoditasMP": arrayKomKT}))
                                 })
                                 .catch((error) => {
-                                    if(process.env.REACT_APP_BE_ENV == "DEV") {
+                                    if(import.meta.env.VITE_BE_ENV == "DEV") {
                                         console.log(error)
                                     };
                                 });
@@ -1616,7 +1616,7 @@ function DocK11() {
                                     setdataSelect(values => ({...values, "peruntukanMPKI": arraySelectKlasKI}))
                                 })
                                 .catch((error) => {
-                                    if(process.env.REACT_APP_BE_ENV == "DEV") {
+                                    if(import.meta.env.VITE_BE_ENV == "DEV") {
                                         console.log(error)
                                     };
                                 });
@@ -1636,7 +1636,7 @@ function DocK11() {
                                     }
                                 })
                                 .catch((error) => {
-                                    if(process.env.REACT_APP_BE_ENV == "DEV") {
+                                    if(import.meta.env.VITE_BE_ENV == "DEV") {
                                         console.log(error)
                                     };
                                 });
@@ -1821,7 +1821,7 @@ function DocK11() {
                 }
             })
             .catch((error) => {
-                if(process.env.REACT_APP_BE_ENV == "DEV") {
+                if(import.meta.env.VITE_BE_ENV == "DEV") {
                     console.log(error)
                 };
             });
@@ -3339,7 +3339,7 @@ function DocK11() {
                                                                                         <td>{moment(data.tanggal_dokumen).format('YYYY-MM-DD')}</td>
                                                                                         <td>{data.negara}</td>
                                                                                         <td>{data.keterangan}</td>
-                                                                                        <td><a href={process.env.REACT_APP_BE_LINK + data.efile} target='_blank' rel='noreferrer'>[LIHAT FILE]</a></td>
+                                                                                        <td><a href={import.meta.env.VITE_BE_LINK + data.efile} target='_blank' rel='noreferrer'>[LIHAT FILE]</a></td>
                                                                                         <td>
                                                                                             <div className="d-grid gap-2">
                                                                                                 <button type="button" className="btn p-0 hide-arrow dropdown-toggle" aria-expanded="false" data-bs-toggle="dropdown">
@@ -3524,16 +3524,16 @@ function DocK11() {
                                         </div>
                                         <div className='row'>
                                             <div className='col-sm-2'>
-                                                <button className='btn btn-dark' type='submit'>Proses PTK</button>
+                                                <button className='btn btn-dark' disabled={dataIdPage.noPermohonan == '' ? false : true} type='submit'>Proses PTK</button>
                                             </div>
                                             <div className='col-sm-2'>
-                                                <a className='btn btn-warning pb-1' href={require("../../dok/k11.pdf")} rel="noopener noreferrer" target='_blank'>
+                                                <a className='btn btn-warning pb-1' href={import("../../dok/k11.pdf")} rel="noopener noreferrer" target='_blank'>
                                                     <i className="fa-solid fa-printer fa-sm"></i>
                                                     print
                                                 </a>
                                             </div>
                                             <div className='col-sm-8'>
-                                                <button type='button' onClick={() => navigate(process.env.PUBLIC_URL + '/k21')} className="btn btn-info pb-1 float-end">
+                                                <button type='button' onClick={() => navigate('/k21')} className="btn btn-info pb-1 float-end">
                                                     <span className="d-sm-inline-block d-none me-sm-1">Form Analisa</span>
                                                     <i className="fa-solid fa-angle-right"></i>
                                                 </button>

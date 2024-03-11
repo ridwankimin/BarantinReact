@@ -50,13 +50,13 @@ function DocK74() {
                     resHsy
                     .then((response) => {
                         if(response.data.status == 201) {
-                            if(process.env.REACT_APP_BE_ENV == "DEV") {
+                            if(import.meta.env.VITE_BE_ENV == "DEV") {
                                 console.log("history saved")
                             }
                         }
                     })
                     .catch((error) => {
-                        if(process.env.REACT_APP_BE_ENV == "DEV") {
+                        if(import.meta.env.VITE_BE_ENV == "DEV") {
                             console.log(error)
                         }
                     });
@@ -74,7 +74,7 @@ function DocK74() {
             }
         })
         .catch((error) => {
-            if(process.env.REACT_APP_BE_ENV == "DEV") {
+            if(import.meta.env.VITE_BE_ENV == "DEV") {
                 console.log(error)
             }
             Swal.fire({
@@ -127,7 +127,7 @@ function DocK74() {
                             }
                         })
                         .catch((error) => {
-                            if(process.env.REACT_APP_BE_ENV == "DEV") {
+                            if(import.meta.env.VITE_BE_ENV == "DEV") {
                                 console.log(error)
                             }
                             setData(values => ({...values,
@@ -146,7 +146,7 @@ function DocK74() {
                 }
             })
             .catch((error) => {
-                if(process.env.REACT_APP_BE_ENV == "DEV") {
+                if(import.meta.env.VITE_BE_ENV == "DEV") {
                     console.log(error)
                 }
                 if(error.response) {
@@ -203,7 +203,7 @@ function DocK74() {
                 }
             })
             .catch((error) => {
-                if(process.env.REACT_APP_BE_ENV == "DEV") {
+                if(import.meta.env.VITE_BE_ENV == "DEV") {
                     console.log(error)
                 }
                 if(error.response) {
@@ -234,7 +234,7 @@ function DocK74() {
                             }
                         })
                         .catch((error) => {
-                            if(process.env.REACT_APP_BE_ENV == "DEV") {
+                            if(import.meta.env.VITE_BE_ENV == "DEV") {
                                 console.log(error)
                             }
                             if(error.response) {
@@ -285,7 +285,7 @@ function DocK74() {
                 }
             })
             .catch((error) => {
-                if(process.env.REACT_APP_BE_ENV == "DEV") {
+                if(import.meta.env.VITE_BE_ENV == "DEV") {
                     console.log(error)
                 }
                 if(error.response) {
@@ -325,7 +325,7 @@ function DocK74() {
                 }
             })
             .catch((error) => {
-                if(process.env.REACT_APP_BE_ENV == "DEV") {
+                if(import.meta.env.VITE_BE_ENV == "DEV") {
                     console.log(error)
                 }
                 if(error.response) {
@@ -360,7 +360,7 @@ function DocK74() {
                 }
             })
             .catch((error) => {
-                if(process.env.REACT_APP_BE_ENV == "DEV") {
+                if(import.meta.env.VITE_BE_ENV == "DEV") {
                     console.log(error)
                 }
                 setData(values => ({...values,
@@ -396,7 +396,7 @@ function DocK74() {
                 }
             })
             .catch((error) => {
-                if(process.env.REACT_APP_BE_ENV == "DEV") {
+                if(import.meta.env.VITE_BE_ENV == "DEV") {
                     console.log(error)
                 }
                 if(error.response) {
@@ -451,7 +451,7 @@ function DocK74() {
                 }
             })
             .catch((error) => {
-                if(process.env.REACT_APP_BE_ENV == "DEV") {
+                if(import.meta.env.VITE_BE_ENV == "DEV") {
                     console.log(error)
                 }
                 if(error.response.status == 404) {
@@ -495,7 +495,7 @@ function DocK74() {
                 }
             })
             .catch((error) => {
-                if(process.env.REACT_APP_BE_ENV == "DEV") {
+                if(import.meta.env.VITE_BE_ENV == "DEV") {
                     console.log(error)
                 }
                 if(error.response) {

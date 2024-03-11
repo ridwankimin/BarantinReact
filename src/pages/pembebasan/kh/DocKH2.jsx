@@ -13,6 +13,7 @@ import UptNew from '../../../model/master/uptNewGrouping.json';
 import SpinnerDot from '../../../component/loading/SpinnerDot';
 import Select from 'react-select';
 import Swal from 'sweetalert2';
+import PrintKh2 from '../../../component/cetak/pembebasan/PrintKh2';
 
 const log = new PtkHistory()
 const modelPemohon = new PtkModel()
@@ -117,7 +118,7 @@ function DocKH2() {
                     if(response.data.status == 201) {
                         refreshListKomoditas()
                         setLoadKomoditi(false)
-                        if(process.env.REACT_APP_BE_ENV == "DEV") {
+                        if(import.meta.env.VITE_BE_ENV == "DEV") {
                             console.log("history saved")
                         }
                         Swal.fire({
@@ -136,7 +137,7 @@ function DocKH2() {
                 .catch((error) => {
                     setLoadKomoditi(false)
                     setLoadKomoditiPesan("Terjadi error pada saat simpan, mohon refresh halaman dan coba lagi.")
-                    if(process.env.REACT_APP_BE_ENV == "DEV") {
+                    if(import.meta.env.VITE_BE_ENV == "DEV") {
                         console.log(error)
                     }
                     Swal.fire({
@@ -177,13 +178,13 @@ function DocKH2() {
                     resHsy
                     .then((response) => {
                         if(response.data.status == 201) {
-                            if(process.env.REACT_APP_BE_ENV == "DEV") {
+                            if(import.meta.env.VITE_BE_ENV == "DEV") {
                                 console.log("history saved")
                             }
                         }
                     })
                     .catch((error) => {
-                        if(process.env.REACT_APP_BE_ENV == "DEV") {
+                        if(import.meta.env.VITE_BE_ENV == "DEV") {
                             console.log(error)
                         }
                     });
@@ -206,7 +207,7 @@ function DocKH2() {
             }
         })
         .catch((error) => {
-            if(process.env.REACT_APP_BE_ENV == "DEV") {
+            if(import.meta.env.VITE_BE_ENV == "DEV") {
                 console.log(error)
             }
             Swal.fire({
@@ -228,7 +229,7 @@ function DocKH2() {
             }
         })
         .catch((error) => {
-            if(process.env.REACT_APP_BE_ENV == "DEV") {
+            if(import.meta.env.VITE_BE_ENV == "DEV") {
                 console.log(error)
             }
         });
@@ -290,7 +291,7 @@ function DocKH2() {
                 }
             })
             .catch((error) => {
-                if(process.env.REACT_APP_BE_ENV == "DEV") {
+                if(import.meta.env.VITE_BE_ENV == "DEV") {
                     console.log(error)
                 }
                 Swal.fire({
@@ -367,7 +368,7 @@ function DocKH2() {
                             }
                         })
                         .catch((error) => {
-                            if(process.env.REACT_APP_BE_ENV == "DEV") {
+                            if(import.meta.env.VITE_BE_ENV == "DEV") {
                                 console.log(error)
                             }
                             setData(values => ({...values,
@@ -394,7 +395,7 @@ function DocKH2() {
                 }
             })
             .catch((error) => {
-                if(process.env.REACT_APP_BE_ENV == "DEV") {
+                if(import.meta.env.VITE_BE_ENV == "DEV") {
                     console.log(error)
                 }
                 setData(values => ({...values,
@@ -445,7 +446,7 @@ function DocKH2() {
                 }
             })
             .catch((error) => {
-                if(process.env.REACT_APP_BE_ENV == "DEV") {
+                if(import.meta.env.VITE_BE_ENV == "DEV") {
                     console.log(error)
                 }
                 if(error.response.data.status == 404){
@@ -491,7 +492,7 @@ function DocKH2() {
                 }
             })
             .catch((error) => {
-                if(process.env.REACT_APP_BE_ENV == "DEV") {
+                if(import.meta.env.VITE_BE_ENV == "DEV") {
                     console.log(error)
                 }
                 if(error.response.data.status == 404) {
@@ -538,7 +539,7 @@ function DocKH2() {
                 }
             })
             .catch((error) => {
-                if(process.env.REACT_APP_BE_ENV == "DEV") {
+                if(import.meta.env.VITE_BE_ENV == "DEV") {
                     console.log(error)
                 }
                 setData(values => ({...values,
@@ -580,7 +581,7 @@ function DocKH2() {
                 }
             })
             .catch((error) => {
-                if(process.env.REACT_APP_BE_ENV == "DEV") {
+                if(import.meta.env.VITE_BE_ENV == "DEV") {
                     console.log(error)
                 }
                 setData(values => ({...values,
@@ -632,7 +633,7 @@ function DocKH2() {
                 }
             })
             .catch((error) => {
-                if(process.env.REACT_APP_BE_ENV == "DEV") {
+                if(import.meta.env.VITE_BE_ENV == "DEV") {
                     console.log(error)
                 }
                 if(error.response.data.status == 404){
@@ -680,7 +681,7 @@ function DocKH2() {
                 }
             })
             .catch((error) => {
-                if(process.env.REACT_APP_BE_ENV == "DEV") {
+                if(import.meta.env.VITE_BE_ENV == "DEV") {
                     console.log(error)
                 }
                 if(error.response.data.status == 404) {
@@ -1071,12 +1072,26 @@ function DocKH2() {
                                 <div className="offset-sm-2 col-sm-9">
                                     <button type="submit" className="btn btn-primary me-sm-2 me-1"><i className='fa-solid fa-save me-sm-2 me-1'></i> Simpan</button>
                                     <button type="button" className="btn btn-danger btn-label-secondary me-sm-2 me-1"><i className='fa-solid fa-cancel me-sm-2 me-1'></i> Batal</button>
-                                    <button type="button" className="btn btn-warning btn-label-secondary me-sm-2 me-1"><i className='fa-solid fa-print me-sm-2 me-1'></i> Print</button>
+                                    <button type="button" className="btn btn-warning btn-label-secondary me-sm-2 me-1" data-bs-toggle="modal" data-bs-target="#modPrint"><i className='fa-solid fa-print me-sm-2 me-1'></i> Print</button>
                                     <button type="button" style={{display: (cekWatch.idDokh2 ? "block" : "none")}} className="float-end btn btn-info btn-label-secondary"><i className='tf-icons fa-solid fa-paper-plane me-sm-2 me-1'></i> TTE</button>
                                 </div>
                             </div>
                         </div>
                     </form>
+                </div>
+            </div>
+        </div>
+
+        <div className="modal fade" id="modPrint" tabIndex="-1">
+            <div className="modal-dialog modal-fullscreen">
+                <div className="modal-content p-3 pb-1">
+                    <div className="modal-body">
+                        <button type="button" className="btn-close float-end" data-bs-dismiss="modal" aria-label="Close"></button>
+                        <div className="text-center mb-4">
+                            <h3 className="address-title">Cetak Dokumen</h3>
+                        </div>
+                        <PrintKh2 dataCetak={data} />
+                    </div>
                 </div>
             </div>
         </div>

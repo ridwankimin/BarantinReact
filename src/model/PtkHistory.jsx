@@ -1,7 +1,8 @@
 
 import axios from "axios";
 import Cookies from "js-cookie";
-const url = process.env.REACT_APP_BE_LINK;
+// const url = process.env.REACT_APP_BE_LINK;
+const url = import.meta.env.VITE_BE_LINK;
 
 export default class PtkHistory {
   pushHistory(idPtk, statusP8, dokumen, stat) {

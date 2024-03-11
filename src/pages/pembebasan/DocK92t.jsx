@@ -73,13 +73,13 @@ function DocK92t() {
                     resHsy
                     .then((response) => {
                         if(response.data.status == 201) {
-                            if(process.env.REACT_APP_BE_ENV == "DEV") {
+                            if(import.meta.env.VITE_BE_ENV == "DEV") {
                                 console.log("history saved")
                             }
                         }
                     })
                     .catch((error) => {
-                        if(process.env.REACT_APP_BE_ENV == "DEV") {
+                        if(import.meta.env.VITE_BE_ENV == "DEV") {
                             console.log(error)
                         }
                     });
@@ -92,7 +92,7 @@ function DocK92t() {
             }
         })
         .catch((error) => {
-            if(process.env.REACT_APP_BE_ENV == "DEV") {
+            if(import.meta.env.VITE_BE_ENV == "DEV") {
                 console.log(error)
             }
             alert(error.response.status + " - " + error.response.data.message)
@@ -118,7 +118,7 @@ function DocK92t() {
             log.updateKomoditiP8(item.id, datasend[index])
                 .then((response) => {
                     if(response.data.status == 201) {
-                        if(process.env.REACT_APP_BE_ENV == "DEV") {
+                        if(import.meta.env.VITE_BE_ENV == "DEV") {
                             console.log("history saved")
                         }
                     }
@@ -126,7 +126,7 @@ function DocK92t() {
                 .catch((error) => {
                     setLoadKomoditi(true)
                     setLoadKomoditiPesan("Terjadi error pada saat simpan, mohon refresh halaman dan coba lagi.")
-                    if(process.env.REACT_APP_BE_ENV == "DEV") {
+                    if(import.meta.env.VITE_BE_ENV == "DEV") {
                         console.log(error)
                     }
                 })
@@ -195,7 +195,7 @@ function DocK92t() {
                 }
             })
             .catch((error) => {
-                if(process.env.REACT_APP_BE_ENV == "DEV") {
+                if(import.meta.env.VITE_BE_ENV == "DEV") {
                     console.log(error)
                 }
             });
@@ -217,7 +217,7 @@ function DocK92t() {
                 }
             })
             .catch((error) => {
-                if(process.env.REACT_APP_BE_ENV == "DEV") {
+                if(import.meta.env.VITE_BE_ENV == "DEV") {
                     console.log(error)
                 }
             });
