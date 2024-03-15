@@ -779,6 +779,7 @@ function DocK37a() {
                             </div>
                             <div className="row">
                                 <div className="col-sm-12">
+                                    
                                     <button type="submit" className="btn btn-primary me-sm-2 me-1">Simpan</button>
                                     <button type="button" className="btn btn-danger me-sm-2 me-1" onClick={handlebatal}>Batal</button>
                                     <a href={import("../../dok/k37.pdf")} rel="noopener noreferrer" target='_blank' className="btn btn-warning"><i className="bx bx-printer bx-xs"></i>&nbsp; Print</a>
