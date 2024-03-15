@@ -47,7 +47,11 @@ const modelSurtug = new PtkSurtug()
 //     }),
 //   };
 
-const addCommas = num => num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+const addCommas = num => {
+    var parts = num.toString().split(".");
+    parts[0] = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+    return parts.join(".");
+};
 const removeNonNumeric = num => num.toString().replace(/[^0-9.]/g, "");
 
 function DocKT1() {
@@ -123,7 +127,7 @@ function DocKT1() {
             if(response.data) {
                 if(response.data.status == 201) {
                     //start save history
-                    const resHsy = log.pushHistory(data.idPtk, "p8", "K-T.1", (data.idDokKT1 ? 'UPDATE' : 'NEW'));
+                    const resHsy = log.pushHistory(data.idPtk, "p8", "KT-1", (data.idDokKT1 ? 'UPDATE' : 'NEW'));
                     resHsy
                     .then((response) => {
                         if(response.data.status == 201) {

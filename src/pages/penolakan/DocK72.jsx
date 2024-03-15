@@ -25,7 +25,11 @@ function alasan() {
 //     return Pemberitahuan.filter((element) => element.dok_id == 29)
 // }
 
-const addCommas = num => num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+const addCommas = num => {
+    var parts = num.toString().split(".");
+    parts[0] = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+    return parts.join(".");
+};
 const removeNonNumeric = num => num.toString().replace(/[^0-9.]/g, "");
 
 const log = new PtkHistory()

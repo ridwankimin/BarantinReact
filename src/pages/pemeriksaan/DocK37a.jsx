@@ -12,6 +12,7 @@ import ModaAlatAngkut from '../../model/master/modaAlatAngkut.json'
 import HasilAnalisis from '../../model/master/hasilAnalisis.json'
 import Rekomendasi from '../../model/master/rekomendasi.json'
 import Swal from 'sweetalert2';
+import LoadBtn from '../../component/loading/LoadBtn';
 
 const model = new PtkPemeriksaan()
 const modelSurtug = new PtkSurtug()
@@ -779,8 +780,9 @@ function DocK37a() {
                             </div>
                             <div className="row">
                                 <div className="col-sm-12">
-                                    
-                                    <button type="submit" className="btn btn-primary me-sm-2 me-1">Simpan</button>
+                                    {onLoad ? <LoadBtn warna="btn-primary" ukuran="" /> :
+                                        <button type="submit" className="btn btn-primary me-sm-2 me-1">Simpan</button>
+                                    }
                                     <button type="button" className="btn btn-danger me-sm-2 me-1" onClick={handlebatal}>Batal</button>
                                     <a href={import("../../dok/k37.pdf")} rel="noopener noreferrer" target='_blank' className="btn btn-warning"><i className="bx bx-printer bx-xs"></i>&nbsp; Print</a>
                                     <button style={{display: (dataWatch.idDok37a ? "block" : "none")}} type='button' onClick={() => navigate((dataWatch.rekomAdmin == "14" ? '/k37b' : '/k22'))} className="btn btn-info pb-1 float-end">

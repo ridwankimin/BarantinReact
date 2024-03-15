@@ -109,7 +109,7 @@ function DocK37b() {
                 if(response.data) {
                     if(response.data.status == 201) {
                         //start save history
-                        const resHsy = log.pushHistory(data.idPtk, "p1b", "K-3.7b", (data.idDok37b ? 'put' : 'post'));
+                        const resHsy = log.pushHistory(data.idPtk, "p1b", "K-3.7b", (data.idDok37b ? 'UPDATE' : 'NEW'));
                         resHsy
                         .then((response) => {
                             if(response.data.status == 201) {

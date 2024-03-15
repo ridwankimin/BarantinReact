@@ -18,7 +18,11 @@ import PrintKh2 from '../../../component/cetak/pembebasan/PrintKh2';
 const log = new PtkHistory()
 const modelPemohon = new PtkModel()
 const modelPelepasan = new PnPelepasan()
-const addCommas = num => num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+const addCommas = num => {
+    var parts = num.toString().split(".");
+    parts[0] = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+    return parts.join(".");
+};
 const removeNonNumeric = num => num.toString().replace(/[^0-9.]/g, "");
 
 const customStyles = {
@@ -174,7 +178,7 @@ function DocKH2() {
                 if(response.data.status == 201) {
                     //start save history
                     // const log = new PtkHistory();
-                    const resHsy = log.pushHistory(data.idPtk, "p8", "KH.2", (data.idDokh2 ? 'UPDATE' : 'NEW'));
+                    const resHsy = log.pushHistory(data.idPtk, "p8", "KH-2", (data.idDokh2 ? 'UPDATE' : 'NEW'));
                     resHsy
                     .then((response) => {
                         if(response.data.status == 201) {

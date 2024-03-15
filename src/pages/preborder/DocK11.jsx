@@ -29,7 +29,12 @@ const modelPemohon = new PtkModel()
 const modelMaster = new Master()
 const log = new PtkHistory()
 
-const addCommas = num => num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+const addCommas = num => {
+    // num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+    var parts = num.toString().split(".");
+    parts[0] = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+    return parts.join(".");
+}
 const removeNonNumeric = num => num.toString().replace(/[^0-9.]/g, "");
 
 function negaraSelectByNamaEn(e) {
@@ -794,7 +799,14 @@ function DocK11() {
                         .then((res) => {
                             if(res.data.status == 200) {
                                 setKomoditiPtk(res.data.data)
-                                setValueMP("nilaiBarang", parseFloat(typeof nilaiMp == "string" ? nilaiMp.replace(",", "") : nilaiMp) + parseFloat(typeof cekdataMP.nilaiBarang == "string" ? cekdataMP.nilaiBarang.replace(",", "") : cekdataMP.nilaiBarang))
+                                let sumVol = 0
+                                if(res.data.data?.length > 0) {
+                                    var arrayNilai = res.data.data?.map(item => {
+                                        return item.harga
+                                    })
+                                    sumVol = arrayNilai.reduce((partialSum, a) => partialSum + a, 0);
+                                }
+                                setValueMP("nilaiBarang", sumVol)
                             }
                         })
                         .catch((error) => {
@@ -3692,7 +3704,7 @@ function DocK11() {
                         </div>
                         </div>
                         <div className="col-md-6 text-center mt-4">
-                        {onLoad ? <LoadBtn warna="btn-success" ukuran="btn-sm" /> :
+                        {onLoad ? <LoadBtn warna="btn-primary" ukuran="btn-sm" /> :
                             <button type="submit" className="btn btn-sm btn-primary me-sm-3 me-1">{cekDataKontainer.idDataKontainer ? "Edit" : "Tambah"}</button>
                         }
                         <button
@@ -4092,7 +4104,7 @@ function DocK11() {
                                 <label className="form-label" htmlFor="nilaiBarangMPKH">Nilai Barang</label>
                                 <div className='row'>
                                     <div className="col-md-7" style={{paddingRight: '2px'}}>
-                                        <input autoComplete="off" type="text" className='form-control form-control-sm' value={cekdataDetilMP.nilaiBarangMPKH ? addCommas(removeNonNumeric(cekdataDetilMP.nilaiBarangMPKH)) : ""} name='nilaiBarangMPKH' id='nilaiBarangMPKH' {...registerDetilMP("nilaiBarangMPKH", {required: "Mohon isi nilai barang"})} />
+                                        <input autoComplete="off" type="text" className='form-control form-control-sm' value={cekdataDetilMP.nilaiBarangMPKH ? addCommas(removeNonNumeric(cekdataDetilMP.nilaiBarangMPKH))  : ""} name='nilaiBarangMPKH' id='nilaiBarangMPKH' {...registerDetilMP("nilaiBarangMPKH", {required: "Mohon isi nilai barang"})} />
                                     </div>
                                     <div className="col-md-5" style={{paddingLeft: '2px'}}>
                                         <input type="hidden" value="IDR" id='satuanNilaiMPKH' name='satuanNilaiMPKH' {...registerMP("satuanNilaiMPKH")}/>
@@ -4268,7 +4280,7 @@ function DocK11() {
                         }
                         <small className='text-danger'>*Format penulisan desimal menggunakan titik ( . )</small>
                         <div className="col-md-12 text-center">
-                            {onLoad ? <LoadBtn warna="btn-success" ukuran="" /> :
+                            {onLoad ? <LoadBtn warna="btn-primary" ukuran="" /> :
                                 <button type="submit" className="btn btn-primary me-sm-3 me-1">{cekdataDetilMP.idDetilMP ? "Edit" : "Tambah"}</button>
                             }
                             <button

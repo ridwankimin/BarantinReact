@@ -50,7 +50,11 @@ function listUptNewById(e) {
     }
 }
 
-const addCommas = num => num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+const addCommas = num => {
+    var parts = num.toString().split(".");
+    parts[0] = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+    return parts.join(".");
+};
 const removeNonNumeric = num => num.toString().replace(/[^0-9.]/g, "");
 
 const customStyles = {
@@ -157,7 +161,7 @@ function DocKT3() {
             if(response.data) {
                 if(response.data.status == 201) {
                     //start save history
-                    const resHsy = log.pushHistory(data.idPtk, "p8", "K-T.3", (data.idDokKT3 ? 'UPDATE' : 'NEW'));
+                    const resHsy = log.pushHistory(data.idPtk, "p8", "KT-3", (data.idDokKT3 ? 'UPDATE' : 'NEW'));
                     resHsy
                     .then((response) => {
                         if(response.data.status == 201) {
