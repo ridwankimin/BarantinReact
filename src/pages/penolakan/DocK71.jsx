@@ -298,7 +298,7 @@ function DocK71() {
                 })
             }))
         )
-        setLoadKomoditi(true)
+        setLoadKomoditi(false)
     }
 
     function refreshListKomoditas() {
@@ -838,7 +838,7 @@ function DocK71() {
                                                 <div className="row">
                                                     <label className="col-sm-4 col-form-label" htmlFor="identitasAngkut">Jenis, Nama Alat Angkut</label>
                                                     <div className="col-sm-8">
-                                                        <input name="identitasAngkut" className="form-control form-control-sm" disabled value={(data.listPtk ? (modaAlatAngkut(data.listPtk.tipe_alat_angkut_terakhir_id).nama + ", " + data.listPtk.nama_alat_angkut_terakhir) : "") || "" } id="identitasAngkut" />
+                                                        <input name="identitasAngkut" className="form-control form-control-sm" disabled value={(data.listPtk ? (modaAlatAngkut(data.listPtk.moda_alat_angkut_terakhir_id).nama + ", " + data.listPtk.nama_alat_angkut_terakhir) : "") || "" } id="identitasAngkut" />
                                                     </div>
                                                 </div>
                                             </div>

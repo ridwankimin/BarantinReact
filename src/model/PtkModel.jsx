@@ -34,7 +34,7 @@ export default class PtkModel {
       let datasend = {
             "id": uuid,
             // "tab": data.tabWizard,
-            "no_aju": Cookies.get("kodeSatpel") + data.permohonan + data.mediaPembawa + dateNow() + makeid(5),
+            "no_aju": Cookies.get("kodeSatpel") + "M" + data.permohonan + data.mediaPembawa + dateNow() + makeid(5),
             // 'tgl_aju' => $data['tgl_aju'],
             "jenis_dokumen": data.jenisForm,
 
@@ -97,7 +97,6 @@ export default class PtkModel {
             },
             data : datasend
         };
-              
       return axios.request(config)
     }
     
@@ -280,7 +279,8 @@ export default class PtkModel {
           'jumlah_kemasan': data.jumlahKemasan,
           'tanda_khusus': data.tandaKemasan,
           'nilai_barang': data.nilaiBarang,
-          'mata_uang': data.satuanNilai,
+          'mata_uang': "IDR",
+          // 'mata_uang': data.satuanNilai,
           'negara_asal_id': data.negaraAsalMP,
           'negara_tujuan_id': data.negaraTujuanMP,
           'kota_kab_asal_id': data.daerahAsalMP, //? 
@@ -460,9 +460,11 @@ export default class PtkModel {
             'keterangan': (jenisKar == "T" ? "" : (jenisKar == "H" ? data.breedMP : (jenisKar == "I" ? data.sizeIkan : ""))),
             'jumlah_kemasan': data.jumlahKemasanDetil,
             'harga': (jenisKar == "T" ? data.nilaiBarangMP : (jenisKar == "H" ? data.nilaiBarangMPKH : (jenisKar == "I" ? data.nilaiBarangMPKI : ""))),
-            'mata_uang': (jenisKar == "T" ? data.satuanNilaiMP : (jenisKar == "H" ? data.satuanNilaiMPKH : (jenisKar == "I" ? data.satuanNilaiMPKI : ""))),
+            'mata_uang': "IDR",
+            // 'mata_uang': (jenisKar == "T" ? data.satuanNilaiMP : (jenisKar == "H" ? data.satuanNilaiMPKH : (jenisKar == "I" ? data.satuanNilaiMPKI : ""))),
             'kurs': "14500", // dari API curs
-            'harga_rp': (jenisKar == "T" ? (data.satuanNilaiMP == "IDR" ? data.nilaiBarangMP : (data.nilaiBarangMP *14500)) : (jenisKar == "H" ? (data.satuanNilaiMPKH == "IDR" ? data.nilaiBarangMPKH : (data.nilaiBarangMPKH * 14500)) : (jenisKar == "I" ? (data.satuanNilaiMPKI == "IDR" ? data.nilaiBarangMPKI : (data.nilaiBarangMPKI * 14500)) : ""))), // konversi inputan ke RP (Jika mata_uang <> 'IDR'>)
+            'harga_rp': (jenisKar == "T" ? data.nilaiBarangMP : (jenisKar == "H" ? data.nilaiBarangMPKH : (jenisKar == "I" ? data.nilaiBarangMPKI : ""))),
+            // 'harga_rp': (jenisKar == "T" ? (data.satuanNilaiMP == "IDR" ? data.nilaiBarangMP : (data.nilaiBarangMP *14500)) : (jenisKar == "H" ? (data.satuanNilaiMPKH == "IDR" ? data.nilaiBarangMPKH : (data.nilaiBarangMPKH * 14500)) : (jenisKar == "I" ? (data.satuanNilaiMPKI == "IDR" ? data.nilaiBarangMPKI : (data.nilaiBarangMPKI * 14500)) : ""))), // konversi inputan ke RP (Jika mata_uang <> 'IDR'>)
             'created_at': dateNow(),
             'tindakan': ""
       };
@@ -565,10 +567,10 @@ export default class PtkModel {
         'status_ptk': data.opsiVerif,       // draft:0 ;dikirim:9 ;diterima:1 ; ditolak:2 
         'status_internal': 'p0', // p0: verifikasi ptk | p1a: periksa admin | p1b: periksa fisik&kesehatan 
         'alasan_penolakan': data.alasanTolak,
-        'no_dok_permohonan': data.noDokumen,
+        'no_dok_permohonan': data.opsiVerif == '2' ? "" : data.noDokumen,
         // 'no_dok_permohonan': "2024-T-0100-K.1.1-000003",
         'tgl_dok_permohonan': data.tglTerimaVerif,
-        'petugas': data.petugasVerif, // pake session
+        'petugas': data.opsiVerif == '2' ? Cookies.get("userId") : data.petugasVerif, // pake session
         'nip': '123',
       };
       // 
@@ -582,7 +584,7 @@ export default class PtkModel {
         },
         data: datasend
       };
-      
+      console.log(JSON.stringify(config))
       
       return axios.request(config)
     }

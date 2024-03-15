@@ -1,0 +1,191 @@
+[ 
+{ 
+"id":1,
+"jenis_perlakuan":"Temperature",
+"code":"CT",
+"deskripsi":"Cold Treatment",
+"deskripsi_en":"Cold Treatment",
+"kh":"Y",
+"ki":"Y",
+"kt":"Y"
+},
+{ 
+"id":2,
+"jenis_perlakuan":"Temperature",
+"code":"HT",
+"deskripsi":"Heat Treatment",
+"deskripsi_en":"Heat Treatment",
+"kh":"Y",
+"ki":"Y",
+"kt":"Y"
+},
+{ 
+"id":3,
+"jenis_perlakuan":"Temperature",
+"code":"DR",
+"deskripsi":"Dry Heat",
+"deskripsi_en":"Dry Heat",
+"kh":"Y",
+"ki":"Y",
+"kt":"Y"
+},
+{ 
+"id":4,
+"jenis_perlakuan":"Temperature",
+"code":"MH",
+"deskripsi":"Moist Heat",
+"deskripsi_en":"Moist Heat",
+"kh":"Y",
+"ki":"Y",
+"kt":"Y"
+},
+{ 
+"id":5,
+"jenis_perlakuan":"Temperature",
+"code":"VH",
+"deskripsi":"Vapour Heat",
+"deskripsi_en":"Vapour Heat",
+"kh":"Y",
+"ki":"Y",
+"kt":"Y"
+},
+{ 
+"id":6,
+"jenis_perlakuan":"Temperature",
+"code":"KD",
+"deskripsi":"Kiln Drying",
+"deskripsi_en":"Kiln Drying",
+"kh":"Y",
+"ki":"Y",
+"kt":"Y"
+},
+{ 
+"id":7,
+"jenis_perlakuan":"Temperature",
+"code":"HW",
+"deskripsi":"Hot Water Treatment",
+"deskripsi_en":"Hot Water Treatment",
+"kh":"Y",
+"ki":"Y",
+"kt":"Y"
+},
+{ 
+"id":8,
+"jenis_perlakuan":"Temperature",
+"code":"DH",
+"deskripsi":"Dielectric Heating",
+"deskripsi_en":"Dielectric Heating",
+"kh":"Y",
+"ki":"Y",
+"kt":"Y"
+},
+{ 
+"id":9,
+"jenis_perlakuan":"Chemical",
+"code":"FG",
+"deskripsi":"Fungicide",
+"deskripsi_en":"Fungicide",
+"kh":"Y",
+"ki":"Y",
+"kt":"Y"
+},
+{ 
+"id":10,
+"jenis_perlakuan":"Chemical",
+"code":"IN",
+"deskripsi":"Insecticide",
+"deskripsi_en":"Insecticide",
+"kh":"Y",
+"ki":"Y",
+"kt":"Y"
+},
+{ 
+"id":11,
+"jenis_perlakuan":"Chemical",
+"code":"NE",
+"deskripsi":"Nematicide",
+"deskripsi_en":"Nematicide",
+"kh":"Y",
+"ki":"Y",
+"kt":"Y"
+},
+{ 
+"id":12,
+"jenis_perlakuan":"Chemical",
+"code":"OP",
+"deskripsi":"Other Pesticide",
+"deskripsi_en":"Other Pesticide",
+"kh":"Y",
+"ki":"Y",
+"kt":"Y"
+},
+{ 
+"id":13,
+"jenis_perlakuan":"Chemical",
+"code":"CPI",
+"deskripsi":"Chemical Pressure Impregnation",
+"deskripsi_en":"Chemical Pressure Impregnation",
+"kh":"Y",
+"ki":"Y",
+"kt":"Y"
+},
+{ 
+"id":14,
+"jenis_perlakuan":"Chemical",
+"code":"FU",
+"deskripsi":"Fumigation",
+"deskripsi_en":"Fumigation",
+"kh":"Y",
+"ki":"Y",
+"kt":"Y"
+},
+{ 
+"id":15,
+"jenis_perlakuan":"Chemical",
+"code":"SC",
+"deskripsi":"Seed Coating",
+"deskripsi_en":"Seed Coating",
+"kh":"Y",
+"ki":"Y",
+"kt":"Y"
+},
+{ 
+"id":16,
+"jenis_perlakuan":"Radiation",
+"code":"RAT",
+"deskripsi":"Radiation Treatment",
+"deskripsi_en":"Radiation Treatment",
+"kh":"Y",
+"ki":"Y",
+"kt":"Y"
+},
+{ 
+"id":17,
+"jenis_perlakuan":"Other",
+"code":"DV",
+"deskripsi":"Devitalization",
+"deskripsi_en":"Devitalization",
+"kh":"Y",
+"ki":"Y",
+"kt":"Y"
+},
+{ 
+"id":18,
+"jenis_perlakuan":"Other",
+"code":"DB",
+"deskripsi":"Debarking",
+"deskripsi_en":"Debarking",
+"kh":"Y",
+"ki":"Y",
+"kt":"Y"
+},
+{ 
+"id":19,
+"jenis_perlakuan":"Other",
+"code":"CD",
+"deskripsi":"Cold Disinfestation",
+"deskripsi_en":"Cold Disinfestation",
+"kh":"Y",
+"ki":"Y",
+"kt":"Y"
+}]

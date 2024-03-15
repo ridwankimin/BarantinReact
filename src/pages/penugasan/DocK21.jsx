@@ -9,6 +9,7 @@ import Swal from 'sweetalert2';
 import { useNavigate } from 'react-router-dom';
 import PegawaiJson from '../../model/master/pegawaiPertanian.json'
 import Select from 'react-select';
+import LoadBtn from '../../component/loading/LoadBtn';
 
 const modelSurtug = new PtkSurtug()
 const modelPemohon = new PtkModel()
@@ -58,6 +59,7 @@ function DocK21() {
     let navigate = useNavigate()
     const jenisKar = Cookies.get("jenisKarantina")
     let [dataPtk, setDataPtk] = useState([])
+    let [onload, setOnload] = useState(false)
 
     const {
         register,
@@ -71,11 +73,14 @@ function DocK21() {
     const dataWatch = watch()
 
     const onSubmit = (data) => {
+        setOnload(true)
         const response = modelSurtug.ptkAnalisis(data);
         response
         .then((response) => {
             if(response.data) {
+                console.log(response.data)
                 if(response.data.status == 201) {
+                    setOnload(false)
                     Swal.fire({
                         title: "Sukses!",
                         text: "Hasil analisa permohonan berhasil " + (data.idDok21 ? "diedit." : "disimpan."),
@@ -85,6 +90,7 @@ function DocK21() {
                     setValue("idDok21", response.data.data.id)
                     setValue("noDok21", response.data.data.nomor)
                 } else {
+                    setOnload(false)
                     Swal.fire({
                         title: "Error!",
                         text: response.data.message,
@@ -94,6 +100,7 @@ function DocK21() {
             }
         })
         .catch((error) => {
+            setOnload(false)
             if(import.meta.env.VITE_BE_ENV == "DEV") {
                 console.log(error)
             }
@@ -139,8 +146,14 @@ function DocK21() {
                             }));
                         } else {
                             setData(values => ({...values,
-                                errorPTK: "PTK belun diverifikasi, mohon cek data PTK NO " + base64_decode(ptkNomor[0]),
+                                errorPTK: "PTK belum diverifikasi, mohon cek data PTK NO " + base64_decode(ptkNomor[0]),
                             }));
+                            Swal.fire({
+                                title: "Perhatian!",
+                                text: "PTK NO " + base64_decode(ptkNomor[0]) + " belum diverifikasi",
+                                icon: "warning"
+                            })
+                            navigate('/k11')
                         }
                         setDataPtk(values => ({...values,
                             listPtk: res.data.data.ptk,
@@ -206,7 +219,7 @@ function DocK21() {
                                 setValue("opsiDilarangOPTK", (arrayOlah.indexOf('32') >= 0 ? "32" : (arrayOlah.indexOf('33') >= 0 ? "33" : (arrayOlah.indexOf('23') >= 0 ? "23" : ""))))
                                 
                                 const arrayOlahText = response.data.data?.filter((element) => element.hasil_analisis_id == 36)
-                                setValue("opsiKTLainnya", arrayOlahText[0].lainnya)
+                                setValue("opsiKTLainnya", arrayOlahText[0]?.lainnya)
                             }
                             
                             const arrayOlahText = response.data.data?.filter((element) => element.hasil_analisis_id == 37 || element.hasil_analisis_id == 38 || element.hasil_analisis_id == 39 || element.hasil_analisis_id == 40 || element.hasil_analisis_id == 41 || element.hasil_analisis_id == 42 || element.hasil_analisis_id == 43)
@@ -483,6 +496,45 @@ function DocK21() {
                                             </div>
                                         </div>
                                     </div>
+                                    <div className="card">
+                                        <h2 className="accordion-header" id="headerMP">
+                                            <button className="accordion-button" type="button" style={{backgroundColor: '#123138'}} data-bs-toggle="collapse" data-bs-target="#collapseMP" aria-expanded="true" aria-controls="collapseImporter">
+                                                <h5 className='text-lightest mb-0'>III. Lampiran</h5>
+                                            </button>
+                                        </h2>
+                                        <div id="collapseMP">
+                                            <div className="accordion-body">
+                                                <div className="row">
+                                                    <div className='col-md-12 mb-3'>
+                                                        <div className="table-responsive text-nowrap" style={{height: (data.listDokumen?.length > 8 ? "300px" : "")}}>
+                                                            <table className="table table-sm table-bordered table-hover table-striped dataTable">
+                                                                <thead>
+                                                                    <tr>
+                                                                        <th>No</th>
+                                                                        <th>Jenis Dokumen</th>
+                                                                        <th>Nomor</th>
+                                                                        <th>Lampiran</th>
+                                                                    </tr>
+                                                                </thead>
+                                                                <tbody>
+                                                                    {dataPtk.listDokumen ? (dataPtk.listDokumen?.map((data, index) => (
+                                                                                <tr key={index}>
+                                                                                    <td>{index + 1}</td>
+                                                                                    <td>{data.nama_dokumen}</td>
+                                                                                    <td>{data.no_dokumen}</td>
+                                                                                    <td><a href={import.meta.env.VITE_BE_LINK + data.efile} target='_blank' rel='noreferrer'>{data.efile}</a></td>
+                                                                                </tr>
+                                                                            ))
+                                                                        ) : null
+                                                                    }
+                                                                </tbody>
+                                                            </table>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -621,6 +673,7 @@ function DocK21() {
                                                     <label className="col-form-label" htmlFor="mpHPHK">C. Media Pembawa OPTK</label>
                                                     <div className="row">
                                                         <div className="col-sm-4">
+                                                            <h6 className='mb-2'><u><b>Cara dan Tingkat Pengolahan</b></u></h6>
                                                             <div className="form-check">
                                                                 <label className="form-check-label" htmlFor="opsiOlah24T">Belum Diolah</label>
                                                                 <input name="opsiOlahT" value="24" {...register("opsiOlahT", {required: (data.jenisKarantina == "T" ? "Mohon pilih salah satu (belum/sudah diolah)" : false)})} className={errors.opsiOlahT ? "form-check-input is-invalid" : "form-check-input"} type="radio" id="opsiOlah24T" />
@@ -633,8 +686,10 @@ function DocK21() {
                                                                 <label className="form-check-label" htmlFor="opsiOlah35T">Sudah diolah sampai tingkat yang masih dapat terinfestasi OPTK/OPT</label>
                                                                 <input name="opsiOlahT" value="35" {...register("opsiOlahT")} className={errors.opsiOlahT ? "form-check-input is-invalid" : "form-check-input"} type="radio" id="opsiOlah35T" />
                                                             </div>
+                                                            {errors.opsiOlahT && <small className="text-danger">{errors.opsiOlahT.message}</small>}
                                                         </div>
                                                         <div className="col-sm-3">
+                                                            <h6 className='mb-2'><u><b>Ketegori Wasdal</b></u></h6>
                                                             <div className="form-check">
                                                                 <label className="form-check-label" htmlFor="opsiKT25">Termasuk Pangan</label>
                                                                 <input name="opsiKT" value="25" {...register("opsiKT", { required: (data.jenisKarantina == "T" ? "Mohon isi analisa minimal 1 pilihan." : false)})} className={errors.opsiKT ? "form-check-input is-invalid" : "form-check-input"} type="checkbox" id="opsiKT25" />
@@ -659,12 +714,14 @@ function DocK21() {
                                                                 <label className="form-check-label" htmlFor="opsiKT30">Jenis Asing Invasif</label>
                                                                 <input name="opsiKT" value="30" {...register("opsiKT")} className={errors.opsiKT ? "form-check-input is-invalid" : "form-check-input"} type="checkbox" id="opsiKT30" />
                                                             </div>
-                                                        </div>
-                                                        <div className="col-sm-5">
                                                             <div className="form-check">
                                                                 <label className="form-check-label" htmlFor="opsiKT31">Tumbuhan Liar dan Tumbuhan Langka</label>
                                                                 <input name="opsiKT" value="31" {...register("opsiKT")} className={errors.opsiKT ? "form-check-input is-invalid" : "form-check-input"} type="checkbox" id="opsiKT31" />
                                                             </div>
+                                                            {errors.opsiKT && <small className="text-danger">{errors.opsiKT.message}</small>}
+                                                        </div>
+                                                        <div className="col-sm-5">
+                                                            <h6 className='mb-2'><u><b>Tujuan Penggunaan</b></u></h6>
                                                             <div className="form-check">
                                                                 <label className="form-check-label" htmlFor="opsiDilarangOPTK32">Dimasukkan/dikeluarkan untuk ditanam</label>
                                                                 <input name="opsiDilarangOPTK" value="32" {...register("opsiDilarangOPTK", { required: (data.jenisKarantina == "T" ? "Mohon pilih peruntukan pemasukan/pengeluaran MP (ditanam/selain ditaman/dilarang)" : false)})} className={errors.opsiKT ? "form-check-input is-invalid" : "form-check-input"} type="radio" id="opsiDilarangOPTK32" />
@@ -677,22 +734,14 @@ function DocK21() {
                                                                 <label className="form-check-label" htmlFor="opsiDilarangOPTK23">Dilarang Pemasukan / Pengeluarannya</label>
                                                                 <input name="opsiDilarangOPTK" value="23" {...register("opsiDilarangOPTK")} className={errors.opsiKT ? "form-check-input is-invalid" : "form-check-input"} type="radio" id="opsiDilarangOPTK23" />
                                                             </div>
-                                                            <div className='row'>
-                                                                <div className='col-sm-3'>
-                                                                    <div className="form-check">
-                                                                        <label className="form-check-label" htmlFor="opsiKT36">Lainnya...</label>
-                                                                        <input name="opsiKT" value="36" {...register("opsiKT")} className={errors.opsiKT ? "form-check-input is-invalid" : "form-check-input"} type="checkbox" id="opsiKT36" />
-                                                                    </div>
-                                                                </div>
-                                                                <div className='col-sm-9'>
-                                                                    <input style={{display: (dataWatch.opsiKT ? (dataWatch.opsiKT.indexOf('36') >= 0 ? 'block' : 'none') : 'none')}} type="text" placeholder='Lainnya..' name='opsiKTLainnya' id='opsiKTLainnya' {...register("opsiKTLainnya")} className='form-control form-control-sm' />
-                                                                </div>
-                                                            </div>
+                                                            {errors.opsiDilarangOPTK && <small className="text-danger">{errors.opsiDilarangOPTK.message}</small>}
                                                         </div>
-                                                        {errors.opsiOlahT && <small className="text-danger">{errors.opsiOlahT.message}</small>}
-                                                        {errors.opsiDilarangOPTK && <small className="text-danger">{errors.opsiDilarangOPTK.message}</small>}
-                                                        {errors.opsiKT && <small className="text-danger">{errors.opsiKT.message}</small>}
                                                     </div>
+                                                </div>
+                                                <div className="form-check">
+                                                    <label className="form-check-label" htmlFor="opsiKT36">Lainnya...</label>
+                                                    <input name="opsiKT" value="36" {...register("opsiKT")} className={errors.opsiKT ? "form-check-input is-invalid" : "form-check-input"} type="checkbox" id="opsiKT36" />
+                                                    <input style={{display: (dataWatch.opsiKT ? (dataWatch.opsiKT.indexOf('36') >= 0 ? 'block' : 'none') : 'none')}} type="text" placeholder='Lainnya..' name='opsiKTLainnya' id='opsiKTLainnya' {...register("opsiKTLainnya")} className='form-control form-control-sm' />
                                                 </div>
                                                 {/* </div> */}
                                                 <hr />
@@ -798,7 +847,9 @@ function DocK21() {
                         </div>
                         <div className="row">
                             <div className="col-sm-12">
-                                <button type="submit" className="btn btn-primary me-sm-2 me-1">Simpan</button>
+                                {onLoad ? <LoadBtn warna="btn-primary" ukuran="" /> :
+                                    <button type="submit" className="btn btn-primary me-sm-2 me-1">Simpan</button>
+                                }
                                 <button type="button" className="btn btn-danger me-sm-2 me-1">Batal</button>
                                 <button type='button' onClick={() => navigate('/k22')} className="btn btn-info pb-1 float-end">
                                     <span className="d-sm-inline-block d-none me-sm-1">Buat Surat Tugas</span>

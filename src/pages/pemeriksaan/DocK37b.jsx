@@ -909,7 +909,7 @@ function DocK37b() {
                                 <div className="col-sm-12">
                                     <button type="submit" className="btn btn-primary me-sm-2 me-1">Simpan</button>
                                     <button type="button" className="btn btn-danger me-sm-2 me-1">Batal</button>
-                                    <a href={require("../../dok/k37a.pdf")} rel="noopener noreferrer" target='_blank' className="btn btn-warning"><i className="bx bx-printer bx-xs"></i>&nbsp; Print</a>
+                                    <a href={import("../../dok/k37a.pdf")} rel="noopener noreferrer" target='_blank' className="btn btn-warning"><i className="bx bx-printer bx-xs"></i>&nbsp; Print</a>
                                     <button style={{display: (data.cekSimpan37b ? "block" : "none")}} type='button' onClick={() => navigate('/k22')} className="btn btn-info pb-1 float-end">
                                         <span className="d-sm-inline-block d-none me-sm-1">Buat Surat Tugas</span>
                                         <i className="fa-solid fa-angle-right"></i>

@@ -158,7 +158,6 @@ export default class PtkSurtug {
           },
           data: datasend
         };
-        
         return axios.request(config)
     }
 

@@ -63,6 +63,7 @@ function DocK22() {
     let [listDataHeader, setListDataHeader] = useState();
     let [listDataDetil, setListDataDetil] = useState();
     let [data, setData] = useState({})
+    let [onLoad, setOnload] = useState(false)
     const {
 		register: registerHeader,
         setValue: setValueHeader,
@@ -74,6 +75,7 @@ function DocK22() {
     const dataHeader = watchHeader()
 
     const onSubmitHeader = (data) => {
+        setOnload(true)
         const response = modelSurtug.simpanHeader(data);
             response
             .then((response) => {
@@ -82,6 +84,7 @@ function DocK22() {
                 }
                 if(response.data) {
                     if(response.data.status == 201) {
+                        setOnload(false)
                         Swal.fire({
                             icon: "success",
                             title: "Sukses!",
@@ -116,6 +119,7 @@ function DocK22() {
                         // dataSurtugHeader()
                         
                     } else {
+                        setOnload(false)
                         Swal.fire({
                             icon: "error",
                             title: "Error!",
@@ -125,6 +129,7 @@ function DocK22() {
                 }
             })
             .catch((error) => {
+                setOnload(false)
                 if(import.meta.env.VITE_BE_ENV == "DEV") {
                     console.log(error)
                 }
@@ -155,6 +160,7 @@ function DocK22() {
     const dataDetilSurtug = watchDetilSurtug()
     
     const onSubmitDetilSurtug = (data) => {
+        setOnload(true)
         // console.log(data)
         const response = modelSurtug.simpanDetil(data);
             response
@@ -164,6 +170,7 @@ function DocK22() {
                 }
                 if(response.data) {
                     if(response.data.status == 201) {
+                        setOnload(false)
                         Swal.fire({
                             icon: "success",
                             title: "Sukses!",
@@ -175,6 +182,7 @@ function DocK22() {
                 }
             })
             .catch((error) => {
+                setOnload(false)
                 if(import.meta.env.VITE_BE_ENV == "DEV") {
                     console.log(error)
                 }
@@ -536,7 +544,7 @@ function DocK22() {
                                     <input type="datetime-local" value={data.tglSurtug || ""} id="tglDok22" className="form-control form-control-sm" placeholder="Tanggal" disabled />
                                 </div>
                                 <div className="col-sm-4">
-                                    <a href={require("../../dok/k22.pdf")} rel="noopener noreferrer" target='_blank' className='btn btn-info pb-1 float-end'>
+                                    <a href="#" rel="noopener noreferrer" target='_blank' className='btn btn-info pb-1 float-end'>
                                         <i className="bx bx-printer bx-sm"></i>
                                         Print
                                     </a>
@@ -577,7 +585,9 @@ function DocK22() {
                                     {errorsHeader.tglSurtug && <small className="text-danger">{errorsHeader.tglSurtug.message}</small>}
                                 </div>
                                 <div className="col-sm-2">
-                                    <button type="submit" className="btn btn-sm btn-primary">{dataHeader.idHeader == '' ? 'Buat Nomor Surtug' : 'Edit Surat Tugas'}</button>
+                                    {onLoad ? <LoadBtn warna="btn-primary" ukuran="btn-sm" /> :
+                                        <button type="submit" className="btn btn-sm btn-primary">{dataHeader.idHeader == '' ? 'Buat Nomor Surtug' : 'Edit Surat Tugas'}</button>
+                                    }
                                 </div>
                             {/* </div> */}
                         </form>
@@ -808,10 +818,12 @@ function DocK22() {
                                             </div>
                                         </div>
                                     </div>
+                                    {onLoad ? <LoadBtn warna="btn-primary" ukuran="" /> :
+                                        <button type="submit" className="btn btn-primary">Simpan</button>
+                                    }
                                     <button type="button" className="btn btn-label-secondary me-sm-2 me-1" data-bs-dismiss="modal">
                                     Close
                                     </button>
-                                    <button type="submit" className="btn btn-primary">Simpan</button>
                                 </form>
                             </div>
                         </div>

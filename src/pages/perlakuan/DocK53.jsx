@@ -3,12 +3,40 @@ import Cookies from 'js-cookie';
 import React, { useEffect, useState } from 'react'
 import PnPerlakuan from '../../model/PnPerlakuan';
 import {decode as base64_decode} from 'base-64';
-import { useForm } from 'react-hook-form';
+import { Controller, useForm } from 'react-hook-form';
 import PtkModel from '../../model/PtkModel';
 import PtkSurtug from '../../model/PtkSurtug';
 import PtkHistory from '../../model/PtkHistory';
 import SpinnerDot from '../../component/loading/SpinnerDot';
 import Swal from 'sweetalert2';
+import TipePerlakuan from '../../model/master/tipePerlakuan.json'
+import Pestisida from '../../model/master/bahanPestisida.json'
+import Select from 'react-select';
+
+function tipePerlakuan(tipe) {
+    if(tipe) {
+        const dataPerlkuan = TipePerlakuan?.filter((item) => (tipe == "CHT" ? (item.jenis_perlakuan == "Chemical") : (item.jenis_perlakuan != "Chemical")))
+        var arrayTipePerlakuan = dataPerlkuan.map(item => {
+            return {
+                value: item.id,
+                label: item.deskripsi,
+            }
+        })
+        return arrayTipePerlakuan
+    } else {
+        return null
+    }
+}
+
+function pestisida() {
+    var arrayPestisida = Pestisida.map(item => {
+        return {
+            value: item.id,
+            label: item.nama
+        }
+    })
+    return arrayPestisida
+}
 
 const addCommas = num => num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")
 const removeNonNumeric = num => num.toString().replace(/[^0-9.]/g, "")
@@ -17,6 +45,36 @@ const log = new PtkHistory()
 const modelPemohon = new PtkModel()
 const modelPerlakuan = new PnPerlakuan()
 const modelSurtug = new PtkSurtug()
+
+const customStyles = {
+    control: (provided, state) => ({
+        ...provided,
+        background: '#fff',
+        borderColor: '#D4D8DD',
+        cursor: 'text',
+        minHeight: '30px',
+        height: '30px',
+        boxShadow: state.isFocused ? null : null,
+    }),
+
+    valueContainer: (provided, state) => ({
+        ...provided,
+        height: '30px',
+        padding: '0 6px'
+    }),
+
+    input: (provided, state) => ({
+        ...provided,
+        margin: '0px',
+    }),
+    indicatorSeparator: state => ({
+        display: 'none',
+    }),
+    indicatorsContainer: (provided, state) => ({
+        ...provided,
+        height: '30px',
+    }),
+}
 
 function DocK53() {
     const idPtk = Cookies.get("idPtkPage");
@@ -33,6 +91,7 @@ function DocK53() {
     const {
         register,
         setValue,
+        control,
         handleSubmit,
         watch,
         formState: { errors },
@@ -185,8 +244,9 @@ function DocK53() {
         setLoadKomoditi(true)
         data.listKomoditas?.map((item, index) => (
             log.updateKomoditiP4(item.id, datasend[index])
-                .then((response) => {
-                    if(response.data.status == 201) {
+            .then((response) => {
+                console.log(datasend[index])
+                if(response.data.status == 201) {
                         refreshListKomoditas()
                         setLoadKomoditi(false)
                         if(import.meta.env.VITE_BE_ENV == "DEV") {
@@ -968,11 +1028,20 @@ function DocK53() {
                                                                 </div>
                                                                 <label className="col-sm-2 col-form-label text-sm-center" htmlFor="tipePerlakuan">Tipe Perlakuan <span className='text-danger'>*</span></label>
                                                                 <div className="col-sm-3">
-                                                                    <select name="tipePerlakuan" id="tipePerlakuan" {...register("tipePerlakuan", {required: "Mohon isi tipe perlakuan."})} className={errors.tipePerlakuan ? "form-select form-select-sm is-invalid" : "form-select form-select-sm"}>
+                                                                    <Controller
+                                                                        control={control}
+                                                                        name={"tipePerlakuan"}
+                                                                        className="form-control form-control-sm"
+                                                                        rules={{ required: "Mohon isi tipe perlakuan."}}
+                                                                        render={({ field: {value, onChange, ...field } }) => (
+                                                                            <Select styles={customStyles} value={{id: cekWatch.tipePerlakuan, label: cekWatch.tipePerlakuanView}} onChange={(e) => setValue("tipePerlakuan", e.value) & setValue("tipePerlakuanView", e.label)} placeholder={"Pilih tipe Perlakuan.."} {...field} options={tipePerlakuan(cekWatch.metodePerlakuan)} />
+                                                                        )}
+                                                                    />
+                                                                    {/* <select name="tipePerlakuan" id="tipePerlakuan" {...register("tipePerlakuan", {required: "Mohon isi tipe perlakuan."})} className={errors.tipePerlakuan ? "form-select form-select-sm is-invalid" : "form-select form-select-sm"}>
                                                                         <option value="">--</option>
                                                                         <option value="1">Tipe 1</option>
                                                                         <option value="2">Tipe 2</option>
-                                                                    </select>
+                                                                    </select> */}
                                                                     {errors.tipePerlakuan && <small className="text-danger">{errors.tipePerlakuan.message}</small>}
                                                                 </div>
                                                             </div>
@@ -981,7 +1050,16 @@ function DocK53() {
                                                             <div className="row">
                                                                 <label className="col-sm-3 col-form-label" htmlFor="bahanPestisida">Bahan/Pestisida yang digunakan</label>
                                                                 <div className="col-sm-3">
-                                                                    <input type="text" name='bahanPestisida' id='bahanPestisida' {...register("bahanPestisida")} className='form-control form-control-sm' />
+                                                                    <Controller
+                                                                        control={control}
+                                                                        name={"bahanPestisida"}
+                                                                        className="form-control form-control-sm"
+                                                                        rules={{ required: false}}
+                                                                        render={({ field: {value, onChange, ...field } }) => (
+                                                                            <Select styles={customStyles} value={{id: cekWatch.bahanPestisida, label: cekWatch.bahanPestisidaView}} onChange={(e) => setValue("bahanPestisida", e.value) & setValue("bahanPestisidaView", e.label)} placeholder={"Pilih bahan pestisida.."} {...field} options={pestisida()} />
+                                                                        )}
+                                                                    />
+                                                                    {/* <input type="text" name='bahanPestisida' id='bahanPestisida' {...register("bahanPestisida")} className='form-control form-control-sm' /> */}
                                                                 </div>
                                                             </div>
                                                         </div>
@@ -1156,7 +1234,7 @@ function DocK53() {
                                                     ))}
                                                 </select>
                                                 {errors.ttdPerlakuan && <small className="text-danger">{errors.ttdPerlakuan.message}</small>}
-                                                <input type="text" name='ttdPerlakuan' id='ttdPerlakuan' {...register("ttdPerlakuan")} className='form-control form-control-sm' />
+                                                {/* <input type="text" name='ttdPerlakuan' id='ttdPerlakuan' {...register("ttdPerlakuan")} className='form-control form-control-sm' /> */}
                                             </div>
                                             <label className="col-sm-2 col-form-label text-sm-end" htmlFor="diterbitkan">diterbitkan di<span className='text-danger'>*</span></label>
                                             <div className="col-sm-3 mb-3 pr-2">

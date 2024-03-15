@@ -1,0 +1,1604 @@
+[ 
+{ 
+"id":1,
+"nama":"Aldrin and Dieldrin",
+"created_at":"2024-01-30 11:06:11",
+"updated_at":null,
+"deleted_at":null
+},
+{ 
+"id":2,
+"nama":"Azinphos-Methyl",
+"created_at":"2024-01-30 11:06:11",
+"updated_at":null,
+"deleted_at":null
+},
+{ 
+"id":3,
+"nama":"Captan",
+"created_at":"2024-01-30 11:06:11",
+"updated_at":null,
+"deleted_at":null
+},
+{ 
+"id":4,
+"nama":"Carbaryl",
+"created_at":"2024-01-30 11:06:11",
+"updated_at":null,
+"deleted_at":null
+},
+{ 
+"id":5,
+"nama":"Chlordane",
+"created_at":"2024-01-30 11:06:11",
+"updated_at":null,
+"deleted_at":null
+},
+{ 
+"id":6,
+"nama":"Chlormequat",
+"created_at":"2024-01-30 11:06:11",
+"updated_at":null,
+"deleted_at":null
+},
+{ 
+"id":7,
+"nama":"Chlorpyrifos",
+"created_at":"2024-01-30 11:06:11",
+"updated_at":null,
+"deleted_at":null
+},
+{ 
+"id":8,
+"nama":"2,4-D",
+"created_at":"2024-01-30 11:06:12",
+"updated_at":null,
+"deleted_at":null
+},
+{ 
+"id":9,
+"nama":"DDT",
+"created_at":"2024-01-30 11:06:12",
+"updated_at":null,
+"deleted_at":null
+},
+{ 
+"id":10,
+"nama":"Diazinon",
+"created_at":"2024-01-30 11:06:12",
+"updated_at":null,
+"deleted_at":null
+},
+{ 
+"id":11,
+"nama":"Dichlorvos",
+"created_at":"2024-01-30 11:06:12",
+"updated_at":null,
+"deleted_at":null
+},
+{ 
+"id":12,
+"nama":"Dicofol",
+"created_at":"2024-01-30 11:06:12",
+"updated_at":null,
+"deleted_at":null
+},
+{ 
+"id":13,
+"nama":"Dimethoate",
+"created_at":"2024-01-30 11:06:12",
+"updated_at":null,
+"deleted_at":null
+},
+{ 
+"id":14,
+"nama":"Diphenylamine",
+"created_at":"2024-01-30 11:06:12",
+"updated_at":null,
+"deleted_at":null
+},
+{ 
+"id":15,
+"nama":"Diquat",
+"created_at":"2024-01-30 11:06:12",
+"updated_at":null,
+"deleted_at":null
+},
+{ 
+"id":16,
+"nama":"Endosulfan",
+"created_at":"2024-01-30 11:06:12",
+"updated_at":null,
+"deleted_at":null
+},
+{ 
+"id":17,
+"nama":"Endrin",
+"created_at":"2024-01-30 11:06:12",
+"updated_at":null,
+"deleted_at":null
+},
+{ 
+"id":18,
+"nama":"Ethion",
+"created_at":"2024-01-30 11:06:12",
+"updated_at":null,
+"deleted_at":null
+},
+{ 
+"id":19,
+"nama":"Ethoxyquin",
+"created_at":"2024-01-30 11:06:12",
+"updated_at":null,
+"deleted_at":null
+},
+{ 
+"id":20,
+"nama":"Fenitrothion",
+"created_at":"2024-01-30 11:06:13",
+"updated_at":null,
+"deleted_at":null
+},
+{ 
+"id":21,
+"nama":"Fenthion",
+"created_at":"2024-01-30 11:06:13",
+"updated_at":null,
+"deleted_at":null
+},
+{ 
+"id":22,
+"nama":"Folpet",
+"created_at":"2024-01-30 11:06:13",
+"updated_at":null,
+"deleted_at":null
+},
+{ 
+"id":23,
+"nama":"Heptachlor",
+"created_at":"2024-01-30 11:06:13",
+"updated_at":null,
+"deleted_at":null
+},
+{ 
+"id":24,
+"nama":"Hydrogen Phosphide",
+"created_at":"2024-01-30 11:06:13",
+"updated_at":null,
+"deleted_at":null
+},
+{ 
+"id":25,
+"nama":"Bromide Ion",
+"created_at":"2024-01-30 11:06:13",
+"updated_at":null,
+"deleted_at":null
+},
+{ 
+"id":26,
+"nama":"Lindane",
+"created_at":"2024-01-30 11:06:13",
+"updated_at":null,
+"deleted_at":null
+},
+{ 
+"id":27,
+"nama":"Malathion",
+"created_at":"2024-01-30 11:06:14",
+"updated_at":null,
+"deleted_at":null
+},
+{ 
+"id":28,
+"nama":"Methidathion",
+"created_at":"2024-01-30 11:06:14",
+"updated_at":null,
+"deleted_at":null
+},
+{ 
+"id":29,
+"nama":"Methyl Bromide",
+"created_at":"2024-01-30 11:06:14",
+"updated_at":null,
+"deleted_at":null
+},
+{ 
+"id":30,
+"nama":"Omethoate",
+"created_at":"2024-01-30 11:06:14",
+"updated_at":null,
+"deleted_at":null
+},
+{ 
+"id":31,
+"nama":"2-Phenylphenol",
+"created_at":"2024-01-30 11:06:14",
+"updated_at":null,
+"deleted_at":null
+},
+{ 
+"id":32,
+"nama":"Paraquat",
+"created_at":"2024-01-30 11:06:14",
+"updated_at":null,
+"deleted_at":null
+},
+{ 
+"id":33,
+"nama":"Parathion",
+"created_at":"2024-01-30 11:06:14",
+"updated_at":null,
+"deleted_at":null
+},
+{ 
+"id":34,
+"nama":"Parathion-Methyl",
+"created_at":"2024-01-30 11:06:14",
+"updated_at":null,
+"deleted_at":null
+},
+{ 
+"id":35,
+"nama":"Phosalone",
+"created_at":"2024-01-30 11:06:14",
+"updated_at":null,
+"deleted_at":null
+},
+{ 
+"id":36,
+"nama":"Piperonyl Butoxide",
+"created_at":"2024-01-30 11:06:14",
+"updated_at":null,
+"deleted_at":null
+},
+{ 
+"id":37,
+"nama":"Pyrethrins",
+"created_at":"2024-01-30 11:06:14",
+"updated_at":null,
+"deleted_at":null
+},
+{ 
+"id":38,
+"nama":"Quintozene",
+"created_at":"2024-01-30 11:06:14",
+"updated_at":null,
+"deleted_at":null
+},
+{ 
+"id":39,
+"nama":"Thiabendazole",
+"created_at":"2024-01-30 11:06:15",
+"updated_at":null,
+"deleted_at":null
+},
+{ 
+"id":40,
+"nama":"Cyhexatin",
+"created_at":"2024-01-30 11:06:15",
+"updated_at":null,
+"deleted_at":null
+},
+{ 
+"id":41,
+"nama":"Bromopropylate",
+"created_at":"2024-01-30 11:06:15",
+"updated_at":null,
+"deleted_at":null
+},
+{ 
+"id":42,
+"nama":"Carbendazim",
+"created_at":"2024-01-30 11:06:15",
+"updated_at":null,
+"deleted_at":null
+},
+{ 
+"id":43,
+"nama":"Disulfoton",
+"created_at":"2024-01-30 11:06:15",
+"updated_at":null,
+"deleted_at":null
+},
+{ 
+"id":44,
+"nama":"Amitrole",
+"created_at":"2024-01-30 11:06:15",
+"updated_at":null,
+"deleted_at":null
+},
+{ 
+"id":45,
+"nama":"Chlorothalonil",
+"created_at":"2024-01-30 11:06:16",
+"updated_at":null,
+"deleted_at":null
+},
+{ 
+"id":46,
+"nama":"Dichloran",
+"created_at":"2024-01-30 11:06:17",
+"updated_at":null,
+"deleted_at":null
+},
+{ 
+"id":47,
+"nama":"Dodine",
+"created_at":"2024-01-30 11:06:17",
+"updated_at":null,
+"deleted_at":null
+},
+{ 
+"id":48,
+"nama":"Fenamiphos",
+"created_at":"2024-01-30 11:06:17",
+"updated_at":null,
+"deleted_at":null
+},
+{ 
+"id":49,
+"nama":"Pirimiphos-Methyl",
+"created_at":"2024-01-30 11:06:17",
+"updated_at":null,
+"deleted_at":null
+},
+{ 
+"id":50,
+"nama":"Dinocap",
+"created_at":"2024-01-30 11:06:17",
+"updated_at":null,
+"deleted_at":null
+},
+{ 
+"id":51,
+"nama":"Chlorpyrifos-Methyl",
+"created_at":"2024-01-30 11:06:17",
+"updated_at":null,
+"deleted_at":null
+},
+{ 
+"id":52,
+"nama":"Methomyl",
+"created_at":"2024-01-30 11:06:17",
+"updated_at":null,
+"deleted_at":null
+},
+{ 
+"id":53,
+"nama":"Acephate",
+"created_at":"2024-01-30 11:06:17",
+"updated_at":null,
+"deleted_at":null
+},
+{ 
+"id":54,
+"nama":"Carbofuran",
+"created_at":"2024-01-30 11:06:17",
+"updated_at":null,
+"deleted_at":null
+},
+{ 
+"id":55,
+"nama":"Methamidophos",
+"created_at":"2024-01-30 11:06:17",
+"updated_at":null,
+"deleted_at":null
+},
+{ 
+"id":56,
+"nama":"Pirimicarb",
+"created_at":"2024-01-30 11:06:17",
+"updated_at":null,
+"deleted_at":null
+},
+{ 
+"id":57,
+"nama":"Maleic Hydrazide",
+"created_at":"2024-01-30 11:06:17",
+"updated_at":null,
+"deleted_at":null
+},
+{ 
+"id":58,
+"nama":"Phosmet",
+"created_at":"2024-01-30 11:06:17",
+"updated_at":null,
+"deleted_at":null
+},
+{ 
+"id":59,
+"nama":"Dithiocarbamates",
+"created_at":"2024-01-30 11:06:17",
+"updated_at":null,
+"deleted_at":null
+},
+{ 
+"id":60,
+"nama":"Ethephon",
+"created_at":"2024-01-30 11:06:17",
+"updated_at":null,
+"deleted_at":null
+},
+{ 
+"id":61,
+"nama":"Fenbutatin Oxide",
+"created_at":"2024-01-30 11:06:17",
+"updated_at":null,
+"deleted_at":null
+},
+{ 
+"id":62,
+"nama":"Imazalil",
+"created_at":"2024-01-30 11:06:17",
+"updated_at":null,
+"deleted_at":null
+},
+{ 
+"id":63,
+"nama":"Iprodione",
+"created_at":"2024-01-30 11:06:18",
+"updated_at":null,
+"deleted_at":null
+},
+{ 
+"id":64,
+"nama":"Phorate",
+"created_at":"2024-01-30 11:06:18",
+"updated_at":null,
+"deleted_at":null
+},
+{ 
+"id":65,
+"nama":"Propargite",
+"created_at":"2024-01-30 11:06:18",
+"updated_at":null,
+"deleted_at":null
+},
+{ 
+"id":66,
+"nama":"Guazatine",
+"created_at":"2024-01-30 11:06:18",
+"updated_at":null,
+"deleted_at":null
+},
+{ 
+"id":67,
+"nama":"Triforine",
+"created_at":"2024-01-30 11:06:18",
+"updated_at":null,
+"deleted_at":null
+},
+{ 
+"id":68,
+"nama":"Aldicarb",
+"created_at":"2024-01-30 11:06:18",
+"updated_at":null,
+"deleted_at":null
+},
+{ 
+"id":69,
+"nama":"Cypermethrins (including alpha- and zeta- cypermethrin)",
+"created_at":"2024-01-30 11:06:18",
+"updated_at":null,
+"deleted_at":null
+},
+{ 
+"id":70,
+"nama":"Fenvalerate",
+"created_at":"2024-01-30 11:06:18",
+"updated_at":null,
+"deleted_at":null
+},
+{ 
+"id":71,
+"nama":"Permethrin",
+"created_at":"2024-01-30 11:06:18",
+"updated_at":null,
+"deleted_at":null
+},
+{ 
+"id":72,
+"nama":"Amitraz",
+"created_at":"2024-01-30 11:06:18",
+"updated_at":null,
+"deleted_at":null
+},
+{ 
+"id":73,
+"nama":"Oxamyl",
+"created_at":"2024-01-30 11:06:18",
+"updated_at":null,
+"deleted_at":null
+},
+{ 
+"id":74,
+"nama":"Phenthoate",
+"created_at":"2024-01-30 11:06:18",
+"updated_at":null,
+"deleted_at":null
+},
+{ 
+"id":75,
+"nama":"Azocyclotin",
+"created_at":"2024-01-30 11:06:18",
+"updated_at":null,
+"deleted_at":null
+},
+{ 
+"id":76,
+"nama":"Diflubenzuron",
+"created_at":"2024-01-30 11:06:18",
+"updated_at":null,
+"deleted_at":null
+},
+{ 
+"id":77,
+"nama":"Methiocarb",
+"created_at":"2024-01-30 11:06:18",
+"updated_at":null,
+"deleted_at":null
+},
+{ 
+"id":78,
+"nama":"Triadimefon",
+"created_at":"2024-01-30 11:06:18",
+"updated_at":null,
+"deleted_at":null
+},
+{ 
+"id":79,
+"nama":"Deltamethrin",
+"created_at":"2024-01-30 11:06:18",
+"updated_at":null,
+"deleted_at":null
+},
+{ 
+"id":80,
+"nama":"Metalaxyl",
+"created_at":"2024-01-30 11:06:18",
+"updated_at":null,
+"deleted_at":null
+},
+{ 
+"id":81,
+"nama":"Prochloraz",
+"created_at":"2024-01-30 11:06:18",
+"updated_at":null,
+"deleted_at":null
+},
+{ 
+"id":82,
+"nama":"Triazophos",
+"created_at":"2024-01-30 11:06:18",
+"updated_at":null,
+"deleted_at":null
+},
+{ 
+"id":83,
+"nama":"Bitertanol",
+"created_at":"2024-01-30 11:06:18",
+"updated_at":null,
+"deleted_at":null
+},
+{ 
+"id":84,
+"nama":"Carbosulfan",
+"created_at":"2024-01-30 11:06:18",
+"updated_at":null,
+"deleted_at":null
+},
+{ 
+"id":85,
+"nama":"Cyhalothrin (includes lambda-cyhalothrin)",
+"created_at":"2024-01-30 11:06:19",
+"updated_at":null,
+"deleted_at":null
+},
+{ 
+"id":86,
+"nama":"Methoprene",
+"created_at":"2024-01-30 11:06:19",
+"updated_at":null,
+"deleted_at":null
+},
+{ 
+"id":87,
+"nama":"Propamocarb",
+"created_at":"2024-01-30 11:06:19",
+"updated_at":null,
+"deleted_at":null
+},
+{ 
+"id":88,
+"nama":"Ethoprophos",
+"created_at":"2024-01-30 11:06:19",
+"updated_at":null,
+"deleted_at":null
+},
+{ 
+"id":89,
+"nama":"Dimethipin",
+"created_at":"2024-01-30 11:06:19",
+"updated_at":null,
+"deleted_at":null
+},
+{ 
+"id":90,
+"nama":"Benalaxyl",
+"created_at":"2024-01-30 11:06:19",
+"updated_at":null,
+"deleted_at":null
+},
+{ 
+"id":91,
+"nama":"Clofentezine",
+"created_at":"2024-01-30 11:06:19",
+"updated_at":null,
+"deleted_at":null
+},
+{ 
+"id":92,
+"nama":"Cyfluthrin/beta-cyfluthrin",
+"created_at":"2024-01-30 11:06:19",
+"updated_at":null,
+"deleted_at":null
+},
+{ 
+"id":93,
+"nama":"Glyphosate",
+"created_at":"2024-01-30 11:06:19",
+"updated_at":null,
+"deleted_at":null
+},
+{ 
+"id":94,
+"nama":"Vinclozolin",
+"created_at":"2024-01-30 11:06:19",
+"updated_at":null,
+"deleted_at":null
+},
+{ 
+"id":95,
+"nama":"Propiconazole",
+"created_at":"2024-01-30 11:06:19",
+"updated_at":null,
+"deleted_at":null
+},
+{ 
+"id":96,
+"nama":"Flusilazole",
+"created_at":"2024-01-30 11:06:19",
+"updated_at":null,
+"deleted_at":null
+},
+{ 
+"id":97,
+"nama":"Oxydemeton-Methyl",
+"created_at":"2024-01-30 11:06:19",
+"updated_at":null,
+"deleted_at":null
+},
+{ 
+"id":98,
+"nama":"Terbufos",
+"created_at":"2024-01-30 11:06:19",
+"updated_at":null,
+"deleted_at":null
+},
+{ 
+"id":99,
+"nama":"Triadimenol",
+"created_at":"2024-01-30 11:06:19",
+"updated_at":null,
+"deleted_at":null
+},
+{ 
+"id":100,
+"nama":"Cyromazine",
+"created_at":"2024-01-30 11:06:19",
+"updated_at":null,
+"deleted_at":null
+},
+{ 
+"id":101,
+"nama":"Profenofos",
+"created_at":"2024-01-30 11:06:19",
+"updated_at":null,
+"deleted_at":null
+},
+{ 
+"id":102,
+"nama":"Bentazone",
+"created_at":"2024-01-30 11:06:19",
+"updated_at":null,
+"deleted_at":null
+},
+{ 
+"id":103,
+"nama":"Buprofezin",
+"created_at":"2024-01-30 11:06:19",
+"updated_at":null,
+"deleted_at":null
+},
+{ 
+"id":104,
+"nama":"Cadusafos",
+"created_at":"2024-01-30 11:06:19",
+"updated_at":null,
+"deleted_at":null
+},
+{ 
+"id":105,
+"nama":"Glufosinate-Ammonium",
+"created_at":"2024-01-30 11:06:19",
+"updated_at":null,
+"deleted_at":null
+},
+{ 
+"id":106,
+"nama":"Hexythiazox",
+"created_at":"2024-01-30 11:06:19",
+"updated_at":null,
+"deleted_at":null
+},
+{ 
+"id":107,
+"nama":"Abamectin",
+"created_at":"2024-01-30 11:06:19",
+"updated_at":null,
+"deleted_at":null
+},
+{ 
+"id":108,
+"nama":"Bifenthrin",
+"created_at":"2024-01-30 11:06:19",
+"updated_at":null,
+"deleted_at":null
+},
+{ 
+"id":109,
+"nama":"Cycloxydim",
+"created_at":"2024-01-30 11:06:19",
+"updated_at":null,
+"deleted_at":null
+},
+{ 
+"id":110,
+"nama":"Dithianon",
+"created_at":"2024-01-30 11:06:19",
+"updated_at":null,
+"deleted_at":null
+},
+{ 
+"id":111,
+"nama":"Myclobutanil",
+"created_at":"2024-01-30 11:06:19",
+"updated_at":null,
+"deleted_at":null
+},
+{ 
+"id":112,
+"nama":"Penconazole",
+"created_at":"2024-01-30 11:06:19",
+"updated_at":null,
+"deleted_at":null
+},
+{ 
+"id":113,
+"nama":"Etofenprox",
+"created_at":"2024-01-30 11:06:19",
+"updated_at":null,
+"deleted_at":null
+},
+{ 
+"id":114,
+"nama":"Fenpropathrin",
+"created_at":"2024-01-30 11:06:19",
+"updated_at":null,
+"deleted_at":null
+},
+{ 
+"id":115,
+"nama":"Clethodim",
+"created_at":"2024-01-30 11:06:19",
+"updated_at":null,
+"deleted_at":null
+},
+{ 
+"id":116,
+"nama":"Fenpropimorph",
+"created_at":"2024-01-30 11:06:19",
+"updated_at":null,
+"deleted_at":null
+},
+{ 
+"id":117,
+"nama":"Tebuconazole",
+"created_at":"2024-01-30 11:06:19",
+"updated_at":null,
+"deleted_at":null
+},
+{ 
+"id":118,
+"nama":"Teflubenzuron",
+"created_at":"2024-01-30 11:06:20",
+"updated_at":null,
+"deleted_at":null
+},
+{ 
+"id":119,
+"nama":"Tolclofos-Methyl",
+"created_at":"2024-01-30 11:06:20",
+"updated_at":null,
+"deleted_at":null
+},
+{ 
+"id":120,
+"nama":"Fenarimol",
+"created_at":"2024-01-30 11:06:20",
+"updated_at":null,
+"deleted_at":null
+},
+{ 
+"id":121,
+"nama":"Fenpyroximate",
+"created_at":"2024-01-30 11:06:20",
+"updated_at":null,
+"deleted_at":null
+},
+{ 
+"id":122,
+"nama":"Haloxyfop",
+"created_at":"2024-01-30 11:06:20",
+"updated_at":null,
+"deleted_at":null
+},
+{ 
+"id":123,
+"nama":"Flumethrin",
+"created_at":"2024-01-30 11:06:20",
+"updated_at":null,
+"deleted_at":null
+},
+{ 
+"id":124,
+"nama":"Tebufenozide",
+"created_at":"2024-01-30 11:06:20",
+"updated_at":null,
+"deleted_at":null
+},
+{ 
+"id":125,
+"nama":"Fenbuconazole",
+"created_at":"2024-01-30 11:06:20",
+"updated_at":null,
+"deleted_at":null
+},
+{ 
+"id":126,
+"nama":"Kresoxim-Methyl",
+"created_at":"2024-01-30 11:06:20",
+"updated_at":null,
+"deleted_at":null
+},
+{ 
+"id":127,
+"nama":"Pyriproxyfen",
+"created_at":"2024-01-30 11:06:20",
+"updated_at":null,
+"deleted_at":null
+},
+{ 
+"id":128,
+"nama":"Chlorpropham",
+"created_at":"2024-01-30 11:06:20",
+"updated_at":null,
+"deleted_at":null
+},
+{ 
+"id":129,
+"nama":"Fipronil",
+"created_at":"2024-01-30 11:06:20",
+"updated_at":null,
+"deleted_at":null
+},
+{ 
+"id":130,
+"nama":"Spinosad",
+"created_at":"2024-01-30 11:06:20",
+"updated_at":null,
+"deleted_at":null
+},
+{ 
+"id":131,
+"nama":"Esfenvalerate",
+"created_at":"2024-01-30 11:06:20",
+"updated_at":null,
+"deleted_at":null
+},
+{ 
+"id":132,
+"nama":"Flutolanil",
+"created_at":"2024-01-30 11:06:20",
+"updated_at":null,
+"deleted_at":null
+},
+{ 
+"id":133,
+"nama":"Imidacloprid",
+"created_at":"2024-01-30 11:06:21",
+"updated_at":null,
+"deleted_at":null
+},
+{ 
+"id":134,
+"nama":"Cyprodinil",
+"created_at":"2024-01-30 11:06:21",
+"updated_at":null,
+"deleted_at":null
+},
+{ 
+"id":135,
+"nama":"Famoxadone",
+"created_at":"2024-01-30 11:06:21",
+"updated_at":null,
+"deleted_at":null
+},
+{ 
+"id":136,
+"nama":"Methoxyfenozide",
+"created_at":"2024-01-30 11:06:21",
+"updated_at":null,
+"deleted_at":null
+},
+{ 
+"id":137,
+"nama":"Pyraclostrobin",
+"created_at":"2024-01-30 11:06:21",
+"updated_at":null,
+"deleted_at":null
+},
+{ 
+"id":138,
+"nama":"Fludioxonil",
+"created_at":"2024-01-30 11:06:21",
+"updated_at":null,
+"deleted_at":null
+},
+{ 
+"id":139,
+"nama":"Trifloxystrobin",
+"created_at":"2024-01-30 11:06:21",
+"updated_at":null,
+"deleted_at":null
+},
+{ 
+"id":140,
+"nama":"Dimethenamid-P",
+"created_at":"2024-01-30 11:06:21",
+"updated_at":null,
+"deleted_at":null
+},
+{ 
+"id":141,
+"nama":"Fenhexamid",
+"created_at":"2024-01-30 11:06:21",
+"updated_at":null,
+"deleted_at":null
+},
+{ 
+"id":142,
+"nama":"Indoxacarb",
+"created_at":"2024-01-30 11:06:21",
+"updated_at":null,
+"deleted_at":null
+},
+{ 
+"id":143,
+"nama":"Novaluron",
+"created_at":"2024-01-30 11:06:21",
+"updated_at":null,
+"deleted_at":null
+},
+{ 
+"id":144,
+"nama":"Sulfuryl fluoride",
+"created_at":"2024-01-30 11:06:21",
+"updated_at":null,
+"deleted_at":null
+},
+{ 
+"id":145,
+"nama":"Bifenazate",
+"created_at":"2024-01-30 11:06:21",
+"updated_at":null,
+"deleted_at":null
+},
+{ 
+"id":146,
+"nama":"Aminopyralid",
+"created_at":"2024-01-30 11:06:21",
+"updated_at":null,
+"deleted_at":null
+},
+{ 
+"id":147,
+"nama":"Boscalid",
+"created_at":"2024-01-30 11:06:21",
+"updated_at":null,
+"deleted_at":null
+},
+{ 
+"id":148,
+"nama":"Quinoxyfen",
+"created_at":"2024-01-30 11:06:21",
+"updated_at":null,
+"deleted_at":null
+},
+{ 
+"id":149,
+"nama":"Thiacloprid",
+"created_at":"2024-01-30 11:06:21",
+"updated_at":null,
+"deleted_at":null
+},
+{ 
+"id":150,
+"nama":"Difenoconazole",
+"created_at":"2024-01-30 11:06:21",
+"updated_at":null,
+"deleted_at":null
+},
+{ 
+"id":151,
+"nama":"Dimethomorph",
+"created_at":"2024-01-30 11:06:21",
+"updated_at":null,
+"deleted_at":null
+},
+{ 
+"id":152,
+"nama":"Pyrimethanil",
+"created_at":"2024-01-30 11:06:21",
+"updated_at":null,
+"deleted_at":null
+},
+{ 
+"id":153,
+"nama":"Zoxamide",
+"created_at":"2024-01-30 11:06:21",
+"updated_at":null,
+"deleted_at":null
+},
+{ 
+"id":154,
+"nama":"Azoxystrobin",
+"created_at":"2024-01-30 11:06:21",
+"updated_at":null,
+"deleted_at":null
+},
+{ 
+"id":155,
+"nama":"Chlorantraniliprole",
+"created_at":"2024-01-30 11:06:21",
+"updated_at":null,
+"deleted_at":null
+},
+{ 
+"id":156,
+"nama":"Mandipropamid",
+"created_at":"2024-01-30 11:06:21",
+"updated_at":null,
+"deleted_at":null
+},
+{ 
+"id":157,
+"nama":"Prothioconazole",
+"created_at":"2024-01-30 11:06:21",
+"updated_at":null,
+"deleted_at":null
+},
+{ 
+"id":158,
+"nama":"Spinetoram",
+"created_at":"2024-01-30 11:06:21",
+"updated_at":null,
+"deleted_at":null
+},
+{ 
+"id":159,
+"nama":"Spirotetramat",
+"created_at":"2024-01-30 11:06:21",
+"updated_at":null,
+"deleted_at":null
+},
+{ 
+"id":160,
+"nama":"Fluopicolide",
+"created_at":"2024-01-30 11:06:21",
+"updated_at":null,
+"deleted_at":null
+},
+{ 
+"id":161,
+"nama":"Metaflumizone",
+"created_at":"2024-01-30 11:06:21",
+"updated_at":null,
+"deleted_at":null
+},
+{ 
+"id":162,
+"nama":"Spirodiclofen",
+"created_at":"2024-01-30 11:06:21",
+"updated_at":null,
+"deleted_at":null
+},
+{ 
+"id":163,
+"nama":"Clothianidin",
+"created_at":"2024-01-30 11:06:21",
+"updated_at":null,
+"deleted_at":null
+},
+{ 
+"id":164,
+"nama":"Cyproconazole",
+"created_at":"2024-01-30 11:06:21",
+"updated_at":null,
+"deleted_at":null
+},
+{ 
+"id":165,
+"nama":"Dicamba",
+"created_at":"2024-01-30 11:06:21",
+"updated_at":null,
+"deleted_at":null
+},
+{ 
+"id":166,
+"nama":"Etoxazole",
+"created_at":"2024-01-30 11:06:21",
+"updated_at":null,
+"deleted_at":null
+},
+{ 
+"id":167,
+"nama":"Flubendiamide",
+"created_at":"2024-01-30 11:06:21",
+"updated_at":null,
+"deleted_at":null
+},
+{ 
+"id":168,
+"nama":"Fluopyram",
+"created_at":"2024-01-30 11:06:21",
+"updated_at":null,
+"deleted_at":null
+},
+{ 
+"id":169,
+"nama":"Meptyldinocap",
+"created_at":"2024-01-30 11:06:21",
+"updated_at":null,
+"deleted_at":null
+},
+{ 
+"id":170,
+"nama":"Thiamethoxam",
+"created_at":"2024-01-30 11:06:21",
+"updated_at":null,
+"deleted_at":null
+},
+{ 
+"id":171,
+"nama":"Acetamiprid",
+"created_at":"2024-01-30 11:06:21",
+"updated_at":null,
+"deleted_at":null
+},
+{ 
+"id":172,
+"nama":"Emamectin benzoate",
+"created_at":"2024-01-30 11:06:22",
+"updated_at":null,
+"deleted_at":null
+},
+{ 
+"id":173,
+"nama":"Flutriafol",
+"created_at":"2024-01-30 11:06:22",
+"updated_at":null,
+"deleted_at":null
+},
+{ 
+"id":174,
+"nama":"Isopyrazam",
+"created_at":"2024-01-30 11:06:22",
+"updated_at":null,
+"deleted_at":null
+},
+{ 
+"id":175,
+"nama":"Saflufenacil",
+"created_at":"2024-01-30 11:06:22",
+"updated_at":null,
+"deleted_at":null
+},
+{ 
+"id":176,
+"nama":"Sulfoxaflor",
+"created_at":"2024-01-30 11:06:22",
+"updated_at":null,
+"deleted_at":null
+},
+{ 
+"id":177,
+"nama":"Penthiopyrad",
+"created_at":"2024-01-30 11:06:22",
+"updated_at":null,
+"deleted_at":null
+},
+{ 
+"id":178,
+"nama":"Chlorfenapyr",
+"created_at":"2024-01-30 11:06:22",
+"updated_at":null,
+"deleted_at":null
+},
+{ 
+"id":179,
+"nama":"Dinotefuran",
+"created_at":"2024-01-30 11:06:22",
+"updated_at":null,
+"deleted_at":null
+},
+{ 
+"id":180,
+"nama":"Fluxapyroxad",
+"created_at":"2024-01-30 11:06:22",
+"updated_at":null,
+"deleted_at":null
+},
+{ 
+"id":181,
+"nama":"MCPA",
+"created_at":"2024-01-30 11:06:22",
+"updated_at":null,
+"deleted_at":null
+},
+{ 
+"id":182,
+"nama":"Picoxystrobin",
+"created_at":"2024-01-30 11:06:22",
+"updated_at":null,
+"deleted_at":null
+},
+{ 
+"id":183,
+"nama":"Sedaxane",
+"created_at":"2024-01-30 11:06:22",
+"updated_at":null,
+"deleted_at":null
+},
+{ 
+"id":184,
+"nama":"Ametoctradin",
+"created_at":"2024-01-30 11:06:22",
+"updated_at":null,
+"deleted_at":null
+},
+{ 
+"id":185,
+"nama":"Benzovindiflupyr",
+"created_at":"2024-01-30 11:06:22",
+"updated_at":null,
+"deleted_at":null
+},
+{ 
+"id":186,
+"nama":"Bixafen",
+"created_at":"2024-01-30 11:06:22",
+"updated_at":null,
+"deleted_at":null
+},
+{ 
+"id":187,
+"nama":"Cyantraniliprole",
+"created_at":"2024-01-30 11:06:22",
+"updated_at":null,
+"deleted_at":null
+},
+{ 
+"id":188,
+"nama":"Fenamidone",
+"created_at":"2024-01-30 11:06:22",
+"updated_at":null,
+"deleted_at":null
+},
+{ 
+"id":189,
+"nama":"Fluensulfone",
+"created_at":"2024-01-30 11:06:22",
+"updated_at":null,
+"deleted_at":null
+},
+{ 
+"id":190,
+"nama":"Imazapic",
+"created_at":"2024-01-30 11:06:22",
+"updated_at":null,
+"deleted_at":null
+},
+{ 
+"id":191,
+"nama":"Imazapyr",
+"created_at":"2024-01-30 11:06:22",
+"updated_at":null,
+"deleted_at":null
+},
+{ 
+"id":192,
+"nama":"Isoxaflutole",
+"created_at":"2024-01-30 11:06:22",
+"updated_at":null,
+"deleted_at":null
+},
+{ 
+"id":193,
+"nama":"Tolfenpyrad",
+"created_at":"2024-01-30 11:06:22",
+"updated_at":null,
+"deleted_at":null
+},
+{ 
+"id":194,
+"nama":"Triflumizole",
+"created_at":"2024-01-30 11:06:22",
+"updated_at":null,
+"deleted_at":null
+},
+{ 
+"id":195,
+"nama":"Trinexapac-ethyl",
+"created_at":"2024-01-30 11:06:22",
+"updated_at":null,
+"deleted_at":null
+},
+{ 
+"id":196,
+"nama":"Aminocyclopyrachlor",
+"created_at":"2024-01-30 11:06:23",
+"updated_at":null,
+"deleted_at":null
+},
+{ 
+"id":197,
+"nama":"Cyflumetofen",
+"created_at":"2024-01-30 11:06:23",
+"updated_at":null,
+"deleted_at":null
+},
+{ 
+"id":198,
+"nama":"Dichlobenil",
+"created_at":"2024-01-30 11:06:23",
+"updated_at":null,
+"deleted_at":null
+},
+{ 
+"id":199,
+"nama":"Flufenoxuron",
+"created_at":"2024-01-30 11:06:23",
+"updated_at":null,
+"deleted_at":null
+},
+{ 
+"id":200,
+"nama":"Imazamox",
+"created_at":"2024-01-30 11:06:23",
+"updated_at":null,
+"deleted_at":null
+},
+{ 
+"id":201,
+"nama":"Mesotrione",
+"created_at":"2024-01-30 11:06:23",
+"updated_at":null,
+"deleted_at":null
+},
+{ 
+"id":202,
+"nama":"Metrafenone",
+"created_at":"2024-01-30 11:06:23",
+"updated_at":null,
+"deleted_at":null
+},
+{ 
+"id":203,
+"nama":"Acetochlor",
+"created_at":"2024-01-30 11:06:23",
+"updated_at":null,
+"deleted_at":null
+},
+{ 
+"id":204,
+"nama":"Cyazofamid",
+"created_at":"2024-01-30 11:06:23",
+"updated_at":null,
+"deleted_at":null
+},
+{ 
+"id":205,
+"nama":"Flonicamid",
+"created_at":"2024-01-30 11:06:23",
+"updated_at":null,
+"deleted_at":null
+},
+{ 
+"id":206,
+"nama":"Fluazifop-p-butyl",
+"created_at":"2024-01-30 11:06:23",
+"updated_at":null,
+"deleted_at":null
+},
+{ 
+"id":207,
+"nama":"Flumioxazin",
+"created_at":"2024-01-30 11:06:23",
+"updated_at":null,
+"deleted_at":null
+},
+{ 
+"id":208,
+"nama":"Flupyradifurone",
+"created_at":"2024-01-30 11:06:23",
+"updated_at":null,
+"deleted_at":null
+},
+{ 
+"id":209,
+"nama":"Lufenuron",
+"created_at":"2024-01-30 11:06:23",
+"updated_at":null,
+"deleted_at":null
+},
+{ 
+"id":210,
+"nama":"Quinclorac",
+"created_at":"2024-01-30 11:06:23",
+"updated_at":null,
+"deleted_at":null
+},
+{ 
+"id":211,
+"nama":"Acibenzolar-S-methyl",
+"created_at":"2024-01-30 11:06:23",
+"updated_at":null,
+"deleted_at":null
+},
+{ 
+"id":212,
+"nama":"Imazethapyr",
+"created_at":"2024-01-30 11:06:23",
+"updated_at":null,
+"deleted_at":null
+},
+{ 
+"id":213,
+"nama":"Isofetamid",
+"created_at":"2024-01-30 11:06:24",
+"updated_at":null,
+"deleted_at":null
+},
+{ 
+"id":214,
+"nama":"Oxathiapiprolin",
+"created_at":"2024-01-30 11:06:24",
+"updated_at":null,
+"deleted_at":null
+},
+{ 
+"id":215,
+"nama":"Pendimethalin",
+"created_at":"2024-01-30 11:06:24",
+"updated_at":null,
+"deleted_at":null
+},
+{ 
+"id":216,
+"nama":"Pinoxaden",
+"created_at":"2024-01-30 11:06:24",
+"updated_at":null,
+"deleted_at":null
+},
+{ 
+"id":217,
+"nama":"Spiromesifen",
+"created_at":"2024-01-30 11:06:24",
+"updated_at":null,
+"deleted_at":null
+},
+{ 
+"id":218,
+"nama":"Bicyclopyrone",
+"created_at":"2024-01-30 11:06:24",
+"updated_at":null,
+"deleted_at":null
+},
+{ 
+"id":219,
+"nama":"Fenazaquin",
+"created_at":"2024-01-30 11:06:24",
+"updated_at":null,
+"deleted_at":null
+},
+{ 
+"id":220,
+"nama":"Fenpyrazamine",
+"created_at":"2024-01-30 11:06:24",
+"updated_at":null,
+"deleted_at":null
+},
+{ 
+"id":221,
+"nama":"Isoprothiolane",
+"created_at":"2024-01-30 11:06:24",
+"updated_at":null,
+"deleted_at":null
+},
+{ 
+"id":222,
+"nama":"Fosetyl Al",
+"created_at":"2024-01-30 11:06:24",
+"updated_at":null,
+"deleted_at":null
+},
+{ 
+"id":223,
+"nama":"Triflumezopyrim",
+"created_at":"2024-01-30 11:06:24",
+"updated_at":null,
+"deleted_at":null
+},
+{ 
+"id":224,
+"nama":"Ethiprole",
+"created_at":"2024-01-30 11:06:24",
+"updated_at":null,
+"deleted_at":null
+},
+{ 
+"id":225,
+"nama":"Fenpicoxamid",
+"created_at":"2024-01-30 11:06:24",
+"updated_at":null,
+"deleted_at":null
+},
+{ 
+"id":226,
+"nama":"Norflurazon",
+"created_at":"2024-01-30 11:06:24",
+"updated_at":null,
+"deleted_at":null
+},
+{ 
+"id":227,
+"nama":"Pydiflumetofen",
+"created_at":"2024-01-30 11:06:24",
+"updated_at":null,
+"deleted_at":null
+},
+{ 
+"id":228,
+"nama":"Pyriofenone",
+"created_at":"2024-01-30 11:06:24",
+"updated_at":null,
+"deleted_at":null
+},
+{ 
+"id":229,
+"nama":"Tioxazafen",
+"created_at":"2024-01-30 11:06:24",
+"updated_at":null,
+"deleted_at":null
+}]

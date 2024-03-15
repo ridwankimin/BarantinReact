@@ -599,7 +599,7 @@ function DocK37a() {
                                                             <div className="row">
                                                                 <label className="col-sm-4 col-form-label" htmlFor="identitasAngkut">Jenis, Nama Alat Angkut</label>
                                                                 <div className="col-sm-8">
-                                                                    <input name="identitasAngkut" className="form-control form-control-sm" disabled value={(data.listPtk ? (modaAlatAngkut(data.listPtk.tipe_alat_angkut_terakhir_id).nama + ", " + data.listPtk.nama_alat_angkut_terakhir) : "") || "" } id="identitasAngkut" />
+                                                                    <input name="identitasAngkut" className="form-control form-control-sm" disabled value={(data.listPtk ? (modaAlatAngkut(data.listPtk.moda_alat_angkut_terakhir_id).nama + ", " + data.listPtk.nama_alat_angkut_terakhir) : "") || "" } id="identitasAngkut" />
                                                                 </div>
                                                             </div>
                                                         </div>
@@ -781,7 +781,7 @@ function DocK37a() {
                                 <div className="col-sm-12">
                                     <button type="submit" className="btn btn-primary me-sm-2 me-1">Simpan</button>
                                     <button type="button" className="btn btn-danger me-sm-2 me-1" onClick={handlebatal}>Batal</button>
-                                    <a href={require("../../dok/k37.pdf")} rel="noopener noreferrer" target='_blank' className="btn btn-warning"><i className="bx bx-printer bx-xs"></i>&nbsp; Print</a>
+                                    <a href={import("../../dok/k37.pdf")} rel="noopener noreferrer" target='_blank' className="btn btn-warning"><i className="bx bx-printer bx-xs"></i>&nbsp; Print</a>
                                     <button style={{display: (dataWatch.idDok37a ? "block" : "none")}} type='button' onClick={() => navigate((dataWatch.rekomAdmin == "14" ? '/k37b' : '/k22'))} className="btn btn-info pb-1 float-end">
                                         <span className="d-sm-inline-block d-none me-sm-1">{dataWatch.rekomAdmin == "14" ? "Pemeriksaan Fisik/Kesehatan" : "Buat Surat Tugas"}</span>
                                         <i className="fa-solid fa-angle-right"></i>
