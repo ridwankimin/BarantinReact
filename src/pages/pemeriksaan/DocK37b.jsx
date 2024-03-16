@@ -299,7 +299,7 @@ function DocK37b() {
             });
 
             // 2: penugasan periksa kesehatan
-            const responseSurtug = modelSurtug.getDetilSurtugPenugasan(base64_decode(ptkNomor[1]), 2);
+            const responseSurtug = modelSurtug.getSurtugByPtk(base64_decode(ptkNomor[1]), 2);
             responseSurtug
             .then((response) => {
                 if(response.data) {
@@ -492,7 +492,7 @@ function DocK37b() {
         }
 
         if(data.errorSurtug) {
-            const responseSurtug = modelSurtug.getDetilSurtugPenugasan(data.idPtk, 2);
+            const responseSurtug = modelSurtug.getSurtugByPtk(data.idPtk, 2);
             responseSurtug
             .then((response) => {
                 if(response.data) {
@@ -855,7 +855,7 @@ function DocK37b() {
                                                         <div className="col-sm-4">
                                                             <select className={errors.ttd1 == '' ? 'form-select form-select-sm is-invalid' : 'form-select form-select-sm'} name="ttd1" id="ttd1" {...register("ttd1", { required: "Mohon pilih penandatangan."})}>
                                                                 {data.petugas?.map((item, index) => (
-                                                                    <option value={item.penanda_tangan_id} key={index} defaultValue={dataWatch.ttd1}>{item.nama + " - " + item.nip}</option>
+                                                                    <option value={item.petugas_id} key={index} defaultValue={dataWatch.ttd1}>{item.nama + " - " + item.nip}</option>
                                                                 ))}
                                                             </select>
                                                             {/* <input type="text" name='ttd1' id='ttd1' {...register("ttd1", {required: "Mohon pilih penandatangan."})} className={errors.ttd1 ? "form-select form-select-sm is-invalid" : "form-select form-select-sm"}/> */}

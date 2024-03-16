@@ -207,7 +207,7 @@ function DocK37a() {
             });
             
             // 1: penugasan periksa administratif
-            const responseSurtug = modelSurtug.getDetilSurtugPenugasan(base64_decode(ptkNomor[1]), 1);
+            const responseSurtug = modelSurtug.getSurtugByPtk(base64_decode(ptkNomor[1]), 1);
             responseSurtug
             .then((response) => {
                 if(response.data) {
@@ -222,7 +222,7 @@ function DocK37a() {
                             setValueAdministratif("ttdAdminidtratif", response.data.data[0].penanda_tangan_id)
                             setValueAdministratif("idPtk", base64_decode(ptkNomor[1]))
                             setValueAdministratif("noDok", base64_decode(ptkNomor[2]))
-                            setValueAdministratif("idSurtug", response.data.data[0].id)
+                            setValueAdministratif("idSurtug", response.data.data[0].ptk_surtug_header_id)
                         } else {
                             setData(values => ({...values,
                                 errorSurtug: response.data.message,
@@ -339,7 +339,7 @@ function DocK37a() {
         
         if(data.errorSurtug) {
             // 1: penugasan periksa administratif
-            const responseSurtug = modelSurtug.getDetilSurtugPenugasan(data.idPtk, 1);
+            const responseSurtug = modelSurtug.getSurtugByPtk(data.idPtk, 1);
             responseSurtug
             .then((response) => {
                 if(response.data) {
@@ -353,7 +353,7 @@ function DocK37a() {
                                 nipPetugas: response.data.data[0].nip,
                             }));
                             setValueAdministratif("ttdAdminidtratif", response.data.data[0].penanda_tangan_id)
-                            setValueAdministratif("idSurtug", response.data.data[0].id)
+                            setValueAdministratif("idSurtug", response.data.data[0].ptk_surtug_header_id)
                         } else {
                             setData(values => ({...values,
                                 errorSurtug: response.data.message,
@@ -764,8 +764,9 @@ function DocK37a() {
                                                             <div className='form-control-label'><b>Penandatangan</b></div>
                                                             <div className="col-sm-5">
                                                                 <select className={errorsAdministratif.ttdAdminidtratif == '' ? 'form-select is-invalid' : 'form-select'} name="ttdAdminidtratif" id="ttdAdminidtratif" {...registerAdministratif("ttdAdminidtratif", { required: "Mohon pilih nama penandatangan."})}>
+                                                                    <option value="">--</option>
                                                                     {data.petugas?.map((item, index) => (
-                                                                        <option value={item.penanda_tangan_id} key={index} defaultValue={dataWatch.ttdAdminidtratif}>{item.nama + " - " + item.nip}</option>
+                                                                        <option value={item.petugas_id} key={index} defaultValue={dataWatch.ttdAdminidtratif}>{item.nama + " - " + item.nip}</option>
                                                                     ))}
                                                                 </select>
                                                                 {errorsAdministratif.ttdAdminidtratif && <small className="text-danger">{errorsAdministratif.ttdAdminidtratif.message}</small>}

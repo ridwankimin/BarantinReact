@@ -425,13 +425,13 @@ function DocK53() {
                 }))
             });
 
-            const resPenugasan = modelSurtug.getDetilSurtugPenugasan(base64_decode(ptkNomor[1]), 8);
+            const resPenugasan = modelSurtug.getSurtugByPtk(base64_decode(ptkNomor[1]), 8);
             resPenugasan
             .then((response) => {
                 if(typeof response.data != "string") {
                     if(response.data) {
                         if(response.data.status == 200) {
-                            setValue("idSurtug", response.data.data[0].id)
+                            setValue("idSurtug", response.data.data[0].ptk_surtug_header_id)
                             setData(values => ({...values,
                                 errorSurtug: "",
                                 noSurtug: response.data.data[0].nomor,
@@ -624,13 +624,13 @@ function DocK53() {
         }
 
         if(data.errorSurtug) {
-            const resPenugasan = modelSurtug.getDetilSurtugPenugasan(data.noIdPtk, 8);
+            const resPenugasan = modelSurtug.getSurtugByPtk(data.noIdPtk, 8);
             resPenugasan
             .then((response) => {
                 if(typeof response.data != "string") {
                     if(response.data) {
                         if(response.data.status == 200) {
-                            setValue("idSurtug", response.data.data[0].id)
+                            setValue("idSurtug", response.data.data[0].ptk_surtug_header_id)
                             setData(values => ({...values,
                                 errorSurtug: "",
                                 noSurtug: response.data.data[0].nomor,
@@ -1248,7 +1248,7 @@ function DocK53() {
                                                 <select className={errors.ttdPerlakuan == '' ? 'form-select form-select-sm is-invalid' : 'form-select form-select-sm'} name="ttdPerlakuan" id="ttdPerlakuan" {...register("ttdPerlakuan", { required: "Mohon pilih penandatangan."})}>
                                                     <option value="">--</option>
                                                     {data.petugas?.map((item, index) => (
-                                                        <option value={item.penanda_tangan_id} key={index}>{item.nama + " - " + item.nip}</option>
+                                                        <option value={item.petugas_id} key={index}>{item.nama + " - " + item.nip}</option>
                                                     ))}
                                                 </select>
                                                 {errors.ttdPerlakuan && <small className="text-danger">{errors.ttdPerlakuan.message}</small>}

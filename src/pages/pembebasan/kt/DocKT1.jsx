@@ -313,7 +313,11 @@ function DocKT1() {
             if(import.meta.env.VITE_BE_ENV == "DEV") {
                 console.log(error)
             }
-            alert(error.response.status + " - " + error.response.data.message)
+            Swal.fire({
+                title: "Error!",
+                icon: "error",
+                text: error.response.data.status + " - " + error.response.data.message
+            })
         });
     }
 
@@ -324,7 +328,11 @@ function DocKT1() {
             })
             setValue("tandaKhusus", "CONT/SEAL NO: " + noKontainerPtk.join("; "))
         } else {
-            alert("Gagal tarik data kontainer, silahkan refresh halaman dan coba lagi")
+            Swal.fire({
+                title: "Error!",
+                icon: "error",
+                text: "Gagal tarik data kontainer, silahkan refresh halaman dan coba lagi"
+            })
         }
     }
 
@@ -425,7 +433,7 @@ function DocKT1() {
             
 
             // 1: penugasan periksa administratif
-            const resSurtug = modelSurtug.getDetilSurtugPenugasan(base64_decode(ptkNomor[1]), 14);
+            const resSurtug = modelSurtug.getSurtugByPtk(base64_decode(ptkNomor[1]), 14);
             resSurtug
             .then((response) => {
                 if(typeof response.data != "string") {
@@ -438,7 +446,7 @@ function DocKT1() {
                                 tglSurtug: response.data.data[0].tanggal,
                                 petugas: response.data.data
                             }));
-                            setValue("idSurtug", response.data.data[0].id)
+                            setValue("idSurtug", response.data.data[0].ptk_surtug_header_id)
                         } else if(response.data.status == 404) {
                             setData(values => ({...values,
                                 errorSurtug: "Surat tugas tidak ada/belum dibuat"
@@ -468,7 +476,6 @@ function DocKT1() {
                         errorSurtug: "Gagal load data surat tugas"
                     }));
                 }
-                // alert(error.response.status + " - " + error.response.data.message)
             });
 
             const resPelId = modelPelepasan.getById(base64_decode(ptkNomor[1]), "T");
@@ -491,14 +498,47 @@ function DocKT1() {
                             setValue("adDeclare", response.data.data.additional_declaration)
                             setValue("adInfo", response.data.data.additional_information)
                             setValue("addInspect", response.data.data.add_inspection)
-                            setValue("idPerlakuan", response.data.data.pn_perlakuan_id)
                             setValue("replacedDokId", response.data.data.replaced_dok_id)
-
-                            // handleGetDokumenPerlakuan()
-                            
                             setValue("isAttach", response.data.data.is_attachment !== null ? response.data.data.is_attachment.toString() : "")
                             setValue("ttdPutusan", response.data.data.user_ttd_id?.toString())
                             setValue("diterbitkan", response.data.data.diterbitkan_di)
+                            
+                            if(response.data.data.pn_perlakuan_id) {
+                                const resPerlakuan = modelPerlakuan.getByIdPerlakuan(response.data.data.pn_perlakuan_id);
+                                resPerlakuan
+                                .then((response) => {
+                                    if(response.data) {
+                                        if(typeof response.data != "string") {
+                                            if(response.data.status == 200) {
+                                                setData(values => ({...values,
+                                                    errorPerlakuan: "",
+                                                }));
+                                                setValue("idPerlakuan", response.data.data.id)
+                                                setValue("selectPerlakuan", response.data.data.dokumen_karantina_id?.toString())
+                                                setValue("tipePerlakuan", response.data.data.tipe_perlakuan_id)
+                                                setValue("tglPerlakuan", response.data.data.tgl_perlakuan_mulai)
+                                                setValue("bahanKimia", response.data.data.pestisida_id)
+                                                setValue("konsentrasi", response.data.data.dosis_aplikasi)
+                                                setValue("durasiPerlakuan", response.data.data.lama_papar)
+                                                setValue("temperatur", response.data.data.suhu_komoditi)
+                                                setValue("adInfo", response.data.data.ket_perlakuan_lain)
+                                            }
+                                        } else {
+                                            setData(values => ({...values,
+                                                errorPerlakuan: "Gagal load data perlakuan",
+                                            }));
+                                        }
+                                    }
+                                })
+                                .catch((error) => {
+                                    if(import.meta.env.VITE_BE_ENV == "DEV") {
+                                        console.log(error)
+                                    }
+                                    setData(values => ({...values,
+                                        errorPerlakuan: "Gagal load data perlakuan",
+                                    }));
+                                });
+                            }
                         } else if(response.data.status == 404) {
                             setData(values => ({...values,
                                 errorKT1: ""
@@ -619,7 +659,7 @@ function DocKT1() {
 
         if(data.errorSurtug) {
             // 1: penugasan periksa administratif
-            const resSurtug = modelSurtug.getDetilSurtugPenugasan(data.noIdPtk, 14);
+            const resSurtug = modelSurtug.getSurtugByPtk(data.noIdPtk, 14);
             resSurtug
             .then((response) => {
                 if(typeof response.data != "string") {
@@ -632,7 +672,7 @@ function DocKT1() {
                                 tglSurtug: response.data.data[0].tanggal,
                                 petugas: response.data.data
                             }));
-                            setValue("idSurtug", response.data.data[0].id)
+                            setValue("idSurtug", response.data.data[0].ptk_surtug_header_id)
                         } else if(response.data.status == 404) {
                             setData(values => ({...values,
                                 errorSurtug: "Surat tugas tidak ada/belum dibuat"
@@ -665,7 +705,7 @@ function DocKT1() {
             });
         }
 
-        if(data.errorKT1) {
+        if(data.errorKT1 || data.errorPerlakuan) {
             const resPelId = modelPelepasan.getById(data.noIdPtk, "T");
             resPelId
             .then((response) => {
@@ -686,14 +726,47 @@ function DocKT1() {
                             setValue("adDeclare", response.data.data.additional_declaration)
                             setValue("adInfo", response.data.data.additional_information)
                             setValue("addInspect", response.data.data.add_inspection)
-                            setValue("idPerlakuan", response.data.data.pn_perlakuan_id)
                             setValue("replacedDokId", response.data.data.replaced_dok_id)
-    
-                            // handleGetDokumenPerlakuan()
-                            
                             setValue("isAttach", response.data.data.is_attachment !== null ? response.data.data.is_attachment.toString() : "")
                             setValue("ttdPutusan", response.data.data.user_ttd_id?.toString())
                             setValue("diterbitkan", response.data.data.diterbitkan_di)
+                            
+                            if(response.data.data.pn_perlakuan_id != null) {
+                                const resPerlakuan = modelPerlakuan.getByIdPerlakuan(response.data.data.pn_perlakuan_id);
+                                resPerlakuan
+                                .then((response) => {
+                                    if(response.data) {
+                                        if(typeof response.data != "string") {
+                                            if(response.data.status == 200) {
+                                                setData(values => ({...values,
+                                                    errorPerlakuan: "",
+                                                }));
+                                                setValue("idPerlakuan", response.data.data.id)
+                                                setValue("selectPerlakuan", response.data.data.dokumen_karantina_id?.toString())
+                                                setValue("tipePerlakuan", response.data.data.tipe_perlakuan_id)
+                                                setValue("tglPerlakuan", response.data.data.tgl_perlakuan_mulai)
+                                                setValue("bahanKimia", response.data.data.pestisida_id)
+                                                setValue("konsentrasi", response.data.data.dosis_aplikasi)
+                                                setValue("durasiPerlakuan", response.data.data.lama_papar)
+                                                setValue("temperatur", response.data.data.suhu_komoditi)
+                                                setValue("adInfo", response.data.data.ket_perlakuan_lain)
+                                            }
+                                        } else {
+                                            setData(values => ({...values,
+                                                errorPerlakuan: "Gagal load data perlakuan",
+                                            }));
+                                        }
+                                    }
+                                })
+                                .catch((error) => {
+                                    if(import.meta.env.VITE_BE_ENV == "DEV") {
+                                        console.log(error)
+                                    }
+                                    setData(values => ({...values,
+                                        errorPerlakuan: "Gagal load data perlakuan",
+                                    }));
+                                });
+                            }
                         } else if(response.data.status == 404) {
                             setData(values => ({...values,
                                 errorKT1: ""
@@ -735,8 +808,8 @@ function DocKT1() {
             KT-1 <span className="fw-light" style={{color: 'blue'}}>PHYTOSANITARY FOR EXPORT</span>
 
             <small className='float-end'>
-                <span className='text-danger'>{(data.errorPTKPage ? data.errorPTKPage + "; " : "") + (data.errorSurtug ? data.errorSurtug + "; " : "") + (data.errorKomoditi ? data.errorKomoditi + "; " : "") + (data.errorKT1 ? data.errorKT1 + "; " : "")}</span>
-                {data.errorPTKPage || data.errorSurtug || data.errorKomoditi || data.errorKT1 ?
+                <span className='text-danger'>{(data.errorPTKPage ? data.errorPTKPage + "; " : "") + (data.errorSurtug ? data.errorSurtug + "; " : "") + (data.errorKomoditi ? data.errorKomoditi + "; " : "") + (data.errorKT1 ? data.errorKT1 + "; " : "") + (data.errorPerlakuan ? data.errorPerlakuan + "; " : "")}</span>
+                {data.errorPTKPage || data.errorSurtug || data.errorKomoditi || data.errorKT1 || errorPerlakuan ?
                     <button type='button' className='btn btn-warning btn-xs' onClick={() => refreshData()}><i className='fa-solid fa-sync'></i> Refresh</button>
                 : ""}
             </small>
@@ -1085,7 +1158,7 @@ function DocKT1() {
                                 <div className="col-sm-3 mb-3 pr-2">
                                     <select className={errors.ttdPutusan == '' ? 'form-select form-select-sm is-invalid' : 'form-select form-select-sm'} name="ttdPutusan" id="ttdPutusan" {...register("ttdPutusan", { required: "Mohon pilih penandatangan."})}>
                                         {data.petugas?.map((item, index) => (
-                                            <option value={item.penanda_tangan_id} key={index} defaultValue={cekWatch.ttdPutusan}>{item.nama + " - " + item.nip}</option>
+                                            <option value={item.petugas_id} key={index} defaultValue={cekWatch.ttdPutusan}>{item.nama + " - " + item.nip}</option>
                                         ))}
                                     </select>
                                     {/* <input type="text" {...register("ttdPutusan", { required: "Mohon pilih nama penandatangan."})} className={errors.ttdPutusan ? "form-control form-control-sm is-invalid" : "form-control form-control-sm"} /> */}

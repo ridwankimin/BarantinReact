@@ -469,7 +469,7 @@ function DocKI1() {
             });
 
             // 1: penugasan periksa administratif
-            const resSurtug = modelSurtug.getDetilSurtugPenugasan(base64_decode(ptkNomor[1]), 14);
+            const resSurtug = modelSurtug.getSurtugByPtk(base64_decode(ptkNomor[1]), 14);
             resSurtug
             .then((response) => {
                 if(response.data) {
@@ -483,7 +483,7 @@ function DocKI1() {
                                 tglSurtug: response.data.data[0].tanggal,
                                 petugas: response.data.data
                             }));
-                            setValue("idSurtug", response.data.data[0].id)
+                            setValue("idSurtug", response.data.data[0].ptk_surtug_header_id)
                         }
                     } else {
                         setData(values => ({...values,
@@ -681,7 +681,7 @@ function DocKI1() {
 
         if(data.errorSurtug) {
             // 1: penugasan periksa administratif
-            const resSurtug = modelSurtug.getDetilSurtugPenugasan(data.noIdPtk, 14);
+            const resSurtug = modelSurtug.getSurtugByPtk(data.noIdPtk, 14);
             resSurtug
             .then((response) => {
                 if(response.data) {
@@ -695,7 +695,7 @@ function DocKI1() {
                                 tglSurtug: response.data.data[0].tanggal,
                                 petugas: response.data.data
                             }));
-                            setValue("idSurtug", response.data.data[0].id)
+                            setValue("idSurtug", response.data.data[0].ptk_surtug_header_id)
                         }
                     } else {
                         setData(values => ({...values,
@@ -1230,7 +1230,7 @@ function DocKI1() {
                             <div className="col-sm-3 mb-3 pr-2">
                                 <select className={errors.ttdPutusan == '' ? 'form-select form-select-sm is-invalid' : 'form-select form-select-sm'} name="ttdPutusan" id="ttdPutusan" {...register("ttdPutusan", { required: "Mohon pilih penandatangan."})}>
                                     {data.petugas?.map((item, index) => (
-                                        <option value={item.penanda_tangan_id} key={index} defaultValue={cekWatch.ttdPutusan}>{item.nama + " - " + item.nip}</option>
+                                        <option value={item.petugas_id} key={index} defaultValue={cekWatch.ttdPutusan}>{item.nama + " - " + item.nip}</option>
                                     ))}
                                 </select>
                                 {errors.ttdPutusan && <small className="text-danger">{errors.ttdPutusan.message}</small>}

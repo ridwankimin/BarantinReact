@@ -189,6 +189,21 @@ export default class PtkSurtug {
         }
       };
       
+      return axios.request(config)
+    }
+    
+    getSurtugByPtk(id, penugasan) {
+      let config = {
+        method: 'post',
+        maxBodyLength: Infinity,
+        url: url + 'surtug/penugasan/' + id,
+        headers: { 
+          'Content-Type': 'application/json', 
+        },
+        data: {
+          penugasan_id: penugasan
+        }
+      };
       
       return axios.request(config)
     }

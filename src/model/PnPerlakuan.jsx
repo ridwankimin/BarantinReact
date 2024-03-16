@@ -22,6 +22,19 @@ export default class PnPerlakuan {
     };
     return axios.request(config)
   }
+  
+  getByIdPerlakuan(id) {
+    let config = {
+      method: 'get',
+      maxBodyLength: Infinity,
+      url: url + 'pn-perlakuan/' + id,
+      // url: url + 'pn-adm',
+      headers: { 
+        'Content-Type': 'application/json', 
+      }
+    };
+    return axios.request(config)
+  }
     
     sertifPerlakuan(data) {
         const uuid = uuidv4();

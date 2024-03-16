@@ -9,12 +9,15 @@ import PtkModel from '../../model/PtkModel';
 import PtkSurtug from '../../model/PtkSurtug';
 import SpinnerDot from '../../component/loading/SpinnerDot';
 import Swal from 'sweetalert2';
+import PnPerlakuan from '../../model/PnPerlakuan';
+import LoadBtn from '../../component/loading/LoadBtn';
 
 const log = new PtkHistory()
 const modelPemohon = new PtkModel()
 const model = new PnPelepasan()
 const modelSurtug = new PtkSurtug()
 const modelPelepasan = new PnPelepasan()
+const modelPerlakuan = new PnPerlakuan()
 
 const addCommas = num => {
     var parts = num.toString().split(".");
@@ -44,32 +47,82 @@ function DocK92t() {
         handleSubmit,
         watch,
         formState: { errors },
-    } = useForm();
+    } = useForm({
+        defaultValues: {
+            noSeri: "*******"
+        }
+    });
 
     const cekWatch = watch()
 
     const {
-        register: registerMPK92t,
-        setValue: setValueMPK92t,
+        register: registerMPk92t,
+        setValue: setValueMPk92t,
         // control: controlMPK92t,
-        watch: watchMPK92t,
-        handleSubmit: handleFormMPK92t,
-        // reset: resetFormKomoditi,
-        formState: { errors: errorsMPK92t },
+        watch: watchMPk92t,
+        handleSubmit: handleFormMPk92t,
+        reset: resetFormKomoditik92t,
+        formState: { errors: errorsMPk92t },
     } = useForm({
         defaultValues: {
             idMPK92t: "",
-            volumeNetto: "",
-            volumeLain: "",
+            nettoP8: "",
+            volumeP8: "",
             satuanLain: "",
             namaUmum: "",
             namaLatin: "",
           }
         })
 
-    const cekdataMPK92t = watchMPK92t()
+    const cekdataMPk92t = watchMPk92t()
 
     function onSubmitMPK92t(data) {
+        setOnLoad(true)
+        let cekVolume = false
+        if(parseFloat(typeof data.volumeP8 == "string" ? data.volumeP8.replace(/,/g, "") : data.volumeP8) > parseFloat(cekData.volumeP8) || parseFloat(typeof data.nettoP8 == "string" ? data.nettoP8.replace(/,/g, "") : data.nettoP8) > parseFloat(cekData.nettoP8)) {
+            cekVolume = false 
+        } else {
+            cekVolume = true
+        }
+        if(cekVolume) {
+            log.updateKomoditiP8(data.idMPk92t, data)
+            .then((response) => {
+                setOnLoad(false)
+                if(response.data.status == 201) {
+                    Swal.fire({
+                        title: "Sukses!",
+                        text: "Volume P8 berhasil disimpan",
+                        icon: "success"
+                    });
+                    resetFormKomoditik92t()
+                    refreshListKomoditas()
+                } else {
+                    Swal.fire({
+                        icon: "error",
+                        title: "Error!",
+                        text: response.data.message
+                    })
+                }
+            })
+            .catch((error) => {
+                setOnLoad(false)
+                if(import.meta.env.VITE_BE_ENV == "DEV") {
+                    console.log(error)
+                }
+                Swal.fire({
+                    icon: "error",
+                    title: "Error!",
+                    text: error.response.data.message
+                })
+            })
+        } else {
+            setOnLoad(false)
+            Swal.fire({
+                icon: "error",
+                title: "Error!",
+                text: "Volume input melebihi volume awal, mohon cek isian anda"
+            })
+        }
     }
 
     const onSubmit = (data) => {
@@ -94,10 +147,19 @@ function DocK92t() {
                         }
                     });
                     //end save history
-
-                    alert(response.data.status + " - " + response.data.message)
+                    Swal.fire({
+                        icon: "success",
+                        title: "Sukses!",
+                        text: "Sertifikat Pelepasan Karantina Berhasil " + (data.idDok92t ? 'diedit' : 'disimpan')
+                    })
                     setValue("idDok92t", response.data.data.id)
                     setValue("noDok92t", response.data.data.nomor)
+                } else {
+                    Swal.fire({
+                        icon: "error",
+                        title: "Error!",
+                        text: response.data.status + " - " + response.data.message
+                    })
                 }
             }
         })
@@ -105,27 +167,31 @@ function DocK92t() {
             if(import.meta.env.VITE_BE_ENV == "DEV") {
                 console.log(error)
             }
-            alert(error.response.status + " - " + error.response.data.message)
+            Swal.fire({
+                icon: "error",
+                title: "Error!",
+                text: error.response.data.status + " - " + error.response.data.message
+            })
         });
     }
 
     function handleEditKomoditas(e) {
         const dataMP = data.listKomoditas?.filter((element, index) => index == e)
-        setValueMPK92t("idMPk92t", dataMP[0].id)
-        setValueMPK92t("idPtk", dataMP[0].ptk_id)
-        setValueMPK92t("jenisKar", Cookies.get("jenisKarantina"))
+        setValueMPk92t("idMPk92t", dataMP[0].id)
+        setValueMPk92t("idPtk", dataMP[0].ptk_id)
+        setValueMPk92t("jenisKar", Cookies.get("jenisKarantina"))
         setCekData(values => ({...values,
             volumeP8: dataMP[0].volume_lain,
             nettoP8: dataMP[0].volume_netto,
             jantanP8: dataMP[0].jantan,
             betinaP8: dataMP[0].betina
         }));
-        setValueMPK92t("nettoP8", dataMP[0].volume_netto)
-        setValueMPK92t("satuanNetto", dataMP[0].sat_netto)
-        setValueMPK92t("volumeP8", dataMP[0].volume_lain)
-        setValueMPK92t("satuanLain", dataMP[0].sat_lain)
-        setValueMPK92t("namaUmum", dataMP[0].nama_umum_tercetak)
-        setValueMPK92t("namaLatin", dataMP[0].nama_latin_tercetak)
+        setValueMPk92t("nettoP8", dataMP[0].volume_netto)
+        setValueMPk92t("satuanNetto", dataMP[0].sat_netto)
+        setValueMPk92t("volumeP8", dataMP[0].volume_lain)
+        setValueMPk92t("satuanLain", dataMP[0].sat_lain)
+        setValueMPk92t("namaUmum", dataMP[0].nama_umum_tercetak)
+        setValueMPk92t("namaLatin", dataMP[0].nama_latin_tercetak)
     }
 
     function handleEditKomoditasAll() {
@@ -167,6 +233,59 @@ function DocK92t() {
         setLoadKomoditi(false)
     }
 
+    function handleGetDokumenPerlakuan(e) {
+        const resLaporan = modelPerlakuan.getPtkByDokumen(data.noIdPtk, e)
+        resLaporan
+        .then((response) => {
+            if(typeof response.data != "string") {
+                setData(values => ({...values,
+                    errorData5: false
+                }))
+                if(response.data.status == 200) {
+                    setValue("idPerlakuan", response.data.data[0].id)
+                    setValue("tipePerlakuan", response.data.data[0].tipe_perlakuan_id)
+                    setValue("tglPerlakuan", response.data.data[0].tgl_perlakuan_mulai)
+                    setValue("bahanKimia", response.data.data[0].pestisida_id)
+                    setValue("konsentrasi", response.data.data[0].dosis_aplikasi)
+                    setValue("durasiPerlakuan", response.data.data[0].lama_papar)
+                    setValue("temperatur", response.data.data[0].suhu_komoditi)
+                    setValue("adInfo", response.data.data[0].ket_perlakuan_lain)
+                }
+            } else {
+                setData(values => ({...values,
+                    errorData5: true
+                }))
+            }
+        })
+        .catch((error) => {
+            if(import.meta.env.VITE_BE_ENV == "DEV") {
+                console.log(error)
+            }
+            Swal.fire({
+                title: "Error!",
+                icon: "error",
+                text: error.response.data.status + " - " + error.response.data.message
+            })
+        });
+    }
+
+    function refreshListKomoditas() {
+        const resKom = modelPemohon.getKomoditiPtkId(data.noIdPtk, Cookies.get("jenisKarantina"));
+        resKom
+        .then((res) => {
+            if(res.data.status == 200) {
+                setData(values => ({...values,
+                    listKomoditas: res.data.data
+                }));
+            }
+        })
+        .catch((error) => {
+            if(import.meta.env.VITE_BE_ENV == "DEV") {
+                console.log(error)
+            }
+        });
+    }
+
     useEffect(()=>{
         if(idPtk) {
             setValue("tglDok92t", (new Date()).toLocaleString('en-CA', { hourCycle: 'h24' }).replace(',', '').slice(0,16))
@@ -189,7 +308,6 @@ function DocK92t() {
                         setData(values => ({...values,
                             errorPTK: "",
                             listPtk: response.data.data.ptk,
-                            listKomoditas: response.data.data.ptk_komoditi,
                             listDokumen: response.data.data.ptk_dokumen
                         }));
 
@@ -199,7 +317,7 @@ function DocK92t() {
                             if(typeof res.data != "string") {
                                 if(res.data.status == 200) {
                                     setData(values => ({...values,
-                                        errorKomoditas: "",
+                                        errorKomoditi: "",
                                         listKomoditas: res.data.data
                                     }));
                                     var arrayKomKT = res.data.data.map(item => {
@@ -216,7 +334,7 @@ function DocK92t() {
                                 }
                             } else {
                                 setData(values => ({...values,
-                                    errorKomoditas: "Gagal load data Komoditas"
+                                    errorKomoditi: "Gagal load data Komoditas"
                                 }));
                             }
                         })
@@ -225,7 +343,7 @@ function DocK92t() {
                                 console.log(error)
                             }
                             setData(values => ({...values,
-                                errorKomoditas: "Gagal load data Komoditas"
+                                errorKomoditi: "Gagal load data Komoditas"
                             }));
                         });
                         
@@ -235,7 +353,7 @@ function DocK92t() {
                 } else {
                     setData(values => ({...values,
                         errorPTK: "Gagal load data PTK",
-                        errorKomoditas: "Gagal load data Komoditas"
+                        errorKomoditi: "Gagal load data Komoditas"
                     }));
                 }
             })
@@ -245,12 +363,11 @@ function DocK92t() {
                 }
                 setData(values => ({...values,
                     errorPTK: "Gagal load data PTK",
-                    errorKomoditas: "Gagal load data Komoditas"
+                    errorKomoditi: "Gagal load data Komoditas"
                 }));
             });
 
-                // 1: penugasan periksa administratif
-            const resSurtug = modelSurtug.getDetilSurtugPenugasan(base64_decode(ptkNomor[1]), 14);
+            const resSurtug = modelSurtug.getSurtugByPtk(base64_decode(ptkNomor[1]), 14);
             resSurtug
             .then((response) => {
                 if(response.data) {
@@ -262,7 +379,7 @@ function DocK92t() {
                                 tglSurtug: response.data.data[0].tanggal,
                                 petugas: response.data.data
                             }));
-                            setValue("idSurtug", response.data.data[0].id)
+                            setValue("idSurtug", response.data.data[0].ptk_surtug_header_id)
                         }
                     } else {
                         setData(values => ({...values,
@@ -301,19 +418,52 @@ function DocK92t() {
                             setValue("noSeri", response.data.data.nomor_seri)
                             setValue("jenisDokumen", response.data.data.status_dok)
                             
-                            setValue("hasilPemeriksaan", response.data.data.hasil_periksa)
-                            setValue("hasilPemeriksaanKet1", response.data.data.p1)
-                            setValue("hasilPemeriksaanKet2", response.data.data.p2)
-                            setValue("hasilPemeriksaanKet3", response.data.data.p3)
-                            setValue("hasilPemeriksaanKet4", response.data.data.p4)
+                            setValue("keteranganTambahan", response.data.data.additional_information)
+                            
                             setValue("isAttach", response.data.data.is_attachment)
                             setValue("ttdPutusan", response.data.data.user_ttd_id?.toString())
                             setValue("diterbitkan", response.data.data.diterbitkan_di)
-
+                            
+                            if(response.data.data.pn_perlakuan_id != null) {
+                                const resPerlakuan = modelPerlakuan.getByIdPerlakuan(response.data.data.pn_perlakuan_id);
+                                resPerlakuan
+                                .then((response) => {
+                                    if(response.data) {
+                                        if(typeof response.data != "string") {
+                                            if(response.data.status == 200) {
+                                                setData(values => ({...values,
+                                                    errorPerlakuan: "",
+                                                }));
+                                                setValue("idPerlakuan", response.data.data.id)
+                                                setValue("selectPerlakuan", response.data.data.dokumen_karantina_id?.toString())
+                                                setValue("tipePerlakuan", response.data.data.tipe_perlakuan_id)
+                                                setValue("tglPerlakuan", response.data.data.tgl_perlakuan_mulai)
+                                                setValue("bahanKimia", response.data.data.pestisida_id)
+                                                setValue("konsentrasi", response.data.data.dosis_aplikasi)
+                                                setValue("durasiPerlakuan", response.data.data.lama_papar)
+                                                setValue("temperatur", response.data.data.suhu_komoditi)
+                                                setValue("adInfo", response.data.data.ket_perlakuan_lain)
+                                            }
+                                        } else {
+                                            setData(values => ({...values,
+                                                errorPerlakuan: "Gagal load data perlakuan",
+                                            }));
+                                        }
+                                    }
+                                })
+                                .catch((error) => {
+                                    if(import.meta.env.VITE_BE_ENV == "DEV") {
+                                        console.log(error)
+                                    }
+                                    setData(values => ({...values,
+                                        errorPerlakuan: "Gagal load data perlakuan",
+                                    }));
+                                });
+                            }
                         }
                     } else {
                         setData(values => ({...values,
-                            errork92i: "Gagal load data Sertifikat Karantina Ikan"
+                            errork92t: "Gagal load data Sertifikat Karantina"
                         }));
                     }
                 }
@@ -325,21 +475,221 @@ function DocK92t() {
                 if(error.response) {
                     if(error.response.data.status == 404) {
                         setData(values => ({...values,
-                            errork92i: "",
+                            errork92t: "",
                         }));
                     } else {
                         setData(values => ({...values,
-                            errork92i: "Gagal load data Sertifikat Karantina Ikan",
+                            errork92t: "Gagal load data Sertifikat Karantina",
                         }));
                     }
                 }
             });
         }
     },[idPtk, setValue])
+
+    function refreshData() {
+        if(data.errorPTK) {
+            const response = modelPemohon.getPtkId(data.noIdPtk);
+            response
+            .then((response) => {
+                if(typeof response.data != "string") {
+                    if(response.data.status == 200) {
+                        setData(values => ({...values,
+                            errorPTK: "",
+                            listPtk: response.data.data.ptk,
+                            listDokumen: response.data.data.ptk_dokumen
+                        }));
+
+                        setValue("idPtk", data.noIdPtk)
+                        setValue("noDokumen", data.noDokumen)
+                    }
+                } else {
+                    setData(values => ({...values,
+                        errorPTK: "Gagal load data PTK"
+                    }));
+                }
+            })
+            .catch((error) => {
+                if(import.meta.env.VITE_BE_ENV == "DEV") {
+                    console.log(error)
+                }
+                setData(values => ({...values,
+                    errorPTK: "Gagal load data PTK"
+                }));
+            });
+        }
+
+        if(data.errorKomoditi) {
+            const resKom = modelPemohon.getKomoditiPtkId(data.noIdPtk, Cookies.get("jenisKarantina"));
+            resKom
+            .then((res) => {
+                if(typeof res.data != "string") {
+                    if(res.data.status == 200) {
+                        setData(values => ({...values,
+                            errorKomoditi: "",
+                            listKomoditas: res.data.data
+                        }));
+                        var arrayKomKT = res.data.data.map(item => {
+                            return {
+                                namaUmum: item.nama_umum_tercetak,
+                                namaLatin: item.nama_latin_tercetak,
+                                jantanP8: null,
+                                betinaP8: null,
+                                volumeP8: item.volume_lain,
+                                nettoP8: item.volume_netto
+                            }
+                        })
+                        setDataSend(arrayKomKT)
+                    }
+                } else {
+                    setData(values => ({...values,
+                        errorKomoditi: "Gagal load data Komoditas"
+                    }));
+                }
+            })
+            .catch((error) => {
+                if(import.meta.env.VITE_BE_ENV == "DEV") {
+                    console.log(error)
+                }
+                setData(values => ({...values,
+                    errorKomoditi: "Gagal load data Komoditas"
+                }));
+            });
+        }
+
+        if(data.errorSurtug) {
+            const resSurtug = modelSurtug.getSurtugByPtk(data.noIdPtk, 14);
+            resSurtug
+            .then((response) => {
+                if(response.data) {
+                    if(typeof response.data != "string") {
+                        if(response.data.status == 200) {
+                            setData(values => ({...values,
+                                errorSurtug: "",
+                                noSurtug: response.data.data[0].nomor,
+                                tglSurtug: response.data.data[0].tanggal,
+                                petugas: response.data.data
+                            }));
+                            setValue("idSurtug", response.data.data[0].ptk_surtug_header_id)
+                        }
+                    } else {
+                        setData(values => ({...values,
+                            errorSurtug: "Gagal load data Surat tugas",
+                        }));
+                    }
+                }
+            })
+            .catch((error) => {
+                if(import.meta.env.VITE_BE_ENV == "DEV") {
+                    console.log(error)
+                }
+                if(error.response.data.status == 404) {
+                    setData(values => ({...values,
+                        errorSurtug: "Surat tugas tidak ada/belum dibuat",
+                    }));
+                } else {
+                    setData(values => ({...values,
+                        errorSurtug: "Gagal load data Surat tugas",
+                    }));
+                }
+            });
+        }
+
+        if(data.errork92t || data.errorPerlakuan) {
+            const resPelId = modelPelepasan.getById(data.noIdPtk, "T");
+            resPelId
+            .then((response) => {
+                if(response.data) {
+                    if(typeof response.data != "string") {
+                        setData(values => ({...values,
+                            errork92t: ""
+                        }));
+                        if(response.data.status == 200) {
+                            setValue("idDok92t", response.data.data.id)
+                            setValue("noDok92t", response.data.data.nomor)
+                            setValue("tglDok92t", response.data.data.tanggal)
+                            setValue("noSeri", response.data.data.nomor_seri)
+                            setValue("jenisDokumen", response.data.data.status_dok)
+                            
+                            setValue("keteranganTambahan", response.data.data.additional_information)
+                            
+                            setValue("isAttach", response.data.data.is_attachment)
+                            setValue("ttdPutusan", response.data.data.user_ttd_id?.toString())
+                            setValue("diterbitkan", response.data.data.diterbitkan_di)
+                            
+                            if(response.data.data.pn_perlakuan_id != null) {
+                                const resPerlakuan = modelPerlakuan.getByIdPerlakuan(response.data.data.pn_perlakuan_id);
+                                resPerlakuan
+                                .then((response) => {
+                                    if(response.data) {
+                                        if(typeof response.data != "string") {
+                                            if(response.data.status == 200) {
+                                                setData(values => ({...values,
+                                                    errorPerlakuan: "",
+                                                }));
+                                                setValue("idPerlakuan", response.data.data.id)
+                                                setValue("selectPerlakuan", response.data.data.dokumen_karantina_id?.toString())
+                                                setValue("tipePerlakuan", response.data.data.tipe_perlakuan_id)
+                                                setValue("tglPerlakuan", response.data.data.tgl_perlakuan_mulai)
+                                                setValue("bahanKimia", response.data.data.pestisida_id)
+                                                setValue("konsentrasi", response.data.data.dosis_aplikasi)
+                                                setValue("durasiPerlakuan", response.data.data.lama_papar)
+                                                setValue("temperatur", response.data.data.suhu_komoditi)
+                                                setValue("adInfo", response.data.data.ket_perlakuan_lain)
+                                            }
+                                        } else {
+                                            setData(values => ({...values,
+                                                errorPerlakuan: "Gagal load data perlakuan",
+                                            }));
+                                        }
+                                    }
+                                })
+                                .catch((error) => {
+                                    if(import.meta.env.VITE_BE_ENV == "DEV") {
+                                        console.log(error)
+                                    }
+                                    setData(values => ({...values,
+                                        errorPerlakuan: "Gagal load data perlakuan",
+                                    }));
+                                });
+                            }
+                        }
+                    } else {
+                        setData(values => ({...values,
+                            errork92t: "Gagal load data Sertifikat Karantina"
+                        }));
+                    }
+                }
+            })
+            .catch((error) => {
+                if(import.meta.env.VITE_BE_ENV == "DEV") {
+                    console.log(error)
+                }
+                if(error.response) {
+                    if(error.response.data.status == 404) {
+                        setData(values => ({...values,
+                            errork92t: "",
+                        }));
+                    } else {
+                        setData(values => ({...values,
+                            errork92t: "Gagal load data Sertifikat Karantina",
+                        }));
+                    }
+                }
+            });   
+        }
+    }
   return (
     <div className="container-xxl flex-grow-1 container-p-y">
         <h4 className="py-3 breadcrumb-wrapper mb-4">
             K-9.2.T <span className="fw-light" style={{color: 'blue'}}>Sertifikat Pelepasan Karantina Tumbuhan/Pengawasan</span>
+
+            <small className='float-end'>
+                <span className='text-danger'>{(data.errorPTK ? data.errorPTK + "; " : "") + (data.errorSurtug ? data.errorSurtug + "; " : "") + (data.errorKomoditi ? data.errorKomoditi + "; " : "") + (data.errork92t ? data.errork92t + "; " : "") + (data.errorPerlakuan ? data.errorPerlakuan + "; " : "")}</span>
+                {data.errorPTK || data.errorSurtug || data.errorKomoditi || data.errork92t || data.errorPerlakuan ?
+                    <button type='button' className='btn btn-warning btn-xs' onClick={() => refreshData()}><i className='fa-solid fa-sync'></i> Refresh</button>
+                : ""}
+            </small>
         </h4>
 
         <div className="row">
@@ -391,7 +741,7 @@ function DocK92t() {
                                     </div>
                                     <label className="col-sm-2 col-form-label text-sm-end" htmlFor="noSeri">No Seri <span className='text-danger'>*</span></label>
                                     <div className="col-sm-2">
-                                        <input type="text" id="noSeri" name='noSeri' {...register("noSeri", {required: "Mohon isi Nomor seru."})} className={errors.noSeri ? "form-control form-control-sm is-invalid" : "form-control form-control-sm"} />
+                                        <input type="text" id="noSeri" disabled name='noSeri' {...register("noSeri", {required: "Mohon isi Nomor seru."})} className={errors.noSeri ? "form-control form-control-sm is-invalid" : "form-control form-control-sm"} />
                                         {errors.noSeri && <small className="text-danger">{errors.noSeri.message}</small>}
                                     </div>
                                 </div>
@@ -400,7 +750,7 @@ function DocK92t() {
                                 <div className="row mb-3">
                                     <label className="col-sm-2 col-form-label text-sm-start" htmlFor="noDok92t">Nomor Dokumen</label>
                                     <div className="col-sm-3">
-                                        <input type="text" id="noDok92t" name='noDok92t' {...register("noDok92t")} className="form-control form-control-sm" placeholder="Nomor Dokumen K-T.1" disabled />
+                                        <input type="text" id="noDok92t" name='noDok92t' {...register("noDok92t")} className="form-control form-control-sm" placeholder="Nomor Dokumen K-9.2.T" disabled />
                                     </div>
                                     <label className="col-sm-3 col-form-label text-sm-end" htmlFor="tglDok92t">Tanggal <span className='text-danger'>*</span></label>
                                     <div className="col-sm-2">
@@ -424,7 +774,7 @@ function DocK92t() {
                                                     <div className="row">
                                                         <label className="col-sm-4 col-form-label" htmlFor="namaPengirim">Nama</label>
                                                         <div className="col-sm-8">
-                                                            <input type="text" id="namaPengirim" value={data.listPtk && (data.listPtk.nama_pengirim || "")} disabled className="form-control form-control-sm" placeholder="Nama Pengirim" />
+                                                            <input type="text" id="namaPengirim" value={data.listPtk?.nama_pengirim || ""} disabled className="form-control form-control-sm" placeholder="Nama Pengirim" />
                                                         </div>
                                                     </div>
                                                 </div>
@@ -433,7 +783,7 @@ function DocK92t() {
                                                     <div className="row">
                                                         <label className="col-sm-4 col-form-label" htmlFor="namaPenerima">Nama</label>
                                                         <div className="col-sm-8">
-                                                            <input type="text" id="namaPenerima" value={data.listPtk && (data.listPtk.nama_penerima || "")} disabled className="form-control form-control-sm" placeholder="Nama Penerima" />
+                                                            <input type="text" id="namaPenerima" value={data.listPtk?.nama_penerima || ""} disabled className="form-control form-control-sm" placeholder="Nama Penerima" />
                                                         </div>
                                                     </div>
                                                 </div>
@@ -443,7 +793,7 @@ function DocK92t() {
                                                     <div className="row">
                                                         <label className="col-sm-4 col-form-label" htmlFor="alamatPengirim">Alamat</label>
                                                         <div className="col-sm-8">
-                                                            <textarea name="alamatPengirim" className="form-control form-control-sm" disabled value={data.listPtk && (data.listPtk.alamat_pengirim || "")} id="alamatPengirim" rows="2" placeholder=""></textarea>
+                                                            <textarea name="alamatPengirim" className="form-control form-control-sm" disabled value={data.listPtk?.alamat_pengirim || ""} id="alamatPengirim" rows="2" placeholder=""></textarea>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -451,7 +801,7 @@ function DocK92t() {
                                                     <div className="row">
                                                         <label className="col-sm-4 col-form-label" htmlFor="alamatPenerima">Alamat</label>
                                                         <div className="col-sm-8">
-                                                            <textarea name="alamatPenerima" className="form-control form-control-sm" disabled value={data.listPtk && (data.listPtk.alamat_penerima || "")} id="alamatPenerima" rows="2" placeholder=""></textarea>
+                                                            <textarea name="alamatPenerima" className="form-control form-control-sm" disabled value={data.listPtk?.alamat_penerima || ""} id="alamatPenerima" rows="2" placeholder=""></textarea>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -461,7 +811,7 @@ function DocK92t() {
                                                     <div className="row">
                                                         <label className="col-sm-4 col-form-label" htmlFor="identitasPengirim">Identitas</label>
                                                         <div className="col-sm-8">
-                                                            <input name="identitastPengirim" className="form-control form-control-sm" disabled value={data.listPtk && ((data.listPtk.jenis_identitas_pengirim + " - " + data.listPtk.nomor_identitas_pengirim) || "")} id="identitasPengirim" placeholder="" />
+                                                            <input name="identitastPengirim" className="form-control form-control-sm" disabled value={(data.listPtk?.jenis_identitas_pengirim + " - " + data.listPtk?.nomor_identitas_pengirim) || ""} id="identitasPengirim" placeholder="" />
                                                         </div>
                                                     </div>
                                                 </div>
@@ -469,7 +819,7 @@ function DocK92t() {
                                                     <div className="row">
                                                         <label className="col-sm-4 col-form-label" htmlFor="identitasPenerima">Identitas</label>
                                                         <div className="col-sm-8">
-                                                            <input name="identitasPenerima" className="form-control form-control-sm" disabled value={data.listPtk && ((data.listPtk.jenis_identitas_penerima + " - " + data.listPtk.nomor_identitas_penerima) || "")} id="identitasPenerima" placeholder="" />
+                                                            <input name="identitasPenerima" className="form-control form-control-sm" disabled value={(data.listPtk?.jenis_identitas_penerima + " - " + data.listPtk?.nomor_identitas_penerima) || ""} id="identitasPenerima" placeholder="" />
                                                         </div>
                                                     </div>
                                                 </div>
@@ -479,7 +829,7 @@ function DocK92t() {
                                                 <h5 className='mb-1'><b><u>Identitas Media Pembawa</u></b>
                                                 {loadKomoditi ? <SpinnerDot/> : null}
                                                 {data.listKomoditas ? 
-                                                (loadKomoditi ? null : <button className='btn btn-sm btn-outline-secondary' onClick={handleEditKomoditasAll} style={{marginLeft: "15px"}}><i className='fa-solid fa-check-square text-success me-sm-2 me-1'></i> Tidak ada perubahan</button>) : null }
+                                                (loadKomoditi ? null : <button type='button' className='btn btn-sm btn-outline-secondary' onClick={handleEditKomoditasAll} style={{marginLeft: "15px"}}><i className='fa-solid fa-check-square text-success me-sm-2 me-1'></i> Tidak ada perubahan</button>) : null }
                                                 <span className='text-danger'>{loadKomoditiPesan}</span>
                                                 </h5>
                                                 <div className='col-md-12 mb-3'>
@@ -578,7 +928,7 @@ function DocK92t() {
                                                     <div className="row">
                                                         <label className="col-sm-4 col-form-label" htmlFor="tujuanPemasukan">Tujuan pemasukan</label>
                                                         <div className="col-sm-8">
-                                                            <input name="tujuanPemasukan" className="form-control form-control-sm" disabled value={data.listPtk && ((data.listPtk.peruntukan) || "")} id="tujuanPemasukan" placeholder="" />
+                                                            <input name="tujuanPemasukan" className="form-control form-control-sm" disabled value={data.listPtk && ((data.listPtk.peruntukan) || ""} id="tujuanPemasukan" placeholder="" />
                                                         </div>
                                                     </div>
                                                 </div> */}
@@ -590,7 +940,7 @@ function DocK92t() {
                                                     <div className="row">
                                                         <label className="col-sm-4 col-form-label" htmlFor="jenisNamaAlatAngkut">Jenis dan Nama Alat Angkut</label>
                                                         <div className="col-sm-6">
-                                                            <input type="text" id="jenisNamaAlatAngkut" value={data.listPtk && (data.listPtk.tipe_alat_angkut_terakhir_id + ", " + data.listPtk.nama_alat_angkut_terakhir || "")} disabled className="form-control form-control-sm" placeholder="Jenis dan Nama Alat Angkut" />
+                                                            <input type="text" id="jenisNamaAlatAngkut" value={data.listPtk?.tipe_alat_angkut_terakhir_id + ", " + data.listPtk?.nama_alat_angkut_terakhir || ""} disabled className="form-control form-control-sm" placeholder="Jenis dan Nama Alat Angkut" />
                                                         </div>
                                                     </div>
                                                 </div>
@@ -598,7 +948,7 @@ function DocK92t() {
                                                     <div className="row">
                                                         <label className="col-sm-4 col-form-label" htmlFor="negaraDaerahAsal">Negara/area asal*) dan tempat pengeluaran</label>
                                                         <div className="col-sm-6">
-                                                            <input type="text" id="negaraDaerahAsal" value={data.listPtk && (data.listPtk.negara_muat + ", " + data.listPtk.pelabuhan_muat || "")} disabled className="form-control form-control-sm" placeholder="Negara/area asal*) dan tempat pengeluaran" />
+                                                            <input type="text" id="negaraDaerahAsal" value={data.listPtk?.negara_muat + ", " + data.listPtk?.pelabuhan_muat || ""} disabled className="form-control form-control-sm" placeholder="Negara/area asal*) dan tempat pengeluaran" />
                                                         </div>
                                                     </div>
                                                 </div>
@@ -606,7 +956,7 @@ function DocK92t() {
                                                     <div className="row">
                                                         <label className="col-sm-4 col-form-label" htmlFor="daerahAsalMP">Tempat/area produksi media pembawa</label>
                                                         <div className="col-sm-6">
-                                                            <input type="text" id="daerahAsalMP" value={data.listPtk && (data.listPtk.kota_tujuan || "")} disabled className="form-control form-control-sm" placeholder="Tempat/area produksi media pembawa" />
+                                                            <input type="text" id="daerahAsalMP" value={data.listPtk?.kota_tujuan || ""} disabled className="form-control form-control-sm" placeholder="Tempat/area produksi media pembawa" />
                                                         </div>
                                                     </div>
                                                 </div>
@@ -614,7 +964,7 @@ function DocK92t() {
                                                     <div className="row">
                                                         <label className="col-sm-4 col-form-label" htmlFor="tglTiba">Tanggal tiba</label>
                                                         <div className="col-sm-4">
-                                                            <input type="text" id="tglTiba" value={data.listPtk && (data.listPtk.tanggal_rencana_tiba_terakhir || "")} disabled className="form-control form-control-sm" placeholder="Tanggal tiba" />
+                                                            <input type="text" id="tglTiba" value={data.listPtk?.tanggal_rencana_tiba_terakhir || ""} disabled className="form-control form-control-sm" placeholder="Tanggal tiba" />
                                                         </div>
                                                     </div>
                                                 </div>
@@ -632,19 +982,39 @@ function DocK92t() {
                                     <div id="collapsePerlakuan">
                                         <div className="accordion-body">
                                             <div className="row">
+                                                <div className="col-md-12">
+                                                    <div className="row">
+                                                        <label className="col-sm-2 col-form-label" htmlFor="selectPerlakuan">Ambil data dari dokumen :</label>
+                                                        <div className="col-sm-2">
+                                                            <select name="selectPerlakuan" id="selectPerlakuan" {...register("selectPerlakuan")} onChange={(e) => handleGetDokumenPerlakuan(e.target.value)} className='form-select form-select-sm'>
+                                                                <option value="">--</option>
+                                                                <option value="21">K-5.1</option>
+                                                                <option value="22">K-5.2</option>
+                                                                <option value="23">K-5.3</option>
+                                                            </select>
+                                                            <input type="hidden" id='idPerlakuan' {...register("idPerlakuan")} />
+                                                        </div>
+                                                        <div className="col-sm-5">
+                                                            <span className='text-danger'>{data.errorData5 ? "Gagal tarik data perlakuan, silahkan coba lagi" : ""}</span>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <hr className='mt-2'/>
+                                            <div className="row">
                                                 <div className="col-md-6">
                                                     <div className="row">
                                                         <label className="col-sm-4 col-form-label" htmlFor="tipePerlakuan">Treatment type</label>
                                                         <div className="col-sm-8">
-                                                            <input type="text" id="tipePerlakuan" placeholder='Tipe Perlakuan' className="form-control form-control-sm" />
+                                                            <input type="text" id="tipePerlakuan" placeholder='Tipe Perlakuan' disabled {...register("tipePerlakuan")} className="form-control form-control-sm" />
                                                         </div>
                                                     </div>
                                                 </div>
                                                 <div className="col-md-6">
                                                     <div className="row">
                                                         <label className="col-sm-4 col-form-label" htmlFor="tglPerlakuan">Date of Treatment</label>
-                                                        <div className="col-sm-8">
-                                                            <input type="text" id="tglPerlakuan" placeholder="Tanggal Perlakuan" className="form-control form-control-sm" />
+                                                        <div className="col-sm-3">
+                                                            <input type="text" id="tglPerlakuan" placeholder="Tanggal Perlakuan" disabled {...register("tglPerlakuan")} className="form-control form-control-sm" />
                                                         </div>
                                                     </div>
                                                 </div>
@@ -652,7 +1022,7 @@ function DocK92t() {
                                                     <div className="row">
                                                         <label className="col-sm-4 col-form-label" htmlFor="bahanKimia">Chemical (active ingredient)</label>
                                                         <div className="col-sm-8">
-                                                            <input type="text" id="bahanKimia" placeholder="Bahan Kimia yang dipakai" className="form-control form-control-sm" />
+                                                            <input type="text" id="bahanKimia" placeholder="Bahan Kimia yang dipakai" disabled {...register("bahanKimia")} className="form-control form-control-sm" />
                                                         </div>
                                                     </div>
                                                 </div>
@@ -660,7 +1030,12 @@ function DocK92t() {
                                                     <div className="row">
                                                         <label className="col-sm-4 col-form-label" htmlFor="konsentrasi">Concentration</label>
                                                         <div className="col-sm-8">
-                                                            <input type="text" id="konsentrasi" placeholder="Konsentrasi" className="form-control form-control-sm" />
+                                                            <div className="col-sm-3">
+                                                                <div className='input-group input-group-sm input-group-merge'>
+                                                                    <input type="text" id="konsentrasi" {...register("konsentrasi")} disabled className="form-control form-control-sm" />
+                                                                    <span className='input-group-text'>g/m&sup3;</span>
+                                                                </div>
+                                                            </div>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -668,7 +1043,12 @@ function DocK92t() {
                                                     <div className="row">
                                                         <label className="col-sm-4 col-form-label" htmlFor="durasiPerlakuan">Duration</label>
                                                         <div className="col-sm-8">
-                                                            <input type="text" id="durasiPerlakuan" placeholder="Durasi Perlakuan" className="form-control form-control-sm" />
+                                                            <div className="col-sm-3">
+                                                                <div className='input-group input-group-sm input-group-merge'>
+                                                                    <input type="text" id="durasiPerlakuan" {...register("durasiPerlakuan")} disabled className="form-control form-control-sm" />
+                                                                    <span className='input-group-text'>jam</span>
+                                                                </div>
+                                                            </div>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -676,14 +1056,19 @@ function DocK92t() {
                                                     <div className="row">
                                                         <label className="col-sm-4 col-form-label" htmlFor="temperatur">Temperature</label>
                                                         <div className="col-sm-8">
-                                                            <input type="text" id="temperatur" placeholder="Temperature" className="form-control form-control-sm" />
+                                                            <div className="col-sm-3">
+                                                                <div className='input-group input-group-sm input-group-merge'>
+                                                                    <input type="text" id="temperatur" {...register("temperatur")} disabled className="form-control form-control-sm" />
+                                                                    <span className='input-group-text'>&deg;C</span>
+                                                                </div>
+                                                            </div>
                                                         </div>
                                                     </div>
                                                 </div>
                                                 <div className="col-md-12">
                                                     <div className="row">
                                                         <label className="col-sm-2 col-form-label" htmlFor="adInfo">Additional information</label>
-                                                        <div className="col-sm-9">
+                                                        <div className="col-sm-8">
                                                             <textarea name="adInfo" id="adInfo" rows="2" {...register("adInfo")} placeholder='Additional information..' className='form-control form-control-sm'></textarea>
                                                         </div>
                                                     </div>
@@ -743,8 +1128,9 @@ function DocK92t() {
                                 <div className='col-sm-2 col-form-label'>Penandatangan</div>
                                 <div className="col-sm-3 mb-3 pr-2">
                                     <select className={errors.ttdPutusan == '' ? 'form-select form-select-sm is-invalid' : 'form-select form-select-sm'} name="ttdPutusan" id="ttdPutusan" {...register("ttdPutusan", { required: "Mohon pilih penandatangan."})}>
+                                        <option value="">--</option>
                                         {data.petugas?.map((item, index) => (
-                                            <option value={item.penanda_tangan_id} key={index} defaultValue={cekWatch.ttdPutusan}>{item.nama + " - " + item.nip}</option>
+                                            <option value={item.petugas_id} key={index} defaultValue={cekWatch.ttdPutusan}>{item.nama + " - " + item.nip}</option>
                                         ))}
                                     </select>
                                     {/* <input type="text" {...register("ttdPutusan", { required: "Mohon pilih nama penandatangan."})} className={errors.ttdPutusan ? "form-control form-control-sm is-invalid" : "form-control form-control-sm"} /> */}
@@ -759,7 +1145,9 @@ function DocK92t() {
                             <div className="pt-2">
                                 <div className="row">
                                     <div className="offset-sm-2 col-sm-9">
-                                        <button type="submit" className="btn btn-primary me-sm-2 me-1">Simpan</button>
+                                        {onLoad ? <LoadBtn warna="btn-primary" ukuran="" /> :
+                                            <button type="submit" className="btn btn-primary me-sm-3 me-1">Simpan</button>
+                                        }
                                         <button type="reset" className="btn btn-danger btn-label-secondary me-sm-2 me-1">Batal</button>
                                         {/* <a href={require("../dok/K92t.pdf")} rel="noopener noreferrer" target='_blank' className="btn btn-warning"><i className="bx bx-printer bx-xs"></i>&nbsp; Print</a> */}
                                     </div>
@@ -779,44 +1167,46 @@ function DocK92t() {
                         <div className="text-center mb-4">
                             <h3 className="address-title">Perubahan Media Pembawa {Cookies.get("jenisKarantina") == 'H' ? 'Hewan' : (Cookies.get("jenisKarantina") == 'I' ? 'Ikan' : 'Tumbuhan')}</h3>
                         </div>
-                        <form onSubmit={handleFormMPK92t(onSubmitMPK92t)} className="row g-3">
-                        <input type="hidden" name='idMPK92t' {...registerMPK92t("idMPK92t")} />
-                        <input type="hidden" name='idPtk' {...registerMPK92t("idPtk")} />
-                        <input type="hidden" name='jenisKar' {...registerMPK92t("jenisKar")} />
+                        <form onSubmit={handleFormMPk92t(onSubmitMPK92t)} className="row g-3">
+                        <input type="hidden" name='idMPK92t' {...registerMPk92t("idMPK92t")} />
+                        <input type="hidden" name='idPtk' {...registerMPk92t("idPtk")} />
+                        <input type="hidden" name='jenisKar' {...registerMPk92t("jenisKar")} />
                             <div className="col-6">
                                 <label className="form-label" htmlFor="namaUmum">Nama Umum Tercetak</label>
-                                <input type='text' name="namaUmum" id="namaUmum" {...registerMPK92t("namaUmum")} className="form-control form-control-sm" />
+                                <input type='text' name="namaUmum" id="namaUmum" {...registerMPk92t("namaUmum")} className="form-control form-control-sm" />
                             </div>
                             <div className="col-6">
                                 <label className="form-label" htmlFor="namaLatin">Nama Latin Tercetak</label>
-                                <input type='text' name="namaLatin" id="namaLatin" {...registerMPK92t("namaLatin")} className="form-control form-control-sm" />
+                                <input type='text' name="namaLatin" id="namaLatin" {...registerMPk92t("namaLatin")} className="form-control form-control-sm" />
                             </div>
                             <div className="col-6">
-                                <label className="form-label" htmlFor="volumeNetto">Volume Netto Akhir-P8<span className='text-danger'>*</span></label>
+                                <label className="form-label" htmlFor="nettoP8">Volume Netto Akhir-P8<span className='text-danger'>*</span></label>
                                 <div className='row'>
                                     <div className="col-5" style={{paddingRight: '2px'}}>
-                                        <input type="text" name='volumeNetto' id='volumeNetto' value={cekdataMPK92t.volumeNetto ? addCommas(removeNonNumeric(cekdataMPK92t.volumeNetto)) : ""} {...registerMPK92t("volumeNetto", {required: "Mohon isi volume netto."})} className={errorsMPK92t.volumeNetto ? "form-control form-control-sm is-invalid" : "form-control form-control-sm"} />
+                                        <input type="text" name='nettoP8' id='nettoP8' value={cekdataMPk92t.nettoP8 ? addCommas(removeNonNumeric(cekdataMPk92t.nettoP8)) : ""} {...registerMPk92t("nettoP8", {required: "Mohon isi volume netto."})} className={errorsMPk92t.nettoP8 ? "form-control form-control-sm is-invalid" : "form-control form-control-sm"} />
                                     </div>
                                     <div className="col-3" style={{paddingLeft: '2px'}}>
-                                        <input type="text" className='form-control form-control-sm' name='satuanNetto' id='satuanNetto' {...registerMPK92t("satuanNetto")} disabled />
+                                        <input type="text" className='form-control form-control-sm' name='satuanNetto' id='satuanNetto' {...registerMPk92t("satuanNetto")} disabled />
                                     </div>
                                 </div>
-                                {errorsMPK92t.volumeNetto && <small className="text-danger">{errorsMPK92t.volumeNetto.message}</small>}
+                                {errorsMPk92t.nettoP8 && <small className="text-danger">{errorsMPk92t.nettoP8.message}</small>}
                             </div>
                             <div className="col-6">
-                                <label className="form-label" htmlFor="volumeLain">Volume Lain Akhir-P8</label>
+                                <label className="form-label" htmlFor="volumeP8">Volume Lain Akhir-P8</label>
                                 <div className='row'>
                                     <div className="col-5" style={{paddingRight: '2px'}}>
-                                        <input type="text" className='form-control form-control-sm' name='volumeLain' id='volumeLain' value={cekdataMPK92t.volumeLain ? addCommas(removeNonNumeric(cekdataMPK92t.volumeLain)) : ""} {...registerMPK92t("volumeLain")} />
+                                        <input type="text" className='form-control form-control-sm' name='volumeP8' id='volumeP8' value={cekdataMPk92t.volumeP8 ? addCommas(removeNonNumeric(cekdataMPk92t.volumeP8)) : ""} {...registerMPk92t("volumeP8")} />
                                     </div>
                                     <div className="col-3" style={{paddingLeft: '2px'}}>
-                                        <input type="text" className='form-control form-control-sm' name='satuanLain' id='satuanLain' {...registerMPK92t("satuanLain")} disabled />
+                                        <input type="text" className='form-control form-control-sm' name='satuanLain' id='satuanLain' {...registerMPk92t("satuanLain")} disabled />
                                     </div>
                                 </div>
                             </div>
                         <small className='text-danger'>*Format penulisan desimal menggunakan titik ( . )</small>
                         <div className="col-12 text-center">
-                            <button type="submit" className="btn btn-primary me-sm-3 me-1">Simpan</button>
+                            {onLoad ? <LoadBtn warna="btn-primary" ukuran="" /> :
+                                <button type="submit" className="btn btn-primary me-sm-3 me-1">Simpan</button>
+                            }
                             <button
                             type="reset"
                             className="btn btn-label-secondary"

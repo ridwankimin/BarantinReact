@@ -453,7 +453,7 @@ function DocK82() {
                 }));
             });
         
-            const resSurtug = modelSurtug.getDetilSurtugPenugasan(base64_decode(ptkNomor[1]), 11);
+            const resSurtug = modelSurtug.getSurtugByPtk(base64_decode(ptkNomor[1]), 11);
             resSurtug
             .then((response) => {
                 if(response.data) {
@@ -466,7 +466,7 @@ function DocK82() {
                                 tglSurtug: response.data.data[0].tanggal,
                                 petugas: response.data.data
                             }));
-                            setValue("idSurtug", response.data.data[0].id)
+                            setValue("idSurtug", response.data.data[0].ptk_surtug_header_id)
                         } else if(response.data.status == 404) {
                             setData(values => ({...values,
                                 errorSurtug: "Surat tugas tidak ada / belum dibuat",
@@ -684,7 +684,7 @@ function DocK82() {
         }
     
         if(data.errorSurtug) {
-            const resSurtug = modelSurtug.getDetilSurtugPenugasan(data.noIdPtk, 11);
+            const resSurtug = modelSurtug.getSurtugByPtk(data.noIdPtk, 11);
             resSurtug
             .then((response) => {
                 if(response.data) {
@@ -697,7 +697,7 @@ function DocK82() {
                                 tglSurtug: response.data.data[0].tanggal,
                                 petugas: response.data.data
                             }));
-                            setValue("idSurtug", response.data.data[0].id)
+                            setValue("idSurtug", response.data.data[0].ptk_surtug_header_id)
                         } else if(response.data.status == 404) {
                             setData(values => ({...values,
                                 errorSurtug: "Surat tugas tidak ada / belum dibuat",
@@ -1163,7 +1163,7 @@ function DocK82() {
                             <select className={errors.ttdPutusan == '' ? 'form-select form-select-sm is-invalid' : 'form-select form-select-sm'} name="ttdPutusan" id="ttdPutusan" {...register("ttdPutusan", { required: "Mohon pilih penandatangan."})}>
                                 <option value="">--</option>
                                 {data.petugas?.map((item, index) => (
-                                    <option value={item.penanda_tangan_id} key={index}>{item.nama + " - " + item.nip}</option>
+                                    <option value={item.petugas_id} key={index}>{item.nama + " - " + item.nip}</option>
                                 ))}
                             </select>
                             {errors.ttdPutusan && <small className="text-danger">{errors.ttdPutusan.message}</small>}
