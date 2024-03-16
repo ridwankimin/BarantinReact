@@ -11,6 +11,7 @@ import Master from '../../model/Master';
 import PtkHistory from '../../model/PtkHistory';
 import Swal from 'sweetalert2';
 import PtkSurtug from '../../model/PtkSurtug';
+import LoadBtn from '../../component/loading/LoadBtn';
 
 const modelPemohon = new PtkModel()
 const modelOPTK = new Master()
@@ -23,6 +24,7 @@ function DocK37b() {
     let [data,setData] = useState({})
     let [dataSegel,setDataSegel] = useState({})
     let [dataSegelArray,setDataSegelArray] = useState([])
+    let [onLoad,setOnLoad] = useState(false)
     
     let navigate = useNavigate();
     const {
@@ -44,10 +46,12 @@ function DocK37b() {
     const dataWatchHeader = watchHeader()
 
     const onSubmitHeader = (dataHeader) => {
+        setOnLoad(true)
         const response = modelPeriksa.ptkFisikKesehatanHeader(dataHeader);
         response
         .then((response) => {
             if(response.data) {
+                setOnLoad(false)
                 if(response.data.status == 201) {
                     setData(values => ({...values,
                         cekSimpan37b: true
@@ -78,6 +82,7 @@ function DocK37b() {
                     setvalueHeader("idDok37b", response.data.data.id)
                     // setValue("noDok37b", response.data.data.nomor)
                 } else {
+                    setOnLoad(false)
                     Swal.fire({
                         title: "Error!",
                         text: response.data.message,
@@ -87,6 +92,7 @@ function DocK37b() {
             }
         })
         .catch((error) => {
+            setOnLoad(false)
             if(import.meta.env.VITE_BE_ENV == "DEV") {
                 console.log(error)
             }
@@ -103,10 +109,12 @@ function DocK37b() {
     // let [listWasdal, setListWasdal] = useState([])
 
     const onSubmit = (data) => {
+        setOnLoad(true)
         const response = modelPeriksa.ptkFisikKesehatan(data, listKesehatan);
             response
             .then((response) => {
                 if(response.data) {
+                    setOnLoad(false)
                     if(response.data.status == 201) {
                         //start save history
                         const resHsy = log.pushHistory(data.idPtk, "p1b", "K-3.7b", (data.idDok37b ? 'UPDATE' : 'NEW'));
@@ -144,6 +152,7 @@ function DocK37b() {
                 }
             })
             .catch((error) => {
+                setOnLoad(false)
                 if(import.meta.env.VITE_BE_ENV == "DEV") {
                     console.log(error)
                 }
@@ -176,6 +185,7 @@ function DocK37b() {
     
     function submitModKesehatan(e) {
         e.preventDefault();
+        setOnLoad(true)
         const datakom = data.mpPeriksa.split(";")
         setListKesehatan([...listKesehatan, { 
             ptk_komoditas_id: datakom[0],
@@ -210,6 +220,7 @@ function DocK37b() {
             temuanWasdal: "",
             catatanWasdal: "",
         }));
+        setOnLoad(false)
     }
 
     useEffect(() => {
@@ -851,7 +862,9 @@ function DocK37b() {
                                                             {errors.ttd1 && <small className="text-danger">{errors.ttd1.message}</small>}
                                                         </div>
                                                     </div>
-                                                    <button type="submit" className="btn btn-sm btn-primary me-sm-2 me-1">Simpan Hasil Pemeriksaan</button>
+                                                    {onLoad ? <LoadBtn warna="btn-primary" ukuran="btn-sm" /> :
+                                                        <button type="submit" className="btn btn-sm btn-primary me-sm-2 me-1">Simpan Hasil Pemeriksaan</button>
+                                                    }
                                                     {/* <button type="button" className="btn btn-sm btn-danger me-sm-2 me-1">Hapus</button> */}
                                                 </div>
                                             </div>
@@ -907,7 +920,9 @@ function DocK37b() {
                             </div>
                             <div className="row">
                                 <div className="col-sm-12">
-                                    <button type="submit" className="btn btn-primary me-sm-2 me-1">Simpan</button>
+                                    {onLoad ? <LoadBtn warna="btn-primary" ukuran="" /> :
+                                        <button type="submit" className="btn btn-primary me-sm-2 me-1">Simpan</button>
+                                    }
                                     <button type="button" className="btn btn-danger me-sm-2 me-1">Batal</button>
                                     <a href={import("../../dok/k37a.pdf")} rel="noopener noreferrer" target='_blank' className="btn btn-warning"><i className="bx bx-printer bx-xs"></i>&nbsp; Print</a>
                                     <button style={{display: (data.cekSimpan37b ? "block" : "none")}} type='button' onClick={() => navigate('/k22')} className="btn btn-info pb-1 float-end">
@@ -980,7 +995,9 @@ function DocK37b() {
                                 </div>
                                 <div className='row'>
                                     <div className='col-sm-12 text-center'>
-                                        <button type="submit" className="btn btn-primary me-sm-2 me-1">Simpan</button>
+                                        {onLoad ? <LoadBtn warna="btn-primary" ukuran="" /> :
+                                            <button type="submit" className="btn btn-primary me-sm-2 me-1">Simpan</button>
+                                        }
                                         <button type="button" className="btn btn-danger me-sm-2 me-1" data-bs-dismiss="modal" aria-label="Close">Tutup</button>
                                     </div>   
                                 </div>
@@ -1023,7 +1040,9 @@ function DocK37b() {
                                 </div>
                             </div>
                             <div className="col-12 text-center mb-3">
-                                <button type="submit" className="btn btn-sm btn-primary me-sm-3 me-1">Tambah</button>
+                                {onLoad ? <LoadBtn warna="btn-primary" ukuran="btn-sm" /> :
+                                    <button type="submit" className="btn btn-sm btn-primary me-sm-3 me-1">Tambah</button>
+                                }
                                 <button
                                 type="reset"
                                 className="btn btn-sm btn-label-secondary"

@@ -264,7 +264,7 @@ export default class PnPelepasan {
         'nomor': data.noDokumen.replace("K.1.1", "K.9.2T"),
         'tanggal': data.tglDok92t,
         'nomor_seri': data.noSeri,
-        'karantina_tujuan': (data.karantinaTujuanDepan ? data.karantinaTujuanDepan + " " : "") + data.karantinaTujuan + data.karantinaTujuanBelakang,
+        'karantina_tujuan': "",
         'entry_point': "",
         'upt_tujuan_id': "",
         'nama_umum_tercetak': "",
@@ -273,7 +273,7 @@ export default class PnPelepasan {
         'jumlah_tercetak': "",
         'additional_declaration': "", //data.adDeclare
         'additional_information': data.keteranganTambahan,
-        'pn_perlakuan_id': data.idPerlakuan,
+        'pn_perlakuan_id': data.idPerlakuan ? data.idPerlakuan : "",
         //Distinguishing marks ?
         'pc_no': "", //
         'is_pc': "", //

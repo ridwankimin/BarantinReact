@@ -10,6 +10,7 @@ import PtkHistory from '../../model/PtkHistory';
 import PtkModel from '../../model/PtkModel';
 import Swal from 'sweetalert2';
 import PtkSurtug from '../../model/PtkSurtug';
+import LoadBtn from '../../component/loading/LoadBtn';
 
 function modaAlatAngkut(e){
     return ModaAlatAngkut.find((element) => element.id == parseInt(e))
@@ -29,6 +30,7 @@ function DocK74() {
         noDokumen: "",
         tglDokumen: "",
     })
+    let [onLoad, setOnLoad] = useState(false)
     
     const {
         register,
@@ -41,9 +43,11 @@ function DocK74() {
     const cekWatch = watch()
     
     function onSubmit(data) {
+        setOnLoad(true)
         const response = modelPenolakan.save74(data);
         response
         .then((response) => {
+            setOnLoad(false)
             if(response.data) {
                 if(response.data.status == 201) {
                     const resHsy = log.pushHistory(data.idPtk, "p6", "K-7.4", (data.idDok74 ? 'UPDATE' : 'NEW'));
@@ -74,6 +78,7 @@ function DocK74() {
             }
         })
         .catch((error) => {
+            setOnLoad(false)
             if(import.meta.env.VITE_BE_ENV == "DEV") {
                 console.log(error)
             }
@@ -872,7 +877,9 @@ function DocK74() {
                         </div>
                         <div className="row">
                             <div className="offset-sm-2 col-sm-9">
-                                <button type="submit" className="btn btn-primary me-sm-2 me-1">Simpan</button>
+                                {onLoad ? <LoadBtn warna="btn-primary" ukuran="" /> :
+                                    <button type="submit" className="btn btn-primary me-sm-2 me-1">Simpan</button>
+                                }
                                 <button type="button" className="btn btn-danger btn-label-secondary me-sm-2 me-1">Batal</button>
                             </div>
                         </div>

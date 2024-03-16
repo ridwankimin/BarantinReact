@@ -15,6 +15,7 @@ import Swal from 'sweetalert2'
 import Select from 'react-select'
 import moment from 'moment'
 import SpinnerDot from '../../component/loading/SpinnerDot'
+import LoadBtn from '../../component/loading/LoadBtn'
 
 const log = new PtkHistory()
 const modelPemohon = new PtkModel()
@@ -94,6 +95,7 @@ function DocK93() {
     let [loadKomoditiPesan, setLoadKomoditiPesan] = useState("")
     let [cekData, setCekData] = useState()
     let [datasend, setDataSend] = useState([])
+    let [onLoad, setOnLoad] = useState(false)
 
     let [data, setData] = useState({
         noAju: "",
@@ -119,10 +121,12 @@ function DocK93() {
 
     const dataCekKom = data.listKomoditas?.filter(item => item.volumeP8 == null || item.nettoP8 == null)
     const onSubmit = (data) => {
+        setOnLoad(true)
         if(dataCekKom.length == 0) {
             const response = modelPelepasan.mpLainOrKeterangan(data, Cookies.get("jenisKarantina"), "K.9.3");
             response
             .then((response) => {
+                setOnLoad(false)
                 if(response.data) {
                     if(response.data.status == 201) {
                         //start save history
@@ -160,6 +164,7 @@ function DocK93() {
                 }
             })
             .catch((error) => {
+                setOnLoad(false)
                 if(import.meta.env.VITE_BE_ENV == "DEV") {
                     console.log(error)
                 }
@@ -170,6 +175,7 @@ function DocK93() {
                 });
             });
         } else {
+            setOnLoad(false)
             Swal.fire({
                 icon: "error",
                 title: "Error!",
@@ -202,15 +208,29 @@ function DocK93() {
     const cekdataMPk93 = watchMPk93()
 
     function onSubmitMPk93(data) {
+        setOnLoad(true)
         let cekVolume = false
-        if(parseFloat(typeof data.volumeP8 == "string" ? data.volumeP8.replace(",", "") : data.volumeP8) > parseFloat(cekData.volumeP8) || parseFloat(typeof data.nettoP8 == "string" ? data.nettoP8.replace(",", "") : data.nettoP8) > parseFloat(cekData.nettoP8)) {
-            cekVolume = false 
+        if((data.jantanP8 != null) || (data.betinaP8 != null) ) {
+            if((parseFloat(typeof data.jantanP8 == "string" ? data.jantanP8.replace(/,/g, "") : data.jantanP8) > parseFloat(cekData.jantanP8)) || (parseFloat((typeof data.betinaP8 == "string" ? data.betinaP8.replace(/,/g, "") : data.betinaP8)) > parseFloat(cekData.betinaP8))) {
+                cekVolume = false
+            } else {
+                if(parseFloat(typeof data.volumeP8 == "string" ? data.volumeP8.replace(/,/g, "") : data.volumeP8) > parseFloat(cekData.volumeP8) || parseFloat(typeof data.nettoP8 == "string" ? data.nettoP8.replace(/,/g, "") : data.nettoP8) > parseFloat(cekData.nettoP8)) {
+                    cekVolume = false 
+                } else {
+                    cekVolume = true
+                }
+            }
         } else {
-            cekVolume = true
+            if(parseFloat(typeof data.volumeP8 == "string" ? data.volumeP8.replace(/,/g, "") : data.volumeP8) > parseFloat(cekData.volumeP8) || parseFloat(typeof data.nettoP8 == "string" ? data.nettoP8.replace(/,/g, "") : data.nettoP8) > parseFloat(cekData.nettoP8)) {
+                cekVolume = false 
+            } else {
+                cekVolume = true
+            }
         }
         if(cekVolume) {
             log.updateKomoditiP8(data.idMPk93, data)
             .then((response) => {
+                setOnLoad(false)
                 if(response.data.status == 201) {
                     Swal.fire({
                         title: "Sukses!",
@@ -228,6 +248,7 @@ function DocK93() {
                 }
             })
             .catch((error) => {
+                setOnLoad(false)
                 if(import.meta.env.VITE_BE_ENV == "DEV") {
                     console.log(error)
                 }
@@ -238,6 +259,7 @@ function DocK93() {
                 })
             })
         } else {
+            setOnLoad(false)
             Swal.fire({
                 icon: "error",
                 title: "Error!",
@@ -1194,7 +1216,9 @@ function DocK93() {
                         <div className="pt-2">
                             <div className="row">
                                 <div className="offset-sm-2 col-sm-9">
-                                    <button type="submit" className="btn btn-primary me-sm-2 me-1"><i className='fa-solid fa-save me-sm-2 me-1'></i> Simpan</button>
+                                    {onLoad ? <LoadBtn warna="btn-primary" ukuran="" /> :
+                                        <button type="submit" className="btn btn-primary me-sm-2 me-1"><i className='fa-solid fa-save me-sm-2 me-1'></i> Simpan</button>
+                                    }
                                     <button type="button" className="btn btn-danger btn-label-secondary me-sm-2 me-1"><i className='fa-solid fa-cancel me-sm-2 me-1'></i> Batal</button>
                                     <button type="button" className="btn btn-warning btn-label-secondary me-sm-2 me-1"><i className='fa-solid fa-print me-sm-2 me-1'></i> Print</button>
                                     <button type="button" style={{display: (cekWatch.idDok93 ? "block" : "none")}} className="float-end btn btn-info btn-label-secondary"><i className='tf-icons fa-solid fa-paper-plane me-sm-2 me-1'></i> TTE</button>
@@ -1251,7 +1275,9 @@ function DocK93() {
                             </div>
                         <small className='text-danger'>*Format penulisan desimal menggunakan titik ( . )</small>
                         <div className="col-12 text-center">
-                            <button type="submit" className="btn btn-primary me-sm-3 me-1">Simpan</button>
+                            {onLoad ? <LoadBtn warna="btn-primary" ukuran="" /> :
+                                <button type="submit" className="btn btn-primary me-sm-3 me-1">Simpan</button>
+                            }
                             <button
                             type="reset"
                             className="btn btn-label-secondary"

@@ -6,6 +6,7 @@ import PtkModel from '../../model/PtkModel';
 import { useForm } from 'react-hook-form';
 import PtkPemeriksaan from '../../model/PtkPemeriksaan';
 import Swal from 'sweetalert2';
+import LoadBtn from '../../component/loading/LoadBtn';
 
 const modelPemohon = new PtkModel()
 const modelPeriksa = new PtkPemeriksaan()
@@ -18,6 +19,8 @@ function DocK31() {
         noDokumen: "",
         tglDokumen: "",
     })
+    let [onLoad, setOnLoad] = useState(false)
+    
     const {
         register,
         setValue,
@@ -31,11 +34,13 @@ function DocK31() {
     const cekWatch = watch()
 
     const onSubmit = (data) => {
+        setOnLoad(true)
         const response = modelPeriksa.pnBongkar31(data);
         response
         .then((response) => {
             if(response.data) {
-                if(response.data.status === 200) {
+                setOnLoad(false)
+                if(response.data.status == 201) {
                     Swal.fire({
                         title: "Sukses!",
                         text: "Surat Persetujuan/Penolakan Bongkar berhasil " + (data.idDok31 ? "diedit." : "disimpan."),
@@ -54,6 +59,7 @@ function DocK31() {
             }
         })
         .catch((error) => {
+            setOnLoad(false)
             if(import.meta.env.VITE_BE_ENV == "DEV") {
                 console.log(error)
             }
@@ -116,7 +122,7 @@ function DocK31() {
             response31
             .then((response) => {
                 if(typeof response.data != "string") {
-                    if(response.data.status === 200) {
+                    if(response.data.status == 200) {
                         setData(values => ({...values,
                             errorBongkar: "",
                         }))
@@ -194,7 +200,7 @@ function DocK31() {
             response31
             .then((response) => {
                 if(typeof response.data != "string") {
-                    if(response.data.status === 200) {
+                    if(response.data.status == 200) {
                         setData(values => ({...values,
                             errorBongkar: "",
                         }))
@@ -538,8 +544,8 @@ function DocK31() {
                                                                         ))}
                                                                     </select>
                                                                     {/* <input type="text" {...register("ttdPutusan", { required: "Mohon pilih nama penandatangan."})} className={errors.ttdPutusan ? "form-control form-control-sm is-invalid" : "form-control form-control-sm"} /> */}
-                                                                    {/* <input type="text" className={errorsAdministratif.ttdAdminidtratif === '' ? 'form-control is-invalid' : 'form-control'} {...registerAdministratif("ttdAdminidtratif", { required: "Mohon pilih nama penandatangan."})}/> */}
-                                                                    {/* <select className={dataWatch.ttdAdminidtratif === '' ? 'form-select form-select-sm is-invalid' : 'form-select form-select-sm'} {...registerAdministratif("ttdAdminidtratif", { required: "Mohon pilih nama penandatangan."})}>
+                                                                    {/* <input type="text" className={errorsAdministratif.ttdAdminidtratif == '' ? 'form-control is-invalid' : 'form-control'} {...registerAdministratif("ttdAdminidtratif", { required: "Mohon pilih nama penandatangan."})}/> */}
+                                                                    {/* <select className={dataWatch.ttdAdminidtratif == '' ? 'form-select form-select-sm is-invalid' : 'form-select form-select-sm'} {...registerAdministratif("ttdAdminidtratif", { required: "Mohon pilih nama penandatangan."})}>
                                                                         <option value="">--</option>
                                                                         <option value='1'>Dilakukan penahanan dan/atau melengkapi dokumen</option>
                                                                         <option value='2'>Dilakukan pengasingan dan pengamatan</option>
@@ -553,7 +559,9 @@ function DocK31() {
                                                     </div>
                                                     <div className="row">
                                                         <div className="col-sm-12">
-                                                            <button type="submit" className="btn btn-primary me-sm-2 me-1">Simpan</button>
+                                                            {onLoad ? <LoadBtn warna="btn-primary" ukuran="" /> :
+                                                                <button type="submit" className="btn btn-primary me-sm-2 me-1">Simpan</button>
+                                                            }
                                                             <button type="button" className="btn btn-danger me-sm-2 me-1">Batal</button>
                                                         </div>
                                                     </div>

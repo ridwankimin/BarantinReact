@@ -7,6 +7,7 @@ import Cookies from 'js-cookie';
 import ModaAlatAngkut from '../../model/master/modaAlatAngkut.json';
 import { useForm } from 'react-hook-form';
 import Swal from 'sweetalert2';
+import LoadBtn from '../../component/loading/LoadBtn';
 
 const modelPemohon = new PtkModel()
 const modelPeriksa = new PtkPemeriksaan()
@@ -15,7 +16,11 @@ function modaAlatAngkut(e){
     return ModaAlatAngkut.find((element) => element.id == parseInt(e))
 }
 
-const addCommas = num => num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+const addCommas = num => {
+    var parts = num.toString().split(".");
+    parts[0] = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+    return parts.join(".");
+};
 const removeNonNumeric = num => num.toString().replace(/[^0-9.]/g, "");
 
 function DocK34() {
@@ -29,14 +34,17 @@ function DocK34() {
 
     let [dataSegel,setDataSegel] = useState({})
     let [dataSegelArray,setDataSegelArray] = useState([])
+    let [onLoad, setOnLoad] = useState(false)
     function handleSubmitSegel(e) {
         e.preventDefault();
+        setOnLoad(true)
         setDataSegelArray([...dataSegelArray, { 
             jenisSegel: dataSegel.jenisSegel,
             nomorSegel: dataSegel.nomorSegel,
             nomorKontainer: dataSegel.nomorKontainer
         }]);
         resetDataSegel()
+        setOnLoad(false)
     }
     
     function resetDataSegel() {
@@ -61,10 +69,12 @@ function DocK34() {
     // const cekWatch = watch()
 
     const onSubmit = (data) => {
+        setOnLoad(true)
         const response = modelPeriksa.pnInstalasi(data);
         response
         .then((response) => {
             if(response.data) {
+                setOnLoad(false)
                 console.log(response.data)
                 if(response.data.status == 201) {
                     Swal.fire({
@@ -84,6 +94,7 @@ function DocK34() {
             }
         })
         .catch((error) => {
+            setOnLoad(false)
             if(import.meta.env.VITE_BE_ENV == "DEV") {
                 console.log(error)
             }
@@ -601,7 +612,9 @@ function DocK34() {
                                 {errors.diterbitkan && <small className="text-danger">{errors.diterbitkan.message}</small>}
                             </div>
                         </div>
-                        <button type="submit" className="btn btn-primary me-sm-2 me-1">Simpan</button>
+                        {onLoad ? <LoadBtn warna="btn-primary" ukuran="" /> :
+                            <button type="submit" className="btn btn-primary me-sm-2 me-1">Simpan</button>
+                        }
                         <button type="button" className="btn btn-danger me-sm-2 me-1">Hapus</button>
                     </form>
                 </div>
@@ -640,7 +653,9 @@ function DocK34() {
                                 </div>
                             </div>
                             <div className="col-12 text-center mb-3">
-                                <button type="submit" className="btn btn-sm btn-primary me-sm-3 me-1">Tambah</button>
+                                {onLoad ? <LoadBtn warna="btn-primary" ukuran="btn-sm" /> :
+                                    <button type="submit" className="btn btn-sm btn-primary me-sm-3 me-1">Tambah</button>
+                                }
                                 <button
                                 type="reset"
                                 className="btn btn-sm btn-label-secondary"

@@ -6,6 +6,7 @@ import {decode as base64_decode} from 'base-64'
 import PtkModel from '../../model/PtkModel'
 import PtkPemeriksaan from '../../model/PtkPemeriksaan'
 import Swal from 'sweetalert2'
+import LoadBtn from '../../component/loading/LoadBtn'
 
 const modelPemohon = new PtkModel()
 const modelPeriksa = new PtkPemeriksaan()
@@ -18,6 +19,7 @@ function DocK32() {
         noDokumen: "",
         tglDokumen: "",
     })
+    let [onLoad, setOnLoad] = useState(false)
     const {
         register,
         setValue,
@@ -29,11 +31,13 @@ function DocK32() {
     });
 
     const onSubmit = (data) => {
+        setOnLoad(true)
         const response = modelPeriksa.pnBongkar32(data);
         response
         .then((response) => {
             if(response.data) {
-                if(response.data.status === 201) {
+                setOnLoad(false)
+                if(response.data.status == 201) {
                     Swal.fire({
                         title: "Sukses!",
                         text: "Surat Persetujuan/Penolakan Muat berhasil " + (data.idDok32 ? "diedit." : "disimpan."),
@@ -53,6 +57,7 @@ function DocK32() {
             }
         })
         .catch((error) => {
+            setOnLoad(false)
             if(import.meta.env.VITE_BE_ENV == "DEV") {
                 console.log(error)
             }
@@ -596,7 +601,9 @@ function DocK32() {
                                                     </div>
                                                     <div className="row">
                                                         <div className="col-sm-12">
-                                                            <button type="submit" className="btn btn-primary me-sm-2 me-1">Simpan</button>
+                                                            {onLoad ? <LoadBtn warna="btn-primary" ukuran="" /> :
+                                                                <button type="submit" className="btn btn-primary me-sm-2 me-1">Simpan</button>
+                                                            }
                                                             <button type="button" className="btn btn-danger me-sm-2 me-1">Batal</button>
                                                         </div>
                                                     </div>

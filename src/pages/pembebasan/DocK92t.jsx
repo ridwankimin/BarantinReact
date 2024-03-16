@@ -8,7 +8,13 @@ import PtkHistory from '../../model/PtkHistory';
 import PtkModel from '../../model/PtkModel';
 import PtkSurtug from '../../model/PtkSurtug';
 import SpinnerDot from '../../component/loading/SpinnerDot';
+import Swal from 'sweetalert2';
+
 const log = new PtkHistory()
+const modelPemohon = new PtkModel()
+const model = new PnPelepasan()
+const modelSurtug = new PtkSurtug()
+const modelPelepasan = new PnPelepasan()
 
 const addCommas = num => {
     var parts = num.toString().split(".");
@@ -21,6 +27,8 @@ function DocK92t() {
     const idPtk = Cookies.get("idPtkPage");
     let [loadKomoditi, setLoadKomoditi] = useState(false)
     let [loadKomoditiPesan, setLoadKomoditiPesan] = useState("")
+    let [cekData, setCekData] = useState()
+    let [onLoad, setOnLoad] = useState()
     let [datasend, setDataSend] = useState([])
 
     let [data, setData] = useState({
@@ -65,15 +73,13 @@ function DocK92t() {
     }
 
     const onSubmit = (data) => {
-        const model = new PnPelepasan();
-        const response = model.eksporKT(data);
+        const response = model.imporAreaKT(data);
         response
         .then((response) => {
             if(response.data) {
                 if(response.data.status == 201) {
                     //start save history
-                    const log = new PtkHistory();
-                    const resHsy = log.pushHistory(data.idPtk, "p8", "K-9.2t", (data.idDok92t ? 'UPDATE' : 'NEW'));
+                    const resHsy = log.pushHistory(data.idPtk, "p8", "K-9.2.T", (data.idDok92t ? 'UPDATE' : 'NEW'));
                     resHsy
                     .then((response) => {
                         if(response.data.status == 201) {
@@ -104,16 +110,22 @@ function DocK92t() {
     }
 
     function handleEditKomoditas(e) {
-        setValueMPK92t("idMPK92t", e.target.dataset.header)
-        setValueMPK92t("idPtk", e.target.dataset.ptk)
-        setValueMPK92t("jenisKar", "T")
-        const cell = e.target.closest('tr')
-        setValueMPK92t("volumeNetto", cell.cells[5].innerHTML)
-        setValueMPK92t("satuanNetto", cell.cells[6].innerHTML)
-        setValueMPK92t("volumeLain", cell.cells[7].innerHTML)
-        setValueMPK92t("satuanLain", cell.cells[8].innerHTML)
-        setValueMPK92t("namaUmum", cell.cells[3].innerHTML)
-        setValueMPK92t("namaLatin", cell.cells[4].innerHTML)
+        const dataMP = data.listKomoditas?.filter((element, index) => index == e)
+        setValueMPK92t("idMPk92t", dataMP[0].id)
+        setValueMPK92t("idPtk", dataMP[0].ptk_id)
+        setValueMPK92t("jenisKar", Cookies.get("jenisKarantina"))
+        setCekData(values => ({...values,
+            volumeP8: dataMP[0].volume_lain,
+            nettoP8: dataMP[0].volume_netto,
+            jantanP8: dataMP[0].jantan,
+            betinaP8: dataMP[0].betina
+        }));
+        setValueMPK92t("nettoP8", dataMP[0].volume_netto)
+        setValueMPK92t("satuanNetto", dataMP[0].sat_netto)
+        setValueMPK92t("volumeP8", dataMP[0].volume_lain)
+        setValueMPK92t("satuanLain", dataMP[0].sat_lain)
+        setValueMPK92t("namaUmum", dataMP[0].nama_umum_tercetak)
+        setValueMPK92t("namaLatin", dataMP[0].nama_latin_tercetak)
     }
 
     function handleEditKomoditasAll() {
@@ -122,21 +134,37 @@ function DocK92t() {
             log.updateKomoditiP8(item.id, datasend[index])
                 .then((response) => {
                     if(response.data.status == 201) {
-                        if(import.meta.env.VITE_BE_ENV == "DEV") {
-                            console.log("history saved")
-                        }
+                        refreshListKomoditas()
+                        setLoadKomoditi(false)
+                        
+                        Swal.fire({
+                            icon: "success",
+                            title: "Sukses!",
+                            text: "Volume P8 berhasil disimpan (tidak ada perubahan dengan volume awal)"
+                        })
+                    } else {
+                        Swal.fire({
+                            icon: "error",
+                            title: "Error!",
+                            text: response.data.status
+                        })
                     }
                 })
                 .catch((error) => {
-                    setLoadKomoditi(true)
+                    setLoadKomoditi(false)
                     setLoadKomoditiPesan("Terjadi error pada saat simpan, mohon refresh halaman dan coba lagi.")
                     if(import.meta.env.VITE_BE_ENV == "DEV") {
                         console.log(error)
                     }
+                    Swal.fire({
+                        icon: "error",
+                        title: "Error!",
+                        text: error.response.data.status
+                    })
                 })
             )
         )
-        setLoadKomoditi(true)
+        setLoadKomoditi(false)
     }
 
     useEffect(()=>{
@@ -146,83 +174,164 @@ function DocK92t() {
             let ptkDecode = idPtk ? base64_decode(idPtk) : "";
             let ptkNomor = idPtk ? ptkDecode.split('m0R3N0r1R') : "";
             
-            const modelPemohon = new PtkModel();
+            setData(values => ({...values,
+                noAju: idPtk ? base64_decode(ptkNomor[0]) : "",
+                noIdPtk: idPtk ? base64_decode(ptkNomor[1]) : "",
+                noDokumen: idPtk ? base64_decode(ptkNomor[2]) : "",
+                tglDokumen: tglPtk,
+            }));
+            
             const response = modelPemohon.getPtkId(base64_decode(ptkNomor[1]));
             response
             .then((response) => {
-                if(response.data.status == 200) {
-                    let kodeHSData = response.data.data.ptk_komoditi?.map(item => {
-                        return item.kode_hs
-                    })
-                    let namaUmumMP = response.data.data.ptk_komoditi?.map(item => {
-                        return item.nama_umum_tercetak
-                    })
-                    let namaIlmiahMP = response.data.data.ptk_komoditi?.map(item => {
-                        return item.nama_latin_tercetak
-                    })
-                    let VolumeMP = response.data.data.ptk_komoditi?.map(item => {
-                        return item.volume_lain + " " + item.sat_lain
-                    })
-                    // alert(response.data.message);
-                    setData(values => ({...values,
-                        noAju: idPtk ? base64_decode(ptkNomor[0]) : "",
-                        noIdPtk: idPtk ? base64_decode(ptkNomor[1]) : "",
-                        noDokumen: idPtk ? base64_decode(ptkNomor[2]) : "",
-                        tglDokumen: tglPtk,
-                        kodeHs: kodeHSData.join(";"),
-                        // mpTercetak: namaUmumMP.join(";"),
-                        listPtk: response.data.data.ptk,
-                        listKomoditas: response.data.data.ptk_komoditi,
-                        listDokumen: response.data.data.ptk_dokumen
-                    }));
+                if(typeof response.data != "string") {
+                    if(response.data.status == 200) {
+                        setData(values => ({...values,
+                            errorPTK: "",
+                            listPtk: response.data.data.ptk,
+                            listKomoditas: response.data.data.ptk_komoditi,
+                            listDokumen: response.data.data.ptk_dokumen
+                        }));
 
-                    var arrayKomKT = response.data.data.ptk_komoditi?.map(item => {
-                        return {
-                            namaUmum: item.nama_umum_tercetak,
-                            namaLatin: item.nama_latin_tercetak,
-                            jantan: null,
-                            betina: null,
-                            volumeP8: item.volume_lain,
-                            nettoP8: item.volume_netto
-                        }
-                    })
-                    setDataSend(arrayKomKT)
-                    
-                    setValue("tandaKhusus", response.data.data.ptk.tanda_khusus)
-                    setValue("namaUmum", namaUmumMP.join(";"))
-                    setValue("namaIlmiah", namaIlmiahMP.join(";"))
-                    setValue("jmlTercetak", VolumeMP.join(";"))
-                    setValue("karantinaTujuan", response.data.data.ptk.negara_penerima)
-                    setValue("entryPoint", response.data.data.ptk.pelabuhan_bongkar + ", " + response.data.data.ptk.negara_bongkar)
-                    setValue("idPtk", base64_decode(ptkNomor[1]))
-                    setValue("noDokumen", base64_decode(ptkNomor[2]))
+                        const resKom = modelPemohon.getKomoditiPtkId(base64_decode(ptkNomor[1]), Cookies.get("jenisKarantina"));
+                        resKom
+                        .then((res) => {
+                            if(typeof res.data != "string") {
+                                if(res.data.status == 200) {
+                                    setData(values => ({...values,
+                                        errorKomoditas: "",
+                                        listKomoditas: res.data.data
+                                    }));
+                                    var arrayKomKT = res.data.data.map(item => {
+                                        return {
+                                            namaUmum: item.nama_umum_tercetak,
+                                            namaLatin: item.nama_latin_tercetak,
+                                            jantanP8: null,
+                                            betinaP8: null,
+                                            volumeP8: item.volume_lain,
+                                            nettoP8: item.volume_netto
+                                        }
+                                    })
+                                    setDataSend(arrayKomKT)
+                                }
+                            } else {
+                                setData(values => ({...values,
+                                    errorKomoditas: "Gagal load data Komoditas"
+                                }));
+                            }
+                        })
+                        .catch((error) => {
+                            if(import.meta.env.VITE_BE_ENV == "DEV") {
+                                console.log(error)
+                            }
+                            setData(values => ({...values,
+                                errorKomoditas: "Gagal load data Komoditas"
+                            }));
+                        });
+                        
+                        setValue("idPtk", base64_decode(ptkNomor[1]))
+                        setValue("noDokumen", base64_decode(ptkNomor[2]))
+                    }
+                } else {
+                    setData(values => ({...values,
+                        errorPTK: "Gagal load data PTK",
+                        errorKomoditas: "Gagal load data Komoditas"
+                    }));
                 }
             })
             .catch((error) => {
                 if(import.meta.env.VITE_BE_ENV == "DEV") {
                     console.log(error)
                 }
+                setData(values => ({...values,
+                    errorPTK: "Gagal load data PTK",
+                    errorKomoditas: "Gagal load data Komoditas"
+                }));
             });
 
-            const modelSurtug = new PtkSurtug();
                 // 1: penugasan periksa administratif
             const resSurtug = modelSurtug.getDetilSurtugPenugasan(base64_decode(ptkNomor[1]), 14);
             resSurtug
             .then((response) => {
                 if(response.data) {
-                    if(response.data.status == 200) {
+                    if(typeof response.data != "string") {
+                        if(response.data.status == 200) {
+                            setData(values => ({...values,
+                                errorSurtug: "",
+                                noSurtug: response.data.data[0].nomor,
+                                tglSurtug: response.data.data[0].tanggal,
+                                petugas: response.data.data
+                            }));
+                            setValue("idSurtug", response.data.data[0].id)
+                        }
+                    } else {
                         setData(values => ({...values,
-                            noSurtug: response.data.data[0].nomor,
-                            tglSurtug: response.data.data[0].tanggal,
-                            petugas: response.data.data
+                            errorSurtug: "Gagal load data Surat tugas",
                         }));
-                        setValue("idSurtug", response.data.data[0].id)
                     }
                 }
             })
             .catch((error) => {
                 if(import.meta.env.VITE_BE_ENV == "DEV") {
                     console.log(error)
+                }
+                if(error.response.data.status == 404) {
+                    setData(values => ({...values,
+                        errorSurtug: "Surat tugas tidak ada/belum dibuat",
+                    }));
+                } else {
+                    setData(values => ({...values,
+                        errorSurtug: "Gagal load data Surat tugas",
+                    }));
+                }
+            });
+
+            const resPelId = modelPelepasan.getById(base64_decode(ptkNomor[1]), "T");
+            resPelId
+            .then((response) => {
+                if(response.data) {
+                    if(typeof response.data != "string") {
+                        setData(values => ({...values,
+                            errork92t: ""
+                        }));
+                        if(response.data.status == 200) {
+                            setValue("idDok92t", response.data.data.id)
+                            setValue("noDok92t", response.data.data.nomor)
+                            setValue("tglDok92t", response.data.data.tanggal)
+                            setValue("noSeri", response.data.data.nomor_seri)
+                            setValue("jenisDokumen", response.data.data.status_dok)
+                            
+                            setValue("hasilPemeriksaan", response.data.data.hasil_periksa)
+                            setValue("hasilPemeriksaanKet1", response.data.data.p1)
+                            setValue("hasilPemeriksaanKet2", response.data.data.p2)
+                            setValue("hasilPemeriksaanKet3", response.data.data.p3)
+                            setValue("hasilPemeriksaanKet4", response.data.data.p4)
+                            setValue("isAttach", response.data.data.is_attachment)
+                            setValue("ttdPutusan", response.data.data.user_ttd_id?.toString())
+                            setValue("diterbitkan", response.data.data.diterbitkan_di)
+
+                        }
+                    } else {
+                        setData(values => ({...values,
+                            errork92i: "Gagal load data Sertifikat Karantina Ikan"
+                        }));
+                    }
+                }
+            })
+            .catch((error) => {
+                if(import.meta.env.VITE_BE_ENV == "DEV") {
+                    console.log(error)
+                }
+                if(error.response) {
+                    if(error.response.data.status == 404) {
+                        setData(values => ({...values,
+                            errork92i: "",
+                        }));
+                    } else {
+                        setData(values => ({...values,
+                            errork92i: "Gagal load data Sertifikat Karantina Ikan",
+                        }));
+                    }
                 }
             });
         }
@@ -407,7 +516,7 @@ function DocK92t() {
                                                                                 <td>{data.volumeP8}</td>
                                                                                 <td>{data.nettoP8}</td>
                                                                                 <td>
-                                                                                    <button className="btn btn-default dropdown-item" href="#" type="button" onClick={handleEditKomoditas} data-header={data.id} data-ptk={data.ptk_id} data-bs-toggle="modal" data-bs-target="#modKomoditas"><i className="fa-solid fa-pen-to-square me-1"></i> Edit</button>
+                                                                                    <button className="btn btn-default dropdown-item" href="#" type="button" onClick={() => handleEditKomoditas(index)} data-bs-toggle="modal" data-bs-target="#modKomoditas"><i className="fa-solid fa-pen-to-square me-1"></i> Edit</button>
                                                                                 </td>
                                                                             </tr>
                                                                         ))

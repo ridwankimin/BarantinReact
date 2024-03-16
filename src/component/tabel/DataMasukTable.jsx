@@ -149,7 +149,7 @@ function DataMasukTable(props) {
     const getListPtk = useCallback(async () => {
         try {
             const response = await model.getPtkList(props.dataIn)
-            if(response.data.status == '200') {
+            if(response.data.status == 200) {
                 const dataReturn = response.data.data;
                 setDataTableBE(response.data.data)
                 const arrayData = dataReturn.map((item, index) => {
@@ -157,11 +157,11 @@ function DataMasukTable(props) {
                         id: index + 1,
                         idPtk: item.id,
                         noAju: item.no_aju,
-                        karantina: (item.jenis_karantina === 'T' ? 'Tumbuhan' : (item.jenis_karantina === 'I' ? 'Ikan' : 'Hewan')),
+                        karantina: (item.jenis_karantina == 'T' ? 'Tumbuhan' : (item.jenis_karantina == 'I' ? 'Ikan' : 'Hewan')),
                         noDokumen: item.no_dok_permohonan,
                         tglDokumen: item.tgl_dok_permohonan,
-                        jenisPermohonan: (item.jenis_permohonan === 'EX' ? 'Ekspor' : (item.jenis_permohonan === 'IM' ? 'Impor' : (item.jenis_permohonan === 'DK' ? 'Dokel' : (item.jenis_permohonan === 'DM' ? 'Domas' : (item.jenis_permohonan === 'RE' ? 'Re Ekspor' : (item.jenis_permohonan === 'RI' ? 'Re Impor' : (item.jenis_permohonan === 'TR' ? 'Transit' : 'Serah Terima'))))))),
-                        status: (item.status_ptk === 0 ? 'Draft' : (item.status_ptk === 9 ? 'Pengajuan' : (item.status_ptk === 1 ? 'Diterima' : (item.status_ptk === 2 ? 'Ditolak' : 'blm diset')))),
+                        jenisPermohonan: (item.jenis_permohonan == 'EX' ? 'Ekspor' : (item.jenis_permohonan == 'IM' ? 'Impor' : (item.jenis_permohonan == 'DK' ? 'Dokel' : (item.jenis_permohonan == 'DM' ? 'Domas' : (item.jenis_permohonan == 'RE' ? 'Re Ekspor' : (item.jenis_permohonan == 'RI' ? 'Re Impor' : (item.jenis_permohonan == 'TR' ? 'Transit' : 'Serah Terima'))))))),
+                        status: (item.status_ptk == 0 ? 'Draft' : (item.status_ptk == 9 ? 'Pengajuan' : (item.status_ptk == 1 ? 'Diterima' : (item.status_ptk == 2 ? 'Ditolak' : 'blm diset')))),
                         pemohon: item.nama_pemohon,
                         pengirim: item.nama_pengirim,
                         penerima: item.nama_penerima,
@@ -229,7 +229,7 @@ function DataMasukTable(props) {
 	}, [filterText]);
 
     function handleClick(e) {
-        if(e.selectedCount === 1) {
+        if(e.selectedCount == 1) {
             Swal.fire({
                 title: "Item dipilih",
                 text: "Karantina: " + e.selectedRows[0].karantina + " || No AJU: " + e.selectedRows[0].noAju,

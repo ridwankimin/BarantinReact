@@ -207,7 +207,6 @@ export default class PtkModel {
           },
           data: datasend
         };
-        // 
         
         return axios.request(config)
       }
@@ -570,8 +569,8 @@ export default class PtkModel {
         'no_dok_permohonan': data.opsiVerif == '2' ? "" : data.noDokumen,
         // 'no_dok_permohonan': "2024-T-0100-K.1.1-000003",
         'tgl_dok_permohonan': data.tglTerimaVerif,
-        'petugas': data.opsiVerif == '2' ? Cookies.get("userId") : data.petugasVerif, // pake session
-        'nip': '123',
+        'petugas': data.opsiVerif == '2' ? Cookies.get("nama") : data.petugasVerif.split(" - ")[0], // pake session
+        'nip': data.opsiVerif == '2' ? Cookies.get("nip") : data.petugasVerif.split(" - ")[1],
       };
       // 
       let config = {

@@ -9,6 +9,7 @@ import PtkSurtug from '../../model/PtkSurtug';
 import Swal from 'sweetalert2';
 import Select from 'react-select';
 import PegawaiJson from '../../model/master/pegawaiPertanian.json'
+import LoadBtn from '../../component/loading/LoadBtn';
 
 const modelSurtug = new PtkSurtug()
 

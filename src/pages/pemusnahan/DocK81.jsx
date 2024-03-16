@@ -11,6 +11,7 @@ import SpinnerDot from '../../component/loading/SpinnerDot';
 import ModaAlatAngkut from '../../model/master/modaAlatAngkut.json';
 import Alasan from '../../model/master/alasan.json';
 import Swal from 'sweetalert2';
+import LoadBtn from '../../component/loading/LoadBtn';
 
 const log = new PtkHistory()
 const modelPemohon = new PtkModel()
@@ -28,6 +29,7 @@ function DocK81() {
     let [loadKomoditi, setLoadKomoditi] = useState(false)
     let [cekData, setCekData] = useState()
     let [loadKomoditiPesan, setLoadKomoditiPesan] = useState("")
+    let [onLoad, setOnLoad] = useState(false)
     let [datasend, setDataSend] = useState([])
 
     let [data, setData] = useState({
@@ -128,11 +130,13 @@ function DocK81() {
     const dataCekKom = data.listKomoditas?.filter(item => item.volumeP7 == null || item.nettoP7 == null)
     const dataCekKomJanBen = data.listKomoditas?.filter(item => (item.jantan != null && item.jantanP7 == null) || (item.betina != null && item.betinaP7 == null))
     const onSubmit = (data) => {
+        setOnLoad(true)
         if(dataCekKom.length == 0 && dataCekKomJanBen.length == 0) {
             const response = modelPemusnahan.simpan81(data);
             response
             .then((response) => {
                 if(response.data) {
+                    setOnLoad(false)
                     if(response.data.status == 201) {
                         //start save history
                         const resHsy = log.pushHistory(data.idPtk, "P7", "K-8.1", (data.idDok81 ? 'UPDATE' : 'NEW'));
@@ -167,6 +171,7 @@ function DocK81() {
                 }
             })
             .catch((error) => {
+                setOnLoad(false)
                 if(import.meta.env.VITE_BE_ENV == "DEV") {
                     console.log(error)
                 }
@@ -177,6 +182,7 @@ function DocK81() {
                 })
             });
         } else {
+            setOnLoad(false)
             Swal.fire({
                 icon: "error",
                 title: "Error!",
@@ -207,19 +213,20 @@ function DocK81() {
     const cekdataMPk81 = watchMPk81()
 
     function onSubmitMPk81(data) {
+        setOnLoad(true)
         let cekVolume = false
         if((data.jantanP7 != null) || (data.betinaP7 != null) ) {
-            if((parseFloat(typeof data.jantanP7 == "string" ? data.jantanP7.replace(",", "") : data.jantanP7) > parseFloat(cekData.jantanP7)) || (parseFloat((typeof data.betinaP7 == "string" ? data.betinaP7.replace(",", "") : data.betinaP7)) > parseFloat(cekData.betinaP7))) {
+            if((parseFloat(typeof data.jantanP7 == "string" ? data.jantanP7.replace(/,/g, "") : data.jantanP7) > parseFloat(cekData.jantanP7)) || (parseFloat((typeof data.betinaP7 == "string" ? data.betinaP7.replace(/,/g, "") : data.betinaP7)) > parseFloat(cekData.betinaP7))) {
                 cekVolume = false
             } else {
-                if(parseFloat(typeof data.volumeP7 == "string" ? data.volumeP7.replace(",", "") : data.volumeP7) > parseFloat(cekData.volumeP7) || parseFloat(typeof data.nettoP7 == "string" ? data.nettoP7.replace(",", "") : data.nettoP7) > parseFloat(cekData.nettoP7)) {
+                if(parseFloat(typeof data.volumeP7 == "string" ? data.volumeP7.replace(/,/g, "") : data.volumeP7) > parseFloat(cekData.volumeP7) || parseFloat(typeof data.nettoP7 == "string" ? data.nettoP7.replace(/,/g, "") : data.nettoP7) > parseFloat(cekData.nettoP7)) {
                     cekVolume = false 
                 } else {
                     cekVolume = true
                 }
             }
         } else {
-            if(parseFloat(typeof data.volumeP7 == "string" ? data.volumeP7.replace(",", "") : data.volumeP7) > parseFloat(cekData.volumeP7) || parseFloat(typeof data.nettoP7 == "string" ? data.nettoP7.replace(",", "") : data.nettoP7) > parseFloat(cekData.nettoP7)) {
+            if(parseFloat(typeof data.volumeP7 == "string" ? data.volumeP7.replace(/,/g, "") : data.volumeP7) > parseFloat(cekData.volumeP7) || parseFloat(typeof data.nettoP7 == "string" ? data.nettoP7.replace(/,/g, "") : data.nettoP7) > parseFloat(cekData.nettoP7)) {
                 cekVolume = false 
             } else {
                 cekVolume = true
@@ -228,6 +235,7 @@ function DocK81() {
         if(cekVolume) {
             log.updateKomoditiP7(data.idMPk81, data)
             .then((response) => {
+                setOnLoad(false)
                 if(response.data.status == 201) {
                     Swal.fire({
                         icon: "success",
@@ -245,6 +253,7 @@ function DocK81() {
                 }
             })
             .catch((error) => {
+                setOnLoad(false)
                 if(import.meta.env.VITE_BE_ENV == "DEV") {
                     console.log(error)
                 }
@@ -255,6 +264,7 @@ function DocK81() {
                 })
             })
         } else {
+            setOnLoad(false)
             Swal.fire({
                 icon: "error",
                 title: "Error!",
@@ -978,7 +988,9 @@ function DocK81() {
                         <div className="pt-2">
                             <div className="row">
                                 <div className="offset-sm-2 col-sm-9">
-                                    <button type="submit" className="btn btn-primary me-sm-2 me-1"><i className='fa-solid fa-save me-sm-2 me-1'></i> Simpan</button>
+                                    {onLoad ? <LoadBtn warna="btn-primary" ukuran="" /> :
+                                        <button type="submit" className="btn btn-primary me-sm-2 me-1"><i className='fa-solid fa-save me-sm-2 me-1'></i> Simpan</button>
+                                    }
                                     <button type="button" className="btn btn-danger btn-label-secondary me-sm-2 me-1"><i className='fa-solid fa-cancel me-sm-2 me-1'></i> Batal</button>
                                     <button type="button" className="btn btn-warning btn-label-secondary me-sm-2 me-1"><i className='fa-solid fa-print me-sm-2 me-1'></i> Print</button>
                                     <button type="button" style={{display: (cekWatch.idDok81 ? "block" : "none")}} className="float-end btn btn-info btn-label-secondary"><i className='tf-icons fa-solid fa-paper-plane me-sm-2 me-1'></i> TTE</button>
@@ -1052,7 +1064,9 @@ function DocK81() {
                             
                         <small className='text-danger'>*Format penulisan desimal menggunakan titik ( . )</small>
                         <div className="col-12 text-center">
-                            <button type="submit" className="btn btn-primary me-sm-3 me-1">Simpan</button>
+                            {onLoad ? <LoadBtn warna="btn-primary" ukuran="" /> :
+                                <button type="submit" className="btn btn-primary me-sm-3 me-1">Simpan</button>
+                            }
                             <button
                             type="reset"
                             className="btn btn-label-secondary"

@@ -31,9 +31,11 @@ function Login() {
                 });
                 
                 Cookies.set("userId", dataUser.id, {expires: 7});
-                Cookies.set("uptId", dataUser.id_upt, {expires: 7});
+                Cookies.set("uptId", dataUser.upt_id, {expires: 7});
                 Cookies.set("username", dataUser.username, {expires: 7});
-                Cookies.set("kodeSatpel", dataUser.kode_satpel, {expires: 7});
+                Cookies.set("kodeSatpel", dataUser.upt_id, {expires: 7});
+                Cookies.set("nama", dataUser.nama, {expires: 7});
+                Cookies.set("nip", dataUser.nip, {expires: 7});
                 Cookies.set("namaUpt", dataUser.nama_upt, {expires: 7});
                 Cookies.set("namaSatpel", dataUser.nama_satpel, {expires: 7});
         

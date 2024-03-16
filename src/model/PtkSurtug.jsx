@@ -184,7 +184,8 @@ export default class PtkSurtug {
         },
         data: {
           ptk_surtug_header_id: id,
-          ptk_surtug_petugas_id: ""
+          ptk_surtug_petugas_id: "",
+          penugasan_id: ""
         }
       };
       

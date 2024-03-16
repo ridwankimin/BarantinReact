@@ -13,6 +13,7 @@ import PtkSurtug from '../../model/PtkSurtug';
 import SpinnerDot from '../../component/loading/SpinnerDot';
 import Swal from 'sweetalert2';
 import PtkPemeriksaan from '../../model/PtkPemeriksaan';
+import LoadBtn from '../../component/loading/LoadBtn';
 
 const log = new PtkHistory()
 const modelPemohon = new PtkModel()
@@ -43,6 +44,8 @@ function DocK92i() {
     const idPtk = Cookies.get("idPtkPage");
     let [loadKomoditi, setLoadKomoditi] = useState(false)
     let [loadKomoditiPesan, setLoadKomoditiPesan] = useState("")
+    let [cekData, setCekData] = useState()
+    let [onLoad, setOnLoad] = useState(false)
     let [datasend, setDataSend] = useState([])
 
     let [data, setData] = useState({
@@ -58,14 +61,20 @@ function DocK92i() {
         handleSubmit,
         watch,
         formState: { errors },
-    } = useForm();
+    } = useForm({
+        defaultValues: {
+            noSeri: "*******"
+        }
+    });
 
     const cekWatch = watch()
 
     const onSubmit = (data) => {
+        setOnLoad(true)
         const response = modelPelepasan.imporAreaKI(data);
         response
         .then((response) => {
+            setOnLoad(false)
             if(response.data) {
                 if(response.data.status == 201) {
                     //start save history
@@ -98,6 +107,7 @@ function DocK92i() {
             }
         })
         .catch((error) => {
+            setOnLoad(false)
             if(import.meta.env.VITE_BE_ENV == "DEV") {
                 console.log(error)
             }
@@ -133,38 +143,71 @@ function DocK92i() {
     const cekdataMPk92i = watchMPk92i()
 
     function onSubmitMPk92i(data) {
-        log.updateKomoditiP8(data.idMPk92i, data)
-        .then((response) => {
-            if(response.data.status == 201) {
-                // alert(response.data.status + " - " + response.data.message)
+        setOnLoad(true)
+        let cekVolume = false
+        if(parseFloat(typeof data.volumeP8 == "string" ? data.volumeP8.replace(/,/g, "") : data.volumeP8) > parseFloat(cekData.volumeP8) || parseFloat(typeof data.nettoP8 == "string" ? data.nettoP8.replace(/,/g, "") : data.nettoP8) > parseFloat(cekData.nettoP8)) {
+            cekVolume = false 
+        } else {
+            cekVolume = true
+        }
+        if(cekVolume) {
+            log.updateKomoditiP8(data.idMPk92i, data)
+            .then((response) => {
+                setOnLoad(false)
+                if(response.data.status == 201) {
+                    Swal.fire({
+                        title: "Sukses!",
+                        text: "Volume P8 berhasil disimpan",
+                        icon: "success"
+                    });
+                    resetFormKomoditik92i()
+                    refreshListKomoditas()
+                } else {
+                    Swal.fire({
+                        icon: "error",
+                        title: "Error!",
+                        text: response.data.message
+                    })
+                }
+            })
+            .catch((error) => {
+                setOnLoad(false)
+                if(import.meta.env.VITE_BE_ENV == "DEV") {
+                    console.log(error)
+                }
                 Swal.fire({
-                    title: "Sukses!",
-                    text: "Volume P8 berhasil diupdate",
-                    icon: "success"
-                });
-                resetFormKomoditik92i()
-                refreshListKomoditas()
-            }
-        })
-        .catch((error) => {
-            if(import.meta.env.VITE_BE_ENV == "DEV") {
-                console.log(error)
-            }
-        })
+                    icon: "error",
+                    title: "Error!",
+                    text: error.response.data.message
+                })
+            })
+        } else {
+            setOnLoad(false)
+            Swal.fire({
+                icon: "error",
+                title: "Error!",
+                text: "Volume input melebihi volume awal, mohon cek isian anda"
+            })
+        }
     }
 
     function handleEditKomoditas(e) {
-        setValueMPk92i("idMPk92i", e.target.dataset.headerid)
-        setValueMPk92i("idPtk", e.target.dataset.ptk)
-        setValueMPk92i("jenisKar", "I")
-        const cell = e.target.closest('tr')
-        setValueMPk92i("nettoP8", cell.cells[5].innerHTML)
-        setValueMPk92i("satuanNetto", cell.cells[6].innerHTML)
-        setValueMPk92i("volumeP8", cell.cells[7].innerHTML)
-        setValueMPk92i("satuanLain", cell.cells[8].innerHTML)
-        setValueMPk92i("namaUmum", cell.cells[3].innerHTML)
-        setValueMPk92i("namaLatin", cell.cells[4].innerHTML)
-        setValueMPk92i("volumeP8", cell.cells[7].innerHTML)
+        const dataMP = data.listKomoditas?.filter((element, index) => index == e)
+        setValueMPk92i("idMPk92i", dataMP[0].id)
+        setValueMPk92i("idPtk", dataMP[0].ptk_id)
+        setValueMPk92i("jenisKar", Cookies.get("jenisKarantina"))
+        setCekData(values => ({...values,
+            volumeP8: dataMP[0].volume_lain,
+            nettoP8: dataMP[0].volume_netto,
+            jantanP8: dataMP[0].jantan,
+            betinaP8: dataMP[0].betina
+        }));
+        setValueMPk92i("nettoP8", dataMP[0].volume_netto)
+        setValueMPk92i("satuanNetto", dataMP[0].sat_netto)
+        setValueMPk92i("volumeP8", dataMP[0].volume_lain)
+        setValueMPk92i("satuanLain", dataMP[0].sat_lain)
+        setValueMPk92i("namaUmum", dataMP[0].nama_umum_tercetak)
+        setValueMPk92i("namaLatin", dataMP[0].nama_latin_tercetak)
     }
 
     function handleEditKomoditasAll() {
@@ -175,9 +218,18 @@ function DocK92i() {
                     if(response.data.status == 201) {
                         refreshListKomoditas()
                         setLoadKomoditi(false)
-                        if(import.meta.env.VITE_BE_ENV == "DEV") {
-                            console.log("history saved")
-                        }
+                        
+                        Swal.fire({
+                            icon: "success",
+                            title: "Sukses!",
+                            text: "Volume P8 berhasil disimpan (tidak ada perubahan dengan volume awal)"
+                        })
+                    } else {
+                        Swal.fire({
+                            icon: "error",
+                            title: "Error!",
+                            text: response.data.status
+                        })
                     }
                 })
                 .catch((error) => {
@@ -186,6 +238,11 @@ function DocK92i() {
                     if(import.meta.env.VITE_BE_ENV == "DEV") {
                         console.log(error)
                     }
+                    Swal.fire({
+                        icon: "error",
+                        title: "Error!",
+                        text: error.response.data.status
+                    })
                 })
             )
         )
@@ -193,7 +250,7 @@ function DocK92i() {
     }
 
    function refreshListKomoditas() {
-        const resKom = modelPemohon.getKomoditiPtkId(data.noIdPtk, "H");
+        const resKom = modelPemohon.getKomoditiPtkId(data.noIdPtk, Cookies.get("jenisKarantina"));
         resKom
         .then((res) => {
             if(res.data.status == 200) {
@@ -235,7 +292,7 @@ function DocK92i() {
                             listDokumen: response.data.data.ptk_dokumen
                         }));
 
-                        const resKom = modelPemohon.getKomoditiPtkId(base64_decode(ptkNomor[1]), "H");
+                        const resKom = modelPemohon.getKomoditiPtkId(base64_decode(ptkNomor[1]), Cookies.get("jenisKarantina"));
                         resKom
                         .then((res) => {
                             if(typeof res.data != "string") {
@@ -463,7 +520,7 @@ function DocK92i() {
         }
 
         if(data.errorKomoditas) {
-            const resKom = modelPemohon.getKomoditiPtkId(data.noIdPtk, "H");
+            const resKom = modelPemohon.getKomoditiPtkId(data.noIdPtk, Cookies.get("jenisKarantina"));
             resKom
             .then((res) => {
                 if(typeof res.data != "string") {
@@ -693,7 +750,7 @@ function DocK92i() {
                                 </div>
                                 <label className="col-sm-2 col-form-label text-sm-end" htmlFor="noSeri">No Seri <span className='text-danger'>*</span></label>
                                 <div className="col-sm-2">
-                                    <input type="text" id="noSeri" name='noSeri' {...register("noSeri", {required: "Mohon isi Nomor seru."})} className={errors.noSeri ? "form-control form-control-sm is-invalid" : "form-control form-control-sm"} />
+                                    <input type="text" id="noSeri" disabled name='noSeri' {...register("noSeri", {required: "Mohon isi Nomor seru."})} className={errors.noSeri ? "form-control form-control-sm is-invalid" : "form-control form-control-sm"} />
                                     {errors.noSeri && <small className="text-danger">{errors.noSeri.message}</small>}
                                 </div>
                             </div>
@@ -895,7 +952,7 @@ function DocK92i() {
                                                                             <td>{data.volumeP8}</td>
                                                                             <td>{data.nettoP8}</td>
                                                                             <td>
-                                                                                <button className="btn btn-default dropdown-item" type="button" onClick={handleEditKomoditas} data-headerid={data.id} data-ptk={data.ptk_id} data-bs-toggle="modal" data-bs-target="#modKomoditas"><i className="fa-solid fa-pen-to-square me-1"></i> Edit</button>
+                                                                                <button className="btn btn-default dropdown-item" type="button" onClick={() => handleEditKomoditas(index)} data-bs-toggle="modal" data-bs-target="#modKomoditas"><i className="fa-solid fa-pen-to-square me-1"></i> Edit</button>
                                                                             </td>
                                                                         </tr>
                                                                     ))
@@ -979,7 +1036,9 @@ function DocK92i() {
                         <div className="pt-2">
                             <div className="row">
                                 <div className="offset-sm-2 col-sm-9">
-                                    <button type="submit" className="btn btn-primary me-sm-2 me-1">Simpan</button>
+                                    {onLoad ? <LoadBtn warna="btn-primary" ukuran="" /> :
+                                        <button type="submit" className="btn btn-primary me-sm-3 me-1">Simpan</button>
+                                    }
                                     <button type="button" className="btn btn-danger btn-label-secondary me-sm-2 me-1">Batal</button>
                                 </div>
                             </div>
@@ -1034,7 +1093,9 @@ function DocK92i() {
                             </div>
                         <small className='text-danger'>*Format penulisan desimal menggunakan titik ( . )</small>
                         <div className="col-12 text-center">
-                            <button type="submit" className="btn btn-primary me-sm-3 me-1">Simpan</button>
+                            {onLoad ? <LoadBtn warna="btn-primary" ukuran="" /> :
+                                <button type="submit" className="btn btn-primary me-sm-3 me-1">Simpan</button>
+                            }
                             <button
                             type="reset"
                             className="btn btn-label-secondary"

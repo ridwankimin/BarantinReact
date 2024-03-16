@@ -12,6 +12,7 @@ import { useForm } from 'react-hook-form';
 import Swal from 'sweetalert2';
 import PtkSurtug from '../../model/PtkSurtug';
 import SpinnerDot from '../../component/loading/SpinnerDot';
+import LoadBtn from '../../component/loading/LoadBtn';
 
 function modaAlatAngkut(e){
     return ModaAlatAngkut.find((element) => element.id == parseInt(e))
@@ -39,6 +40,7 @@ function DocK73() {
     let [cekData, setCekData] = useState()
     let [loadKomoditiPesan, setLoadKomoditiPesan] = useState("")
     let [datasend, setDataSend] = useState([])
+    let [onLoad, setOnLoad] = useState(false)
     
     let [data, setData] = useState({
         noAju: "",
@@ -60,10 +62,12 @@ function DocK73() {
     const dataCekKom = data.listKomoditas?.filter(item => item.volumeP6 == null || item.nettoP6 == null)
     const dataCekKomJanBen = data.listKomoditas?.filter(item => (item.jantan != null && item.jantanP6 == null) || (item.betina != null && item.betinaP6 == null))
     function onSubmit(data) {
+        setOnLoad(true)
         if(dataCekKom.length == 0 && dataCekKomJanBen.length == 0) {
             const response = modelPenolakan.save73(data, data.idDok72);
             response
             .then((response) => {
+                setOnLoad(false)
                 if(response.data) {
                     if(response.data.status == 201) {
                         const resHsy = log.pushHistory(data.idPtk, "p6", "K-7.3", (data.idDok73 ? 'UPDATE' : 'NEW'));
@@ -94,6 +98,7 @@ function DocK73() {
                 }
             })
             .catch((error) => {
+                setOnLoad(false)
                 if(import.meta.env.VITE_BE_ENV == "DEV") {
                     console.log(error)
                 }
@@ -105,6 +110,7 @@ function DocK73() {
                 // alert(error.response.status + " - " + error.response.data.message)
             });
         } else {
+            setOnLoad(false)
             Swal.fire({
                 icon: "error",
                 title: "Error!",
@@ -135,19 +141,20 @@ function DocK73() {
     const cekdataMPk73 = watchMPk73()
 
     function onSubmitMPk73(data) {
+        setOnLoad(true)
         let cekVolume = false
         if((data.jantanP6 != null) || (data.betinaP6 != null) ) {
-            if((parseFloat(typeof data.jantanP6 == "string" ? data.jantanP6.replace(",", "") : data.jantanP6) > parseFloat(cekData.jantanP6)) || (parseFloat((typeof data.betinaP6 == "string" ? data.betinaP6.replace(",", "") : data.betinaP6)) > parseFloat(cekData.betinaP6))) {
+            if((parseFloat(typeof data.jantanP6 == "string" ? data.jantanP6.replace(/,/g, "") : data.jantanP6) > parseFloat(cekData.jantanP6)) || (parseFloat((typeof data.betinaP6 == "string" ? data.betinaP6.replace(/,/g, "") : data.betinaP6)) > parseFloat(cekData.betinaP6))) {
                 cekVolume = false
             } else {
-                if(parseFloat(typeof data.volumeP6 == "string" ? data.volumeP6.replace(",", "") : data.volumeP6) > parseFloat(cekData.volumeP6) || parseFloat(typeof data.nettoP6 == "string" ? data.nettoP6.replace(",", "") : data.nettoP6) > parseFloat(cekData.nettoP6)) {
+                if(parseFloat(typeof data.volumeP6 == "string" ? data.volumeP6.replace(/,/g, "") : data.volumeP6) > parseFloat(cekData.volumeP6) || parseFloat(typeof data.nettoP6 == "string" ? data.nettoP6.replace(/,/g, "") : data.nettoP6) > parseFloat(cekData.nettoP6)) {
                     cekVolume = false 
                 } else {
                     cekVolume = true
                 }
             }
         } else {
-            if(parseFloat(typeof data.volumeP6 == "string" ? data.volumeP6.replace(",", "") : data.volumeP6) > parseFloat(cekData.volumeP6) || parseFloat(typeof data.nettoP6 == "string" ? data.nettoP6.replace(",", "") : data.nettoP6) > parseFloat(cekData.nettoP6)) {
+            if(parseFloat(typeof data.volumeP6 == "string" ? data.volumeP6.replace(/,/g, "") : data.volumeP6) > parseFloat(cekData.volumeP6) || parseFloat(typeof data.nettoP6 == "string" ? data.nettoP6.replace(/,/g, "") : data.nettoP6) > parseFloat(cekData.nettoP6)) {
                 cekVolume = false 
             } else {
                 cekVolume = true
@@ -156,6 +163,7 @@ function DocK73() {
         if(cekVolume) {
             log.updateKomoditiP6(data.idMPk73, data)
             .then((response) => {
+                setOnLoad(false)
                 if(response.data.status == 201) {
                     // alert(response.data.status + " - " + response.data.message)
                     Swal.fire({
@@ -170,6 +178,7 @@ function DocK73() {
                 }
             })
             .catch((error) => {
+                setOnLoad(false)
                 if(import.meta.env.VITE_BE_ENV == "DEV") {
                     console.log(error)
                 }
@@ -1074,7 +1083,9 @@ function DocK73() {
                         </div>
                         <div className="row">
                             <div className="offset-sm-2 col-sm-9">
-                                <button type="submit" className="btn btn-primary me-sm-2 me-1">Simpan</button>
+                                {onLoad ? <LoadBtn warna="btn-primary" ukuran="" /> :
+                                    <button type="submit" className="btn btn-primary me-sm-2 me-1">Simpan</button>
+                                }
                                 <button type="button" className="btn btn-danger btn-label-secondary me-sm-2 me-1">Batal</button>
                             </div>
                         </div>
@@ -1145,7 +1156,9 @@ function DocK73() {
                             
                         <small className='text-danger'>*Format penulisan desimal menggunakan titik ( . )</small>
                         <div className="col-12 text-center">
-                            <button type="submit" className="btn btn-primary me-sm-3 me-1">Simpan</button>
+                            {onLoad ? <LoadBtn warna="btn-primary" ukuran="" /> :
+                                <button type="submit" className="btn btn-primary me-sm-2 me-1">Simpan</button>
+                            }
                             <button
                             type="reset"
                             className="btn btn-label-secondary"

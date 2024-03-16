@@ -7,6 +7,7 @@ import PnPelepasan from '../../model/PnPelepasan';
 import PtkModel from '../../model/PtkModel';
 import Rekomendasi from '../../model/master/rekomendasi.json'
 import Swal from 'sweetalert2';
+// form K-9.4 UDAN GA DIPAKE
 
 const model = new PnPelepasan()
 const modelPemohon = new PtkModel()

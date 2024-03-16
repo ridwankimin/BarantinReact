@@ -30,7 +30,6 @@ const modelMaster = new Master()
 const log = new PtkHistory()
 
 const addCommas = num => {
-    // num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
     var parts = num.toString().split(".");
     parts[0] = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ",");
     return parts.join(".");
@@ -71,7 +70,7 @@ function areaTangkap() {
 function masterPegawai() {
     var arrayPegawai = PegawaiJson.map(item => {
         return {
-            value: item.id,
+            value: item.nama + " - " + item.nip,
             label: item.nama + " - " + item.nip,
         }
     })

@@ -8,12 +8,17 @@ import Swal from 'sweetalert2';
 import { useForm } from 'react-hook-form';
 import Select from 'react-select';
 import PtkSurtug from '../../model/PtkSurtug';
+import LoadBtn from '../../component/loading/LoadBtn';
 
 const modelPemohon = new PtkModel()
 const modelSurtug = new PtkSurtug()
 const modelPeriksa = new PtkPemeriksaan()
 
-const addCommas = num => num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+const addCommas = num => {
+    var parts = num.toString().split(".");
+    parts[0] = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+    return parts.join(".");
+};
 const removeNonNumeric = num => num.toString().replace(/[^0-9.]/g, "");
 
 const customStyles = {
@@ -56,11 +61,13 @@ function DocK33() {
     })
     let [listDetilSampel, setListDetilSampel] = useState([])
     let [dataSelect, setDataSelect] = useState([])
+    let [onLoad, setOnLoad] = useState(false)
 
     let [detilSampel, setDetilSampel] = useState({})
 
     function handleDetilSampel(e) {
         e.preventDefault()
+        setOnLoad(true)
         setListDetilSampel([...listDetilSampel, { 
             ptk_komoditas_id: detilSampel.idkom,
             nama_umum_tercetak: detilSampel.namaKom,
@@ -91,6 +98,7 @@ function DocK33() {
             noKontainer: "",
             keterangan: ""
         }));
+        setOnLoad(false)
     }
 
     const {
@@ -106,10 +114,12 @@ function DocK33() {
     const cekWatch = watch()
 
     const onSubmit = (data) => {
+        setOnLoad(true)
         const response = modelPeriksa.pnSampling(data, listDetilSampel);
         response
         .then((response) => {
             if(response.data) {
+                setOnLoad(false)
                 if(response.data.status == 201) {
                     Swal.fire({
                         title: "Sukses!",
@@ -129,6 +139,7 @@ function DocK33() {
             }
         })
         .catch((error) => {
+            setOnLoad(false)
             if(import.meta.env.VITE_BE_ENV == "DEV") {
                 console.log(error)
             }
@@ -879,7 +890,9 @@ function DocK33() {
                                 {errors.ttdUser && <small className="text-danger">{errors.ttdUser.message}</small>}
                             </div>
                         </div>
-                        <button type="submit" className="btn btn-primary me-sm-2 me-1">Simpan</button>
+                        {onLoad ? <LoadBtn warna="btn-primary" ukuran="" /> :
+                            <button type="submit" className="btn btn-primary me-sm-2 me-1">Simpan</button>
+                        }
                         <button type="button" className="btn btn-danger me-sm-2 me-1">Hapus</button>
                     </form>
                 </div>
@@ -941,7 +954,9 @@ function DocK33() {
                                 </div>
                                 <div className='row'>
                                     <div className='col-sm-12 text-center'>
-                                        <button type="submit" className="btn btn-primary me-sm-2 me-1">Simpan</button>
+                                        {onLoad ? <LoadBtn warna="btn-primary" ukuran="" /> :
+                                            <button type="submit" className="btn btn-primary me-sm-2 me-1">Simpan</button>
+                                        }
                                         <button type="button" className="btn btn-danger me-sm-2 me-1" data-bs-dismiss="modal" aria-label="Close">Tutup</button>
                                     </div>   
                                 </div>

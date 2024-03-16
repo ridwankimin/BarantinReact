@@ -12,6 +12,7 @@ import Alasan from '../../model/master/alasan.json';
 import Pemberitahuan from '../../model/master/pemberitahuan.json';
 import SpinnerDot from '../../component/loading/SpinnerDot';
 import Swal from 'sweetalert2';
+import LoadBtn from '../../component/loading/LoadBtn';
 
 function modaAlatAngkut(e){
     return ModaAlatAngkut.find((element) => element.id == parseInt(e))
@@ -42,6 +43,7 @@ function DocK61() {
     let [cekData, setCekData] = useState()
     let [loadKomoditiPesan, setLoadKomoditiPesan] = useState("")
     let [datasend, setDataSend] = useState([])
+    let [onLoad, setOnLoad] = useState(false)
 
     let [data, setData] = useState({
         noAju: "",
@@ -63,10 +65,12 @@ function DocK61() {
     const dataCekKom = data.listKomoditas?.filter(item => item.volumeP6 == null || item.nettoP6 == null)
     const dataCekKomJanBen = data.listKomoditas?.filter(item => (item.jantan != null && item.jantanP6 == null) || (item.betina != null && item.betinaP6 == null))
     function onSubmit(data) {
+        setOnLoad(true)
         if(dataCekKom.length == 0 && dataCekKomJanBen.length == 0) {
             const response = modelPenahanan.save61(data);
             response
             .then((response) => {
+                setOnLoad(false)
                 if(response.data) {
                     if(response.data.status == 201) {
                         const resHsy = log.pushHistory(data.idPtk, "p5", "K-6.1", (data.idDok61 ? 'UPDATE' : 'NEW'));
@@ -93,9 +97,11 @@ function DocK61() {
                         setValue("idDok61", response.data.data.id)
                         setValue("noDok61", response.data.data.nomor)
                         if(data.isBATahan) {
+                            setOnLoad(true)
                             const response62 = modelPenahanan.save62(data, response.data.data.id);
                             response62
                             .then((response) => {
+                                setOnLoad(false)
                                 if(response.data) {
                                     if(response.data.status == 201) {
                                         const resHsy = log.pushHistory(data.idPtk, "p5", "K-6.2", (data.idDok62 ? 'UPDATE' : 'NEW'));
@@ -130,6 +136,7 @@ function DocK61() {
                                 }
                             })
                             .catch((error) => {
+                                setOnLoad(false)
                                 if(import.meta.env.VITE_BE_ENV == "DEV") {
                                     console.log(error)
                                 }
@@ -150,6 +157,7 @@ function DocK61() {
                 }
             })
             .catch((error) => {
+                setOnLoad(false)
                 if(import.meta.env.VITE_BE_ENV == "DEV") {
                     console.log(error)
                 }
@@ -160,6 +168,7 @@ function DocK61() {
                 });
             });
         } else {
+            setOnLoad(false)
             Swal.fire({
                 icon: "error",
                 title: "Error!",
@@ -190,19 +199,20 @@ function DocK61() {
     const cekdataMPk61 = watchMPk61()
 
     function onSubmitMPk61(data) {
+        setOnLoad(true)
         let cekVolume = false
         if((data.jantanP5 != null) || (data.betinaP5 != null) ) {
-            if((parseFloat(typeof data.jantanP5 == "string" ? data.jantanP5.replace(",", "") : data.jantanP5) > parseFloat(cekData.jantanP5)) || (parseFloat((typeof data.betinaP5 == "string" ? data.betinaP5.replace(",", "") : data.betinaP5)) > parseFloat(cekData.betinaP5))) {
+            if((parseFloat(typeof data.jantanP5 == "string" ? data.jantanP5.replace(/,/g, "") : data.jantanP5) > parseFloat(cekData.jantanP5)) || (parseFloat((typeof data.betinaP5 == "string" ? data.betinaP5.replace(/,/g, "") : data.betinaP5)) > parseFloat(cekData.betinaP5))) {
                 cekVolume = false
             } else {
-                if(parseFloat(typeof data.volumeP5 == "string" ? data.volumeP5.replace(",", "") : data.volumeP5) > parseFloat(cekData.volumeP5) || parseFloat(typeof data.nettoP5 == "string" ? data.nettoP5.replace(",", "") : data.nettoP5) > parseFloat(cekData.nettoP5)) {
+                if(parseFloat(typeof data.volumeP5 == "string" ? data.volumeP5.replace(/,/g, "") : data.volumeP5) > parseFloat(cekData.volumeP5) || parseFloat(typeof data.nettoP5 == "string" ? data.nettoP5.replace(/,/g, "") : data.nettoP5) > parseFloat(cekData.nettoP5)) {
                     cekVolume = false 
                 } else {
                     cekVolume = true
                 }
             }
         } else {
-            if(parseFloat(typeof data.volumeP5 == "string" ? data.volumeP5.replace(",", "") : data.volumeP5) > parseFloat(cekData.volumeP5) || parseFloat(typeof data.nettoP5 == "string" ? data.nettoP5.replace(",", "") : data.nettoP5) > parseFloat(cekData.nettoP5)) {
+            if(parseFloat(typeof data.volumeP5 == "string" ? data.volumeP5.replace(/,/g, "") : data.volumeP5) > parseFloat(cekData.volumeP5) || parseFloat(typeof data.nettoP5 == "string" ? data.nettoP5.replace(/,/g, "") : data.nettoP5) > parseFloat(cekData.nettoP5)) {
                 cekVolume = false 
             } else {
                 cekVolume = true
@@ -211,6 +221,7 @@ function DocK61() {
         if(cekVolume) {
             log.updateKomoditiP5(data.idMPk61, data)
             .then((response) => {
+                setOnLoad(false)
                 if(response.data.status == 201) {
                     Swal.fire({
                         title: "Sukses!",
@@ -231,6 +242,7 @@ function DocK61() {
                 }
             })
             .catch((error) => {
+                setOnLoad(false)
                 if(import.meta.env.VITE_BE_ENV == "DEV") {
                     console.log(error)
                 }
@@ -241,6 +253,7 @@ function DocK61() {
                 })
             })
         } else {
+            setOnLoad(false)
             Swal.fire({
                 icon: "error",
                 title: "Error!",
@@ -1088,7 +1101,9 @@ function DocK61() {
                         <div style={{marginLeft: "15px"}}>
                             <div className="row">
                                 <div className="col-sm-9">
-                                    <button type="submit" className="btn btn-primary me-sm-2 me-1">Simpan</button>
+                                    {onLoad ? <LoadBtn warna="btn-primary" ukuran="" /> :
+                                        <button type="submit" className="btn btn-primary me-sm-2 me-1">Simpan</button>
+                                    }
                                     <button type="button" className="btn btn-danger btn-label-secondary me-sm-2 me-1">Batal</button>
                                 </div>
                             </div>
@@ -1160,7 +1175,9 @@ function DocK61() {
                             
                         <small className='text-danger'>*Format penulisan desimal menggunakan titik ( . )</small>
                         <div className="col-12 text-center">
-                            <button type="submit" className="btn btn-primary me-sm-3 me-1">Simpan</button>
+                            {onLoad ? <LoadBtn warna="btn-primary" ukuran="" /> :
+                                <button type="submit" className="btn btn-primary me-sm-3 me-1">Simpan</button>
+                            }
                             <button
                             type="reset"
                             className="btn btn-label-secondary"

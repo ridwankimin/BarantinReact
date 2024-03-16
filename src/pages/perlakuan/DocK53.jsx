@@ -12,6 +12,7 @@ import Swal from 'sweetalert2';
 import TipePerlakuan from '../../model/master/tipePerlakuan.json'
 import Pestisida from '../../model/master/bahanPestisida.json'
 import Select from 'react-select';
+import LoadBtn from '../../component/loading/LoadBtn';
 
 function tipePerlakuan(tipe) {
     if(tipe) {
@@ -86,6 +87,7 @@ function DocK53() {
     let [cekData, setCekData] = useState()
     let [loadKomoditiPesan, setLoadKomoditiPesan] = useState("")
     let [datasend, setDataSend] = useState([])
+    let [onLoad, setOnLoad] = useState(false)
     let [data, setData] = useState({
         noAju: "",
         noIdPtk: "",
@@ -107,9 +109,11 @@ function DocK53() {
     const cekWatch = watch()
 
     const onSubmit = (data) => {
+        setOnLoad(true)
         const response = modelPerlakuan.sertifLaporan(data);
             response
             .then((response) => {
+                setOnLoad(false)
                 if(response.data) {
                     if(response.data.status == 201) {
                         //start save history
@@ -140,6 +144,7 @@ function DocK53() {
                 }
             })
             .catch((error) => {
+                setOnLoad(false)
                 if(import.meta.env.VITE_BE_ENV == "DEV") {
                     console.log(error)
                 }
@@ -173,23 +178,30 @@ function DocK53() {
     const cekdataMPk53 = watchMPk53()
 
     function onSubmitMPk53(data) {
+        setOnLoad(true)
         let cekVolume = false
-        if(data.jantanP4 || data.betinaP4 ) {
-            if(parseFloat(data.jantanP4) > parseFloat(cekData.jantanP4) || parseFloat(data.betinaP4) > parseFloat(cekData.nettoP4)) {
+        if((data.jantanP4 != null) || (data.betinaP4 != null) ) {
+            if((parseFloat(typeof data.jantanP4 == "string" ? data.jantanP4.replace(/,/g, "") : data.jantanP4) > parseFloat(cekData.jantanP4)) || (parseFloat((typeof data.betinaP4 == "string" ? data.betinaP4.replace(/,/g, "") : data.betinaP4)) > parseFloat(cekData.betinaP4))) {
                 cekVolume = false
+            } else {
+                if(parseFloat(typeof data.volumeP4 == "string" ? data.volumeP4.replace(/,/g, "") : data.volumeP4) > parseFloat(cekData.volumeP4) || parseFloat(typeof data.nettoP4 == "string" ? data.nettoP4.replace(/,/g, "") : data.nettoP4) > parseFloat(cekData.nettoP4)) {
+                    cekVolume = false 
+                } else {
+                    cekVolume = true
+                }
+            }
+        } else {
+            if(parseFloat(typeof data.volumeP4 == "string" ? data.volumeP4.replace(/,/g, "") : data.volumeP4) > parseFloat(cekData.volumeP4) || parseFloat(typeof data.nettoP4 == "string" ? data.nettoP4.replace(/,/g, "") : data.nettoP4) > parseFloat(cekData.nettoP4)) {
+                cekVolume = false 
             } else {
                 cekVolume = true
             }
-        }
-        if(parseFloat(typeof data.volumeP4 == "string" ? data.volumeP4.replace(",", "") : data.volumeP4) > parseFloat(cekData.volumeP4) || parseFloat(typeof data.nettoP4 == "string" ? data.nettoP4.replace(",", "") : data.nettoP4) > parseFloat(cekData.nettoP4)) {
-            cekVolume = false 
-        } else {
-            cekVolume = true
         }
 
         if(cekVolume) {
             log.updateKomoditiP4(data.idMPk53, data)
             .then((response) => {
+                setOnLoad(false)
                 if(response.data.status == 201) {
                     Swal.fire({
                         title: "Sukses!",
@@ -207,6 +219,7 @@ function DocK53() {
                 }
             })
             .catch((error) => {
+                setOnLoad(false)
                 if(import.meta.env.VITE_BE_ENV == "DEV") {
                     console.log(error)
                 }
@@ -217,6 +230,7 @@ function DocK53() {
                 })
             })
         } else {
+            setOnLoad(false)
             Swal.fire({
                 title: "Error!",
                 text: "Volume input melebihi volume awal, mohon cek isian anda",
@@ -1251,7 +1265,9 @@ function DocK53() {
                             </div>
                             <div className="row">
                                 <div className="col-sm-12 text-center">
-                                    <button type="submit" className="btn btn-primary me-sm-2 me-1"><i className='fa-solid fa-save me-sm-2 me-1'></i> Simpan</button>
+                                    {onLoad ? <LoadBtn warna="btn-primary" ukuran="" /> :
+                                        <button type="submit" className="btn btn-primary me-sm-2 me-1"><i className='fa-solid fa-save me-sm-2 me-1'></i> Simpan</button>
+                                    }
                                     <button type="button" className="btn btn-danger btn-label-secondary me-sm-2 me-1"><i className='fa-solid fa-cancel me-sm-2 me-1'></i> Batal</button>
                                     <button type="button" className="btn btn-warning btn-label-secondary me-sm-2 me-1"><i className='fa-solid fa-print me-sm-2 me-1'></i> Print</button>
                                     <button type="button" style={{display: (cekWatch.idDok53 ? "block" : "none")}} className="float-end btn btn-info btn-label-secondary"><i className='tf-icons fa-solid fa-paper-plane me-sm-2 me-1'></i> TTE</button>
@@ -1325,7 +1341,9 @@ function DocK53() {
                             
                         <small className='text-danger'>*Format penulisan desimal menggunakan titik ( . )</small>
                         <div className="col-12 text-center">
-                            <button type="submit" className="btn btn-primary me-sm-3 me-1">Simpan</button>
+                            {onLoad ? <LoadBtn warna="btn-primary" ukuran="" /> :
+                                <button type="submit" className="btn btn-primary me-sm-3 me-1">Simpan</button>
+                            }
                             <button
                             type="reset"
                             className="btn btn-label-secondary"
