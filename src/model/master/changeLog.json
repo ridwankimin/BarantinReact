@@ -1,0 +1,12 @@
+[
+    {
+        "id": 2,
+        "versi": "0.1.1",
+        "deskripsi": "Perbaikan total nilai barang;Perbaikan format angka setelah desimal;Perbaikan simpan/edit form analisa (K-2.1);Penambahan fitur loading di semua tombol simpan;Penambahan Kota/kab Papua;Penambahan Master Bahan pestisida;Penambahan tipe perlakuan (Form K-5..);Penambahan Edit volume P1 di form periksa fisik/kesehatan;Penambahan/Perbaikan Validasi volume P1-8;Perbaikan Form K-9.2T;Implementasi menu yang aktif berdasarkan surat tugas"
+    },
+    {
+        "id": 1,
+        "versi": "0.1.0",
+        "deskripsi": "Pengenalan Pertama Barantin System"
+    }
+]

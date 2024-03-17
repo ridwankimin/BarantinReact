@@ -151,6 +151,7 @@ function DataMasukTable(props) {
             const response = await model.getPtkList(props.dataIn)
             if(response.data.status == 200) {
                 const dataReturn = response.data.data;
+                console.log(response.data.data)
                 setDataTableBE(response.data.data)
                 const arrayData = dataReturn.map((item, index) => {
                     return {
@@ -203,6 +204,10 @@ function DataMasukTable(props) {
             if(import.meta.env.VITE_BE_ENV == "DEV") {
                 console.log(error)
             }
+            Swal.fire({
+                icon: "error",
+                title: "Data kosong"
+            })
             setDataTable();
         }
     }, [model, props.dataIn, filterText])
@@ -255,15 +260,16 @@ function DataMasukTable(props) {
                     Cookies.set("jenisKarantina", dataPTK[0].jenis_karantina, {
                         expires: 7
                     });
+                    // Cookies.set("jenisMp", dataPTK[0].jenis_karantina, {
+                        //     expires: 7
+                    // });
                     Cookies.set("jenisPermohonan", dataPTK[0].jenis_permohonan, {
                         expires: 7
                     });
                     Cookies.set("jenisForm", "PTK", {
                         expires: 7
                     });
-                    // window.onload(
-                        navigate('/k11')
-                    // )
+                    navigate('/k11')
                     window.location.reload()
                 }
             });
@@ -272,29 +278,29 @@ function DataMasukTable(props) {
 
   return (
         <DataTable
-                title='Table Data PTK'
-                customStyles={tableCustomStyles}
-                columns={columns}
-                data={dataTable}
-                selectableRows
-                selectableRowsSingle
-                onSelectedRowsChange={handleClick}
-                pagination
-                paginationServer
-                dense
-                direction="auto"
-                fixedHeader
-                fixedHeaderScrollHeight="350px"
-                highlightOnHover
-                pointerOnHover
-                responsive
-                striped
-                subHeader
-                clearSelectedRows
-			    subHeaderComponent={subHeaderComponentMemo}
-			    // persistTableHead
-            />
-  )
+            title='Table Data PTK'
+            customStyles={tableCustomStyles}
+            columns={columns}
+            data={dataTable}
+            selectableRows
+            selectableRowsSingle
+            onSelectedRowsChange={handleClick}
+            pagination
+            paginationServer
+            dense
+            direction="auto"
+            fixedHeader
+            fixedHeaderScrollHeight="350px"
+            highlightOnHover
+            pointerOnHover
+            responsive
+            striped
+            subHeader
+            clearSelectedRows
+            subHeaderComponent={subHeaderComponentMemo}
+            // persistTableHead
+        />
+    )
 }
 
 export default DataMasukTable

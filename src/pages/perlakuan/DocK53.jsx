@@ -107,10 +107,13 @@ function DocK53() {
     });
 
     const cekWatch = watch()
-
+    
     const onSubmit = (data) => {
         setOnLoad(true)
-        const response = modelPerlakuan.sertifLaporan(data);
+        const dataCekKom = data.listKomoditas?.filter(item => item.volumeP4 == null || item.nettoP4 == null)
+        const dataCekKomJanBen = data.listKomoditas?.filter(item => (item.jantan != null && item.jantanP4 == null) || (item.betina != null && item.betinaP4 == null))
+        if(dataCekKom.length == 0 && dataCekKomJanBen.length == 0) {
+            const response = modelPerlakuan.sertifLaporan(data);
             response
             .then((response) => {
                 setOnLoad(false)
@@ -132,7 +135,7 @@ function DocK53() {
                             }
                         });
                         //end save history
-
+    
                         Swal.fire({
                             title: "Sukses!",
                             text: "Laporan Hasil Perlakuan berhasil " + (data.idDok37a ? "diedit." : "disimpan."),
@@ -154,6 +157,14 @@ function DocK53() {
                     icon: "error"
                 })
             });
+        } else {
+            setOnLoad(false)
+            Swal.fire({
+                icon: "error",
+                title: "Error!",
+                text: "Mohon isi volume P4"
+            });
+        }
     }
 
     const {

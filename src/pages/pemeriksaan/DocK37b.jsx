@@ -12,6 +12,7 @@ import PtkHistory from '../../model/PtkHistory';
 import Swal from 'sweetalert2';
 import PtkSurtug from '../../model/PtkSurtug';
 import LoadBtn from '../../component/loading/LoadBtn';
+import SpinnerDot from '../../component/loading/SpinnerDot';
 
 const modelPemohon = new PtkModel()
 const modelOPTK = new Master()
@@ -19,11 +20,23 @@ const modelSurtug = new PtkSurtug()
 const modelPeriksa = new PtkPemeriksaan()
 const log = new PtkHistory()
 
+const addCommas = num => {
+    var parts = num.toString().split(".");
+    parts[0] = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+    return parts.join(".");
+};
+const removeNonNumeric = num => num.toString().replace(/[^0-9.]/g, "");
+
+
 function DocK37b() {
     const idPtk = Cookies.get("idPtkPage");
     let [data,setData] = useState({})
     let [dataSegel,setDataSegel] = useState({})
     let [dataSegelArray,setDataSegelArray] = useState([])
+    let [cekData, setCekData] = useState()
+    let [loadKomoditi, setLoadKomoditi] = useState(false)
+    let [loadKomoditiPesan, setLoadKomoditiPesan] = useState("")
+    let [datasend, setDataSend] = useState([])
     let [onLoad,setOnLoad] = useState(false)
     
     let navigate = useNavigate();
@@ -47,61 +60,72 @@ function DocK37b() {
 
     const onSubmitHeader = (dataHeader) => {
         setOnLoad(true)
-        const response = modelPeriksa.ptkFisikKesehatanHeader(dataHeader);
-        response
-        .then((response) => {
-            if(response.data) {
-                setOnLoad(false)
-                if(response.data.status == 201) {
-                    setData(values => ({...values,
-                        cekSimpan37b: true
-                    }));
-                    //start save history
-                    const resHsy = log.pushHistory(data.idPtk, "p1b", "K-3.7b", (dataHeader.idDok37b ? 'UPDATE' : 'NEW'));
-                    resHsy
-                    .then((response) => {
-                        if(response.data.status == 201) {
-                            if(import.meta.env.VITE_BE_ENV == "DEV") {
-                                console.log("history saved")
-                            }
-                        }
-                    })
-                    .catch((error) => {
-                        if(import.meta.env.VITE_BE_ENV == "DEV") {
-                            console.log(error)
-                        }
-                    });
-                    //end save history
-
-                    Swal.fire({
-                        title: "Sukses!",
-                        text: "Hasil Pemeriksaan Kesehatan berhasil " + (data.idDok37b ? "diedit." : "disimpan."),
-                        icon: "success"
-                    });
-                    setValue("idDok37b", response.data.data.id)
-                    setvalueHeader("idDok37b", response.data.data.id)
-                    // setValue("noDok37b", response.data.data.nomor)
-                } else {
+        const dataCekKom = data.listKomoditas?.filter(item => item.volumeP1 == null || item.nettoP1 == null)
+        const dataCekKomJanBen = data.listKomoditas?.filter(item => (item.jantan != null && item.jantanP1 == null) || (item.betina != null && item.betinaP1 == null))
+        if(dataCekKom.length == 0 && dataCekKomJanBen.length == 0) {
+            const response = modelPeriksa.ptkFisikKesehatanHeader(dataHeader);
+            response
+            .then((response) => {
+                if(response.data) {
                     setOnLoad(false)
-                    Swal.fire({
-                        title: "Error!",
-                        text: response.data.message,
-                        icon: "error"
-                    });
+                    if(response.data.status == 201) {
+                        setData(values => ({...values,
+                            cekSimpan37b: true
+                        }));
+                        //start save history
+                        const resHsy = log.pushHistory(data.idPtk, "p1b", "K-3.7b", (dataHeader.idDok37b ? 'UPDATE' : 'NEW'));
+                        resHsy
+                        .then((response) => {
+                            if(response.data.status == 201) {
+                                if(import.meta.env.VITE_BE_ENV == "DEV") {
+                                    console.log("history saved")
+                                }
+                            }
+                        })
+                        .catch((error) => {
+                            if(import.meta.env.VITE_BE_ENV == "DEV") {
+                                console.log(error)
+                            }
+                        });
+                        //end save history
+
+                        Swal.fire({
+                            title: "Sukses!",
+                            text: "Hasil Pemeriksaan Kesehatan berhasil " + (data.idDok37b ? "diedit." : "disimpan."),
+                            icon: "success"
+                        });
+                        setValue("idDok37b", response.data.data.id)
+                        setvalueHeader("idDok37b", response.data.data.id)
+                        // setValue("noDok37b", response.data.data.nomor)
+                    } else {
+                        setOnLoad(false)
+                        Swal.fire({
+                            title: "Error!",
+                            text: response.data.message,
+                            icon: "error"
+                        });
+                    }
                 }
-            }
-        })
-        .catch((error) => {
-            setOnLoad(false)
-            if(import.meta.env.VITE_BE_ENV == "DEV") {
-                console.log(error)
-            }
-            Swal.fire({
-                title: "Error!",
-                text: error.response.data.message,
-                icon: "error"
+            })
+            .catch((error) => {
+                setOnLoad(false)
+                if(import.meta.env.VITE_BE_ENV == "DEV") {
+                    console.log(error)
+                }
+                Swal.fire({
+                    title: "Error!",
+                    text: error.response.data.message,
+                    icon: "error"
+                });
             });
-        });
+        } else {
+            setOnLoad(false)
+            Swal.fire({
+                icon: "error",
+                title: "Error!",
+                text: "Mohon isi volume P1"
+            });
+        }
     }
 
     let [dataSelect, setDataSelect] = useState({})
@@ -221,6 +245,166 @@ function DocK37b() {
             catatanWasdal: "",
         }));
         setOnLoad(false)
+    }
+
+    function handleEditKomoditas(e) {
+        const dataMP = data.listKomoditas?.filter((element, index) => index == e)
+        setValueMPk37b("idMPk37b", dataMP[0].id)
+        setValueMPk37b("idPtk", dataMP[0].ptk_id)
+        setValueMPk37b("jenisKar", Cookies.get("jenisKarantina"))
+        setCekData(values => ({...values,
+            volumeP1: dataMP[0].volume_lain,
+            nettoP1: dataMP[0].volume_netto,
+            jantanP1: dataMP[0].jantan,
+            betinaP1: dataMP[0].betina
+        }));
+        setValueMPk37b("nettoP1", dataMP[0].volume_netto)
+        setValueMPk37b("satuanNetto", dataMP[0].sat_netto)
+        setValueMPk37b("volumeP1", dataMP[0].volume_lain)
+        setValueMPk37b("satuanLain", dataMP[0].sat_lain)
+        setValueMPk37b("jantanP1", dataMP[0].jantan)
+        setValueMPk37b("betinaP1", dataMP[0].betina)
+        setValueMPk37b("namaUmum", dataMP[0].nama_umum_tercetak)
+        setValueMPk37b("namaLatin", dataMP[0].nama_latin_tercetak)
+    }
+
+    function refreshListKomoditas() {
+        const resKom = modelPemohon.getKomoditiPtkId(data.idPtk, Cookies.get("jenisKarantina"));
+        resKom
+        .then((res) => {
+            if(res.data.status == 200) {
+                setData(values => ({...values,
+                    listKomoditas: res.data.data
+                }));
+            }
+        })
+        .catch((error) => {
+            if(import.meta.env.VITE_BE_ENV == "DEV") {
+                console.log(error)
+            }
+        });
+    }
+
+    function handleEditKomoditasAll() {
+        setLoadKomoditi(true)
+        data.listKomoditas?.map((item, index) => (
+            log.updateKomoditiP1(item.id, datasend[index])
+            .then((response) => {
+                if(response.data.status == 201) {
+                    refreshListKomoditas()
+                    setLoadKomoditi(false)
+                    if(import.meta.env.VITE_BE_ENV == "DEV") {
+                        console.log("history saved")
+                    }
+                    Swal.fire({
+                        icon: "success",
+                        title: "Sukses!",
+                        text: "Volume P1 berhasil disimpan (tidak ada perubahan dengan volume awal)"
+                    })
+                } else {
+                    Swal.fire({
+                        icon: "error",
+                        title: "Error!",
+                        text: response.data.status
+                    })
+                }
+            })
+            .catch((error) => {
+                setLoadKomoditi(false)
+                setLoadKomoditiPesan("Terjadi error pada saat simpan, mohon refresh halaman dan coba lagi.")
+                if(import.meta.env.VITE_BE_ENV == "DEV") {
+                    console.log(error)
+                }
+                Swal.fire({
+                    icon: "error",
+                    title: "Error!",
+                    text: error.response.data.status
+                })
+            }))
+        )
+        setLoadKomoditi(true)
+    }
+
+    const {
+        register: registerMPk37b,
+        setValue: setValueMPk37b,
+        // control: controlMPk37b,
+        watch: watchMPk37b,
+        handleSubmit: handleFormMPk37b,
+        reset: resetFormKomoditik37b,
+        formState: { errors: errorsMPk37b },
+    } = useForm({
+        defaultValues: {
+            idMPk37b: "",
+            volumeNetto: "",
+            volumeLain: "",
+            satuanLain: "",
+            jantanP1: "",
+            betinaP1: "",
+          }
+        })
+
+    const cekdataMPk37b = watchMPk37b()
+
+    function onSubmitMPk37b(data) {
+        setOnLoad(true)
+        let cekVolume = false
+        if((data.jantanP1 != null) || (data.betinaP1 != null) ) {
+            if((parseFloat(typeof data.jantanP1 == "string" ? data.jantanP1.replace(/,/g, "") : data.jantanP1) > parseFloat(cekData.jantanP1)) || (parseFloat((typeof data.betinaP1 == "string" ? data.betinaP1.replace(/,/g, "") : data.betinaP1)) > parseFloat(cekData.betinaP1))) {
+                cekVolume = false
+            } else {
+                if(parseFloat(typeof data.volumeP1 == "string" ? data.volumeP1.replace(/,/g, "") : data.volumeP1) > parseFloat(cekData.volumeP1) || parseFloat(typeof data.nettoP1 == "string" ? data.nettoP1.replace(/,/g, "") : data.nettoP1) > parseFloat(cekData.nettoP1)) {
+                    cekVolume = false 
+                } else {
+                    cekVolume = true
+                }
+            }
+        } else {
+            if(parseFloat(typeof data.volumeP1 == "string" ? data.volumeP1.replace(/,/g, "") : data.volumeP1) > parseFloat(cekData.volumeP1) || parseFloat(typeof data.nettoP1 == "string" ? data.nettoP1.replace(/,/g, "") : data.nettoP1) > parseFloat(cekData.nettoP1)) {
+                cekVolume = false 
+            } else {
+                cekVolume = true
+            }
+        }
+        if(cekVolume) {
+            log.updateKomoditiP1(data.idMPk37b, data)
+            .then((response) => {
+                setOnLoad(false)
+                if(response.data.status == 201) {
+                    Swal.fire({
+                        icon: "success",
+                        title: "Sukses!",
+                        text: "Volume P1 berhasil diubah"
+                    })
+                    resetFormKomoditik37b()
+                    refreshListKomoditas()
+                } else {
+                    Swal.fire({
+                        icon: "error",
+                        title: "Error!",
+                        text: response.data.message
+                    })
+                }
+            })
+            .catch((error) => {
+                setOnLoad(false)
+                if(import.meta.env.VITE_BE_ENV == "DEV") {
+                    console.log(error)
+                }
+                Swal.fire({
+                    icon: "error",
+                    title: "Error!",
+                    text: error.response.data.message
+                })
+            })
+        } else {
+            setOnLoad(false)
+            Swal.fire({
+                icon: "error",
+                title: "Error!",
+                text: "Volume input melebihi volume awal, mohon cek isian anda"
+            })
+        }
     }
 
     useEffect(() => {
@@ -365,16 +549,26 @@ function DocK37b() {
             resKom
             .then((res) => {
                 if(typeof res.data != "string") {
-                    setData(values => ({...values,
-                        errorKomoditi: ""
-                    }));
                     if(res.data.status == 200) {
+                        setData(values => ({...values,
+                            errorKomoditi: "",
+                            listKomoditas: res.data.data
+                        }));
                         const arraySelectKomoditi = res.data.data.map(item => {
                             return {
                                 value: item.id + ";" + item.nama_umum_tercetak + ";" + item.volume_lain + ";" + item.sat_lain,
                                 label: item.nama_umum_tercetak + " - " + item.nama_latin_tercetak
                             }
                         })
+                        var arrayKomKH = res.data.data.map(item => {
+                            return {
+                                jantanP1: item.jantan,
+                                betinaP1: item.betina,
+                                volumeP1: item.volume_lain,
+                                nettoP1: item.volume_netto
+                            }
+                        })
+                        setDataSend(arrayKomKH)
                         setDataSelect(values => ({...values, komoditas: arraySelectKomoditi }));
                     }
                 } else {
@@ -423,7 +617,7 @@ function DocK37b() {
                         errorOptk: "Gagal load data penyakit"
                     }));
                 });
-                // } else if(Cookies.get("jenisKarantina") == "H")
+                // } else if(Cookies.get("jenisKarantina") == Cookies.get("jenisKarantina"))
             } else {
                 const resOPTK = modelOPTK.masterHPHK();
                 resOPTK
@@ -531,10 +725,11 @@ function DocK37b() {
             resKom
             .then((res) => {
                 if(typeof res.data != "string") {
-                    setData(values => ({...values,
-                        errorKomoditi: ""
-                    }));
                     if(res.data.status == 200) {
+                        setData(values => ({...values,
+                            errorKomoditi: "",
+                            listKomoditas: res.data.data
+                        }));
                         const arraySelectKomoditi = res.data.data.map(item => {
                             return {
                                 value: item.id + ";" + item.nama_umum_tercetak + ";" + item.volume_lain + ";" + item.sat_lain,
@@ -542,6 +737,15 @@ function DocK37b() {
                             }
                         })
                         setDataSelect(values => ({...values, komoditas: arraySelectKomoditi }));
+                        var arrayKomKH = res.data.data.map(item => {
+                            return {
+                                jantanP1: item.jantan,
+                                betinaP1: item.betina,
+                                volumeP1: item.volume_lain,
+                                nettoP1: item.volume_netto
+                            }
+                        })
+                        setDataSend(arrayKomKH)
                     }
                 } else {
                     setData(values => ({...values,
@@ -750,6 +954,78 @@ function DocK37b() {
                             <div className="row my-4">
                                 <div className="col">
                                     <div className="accordion" id="collapseSection">
+                                        <div className="card">
+                                            <h2 className="accordion-header" id="headerPerlakuan">
+                                                <button className="accordion-button" type="button" style={{backgroundColor: '#123138'}} data-bs-toggle="collapse" data-bs-target="#collapsePerlakuan" aria-expanded="true" aria-controls="collapseImporter">
+                                                    <h5 className='text-lightest mb-0'>Uraian Media Pembawa
+                                                    </h5>
+                                                </button>
+                                            </h2>
+                                            <div id="collapsePerlakuan">
+                                                <div className="accordion-body">
+                                                    <div className="row">
+                                                        <span className='mb-1'>
+                                                            {loadKomoditi ? <SpinnerDot/> : null}
+                                                            {data.listKomoditas ? 
+                                                            (loadKomoditi ? null : <button type='button' className='btn btn-sm btn-outline-secondary' onClick={handleEditKomoditasAll} style={{marginLeft: "15px"}}><i className='fa-solid fa-check-square text-success me-sm-2 me-1'></i> Tidak ada perubahan</button>) : null }
+                                                            <span className='text-danger'>{loadKomoditiPesan}</span>
+                                                        </span>
+                                                        <div className='col-md-12 mb-3'>
+                                                            <div className="table-responsive text-nowrap" style={{height: (data.listKomoditas?.length > 8 ? "300px" : "")}}>
+                                                                <table className="table table-sm table-bordered table-hover table-striped dataTable">
+                                                                    <thead>
+                                                                        <tr>
+                                                                            <th>No</th>
+                                                                            <th>Kode HS</th>
+                                                                            <th>Klasifikasi</th>
+                                                                            <th>Komoditas Umum</th>
+                                                                            <th>Komoditas En/Latin</th>
+                                                                            <th>Netto</th>
+                                                                            <th>Satuan</th>
+                                                                            <th>Jumlah</th>
+                                                                            <th>Satuan</th>
+                                                                            <th>Jantan</th>
+                                                                            <th>Betina</th>
+                                                                            <th>Volume P1</th>
+                                                                            <th>Netto P1</th>
+                                                                            <th>Jantan P1</th>
+                                                                            <th>Betina P1</th>
+                                                                            <th>Act</th>
+                                                                        </tr>
+                                                                    </thead>
+                                                                    <tbody>
+                                                                        {data.listKomoditas ? (data.listKomoditas?.map((data, index) => (
+                                                                                    <tr key={index}>
+                                                                                        <td>{index + 1}</td>
+                                                                                        <td>{data.kode_hs}</td>
+                                                                                        <td>{data.klasifikasi}</td>
+                                                                                        <td>{data.nama_umum_tercetak}</td>
+                                                                                        <td>{data.nama_latin_tercetak}</td>
+                                                                                        <td className='text-end'>{data.volume_netto?.toLocaleString()}</td>
+                                                                                        <td>{data.sat_netto}</td>
+                                                                                        <td className='text-end'>{data.volume_lain?.toLocaleString()}</td>
+                                                                                        <td>{data.sat_lain}</td>
+                                                                                        <td className='text-end'>{data.jantan?.toLocaleString()}</td>
+                                                                                        <td className='text-end'>{data.betina?.toLocaleString()}</td>
+                                                                                        <td className='text-end'>{data.volumeP1?.toLocaleString()}</td>
+                                                                                        <td className='text-end'>{data.nettoP1?.toLocaleString()}</td>
+                                                                                        <td className='text-end'>{data.jantanP1?.toLocaleString()}</td>
+                                                                                        <td className='text-end'>{data.betinaP1?.toLocaleString()}</td>
+                                                                                        <td>
+                                                                                            <button className="btn btn-default dropdown-item" type="button" onClick={() => handleEditKomoditas(index)} data-bs-toggle="modal" data-bs-target="#modKomoditas"><i className="fa-solid fa-pen-to-square me-1"></i> Edit</button>
+                                                                                        </td>
+                                                                                    </tr>
+                                                                                ))
+                                                                            ) : null
+                                                                        }
+                                                                    </tbody>
+                                                                </table>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
                                         <div className="card">
                                             <h2 className="accordion-header" id="headerExporter">
                                                 <button className="accordion-button" type="button" style={{backgroundColor: '#123138'}} data-bs-toggle="collapse" data-bs-target="#collapseExporter" aria-expanded="true" aria-controls="collapseExporter">
@@ -1081,6 +1357,85 @@ function DocK37b() {
                                     </table>
                                 </div>
                             </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div className="modal fade" id="modKomoditas" tabIndex="-1">
+            <div className="modal-dialog modal-lg">
+                <div className="modal-content p-3 pb-1">
+                    <div className="modal-body">
+                        <button type="button" className="btn-close float-end" data-bs-dismiss="modal" aria-label="Close"></button>
+                        <div className="text-center mb-4">
+                            <h3 className="address-title">Perubahan Media Pembawa</h3>
+                        </div>
+                        <form onSubmit={handleFormMPk37b(onSubmitMPk37b)} className="row g-3">
+                        <input type="hidden" name='idMPk37b' {...registerMPk37b("idMPk37b")} />
+                        <input type="hidden" name='idPtk' {...registerMPk37b("idPtk")} />
+                        <input type="hidden" name='jenisKar' {...registerMPk37b("jenisKar")} />
+                            <div className="col-6">
+                                <label className="form-label" htmlFor="nettoP1">Volume Netto P1<span className='text-danger'>*</span></label>
+                                <div className='row'>
+                                    <div className="col-5" style={{paddingRight: '2px'}}>
+                                        <input type="text" name='nettoP1' id='nettoP1' value={cekdataMPk37b.nettoP1 ? addCommas(removeNonNumeric(cekdataMPk37b.nettoP1)) : ""} {...registerMPk37b("nettoP1", {required: "Mohon isi volume netto."})} className={errorsMPk37b.nettoP1 ? "form-control form-control-sm is-invalid" : "form-control form-control-sm"} />
+                                    </div>
+                                    <div className="col-3" style={{paddingLeft: '2px'}}>
+                                        <input type="text" className='form-control form-control-sm' name='satuanNetto' id='satuanNetto' {...registerMPk37b("satuanNetto")} disabled />
+                                    </div>
+                                </div>
+                                {errorsMPk37b.volumeNetto && <small className="text-danger">{errorsMPk37b.volumeNetto.message}</small>}
+                            </div>
+                            <div className="col-6">
+                                <label className="form-label" htmlFor="volumeP1">Volume Lain P1</label>
+                                <div className='row'>
+                                    <div className="col-5" style={{paddingRight: '2px'}}>
+                                        <input type="text" className='form-control form-control-sm' name='volumeP1' id='volumeP1' value={cekdataMPk37b.volumeP1 ? addCommas(removeNonNumeric(cekdataMPk37b.volumeP1)) : ""} {...registerMPk37b("volumeP1")} />
+                                    </div>
+                                    <div className="col-3" style={{paddingLeft: '2px'}}>
+                                        <input type="text" className='form-control form-control-sm' name='satuanLain' id='satuanLain' {...registerMPk37b("satuanLain")} disabled />
+                                    </div>
+                                </div>
+                            </div>
+                            <div className="col-6" style={{display: (data.listPtk ? (data.listPtk.jenis_media_pembawa_id == 1 ? "block" : "none") : "none")}}>
+                                <label className="form-label" htmlFor="jantanP1">Jumlah Jantan P1<span className='text-danger'>*</span></label>
+                                <div className='row'>
+                                    <div className="col-3" style={{paddingRight: '2px'}}>
+                                        <input type="text" name='jantanP1' id='jantanP1' value={cekdataMPk37b.jantanP1 ? addCommas(removeNonNumeric(cekdataMPk37b.jantanP1)) : ""} {...registerMPk37b("jantanP1", {required: (data.listPtk ? (data.listPtkjenis_media_pembawa_id == 1 ? "Mohon isi jumlah P1 Jantan." : false) : false)})} className={errorsMPk37b.jantanP1 ? "form-control form-control-sm is-invalid" : "form-control form-control-sm"} />
+                                    </div>
+                                    <div className="col-2" style={{paddingLeft: '2px'}}>
+                                        <input type="text" className='form-control form-control-sm' name='satuanjantanP1' id='satuanjantanP1' value={"EKR"} disabled />
+                                    </div>
+                                </div>
+                                {errorsMPk37b.jantanP1 && <small className="text-danger">{errorsMPk37b.jantanP1.message}</small>}
+                            </div>
+                            <div className="col-6" style={{display: (data.listPtk ? (data.listPtk.jenis_media_pembawa_id == 1 ? "block" : "none") : "none")}}>
+                                <label className="form-label" htmlFor="betinaP1">Jumlah Betina P1<span className='text-danger'>*</span></label>
+                                <div className='row'>
+                                    <div className="col-3" style={{paddingRight: '2px'}}>
+                                        <input type="text" name='betinaP1' id='betinaP1' value={cekdataMPk37b.betinaP1 ? addCommas(removeNonNumeric(cekdataMPk37b.betinaP1)) : ""} {...registerMPk37b("betinaP1", {required: (data.listPtk ? (data.listPtkjenis_media_pembawa_id == 1 ? "Mohon isi jumlah P1 Betina." : false) : false)})} className={errorsMPk37b.betinaP1 ? "form-control form-control-sm is-invalid" : "form-control form-control-sm"} />
+                                    </div>
+                                    <div className="col-2" style={{paddingLeft: '2px'}}>
+                                        <input type="text" className='form-control form-control-sm' name='satuanbetinaP1' id='satuanbetinaP1' value={"EKR"} disabled />
+                                    </div>
+                                </div>
+                                {errorsMPk37b.jantanP1 && <small className="text-danger">{errorsMPk37b.jantanP1.message}</small>}
+                            </div>
+                            
+                        <small className='text-danger'>*Format penulisan desimal menggunakan titik ( . )</small>
+                        <div className="col-12 text-center">
+                            {onLoad ? <LoadBtn warna="btn-primary" ukuran="" /> :
+                                <button type="submit" className="btn btn-primary me-sm-3 me-1">Simpan</button>
+                            }
+                            <button
+                            type="reset"
+                            className="btn btn-label-secondary"
+                            data-bs-dismiss="modal"
+                            aria-label="Close">
+                            Tutup
+                            </button>
+                        </div>
                         </form>
                     </div>
                 </div>

@@ -208,10 +208,10 @@ function DocK82() {
 
     const cekWatch = watch()
 
-    const dataCekKom = data.listKomoditas?.filter(item => item.volumeP7 == null || item.nettoP7 == null)
-    const dataCekKomJanBen = data.listKomoditas?.filter(item => (item.jantan != null && item.jantanP7 == null) || (item.betina != null && item.betinaP7 == null))
     const onSubmit = (data) => {
         setOnLoad(true)
+        const dataCekKom = data.listKomoditas?.filter(item => item.volumeP7 == null || item.nettoP7 == null)
+        const dataCekKomJanBen = data.listKomoditas?.filter(item => (item.jantan != null && item.jantanP7 == null) || (item.betina != null && item.betinaP7 == null))
         if(dataCekKom.length == 0 && dataCekKomJanBen.length == 0) {
             const response = modelPemusnahan.simpan82(data, arraySaksi);
             response

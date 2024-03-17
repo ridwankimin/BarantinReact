@@ -71,52 +71,62 @@ function DocK92i() {
 
     const onSubmit = (data) => {
         setOnLoad(true)
-        const response = modelPelepasan.imporAreaKI(data);
-        response
-        .then((response) => {
-            setOnLoad(false)
-            if(response.data) {
-                if(response.data.status == 201) {
-                    //start save history
-                    // const log = new PtkHistory();
-                    const resHsy = log.pushHistory(data.idPtk, "p8", "K-9.2.I", (data.idDok92i ? 'UPDATE' : 'NEW'));
-                    resHsy
-                    .then((response) => {
-                        if(response.data.status == 201) {
-                            if(import.meta.env.VITE_BE_ENV == "DEV") {
-                                console.log("history saved")
+        const dataCekKom = data.listKomoditas?.filter(item => item.volumeP8 == null || item.nettoP8 == null)
+        if(dataCekKom.length == 0) {
+            const response = modelPelepasan.imporAreaKI(data);
+            response
+            .then((response) => {
+                setOnLoad(false)
+                if(response.data) {
+                    if(response.data.status == 201) {
+                        //start save history
+                        // const log = new PtkHistory();
+                        const resHsy = log.pushHistory(data.idPtk, "p8", "K-9.2.I", (data.idDok92i ? 'UPDATE' : 'NEW'));
+                        resHsy
+                        .then((response) => {
+                            if(response.data.status == 201) {
+                                if(import.meta.env.VITE_BE_ENV == "DEV") {
+                                    console.log("history saved")
+                                }
                             }
-                        }
-                    })
-                    .catch((error) => {
-                        if(import.meta.env.VITE_BE_ENV == "DEV") {
-                            console.log(error)
-                        }
-                    });
-                    //end save history
-
-                    // alert(response.data.status + " - " + response.data.message)
-                    Swal.fire({
-                        title: "Sukses!",
-                        text: "Sertifikat Pelepasan Karantina Ikan berhasil " + (data.idDok92i ? "diedit." : "disimpan."),
-                        icon: "success"
-                    });
-                    setValue("idDok92i", response.data.data.id)
-                    setValue("noDok92i", response.data.data.nomor)
+                        })
+                        .catch((error) => {
+                            if(import.meta.env.VITE_BE_ENV == "DEV") {
+                                console.log(error)
+                            }
+                        });
+                        //end save history
+    
+                        // alert(response.data.status + " - " + response.data.message)
+                        Swal.fire({
+                            title: "Sukses!",
+                            text: "Sertifikat Pelepasan Karantina Ikan berhasil " + (data.idDok92i ? "diedit." : "disimpan."),
+                            icon: "success"
+                        });
+                        setValue("idDok92i", response.data.data.id)
+                        setValue("noDok92i", response.data.data.nomor)
+                    }
                 }
-            }
-        })
-        .catch((error) => {
-            setOnLoad(false)
-            if(import.meta.env.VITE_BE_ENV == "DEV") {
-                console.log(error)
-            }
-            Swal.fire({
-                title: "Error!",
-                text: error.response.status + " - " + error.response.data.message,
-                icon: "error"
+            })
+            .catch((error) => {
+                setOnLoad(false)
+                if(import.meta.env.VITE_BE_ENV == "DEV") {
+                    console.log(error)
+                }
+                Swal.fire({
+                    title: "Error!",
+                    text: error.response.status + " - " + error.response.data.message,
+                    icon: "error"
+                });
             });
-        });
+        } else {
+            setOnLoad(false)
+            Swal.fire({
+                icon: "error",
+                title: "Error!",
+                text: "Mohon isi volume P8"
+            });
+        }
     }
 
     const {
@@ -692,7 +702,7 @@ function DocK92i() {
   return (
     <div className="container-xxl flex-grow-1 container-p-y">
         <h4 className="py-3 breadcrumb-wrapper mb-4">
-            K-9.2.I <span className="fw-light" style={{color: 'blue'}}>(Sertifikat Pelepasan Karantina Ikan)</span>
+            K-9.2.I <span className="fw-light" style={{color: 'blue'}}>SERTIFIKAT PELEPASAN KARANTINA IKAN</span>
 
             <small className='float-end'>
                 <span className='text-danger'>{(data.errorPTK ? data.errorPTK + "; " : "") + (data.errorKomoditas ? data.errorKomoditas + "; " : "") + (data.errork92i ? data.errork92i + "; " : "") + (data.errorPeriksaFisik ? data.errorPeriksaFisik + "; " : "") + (data.errorSurtug ? data.errorSurtug + "; " : "")}</span>

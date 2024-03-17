@@ -26,11 +26,11 @@ const removeNonNumeric = num => num.toString().replace(/[^0-9.]/g, "");
 
 function DocK81() {
     const idPtk = Cookies.get("idPtkPage");
-    let [loadKomoditi, setLoadKomoditi] = useState(false)
     let [cekData, setCekData] = useState()
+    let [loadKomoditi, setLoadKomoditi] = useState(false)
     let [loadKomoditiPesan, setLoadKomoditiPesan] = useState("")
-    let [onLoad, setOnLoad] = useState(false)
     let [datasend, setDataSend] = useState([])
+    let [onLoad, setOnLoad] = useState(false)
 
     let [data, setData] = useState({
         noAju: "",
@@ -61,7 +61,7 @@ function DocK81() {
     }
 
     function refreshListKomoditas() {
-        const resKom = modelPemohon.getKomoditiPtkId(data.noIdPtk, "H");
+        const resKom = modelPemohon.getKomoditiPtkId(data.noIdPtk, Cookies.get("jenisKarantina"));
         resKom
         .then((res) => {
             if(res.data.status == 200) {
@@ -127,10 +127,10 @@ function DocK81() {
 
     const cekWatch = watch()
 
-    const dataCekKom = data.listKomoditas?.filter(item => item.volumeP7 == null || item.nettoP7 == null)
-    const dataCekKomJanBen = data.listKomoditas?.filter(item => (item.jantan != null && item.jantanP7 == null) || (item.betina != null && item.betinaP7 == null))
     const onSubmit = (data) => {
         setOnLoad(true)
+        const dataCekKom = data.listKomoditas?.filter(item => item.volumeP7 == null || item.nettoP7 == null)
+        const dataCekKomJanBen = data.listKomoditas?.filter(item => (item.jantan != null && item.jantanP7 == null) || (item.betina != null && item.betinaP7 == null))
         if(dataCekKom.length == 0 && dataCekKomJanBen.length == 0) {
             const response = modelPemusnahan.simpan81(data);
             response
@@ -881,7 +881,7 @@ function DocK81() {
                                                     <div className="form-check" key={index}>
                                                         <input className="form-check-input" type="checkbox" {...register("a" + data.id)} value={1} id={"a" + data.id} />
                                                         <label className="form-check-label" htmlFor={"a" + data.id}>
-                                                            {data.deskripsi.replace("HPHK/HPIK/OPTK", (Cookies.get("jenisKarantina") == "H" ? "HPHK" : (Cookies.get("jenisKarantina") == "I" ? "HPIK" : "OPTK"))).replace("/OPT", ((Cookies.get("jenisKarantina") !== "T" ? "" : "/OPT")))}
+                                                            {data.deskripsi.replace("HPHK/HPIK/OPTK", (Cookies.get("jenisKarantina") == Cookies.get("jenisKarantina") ? "HPHK" : (Cookies.get("jenisKarantina") == "I" ? "HPIK" : "OPTK"))).replace("/OPT", ((Cookies.get("jenisKarantina") !== "T" ? "" : "/OPT")))}
                                                         </label>
                                                         {data.id == 7 ?
                                                         <div className='col-md-4' style={{display: (cekWatch.a7 == '1' ? 'block' : 'none')}}>

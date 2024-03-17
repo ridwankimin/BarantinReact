@@ -174,57 +174,68 @@ function DocKH1() {
 
     const onSubmit = (data) => {
         setOnLoad(true)
-        const response = modelPelepasan.eksporDokelHewanHidup(data);
-        response
-        .then((response) => {
-            setOnLoad(false)
-            if(response.data) {
-                if(response.data.status == 201) {
-                    //start save history
-                    // const log = new PtkHistory();
-                    const resHsy = log.pushHistory(data.idPtk, "p8", "KH-1", (data.idDokh1 ? 'UPDATE' : 'NEW'));
-                    resHsy
-                    .then((response) => {
-                        if(response.data.status == 201) {
-                            if(import.meta.env.VITE_BE_ENV == "DEV") {
-                                console.log("history saved")
+        const dataCekKom = data.listKomoditas?.filter(item => item.volumeP8 == null || item.nettoP8 == null)
+        const dataCekKomJanBen = data.listKomoditas?.filter(item => (item.jantan != null && item.jantanP8 == null) || (item.betina != null && item.betinaP8 == null))
+        if(dataCekKom.length == 0 && dataCekKomJanBen.length == 0) {
+            const response = modelPelepasan.eksporDokelHewanHidup(data);
+            response
+            .then((response) => {
+                setOnLoad(false)
+                if(response.data) {
+                    if(response.data.status == 201) {
+                        //start save history
+                        // const log = new PtkHistory();
+                        const resHsy = log.pushHistory(data.idPtk, "p8", "KH-1", (data.idDokh1 ? 'UPDATE' : 'NEW'));
+                        resHsy
+                        .then((response) => {
+                            if(response.data.status == 201) {
+                                if(import.meta.env.VITE_BE_ENV == "DEV") {
+                                    console.log("history saved")
+                                }
                             }
-                        }
-                    })
-                    .catch((error) => {
-                        if(import.meta.env.VITE_BE_ENV == "DEV") {
-                            console.log(error)
-                        }
-                    });
-                    //end save history
-
-                    Swal.fire({
-                        icon: "success",
-                        title: "Sukses!",
-                        text: "Sertifikat kesehatan hewan berhasil " + (data.idDokh1 ? 'diedit' : 'disimpan')
-                    })
-                    setValue("idDokh1", response.data.data.id)
-                    setValue("noDokh1", response.data.data.nomor)
-                } else {
-                    Swal.fire({
-                        icon: "error",
-                        title: "Error!",
-                        text: response.data.message
-                    })
+                        })
+                        .catch((error) => {
+                            if(import.meta.env.VITE_BE_ENV == "DEV") {
+                                console.log(error)
+                            }
+                        });
+                        //end save history
+    
+                        Swal.fire({
+                            icon: "success",
+                            title: "Sukses!",
+                            text: "Sertifikat kesehatan hewan berhasil " + (data.idDokh1 ? 'diedit' : 'disimpan')
+                        })
+                        setValue("idDokh1", response.data.data.id)
+                        setValue("noDokh1", response.data.data.nomor)
+                    } else {
+                        Swal.fire({
+                            icon: "error",
+                            title: "Error!",
+                            text: response.data.message
+                        })
+                    }
                 }
-            }
-        })
-        .catch((error) => {
+            })
+            .catch((error) => {
+                setOnLoad(false)
+                if(import.meta.env.VITE_BE_ENV == "DEV") {
+                    console.log(error)
+                }
+                Swal.fire({
+                    icon: "error",
+                    title: "Error!",
+                    text: error.response.data.message
+                })
+            });
+        } else {
             setOnLoad(false)
-            if(import.meta.env.VITE_BE_ENV == "DEV") {
-                console.log(error)
-            }
             Swal.fire({
                 icon: "error",
                 title: "Error!",
-                text: error.response.data.message
-            })
-        });
+                text: "Mohon isi volume P8"
+            });
+        }
     }
 
     function refreshListKomoditas() {

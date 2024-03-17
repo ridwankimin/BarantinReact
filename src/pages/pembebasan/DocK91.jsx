@@ -119,9 +119,9 @@ function DocK91() {
 
     const cekWatch = watch()
 
-    const dataCekKom = data.listKomoditas?.filter(item => item.volumeP8 == null || item.nettoP8 == null)
     const onSubmit = (data) => {
         setOnLoad(true)
+        const dataCekKom = data.listKomoditas?.filter(item => item.volumeP8 == null || item.nettoP8 == null)
         if(dataCekKom.length == 0) {
             const response = modelPelepasan.mpLainOrKeterangan(data, Cookies.get("jenisKarantina"), "K.9.1");
             response

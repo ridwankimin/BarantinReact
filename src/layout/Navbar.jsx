@@ -1,7 +1,11 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import logbar from '../logo/barantins.png'
 import Cookies from 'js-cookie'
+import {decode as base64_decode} from 'base-64';
 import { useLocation, useNavigate } from 'react-router-dom'
+import PtkSurtug from '../model/PtkSurtug';
+
+const modelSurtug = new PtkSurtug()
 
 function Navbar(props) {
     const navigate = useNavigate();
@@ -9,6 +13,29 @@ function Navbar(props) {
     let [ketMenu, setKetMenu] = useState(Cookies.get("ketMenu"))
     let [ketSubMenu, setKetSubMenu] = useState("")
     let [menuOpen, setMenuOpen] = useState(false)
+    let [data, setData] = useState({
+        pAdmin: 0,
+        pFisikKesehatan: 0,
+        pSingmat: 0,
+        pAtasAlatAngkut: 0,
+        pAlatAngkut: 0,
+        pPengawasan: 0,
+        pPengawalan: 0,
+        pPerlakuan: 0,
+        pPenahanan: 0,
+        pPenolakan: 0,
+        pPemusnahan: 0,
+        pSuratKeterangan: 0,
+        pPembebasan: 0,
+        pSerahTerima: 0,
+        pMonitoring: 0,
+        pLainTK: 0,
+        pWasmalistrik: 0,
+        pGelarPerkara: 0,
+        pPenyidikan: 0,
+        pLengkapiBerkas: 0,
+        pLainHK: 0
+    })
     let [subMenuOpen, setSubMenuOpen] = useState(false)
 
     function handleMenuOpen(e) {
@@ -21,6 +48,7 @@ function Navbar(props) {
     }
 
     function removeCookie() {
+        window.location.reload()
         Cookies.remove("idPtkPage");
         Cookies.remove("tglPtk");
         Cookies.remove("jenisKarantina");
@@ -33,6 +61,74 @@ function Navbar(props) {
         }
         setKetSubMenu(e.target.dataset.i18n);
     } 
+
+    const idPtk = Cookies.get("idPtkPage");
+
+    function getSurtug(e) {
+        const resSurtug = modelSurtug.getSurtugByPtk(e, "");
+        resSurtug
+        .then((response) => {
+            if(response.data) {
+                if(typeof response.data != "string") {
+                    if(response.data.status == 200) {
+                        console.log("navbar ok")
+                        setData(values => ({...values,
+                            errorSurtugPage: "",
+                            pAdmin: response.data.data.filter((element) => element.penugasan_id == 1).length,
+                            pFisikKesehatan: response.data.data.filter((element) => element.penugasan_id == 2).length,
+                            pSingmat: response.data.data.filter((element) => element.penugasan_id == 3).length,
+                            pAtasAlatAngkut: response.data.data.filter((element) => element.penugasan_id == 4).length,
+                            pAlatAngkut: response.data.data.filter((element) => element.penugasan_id == 5).length,
+                            pPengawasan: response.data.data.filter((element) => element.penugasan_id == 6).length,
+                            pPengawalan: response.data.data.filter((element) => element.penugasan_id == 7).length,
+                            pPerlakuan: response.data.data.filter((element) => element.penugasan_id == 8).length,
+                            pPenahanan: response.data.data.filter((element) => element.penugasan_id == 9).length,
+                            pPenolakan: response.data.data.filter((element) => element.penugasan_id == 10).length,
+                            pPemusnahan: response.data.data.filter((element) => element.penugasan_id == 11).length,
+                            pSuratKeterangan: response.data.data.filter((element) => element.penugasan_id == 12).length,
+                            pPembebasan: response.data.data.filter((element) => element.penugasan_id == 13 || element.penugasan_id == 14).length,
+                            pSerahTerima: response.data.data.filter((element) => element.penugasan_id == 15).length,
+                            pMonitoring: response.data.data.filter((element) => element.penugasan_id == 16).length,
+                            pLainTK: response.data.data.filter((element) => element.penugasan_id == 17).length,
+                            pWasmalistrik: response.data.data.filter((element) => element.penugasan_id == 18).length,
+                            pGelarPerkara: response.data.data.filter((element) => element.penugasan_id == 19).length,
+                            pPenyidikan: response.data.data.filter((element) => element.penugasan_id == 20).length,
+                            pLengkapiBerkas: response.data.data.filter((element) => element.penugasan_id == 21).length,
+                            pLainHK: response.data.data.filter((element) => element.penugasan_id == 22).length
+                        }));
+                    }
+                } else {
+                    console.log("navbar string")
+                    getSurtug(e)
+                    setData(values => ({...values,
+                        errorSurtugPage: "Gagal load data surat tugas"
+                    }))
+                }
+            }
+        })
+        .catch((error) => {
+            if(import.meta.env.VITE_BE_ENV == "DEV") {
+                console.log(error)
+            }
+            console.log("navbar error")
+            
+            if(error.response.data.status != 404) {
+                getSurtug(e)
+                setData(values => ({...values,
+                    errorSurtugPage: "Gagal load data surat tugas"
+                }))
+            }
+        });
+    }
+
+    useEffect(() => {
+        if(idPtk) {
+            let ptkDecode = idPtk ? base64_decode(idPtk) : "";
+            let ptkNomor = idPtk ? ptkDecode.split('m0R3N0r1R') : "";
+
+            getSurtug(base64_decode(ptkNomor[1]))
+        }
+    },[idPtk])
 
     return (
     <aside id="layout-menu" className={"menu-vertical menu bg-menu-theme" + (props.menu ? " layout-menu" : "")} style={{transition: "all 0.5s ease"}}>
@@ -123,48 +219,49 @@ function Navbar(props) {
                     <div data-i18n="Pemeriksaan">Segel Karantina</div>
                 </div>
             </li> */}
-            <li className={(ketMenu === 'Pemeriksaan' && menuOpen === true) || location.pathname.split("/")[1] === 'k31' || location.pathname.split("/")[1] === 'k32' || location.pathname.split("/")[1] === 'k33' || location.pathname.split("/")[1] === 'k34' || location.pathname.split("/")[1] === 'k35' || location.pathname.split("/")[1] === 'k36' || location.pathname.split("/")[1] === 'k37b' || location.pathname.split("/")[1] === 'k37a' || location.pathname.split("/")[1] === 'k38' || location.pathname.split("/")[1] === 'k39' || location.pathname.split("/")[1] === 'k310' ? 'menu-item open menu-item-animating open' : 'menu-item menu-item-animating menu-item-closing'}>
+            <li className={(ketMenu === 'Pemeriksaan' && menuOpen === true) || location.pathname.split("/")[1] === 'k31' || location.pathname.split("/")[1] === 'k32' || location.pathname.split("/")[1] === 'k33' || location.pathname.split("/")[1] === 'k34' || location.pathname.split("/")[1] === 'k35' || location.pathname.split("/")[1] === 'k36' || location.pathname.split("/")[1] === 'k37b' || location.pathname.split("/")[1] === 'k37a' || location.pathname.split("/")[1] === 'k38' || location.pathname.split("/")[1] === 'k39' || location.pathname.split("/")[1] === 'k310' ? 'menu-item open menu-item-animating open' : 'menu-item menu-item-animating menu-item-closing'}
+            style={{display: (Cookies.get("idPtkPage") ? "block" : "none")}}>
                 <button type='button' style={{backgroundColor: "#123138"}} className="w-100 text-sm-start menu-link menu-toggle text-lightest" data-i18n="Pemeriksaan" onClick={handleMenuOpen}>
                     <i className="menu-icon tf-icons fa-solid fa-magnifying-glass"></i>
                     <div data-i18n="Pemeriksaan">Pemeriksaan</div>
                 </button>
                 <ul className="menu-sub">
-                    <li className={location.pathname.split("/")[1] === 'k31' ? "menu-item active" : "menu-item"}>
+                    <li className={location.pathname.split("/")[1] === 'k31' ? "menu-item active" : "menu-item"} style={{display: (data.pAlatAngkut > 0 && (Cookies.get("jenisPermohonan") == "IM" || Cookies.get("jenisPermohonan") == "DM") ? "block" : "none")}}>
                         <div type="button" onClick={() => navigate('/k31')} className="menu-link" title='SURAT PERSETUJUAN/PENOLAKAN BONGKAR MEDIA PEMBAWA DARI ALAT ANGKUT'>
                             <div data-i18n="K-3.1">K-3.1</div>
                         </div>
                     </li>
-                    <li className={location.pathname.split("/")[1] === 'k32' ? "menu-item active" : "menu-item"}>
+                    <li className={location.pathname.split("/")[1] === 'k32' ? "menu-item active" : "menu-item"} style={{display: (data.pAlatAngkut > 0 && (Cookies.get("jenisPermohonan") == "EX" || Cookies.get("jenisPermohonan") == "DK") ? "block" : "none")}}>
                         <div type="button" onClick={() => navigate('/k32')} className="menu-link" title='PERSETUJUAN/PENOLAKAN BONGKAR/MUAT MEDIA PEMBAWA KE ALAT ANGKUT'>
                             <div data-i18n="K-3.2">K-3.2</div>
                         </div>
                     </li>
-                    <li className={location.pathname.split("/")[1] === 'k33' ? "menu-item active" : "menu-item"}>
+                    <li className={location.pathname.split("/")[1] === 'k33' ? "menu-item active" : "menu-item"} style={{display: (data.pFisikKesehatan > 0 ? "block" : "none")}}>
                         <div type="button" onClick={() => navigate('/k33')} className="menu-link" title='BERITA ACARA PENGAMBILAN CONTOH'>
                             <div data-i18n="K-3.3">K-3.3</div>
                         </div>
                     </li>
-                    <li className={location.pathname.split("/")[1] === 'k34' ? "menu-item active" : "menu-item"}>
+                    <li className={location.pathname.split("/")[1] === 'k34' ? "menu-item active" : "menu-item"} >
                         <div type="button" onClick={() => navigate('/k34')} className="menu-link" title='SURAT PERINTAH MASUK INSTALASI KARANTINA ATAU TEMPAT LAIN'>
                             <div data-i18n="K-3.4">K-3.4</div>
                         </div>
                     </li>
-                    <li className={location.pathname.split("/")[1] === 'k35' ? "menu-item active" : "menu-item"}>
+                    <li className={location.pathname.split("/")[1] === 'k35' ? "menu-item active" : "menu-item"} style={{display: (data.pPengawalan > 0 ? "block" : "none")}}>
                         <div type="button" onClick={() => navigate('/k35')} className="menu-link" title='LAPORAN HASIL PENGAWALAN MEDIA PEMBAWA'>
                             <div data-i18n="K-3.5">K-3.5</div>
                         </div>
                     </li>
-                    <li className={location.pathname.split("/")[1] === 'k36' ? "menu-item active" : "menu-item"}>
+                    <li className={location.pathname.split("/")[1] === 'k36' ? "menu-item active" : "menu-item"} style={{display: (data.pAtasAlatAngkut > 0 ? "block" : "none")}}>
                         <div type="button" onClick={() => navigate('/k36')} className="menu-link" title='LAPORAN HASIL PEMERIKSAAN MEDIA PEMBAWA DI ATAS ALAT ANGKUT'>
                             <div data-i18n="K-3.6">K-3.6</div>
                         </div>
                     </li>
-                    <li className={location.pathname.split("/")[1] === 'k37a' ? "menu-item active" : "menu-item"}>
+                    <li className={location.pathname.split("/")[1] === 'k37a' ? "menu-item active" : "menu-item"} style={{display: (data.pAdmin > 0 ? "block" : "none")}}>
                         <div type="button" onClick={() => navigate('/k37a')} className="menu-link" title='LAPORAN HASIL PEMERIKSAAN ADMINISTRATIF'>
                             <div data-i18n="K-3.7a">K-3.7a</div>
                         </div>
                     </li>
-                    <li className={location.pathname.split("/")[1] === 'k37b' ? "menu-item active" : "menu-item"}>
+                    <li className={location.pathname.split("/")[1] === 'k37b' ? "menu-item active" : "menu-item"} style={{display: (data.pFisikKesehatan > 0 ? "block" : "none")}}>
                         <div type="button" onClick={() => navigate('/k37b')} className="menu-link" title='LAPORAN HASIL PEMERIKSAAN KESEHATAN'>
                             <div data-i18n="K-3.7b">K-3.7b</div>
                         </div>
@@ -186,7 +283,7 @@ function Navbar(props) {
                     </li>
                 </ul>
             </li>
-            <li className={(ketMenu === 'SingMat' && menuOpen === true) || location.pathname.split("/")[1] === 'k41' || location.pathname.split("/")[1] === 'k42' ? 'menu-item open menu-item-animating open' : 'menu-item menu-item-animating menu-item-closing'}>
+            <li className={(ketMenu === 'SingMat' && menuOpen === true) || location.pathname.split("/")[1] === 'k41' || location.pathname.split("/")[1] === 'k42' ? 'menu-item open menu-item-animating open' : 'menu-item menu-item-animating menu-item-closing'} style={{display: (data.pSingmat > 0 ? "block" : "none")}}>
                 <button type='button' style={{backgroundColor: "#123138"}} className="w-100 text-sm-start menu-link menu-toggle text-lightest" data-i18n="SingMat" onClick={handleMenuOpen}>
                     <i className="menu-icon tf-icons fa-solid fa-tower-observation"></i>
                     <div data-i18n="SingMat">SingMat</div>
@@ -197,14 +294,15 @@ function Navbar(props) {
                             <div data-i18n="K-4.1">K-4.1</div>
                         </div>
                     </li>
-                    <li className={location.pathname.split("/")[1] === 'k42' ? "menu-item active" : "menu-item"}>
+                    {/* <li className={location.pathname.split("/")[1] === 'k42' ? "menu-item active" : "menu-item"}>
                         <div type="button" onClick={() => navigate('/k42')} className="menu-link" title='LAPORAN HASIL PELAKSANAAN TINDAKAN KARANTINA DAN PENGAWASAN UNTUK PENGAMATAN'>
                             <div data-i18n="K-4.2">K-4.2</div>
                         </div>
-                    </li>
+                    </li> */}
                 </ul>
             </li>
-            <li className={(ketMenu === 'Perlakuan' && menuOpen === true) || location.pathname.split("/")[1] === 'k51' || location.pathname.split("/")[1] === 'k52' || location.pathname.split("/")[1] === 'k53' || location.pathname.split("/")[1] === 'k54' || location.pathname.split("/")[1] === 'k55' ? 'menu-item open menu-item-animating open' : 'menu-item menu-item-animating menu-item-closing'}>
+            <li className={(ketMenu === 'Perlakuan' && menuOpen === true) || location.pathname.split("/")[1] === 'k51' || location.pathname.split("/")[1] === 'k52' || location.pathname.split("/")[1] === 'k53' || location.pathname.split("/")[1] === 'k54' || location.pathname.split("/")[1] === 'k55' ? 'menu-item open menu-item-animating open' : 'menu-item menu-item-animating menu-item-closing'} 
+            style={{display: (data.pPerlakuan > 0 ? "block" : "none")}}>
                 <button type='button' style={{backgroundColor: "#123138"}} className="w-100 text-sm-start menu-link menu-toggle text-lightest" data-i18n="Perlakuan" onClick={handleMenuOpen}>
                     <i className="menu-icon tf-icons fa-solid fa-hands-holding-circle"></i>
                     <div data-i18n="Perlakuan">Perlakuan</div>
@@ -237,7 +335,8 @@ function Navbar(props) {
                     </li> */}
                 </ul>
             </li>
-            <li className={(ketMenu === 'Penahanan' && menuOpen === true) || location.pathname.split("/")[1] === 'k61' || location.pathname.split("/")[1] === 'k62' || location.pathname.split("/")[1] === 'k63' ? 'menu-item open menu-item-animating open' : 'menu-item menu-item-animating menu-item-closing'}>
+            <li className={(ketMenu === 'Penahanan' && menuOpen === true) || location.pathname.split("/")[1] === 'k61' || location.pathname.split("/")[1] === 'k62' || location.pathname.split("/")[1] === 'k63' ? 'menu-item open menu-item-animating open' : 'menu-item menu-item-animating menu-item-closing'}
+            style={{display: (data.pPenahanan > 0 ? "block" : "none")}}>
                 <button type='button' style={{backgroundColor: "#123138"}} className="w-100 text-sm-start menu-link menu-toggle text-lightest" data-i18n="Penahanan" onClick={handleMenuOpen}>
                     <i className="menu-icon tf-icons fa-solid fa-handcuffs"></i>
                     <div data-i18n="Penahanan">Penahanan</div>
@@ -260,7 +359,8 @@ function Navbar(props) {
                     </li>
                 </ul>
             </li>
-            <li className={(ketMenu === 'Penolakan' && menuOpen === true) || location.pathname.split("/")[1] === 'k71' || location.pathname.split("/")[1] === 'k72' || location.pathname.split("/")[1] === 'k73' || location.pathname.split("/")[1] === 'k74' || location.pathname.split("/")[1] === 'k75' || location.pathname.split("/")[1] === 'k76' ? 'menu-item open menu-item-animating open' : 'menu-item menu-item-animating menu-item-closing'}>
+            <li className={(ketMenu === 'Penolakan' && menuOpen === true) || location.pathname.split("/")[1] === 'k71' || location.pathname.split("/")[1] === 'k72' || location.pathname.split("/")[1] === 'k73' || location.pathname.split("/")[1] === 'k74' || location.pathname.split("/")[1] === 'k75' || location.pathname.split("/")[1] === 'k76' ? 'menu-item open menu-item-animating open' : 'menu-item menu-item-animating menu-item-closing'}
+            style={{display: (data.pPenolakan > 0 ? "block" : "none")}}>
                 <button type='button' style={{backgroundColor: "#123138"}} className="w-100 text-sm-start menu-link menu-toggle text-lightest" data-i18n="Penolakan" onClick={handleMenuOpen}>
                     <i className="menu-icon tf-icons fa-solid fa-shield-halved"></i>
                     <div data-i18n="Penolakan">Penolakan</div>
@@ -299,7 +399,8 @@ function Navbar(props) {
                     </li> */}
                 </ul>
             </li>
-            <li className={(ketMenu === 'Pemusnahan' && menuOpen === true) || location.pathname.split("/")[1] === 'k81' || location.pathname.split("/")[1] === 'k82' ? 'menu-item open menu-item-animating open' : 'menu-item menu-item-animating menu-item-closing'}>
+            <li className={(ketMenu === 'Pemusnahan' && menuOpen === true) || location.pathname.split("/")[1] === 'k81' || location.pathname.split("/")[1] === 'k82' ? 'menu-item open menu-item-animating open' : 'menu-item menu-item-animating menu-item-closing'}
+            style={{display: (data.pPemusnahan > 0 ? "block" : "none")}}>
                 <button type='button' style={{backgroundColor: "#123138"}} className="w-100 text-sm-start menu-link menu-toggle text-lightest" data-i18n="Pemusnahan" onClick={handleMenuOpen}>
                     <i className="menu-icon tf-icons fa-solid fa-explosion"></i>
                     <div data-i18n="Pemusnahan">Pemusnahan</div>
@@ -317,40 +418,44 @@ function Navbar(props) {
                     </li>
                 </ul>
             </li>
-            <li className={(ketMenu === 'Pembebasan' && menuOpen === true) || location.pathname.split("/")[1] === 'k91' || location.pathname.split("/")[1] === 'k92h' || location.pathname.split("/")[1] === 'k92i' || location.pathname.split("/")[1] === 'k92t' || location.pathname.split("/")[1] === 'k93' || location.pathname.split("/")[1] === 'k94' || location.pathname.split("/")[1] === 'kh1' || location.pathname.split("/")[1] === 'kh2' || location.pathname.split("/")[1] === 'ki1' || location.pathname.split("/")[1] === 'ki2' || location.pathname.split("/")[1] === 'kt1' || location.pathname.split("/")[1] === 'kt2' || location.pathname.split("/")[1] === 'kt3' || location.pathname.split("/")[1] === 'kt4' ? 'menu-item open menu-item-animating open' : 'menu-item menu-item-animating menu-item-closing'}>
+            <li className={(ketMenu === 'Pembebasan' && menuOpen === true) || location.pathname.split("/")[1] === 'k91' || location.pathname.split("/")[1] === 'k92h' || location.pathname.split("/")[1] === 'k92i' || location.pathname.split("/")[1] === 'k92t' || location.pathname.split("/")[1] === 'k93' || location.pathname.split("/")[1] === 'k94' || location.pathname.split("/")[1] === 'kh1' || location.pathname.split("/")[1] === 'kh2' || location.pathname.split("/")[1] === 'ki1' || location.pathname.split("/")[1] === 'ki2' || location.pathname.split("/")[1] === 'kt1' || location.pathname.split("/")[1] === 'kt2' || location.pathname.split("/")[1] === 'kt3' || location.pathname.split("/")[1] === 'kt4' ? 'menu-item open menu-item-animating open' : 'menu-item menu-item-animating menu-item-closing'}
+            style={{display: (data.pPembebasan > 0 || data.pSuratKeterangan > 0 ? "block" : "none")}}>
                 <button type='button' style={{backgroundColor: "#123138"}} className="w-100 text-sm-start menu-link menu-toggle text-lightest" data-i18n="Pembebasan" onClick={handleMenuOpen}>
                     <i className="menu-icon tf-icons fa-solid fa-file-archive"></i>
                     <div data-i18n="Pembebasan">Pembebasan</div>
                 </button>
                 <ul className="menu-sub">
-                    <li className={location.pathname.split("/")[1] === 'k91' ? "menu-item active" : "menu-item"}>
+                    <li className={location.pathname.split("/")[1] === 'k91' ? "menu-item active" : "menu-item"}
+                    style={{display: (data.pPembebasan > 0 ? "block" : "none")}}>
                         <div type="button" onClick={() => navigate('/k91')} className="menu-link" title='SURAT KETERANGAN MEDIA PEMBAWA LAIN'>
                             <div data-i18n="K-9.1">K-9.1</div>
                         </div>
                     </li>
-                    <li className={(ketMenu === 'Pembebasan' && ketSubMenu === 'K-9.2' && subMenuOpen === true) || location.pathname.split("/")[1] === 'k92h' || location.pathname.split("/")[1] === 'k92i' || location.pathname.split("/")[1] === 'k92t' ? 'menu-item open menu-item-animating open' : 'menu-item menu-item-animating menu-item-closing'}>
+                    <li className={(ketMenu === 'Pembebasan' && ketSubMenu === 'K-9.2' && subMenuOpen === true) || location.pathname.split("/")[1] === 'k92h' || location.pathname.split("/")[1] === 'k92i' || location.pathname.split("/")[1] === 'k92t' ? 'menu-item open menu-item-animating open' : 'menu-item menu-item-animating menu-item-closing'}
+                    style={{display: (data.pPembebasan > 0 && (Cookies.get("jenisPermohonan") == "IM" || Cookies.get("jenisPermohonan") == "DM") ? "block" : "none")}}>
                         <button type='button' style={{backgroundColor: "#123138"}} className="w-100 text-sm-start menu-link menu-toggle text-lightest" data-i18n="K-9.2" onClick={handleSubMenuOpen}>
                             <div data-i18n="K-9.2">K-9.2</div>
                         </button>
                         <ul className="menu-sub">
-                            <li className={location.pathname.split("/")[1] === 'k92h' ? "menu-item active" : "menu-item"}>
+                            <li className={location.pathname.split("/")[1] === 'k92h' ? "menu-item active" : "menu-item"} style={{display: (Cookies.get("jeniskarantina") == "H" ? "block" : "none")}}>
                                 <div type="button" onClick={() => navigate('/k92h')} className="menu-link" title='SERTIFIKAT PELEPASAN KARANTINA HEWAN'>
                                     <div data-i18n="K-9.2.H">K-9.2.H</div>
                                 </div>
                             </li>
-                            <li className={location.pathname.split("/")[1] === 'k92i' ? "menu-item active" : "menu-item"}>
+                            <li className={location.pathname.split("/")[1] === 'k92i' ? "menu-item active" : "menu-item"} style={{display: (Cookies.get("jeniskarantina") == "I" ? "block" : "none")}}>
                                 <div type="button" onClick={() => navigate('/k92i')} className="menu-link" title='SERTIFIKAT PELEPASAN KARANTINA IKAN'>
                                     <div data-i18n="K-9.2.I">K-9.2.I</div>
                                 </div>
                             </li>
-                            <li className={location.pathname.split("/")[1] === 'k92t' ? "menu-item active" : "menu-item"}>
+                            <li className={location.pathname.split("/")[1] === 'k92t' ? "menu-item active" : "menu-item"} style={{display: (Cookies.get("jeniskarantina") == "T" ? "block" : "none")}}>
                                 <div type="button" onClick={() => navigate('/k92t')} className="menu-link" title='SERTIFIKAT PELEPASAN KARANTINA TUMBUHAN/PENGAWASAN'>
                                     <div data-i18n="K-9.2.T">K-9.2.T</div>
                                 </div>
                             </li>
                         </ul>
                     </li>
-                    <li className={location.pathname.split("/")[1] === 'k93' ? "menu-item active" : "menu-item"}>
+                    <li className={location.pathname.split("/")[1] === 'k93' ? "menu-item active" : "menu-item"}
+                    style={{display: (data.pSuratKeterangan > 0 ? "block" : "none")}}>
                         <div type="button" onClick={() => navigate('/k93')} className="menu-link" title='SURAT KETERANGAN KARANTINA'>
                             <div data-i18n="K-9.3">K-9.3</div>
                         </div>
@@ -368,7 +473,8 @@ function Navbar(props) {
                             </li>
                         </ul>
                     </li> */}
-                    <li className={(ketMenu === 'Pembebasan' && ketSubMenu === 'KH' && subMenuOpen === true) || location.pathname.split("/")[1] === 'kh1' || location.pathname.split("/")[1] === 'kh2' ? 'menu-item open menu-item-animating open' : 'menu-item menu-item-animating menu-item-closing'}>
+                    <li className={(ketMenu === 'Pembebasan' && ketSubMenu === 'KH' && subMenuOpen === true) || location.pathname.split("/")[1] === 'kh1' || location.pathname.split("/")[1] === 'kh2' ? 'menu-item open menu-item-animating open' : 'menu-item menu-item-animating menu-item-closing'}
+                    style={{display: (data.pPembebasan > 0 && Cookies.get("jenisKarantina") == "H" && (Cookies.get("jenisPermohonan") == "EX" || Cookies.get("jenisPermohonan") == "DK") ? "block" : "none")}}>
                         <button type='button' style={{backgroundColor: "#123138"}} className="w-100 text-sm-start menu-link menu-toggle text-lightest" data-i18n="KH" onClick={handleSubMenuOpen}>
                             <i className="menu-icon tf-icons bx bx-user"></i>
                             <div data-i18n="KH">KH</div>
@@ -386,46 +492,54 @@ function Navbar(props) {
                             </li>
                         </ul>
                     </li>
-                    <li className={(ketMenu === 'Pembebasan' && ketSubMenu === 'KI' && subMenuOpen === true) || location.pathname.split("/")[1] === 'ki1' || location.pathname.split("/")[1] === 'ki2' ? 'menu-item open menu-item-animating open' : 'menu-item menu-item-animating menu-item-closing'}>
+                    <li className={(ketMenu === 'Pembebasan' && ketSubMenu === 'KI' && subMenuOpen === true) || location.pathname.split("/")[1] === 'ki1' || location.pathname.split("/")[1] === 'ki2' ? 'menu-item open menu-item-animating open' : 'menu-item menu-item-animating menu-item-closing'}
+                    style={{display: (data.pPembebasan > 0 && Cookies.get("jenisKarantina") == "I" && (Cookies.get("jenisPermohonan") == "EX" || Cookies.get("jenisPermohonan") == "DK") ? "block" : "none")}}>
                         <button type='button' style={{backgroundColor: "#123138"}} className="w-100 text-sm-start menu-link menu-toggle text-lightest" data-i18n="KI" onClick={handleSubMenuOpen}>
                             <i className="menu-icon tf-icons bx bx-user"></i>
                             <div data-i18n="KI">KI</div>
                         </button>
                         <ul className="menu-sub">
-                            <li className={location.pathname.split("/")[1] === 'ki1' ? "menu-item active" : "menu-item"}>
+                            <li className={location.pathname.split("/")[1] === 'ki1' ? "menu-item active" : "menu-item"}
+                            style={{display: (data.pPembebasan > 0 && Cookies.get("jenisKarantina") == "I" && Cookies.get("jenisPermohonan") == "EX" ? "block" : "none")}}>
                                 <div type="button" onClick={() => navigate('/ki1')} className="menu-link" title='HEALTH CERTIFICATE FOR FISH AND FISH PRODUCTS'>
                                     <div data-i18n="KI-1">KI-1</div>
                                 </div>
                             </li>
-                            <li className={location.pathname.split("/")[1] === 'ki2' ? "menu-item active" : "menu-item"}>
+                            <li className={location.pathname.split("/")[1] === 'ki2' ? "menu-item active" : "menu-item"}
+                            style={{display: (data.pPembebasan > 0 && Cookies.get("jenisKarantina") == "I" && Cookies.get("jenisPermohonan") == "DK" ? "block" : "none")}}>
                                 <div type="button" onClick={() => navigate('/ki2')} className="menu-link" title='SERTIFIKAT KESEHATAN IKAN DAN PRODUK IKAN'>
                                     <div data-i18n="KI-2">KI-2</div>
                                 </div>
                             </li>
                         </ul>
                     </li>
-                    <li className={(ketMenu === 'Pembebasan' && ketSubMenu === 'KT' && subMenuOpen === true) || location.pathname.split("/")[1] === 'kt1' || location.pathname.split("/")[1] === 'kt2' || location.pathname.split("/")[1] === 'kt3' || location.pathname.split("/")[1] === 'kt4' ? 'menu-item open menu-item-animating open' : 'menu-item menu-item-animating menu-item-closing'}>
+                    <li className={(ketMenu === 'Pembebasan' && ketSubMenu === 'KT' && subMenuOpen === true) || location.pathname.split("/")[1] === 'kt1' || location.pathname.split("/")[1] === 'kt2' || location.pathname.split("/")[1] === 'kt3' || location.pathname.split("/")[1] === 'kt4' ? 'menu-item open menu-item-animating open' : 'menu-item menu-item-animating menu-item-closing'}
+                    style={{display: (data.pPembebasan > 0 && Cookies.get("jenisKarantina") == "T" && (Cookies.get("jenisPermohonan") == "EX" || Cookies.get("jenisPermohonan") == "DK" || Cookies.get("jenisPermohonan") == "RE") ? "block" : "none")}}>
                         <button type='button' style={{backgroundColor: "#123138"}} className="w-100 text-sm-start menu-link menu-toggle text-lightest" data-i18n="KT" onClick={handleSubMenuOpen}>
                             <i className="menu-icon tf-icons bx bx-user"></i>
                             <div data-i18n="KT">KT</div>
                         </button>
                         <ul className="menu-sub">
-                            <li className={location.pathname.split("/")[1] === 'kt1' ? "menu-item active" : "menu-item"}>
+                            <li className={location.pathname.split("/")[1] === 'kt1' ? "menu-item active" : "menu-item"}
+                            style={{display: (data.pPembebasan > 0 && Cookies.get("jenisKarantina") == "T" && Cookies.get("jenisPermohonan") == "EX" ? "block" : "none")}}>
                                 <div type="button" onClick={() => navigate('/kt1')} className="menu-link" title='PHYTOSANITARY CERTIFICATE'>
                                     <div data-i18n="KT-1">KT-1</div>
                                 </div>
                             </li>
-                            <li className={location.pathname.split("/")[1] === 'kt2' ? "menu-item active" : "menu-item"}>
+                            <li className={location.pathname.split("/")[1] === 'kt2' ? "menu-item active" : "menu-item"}
+                            style={{display: (data.pPembebasan > 0 && Cookies.get("jenisKarantina") == "T" && Cookies.get("jenisPermohonan") == "RE" ? "block" : "none")}}>
                                 <div type="button" onClick={() => navigate('/kt2')} className="menu-link" title='PHYTOSANITARY CERTIFICATE FOR RE-EXPORT'>
                                     <div data-i18n="KT-2">KT-2</div>
                                 </div>
                             </li>
-                            <li className={location.pathname.split("/")[1] === 'kt3' ? "menu-item active" : "menu-item"}>
+                            <li className={location.pathname.split("/")[1] === 'kt3' ? "menu-item active" : "menu-item"}
+                            style={{display: (data.pPembebasan > 0 && Cookies.get("jenisKarantina") == "T" && Cookies.get("jenisPermohonan") == "DK" ? "block" : "none")}}>
                                 <div type="button" onClick={() => navigate('/kt3')} className="menu-link" title='SERTIFIKAT KESEHATAN TUMBUHAN ANTAR AREA'>
                                     <div data-i18n="KT-3">KT-3</div>
                                 </div>
                             </li>
-                            <li className={location.pathname.split("/")[1] === 'kt4' ? "menu-item active" : "menu-item"}>
+                            <li className={location.pathname.split("/")[1] === 'kt4' ? "menu-item active" : "menu-item"}
+                            style={{display: (data.pPembebasan > 0 && Cookies.get("jenisKarantina") == "T" && Cookies.get("jenisPermohonan") == "EX" ? "block" : "none")}}>
                                 <div type="button" onClick={() => navigate('/kt4')} className="menu-link" title='CERTIFICATE FOR EXPORT OF PROCESSED PRODUCT/NON-REGULATED ARTICLE'>
                                     <div data-i18n="KT-4">KT-4</div>
                                 </div>
