@@ -1,5 +1,4 @@
 /* eslint-disable eqeqeq */
-/* eslint-disable jsx-a11y/anchor-is-valid */
 import Cookies from 'js-cookie';
 import React, { useEffect, useState } from 'react';
 import {decode as base64_decode} from 'base-64';
@@ -95,7 +94,7 @@ function DocKT1() {
             }
         })
         .catch((error) => {
-            if(import.meta.env.VITE_BE_ENV == "DEV") {
+            if(import.meta.env.VITE_REACT_APP_BE_ENV == "DEV") {
                 console.log(error)
             }
         });
@@ -137,13 +136,13 @@ function DocKT1() {
                         resHsy
                         .then((response) => {
                             if(response.data.status == 201) {
-                                if(import.meta.env.VITE_BE_ENV == "DEV") {
+                                if(import.meta.env.VITE_REACT_APP_BE_ENV == "DEV") {
                                     console.log("history saved")
                                 }
                             }
                         })
                         .catch((error) => {
-                            if(import.meta.env.VITE_BE_ENV == "DEV") {
+                            if(import.meta.env.VITE_REACT_APP_BE_ENV == "DEV") {
                                 console.log(error)
                             }
                         });
@@ -167,7 +166,7 @@ function DocKT1() {
             })
             .catch((error) => {
                 setOnLoad(false)
-                if(import.meta.env.VITE_BE_ENV == "DEV") {
+                if(import.meta.env.VITE_REACT_APP_BE_ENV == "DEV") {
                     console.log(error)
                 }
                 Swal.fire({
@@ -217,7 +216,7 @@ function DocKT1() {
             })
             .catch((error) => {
                 setOnLoad(false)
-                if(import.meta.env.VITE_BE_ENV == "DEV") {
+                if(import.meta.env.VITE_REACT_APP_BE_ENV == "DEV") {
                     console.log(error)
                 }
                 Swal.fire({
@@ -263,7 +262,7 @@ function DocKT1() {
                 if(response.data.status == 201) {
                     refreshListKomoditas()
                     setLoadKomoditi(false)
-                    if(import.meta.env.VITE_BE_ENV == "DEV") {
+                    if(import.meta.env.VITE_REACT_APP_BE_ENV == "DEV") {
                         console.log("history saved")
                     }
                     Swal.fire({
@@ -282,7 +281,7 @@ function DocKT1() {
             .catch((error) => {
                 setLoadKomoditi(false)
                 setLoadKomoditiPesan("Terjadi error pada saat simpan, mohon refresh halaman dan coba lagi.")
-                if(import.meta.env.VITE_BE_ENV == "DEV") {
+                if(import.meta.env.VITE_REACT_APP_BE_ENV == "DEV") {
                     console.log(error)
                 }
                 Swal.fire({
@@ -320,7 +319,7 @@ function DocKT1() {
             }
         })
         .catch((error) => {
-            if(import.meta.env.VITE_BE_ENV == "DEV") {
+            if(import.meta.env.VITE_REACT_APP_BE_ENV == "DEV") {
                 console.log(error)
             }
             Swal.fire({
@@ -406,7 +405,7 @@ function DocKT1() {
                             }
                         })
                         .catch((error) => {
-                            if(import.meta.env.VITE_BE_ENV == "DEV") {
+                            if(import.meta.env.VITE_REACT_APP_BE_ENV == "DEV") {
                                 console.log(error)
                             }
                             setData(values => ({...values,
@@ -432,7 +431,7 @@ function DocKT1() {
                 }
             })
             .catch((error) => {
-                if(import.meta.env.VITE_BE_ENV == "DEV") {
+                if(import.meta.env.VITE_REACT_APP_BE_ENV == "DEV") {
                     console.log(error)
                 }
                 setData(values => ({...values,
@@ -474,7 +473,7 @@ function DocKT1() {
                 }
             })
             .catch((error) => {
-                if(import.meta.env.VITE_BE_ENV == "DEV") {
+                if(import.meta.env.VITE_REACT_APP_BE_ENV == "DEV") {
                     console.log(error)
                 }
                 if(error.response.data.status == 404) {
@@ -541,7 +540,7 @@ function DocKT1() {
                                     }
                                 })
                                 .catch((error) => {
-                                    if(import.meta.env.VITE_BE_ENV == "DEV") {
+                                    if(import.meta.env.VITE_REACT_APP_BE_ENV == "DEV") {
                                         console.log(error)
                                     }
                                     setData(values => ({...values,
@@ -566,7 +565,7 @@ function DocKT1() {
                 }
             })
             .catch((error) => {
-                if(import.meta.env.VITE_BE_ENV == "DEV") {
+                if(import.meta.env.VITE_REACT_APP_BE_ENV == "DEV") {
                     console.log(error)
                 }
                 if(error.response) {
@@ -616,7 +615,7 @@ function DocKT1() {
                 }
             })
             .catch((error) => {
-                if(import.meta.env.VITE_BE_ENV == "DEV") {
+                if(import.meta.env.VITE_REACT_APP_BE_ENV == "DEV") {
                     console.log(error)
                 }
                 setData(values => ({...values,
@@ -658,7 +657,7 @@ function DocKT1() {
                 }
             })
             .catch((error) => {
-                if(import.meta.env.VITE_BE_ENV == "DEV") {
+                if(import.meta.env.VITE_REACT_APP_BE_ENV == "DEV") {
                     console.log(error)
                 }
                 setData(values => ({...values,
@@ -700,7 +699,7 @@ function DocKT1() {
                 }
             })
             .catch((error) => {
-                if(import.meta.env.VITE_BE_ENV == "DEV") {
+                if(import.meta.env.VITE_REACT_APP_BE_ENV == "DEV") {
                     console.log(error)
                 }
                 if(error.response.data.status == 404) {
@@ -769,7 +768,7 @@ function DocKT1() {
                                     }
                                 })
                                 .catch((error) => {
-                                    if(import.meta.env.VITE_BE_ENV == "DEV") {
+                                    if(import.meta.env.VITE_REACT_APP_BE_ENV == "DEV") {
                                         console.log(error)
                                     }
                                     setData(values => ({...values,
@@ -794,7 +793,7 @@ function DocKT1() {
                 }
             })
             .catch((error) => {
-                if(import.meta.env.VITE_BE_ENV == "DEV") {
+                if(import.meta.env.VITE_REACT_APP_BE_ENV == "DEV") {
                     console.log(error)
                 }
                 if(error.response) {
@@ -819,7 +818,7 @@ function DocKT1() {
 
             <small className='float-end'>
                 <span className='text-danger'>{(data.errorPTKPage ? data.errorPTKPage + "; " : "") + (data.errorSurtug ? data.errorSurtug + "; " : "") + (data.errorKomoditi ? data.errorKomoditi + "; " : "") + (data.errorKT1 ? data.errorKT1 + "; " : "") + (data.errorPerlakuan ? data.errorPerlakuan + "; " : "")}</span>
-                {data.errorPTKPage || data.errorSurtug || data.errorKomoditi || data.errorKT1 || errorPerlakuan ?
+                {data.errorPTKPage || data.errorSurtug || data.errorKomoditi || data.errorKT1 || data.errorPerlakuan ?
                     <button type='button' className='btn btn-warning btn-xs' onClick={() => refreshData()}><i className='fa-solid fa-sync'></i> Refresh</button>
                 : ""}
             </small>

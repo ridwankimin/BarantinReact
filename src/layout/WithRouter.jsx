@@ -4,7 +4,7 @@ import { BrowserRouter, Route, Routes } from 'react-router-dom'
 
 function WithRouter() {
   return (
-    <BrowserRouter>
+    <BrowserRouter basename='/apps/'>
         <Routes>
           <Route path={"/"} element={<Wrapper page="/" />} />
           <Route path={"/datam"} element={<Wrapper page="/datam" />} />

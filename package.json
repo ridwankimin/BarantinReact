@@ -1,7 +1,8 @@
 {
   "name": "barantin",
-  "homepage": "apps",
+  "homepage": ".",
   "version": "0.1.1",
+  "type": "module",
   "private": true,
   "dependencies": {
     "@testing-library/jest-dom": "^5.17.0",
@@ -30,8 +31,9 @@
   },
   "scripts": {
     "start": "vite",
+    "dev": "vite",
     "build": "vite build",
-    "preview": "vite preview"
+    "preview": "vite preview --port 3000"
   },
   "eslintConfig": {
     "extends": [
@@ -55,6 +57,8 @@
     "@babel/plugin-proposal-private-property-in-object": "^7.21.11",
     "@types/jquery": "^3.5.29",
     "@vitejs/plugin-react": "^4.2.1",
+    "eslint": "^8.57.0",
+    "eslint-plugin-react": "^7.34.1",
     "vite": "^5.1.5"
   }
 }

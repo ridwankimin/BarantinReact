@@ -54,13 +54,13 @@ function DocK74() {
                     resHsy
                     .then((response) => {
                         if(response.data.status == 201) {
-                            if(import.meta.env.VITE_BE_ENV == "DEV") {
+                            if(import.meta.env.VITE_REACT_APP_BE_ENV == "DEV") {
                                 console.log("history saved")
                             }
                         }
                     })
                     .catch((error) => {
-                        if(import.meta.env.VITE_BE_ENV == "DEV") {
+                        if(import.meta.env.VITE_REACT_APP_BE_ENV == "DEV") {
                             console.log(error)
                         }
                     });
@@ -79,7 +79,7 @@ function DocK74() {
         })
         .catch((error) => {
             setOnLoad(false)
-            if(import.meta.env.VITE_BE_ENV == "DEV") {
+            if(import.meta.env.VITE_REACT_APP_BE_ENV == "DEV") {
                 console.log(error)
             }
             Swal.fire({
@@ -132,7 +132,7 @@ function DocK74() {
                             }
                         })
                         .catch((error) => {
-                            if(import.meta.env.VITE_BE_ENV == "DEV") {
+                            if(import.meta.env.VITE_REACT_APP_BE_ENV == "DEV") {
                                 console.log(error)
                             }
                             setData(values => ({...values,
@@ -151,7 +151,7 @@ function DocK74() {
                 }
             })
             .catch((error) => {
-                if(import.meta.env.VITE_BE_ENV == "DEV") {
+                if(import.meta.env.VITE_REACT_APP_BE_ENV == "DEV") {
                     console.log(error)
                 }
                 if(error.response) {
@@ -208,7 +208,7 @@ function DocK74() {
                 }
             })
             .catch((error) => {
-                if(import.meta.env.VITE_BE_ENV == "DEV") {
+                if(import.meta.env.VITE_REACT_APP_BE_ENV == "DEV") {
                     console.log(error)
                 }
                 if(error.response) {
@@ -239,7 +239,7 @@ function DocK74() {
                             }
                         })
                         .catch((error) => {
-                            if(import.meta.env.VITE_BE_ENV == "DEV") {
+                            if(import.meta.env.VITE_REACT_APP_BE_ENV == "DEV") {
                                 console.log(error)
                             }
                             if(error.response) {
@@ -290,7 +290,7 @@ function DocK74() {
                 }
             })
             .catch((error) => {
-                if(import.meta.env.VITE_BE_ENV == "DEV") {
+                if(import.meta.env.VITE_REACT_APP_BE_ENV == "DEV") {
                     console.log(error)
                 }
                 if(error.response) {
@@ -330,7 +330,7 @@ function DocK74() {
                 }
             })
             .catch((error) => {
-                if(import.meta.env.VITE_BE_ENV == "DEV") {
+                if(import.meta.env.VITE_REACT_APP_BE_ENV == "DEV") {
                     console.log(error)
                 }
                 if(error.response) {
@@ -365,7 +365,7 @@ function DocK74() {
                 }
             })
             .catch((error) => {
-                if(import.meta.env.VITE_BE_ENV == "DEV") {
+                if(import.meta.env.VITE_REACT_APP_BE_ENV == "DEV") {
                     console.log(error)
                 }
                 setData(values => ({...values,
@@ -401,7 +401,7 @@ function DocK74() {
                 }
             })
             .catch((error) => {
-                if(import.meta.env.VITE_BE_ENV == "DEV") {
+                if(import.meta.env.VITE_REACT_APP_BE_ENV == "DEV") {
                     console.log(error)
                 }
                 if(error.response) {
@@ -456,7 +456,7 @@ function DocK74() {
                 }
             })
             .catch((error) => {
-                if(import.meta.env.VITE_BE_ENV == "DEV") {
+                if(import.meta.env.VITE_REACT_APP_BE_ENV == "DEV") {
                     console.log(error)
                 }
                 if(error.response.status == 404) {
@@ -500,7 +500,7 @@ function DocK74() {
                 }
             })
             .catch((error) => {
-                if(import.meta.env.VITE_BE_ENV == "DEV") {
+                if(import.meta.env.VITE_REACT_APP_BE_ENV == "DEV") {
                     console.log(error)
                 }
                 if(error.response) {
@@ -789,13 +789,13 @@ function DocK74() {
                                             {errors.textNnc3 && <small className="text-danger">{errors.textNnc3.message}</small>}
                                         </div>
                                         <div className="form-check mb-3">
-                                            <label className="form-check-label"  htmlFor={"nnc4"}>The goods do not comply with Indonesia's food safety/quality requirements (specify):</label>
+                                            <label className="form-check-label"  htmlFor={"nnc4"}>The goods do not comply with Indonesia`s food safety/quality requirements (specify):</label>
                                             <input className="form-check-input" type="checkbox" name={"nnc4"} id={"nnc4"} value="1" {...register("nnc4")} />
                                             <input type="text" className={errors.textNnc4 ? "form-control form-control-sm is-invalid" : "form-control form-control-sm"} name='textNnc4' {...register("textNnc4", {required: (cekWatch.nnc4 == "1" ? "Mohon sebutkan rinciannya.." : false)})} placeholder='Specify of Indonesia`s food safety/quality requirements..' />
                                             {errors.textNnc4 && <small className="text-danger">{errors.textNnc4.message}</small>}
                                         </div>
                                         <div className="form-check mb-3">
-                                            <label className="form-check-label"  htmlFor={"nnc5"}>The goods do not comply with other Indonesia's SPS requirements (specify):</label>
+                                            <label className="form-check-label"  htmlFor={"nnc5"}>The goods do not comply with other Indonesia`s SPS requirements (specify):</label>
                                             <input className="form-check-input" type="checkbox" name={"nnc5"} id={"nnc5"} value="1" {...register("nnc5")} />
                                             <input type="text" className={errors.textNnc5 ? "form-control form-control-sm is-invalid" : "form-control form-control-sm"} name='textNnc5' {...register("textNnc5", {required: (cekWatch.nnc5 ? "Mohon sebutkan rinciannya.." : false)})} placeholder='Specify of Indonesia`s SPS requirements..' />
                                             {errors.textNnc5 && <small className="text-danger">{errors.textNnc5.message}</small>}

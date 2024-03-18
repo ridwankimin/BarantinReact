@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 /* eslint-disable eqeqeq */
 import React, { useEffect, useState } from 'react'
 import PtkHistory from '../../model/PtkHistory'
@@ -134,13 +135,13 @@ function DocK91() {
                         resHsy
                         .then((response) => {
                             if(response.data.status == 201) {
-                                if(import.meta.env.VITE_BE_ENV == "DEV") {
+                                if(import.meta.env.VITE_REACT_APP_BE_ENV == "DEV") {
                                     console.log("history saved")
                                 }
                             }
                         })
                         .catch((error) => {
-                            if(import.meta.env.VITE_BE_ENV == "DEV") {
+                            if(import.meta.env.VITE_REACT_APP_BE_ENV == "DEV") {
                                 console.log(error.response.data);
                             }
                         });
@@ -165,7 +166,7 @@ function DocK91() {
             })
             .catch((error) => {
                 setOnLoad(false)
-                if(import.meta.env.VITE_BE_ENV == "DEV") {
+                if(import.meta.env.VITE_REACT_APP_BE_ENV == "DEV") {
                     console.log(error)
                 }
                 Swal.fire({
@@ -249,7 +250,7 @@ function DocK91() {
             })
             .catch((error) => {
                 setOnLoad(false)
-                if(import.meta.env.VITE_BE_ENV == "DEV") {
+                if(import.meta.env.VITE_REACT_APP_BE_ENV == "DEV") {
                     console.log(error)
                 }
                 Swal.fire({
@@ -295,7 +296,7 @@ function DocK91() {
                 if(response.data.status == 201) {
                     refreshListKomoditas()
                     setLoadKomoditi(false)
-                    if(import.meta.env.VITE_BE_ENV == "DEV") {
+                    if(import.meta.env.VITE_REACT_APP_BE_ENV == "DEV") {
                         console.log("history saved")
                     }
                     Swal.fire({
@@ -314,7 +315,7 @@ function DocK91() {
             .catch((error) => {
                 setLoadKomoditi(false)
                 setLoadKomoditiPesan("Terjadi error pada saat simpan, mohon refresh halaman dan coba lagi.")
-                if(import.meta.env.VITE_BE_ENV == "DEV") {
+                if(import.meta.env.VITE_REACT_APP_BE_ENV == "DEV") {
                     console.log(error)
                 }
                 Swal.fire({
@@ -338,7 +339,7 @@ function DocK91() {
             }
         })
         .catch((error) => {
-            if(import.meta.env.VITE_BE_ENV == "DEV") {
+            if(import.meta.env.VITE_REACT_APP_BE_ENV == "DEV") {
                 console.log(error)
             }
         });
@@ -398,7 +399,7 @@ function DocK91() {
                             }
                         })
                         .catch((error) => {
-                            if(import.meta.env.VITE_BE_ENV == "DEV") {
+                            if(import.meta.env.VITE_REACT_APP_BE_ENV == "DEV") {
                                 console.log(error)
                             }
                             setData(values => ({...values,
@@ -420,7 +421,7 @@ function DocK91() {
                 }
             })
             .catch((error) => {
-                if(import.meta.env.VITE_BE_ENV == "DEV") {
+                if(import.meta.env.VITE_REACT_APP_BE_ENV == "DEV") {
                     console.log(error)
                 }
                 setData(values => ({...values,
@@ -463,7 +464,7 @@ function DocK91() {
                 }
             })
             .catch((error) => {
-                if(import.meta.env.VITE_BE_ENV == "DEV") {
+                if(import.meta.env.VITE_REACT_APP_BE_ENV == "DEV") {
                     console.log(error)
                 }
                 if(error.response) {
@@ -503,7 +504,7 @@ function DocK91() {
                 }
             })
             .catch((error) => {
-                if(import.meta.env.VITE_BE_ENV == "DEV") {
+                if(import.meta.env.VITE_REACT_APP_BE_ENV == "DEV") {
                     console.log(error)
                 }
                 if(error.response) {
@@ -544,7 +545,7 @@ function DocK91() {
                 }
             })
             .catch((error) => {
-                if(import.meta.env.VITE_BE_ENV == "DEV") {
+                if(import.meta.env.VITE_REACT_APP_BE_ENV == "DEV") {
                     console.log(error)
                 }
                 if(error.response) {
@@ -590,7 +591,7 @@ function DocK91() {
                 }
             })
             .catch((error) => {
-                if(import.meta.env.VITE_BE_ENV == "DEV") {
+                if(import.meta.env.VITE_REACT_APP_BE_ENV == "DEV") {
                     console.log(error)
                 }
                 setData(values => ({...values,
@@ -628,7 +629,7 @@ function DocK91() {
                 }
             })
             .catch((error) => {
-                if(import.meta.env.VITE_BE_ENV == "DEV") {
+                if(import.meta.env.VITE_REACT_APP_BE_ENV == "DEV") {
                     console.log(error)
                 }
                 setData(values => ({...values,
@@ -672,7 +673,7 @@ function DocK91() {
                 }
             })
             .catch((error) => {
-                if(import.meta.env.VITE_BE_ENV == "DEV") {
+                if(import.meta.env.VITE_REACT_APP_BE_ENV == "DEV") {
                     console.log(error)
                 }
                 if(error.response) {
@@ -714,7 +715,7 @@ function DocK91() {
                 }
             })
             .catch((error) => {
-                if(import.meta.env.VITE_BE_ENV == "DEV") {
+                if(import.meta.env.VITE_REACT_APP_BE_ENV == "DEV") {
                     console.log(error)
                 }
                 if(error.response) {
@@ -757,7 +758,7 @@ function DocK91() {
                 }
             })
             .catch((error) => {
-                if(import.meta.env.VITE_BE_ENV == "DEV") {
+                if(import.meta.env.VITE_REACT_APP_BE_ENV == "DEV") {
                     console.log(error)
                 }
                 if(error.response) {
@@ -1084,7 +1085,7 @@ function DocK91() {
                                                                 <td>{moment(data.tanggal_dokumen).format('YYYY-MM-DD')}</td>
                                                                 <td>{data.negara}</td>
                                                                 <td>{data.keterangan}</td>
-                                                                <td><a href={import.meta.env.VITE_BE_LINK + data.efile} target='_blank' rel='noreferrer'>[LIHAT FILE]</a></td>
+                                                                <td><a href={import.meta.env.VITE_REACT_APP_BE_LINK + data.efile} target='_blank' rel='noreferrer'>[LIHAT FILE]</a></td>
                                                             </tr>
                                                         ))
                                                     ) : null }

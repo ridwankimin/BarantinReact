@@ -6,7 +6,7 @@ import { v4 as uuidv4 } from 'uuid';
 // import {decode as base64_decode, encode as base64_encode} from 'base-64';
 const date = new Date();
 // const url = process.env.REACT_APP_BE_LINK;
-const url = import.meta.env.VITE_BE_LINK;
+const url = import.meta.env.VITE_REACT_APP_BE_LINK;
 
 function makeid(length) {
   let result = '';

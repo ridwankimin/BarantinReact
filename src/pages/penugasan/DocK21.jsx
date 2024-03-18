@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 /* eslint-disable eqeqeq */
 import Cookies from 'js-cookie';
 import React, { useEffect, useState } from 'react';
@@ -10,9 +11,11 @@ import { useNavigate } from 'react-router-dom';
 import PegawaiJson from '../../model/master/pegawaiPertanian.json'
 import Select from 'react-select';
 import LoadBtn from '../../component/loading/LoadBtn';
+import PtkHistory from '../../model/PtkHistory';
 
 const modelSurtug = new PtkSurtug()
 const modelPemohon = new PtkModel()
+const modelHistory = new PtkHistory()
 
 function masterPegawai() {
     var arrayPegawai = PegawaiJson.map(item => {
@@ -59,7 +62,7 @@ function DocK21() {
     let navigate = useNavigate()
     const jenisKar = Cookies.get("jenisKarantina")
     let [dataPtk, setDataPtk] = useState([])
-    let [onload, setOnload] = useState(false)
+    let [onLoad,setOnload] = useState(false)
 
     const {
         register,
@@ -78,9 +81,26 @@ function DocK21() {
         response
         .then((response) => {
             if(response.data) {
-                console.log(response.data)
                 if(response.data.status == 201) {
                     setOnload(false)
+                    const resRekom = modelHistory.rekomHistory(data.idPtk, response.data.data.id, data.rekomAnalis);
+                    resRekom
+                    .then((response) => {
+                        if(response.data) {
+                            if(response.data.status == 201) {
+                                setOnload(false)
+                                if(import.meta.env.VITE_REACT_APP_BE_ENV == "DEV") {
+                                    console.log("History saved")
+                                }
+                            }
+                        }
+                    })
+                    .catch((error) => {
+                        setOnload(false)
+                        if(import.meta.env.VITE_REACT_APP_BE_ENV == "DEV") {
+                            console.log(error)
+                        }
+                    });
                     Swal.fire({
                         title: "Sukses!",
                         text: "Hasil analisa permohonan berhasil " + (data.idDok21 ? "diedit." : "disimpan."),
@@ -101,7 +121,7 @@ function DocK21() {
         })
         .catch((error) => {
             setOnload(false)
-            if(import.meta.env.VITE_BE_ENV == "DEV") {
+            if(import.meta.env.VITE_REACT_APP_BE_ENV == "DEV") {
                 console.log(error)
             }
             Swal.fire({
@@ -173,7 +193,7 @@ function DocK21() {
                 }
             })
             .catch((error) => {
-                if(import.meta.env.VITE_BE_ENV == "DEV") {
+                if(import.meta.env.VITE_REACT_APP_BE_ENV == "DEV") {
                     console.log(error)
                 }
                 setData(values => ({...values,
@@ -242,7 +262,7 @@ function DocK21() {
                 }
             })
             .catch((error) => {
-                if(import.meta.env.VITE_BE_ENV == "DEV") {
+                if(import.meta.env.VITE_REACT_APP_BE_ENV == "DEV") {
                     console.log(error)
                 }
                 if(error.response) {
@@ -294,7 +314,7 @@ function DocK21() {
                 }
             })
             .catch((error) => {
-                if(import.meta.env.VITE_BE_ENV == "DEV") {
+                if(import.meta.env.VITE_REACT_APP_BE_ENV == "DEV") {
                     console.log(error)
                 }
                 setData(values => ({...values,
@@ -365,7 +385,7 @@ function DocK21() {
                 }
             })
             .catch((error) => {
-                if(import.meta.env.VITE_BE_ENV == "DEV") {
+                if(import.meta.env.VITE_REACT_APP_BE_ENV == "DEV") {
                     console.log(error)
                 }
                 if(error.response) {
@@ -522,7 +542,7 @@ function DocK21() {
                                                                                     <td>{index + 1}</td>
                                                                                     <td>{data.nama_dokumen}</td>
                                                                                     <td>{data.no_dokumen}</td>
-                                                                                    <td><a href={import.meta.env.VITE_BE_LINK + data.efile} target='_blank' rel='noreferrer'>{data.efile}</a></td>
+                                                                                    <td><a href={import.meta.env.VITE_REACT_APP_BE_LINK + data.efile} target='_blank' rel='noreferrer'>{data.efile}</a></td>
                                                                                 </tr>
                                                                             ))
                                                                         ) : null

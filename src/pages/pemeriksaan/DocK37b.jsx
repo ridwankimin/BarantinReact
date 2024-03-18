@@ -77,17 +77,54 @@ function DocK37b() {
                         resHsy
                         .then((response) => {
                             if(response.data.status == 201) {
-                                if(import.meta.env.VITE_BE_ENV == "DEV") {
+                                if(import.meta.env.VITE_REACT_APP_BE_ENV == "DEV") {
                                     console.log("history saved")
                                 }
                             }
                         })
                         .catch((error) => {
-                            if(import.meta.env.VITE_BE_ENV == "DEV") {
+                            if(import.meta.env.VITE_REACT_APP_BE_ENV == "DEV") {
                                 console.log(error)
                             }
                         });
                         //end save history
+
+                        const rekom = data.rekom37b
+                        const resRekom = log.rekomHistory(data.idPtk, response.data.data.id, rekom[0]);
+                        resRekom
+                        .then((response) => {
+                            if(response.data) {
+                                if(response.data.status == 201) {
+                                    if(import.meta.env.VITE_REACT_APP_BE_ENV == "DEV") {
+                                        console.log("History saved")
+                                    }
+                                }
+                            }
+                        })
+                        .catch((error) => {
+                            if(import.meta.env.VITE_REACT_APP_BE_ENV == "DEV") {
+                                console.log(error)
+                            }
+                        });
+                        
+                        if(rekom[1]) {
+                            const resRekom = log.rekomHistory(data.idPtk, response.data.data.id, rekom[1]);
+                            resRekom
+                            .then((response) => {
+                                if(response.data) {
+                                    if(response.data.status == 201) {
+                                        if(import.meta.env.VITE_REACT_APP_BE_ENV == "DEV") {
+                                            console.log("History saved")
+                                        }
+                                    }
+                                }
+                            })
+                            .catch((error) => {
+                                if(import.meta.env.VITE_REACT_APP_BE_ENV == "DEV") {
+                                    console.log(error)
+                                }
+                            });
+                        }
 
                         Swal.fire({
                             title: "Sukses!",
@@ -109,7 +146,7 @@ function DocK37b() {
             })
             .catch((error) => {
                 setOnLoad(false)
-                if(import.meta.env.VITE_BE_ENV == "DEV") {
+                if(import.meta.env.VITE_REACT_APP_BE_ENV == "DEV") {
                     console.log(error)
                 }
                 Swal.fire({
@@ -145,13 +182,13 @@ function DocK37b() {
                         resHsy
                         .then((response) => {
                             if(response.data.status == 201) {
-                                if(import.meta.env.VITE_BE_ENV == "DEV") {
+                                if(import.meta.env.VITE_REACT_APP_BE_ENV == "DEV") {
                                     console.log("history saved")
                                 }
                             }
                         })
                         .catch((error) => {
-                            if(import.meta.env.VITE_BE_ENV == "DEV") {
+                            if(import.meta.env.VITE_REACT_APP_BE_ENV == "DEV") {
                                 console.log(error)
                             }
                         });
@@ -177,7 +214,7 @@ function DocK37b() {
             })
             .catch((error) => {
                 setOnLoad(false)
-                if(import.meta.env.VITE_BE_ENV == "DEV") {
+                if(import.meta.env.VITE_REACT_APP_BE_ENV == "DEV") {
                     console.log(error)
                 }
                 Swal.fire({
@@ -279,7 +316,7 @@ function DocK37b() {
             }
         })
         .catch((error) => {
-            if(import.meta.env.VITE_BE_ENV == "DEV") {
+            if(import.meta.env.VITE_REACT_APP_BE_ENV == "DEV") {
                 console.log(error)
             }
         });
@@ -293,7 +330,7 @@ function DocK37b() {
                 if(response.data.status == 201) {
                     refreshListKomoditas()
                     setLoadKomoditi(false)
-                    if(import.meta.env.VITE_BE_ENV == "DEV") {
+                    if(import.meta.env.VITE_REACT_APP_BE_ENV == "DEV") {
                         console.log("history saved")
                     }
                     Swal.fire({
@@ -312,7 +349,7 @@ function DocK37b() {
             .catch((error) => {
                 setLoadKomoditi(false)
                 setLoadKomoditiPesan("Terjadi error pada saat simpan, mohon refresh halaman dan coba lagi.")
-                if(import.meta.env.VITE_BE_ENV == "DEV") {
+                if(import.meta.env.VITE_REACT_APP_BE_ENV == "DEV") {
                     console.log(error)
                 }
                 Swal.fire({
@@ -388,7 +425,7 @@ function DocK37b() {
             })
             .catch((error) => {
                 setOnLoad(false)
-                if(import.meta.env.VITE_BE_ENV == "DEV") {
+                if(import.meta.env.VITE_REACT_APP_BE_ENV == "DEV") {
                     console.log(error)
                 }
                 Swal.fire({
@@ -466,7 +503,7 @@ function DocK37b() {
                 }
             })
             .catch((error) => {
-                if(import.meta.env.VITE_BE_ENV == "DEV") {
+                if(import.meta.env.VITE_REACT_APP_BE_ENV == "DEV") {
                     console.log(error)
                 }
                 if(error.response) {
@@ -508,7 +545,7 @@ function DocK37b() {
                 }
             })
             .catch((error) => {
-                if(import.meta.env.VITE_BE_ENV == "DEV") {
+                if(import.meta.env.VITE_REACT_APP_BE_ENV == "DEV") {
                     console.log(error)
                 }
                 setData(values => ({...values,
@@ -537,7 +574,7 @@ function DocK37b() {
                 }
             })
             .catch((error) => {
-                if(import.meta.env.VITE_BE_ENV == "DEV") {
+                if(import.meta.env.VITE_REACT_APP_BE_ENV == "DEV") {
                     console.log(error)
                 }
                 setData(values => ({...values,
@@ -578,7 +615,7 @@ function DocK37b() {
                 }
             })
             .catch((error) => {
-                if(import.meta.env.VITE_BE_ENV == "DEV") {
+                if(import.meta.env.VITE_REACT_APP_BE_ENV == "DEV") {
                     console.log(error)
                 }
                 setData(values => ({...values,
@@ -610,7 +647,7 @@ function DocK37b() {
                     }
                 })
                 .catch((error) => {
-                    if(import.meta.env.VITE_BE_ENV == "DEV") {
+                    if(import.meta.env.VITE_REACT_APP_BE_ENV == "DEV") {
                         console.log(error)
                     }
                     setData(values => ({...values,
@@ -642,7 +679,7 @@ function DocK37b() {
                     }
                 })
                 .catch((error) => {
-                    if(import.meta.env.VITE_BE_ENV == "DEV") {
+                    if(import.meta.env.VITE_REACT_APP_BE_ENV == "DEV") {
                         console.log(error)
                     }
                     setData(values => ({...values,
@@ -676,7 +713,7 @@ function DocK37b() {
                 }
             })
             .catch((error) => {
-                if(import.meta.env.VITE_BE_ENV == "DEV") {
+                if(import.meta.env.VITE_REACT_APP_BE_ENV == "DEV") {
                     console.log(error)
                 }
                 setData(values => ({...values,
@@ -711,7 +748,7 @@ function DocK37b() {
                 }
             })
             .catch((error) => {
-                if(import.meta.env.VITE_BE_ENV == "DEV") {
+                if(import.meta.env.VITE_REACT_APP_BE_ENV == "DEV") {
                     console.log(error)
                 }
                 setData(values => ({...values,
@@ -754,7 +791,7 @@ function DocK37b() {
                 }
             })
             .catch((error) => {
-                if(import.meta.env.VITE_BE_ENV == "DEV") {
+                if(import.meta.env.VITE_REACT_APP_BE_ENV == "DEV") {
                     console.log(error)
                 }
                 setData(values => ({...values,
@@ -788,7 +825,7 @@ function DocK37b() {
                     }
                 })
                 .catch((error) => {
-                    if(import.meta.env.VITE_BE_ENV == "DEV") {
+                    if(import.meta.env.VITE_REACT_APP_BE_ENV == "DEV") {
                         console.log(error)
                     }
                     setData(values => ({...values,
@@ -819,7 +856,7 @@ function DocK37b() {
                     }
                 })
                 .catch((error) => {
-                    if(import.meta.env.VITE_BE_ENV == "DEV") {
+                    if(import.meta.env.VITE_REACT_APP_BE_ENV == "DEV") {
                         console.log(error)
                     }
                     setData(values => ({...values,
@@ -874,7 +911,7 @@ function DocK37b() {
                 }
             })
             .catch((error) => {
-                if(import.meta.env.VITE_BE_ENV == "DEV") {
+                if(import.meta.env.VITE_REACT_APP_BE_ENV == "DEV") {
                     console.log(error)
                 }
                 if(error.response) {

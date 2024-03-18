@@ -1,4 +1,3 @@
-/* eslint-disable jsx-a11y/anchor-is-valid */
 import React, {useState} from 'react'
 import DataMasukTable from '../component/tabel/DataMasukTable'
 import { useForm } from 'react-hook-form'

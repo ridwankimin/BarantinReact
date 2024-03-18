@@ -1,7 +1,7 @@
 import axios from "axios";
 
 // const url = process.env.REACT_APP_BE_LINK;
-const url = import.meta.env.VITE_BE_LINK;
+const url = import.meta.env.VITE_REACT_APP_BE_LINK;
 // const contentType = 'application/json';
 // const qs = require('qs');
 // const tokenAuth = process.env.REACT_APP_API_KEY

@@ -60,7 +60,7 @@ function DocK31() {
         })
         .catch((error) => {
             setOnLoad(false)
-            if(import.meta.env.VITE_BE_ENV == "DEV") {
+            if(import.meta.env.VITE_REACT_APP_BE_ENV == "DEV") {
                 console.log(error)
             }
             // alert(error.response.status + " - " + error.response.data.message)
@@ -110,7 +110,7 @@ function DocK31() {
                 }
             })
             .catch((error) => {
-                if(import.meta.env.VITE_BE_ENV == "DEV") {
+                if(import.meta.env.VITE_REACT_APP_BE_ENV == "DEV") {
                     console.log(error)
                 }
                 setData(values => ({...values,
@@ -143,7 +143,7 @@ function DocK31() {
                 }
             })
             .catch((error) => {
-                if(import.meta.env.VITE_BE_ENV == "DEV") {
+                if(import.meta.env.VITE_REACT_APP_BE_ENV == "DEV") {
                     console.log(error)
                 }
                 if(error.response.data.status == 404) {
@@ -186,7 +186,7 @@ function DocK31() {
                 }
             })
             .catch((error) => {
-                if(import.meta.env.VITE_BE_ENV == "DEV") {
+                if(import.meta.env.VITE_REACT_APP_BE_ENV == "DEV") {
                     console.log(error)
                 }
                 setData(values => ({...values,
@@ -221,7 +221,7 @@ function DocK31() {
                 }
             })
             .catch((error) => {
-                if(import.meta.env.VITE_BE_ENV == "DEV") {
+                if(import.meta.env.VITE_REACT_APP_BE_ENV == "DEV") {
                     console.log(error)
                 }
                 if(error.response.data.status == 404) {
@@ -483,7 +483,7 @@ function DocK31() {
                                                                         <td>{index + 1}</td>
                                                                         <td>{data.nama_dokumen}</td>
                                                                         <td>{data.no_dokumen}</td>
-                                                                        <td><a href={import.meta.env.VITE_BE_LINK + data.efile} target='_blank' rel='noreferrer'>{data.efile}</a></td>
+                                                                        <td><a href={import.meta.env.VITE_REACT_APP_BE_LINK + data.efile} target='_blank' rel='noreferrer'>{data.efile}</a></td>
                                                                     </tr>
                                                                 ))
                                                             ) : null

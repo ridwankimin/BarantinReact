@@ -1,3 +1,4 @@
+/* eslint-disable react/prop-types */
 /* eslint-disable eqeqeq */
 import React, { useCallback, useEffect, useMemo, useState } from 'react'
 import DataTable from 'react-data-table-component'

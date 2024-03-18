@@ -1,8 +1,8 @@
-import { useCallback, useEffect, useMemo, useState } from 'react';
+import { useState } from 'react';
 import SatuanJson from './satuan.json'
-import Master from '../Master';
+import React from 'react';
 
-function MasterSatuan(props) {
+function MasterSatuan() {
    let [dataSatuan] = useState(SatuanJson);
 
 //    let master = useMemo(() => new Master(), [])

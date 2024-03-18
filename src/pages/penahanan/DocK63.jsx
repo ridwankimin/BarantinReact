@@ -79,17 +79,34 @@ function DocK63() {
                         resHsy
                         .then((response) => {
                             if(response.data.status == 201) {
-                                if(import.meta.env.VITE_BE_ENV == "DEV") {
+                                if(import.meta.env.VITE_REACT_APP_BE_ENV == "DEV") {
                                     console.log("history saved")
                                 }
                             }
                         })
                         .catch((error) => {
-                            if(import.meta.env.VITE_BE_ENV == "DEV") {
+                            if(import.meta.env.VITE_REACT_APP_BE_ENV == "DEV") {
                                 console.log(error)
                             }
                         });
                         //end save history
+
+                        const resRekom = log.rekomHistory(data.idPtk, response.data.data.id, data.rekomendasi);
+                        resRekom
+                        .then((response) => {
+                            if(response.data) {
+                                if(response.data.status == 201) {
+                                    if(import.meta.env.VITE_REACT_APP_BE_ENV == "DEV") {
+                                        console.log("History saved")
+                                    }
+                                }
+                            }
+                        })
+                        .catch((error) => {
+                            if(import.meta.env.VITE_REACT_APP_BE_ENV == "DEV") {
+                                console.log(error)
+                            }
+                        });
 
                         Swal.fire({
                             title: "Sukses!",
@@ -109,7 +126,7 @@ function DocK63() {
             })
             .catch((error) => {
                 setOnLoad(false)
-                if(import.meta.env.VITE_BE_ENV == "DEV") {
+                if(import.meta.env.VITE_REACT_APP_BE_ENV == "DEV") {
                     console.log(error)
                 }
                 Swal.fire({
@@ -193,7 +210,7 @@ function DocK63() {
             })
             .catch((error) => {
                 setOnLoad(false)
-                if(import.meta.env.VITE_BE_ENV == "DEV") {
+                if(import.meta.env.VITE_REACT_APP_BE_ENV == "DEV") {
                     console.log(error)
                 }
                 Swal.fire({
@@ -241,7 +258,7 @@ function DocK63() {
                 if(response.data.status == 201) {
                     refreshListKomoditas()
                     setLoadKomoditi(false)
-                    if(import.meta.env.VITE_BE_ENV == "DEV") {
+                    if(import.meta.env.VITE_REACT_APP_BE_ENV == "DEV") {
                         console.log("history saved")
                     }
                     Swal.fire({
@@ -260,7 +277,7 @@ function DocK63() {
             .catch((error) => {
                 setLoadKomoditi(false)
                 setLoadKomoditiPesan("Terjadi error pada saat simpan, mohon refresh halaman dan coba lagi.")
-                if(import.meta.env.VITE_BE_ENV == "DEV") {
+                if(import.meta.env.VITE_REACT_APP_BE_ENV == "DEV") {
                     console.log(error)
                 }
                 Swal.fire({
@@ -284,7 +301,7 @@ function DocK63() {
             }
         })
         .catch((error) => {
-            if(import.meta.env.VITE_BE_ENV == "DEV") {
+            if(import.meta.env.VITE_REACT_APP_BE_ENV == "DEV") {
                 console.log(error)
             }
         });
@@ -341,7 +358,7 @@ function DocK63() {
                             }
                         })
                         .catch((error) => {
-                            if(import.meta.env.VITE_BE_ENV == "DEV") {
+                            if(import.meta.env.VITE_REACT_APP_BE_ENV == "DEV") {
                                 console.log(error)
                             }
                             if(error.response) {
@@ -368,7 +385,7 @@ function DocK63() {
                 }
             })
             .catch((error) => {
-                if(import.meta.env.VITE_BE_ENV == "DEV") {
+                if(import.meta.env.VITE_REACT_APP_BE_ENV == "DEV") {
                     console.log(error)
                 }
                 if(error.response) {
@@ -424,7 +441,7 @@ function DocK63() {
                 }
             })
             .catch((error) => {
-                if(import.meta.env.VITE_BE_ENV == "DEV") {
+                if(import.meta.env.VITE_REACT_APP_BE_ENV == "DEV") {
                     console.log(error)
                 }
                 if(error.response) {
@@ -469,7 +486,7 @@ function DocK63() {
                 }
             })
             .catch((error) => {
-                if(import.meta.env.VITE_BE_ENV == "DEV") {
+                if(import.meta.env.VITE_REACT_APP_BE_ENV == "DEV") {
                     console.log(error)
                 }
                 if(error.response) {
@@ -511,7 +528,7 @@ function DocK63() {
                 }
             })
             .catch((error) => {
-                if(import.meta.env.VITE_BE_ENV == "DEV") {
+                if(import.meta.env.VITE_REACT_APP_BE_ENV == "DEV") {
                     console.log(error)
                 }
                 if(error.response) {
@@ -553,7 +570,7 @@ function DocK63() {
                 }
             })
             .catch((error) => {
-                if(import.meta.env.VITE_BE_ENV == "DEV") {
+                if(import.meta.env.VITE_REACT_APP_BE_ENV == "DEV") {
                     console.log(error)
                 }
                 if(error.response) {
@@ -599,7 +616,7 @@ function DocK63() {
                 }
             })
             .catch((error) => {
-                if(import.meta.env.VITE_BE_ENV == "DEV") {
+                if(import.meta.env.VITE_REACT_APP_BE_ENV == "DEV") {
                     console.log(error)
                 }
                 if(error.response) {
@@ -655,7 +672,7 @@ function DocK63() {
                 }
             })
             .catch((error) => {
-                if(import.meta.env.VITE_BE_ENV == "DEV") {
+                if(import.meta.env.VITE_REACT_APP_BE_ENV == "DEV") {
                     console.log(error)
                 }
                 if(error.response) {
@@ -702,7 +719,7 @@ function DocK63() {
                 }
             })
             .catch((error) => {
-                if(import.meta.env.VITE_BE_ENV == "DEV") {
+                if(import.meta.env.VITE_REACT_APP_BE_ENV == "DEV") {
                     console.log(error)
                 }
                 if(error.response) {
@@ -744,7 +761,7 @@ function DocK63() {
                 }
             })
             .catch((error) => {
-                if(import.meta.env.VITE_BE_ENV == "DEV") {
+                if(import.meta.env.VITE_REACT_APP_BE_ENV == "DEV") {
                     console.log(error)
                 }
                 if(error.response) {

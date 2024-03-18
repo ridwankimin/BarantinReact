@@ -32,6 +32,8 @@ function hasilAnalisis(e){
 
 function DocK37a() {
     let navigate = useNavigate();
+    let [data,setData] = useState({})
+    let [onLoad,setOnLoad] = useState(false)
     const {
 		register: registerAdministratif,
         setValue: setValueAdministratif,
@@ -43,10 +45,12 @@ function DocK37a() {
     const dataWatch = watchAdministratif()
 
     const onSubmit = (data) => {
+        setOnLoad(true)
         const response = model.ptkAdmin(data);
         response
         .then((response) => {
             if(response.data) {
+                setOnLoad(false)
                 if(response.data.status == 201) {
                     //start save history
                     const log = new PtkHistory();
@@ -54,17 +58,33 @@ function DocK37a() {
                     resHsy
                     .then((response) => {
                         if(response.data.status == 201) {
-                            if(import.meta.env.VITE_BE_ENV == "DEV") {
+                            if(import.meta.env.VITE_REACT_APP_BE_ENV == "DEV") {
                                 console.log("history saved")
                             }
                         }
                     })
                     .catch((error) => {
-                        if(import.meta.env.VITE_BE_ENV == "DEV") {
+                        if(import.meta.env.VITE_REACT_APP_BE_ENV == "DEV") {
                             console.log(error)
                         }
                     });
                     //end save history
+                    const resRekom = log.rekomHistory(data.idPtk, response.data.data.id, data.rekomAdmin);
+                    resRekom
+                    .then((response) => {
+                        if(response.data) {
+                            if(response.data.status == 201) {
+                                if(import.meta.env.VITE_REACT_APP_BE_ENV == "DEV") {
+                                    console.log("History saved")
+                                }
+                            }
+                        }
+                    })
+                    .catch((error) => {
+                        if(import.meta.env.VITE_REACT_APP_BE_ENV == "DEV") {
+                            console.log(error)
+                        }
+                    });
 
                     Swal.fire({
                         title: "Sukses!",
@@ -83,7 +103,8 @@ function DocK37a() {
             }
         })
         .catch((error) => {
-            if(import.meta.env.VITE_BE_ENV == "DEV") {
+            setOnLoad(false)
+            if(import.meta.env.VITE_REACT_APP_BE_ENV == "DEV") {
                 console.log(error)
             }
             Swal.fire({
@@ -100,7 +121,6 @@ function DocK37a() {
     }
 
     const idPtk = Cookies.get("idPtkPage");
-    let [data,setData] = useState({})
     useEffect(() => {
         if(idPtk) {
             setValueAdministratif("tglDok37a", (new Date()).toLocaleString('en-CA', { hourCycle: 'h24' }).replace(',', '').slice(0,16))
@@ -143,7 +163,7 @@ function DocK37a() {
                 }
             })
             .catch((error) => {
-                if(import.meta.env.VITE_BE_ENV == "DEV") {
+                if(import.meta.env.VITE_REACT_APP_BE_ENV == "DEV") {
                     console.log(error)
                 }
                 if(error.response) {
@@ -190,7 +210,7 @@ function DocK37a() {
                 }
             })
             .catch((error) => {
-                if(import.meta.env.VITE_BE_ENV == "DEV") {
+                if(import.meta.env.VITE_REACT_APP_BE_ENV == "DEV") {
                     console.log(error)
                 }
                 if(error.response) {
@@ -236,7 +256,7 @@ function DocK37a() {
                 }
             })
             .catch((error) => {
-                if(import.meta.env.VITE_BE_ENV == "DEV") {
+                if(import.meta.env.VITE_REACT_APP_BE_ENV == "DEV") {
                     console.log(error)
                 }
                 setData(values => ({...values,
@@ -275,7 +295,7 @@ function DocK37a() {
                 }
             })
             .catch((error) => {
-                if(import.meta.env.VITE_BE_ENV == "DEV") {
+                if(import.meta.env.VITE_REACT_APP_BE_ENV == "DEV") {
                     console.log(error)
                 }
                 if(error.response.data.status == 404) {
@@ -320,7 +340,7 @@ function DocK37a() {
                 }
             })
             .catch((error) => {
-                if(import.meta.env.VITE_BE_ENV == "DEV") {
+                if(import.meta.env.VITE_REACT_APP_BE_ENV == "DEV") {
                     console.log(error)
                 }
                 if(error.response) {
@@ -367,7 +387,7 @@ function DocK37a() {
                 }
             })
             .catch((error) => {
-                if(import.meta.env.VITE_BE_ENV == "DEV") {
+                if(import.meta.env.VITE_REACT_APP_BE_ENV == "DEV") {
                     console.log(error)
                 }
                 setData(values => ({...values,
@@ -408,7 +428,7 @@ function DocK37a() {
                 }
             })
             .catch((error) => {
-                if(import.meta.env.VITE_BE_ENV == "DEV") {
+                if(import.meta.env.VITE_REACT_APP_BE_ENV == "DEV") {
                     console.log(error)
                 }
                 if(error.response.data.status == 404) {
@@ -699,7 +719,7 @@ function DocK37a() {
                                                                                         <td>{index + 1}</td>
                                                                                         <td>{data.nama_dokumen}</td>
                                                                                         <td>{data.no_dokumen}</td>
-                                                                                        <td><a href={import.meta.env.VITE_BE_LINK + data.efile} target='_blank' rel='noreferrer'>{data.efile}</a></td>
+                                                                                        <td><a href={import.meta.env.VITE_REACT_APP_BE_LINK + data.efile} target='_blank' rel='noreferrer'>{data.efile}</a></td>
                                                                                     </tr>
                                                                                 ))
                                                                             ) : null

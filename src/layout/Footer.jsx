@@ -1,3 +1,4 @@
+/* eslint-disable react/prop-types */
 /* eslint-disable eqeqeq */
 import React from 'react'
 import Content from './Content'

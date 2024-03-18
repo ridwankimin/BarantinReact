@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import Master from '../Master';
+import React from 'react';
 
 function MasterProv() {
    let [dataProv,setDataProv] = useState([]);

@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 /* eslint-disable eqeqeq */
 import React, { useCallback, useEffect, useState } from 'react'
 import PersonSvg from '../../logo/svg/PersonSvg'
@@ -271,7 +272,7 @@ function DocK11() {
             }
         })
         .catch((error) => {
-            if(import.meta.env.VITE_BE_ENV == "DEV") {
+            if(import.meta.env.VITE_REACT_APP_BE_ENV == "DEV") {
                 console.log(error)
             }
             Swal.fire({
@@ -521,7 +522,7 @@ function DocK11() {
                 setdataSelect(values => ({...values, provPenerima: arraySelectProv }))
             }
         } catch (error) {
-            if(import.meta.env.VITE_BE_ENV == "DEV") {
+            if(import.meta.env.VITE_REACT_APP_BE_ENV == "DEV") {
                 console.log(error)
             }
             setdataSelect(values => ({...values, provPemohon: [] }))
@@ -548,7 +549,7 @@ function DocK11() {
                 setdataSelect(values => ({...values, [pel]: arraySelectKota}))
             }
         } catch (error) {
-        if(import.meta.env.VITE_BE_ENV == "DEV") {
+        if(import.meta.env.VITE_REACT_APP_BE_ENV == "DEV") {
                 console.log(error)
             }
         setdataSelect(values => ({...values, [pel]: []}))
@@ -593,9 +594,9 @@ function DocK11() {
                 setdataSelect(values => ({...values, "kodeHSMp": arrayKodeHS}));
             })
             .catch((error) => {
-                if(import.meta.env.VITE_BE_ENV == "DEV") {
+                if(import.meta.env.VITE_REACT_APP_BE_ENV == "DEV") {
                     console.log(error)
-                };
+                }
             });
 
             if(cekdataDiri.mediaPembawa != "T") {
@@ -632,15 +633,15 @@ function DocK11() {
                         setdataSelect(values => ({...values, "selectKomoditasMPKH": arrayKomKH}));
                     })
                     .catch((error) => {
-                        if(import.meta.env.VITE_BE_ENV == "DEV") {
+                        if(import.meta.env.VITE_REACT_APP_BE_ENV == "DEV") {
                             console.log(error)
-                        };
+                        }
                     });
                 })
                 .catch((error) => {
-                    if(import.meta.env.VITE_BE_ENV == "DEV") {
+                    if(import.meta.env.VITE_REACT_APP_BE_ENV == "DEV") {
                         console.log(error)
-                    };
+                    }
                 });
 
             } else if(cekdataDiri.mediaPembawa == "T") {
@@ -669,15 +670,15 @@ function DocK11() {
                         setdataSelect(values => ({...values, "selectKomoditasMP": arrayKomKT}))
                     })
                     .catch((error) => {
-                        if(import.meta.env.VITE_BE_ENV == "DEV") {
+                        if(import.meta.env.VITE_REACT_APP_BE_ENV == "DEV") {
                             console.log(error)
-                        };
+                        }
                     });
                 })
                 .catch((error) => {
-                    if(import.meta.env.VITE_BE_ENV == "DEV") {
+                    if(import.meta.env.VITE_REACT_APP_BE_ENV == "DEV") {
                         console.log(error)
-                    };
+                    }
                 });
 
             } else if(cekdataDiri.mediaPembawa == "I") {
@@ -708,15 +709,15 @@ function DocK11() {
                         }
                     })
                     .catch((error) => {
-                        if(import.meta.env.VITE_BE_ENV == "DEV") {
+                        if(import.meta.env.VITE_REACT_APP_BE_ENV == "DEV") {
                             console.log(error)
-                        };
+                        }
                     });
                 })
                 .catch((error) => {
-                    if(import.meta.env.VITE_BE_ENV == "DEV") {
+                    if(import.meta.env.VITE_REACT_APP_BE_ENV == "DEV") {
                         console.log(error)
-                    };
+                    }
                 });
             }
         }
@@ -755,9 +756,9 @@ function DocK11() {
             })
             .catch((error) => {
                 setOnLoad(false)
-                if(import.meta.env.VITE_BE_ENV == "DEV") {
+                if(import.meta.env.VITE_REACT_APP_BE_ENV == "DEV") {
                     console.log(error)
-                };
+                }
                 Swal.fire({
                     icon: "error",
                     title: "Dokumen gagal disimpan.",
@@ -768,16 +769,12 @@ function DocK11() {
 
     const onSubmitDetilMP = (data) => {
         let cekNilai
-        let nilaiMp
         if(cekdataDiri.mediaPembawa == "T") {
             cekNilai = data.nilaiBarangMP?.length
-            nilaiMp = data.nilaiBarangMP 
         } else if(cekdataDiri.mediaPembawa == "H"){
             cekNilai = data.nilaiBarangMPKH?.length 
-            nilaiMp = data.nilaiBarangMPKH
         } else if(cekdataDiri.mediaPembawa == "I"){
             cekNilai = data.nilaiBarangMPKI?.length 
-            nilaiMp = data.nilaiBarangMPKI
         }
         if(cekNilai >= 4) {
             if(cekdataDiri.mediaPembawa) {
@@ -809,16 +806,16 @@ function DocK11() {
                             }
                         })
                         .catch((error) => {
-                            if(import.meta.env.VITE_BE_ENV == "DEV") {
+                            if(import.meta.env.VITE_REACT_APP_BE_ENV == "DEV") {
                                 console.log(error)
                             }
                         });
                     }
                 })
                 .catch((error) => {
-                    if(import.meta.env.VITE_BE_ENV == "DEV") {
+                    if(import.meta.env.VITE_REACT_APP_BE_ENV == "DEV") {
                         console.log(error)
-                    };
+                    }
                 });
             }
         } else {
@@ -850,9 +847,9 @@ function DocK11() {
             })
             .catch((error) => {
                 setOnLoad(false)
-                if(import.meta.env.VITE_BE_ENV == "DEV") {
+                if(import.meta.env.VITE_REACT_APP_BE_ENV == "DEV") {
                     console.log(error)
-                };
+                }
                 Swal.fire({
                     icon: "error",
                     title: "Error!",
@@ -918,9 +915,9 @@ function DocK11() {
                     })
                     .catch((error) => {
                         setOnLoad(false)
-                        if(import.meta.env.VITE_BE_ENV == "DEV") {
+                        if(import.meta.env.VITE_REACT_APP_BE_ENV == "DEV") {
                             console.log(error)
-                        };
+                        }
                         Swal.fire({
                             icon: "error",
                             title: "Data Pemohon gagal disimpan.",
@@ -928,7 +925,7 @@ function DocK11() {
                             showConfirmButton: true
                         })
                     });
-                } else if (result.isDenied) {}
+                } else if (result.isDenied) { /* empty */ }
             });
         }
     };
@@ -962,9 +959,9 @@ function DocK11() {
             })
             .catch((error) => {
                 setOnLoad(false)
-                if(import.meta.env.VITE_BE_ENV == "DEV") {
+                if(import.meta.env.VITE_REACT_APP_BE_ENV == "DEV") {
                     console.log(error)
-                };
+                }
                 Swal.fire({
                     icon: "error",
                     title: "Data Pelabuhan gagal disimpan.",
@@ -1020,9 +1017,9 @@ function DocK11() {
                 })
                 .catch((error) => {
                     setOnLoad(false)
-                    if(import.meta.env.VITE_BE_ENV == "DEV") {
+                    if(import.meta.env.VITE_REACT_APP_BE_ENV == "DEV") {
                         console.log(error)
-                    };
+                    }
                     Swal.fire({
                         icon: "error",
                         title: "Data Pemohon gagal disimpan.",
@@ -1073,9 +1070,9 @@ function DocK11() {
             })
             .catch((error) => {
                 setOnLoad(false)
-                if(import.meta.env.VITE_BE_ENV == "DEV") {
+                if(import.meta.env.VITE_REACT_APP_BE_ENV == "DEV") {
                     console.log(error)
-                };
+                }
                 Swal.fire({
                     icon: "error",
                     title: "Error!",
@@ -1127,9 +1124,9 @@ function DocK11() {
             })
             .catch((error) => {
                 setOnLoad(false)
-                if(import.meta.env.VITE_BE_ENV == "DEV") {
+                if(import.meta.env.VITE_REACT_APP_BE_ENV == "DEV") {
                     console.log(error)
-                };
+                }
                 Swal.fire({
                     icon: "error",
                     title: "Error!",
@@ -1173,13 +1170,13 @@ function DocK11() {
                     resHsy
                     .then((response) => {
                         if(response.data.status == 201) {
-                            if(import.meta.env.VITE_BE_ENV == "DEV") {
+                            if(import.meta.env.VITE_REACT_APP_BE_ENV == "DEV") {
                                 console.log("history saved")
                             }
                         }
                     })
                     .catch((error) => {
-                        if(import.meta.env.VITE_BE_ENV == "DEV") {
+                        if(import.meta.env.VITE_REACT_APP_BE_ENV == "DEV") {
                             console.log(error)
                         }
                     });
@@ -1203,9 +1200,9 @@ function DocK11() {
             })
             .catch((error) => {
                 setOnLoad(false)
-                if(import.meta.env.VITE_BE_ENV == "DEV") {
+                if(import.meta.env.VITE_REACT_APP_BE_ENV == "DEV") {
                     console.log(error)
-                };
+                }
                 Swal.fire({
                     icon: "error",
                     title: error.response.data.status + " - " + error.data.message,
@@ -1248,7 +1245,7 @@ function DocK11() {
         })
         .catch((error) => {
             setOnLoad(false)
-            if(import.meta.env.VITE_BE_ENV == "DEV") {
+            if(import.meta.env.VITE_REACT_APP_BE_ENV == "DEV") {
                 console.log(error)
             }
             Swal.fire({
@@ -1340,7 +1337,7 @@ function DocK11() {
                 }
             })
             .catch((error) => {
-                if(import.meta.env.VITE_BE_ENV == "DEV") {
+                if(import.meta.env.VITE_REACT_APP_BE_ENV == "DEV") {
                     console.log(error)
                 }
             });
@@ -1358,7 +1355,7 @@ function DocK11() {
                 }
             })
             .catch((error) => {
-                if(import.meta.env.VITE_BE_ENV == "DEV") {
+                if(import.meta.env.VITE_REACT_APP_BE_ENV == "DEV") {
                     console.log(error)
                 }
             });
@@ -1376,7 +1373,7 @@ function DocK11() {
                 }
             })
             .catch((error) => {
-                if(import.meta.env.VITE_BE_ENV == "DEV") {
+                if(import.meta.env.VITE_REACT_APP_BE_ENV == "DEV") {
                     console.log(error)
                 }
             });
@@ -1424,7 +1421,7 @@ function DocK11() {
             }
         })
         .catch((error) => {
-            if(import.meta.env.VITE_BE_ENV == "DEV") {
+            if(import.meta.env.VITE_REACT_APP_BE_ENV == "DEV") {
                 console.log(error)
             }
         });
@@ -1508,7 +1505,7 @@ function DocK11() {
             }
         })
         .catch((error) => {
-            if(import.meta.env.VITE_BE_ENV == "DEV") {
+            if(import.meta.env.VITE_REACT_APP_BE_ENV == "DEV") {
                 console.log(error)
             }
         });
@@ -1561,9 +1558,9 @@ function DocK11() {
                             setdataSelect(values => ({...values, "kodeHSMp": arrayDataHS}));
                         })
                         .catch((error) => {
-                            if(import.meta.env.VITE_BE_ENV == "DEV") {
+                            if(import.meta.env.VITE_REACT_APP_BE_ENV == "DEV") {
                                 console.log(error)
-                            };
+                            }
                         });
 
                         // handleKomKHIDetil(response.data.data.ptk.jenis_media_pembawa_id)
@@ -1581,9 +1578,9 @@ function DocK11() {
                                 setdataSelect(values => ({...values, "kodeHSMp": arrayKodeHS}));
                             })
                             .catch((error) => {
-                                if(import.meta.env.VITE_BE_ENV == "DEV") {
+                                if(import.meta.env.VITE_REACT_APP_BE_ENV == "DEV") {
                                     console.log(error)
-                                };
+                                }
                             });
                             
                             if(response.data.data.ptk.jenis_karantina == "H") {
@@ -1600,9 +1597,9 @@ function DocK11() {
                                     setdataSelect(values => ({...values, "peruntukanMPKH": arraySelectKlasKH}));
                                 })
                                 .catch((error) => {
-                                    if(import.meta.env.VITE_BE_ENV == "DEV") {
+                                    if(import.meta.env.VITE_REACT_APP_BE_ENV == "DEV") {
                                         console.log(error)
-                                    };
+                                    }
                                 });
                                 
                                 const resKomKH = modelMaster.masterKomKH(response.data.data.ptk.jenis_media_pembawa_id)
@@ -1618,9 +1615,9 @@ function DocK11() {
                                     setdataSelect(values => ({...values, "selectKomoditasMPKH": arrayKomKH}));
                                 })
                                 .catch((error) => {
-                                    if(import.meta.env.VITE_BE_ENV == "DEV") {
+                                    if(import.meta.env.VITE_REACT_APP_BE_ENV == "DEV") {
                                         console.log(error)
-                                    };
+                                    }
                                 });
                             
                             } else if(response.data.data.ptk.jenis_karantina == "T") {
@@ -1637,9 +1634,9 @@ function DocK11() {
                                     setdataSelect(values => ({...values, "peruntukanMP": arraySelectKlasKT}))
                                 })
                                 .catch((error) => {
-                                    if(import.meta.env.VITE_BE_ENV == "DEV") {
+                                    if(import.meta.env.VITE_REACT_APP_BE_ENV == "DEV") {
                                         console.log(error)
-                                    };
+                                    }
                                 });
                                 
                                 const resKomKT = modelMaster.masterKomKT()
@@ -1655,9 +1652,9 @@ function DocK11() {
                                     setdataSelect(values => ({...values, "selectKomoditasMP": arrayKomKT}))
                                 })
                                 .catch((error) => {
-                                    if(import.meta.env.VITE_BE_ENV == "DEV") {
+                                    if(import.meta.env.VITE_REACT_APP_BE_ENV == "DEV") {
                                         console.log(error)
-                                    };
+                                    }
                                 });
                 
                             } else if(response.data.data.ptk.jenis_karantina == "I") {
@@ -1674,9 +1671,9 @@ function DocK11() {
                                     setdataSelect(values => ({...values, "peruntukanMPKI": arraySelectKlasKI}))
                                 })
                                 .catch((error) => {
-                                    if(import.meta.env.VITE_BE_ENV == "DEV") {
+                                    if(import.meta.env.VITE_REACT_APP_BE_ENV == "DEV") {
                                         console.log(error)
-                                    };
+                                    }
                                 });
                                 
                                 const resKomKI = modelMaster.masterKomKI()
@@ -1694,9 +1691,9 @@ function DocK11() {
                                     }
                                 })
                                 .catch((error) => {
-                                    if(import.meta.env.VITE_BE_ENV == "DEV") {
+                                    if(import.meta.env.VITE_REACT_APP_BE_ENV == "DEV") {
                                         console.log(error)
-                                    };
+                                    }
                                 });
                             }
                         }
@@ -1888,9 +1885,9 @@ function DocK11() {
                 }
             })
             .catch((error) => {
-                if(import.meta.env.VITE_BE_ENV == "DEV") {
+                if(import.meta.env.VITE_REACT_APP_BE_ENV == "DEV") {
                     console.log(error)
-                };
+                }
             });
         }
     },[idPtk, handleKota, handlePelabuhan, setValueDetilMP, setValueDokPeriksa, setValueDokumen, setValueKonfirmasi, setValueKontainer, setValueMP, setValuePelabuhan, setValuePemohon, setValueVerify])
@@ -2035,41 +2032,41 @@ function DocK11() {
                                                 {/* <!-- Hewan --> */}
                                                 <div style={{display: cekdataDiri.mediaPembawa == 'H' ? 'block' : 'none'}}>
                                                     <div className="form-check form-check-inline">
-                                                        <input autoComplete="off" className="form-check-input" type="radio" onChange={(e) => console.log(e.target.value)} disabled={dataIdPage.noAju ? (cekdataDiri.jenisMp == "1" ? false : true) : false} name="jenisMp" id="hidup" value="1" {...registerPemohon("jenisMp", { required: "Mohon pilih jenis media pembawa."})} />
+                                                        <input autoComplete="off" className="form-check-input" type="radio" onChange={() => handleKomKHIDetil()} disabled={dataIdPage.noAju ? (cekdataDiri.jenisMp == "1" ? false : true) : false} name="jenisMp" id="hidup" value="1" {...registerPemohon("jenisMp", { required: "Mohon pilih jenis media pembawa."})} />
                                                         <label className="form-check-label" htmlFor="hidup">Hewan Hidup</label>
                                                     </div>
                                                     <div className="form-check form-check-inline">
-                                                        <input autoComplete="off" className="form-check-input" type="radio" onChange={(e) => handleKomKHIDetil()} disabled={dataIdPage.noAju ? (cekdataDiri.jenisMp == "2" ? false : true) : false} name="jenisMp" id="produk" value="2" {...registerPemohon("jenisMp")} />
+                                                        <input autoComplete="off" className="form-check-input" type="radio" onChange={() => handleKomKHIDetil()} disabled={dataIdPage.noAju ? (cekdataDiri.jenisMp == "2" ? false : true) : false} name="jenisMp" id="produk" value="2" {...registerPemohon("jenisMp")} />
                                                         <label className="form-check-label" htmlFor="produk">Produk Hewan</label>
                                                     </div>
                                                     <div className="form-check form-check-inline">
-                                                        <input autoComplete="off" className="form-check-input" type="radio" onChange={(e) => handleKomKHIDetil()} disabled={dataIdPage.noAju ? (cekdataDiri.jenisMp == "3" ? false : true) : false} name="jenisMp" id="mpl" value="3" {...registerPemohon("jenisMp")} />
+                                                        <input autoComplete="off" className="form-check-input" type="radio" onChange={() => handleKomKHIDetil()} disabled={dataIdPage.noAju ? (cekdataDiri.jenisMp == "3" ? false : true) : false} name="jenisMp" id="mpl" value="3" {...registerPemohon("jenisMp")} />
                                                         <label className="form-check-label" htmlFor="mpl">Media Pembawa Lain</label>
                                                     </div>
                                                 </div>
                                                 {/* <!-- Ikan --> */}
                                                 <div style={{display: cekdataDiri.mediaPembawa == 'I' ? 'block' : 'none'}}>
                                                     <div className="form-check form-check-inline">
-                                                        <input autoComplete="off" className="form-check-input" type="radio" onChange={(e) => handleKomKHIDetil()} disabled={dataIdPage.noAju ? (cekdataDiri.jenisMp == "6" ? false : true) : false} name="jenisMp" id="hidupKI" value="6" {...registerPemohon("jenisMp")} />
+                                                        <input autoComplete="off" className="form-check-input" type="radio" onChange={() => handleKomKHIDetil()} disabled={dataIdPage.noAju ? (cekdataDiri.jenisMp == "6" ? false : true) : false} name="jenisMp" id="hidupKI" value="6" {...registerPemohon("jenisMp")} />
                                                         <label className="form-check-label" htmlFor="hidupKI">Ikan Hidup</label>
                                                     </div>
                                                     <div className="form-check form-check-inline">
-                                                        <input autoComplete="off" className="form-check-input" type="radio" onChange={(e) => handleKomKHIDetil()} disabled={dataIdPage.noAju ? (cekdataDiri.jenisMp == "7" ? false : true) : false} name="jenisMp" id="produkKI" value="7" {...registerPemohon("jenisMp")} />
+                                                        <input autoComplete="off" className="form-check-input" type="radio" onChange={() => handleKomKHIDetil()} disabled={dataIdPage.noAju ? (cekdataDiri.jenisMp == "7" ? false : true) : false} name="jenisMp" id="produkKI" value="7" {...registerPemohon("jenisMp")} />
                                                         <label className="form-check-label" htmlFor="produkKI">Produk Ikan</label>
                                                     </div>
                                                     <div className="form-check form-check-inline">
-                                                        <input autoComplete="off" className="form-check-input" type="radio" onChange={(e) => handleKomKHIDetil()} disabled={dataIdPage.noAju ? (cekdataDiri.jenisMp == "8" ? false : true) : false} name="jenisMp" id="mplKI" value="8" {...registerPemohon("jenisMp")} />
+                                                        <input autoComplete="off" className="form-check-input" type="radio" onChange={() => handleKomKHIDetil()} disabled={dataIdPage.noAju ? (cekdataDiri.jenisMp == "8" ? false : true) : false} name="jenisMp" id="mplKI" value="8" {...registerPemohon("jenisMp")} />
                                                         <label className="form-check-label" htmlFor="mplKI">Media Pembawa Lain</label>
                                                     </div>
                                                 </div>
                                                 {/* <!-- Tumbuhan --> */}
                                                 <div style={{display: cekdataDiri.mediaPembawa == 'T' ? 'block' : 'none'}}>
                                                     <div className="form-check form-check-inline">
-                                                        <input autoComplete="off" className="form-check-input" type="radio" name="jenisMp" id="benih" onChange={(e) => handleKomKHIDetil()} disabled={dataIdPage.noAju ? (cekdataDiri.jenisMp == "4" ? false : true) : false} value="4" {...registerPemohon("jenisMp")} />
+                                                        <input autoComplete="off" className="form-check-input" type="radio" name="jenisMp" id="benih" onChange={() => handleKomKHIDetil()} disabled={dataIdPage.noAju ? (cekdataDiri.jenisMp == "4" ? false : true) : false} value="4" {...registerPemohon("jenisMp")} />
                                                         <label className="form-check-label" htmlFor="benih">Benih</label>
                                                     </div>
                                                     <div className="form-check form-check-inline mb-3">
-                                                        <input autoComplete="off" className="form-check-input" type="radio" name="jenisMp" id="nonbenih" onChange={(e) => handleKomKHIDetil()} disabled={dataIdPage.noAju ? (cekdataDiri.jenisMp == "5" ? false : true) : false} value="5" {...registerPemohon("jenisMp")} />
+                                                        <input autoComplete="off" className="form-check-input" type="radio" name="jenisMp" id="nonbenih" onChange={() => handleKomKHIDetil()} disabled={dataIdPage.noAju ? (cekdataDiri.jenisMp == "5" ? false : true) : false} value="5" {...registerPemohon("jenisMp")} />
                                                         <label className="form-check-label" htmlFor="nonbenih">Non Benih</label>
                                                     </div>
                                                 </div>
@@ -3417,7 +3414,7 @@ function DocK11() {
                                                                                         <td>{moment(data.tanggal_dokumen).format('YYYY-MM-DD')}</td>
                                                                                         <td>{data.negara}</td>
                                                                                         <td>{data.keterangan}</td>
-                                                                                        <td><a href={import.meta.env.VITE_BE_LINK + data.efile} target='_blank' rel='noreferrer'>[LIHAT FILE]</a></td>
+                                                                                        <td><a href={import.meta.env.VITE_REACT_APP_BE_LINK + data.efile} target='_blank' rel='noreferrer'>[LIHAT FILE]</a></td>
                                                                                         <td>
                                                                                             <div className="d-grid gap-2">
                                                                                                 <button type="button" className="btn p-0 hide-arrow dropdown-toggle" aria-expanded="false" data-bs-toggle="dropdown">
@@ -3526,7 +3523,7 @@ function DocK11() {
                                         <h4 className="mt-2">Terimakasih! 😇</h4>
                                         <p>Silahkan cek kembali kelengkapan data yang diinput!</p>
                                         <p>
-                                            Silahkan klik tombol "Simpan & Kirim" jika data yang diinput sudah benar.
+                                            Silahkan klik tombol &quot;Simpan & Kirim&quot; jika data yang diinput sudah benar.
                                         </p>
                                     </div>
                                     <div className="col-md-12 d-flex justify-content-between">

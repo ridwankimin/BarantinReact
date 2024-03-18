@@ -2,6 +2,7 @@ import { useState } from 'react';
 import MasterKemasanJson from './jenisKemasan.json';
 // import Master from '../Master';
 // import Master from '../Master';
+import React from 'react';
 
 // function kemasanJson() {
   // const ret = new 

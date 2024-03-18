@@ -1,7 +1,6 @@
 
 import axios from "axios";
 import Cookies from "js-cookie";
-import { v4 as uuidv4 } from 'uuid';
 // const url = process.env.REACT_APP_BE_LINK;
 const url = import.meta.env.VITE_BE_LINK;
 
@@ -206,9 +205,7 @@ export default class PtkHistory {
   }
   
   rekomHistory(idPtk, idDok, rekom) {
-    const uuid = uuidv4();
     let datasend = {
-      id: uuid,
       ptk_id: idPtk,
       pn_id: idDok,
       rekomendasi_id: rekom,

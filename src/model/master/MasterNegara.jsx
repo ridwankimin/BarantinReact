@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import Master from '../Master';
-import Select from 'react-select';
+import React from 'react';
 
 function MasterNegara() {
    let [dataNegara,setDataNegara] = useState([]);

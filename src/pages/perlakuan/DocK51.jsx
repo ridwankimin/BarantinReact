@@ -67,13 +67,13 @@ function DocK51() {
                         resHsy
                         .then((response) => {
                             if(response.data.status == 201) {
-                                if(import.meta.env.VITE_BE_ENV == "DEV") {
+                                if(import.meta.env.VITE_REACT_APP_BE_ENV == "DEV") {
                                     console.log("history saved")
                                 }
                             }
                         })
                         .catch((error) => {
-                            if(import.meta.env.VITE_BE_ENV == "DEV") {
+                            if(import.meta.env.VITE_REACT_APP_BE_ENV == "DEV") {
                                 console.log(error)
                             }
                         })
@@ -91,7 +91,7 @@ function DocK51() {
             })
             .catch((error) => {
                 setOnLoad(false)
-                if(import.meta.env.VITE_BE_ENV == "DEV") {
+                if(import.meta.env.VITE_REACT_APP_BE_ENV == "DEV") {
                     console.log(error)
                 }
                 Swal.fire({
@@ -133,6 +133,7 @@ function DocK51() {
 
     function onSubmitMPk51(data) {
         setOnLoad(true)
+        let cekVolume = false
         if((data.jantanP4 != null) || (data.betinaP4 != null) ) {
             if((parseFloat(typeof data.jantanP4 == "string" ? data.jantanP4.replace(/,/g, "") : data.jantanP4) > parseFloat(cekData.jantanP4)) || (parseFloat((typeof data.betinaP4 == "string" ? data.betinaP4.replace(/,/g, "") : data.betinaP4)) > parseFloat(cekData.betinaP4))) {
                 cekVolume = false
@@ -174,7 +175,7 @@ function DocK51() {
             })
             .catch((error) => {
                 setOnLoad(false)
-                if(import.meta.env.VITE_BE_ENV == "DEV") {
+                if(import.meta.env.VITE_REACT_APP_BE_ENV == "DEV") {
                     console.log(error)
                 }
                 Swal.fire({
@@ -220,7 +221,7 @@ function DocK51() {
                     if(response.data.status == 201) {
                         refreshListKomoditas()
                         setLoadKomoditi(false)
-                        if(import.meta.env.VITE_BE_ENV == "DEV") {
+                        if(import.meta.env.VITE_REACT_APP_BE_ENV == "DEV") {
                             console.log("history saved")
                         }
                         Swal.fire({
@@ -239,7 +240,7 @@ function DocK51() {
                 .catch((error) => {
                     setLoadKomoditi(false)
                     setLoadKomoditiPesan("Terjadi error pada saat simpan, mohon refresh halaman dan coba lagi.")
-                    if(import.meta.env.VITE_BE_ENV == "DEV") {
+                    if(import.meta.env.VITE_REACT_APP_BE_ENV == "DEV") {
                         console.log(error)
                     }
                     Swal.fire({
@@ -264,7 +265,7 @@ function DocK51() {
             }
         })
         .catch((error) => {
-            if(import.meta.env.VITE_BE_ENV == "DEV") {
+            if(import.meta.env.VITE_REACT_APP_BE_ENV == "DEV") {
                 console.log(error)
             }
         })
@@ -331,7 +332,7 @@ function DocK51() {
                             }
                         })
                         .catch((error) => {
-                            if(import.meta.env.VITE_BE_ENV == "DEV") {
+                            if(import.meta.env.VITE_REACT_APP_BE_ENV == "DEV") {
                                 console.log(error)
                             }
                             setData(values => ({...values,
@@ -356,7 +357,7 @@ function DocK51() {
                     errorPtkPage: "Gagal load data PTK",
                     errorKomoditas: "Gagal load data Komoditas"
                 }))
-                if(import.meta.env.VITE_BE_ENV == "DEV") {
+                if(import.meta.env.VITE_REACT_APP_BE_ENV == "DEV") {
                     console.log(error)
                 }
             })
@@ -386,7 +387,7 @@ function DocK51() {
                 }
             })
             .catch((error) => {
-                if(import.meta.env.VITE_BE_ENV == "DEV") {
+                if(import.meta.env.VITE_REACT_APP_BE_ENV == "DEV") {
                     console.log(error)
                 }
                 if(error.response) {
@@ -507,7 +508,7 @@ function DocK51() {
                     })
                     .catch((error) => {
                         // setData()
-                        if(import.meta.env.VITE_BE_ENV == "DEV") {
+                        if(import.meta.env.VITE_REACT_APP_BE_ENV == "DEV") {
                             console.log(error)
                         }
                         if(error.response.status == 404) {
@@ -531,7 +532,7 @@ function DocK51() {
                         errorDok51: "Gagal load Data Sertifikat Perlakuan",
                     }))
                 }
-                if(import.meta.env.VITE_BE_ENV == "DEV") {
+                if(import.meta.env.VITE_REACT_APP_BE_ENV == "DEV") {
                     console.log(error)
                 }
             })
@@ -575,7 +576,7 @@ function DocK51() {
                 setData(values => ({...values,
                     errorPtkPage: "Gagal load data PTK"
                 }))
-                if(import.meta.env.VITE_BE_ENV == "DEV") {
+                if(import.meta.env.VITE_REACT_APP_BE_ENV == "DEV") {
                     console.log(error)
                 }
             })
@@ -608,7 +609,7 @@ function DocK51() {
                 }
             })
             .catch((error) => {
-                if(import.meta.env.VITE_BE_ENV == "DEV") {
+                if(import.meta.env.VITE_REACT_APP_BE_ENV == "DEV") {
                     console.log(error)
                 }
                 setData(values => ({...values,
@@ -643,7 +644,7 @@ function DocK51() {
                 }
             })
             .catch((error) => {
-                if(import.meta.env.VITE_BE_ENV == "DEV") {
+                if(import.meta.env.VITE_REACT_APP_BE_ENV == "DEV") {
                     console.log(error)
                 }
                 if(error.response) {
@@ -720,7 +721,7 @@ function DocK51() {
                         errorDok51: "Gagal load Data Sertifikat Perlakuan",
                     }))
                 }
-                if(import.meta.env.VITE_BE_ENV == "DEV") {
+                if(import.meta.env.VITE_REACT_APP_BE_ENV == "DEV") {
                     console.log(error)
                 }
             })
@@ -778,7 +779,7 @@ function DocK51() {
             })
             .catch((error) => {
                 // setData()
-                if(import.meta.env.VITE_BE_ENV == "DEV") {
+                if(import.meta.env.VITE_REACT_APP_BE_ENV == "DEV") {
                     console.log(error)
                 }
                 if(error.response.status == 404) {

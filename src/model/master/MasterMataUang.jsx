@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import MataUangJson from './mataUang.json'
 // import Master from '../Master';
+import React from 'react';
 
 function MasterMataUang() {
    let [dataMataUang] = useState(MataUangJson);

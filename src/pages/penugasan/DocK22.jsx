@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 /* eslint-disable eqeqeq */
 import Cookies from 'js-cookie';
 import React, { useEffect } from 'react'
@@ -80,7 +81,7 @@ function DocK22() {
         const response = modelSurtug.simpanHeader(data);
             response
             .then((response) => {
-                if(import.meta.env.VITE_BE_ENV == "DEV") {
+                if(import.meta.env.VITE_REACT_APP_BE_ENV == "DEV") {
                     console.log(response);
                 }
                 if(response.data) {
@@ -112,7 +113,7 @@ function DocK22() {
                             }
                         })
                         .catch((error) => {
-                            if(import.meta.env.VITE_BE_ENV == "DEV") {
+                            if(import.meta.env.VITE_REACT_APP_BE_ENV == "DEV") {
                                 console.log(error)
                             }
                             setListDataDetil([])
@@ -131,7 +132,7 @@ function DocK22() {
             })
             .catch((error) => {
                 setOnload(false)
-                if(import.meta.env.VITE_BE_ENV == "DEV") {
+                if(import.meta.env.VITE_REACT_APP_BE_ENV == "DEV") {
                     console.log(error)
                 }
                 Swal.fire({
@@ -166,7 +167,7 @@ function DocK22() {
         const response = modelSurtug.simpanDetil(data);
             response
             .then((response) => {
-                if(import.meta.env.VITE_BE_ENV == "DEV") {
+                if(import.meta.env.VITE_REACT_APP_BE_ENV == "DEV") {
                     console.log(response);
                 }
                 if(response.data) {
@@ -184,7 +185,7 @@ function DocK22() {
             })
             .catch((error) => {
                 setOnload(false)
-                if(import.meta.env.VITE_BE_ENV == "DEV") {
+                if(import.meta.env.VITE_REACT_APP_BE_ENV == "DEV") {
                     console.log(error)
                 }
                 Swal.fire({
@@ -207,7 +208,7 @@ function DocK22() {
     //         }
     //     })
     //     .catch((error) => {
-    //         if(import.meta.env.VITE_BE_ENV == "DEV") {
+    //         if(import.meta.env.VITE_REACT_APP_BE_ENV == "DEV") {
     //             console.log(error)
     //         }
     //         setListDataHeader([])
@@ -229,7 +230,7 @@ function DocK22() {
             }
         })
         .catch((error) => {
-            if(import.meta.env.VITE_BE_ENV == "DEV") {
+            if(import.meta.env.VITE_REACT_APP_BE_ENV == "DEV") {
                 console.log(error)
             }
             setListDataDetil([])
@@ -312,7 +313,7 @@ function DocK22() {
                 }
             })
             .catch((error) => {
-                if(import.meta.env.VITE_BE_ENV == "DEV") {
+                if(import.meta.env.VITE_REACT_APP_BE_ENV == "DEV") {
                     console.log(error)
                 }
                 setData(values => ({...values,
@@ -343,7 +344,7 @@ function DocK22() {
                 }
             })
             .catch((error) => {
-                if(import.meta.env.VITE_BE_ENV == "DEV") {
+                if(import.meta.env.VITE_REACT_APP_BE_ENV == "DEV") {
                     console.log(error)
                 }
                 if(error.response.data.status == 404) {
@@ -388,7 +389,7 @@ function DocK22() {
                 }
             })
             .catch((error) => {
-                if(import.meta.env.VITE_BE_ENV == "DEV") {
+                if(import.meta.env.VITE_REACT_APP_BE_ENV == "DEV") {
                     console.log(error)
                 }
                 setData(values => ({...values,
@@ -421,7 +422,7 @@ function DocK22() {
                 }
             })
             .catch((error) => {
-                if(import.meta.env.VITE_BE_ENV == "DEV") {
+                if(import.meta.env.VITE_REACT_APP_BE_ENV == "DEV") {
                     console.log(error)
                 }
                 if(error.response.data.status == 404) {
