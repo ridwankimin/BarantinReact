@@ -81,7 +81,7 @@ function Content(props) {
     } else if(props.page == "/k21") {
       return <DocK21 />
     } else if(props.page == "/k22") {
-      return <DocK22 />
+      return <DocK22 refreshNavbar={props.refreshNavbar} />
     } else if(props.page == "/k31") {
       return <DocK31 />
     } else if(props.page == "/k32") {

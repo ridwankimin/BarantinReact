@@ -52,19 +52,19 @@ function DocK52() {
 
     const cekWatch = watch()
 
-    const onSubmit = (data) => {
+    const onSubmit = (dataSubmit) => {
         setOnLoad(true)
         const dataCekKom = data.listKomoditas?.filter(item => item.volumeP4 == null || item.nettoP4 == null)
         const dataCekKomJanBen = data.listKomoditas?.filter(item => (item.jantan != null && item.jantanP4 == null) || (item.betina != null && item.betinaP4 == null))
         if(dataCekKom.length == 0 && dataCekKomJanBen.length == 0) {
-            const response = modelPerlakuan.sertifFumigasi(data);
+            const response = modelPerlakuan.sertifFumigasi(dataSubmit);
             response
             .then((response) => {
                 setOnLoad(false)
                 if(response.data) {
                     if(response.data.status == 201) {
                         //start save history
-                        const resHsy = log.pushHistory(data.idPtk, "p4", "K-5.2", (data.idDok52 ? 'UPDATE' : 'NEW'));
+                        const resHsy = log.pushHistory(dataSubmit.idPtk, "p4", "K-5.2", (dataSubmit.idDok52 ? 'UPDATE' : 'NEW'));
                         resHsy
                         .then((response) => {
                             if(response.data.status == 201) {
@@ -82,7 +82,7 @@ function DocK52() {
     
                         Swal.fire({
                             title: "Sukses!",
-                            text: "Sertifikat fumigasi berhasil " + (data.idDok52 ? "diedit." : "disimpan."),
+                            text: "Sertifikat fumigasi berhasil " + (dataSubmit.idDok52 ? "diedit." : "disimpan."),
                             icon: "success"
                         })
                         setValue("idDok52", response.data.data.id)

@@ -124,18 +124,18 @@ function DocKI2() {
 
     const cekWatch = watch()
 
-    const onSubmit = (data) => {
+    const onSubmit = (dataSubmit) => {
         setOnLoad(true)
         const dataCekKom = data.listKomoditas?.filter(item => item.volumeP8 == null || item.nettoP8 == null)
         if(dataCekKom.length == 0) {
-            const response = modelPelepasan.dokelKI(data);
+            const response = modelPelepasan.dokelKI(dataSubmit);
             response
             .then((response) => {
                 setOnLoad(false)
                 if(response.data) {
                     if(response.data.status == 201) {
                         //start save history
-                        const resHsy = log.pushHistory(data.idPtk, "p8", "KI-2", (data.idDoki2 ? 'UPDATE' : 'NEW'));
+                        const resHsy = log.pushHistory(dataSubmit.idPtk, "p8", "KI-2", (dataSubmit.idDoki2 ? 'UPDATE' : 'NEW'));
                         resHsy
                         .then((response) => {
                             if(response.data.status == 201) {
@@ -153,7 +153,7 @@ function DocKI2() {
     
                         Swal.fire({
                             title: "Sukses!",
-                            text: "Sertifikat Kesehatan Ikan dan Produk Ikan berhasil " + (data.idDoki2 ? "diedit." : "disimpan."),
+                            text: "Sertifikat Kesehatan Ikan dan Produk Ikan berhasil " + (dataSubmit.idDoki2 ? "diedit." : "disimpan."),
                             icon: "success"
                         });
                         setValue("idDoki2", response.data.data.id)

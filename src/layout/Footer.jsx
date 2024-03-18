@@ -25,7 +25,7 @@ function Footer(props) {
         </div>
 
         <div className="content-wrapper">
-            <Content page={props.page} />
+            <Content page={props.page} refreshNavbar={props.refreshNavbar} />
             
             <footer className="content-footer footer bg-footer-theme">
                 <div className="container-fluid d-flex flex-wrap justify-content-between py-2 flex-md-row flex-column">

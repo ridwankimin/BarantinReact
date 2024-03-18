@@ -2,7 +2,7 @@
 import axios from "axios";
 import Cookies from "js-cookie";
 // const url = process.env.REACT_APP_BE_LINK;
-const url = import.meta.env.VITE_BE_LINK;
+const url = import.meta.env.VITE_REACT_APP_BE_LINK;
 
 export default class PtkHistory {
   pushHistory(idPtk, statusP8, dokumen, stat) {
@@ -44,7 +44,6 @@ export default class PtkHistory {
       },
       data: datasend
     };
-    
     return axios.request(config)
   }
   
@@ -208,7 +207,7 @@ export default class PtkHistory {
     let datasend = {
       ptk_id: idPtk,
       pn_id: idDok,
-      rekomendasi_id: rekom,
+      rekomendasi_id: Array.isArray(rekom) ? rekom : [rekom],
     }
     let config = {
       method: 'post',
@@ -219,7 +218,6 @@ export default class PtkHistory {
       },
       data: datasend
     };
-    
     return axios.request(config)
   }
 }

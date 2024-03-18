@@ -116,7 +116,7 @@ export default class PtkPemeriksaan {
             'tanggal': data.tglDok37b,
             'kesimpulan': data.kesimpulan37b,
             'rekomendasi_id': data.rekom37b[0],
-            'rekomendasi2_id': data.rekom37b.length == 2 ? data.rekom37b[1] : '',
+            'rekomendasi2_id': data.rekom37b.length == 2 ? (data.rekom37b[1] == undefined ? '' : data.rekom37b[1]) : '',
             'user_ttd2_id': data.ttd2,
             'user_id': Cookies.get("userId"), // session
         }       
@@ -130,7 +130,7 @@ export default class PtkPemeriksaan {
           },
           data: datasend
         };
-        
+        console.log(JSON.stringify(config))
         
         return axios.request(config)
     }

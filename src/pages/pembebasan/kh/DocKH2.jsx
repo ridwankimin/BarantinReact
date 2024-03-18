@@ -173,11 +173,11 @@ function DocKH2() {
 
     const cekWatch = watch()
 
-    const onSubmit = (data) => {
+    const onSubmit = (dataSubmit) => {
         setOnLoad(true)
         const dataCekKom = data.listKomoditas?.filter(item => item.volumeP8 == null || item.nettoP8 == null)
         if(dataCekKom.length == 0) {
-            const response = modelPelepasan.eksporDokelProdukHewan(data);
+            const response = modelPelepasan.eksporDokelProdukHewan(dataSubmit);
             response
             .then((response) => {
                 setOnLoad(false)
@@ -185,7 +185,7 @@ function DocKH2() {
                     if(response.data.status == 201) {
                         //start save history
                         // const log = new PtkHistory();
-                        const resHsy = log.pushHistory(data.idPtk, "p8", "KH-2", (data.idDokh2 ? 'UPDATE' : 'NEW'));
+                        const resHsy = log.pushHistory(dataSubmit.idPtk, "p8", "KH-2", (dataSubmit.idDokh2 ? 'UPDATE' : 'NEW'));
                         resHsy
                         .then((response) => {
                             if(response.data.status == 201) {
@@ -204,7 +204,7 @@ function DocKH2() {
                         Swal.fire({
                             icon: "success",
                             title: "Sukses!",
-                            text: "Sertifikat sanitasi produk hewan berhasil " + (data.idDokh2 ? 'diedit' : 'disimpan')
+                            text: "Sertifikat sanitasi produk hewan berhasil " + (dataSubmit.idDokh2 ? 'diedit' : 'disimpan')
                         })
                         setValue("idDokh2", response.data.data.id)
                         setValue("noDokh2", response.data.data.nomor)

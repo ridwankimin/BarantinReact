@@ -173,12 +173,12 @@ function DocKH1() {
 
     const cekWatch = watch()
 
-    const onSubmit = (data) => {
+    const onSubmit = (dataSubmit) => {
         setOnLoad(true)
         const dataCekKom = data.listKomoditas?.filter(item => item.volumeP8 == null || item.nettoP8 == null)
         const dataCekKomJanBen = data.listKomoditas?.filter(item => (item.jantan != null && item.jantanP8 == null) || (item.betina != null && item.betinaP8 == null))
         if(dataCekKom.length == 0 && dataCekKomJanBen.length == 0) {
-            const response = modelPelepasan.eksporDokelHewanHidup(data);
+            const response = modelPelepasan.eksporDokelHewanHidup(dataSubmit);
             response
             .then((response) => {
                 setOnLoad(false)
@@ -186,7 +186,7 @@ function DocKH1() {
                     if(response.data.status == 201) {
                         //start save history
                         // const log = new PtkHistory();
-                        const resHsy = log.pushHistory(data.idPtk, "p8", "KH-1", (data.idDokh1 ? 'UPDATE' : 'NEW'));
+                        const resHsy = log.pushHistory(dataSubmit.idPtk, "p8", "KH-1", (dataSubmit.idDokh1 ? 'UPDATE' : 'NEW'));
                         resHsy
                         .then((response) => {
                             if(response.data.status == 201) {
@@ -205,7 +205,7 @@ function DocKH1() {
                         Swal.fire({
                             icon: "success",
                             title: "Sukses!",
-                            text: "Sertifikat kesehatan hewan berhasil " + (data.idDokh1 ? 'diedit' : 'disimpan')
+                            text: "Sertifikat kesehatan hewan berhasil " + (dataSubmit.idDokh1 ? 'diedit' : 'disimpan')
                         })
                         setValue("idDokh1", response.data.data.id)
                         setValue("noDokh1", response.data.data.nomor)

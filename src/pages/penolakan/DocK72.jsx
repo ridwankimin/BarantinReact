@@ -65,18 +65,18 @@ function DocK72() {
 
     const cekWatch = watch()
 
-    function onSubmit(data) {
+    function onSubmit(dataSubmit) {
         setOnLoad(true)
         const dataCekKom = data.listKomoditas?.filter(item => item.volumeP6 == null || item.nettoP6 == null)
         const dataCekKomJanBen = data.listKomoditas?.filter(item => (item.jantan != null && item.jantanP6 == null) || (item.betina != null && item.betinaP6 == null))
         if(dataCekKom.length == 0 && dataCekKomJanBen.length == 0) {
-            const response = modelPenolakan.save72(data, arraySaksi);
+            const response = modelPenolakan.save72(dataSubmit, arraySaksi);
             response
             .then((response) => {
                 setOnLoad(false)
                 if(response.data) {
                     if(response.data.status == 201) {
-                        const resHsy = log.pushHistory(data.idPtk, "p6", "K-7.2", (data.idDok72 ? 'UPDATE' : 'NEW'));
+                        const resHsy = log.pushHistory(dataSubmit.idPtk, "p6", "K-7.2", (dataSubmit.idDok72 ? 'UPDATE' : 'NEW'));
                         resHsy
                         .then((response) => {
                             if(response.data.status == 201) {
@@ -95,20 +95,20 @@ function DocK72() {
                         // alert(response.data.status + " - " + response.data.message)
                         Swal.fire({
                             title: "Sukses!",
-                            text: "Berita Acara Penolakan berhasil " + (data.idDok72 ? "diedit." : "disimpan."),
+                            text: "Berita Acara Penolakan berhasil " + (dataSubmit.idDok72 ? "diedit." : "disimpan."),
                             icon: "success"
                         });
                         setValue("idDok72", response.data.data.id)
                         setValue("noDok72", response.data.data.nomor)
                         if(data.isLapTolak) {
                             setOnLoad(true)
-                            const response73 = modelPenolakan.save73(data, response.data.data.id);
+                            const response73 = modelPenolakan.save73(dataSubmit, response.data.data.id);
                             response73
                             .then((response) => {
                                 setOnLoad(false)
                                 if(response.data) {
                                     if(response.data.status == 201) {
-                                        const resHsy = log.pushHistory(data.idPtk, "p6", "K-7.3", (data.idDok73 ? 'UPDATE' : 'NEW'));
+                                        const resHsy = log.pushHistory(dataSubmit.idPtk, "p6", "K-7.3", (dataSubmit.idDok73 ? 'UPDATE' : 'NEW'));
                                         resHsy
                                         .then((response) => {
                                             if(response.data.status == 201) {
@@ -129,7 +129,7 @@ function DocK72() {
                                         // alert(response.data.status + " - " + response.data.message)
                                         Swal.fire({
                                             title: "Sukses!",
-                                            text: "Laporan Hasil Penolakan berhasil " + (data.idDok73 ? "diedit." : "disimpan."),
+                                            text: "Laporan Hasil Penolakan berhasil " + (dataSubmit.idDok73 ? "diedit." : "disimpan."),
                                             icon: "success"
                                         });
                                     }

@@ -69,11 +69,11 @@ function DocK92i() {
 
     const cekWatch = watch()
 
-    const onSubmit = (data) => {
+    const onSubmit = (dataSubmit) => {
         setOnLoad(true)
         const dataCekKom = data.listKomoditas?.filter(item => item.volumeP8 == null || item.nettoP8 == null)
         if(dataCekKom.length == 0) {
-            const response = modelPelepasan.imporAreaKI(data);
+            const response = modelPelepasan.imporAreaKI(dataSubmit);
             response
             .then((response) => {
                 setOnLoad(false)
@@ -81,7 +81,7 @@ function DocK92i() {
                     if(response.data.status == 201) {
                         //start save history
                         // const log = new PtkHistory();
-                        const resHsy = log.pushHistory(data.idPtk, "p8", "K-9.2.I", (data.idDok92i ? 'UPDATE' : 'NEW'));
+                        const resHsy = log.pushHistory(dataSubmit.idPtk, "p8", "K-9.2.I", (dataSubmit.idDok92i ? 'UPDATE' : 'NEW'));
                         resHsy
                         .then((response) => {
                             if(response.data.status == 201) {
@@ -100,7 +100,7 @@ function DocK92i() {
                         // alert(response.data.status + " - " + response.data.message)
                         Swal.fire({
                             title: "Sukses!",
-                            text: "Sertifikat Pelepasan Karantina Ikan berhasil " + (data.idDok92i ? "diedit." : "disimpan."),
+                            text: "Sertifikat Pelepasan Karantina Ikan berhasil " + (dataSubmit.idDok92i ? "diedit." : "disimpan."),
                             icon: "success"
                         });
                         setValue("idDok92i", response.data.data.id)

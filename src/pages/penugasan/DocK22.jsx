@@ -1,3 +1,4 @@
+/* eslint-disable react/prop-types */
 /* eslint-disable no-unused-vars */
 /* eslint-disable eqeqeq */
 import Cookies from 'js-cookie';
@@ -58,7 +59,7 @@ function stringSimbol(e) {
     return <div dangerouslySetInnerHTML={{__html: e}} />;
 }
 
-function DocK22() {
+function DocK22(props) {
     const idPtk = Cookies.get("idPtkPage");
     let navigate = useNavigate();
     let [addSurtug, setAddSurtug] = useState(false);
@@ -104,7 +105,6 @@ function DocK22() {
                         responseDet
                         .then((res) => {
                             if(res.data) {
-                                console.log(res.data)
                                 if(res.data.status == 200) {
                                     setListDataDetil(res.data.data)
                                 } else {
@@ -180,6 +180,7 @@ function DocK22() {
                         })
                         resetFormDetilSurtug()
                         dataSurtugDetil(data.idHeader)
+                        props.refreshNavbar()
                     }
                 }
             })
@@ -221,7 +222,6 @@ function DocK22() {
         response
         .then((res) => {
             if(res.data) {
-                console.log(res.data)
                 if(res.data.status == 200) {
                     setListDataDetil(res.data.data)
                 } else {
@@ -239,7 +239,6 @@ function DocK22() {
 
     function handleEditHeader(e) {
         const dataHeader = listDataHeader?.filter((item, index) => (index == e))
-        console.log(dataHeader)
         // const cell = e.target.closest('tr')
         setData(values => (
             {...values, 

@@ -64,18 +64,18 @@ function DocK63() {
 
     const cekWatch = watch()
 
-    function onSubmit(data) {
+    function onSubmit(dataSubmit) {
         setOnLoad(true)
         const dataCekKom = data.listKomoditas?.filter(item => item.volumeP5 == null || item.nettoP5 == null)
         const dataCekKomJanBen = data.listKomoditas?.filter(item => (item.jantan != null && item.jantanP5 == null) || (item.betina != null && item.betinaP5 == null))
         if(dataCekKom.length == 0 && dataCekKomJanBen.length == 0) {
-            const response = modelPenahanan.save63(data);
+            const response = modelPenahanan.save63(dataSubmit);
             response
             .then((response) => {
                 if(response.data) {
                     setOnLoad(false)
                     if(response.data.status == 201) {
-                        const resHsy = log.pushHistory(data.idPtk, "p5", "K-6.3", (data.idDok63 ? 'UPDATE' : 'NEW'));
+                        const resHsy = log.pushHistory(dataSubmit.idPtk, "p5", "K-6.3", (dataSubmit.idDok63 ? 'UPDATE' : 'NEW'));
                         resHsy
                         .then((response) => {
                             if(response.data.status == 201) {
@@ -91,7 +91,7 @@ function DocK63() {
                         });
                         //end save history
 
-                        const resRekom = log.rekomHistory(data.idPtk, response.data.data.id, data.rekomendasi);
+                        const resRekom = log.rekomHistory(dataSubmit.idPtk, response.data.data.id, dataSubmit.rekomendasi);
                         resRekom
                         .then((response) => {
                             if(response.data) {
@@ -110,7 +110,7 @@ function DocK63() {
 
                         Swal.fire({
                             title: "Sukses!",
-                            text: "Hasil laporan penahanan berhasil " + (data.idDok63 ? "diedit." : "disimpan."),
+                            text: "Hasil laporan penahanan berhasil " + (dataSubmit.idDok63 ? "diedit." : "disimpan."),
                             icon: "success"
                         });
                         setValue("idDok63", response.data.data.id)

@@ -54,18 +54,18 @@ function DocK62() {
 
     // const cekWatch = watch()
 
-    function onSubmit(data) {
+    function onSubmit(dataSubmit) {
         setOnLoad(true)
         const dataCekKom = data.listKomoditas?.filter(item => item.volumeP5 == null || item.nettoP5 == null)
         const dataCekKomJanBen = data.listKomoditas?.filter(item => (item.jantan != null && item.jantanP5 == null) || (item.betina != null && item.betinaP5 == null))
         if(dataCekKom.length == 0 && dataCekKomJanBen.length == 0) {
-            const response = modelPenahanan.save62(data, data.idDok61);
+            const response = modelPenahanan.save62(dataSubmit, data.idDok61);
             response
             .then((response) => {
                 setOnLoad(false)
                 if(response.data) {
                     if(response.data.status == 201) {
-                        const resHsy = log.pushHistory(data.idPtk, "p5", "K-6.2", (data.idDok62 ? 'UPDATE' : 'NEW'));
+                        const resHsy = log.pushHistory(dataSubmit.idPtk, "p5", "K-6.2", (dataSubmit.idDok62 ? 'UPDATE' : 'NEW'));
                         resHsy
                         .then((response) => {
                             if(response.data.status == 201) {
@@ -82,7 +82,7 @@ function DocK62() {
                         //end save history
                         Swal.fire({
                             title: "Sukses!",
-                            text: "Berita acara penahanan berhasil " + (data.idDok62 ? "diedit." : "disimpan."),
+                            text: "Berita acara penahanan berhasil " + (dataSubmit.idDok62 ? "diedit." : "disimpan."),
                             icon: "success"
                         });
                         setValue("idDok62", response.data.data.id)

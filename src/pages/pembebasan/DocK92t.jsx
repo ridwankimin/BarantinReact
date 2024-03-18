@@ -125,18 +125,18 @@ function DocK92t() {
         }
     }
 
-    const onSubmit = (data) => {
+    const onSubmit = (dataSubmit) => {
         setOnLoad(true)
         const dataCekKom = data.listKomoditas?.filter(item => item.volumeP8 == null || item.nettoP8 == null)
         if(dataCekKom.length == 0) {
-            const response = model.imporAreaKT(data);
+            const response = model.imporAreaKT(dataSubmit);
             response
             .then((response) => {
                 if(response.data) {
                     setOnLoad(false)
                     if(response.data.status == 201) {
                         //start save history
-                        const resHsy = log.pushHistory(data.idPtk, "p8", "K-9.2.T", (data.idDok92t ? 'UPDATE' : 'NEW'));
+                        const resHsy = log.pushHistory(dataSubmit.idPtk, "p8", "K-9.2.T", (dataSubmit.idDok92t ? 'UPDATE' : 'NEW'));
                         resHsy
                         .then((response) => {
                             if(response.data.status == 201) {
@@ -154,7 +154,7 @@ function DocK92t() {
                         Swal.fire({
                             icon: "success",
                             title: "Sukses!",
-                            text: "Sertifikat Pelepasan Karantina Berhasil " + (data.idDok92t ? 'diedit' : 'disimpan')
+                            text: "Sertifikat Pelepasan Karantina Berhasil " + (dataSubmit.idDok92t ? 'diedit' : 'disimpan')
                         })
                         setValue("idDok92t", response.data.data.id)
                         setValue("noDok92t", response.data.data.nomor)

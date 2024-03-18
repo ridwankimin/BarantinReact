@@ -121,18 +121,18 @@ function DocKT1() {
 
     const cekdataMPKT1 = watchMPKT1()
 
-    const onSubmit = (data) => {
+    const onSubmit = (dataSubmit) => {
         setOnLoad(true)
         const dataCekKom = data.listKomoditas?.filter(item => item.volumeP8 == null || item.nettoP8 == null)
         if(dataCekKom.length == 0) {
-            const response = modelPelepasan.eksporKT(data);
+            const response = modelPelepasan.eksporKT(dataSubmit);
             response
             .then((response) => {
                 setOnLoad(false)
                 if(response.data) {
                     if(response.data.status == 201) {
                         //start save history
-                        const resHsy = log.pushHistory(data.idPtk, "p8", "KT-1", (data.idDokKT1 ? 'UPDATE' : 'NEW'));
+                        const resHsy = log.pushHistory(dataSubmit.idPtk, "p8", "KT-1", (dataSubmit.idDokKT1 ? 'UPDATE' : 'NEW'));
                         resHsy
                         .then((response) => {
                             if(response.data.status == 201) {
@@ -151,7 +151,7 @@ function DocKT1() {
                         Swal.fire({
                             icon: "success",
                             title: "Sukses!",
-                            text: "Sertifikat PC berhasil " + (data.idDokKT1 ? 'diedit' : 'disimpan')
+                            text: "Sertifikat PC berhasil " + (dataSubmit.idDokKT1 ? 'diedit' : 'disimpan')
                         })
                         setValue("idDokKT1", response.data.data.id)
                         setValue("noDokKT1", response.data.data.nomor)

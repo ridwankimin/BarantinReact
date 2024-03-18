@@ -156,18 +156,18 @@ function DocKT3() {
 
     const cekdataMPKT3 = watchMPKT3()
 
-    const onSubmit = (data) => {
+    const onSubmit = (dataSubmit) => {
         setOnLoad(true)
         const dataCekKom = data.listKomoditas?.filter(item => item.volumeP8 == null || item.nettoP8 == null)
         if(dataCekKom.length == 0) {
-            const response = modelPelepasan.dokelKT(data);
+            const response = modelPelepasan.dokelKT(dataSubmit);
             response
             .then((response) => {
                 setOnLoad(false)
                 if(response.data) {
                     if(response.data.status == 201) {
                         //start save history
-                        const resHsy = log.pushHistory(data.idPtk, "p8", "KT-3", (data.idDokKT3 ? 'UPDATE' : 'NEW'));
+                        const resHsy = log.pushHistory(dataSubmit.idPtk, "p8", "KT-3", (dataSubmit.idDokKT3 ? 'UPDATE' : 'NEW'));
                         resHsy
                         .then((response) => {
                             if(response.data.status == 201) {
@@ -185,7 +185,7 @@ function DocKT3() {
                         Swal.fire({
                             icon: "success",
                             title: "Sukses!",
-                            text: "Sertifikat kesehatan tumbuhan berhasil " + (data.idDokKT3 ? 'diedit' : 'disimpan')
+                            text: "Sertifikat kesehatan tumbuhan berhasil " + (dataSubmit.idDokKT3 ? 'diedit' : 'disimpan')
                         })
                         
                         setValue("idDokKT3", response.data.data.id)

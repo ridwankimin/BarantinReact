@@ -58,10 +58,10 @@ function DocK37b() {
 	} = useForm()
     const dataWatchHeader = watchHeader()
 
+    const dataCekKom = data.listKomoditas?.filter(item => item.volumeP1 == null || item.nettoP1 == null)
+    const dataCekKomJanBen = data.listKomoditas?.filter(item => (item.jantan != null && item.jantanP1 == null) || (item.betina != null && item.betinaP1 == null))
     const onSubmitHeader = (dataHeader) => {
         setOnLoad(true)
-        const dataCekKom = data.listKomoditas?.filter(item => item.volumeP1 == null || item.nettoP1 == null)
-        const dataCekKomJanBen = data.listKomoditas?.filter(item => (item.jantan != null && item.jantanP1 == null) || (item.betina != null && item.betinaP1 == null))
         if(dataCekKom.length == 0 && dataCekKomJanBen.length == 0) {
             const response = modelPeriksa.ptkFisikKesehatanHeader(dataHeader);
             response
@@ -89,14 +89,13 @@ function DocK37b() {
                         });
                         //end save history
 
-                        const rekom = data.rekom37b
-                        const resRekom = log.rekomHistory(data.idPtk, response.data.data.id, rekom[0]);
+                        const resRekom = log.rekomHistory(data.idPtk, response.data.data.id, dataHeader.rekom37b);
                         resRekom
                         .then((response) => {
                             if(response.data) {
                                 if(response.data.status == 201) {
                                     if(import.meta.env.VITE_REACT_APP_BE_ENV == "DEV") {
-                                        console.log("History saved")
+                                        console.log("History rekom saved")
                                     }
                                 }
                             }
@@ -107,25 +106,6 @@ function DocK37b() {
                             }
                         });
                         
-                        if(rekom[1]) {
-                            const resRekom = log.rekomHistory(data.idPtk, response.data.data.id, rekom[1]);
-                            resRekom
-                            .then((response) => {
-                                if(response.data) {
-                                    if(response.data.status == 201) {
-                                        if(import.meta.env.VITE_REACT_APP_BE_ENV == "DEV") {
-                                            console.log("History saved")
-                                        }
-                                    }
-                                }
-                            })
-                            .catch((error) => {
-                                if(import.meta.env.VITE_REACT_APP_BE_ENV == "DEV") {
-                                    console.log(error)
-                                }
-                            });
-                        }
-
                         Swal.fire({
                             title: "Sukses!",
                             text: "Hasil Pemeriksaan Kesehatan berhasil " + (data.idDok37b ? "diedit." : "disimpan."),
@@ -1128,7 +1108,7 @@ function DocK37b() {
                                                         </h5>
                                                     </div>
                                                     <h5 title='Pengawasan dan Pengendalian Pangan/Pakan/SDG/PRG/Agensia Hayati/JAI/Tumbuhan dan Satwa Liar/Tumbuhan dan Satwa Langka'><u><b>B. Pengawasan dan Pengendalian</b></u></h5>
-                                                    <div className="table-responsive text-nowrap" style={{height: (listKesehatan?.length > 8 ? "300px" : "")}}>
+                                                    <div className="table-responsive text-nowrap mb-3" style={{height: (listKesehatan?.length > 8 ? "300px" : "")}}>
                                                         <table className="table table-sm table-bordered table-hover table-striped dataTable">
                                                             <thead>
                                                                 <tr>
@@ -1225,7 +1205,7 @@ function DocK37b() {
                                 <div className="col-sm-4">
                                     <select className={errorsHeader.ttd2 == '' ? 'form-select form-select-sm is-invalid' : 'form-select form-select-sm'} name="ttd2" id="ttd2" {...registerHeader("ttd2", { required: "Mohon pilih penandatangan."})}>
                                         {data.petugas?.map((item, index) => (
-                                            <option value={item.penanda_tangan_id} key={index} defaultValue={dataWatchHeader.ttd2}>{item.nama + " - " + item.nip}</option>
+                                            <option value={item.petugas_id} key={index} defaultValue={dataWatchHeader.ttd2}>{item.nama + " - " + item.nip}</option>
                                         ))}
                                     </select>
                                     {errorsHeader.ttd2 && <small className="text-danger">{errorsHeader.ttd2.message}</small>}

@@ -209,19 +209,19 @@ function DocK82() {
 
     const cekWatch = watch()
 
-    const onSubmit = (data) => {
+    const onSubmit = (dataSubmit) => {
         setOnLoad(true)
         const dataCekKom = data.listKomoditas?.filter(item => item.volumeP7 == null || item.nettoP7 == null)
         const dataCekKomJanBen = data.listKomoditas?.filter(item => (item.jantan != null && item.jantanP7 == null) || (item.betina != null && item.betinaP7 == null))
         if(dataCekKom.length == 0 && dataCekKomJanBen.length == 0) {
-            const response = modelPemusnahan.simpan82(data, arraySaksi);
+            const response = modelPemusnahan.simpan82(dataSubmit, arraySaksi);
             response
             .then((response) => {
                 setOnLoad(false)
                 if(response.data) {
                     if(response.data.status == 201) {
                         //start save history
-                        const resHsy = log.pushHistory(data.idPtk, "p8", "K-8.2", (data.idDok82 ? 'UPDATE' : 'NEW'));
+                        const resHsy = log.pushHistory(dataSubmit.idPtk, "p8", "K-8.2", (dataSubmit.idDok82 ? 'UPDATE' : 'NEW'));
                         resHsy
                         .then((response) => {
                             if(response.data.status == 201) {
@@ -239,7 +239,7 @@ function DocK82() {
                         Swal.fire({
                             icon: "success",
                             title: "Sukses!",
-                            text: "Berita acara pemusnahan berhasil " + (data.idDok82 ? 'diedit' : 'disimpan')
+                            text: "Berita acara pemusnahan berhasil " + (dataSubmit.idDok82 ? 'diedit' : 'disimpan')
                         });
                     } else {
                         Swal.fire({

@@ -51,19 +51,19 @@ function DocK51() {
 
     const cekWatch = watch()
 
-    const onSubmit = (data) => {
+    const onSubmit = (dataSubmit) => {
         setOnLoad(true)
         const dataCekKom = data.listKomoditas?.filter(item => item.volumeP4 == null || item.nettoP4 == null)
         const dataCekKomJanBen = data.listKomoditas?.filter(item => (item.jantan != null && item.jantanP4 == null) || (item.betina != null && item.betinaP4 == null))
         if(dataCekKom.length == 0 && dataCekKomJanBen.length == 0) {
-            const response = modelPerlakuan.sertifPerlakuan(data)
+            const response = modelPerlakuan.sertifPerlakuan(dataSubmit)
             response
             .then((response) => {
                 setOnLoad(false)
                 if(response.data) {
                     if(response.data.status == 201) {
                         //start save history
-                        const resHsy = log.pushHistory(data.idPtk, "p4", "K-5.1", (data.idDok51 ? 'UPDATE' : 'NEW'))
+                        const resHsy = log.pushHistory(dataSubmit.idPtk, "p4", "K-5.1", (dataSubmit.idDok51 ? 'UPDATE' : 'NEW'))
                         resHsy
                         .then((response) => {
                             if(response.data.status == 201) {
@@ -81,7 +81,7 @@ function DocK51() {
     
                         Swal.fire({
                             title: "Sukses!",
-                            text: "Sertifikat Perlakuan berhasil " + (data.idDok37a ? "diedit." : "disimpan."),
+                            text: "Sertifikat Perlakuan berhasil " + (dataSubmit.idDok51 ? "diedit." : "disimpan."),
                             icon: "success"
                         })
                         setValue("idDok51", response.data.data.id)

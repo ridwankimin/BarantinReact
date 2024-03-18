@@ -6,10 +6,10 @@ export default defineConfig(() => {
     return {
         base: '/apps/',
         plugins: [react(), splitVendorChunkPlugin()],
-        // build: {
-        //     commonjsOptions: { transformMixedEsModules: true }, // Change
-        //     // outDir: 'build'
-        // },
+        build: {
+            commonjsOptions: { transformMixedEsModules: true }, // Change
+            // outDir: 'build'
+        },
         server: {
             port: 3000,
             open: true

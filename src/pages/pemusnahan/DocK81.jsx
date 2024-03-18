@@ -127,19 +127,19 @@ function DocK81() {
 
     const cekWatch = watch()
 
-    const onSubmit = (data) => {
+    const onSubmit = (dataSubmit) => {
         setOnLoad(true)
         const dataCekKom = data.listKomoditas?.filter(item => item.volumeP7 == null || item.nettoP7 == null)
         const dataCekKomJanBen = data.listKomoditas?.filter(item => (item.jantan != null && item.jantanP7 == null) || (item.betina != null && item.betinaP7 == null))
         if(dataCekKom.length == 0 && dataCekKomJanBen.length == 0) {
-            const response = modelPemusnahan.simpan81(data);
+            const response = modelPemusnahan.simpan81(dataSubmit);
             response
             .then((response) => {
                 if(response.data) {
                     setOnLoad(false)
                     if(response.data.status == 201) {
                         //start save history
-                        const resHsy = log.pushHistory(data.idPtk, "P7", "K-8.1", (data.idDok81 ? 'UPDATE' : 'NEW'));
+                        const resHsy = log.pushHistory(dataSubmit.idPtk, "P7", "K-8.1", (dataSubmit.idDok81 ? 'UPDATE' : 'NEW'));
                         resHsy
                         .then((response) => {
                             if(response.data.status == 201) {
@@ -157,7 +157,7 @@ function DocK81() {
                         Swal.fire({
                             icon: "success",
                             title: "Sukses!",
-                            text: "Surat Pemusnahan berhasil " + (data.idDok81 ? 'diubah' : 'disimpan')
+                            text: "Surat Pemusnahan berhasil " + (dataSubmit.idDok81 ? 'diubah' : 'disimpan')
                         })
                         setValue("idDok81", response.data.data.id)
                         setValue("noDok81", response.data.data.nomor)

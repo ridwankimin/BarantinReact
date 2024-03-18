@@ -109,19 +109,19 @@ function DocK53() {
 
     const cekWatch = watch()
     
-    const onSubmit = (data) => {
+    const onSubmit = (dataSubmit) => {
         setOnLoad(true)
         const dataCekKom = data.listKomoditas?.filter(item => item.volumeP4 == null || item.nettoP4 == null)
         const dataCekKomJanBen = data.listKomoditas?.filter(item => (item.jantan != null && item.jantanP4 == null) || (item.betina != null && item.betinaP4 == null))
         if(dataCekKom.length == 0 && dataCekKomJanBen.length == 0) {
-            const response = modelPerlakuan.sertifLaporan(data);
+            const response = modelPerlakuan.sertifLaporan(dataSubmit);
             response
             .then((response) => {
                 setOnLoad(false)
                 if(response.data) {
                     if(response.data.status == 201) {
                         //start save history
-                        const resHsy = log.pushHistory(data.idPtk, "p4", "K-5.3", (data.idDok53 ? 'UPDATE' : 'NEW'));
+                        const resHsy = log.pushHistory(dataSubmit.idPtk, "p4", "K-5.3", (dataSubmit.idDok53 ? 'UPDATE' : 'NEW'));
                         resHsy
                         .then((response) => {
                             if(response.data.status == 201) {
@@ -137,7 +137,7 @@ function DocK53() {
                         });
                         //end save history
 
-                        const resRekom = log.rekomHistory(data.idPtk, response.data.data.id, data.rekomPerlakuan);
+                        const resRekom = log.rekomHistory(dataSubmit.idPtk, response.data.data.id, dataSubmit.rekomPerlakuan);
                         resRekom
                         .then((response) => {
                             if(response.data) {
@@ -156,7 +156,7 @@ function DocK53() {
     
                         Swal.fire({
                             title: "Sukses!",
-                            text: "Laporan Hasil Perlakuan berhasil " + (data.idDok37a ? "diedit." : "disimpan."),
+                            text: "Laporan Hasil Perlakuan berhasil " + (dataSubmit.idDok37a ? "diedit." : "disimpan."),
                             icon: "success"
                         })
                         setValue("idDok53", response.data.data.id)

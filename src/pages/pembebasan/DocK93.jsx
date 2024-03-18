@@ -120,18 +120,18 @@ function DocK93() {
 
     const cekWatch = watch()
 
-    const onSubmit = (data) => {
+    const onSubmit = (dataSubmit) => {
         setOnLoad(true)
         const dataCekKom = data.listKomoditas?.filter(item => item.volumeP8 == null || item.nettoP8 == null)
         if(dataCekKom.length == 0) {
-            const response = modelPelepasan.mpLainOrKeterangan(data, Cookies.get("jenisKarantina"), "K.9.3");
+            const response = modelPelepasan.mpLainOrKeterangan(dataSubmit, Cookies.get("jenisKarantina"), "K.9.3");
             response
             .then((response) => {
                 setOnLoad(false)
                 if(response.data) {
                     if(response.data.status == 201) {
                         //start save history
-                        const resHsy = log.pushHistory(data.idPtk, "p8", "K-9.3", (data.idDok93 ? 'UPDATE' : 'NEW'));
+                        const resHsy = log.pushHistory(dataSubmit.idPtk, "p8", "K-9.3", (dataSubmit.idDok93 ? 'UPDATE' : 'NEW'));
                         resHsy
                         .then((response) => {
                             if(response.data.status == 201) {
@@ -149,7 +149,7 @@ function DocK93() {
     
                         Swal.fire({
                             title: "Sukses!",
-                            text: "Surat Keterangan Karantina berhasil " + (data.idDok93 ? "diedit." : "disimpan."),
+                            text: "Surat Keterangan Karantina berhasil " + (dataSubmit.idDok93 ? "diedit." : "disimpan."),
                             icon: "success"
                         });
                         setValue("idDok93", response.data.data.id)

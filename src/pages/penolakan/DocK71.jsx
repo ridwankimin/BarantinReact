@@ -111,18 +111,18 @@ function DocK71() {
         }
     }
 
-    function onSubmit(data) {
+    function onSubmit(dataSubmit) {
         setOnLoad(true)
         const dataCekKom = data.listKomoditas?.filter(item => item.volumeP6 == null || item.nettoP6 == null)
         const dataCekKomJanBen = data.listKomoditas?.filter(item => (item.jantan != null && item.jantanP6 == null) || (item.betina != null && item.betinaP6 == null))
         if(dataCekKom.length == 0 && dataCekKomJanBen.length == 0) {
-            const response = modelPenolakan.save71(data);
+            const response = modelPenolakan.save71(dataSubmit);
             response
             .then((response) => {
                 setOnLoad(false)
                 if(response.data) {
                     if(response.data.status == 201) {
-                        const resHsy = log.pushHistory(data.idPtk, "p6", "K-7.1", (data.idDok71 ? 'UPDATE' : 'NEW'));
+                        const resHsy = log.pushHistory(dataSubmit.idPtk, "p6", "K-7.1", (dataSubmit.idDok71 ? 'UPDATE' : 'NEW'));
                         resHsy
                         .then((response) => {
                             if(response.data.status == 201) {
@@ -141,7 +141,7 @@ function DocK71() {
                         // alert(response.data.status + " - " + response.data.message)
                         Swal.fire({
                             title: "Sukses!",
-                            text: "Surat Penolakan berhasil " + (data.idDok71 ? "diedit." : "disimpan."),
+                            text: "Surat Penolakan berhasil " + (dataSubmit.idDok71 ? "diedit." : "disimpan."),
                             icon: "success"
                         });
                         setValue("idDok71", response.data.data.id)
