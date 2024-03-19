@@ -358,6 +358,7 @@ function DocK93() {
                 tglDokumen: tglPtk,
             }));
             
+            
             const response = modelPemohon.getPtkId(base64_decode(ptkNomor[1]));
             response
             .then((response) => {
@@ -1175,11 +1176,11 @@ function DocK93() {
                                         <div className="row">
                                             <div className="col-md-12">
                                                 <div className="form-check">
-                                                    <input autoComplete="off" className="form-check-input" type="radio" name="keteranganMP" id="keteranganMP1" value="1" {...register("keteranganMP", { required: "Mohon pilih keterangan media pembawa."})} />
+                                                    <input autoComplete="off" className="form-check-input" type="checkbox" name="keteranganMP" id="keteranganMP1" value="1" checked={Cookies.get("jenisKarantina") == "T" ? false : true} disabled />
                                                     <label className="form-check-label" htmlFor="keteranganMP1">Bukan termasuk media pembawa</label>
                                                 </div>
                                                 <div className="form-check">
-                                                    <input autoComplete="off" className="form-check-input" type="radio" name="keteranganMP" id="keteranganMP2" value="2" {...register("keteranganMP")}/>
+                                                    <input autoComplete="off" className="form-check-input" type="checkbox" name="keteranganMP" id="keteranganMP2" value="2" checked={Cookies.get("jenisKarantina") == "T" ? true : false} disabled />
                                                     <label className="form-check-label" htmlFor="keteranganMP2">Media Pembawa yang tidak dikenai tindakan karantina dan/atau pengawasan</label>
                                                 </div>
                                                 {errors.keteranganMP && <small className="text-danger">{errors.keteranganMP.message}</small>}

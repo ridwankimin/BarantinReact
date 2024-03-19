@@ -34,7 +34,7 @@ export default class PtkModel {
       let datasend = {
             "id": uuid,
             // "tab": data.tabWizard,
-            "no_aju": Cookies.get("kodeSatpel") + "M" + data.permohonan + data.mediaPembawa + dateNow() + makeid(5),
+            "no_aju": Cookies.get("kodeSatpel") + data.permohonan + data.mediaPembawa + dateNow() + makeid(5) + "M",
             // 'tgl_aju' => $data['tgl_aju'],
             "jenis_dokumen": data.jenisForm,
 

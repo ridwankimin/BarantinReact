@@ -1,0 +1,921 @@
+[ 
+{ 
+"id":1,
+"kom_id":12,
+"nama":"ALMON",
+"nama_en":"ALMOND",
+"nama_latin":"Prunus amygdalus",
+"kode_komoditas":"A012"
+},
+{ 
+"id":2,
+"kom_id":40,
+"nama":"KUBIS CHINA PAK-COI",
+"nama_en":"PAK-COI CHINNESE CABBAGE",
+"nama_latin":"Brassica parachinensis",
+"kode_komoditas":"B001"
+},
+{ 
+"id":3,
+"kom_id":49,
+"nama":"BAWANG PUTIH",
+"nama_en":"GARLIC",
+"nama_latin":"Allium sativum",
+"kode_komoditas":"B011"
+},
+{ 
+"id":4,
+"kom_id":53,
+"nama":"BAWANG MERAH",
+"nama_en":"SHALLOT",
+"nama_latin":"Allium ascalonicum",
+"kode_komoditas":"B015"
+},
+{ 
+"id":5,
+"kom_id":66,
+"nama":"KUBIS BRUSSELS",
+"nama_en":"BRUSSELS SPROUTS",
+"nama_latin":"Brassica sp.",
+"kode_komoditas":"B029"
+},
+{ 
+"id":6,
+"kom_id":121,
+"nama":"JAGUNG",
+"nama_en":"MAIZE",
+"nama_latin":"Zea mays",
+"kode_komoditas":"B085"
+},
+{ 
+"id":7,
+"kom_id":172,
+"nama":"KUBIS CHINA PE-TSAI",
+"nama_en":"PE-TSAI CHINNESE CABBAGE",
+"nama_latin":"Brassica sinensis",
+"kode_komoditas":"B136"
+},
+{ 
+"id":8,
+"kom_id":176,
+"nama":"PRUNES",
+"nama_en":"PRUNES",
+"nama_latin":"----",
+"kode_komoditas":"B140"
+},
+{ 
+"id":9,
+"kom_id":201,
+"nama":"BERAS",
+"nama_en":"RICE",
+"nama_latin":"Oryza sativa",
+"kode_komoditas":"B165"
+},
+{ 
+"id":10,
+"kom_id":355,
+"nama":"BIJI KAKAO",
+"nama_en":"CACAO BEANS",
+"nama_latin":"Theobroma cacao",
+"kode_komoditas":"B319"
+},
+{ 
+"id":11,
+"kom_id":483,
+"nama":"ALPUKAT",
+"nama_en":"AVOCADO",
+"nama_latin":"Persea gratissima",
+"kode_komoditas":"B447"
+},
+{ 
+"id":12,
+"kom_id":484,
+"nama":"ANGGUR",
+"nama_en":"GRAPE",
+"nama_latin":"Vitis vinifera",
+"kode_komoditas":"B448"
+},
+{ 
+"id":13,
+"kom_id":485,
+"nama":"APEL",
+"nama_en":"APPLE",
+"nama_latin":"Malus domesticum",
+"kode_komoditas":"B449"
+},
+{ 
+"id":14,
+"kom_id":486,
+"nama":"APRICOT",
+"nama_en":"APRICOT",
+"nama_latin":"Prunus armeniaca",
+"kode_komoditas":"B450"
+},
+{ 
+"id":15,
+"kom_id":487,
+"nama":"ARTICHOKES",
+"nama_en":"ARTHICOKES",
+"nama_latin":"----",
+"kode_komoditas":"B451"
+},
+{ 
+"id":16,
+"kom_id":488,
+"nama":"ASPARAGUS",
+"nama_en":"ASPARAGUS",
+"nama_latin":"Asparagus oficinalis",
+"kode_komoditas":"B452"
+},
+{ 
+"id":17,
+"kom_id":489,
+"nama":"BARLEY",
+"nama_en":"BARLEY",
+"nama_latin":"----",
+"kode_komoditas":"B453"
+},
+{ 
+"id":18,
+"kom_id":490,
+"nama":"BAWANG BOMBAY",
+"nama_en":"ONION",
+"nama_latin":"Allium cepa",
+"kode_komoditas":"B454"
+},
+{ 
+"id":19,
+"kom_id":491,
+"nama":"BLACKBERRY",
+"nama_en":"BLACKBERRIES",
+"nama_latin":"----",
+"kode_komoditas":"B455"
+},
+{ 
+"id":20,
+"kom_id":492,
+"nama":"BLUEBERRY",
+"nama_en":"BLUEBERRY",
+"nama_latin":"Vaccinium sp.",
+"kode_komoditas":"B456"
+},
+{ 
+"id":21,
+"kom_id":493,
+"nama":"BOYSENBERRY",
+"nama_en":"BOYSENBERRY",
+"nama_latin":"----",
+"kode_komoditas":"B457"
+},
+{ 
+"id":22,
+"kom_id":494,
+"nama":"BERAS PECAH KULIT",
+"nama_en":"RICE, HUSKED",
+"nama_latin":"Oryza sativa",
+"kode_komoditas":"B458"
+},
+{ 
+"id":23,
+"kom_id":495,
+"nama":"CERI",
+"nama_en":"CHERRY",
+"nama_latin":"Prunus serulata",
+"kode_komoditas":"B459"
+},
+{ 
+"id":24,
+"kom_id":496,
+"nama":"CHICORY",
+"nama_en":"CHICORY",
+"nama_latin":"----",
+"kode_komoditas":"B460"
+},
+{ 
+"id":25,
+"kom_id":497,
+"nama":"CITRUS FRUIT",
+"nama_en":"CITRUS FRUIT",
+"nama_latin":"----",
+"kode_komoditas":"B461"
+},
+{ 
+"id":26,
+"kom_id":498,
+"nama":"CRANBERRY",
+"nama_en":"CRANBERRY",
+"nama_latin":"----",
+"kode_komoditas":"B462"
+},
+{ 
+"id":27,
+"kom_id":499,
+"nama":"CURRANT HITAM",
+"nama_en":"BLACK CURRANT",
+"nama_latin":"----",
+"kode_komoditas":"B463"
+},
+{ 
+"id":28,
+"kom_id":500,
+"nama":"CURRANT MERAH",
+"nama_en":"RED CURRANT",
+"nama_latin":"----",
+"kode_komoditas":"B464"
+},
+{ 
+"id":29,
+"kom_id":501,
+"nama":"DAUN BAWANG",
+"nama_en":"LEEKS",
+"nama_latin":"----",
+"kode_komoditas":"B465"
+},
+{ 
+"id":30,
+"kom_id":502,
+"nama":"DEWBERRY",
+"nama_en":"DEWBERRY",
+"nama_latin":"----",
+"kode_komoditas":"B466"
+},
+{ 
+"id":31,
+"kom_id":503,
+"nama":"DURIAN",
+"nama_en":"DURIAN, FRESH",
+"nama_latin":"Durio zibethinus",
+"kode_komoditas":"B467"
+},
+{ 
+"id":32,
+"kom_id":504,
+"nama":"FLOWERHEAD BRASSICAS",
+"nama_en":"FLOWERHEAD BRASSICAS",
+"nama_latin":"----",
+"kode_komoditas":"B468"
+},
+{ 
+"id":33,
+"kom_id":508,
+"nama":"JERUK NIPIS",
+"nama_en":"LIMES",
+"nama_latin":"Citrus limonia",
+"kode_komoditas":"B472"
+},
+{ 
+"id":34,
+"kom_id":511,
+"nama":"JERUK MANDARIN",
+"nama_en":"MANDARIN",
+"nama_latin":"Citrus reticulata",
+"kode_komoditas":"B475"
+},
+{ 
+"id":35,
+"kom_id":512,
+"nama":"JERUK",
+"nama_en":"ORANGE",
+"nama_latin":"Citrus sinensis",
+"kode_komoditas":"B476"
+},
+{ 
+"id":36,
+"kom_id":516,
+"nama":"KELENGKENG",
+"nama_en":"LONGAN",
+"nama_latin":"Nephelium longana",
+"kode_komoditas":"B480"
+},
+{ 
+"id":37,
+"kom_id":519,
+"nama":"KIWI",
+"nama_en":"KIWI FRUIT",
+"nama_latin":"Actynidia deliciosa",
+"kode_komoditas":"B483"
+},
+{ 
+"id":38,
+"kom_id":520,
+"nama":"KOHLRABI",
+"nama_en":"KOHLRABI",
+"nama_latin":"----",
+"kode_komoditas":"B484"
+},
+{ 
+"id":39,
+"kom_id":521,
+"nama":"LECI",
+"nama_en":"LYCHEE",
+"nama_latin":"Litchi chinensis",
+"kode_komoditas":"B485"
+},
+{ 
+"id":40,
+"kom_id":522,
+"nama":"LEMON",
+"nama_en":"LEMON",
+"nama_latin":"Citrus limonia",
+"kode_komoditas":"B486"
+},
+{ 
+"id":41,
+"kom_id":523,
+"nama":"MANGGA",
+"nama_en":"MANGO",
+"nama_latin":"Mangifera indica",
+"kode_komoditas":"B487"
+},
+{ 
+"id":42,
+"kom_id":526,
+"nama":"MELON",
+"nama_en":"MELON",
+"nama_latin":"Cucumis melo",
+"kode_komoditas":"B490"
+},
+{ 
+"id":43,
+"kom_id":527,
+"nama":"NANAS",
+"nama_en":"PINEAPPLE",
+"nama_latin":"Ananas comosus",
+"kode_komoditas":"B491"
+},
+{ 
+"id":44,
+"kom_id":529,
+"nama":"PEPAYA",
+"nama_en":"PAPAYA",
+"nama_latin":"Carica papaya",
+"kode_komoditas":"B493"
+},
+{ 
+"id":45,
+"kom_id":530,
+"nama":"PERSIK",
+"nama_en":"PEACH",
+"nama_latin":"----",
+"kode_komoditas":"B494"
+},
+{ 
+"id":46,
+"kom_id":531,
+"nama":"PIR",
+"nama_en":"PEAR",
+"nama_latin":"Pyrus communis",
+"kode_komoditas":"B495"
+},
+{ 
+"id":47,
+"kom_id":532,
+"nama":"PISANG",
+"nama_en":"BANANA",
+"nama_latin":"Musa sp.",
+"kode_komoditas":"B496"
+},
+{ 
+"id":48,
+"kom_id":534,
+"nama":"PLUM",
+"nama_en":"PLUM",
+"nama_latin":"Prunus domestica",
+"kode_komoditas":"B498"
+},
+{ 
+"id":49,
+"kom_id":535,
+"nama":"POMELO",
+"nama_en":"SHADDOCK OR POMELOS",
+"nama_latin":"----",
+"kode_komoditas":"B499"
+},
+{ 
+"id":50,
+"kom_id":536,
+"nama":"RASPBERRY, MERAH, HITAM",
+"nama_en":"RASPBERRY FRUIT, RED. BLACK",
+"nama_latin":"----",
+"kode_komoditas":"B500"
+},
+{ 
+"id":51,
+"kom_id":537,
+"nama":"RYE",
+"nama_en":"RYE",
+"nama_latin":"----",
+"kode_komoditas":"B501"
+},
+{ 
+"id":52,
+"kom_id":541,
+"nama":"STRAWBERRY",
+"nama_en":"STRAWBERRY",
+"nama_latin":"Fragaria sp",
+"kode_komoditas":"B505"
+},
+{ 
+"id":53,
+"kom_id":542,
+"nama":"TEBU",
+"nama_en":"SUGAR CANE",
+"nama_latin":"----",
+"kode_komoditas":"B506"
+},
+{ 
+"id":54,
+"kom_id":785,
+"nama":"PERSIMMON",
+"nama_en":"PERSIMMON",
+"nama_latin":"Diosypros sp.",
+"kode_komoditas":"B749"
+},
+{ 
+"id":55,
+"kom_id":789,
+"nama":"BIT",
+"nama_en":"BEETROOT",
+"nama_latin":"Beta vulgaris",
+"kode_komoditas":"B753"
+},
+{ 
+"id":56,
+"kom_id":791,
+"nama":"CABE",
+"nama_en":"PEPPERS CHILLIES",
+"nama_latin":"Capsicum annum",
+"kode_komoditas":"C001"
+},
+{ 
+"id":57,
+"kom_id":794,
+"nama":"CABE KERING",
+"nama_en":"DRIED CHILIES",
+"nama_latin":"Capsicum annuum",
+"kode_komoditas":"C004"
+},
+{ 
+"id":58,
+"kom_id":795,
+"nama":"CANTALOUPE",
+"nama_en":"MELON ROCK",
+"nama_latin":"----",
+"kode_komoditas":"C005"
+},
+{ 
+"id":59,
+"kom_id":855,
+"nama":"GANDUM",
+"nama_en":"WHEAT",
+"nama_latin":"Triticum aestivum",
+"kode_komoditas":"G004"
+},
+{ 
+"id":60,
+"kom_id":856,
+"nama":"GHERKIN",
+"nama_en":"GHERKIN",
+"nama_latin":"----",
+"kode_komoditas":"G005"
+},
+{ 
+"id":61,
+"kom_id":857,
+"nama":"GOOSEBERRY",
+"nama_en":"GOOSEBERRY",
+"nama_latin":"----",
+"kode_komoditas":"G006"
+},
+{ 
+"id":62,
+"kom_id":858,
+"nama":"GRAPEFRUIT",
+"nama_en":"GRAPEFRUIT",
+"nama_latin":"----",
+"kode_komoditas":"G007"
+},
+{ 
+"id":63,
+"kom_id":859,
+"nama":"HAZELNUTS",
+"nama_en":"HAZELNUTS",
+"nama_latin":"----",
+"kode_komoditas":"G008"
+},
+{ 
+"id":64,
+"kom_id":894,
+"nama":"JAGUNG MANIS",
+"nama_en":"SWEET CORN",
+"nama_latin":"Zea mays",
+"kode_komoditas":"J005"
+},
+{ 
+"id":65,
+"kom_id":900,
+"nama":"JAMUR",
+"nama_en":"MUSHROOM",
+"nama_latin":"Agaricus sp.",
+"kode_komoditas":"J011"
+},
+{ 
+"id":66,
+"kom_id":916,
+"nama":"KACANG BABI",
+"nama_en":"BROAD BEANS",
+"nama_latin":"Vicia faba",
+"kode_komoditas":"K002"
+},
+{ 
+"id":67,
+"kom_id":921,
+"nama":"KACANG HIJAU",
+"nama_en":"MUNG BEANS",
+"nama_latin":"Vigna radiata",
+"kode_komoditas":"K007"
+},
+{ 
+"id":68,
+"kom_id":926,
+"nama":"KACANG LIMA, POLONG MUDA DAN/ATAU KACANG MUDA",
+"nama_en":"LIMA BEANS, YOUNG PODS AND/OR IMMATURE BEANS",
+"nama_latin":"Phaseolus limensis",
+"kode_komoditas":"K012"
+},
+{ 
+"id":69,
+"kom_id":927,
+"nama":"KACANG MAKADAMIA",
+"nama_en":"MACADAMIA NUT",
+"nama_latin":"----",
+"kode_komoditas":"K013"
+},
+{ 
+"id":70,
+"kom_id":928,
+"nama":"KACANG PISTACHIOS",
+"nama_en":"PISTACHIOS NUTS",
+"nama_latin":"----",
+"kode_komoditas":"K014"
+},
+{ 
+"id":71,
+"kom_id":931,
+"nama":"KACANG OTOK",
+"nama_en":"COWPEA",
+"nama_latin":"Vigna unguiculata",
+"kode_komoditas":"K017"
+},
+{ 
+"id":72,
+"kom_id":933,
+"nama":"KACANG POLONG",
+"nama_en":"PEAS",
+"nama_latin":"----",
+"kode_komoditas":"K019"
+},
+{ 
+"id":73,
+"kom_id":934,
+"nama":"KACANG TANAH",
+"nama_en":"PEANUTS",
+"nama_latin":"Arachis hypogaea",
+"kode_komoditas":"K020"
+},
+{ 
+"id":74,
+"kom_id":935,
+"nama":"KACANG-KACANGAN KECUALI BROAD BEANS DAN KEDELAI",
+"nama_en":"BEANS (EXCEPT BROAD BEANS AND SOYABEANS)",
+"nama_latin":"----",
+"kode_komoditas":"K021"
+},
+{ 
+"id":75,
+"kom_id":936,
+"nama":"KALE",
+"nama_en":"KALE",
+"nama_latin":"----",
+"kode_komoditas":"K022"
+},
+{ 
+"id":76,
+"kom_id":1003,
+"nama":"KEDELAI , KERING",
+"nama_en":"SOYBEAN, DRY",
+"nama_latin":"Glycine soja",
+"kode_komoditas":"K089"
+},
+{ 
+"id":77,
+"kom_id":1015,
+"nama":"KENTANG",
+"nama_en":"POTATOES",
+"nama_latin":"Solanum tuberosum",
+"kode_komoditas":"K101"
+},
+{ 
+"id":78,
+"kom_id":1023,
+"nama":"MENTIMUN",
+"nama_en":"CUCUMBER",
+"nama_latin":"Cucumis sativus",
+"kode_komoditas":"K109"
+},
+{ 
+"id":79,
+"kom_id":1026,
+"nama":"KISMIS",
+"nama_en":"RAISINS",
+"nama_latin":"Vitis sp.",
+"kode_komoditas":"K112"
+},
+{ 
+"id":80,
+"kom_id":1056,
+"nama":"LADA, HITAM/PUTIH",
+"nama_en":"PEPPER, BLACK/WHITE",
+"nama_latin":"Piper nigrum",
+"kode_komoditas":"L002"
+},
+{ 
+"id":81,
+"kom_id":1070,
+"nama":"LOBAK JEPANG",
+"nama_en":"RADISH, JAPANESE",
+"nama_latin":"Rhapanus sp.",
+"kode_komoditas":"L016"
+},
+{ 
+"id":82,
+"kom_id":1072,
+"nama":"LOBAK",
+"nama_en":"RADISH",
+"nama_latin":"Raphanus sativa hortensis",
+"kode_komoditas":"L018"
+},
+{ 
+"id":83,
+"kom_id":1073,
+"nama":"LOBAK CINA HIJAU",
+"nama_en":"TURNIP GREEN",
+"nama_latin":"Rhapanus sp.",
+"kode_komoditas":"L019"
+},
+{ 
+"id":84,
+"kom_id":1117,
+"nama":"NEKTARIN",
+"nama_en":"NECTARIN",
+"nama_latin":"Prunus persica nectarina",
+"kode_komoditas":"N003"
+},
+{ 
+"id":85,
+"kom_id":1128,
+"nama":"OATS",
+"nama_en":"OATS",
+"nama_latin":"Avena sp.",
+"kode_komoditas":"O005"
+},
+{ 
+"id":86,
+"kom_id":1141,
+"nama":"PAPRIKA",
+"nama_en":"FRESH PAPRIKA",
+"nama_latin":"Capsicum sp.",
+"kode_komoditas":"P013"
+},
+{ 
+"id":87,
+"kom_id":1142,
+"nama":"PARSLEY",
+"nama_en":"PARSLEY",
+"nama_latin":"----",
+"kode_komoditas":"P014"
+},
+{ 
+"id":88,
+"kom_id":1143,
+"nama":"PECAN",
+"nama_en":"PECAN",
+"nama_latin":"----",
+"kode_komoditas":"P015"
+},
+{ 
+"id":89,
+"kom_id":1172,
+"nama":"MELON JINGGA",
+"nama_en":"CANTALOUPE OR ROCKMELON",
+"nama_latin":"----",
+"kode_komoditas":"R012"
+},
+{ 
+"id":90,
+"kom_id":1185,
+"nama":"BAYAM",
+"nama_en":"SPINACH",
+"nama_latin":"Amaranthus sp.",
+"kode_komoditas":"S009"
+},
+{ 
+"id":91,
+"kom_id":1188,
+"nama":"BROKOLI",
+"nama_en":"BROCCOLI",
+"nama_latin":"Brassica oleracea botrytis",
+"kode_komoditas":"S012"
+},
+{ 
+"id":92,
+"kom_id":1190,
+"nama":"BUAH ARA, BUAH TIN/FIGS KERING ATAU KERING DAN MANISAN\r\n",
+"nama_en":"FIGS, DRIED OR DRIED ANDCANDIED",
+"nama_latin":"----",
+"kode_komoditas":"S014"
+},
+{ 
+"id":93,
+"kom_id":1191,
+"nama":"BUNGA KOL",
+"nama_en":"CAULIFLOWER",
+"nama_latin":"Brassica paradisi",
+"kode_komoditas":"S015"
+},
+{ 
+"id":94,
+"kom_id":1196,
+"nama":"KUBIS",
+"nama_en":"CABBAGE",
+"nama_latin":"Brassica sp.",
+"kode_komoditas":"S020"
+},
+{ 
+"id":95,
+"kom_id":1197,
+"nama":"KUBIS, SAVOY",
+"nama_en":"CABBAGE, SAVOY",
+"nama_latin":"Brassica",
+"kode_komoditas":"S021"
+},
+{ 
+"id":96,
+"kom_id":1198,
+"nama":"KURMA",
+"nama_en":"DATES",
+"nama_latin":"----",
+"kode_komoditas":"S022"
+},
+{ 
+"id":97,
+"kom_id":1205,
+"nama":"SELADA",
+"nama_en":"LETTUCE",
+"nama_latin":"Lactuca sativa",
+"kode_komoditas":"S029"
+},
+{ 
+"id":98,
+"kom_id":1209,
+"nama":"SELEDRI",
+"nama_en":"CELERY",
+"nama_latin":"Apium graveolens",
+"kode_komoditas":"S033"
+},
+{ 
+"id":99,
+"kom_id":1210,
+"nama":"SHORGUM",
+"nama_en":"SHORGUM",
+"nama_latin":"----",
+"kode_komoditas":"S034"
+},
+{ 
+"id":100,
+"kom_id":1211,
+"nama":"SPRING ONIONS",
+"nama_en":"ONION, SPRING",
+"nama_latin":"----",
+"kode_komoditas":"S035"
+},
+{ 
+"id":101,
+"kom_id":1212,
+"nama":"SQUASH",
+"nama_en":"SQUASH",
+"nama_latin":"----",
+"kode_komoditas":"S036"
+},
+{ 
+"id":102,
+"kom_id":1213,
+"nama":"SRIKAYA",
+"nama_en":"CUSTARD APPLE",
+"nama_latin":"----",
+"kode_komoditas":"S037"
+},
+{ 
+"id":103,
+"kom_id":1242,
+"nama":"TEH HIJAU, TEH HITAM",
+"nama_en":"TEA GREEN, BLACK",
+"nama_latin":"Camellia sinensis",
+"kode_komoditas":"T011"
+},
+{ 
+"id":104,
+"kom_id":1255,
+"nama":"TEPUNG JAGUNG",
+"nama_en":"MAIZE FLOUR",
+"nama_latin":"Zea mays",
+"kode_komoditas":"T024"
+},
+{ 
+"id":105,
+"kom_id":1269,
+"nama":"TERUNG",
+"nama_en":"EGGPLANT",
+"nama_latin":"Solanum melongena L",
+"kode_komoditas":"T038"
+},
+{ 
+"id":106,
+"kom_id":1270,
+"nama":"TOMAT",
+"nama_en":"TOMATO",
+"nama_latin":"Lycopersicum esculentum",
+"kode_komoditas":"T039"
+},
+{ 
+"id":107,
+"kom_id":1278,
+"nama":"UBI JALAR",
+"nama_en":"SWEET POTATO",
+"nama_latin":"Ipomoea batatas",
+"kode_komoditas":"U001"
+},
+{ 
+"id":108,
+"kom_id":1279,
+"nama":"WORTEL",
+"nama_en":"CARROT",
+"nama_latin":"Daucus Carota L.",
+"kode_komoditas":"U002"
+},
+{ 
+"id":109,
+"kom_id":1280,
+"nama":"ZAITUN",
+"nama_en":"OLIVES",
+"nama_latin":"----",
+"kode_komoditas":"U003"
+},
+{ 
+"id":110,
+"kom_id":1316,
+"nama":"BIJI KOPI",
+"nama_en":"COFFEE BEANS",
+"nama_latin":"Coffea",
+"kode_komoditas":"K141"
+},
+{ 
+"id":111,
+"kom_id":1346,
+"nama":"BERAS, DIPOLES (DISOSOH)",
+"nama_en":"RICE, POLISHED",
+"nama_latin":"Oryza sativa",
+"kode_komoditas":"B755"
+},
+{ 
+"id":112,
+"kom_id":1381,
+"nama":"BERI",
+"nama_en":"BERRIES",
+"nama_latin":"----",
+"kode_komoditas":"B756"
+},
+{ 
+"id":113,
+"kom_id":1515,
+"nama":"OKRA",
+"nama_en":"OKRA",
+"nama_latin":"----",
+"kode_komoditas":"AA81"
+},
+{ 
+"id":114,
+"kom_id":1579,
+"nama":"TEPUNG RYE",
+"nama_en":"RYE FLOUR",
+"nama_latin":"----",
+"kode_komoditas":"R017"
+},
+{ 
+"id":115,
+"kom_id":1584,
+"nama":"BIT GULA",
+"nama_en":"SUGAR BEET",
+"nama_latin":"Beta vulgaris",
+"kode_komoditas":"B757"
+}]

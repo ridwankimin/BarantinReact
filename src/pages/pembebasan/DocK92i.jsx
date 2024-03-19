@@ -70,6 +70,8 @@ function DocK92i() {
     const cekWatch = watch()
 
     const onSubmit = (dataSubmit) => {
+        const jenisPeriksa = [dataSubmit.isKlinis, dataSubmit.isOrganoleptik, dataSubmit.isLaboratoris]
+        console.log(jenisPeriksa)
         setOnLoad(true)
         const dataCekKom = data.listKomoditas?.filter(item => item.volumeP8 == null || item.nettoP8 == null)
         if(dataCekKom.length == 0) {
@@ -78,6 +80,7 @@ function DocK92i() {
             .then((response) => {
                 setOnLoad(false)
                 if(response.data) {
+                    console.log(response)
                     if(response.data.status == 201) {
                         //start save history
                         // const log = new PtkHistory();
@@ -991,18 +994,18 @@ function DocK92i() {
                                                     <div className="mt-1">
                                                     Hasil pemeriksaan: &emsp;
                                                         <div className="form-check form-check-inline">
-                                                            <input className="form-check-input" type="radio" name="hasilPemeriksaan" id="klinis" value="KLINIS" {...register("hasilPemeriksaan", { required: "Mohon pilih hasil pemeriksaan yang sesuai."})} />
+                                                            <input className="form-check-input" type="checkbox" name="isKlinis" id="klinis" value="KLINIS" {...register("isKlinis")} />
                                                             <label className="form-check-label" htmlFor="klinis">Klinis</label>
                                                         </div>
                                                         <div className="form-check form-check-inline">
-                                                            <input className="form-check-input" type="radio" name="hasilPemeriksaan" id="organoleptik" value="ORGANOLEPTIK" {...register("hasilPemeriksaan")} />
+                                                            <input className="form-check-input" type="checkbox" name="isOrganoleptik" id="organoleptik" value="ORGANOLEPTIK" {...register("isOrganoleptik")} />
                                                             <label className="form-check-label" htmlFor="organoleptik">Organoleptik</label>
                                                         </div>
                                                         <div className="form-check form-check-inline">
-                                                            <input className="form-check-input" type="radio" name="hasilPemeriksaan" id="laboratoris" value="LABORATORIS" {...register("hasilPemeriksaan")} />
+                                                            <input className="form-check-input" type="checkbox" name="isLaboratoris" id="laboratoris" value="LABORATORIS" {...register("isLaboratoris")} />
                                                             <label className="form-check-label" htmlFor="laboratoris">Laboratoris</label>
                                                         </div>
-                                                        {errors.hasilPemeriksaan && <small className="text-danger">{errors.hasilPemeriksaan.message}</small>}
+                                                        {/* {errors.hasilPemeriksaan && <small className="text-danger">{errors.hasilPemeriksaan.message}</small>} */}
                                                     </div>
                                                 </div>
                                                 <p className='mb-0 mt-2'>menunjukkan bahwa Media Pembawa tersebut pada saat pemeriksaan :</p>

@@ -285,46 +285,59 @@ export default class PtkPemeriksaan {
       return axios.request(config)
     }
     
-    pnInstalasi(data) {
-      const uuid = uuidv4();
-  
-      let datasend = {
-        'id': data.idDok34 == '' ? uuid : data.idDok34,
-        'ptk_id': data.idPtk,
-        'nomor': data.noDokumen.replace("K.1.1", "K.3.4"),
-        'tanggal': data.tglDok34,
-        'pemilik': data.pemilikInstalasi,
-        'penanggungjawab': data.namaPenanggungJawab,
-        'alamat_instalasi': data.alamatInstalasi,
-        'jenis_identitas': data.jenisIdentitas,
-        'nomor_identitas': data.nomorIdentitas,
-        'nomor_telp': data.nomorTelepon,
-        'diterbitkan_di': data.diterbitkan,
-        'user_ttd_id': data.userTtd,
-        'user_id': Cookies.get("userId"), // session
-      }       
-      let config = {
-          method: data.idDok34 == '' ? 'post' : 'put',
-          maxBodyLength: Infinity,
-          url: url + (data.idDok34 == '' ? 'pn-ik' : 'pn-ik/' + data.idDok34),
-          headers: { 
-            'Content-Type': 'application/json', 
-          },
-          data: datasend
-        };
-        return axios.request(config)
-      }
+  pnInstalasi(data) {
+    const uuid = uuidv4();
+
+    let datasend = {
+      'id': data.idDok34 == '' ? uuid : data.idDok34,
+      'ptk_id': data.idPtk,
+      'nomor': data.noDokumen.replace("K.1.1", "K.3.4"),
+      'tanggal': data.tglDok34,
+      'pemilik': data.pemilikInstalasi,
+      'penanggungjawab': data.namaPenanggungJawab,
+      'alamat_instalasi': data.alamatInstalasi,
+      'jenis_identitas': data.jenisIdentitas,
+      'nomor_identitas': data.nomorIdentitas,
+      'nomor_telp': data.nomorTelepon,
+      'diterbitkan_di': data.diterbitkan,
+      'user_ttd_id': data.userTtd,
+      'user_id': Cookies.get("userId"), // session
+    }       
+    let config = {
+        method: data.idDok34 == '' ? 'post' : 'put',
+        maxBodyLength: Infinity,
+        url: url + (data.idDok34 == '' ? 'pn-ik' : 'pn-ik/' + data.idDok34),
+        headers: { 
+          'Content-Type': 'application/json', 
+        },
+        data: datasend
+      };
+      return axios.request(config)
+    }
       
-      getPnInstalasiByPtkId(id) {
-        let config = {
-            method: 'get',
-            maxBodyLength: Infinity,
-            url: url + 'pn-ik/' + id,
-            headers: { 
-              'Content-Type': 'application/json', 
-            }
-          };
-          
-          return axios.request(config)
+    getPnInstalasiByPtkId(id) {
+      let config = {
+        method: 'get',
+        maxBodyLength: Infinity,
+        url: url + 'pn-ik/' + id,
+        headers: { 
+          'Content-Type': 'application/json', 
+        }
+      };
+      
+      return axios.request(config)
+    }
+    
+    getPnSP2MP(id) {
+      let config = {
+        method: 'get',
+        maxBodyLength: Infinity,
+        url: url + 'pn-sp2mp/' + id,
+        headers: { 
+          'Content-Type': 'application/json', 
+        }
+      };
+      
+      return axios.request(config)
     }
 }

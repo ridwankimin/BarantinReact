@@ -1002,7 +1002,7 @@ function DocK53() {
                                                                 </div>
                                                             </div>
                                                         </div>
-                                                        <div className="col-md-12">
+                                                        <div className="col-md-12 mb-2">
                                                             <div className="row">
                                                                 <label className="col-sm-2 col-form-label" htmlFor="jmlNoContainer">Jumlah Container</label>
                                                                 <div className="col-sm-6">

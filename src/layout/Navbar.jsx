@@ -351,17 +351,17 @@ function Navbar(props) {
                             <div data-i18n="K-9.2">K-9.2</div>
                         </button>
                         <ul className="menu-sub">
-                            <li className={location.pathname.split("/")[1] === 'k92h' ? "menu-item active" : "menu-item"} style={{display: (Cookies.get("jeniskarantina") == "H" ? "block" : "none")}}>
+                            <li className={location.pathname.split("/")[1] === 'k92h' ? "menu-item active" : "menu-item"} style={{display: (Cookies.get("jenisKarantina") == "H" ? "block" : "none")}}>
                                 <div type="button" onClick={() => navigate('/k92h')} className="menu-link" title='SERTIFIKAT PELEPASAN KARANTINA HEWAN'>
                                     <div data-i18n="K-9.2.H">K-9.2.H</div>
                                 </div>
                             </li>
-                            <li className={location.pathname.split("/")[1] === 'k92i' ? "menu-item active" : "menu-item"} style={{display: (Cookies.get("jeniskarantina") == "I" ? "block" : "none")}}>
+                            <li className={location.pathname.split("/")[1] === 'k92i' ? "menu-item active" : "menu-item"} style={{display: (Cookies.get("jenisKarantina") == "I" ? "block" : "none")}}>
                                 <div type="button" onClick={() => navigate('/k92i')} className="menu-link" title='SERTIFIKAT PELEPASAN KARANTINA IKAN'>
                                     <div data-i18n="K-9.2.I">K-9.2.I</div>
                                 </div>
                             </li>
-                            <li className={location.pathname.split("/")[1] === 'k92t' ? "menu-item active" : "menu-item"} style={{display: (Cookies.get("jeniskarantina") == "T" ? "block" : "none")}}>
+                            <li className={location.pathname.split("/")[1] === 'k92t' ? "menu-item active" : "menu-item"} style={{display: (Cookies.get("jenisKarantina") == "T" ? "block" : "none")}}>
                                 <div type="button" onClick={() => navigate('/k92t')} className="menu-link" title='SERTIFIKAT PELEPASAN KARANTINA TUMBUHAN/PENGAWASAN'>
                                     <div data-i18n="K-9.2.T">K-9.2.T</div>
                                 </div>

@@ -58,10 +58,10 @@ function DocK37b() {
 	} = useForm()
     const dataWatchHeader = watchHeader()
 
-    const dataCekKom = data.listKomoditas?.filter(item => item.volumeP1 == null || item.nettoP1 == null)
-    const dataCekKomJanBen = data.listKomoditas?.filter(item => (item.jantan != null && item.jantanP1 == null) || (item.betina != null && item.betinaP1 == null))
     const onSubmitHeader = (dataHeader) => {
         setOnLoad(true)
+        const dataCekKom = data.listKomoditas?.filter(item => item.volumeP1 == null || item.nettoP1 == null)
+        const dataCekKomJanBen = data.listKomoditas?.filter(item => (item.jantan != null && item.jantanP1 == null) || (item.betina != null && item.betinaP1 == null))
         if(dataCekKom.length == 0 && dataCekKomJanBen.length == 0) {
             const response = modelPeriksa.ptkFisikKesehatanHeader(dataHeader);
             response
