@@ -25,7 +25,7 @@ function PrintKh2(props) {
     let [isLoading, setIsLoading] = useState(false)
     let [noSeri, setNoSeri] = useState(false)
     const cetak = props.dataCetak
-    
+    console.log(props)
     
     const printToPdf = () => {
         setIsLoading(true)
@@ -82,7 +82,7 @@ function PrintKh2(props) {
         })
     }
   return (
-    <div className="container-xxl flex-grow-1 container-p-y">
+    <div>
         {isLoading ? <SpinnerDot/> : 
             (noSeri ? 
             (<button onClick={printToPdf} className="btn btn-warning me-sm-2 me-1"><i className="fa-solid fa-print me-sm-2 me-1"></i>
@@ -96,115 +96,118 @@ function PrintKh2(props) {
         <br />
         <hr />
         <br />
+        <span id="print_to_pdf">
+        <div className="container-xxl flex-grow-1 container-p-y">
     <h4 className="py-3 breadcrumb-wrapper mb-4">
-        KH.1 <span className="text-muted fw-light">(SERTIFIKAT KESEHATAN HEWAN)</span>
+        KH.2 <span className="text-muted fw-light">(SERTIFIKAT SANITASI PRODUK HEWAN)</span>
     </h4>
-
-    {/* <!-- Multi Column with Form Separator --> */}
+ 
     <div className="row">
-        
-        {/* <!-- Form Separator --> */}
         <div className="col-xxl">
             <div className="card mb-4" >
-                {/* <!-- <h5 className="card-header">Form Separator</h5> --> */}
                 <div className="container" id="hal1">
                 <div className="row text-end">
                   <p>&nbsp;</p>
                         <h2> KH-2</h2>
                     </div>
-<p style={{textAlign: 'center'}}><img style={{display: 'block', marginLeft: 'auto', marginRight: 'auto'}} src={garuda} alt="garuda" width="100" height="100" /></p>
-<p style={{textAlign: 'center',fontSize:16}}><strong>REPUBLIK INDONESIA</strong> <br /><strong>BADAN KARANTINA INDONESIA</strong></p>
-<p style={{textAlign: 'center', fontSize:12}}><em><strong>REPUBLIC OF INDONESIA</strong></em><br /><em><strong>INDONESIAN QUARANTINE AGENCY</strong></em></p>
-<p style={{textAlign: 'right'}}>No: {noSeri || cetak.dataKH1?.nomor_seri}</p>
-<p style={{textAlign: 'center',fontSize:16}}><strong>SERTIFIKAT SANITASI PRODUK HEWAN</strong> <br /><strong><em>SANITARY CERTIFICATE OF ANIMAL PRODUCT </em></strong></p>
-<p style={{textAlign: 'center'}}>Nomor:..{cetak.dataKH2?.nomor}<br /><em>Number</em></p>
-<p style={{textAlign: 'justify'}}>Berdasarkan Permohonan Tindakan Karantina dan/atau Pengawasan terhadap Pemasukan/Pengeluaran/Transit*) Media Pembawa Nomor .....................Tanggal .............................,</p>
-<p><strong>I. Rincian Keterangan</strong><br /><em>&nbsp; &nbsp; Detail of Description</em></p>
-<table style={{borderCollapse: 'collapse', width: '99.2978%', height: '158px'}} border="1" id="tabel">
-<tbody>
-<tr style={{height: '18px'}}>
-<td style={{width: '32.1075%', height: '36px'}} rowSpan="2">1. Negara / Daerah <br /><em>&nbsp; &nbsp; Country/Region</em></td>
-<td style={{width: '2.26309%', textAlign: 'center', height: '36px'}} rowSpan="2">:</td>
-<td style={{width: '30.9848%', height: '18px'}} colSpan="2">&nbsp;Asal (<em>origin</em>)</td>
-<td style={{width: '43.9887%', height: '18px'}}>&nbsp;Tujuan <em>(Destination)</em></td>
-</tr>
-<tr style={{height: '18px'}}>
-<td style={{width: '30.9848%', height: '18px'}} colSpan="2">&nbsp;</td>
-<td style={{width: '43.9887%', height: '18px'}}>&nbsp;</td>
-</tr>
-<tr style={{height: '25px'}}>
-<td style={{width: '32.1075%', height: '50px'}} rowSpan="2">2. Nama, Alamat, dan&nbsp; <br />&nbsp; &nbsp; NIB/NPWP/KTP/SIM/Passpor <br /><em>&nbsp; &nbsp; Name and Address</em></td>
-<td style={{width: '2.26309%', height: '25px', textAlign: 'center'}} rowSpan="2">:</td>
-<td style={{width: '30.9848%', height: '25px'}} colSpan="2">&nbsp;Pengirim (<em>Consignor</em>)</td>
-<td style={{width: '43.9887%', height: '25px'}}>&nbsp;Penerima <em>(Consignee)</em></td>
-</tr>
-<tr style={{height: '25px'}}>
-<td style={{width: '30.9848%', height: '25px'}} colSpan="2">&nbsp;</td>
-<td style={{width: '43.9887%', height: '25px'}}>&nbsp;</td>
-</tr>
-<tr style={{height: '36px'}}>
-<td style={{width: '49.863%', height: '36px'}} colSpan="3">3. Tempat Pengeluaran dan Tanggal Muat<br /><em>&nbsp; &nbsp; Port of Exit and Date Of Loading</em></td>
-<td style={{width: '59.4811%', height: '36px'}} colSpan="2">4. Tempat Pemasukan dan Tanggal Bongkar<br /><em>&nbsp; &nbsp; Port of Entry and Date of Unloading</em></td>
-</tr>
-<tr style={{height: '18px'}}>
-<td style={{width: '49.863%', height: '18px'}} colSpan="3">5. Tempat Transit<br /><em>&nbsp; &nbsp; Port of Transit</em></td>
-<td style={{width: '59.4811%', height: '18px'}} colSpan="2">6.Jenis dan Identitas Alat Angkut<br /><em>&nbsp; &nbsp;Type and Identity of the Means of Conveyance</em></td>
-</tr>
-</tbody>
-</table>
-<p>*<sup>) </sup>&nbsp;Coret yang tidak perlu.<br /><em>&nbsp; &nbsp; Streak if not necessary</em></p>
-<p><strong>II. Uraian Media Pembawa</strong><br />&nbsp; &nbsp; &nbsp;<em>Description of Carrier</em></p>
-<table style={{borderCollapse: 'collapse', width: '100%'}} border="1" id="tabel">
-<tbody>
-<tr>
-<td style={{width: '4.83146%'}}>No. <br /><em>No.</em></td>
-<td style={{width: '42.8932%'}}>Jenis Media Pembawa <br /><em>Type of Carrier</em></td>
-<td style={{width: '9.60682%'}}>Jumlah <br /><em>Quantity</em></td>
-<td style={{width: '8.34272%'}}>Satuan<br /><em>Unit</em></td>
-<td style={{width: '34.3258%'}}>Keterangan <br /><em>Description</em></td>
-</tr>
-<tr>
-<td style={{width: '4.83146%'}}>&nbsp;</td>
-<td style={{width: '42.8932%'}}>
-<p>&nbsp;</p>
-</td>
-<td style={{width: '9.60682%'}}>&nbsp;</td>
-<td style={{width: '8.34272%'}}>&nbsp;</td>
-<td style={{width: '34.3258%'}}>&nbsp;</td>
-</tr>
-</tbody>
-</table>
+                  <p style={{textAlign: 'center'}}><img style={{display: 'block', marginLeft: 'auto', marginRight: 'auto'}} src={garuda} alt="garuda" width="100" height="100" /></p>
+                  <p style={{textAlign: 'center',fontSize:16}}><strong>REPUBLIK INDONESIA</strong> <br /><strong>BADAN KARANTINA INDONESIA</strong></p>
+                  <p style={{textAlign: 'center', fontSize:12}}><em><strong>REPUBLIC OF INDONESIA</strong></em><br /><em><strong>INDONESIAN QUARANTINE AGENCY</strong></em></p>
+                  <p style={{textAlign: 'right'}}>No: {noSeri || cetak.dataKH2?.nomor_seri}</p>
+                  <p style={{textAlign: 'center',fontSize:16}}><strong>SERTIFIKAT SANITASI PRODUK HEWAN</strong> <br /><strong><em>SANITARY CERTIFICATE OF ANIMAL PRODUCT </em></strong></p>
+                  <p style={{textAlign: 'center'}}>Nomor: <strong>{cetak.dataKH2?.nomor}</strong><br /><em>Number</em></p>
+                  <p style={{textAlign: 'justify'}}>Berdasarkan Undang-Undang Nomor 21 Tahun 2019 tentang Karantina Hewan, Ikan, dan Tumbuhan dan Peraturan Pemerintah Nomor 29 Tahun 2023 tentang Peraturan Pelaksanaa Undang-Undang Nomor 21 Tahun 2019 tentang Karantina Hewan, Ikan, dan Tumbuhan, serta menindaklanjuti Permohonan Tindakan Karantina dan Pengawasan dan/atau Pengendalian Serta Berita Acara Serah Terima Media Pembawa Di Tempat Pemasukan, Pengeluaran dan/atau Transit Nomor <strong>{cetak.listPtk?.no_dok_permohonan}</strong> Tanggal <strong>{moment(cetak.listPtk?.tgl_dok_permohonan).format('DD/MM/YYYY')}</strong> ternyata media pembawa tersebut di bawah ini:</p>
+                  <p><strong>I. Rincian Keterangan</strong><br /><em>&nbsp; &nbsp; Detail of Description</em></p>
+                  <table style={{borderCollapse: 'collapse', width: '99.2978%', height: '158px'}} border="1" id="tabel">
+                  <tbody>
+                  <tr style={{height: '18px'}}>
+                    <td style={{width: '32.1075%', height: '36px'}} rowSpan="2">1. Negara / Daerah <br /><em>&nbsp; &nbsp; Country/Region</em></td>
+                    <td style={{width: '2.26309%', textAlign: 'center', height: '36px'}} rowSpan="2">:</td>
+                    <td style={{width: '30.9848%', height: '18px'}} colSpan="2">&nbsp;Asal (<em>origin</em>)</td>
+                    <td style={{width: '43.9887%', height: '18px'}}>&nbsp;Tujuan <em>(Destination)</em></td>
+                  </tr>
+                  <tr style={{height: '18px'}}>
+                    <td style={{width: '30.9848%', height: '18px'}} colSpan="2"><strong>{cetak.dataKH2?.negara_asal}</strong></td>
+                    <td style={{width: '43.9887%', height: '18px'}}><strong>{cetak.dataKH2?.negara_tujuan}</strong></td>
+                  </tr>
+                    <tr style={{height: '25px'}}>
+                    <td style={{width: '32.1075%', height: '50px'}} rowSpan="2">2. Nama, Alamat, dan&nbsp; <br />&nbsp; &nbsp; NIB/NPWP/KTP/SIM/Passpor <br /><em>&nbsp; &nbsp; Name and Address</em></td>
+                    <td style={{width: '2.26309%', height: '25px', textAlign: 'center'}} rowSpan="2">:</td>
+                    <td style={{width: '30.9848%', height: '25px'}} colSpan="2">&nbsp;Pengirim (<em>Consignor</em>)</td>
+                    <td style={{width: '43.9887%', height: '25px'}}>&nbsp;Penerima <em>(Consignee)</em></td>
+                  </tr>
+                  <tr style={{height: '25px'}}>
+                    <td style={{width: '30.9848%', height: '25px'}} colSpan="2">
+                      <strong>{cetak.dataKH2?.nama_pengirim}<br /> {cetak.listPtk?.jenis_identitas_pengirim} : {cetak.listPtk?.nomor_identitas_pengirim} <br /> {cetak.dataKH2?.alamat_pengirim}</strong>
+                    </td>
+                    <td style={{width: '43.9887%', height: '25px'}}>
+                      <strong>{cetak.dataKH2?.nama_penerima}<br /> {cetak.listPtk?.jenis_identitas_penerima} : {cetak.listPtk?.nomor_identitas_penerima} <br /> {cetak.dataKH2?.alamat_penerima}</strong>
+                    </td>
+                  </tr>
+                  <tr style={{height: '36px'}}>
+                  <td style={{width: '49.863%', height: '36px'}} colSpan="3">3. Tempat Pengeluaran dan Tanggal Muat : <strong>{cetak.dataKH2?.port1} | {moment(cetak.listPtk?.tanggal_rencana_berangkat_terakhir).format('DD/MM/YYYY')}</strong><br /><em>&nbsp; &nbsp; Port of Exit and Date Of Loading</em></td>
+                  <td style={{width: '59.4811%', height: '36px'}} colSpan="2">4. Tempat Pemasukan dan Tanggal Bongkar : <strong>{cetak.dataKH2?.port1} | {moment(cetak.listPtk?.tanggal_rencana_tiba_terakhir).format('DD/MM/YYYY')}</strong><br /><em>&nbsp; &nbsp; Port of Entry and Date of Unloading</em></td>
+                  </tr>
+                  <tr style={{height: '18px'}}>
+                  <td style={{width: '49.863%', height: '18px'}} colSpan="3">5. Tempat Transit <strong>{cetak.listPtk?.pelabuhan_transit}</strong><br /><em>&nbsp; &nbsp; Port of Transit</em></td>
+                  <td style={{width: '59.4811%', height: '18px'}} colSpan="2">6.Jenis dan Identitas Alat Angkut : {cetak.dataKH2?.nama_alat_angkut_terakhir} , {cetak.dataKH2?.no_voyage_terakhir}<br /><em>&nbsp; &nbsp;Type and Identity of the Means of Conveyance</em></td>
+                  </tr>
+                  </tbody>
+                  </table>
+                  <p>*<sup>) </sup>&nbsp;Coret yang tidak perlu.<br /><em>&nbsp; &nbsp; Streak if not necessary</em></p>
+                  <p><strong>II. Uraian Media Pembawa</strong><br />&nbsp; &nbsp; &nbsp;<em>Description of Carrier</em></p>
+                  <table style={{borderCollapse: 'collapse', width: '100%'}} border="1" id="tabel">
+                  <tbody>
+                  <tr>
+                  <th style={{width: '4.83146%'}}>No. <br /><em>No.</em></th>
+                  <th style={{width: '42.8932%'}}>Jenis Media Pembawa <br /><em>Type of Carrier</em></th>
+                  <th style={{width: '9.60682%'}}>Jumlah <br /><em>Quantity</em></th>
+                  <th style={{width: '8.34272%'}}>Satuan<br /><em>Unit</em></th>
+                  <th style={{width: '34.3258%'}}>Keterangan <br /><em>Description</em></th>
+                  </tr>
+                  {cetak.listKomoditas ? (cetak.listKomoditas?.map((data, index)=>(
+                    <tr key={index}>
+                        <td>{index + 1}</td>
+                        <td>{data.nama_umum_tercetak}</td>
+                        <td>{data.volume_lain}</td>
+                        <td>{data.sat_lain}</td>
+                        <td>{data.volume_netto} {data.sat_netto}, jantan: {data.jantanP8} betina:{data.betinaP8}</td>
+                    </tr>      
+                    ))
+                    ):null
+                }
+                  </tbody>
+                  </table>
+                  <p>**: &nbsp;- Untuk hewan disebutkan bangsa, jenis kelamin, umur, dan keterangan lain;<br /><em>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp;For animal(s)</em><em>,</em> <em>the </em><em>breed, gender, age, and other description</em><em> shall be stated</em></p>
 
-<p>**: &nbsp;- Jumlah ditulis berat netto dan berat brutto;<br /><em>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp;Quantity shall be written in brutto weight and netto weight</em><br />&nbsp; &nbsp; &nbsp; &nbsp;- Untuk produk hewan, disebutkan jenis kemasan, identitas kemasan, dan keterangan lain.<br /><em>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp;For animal product</em><em>, the </em><em>packaging type, packaging identity, and other description</em><em> shall be stated </em></p>
-<p>Berdasarkan hasil tindakan karantina yang telah dilakukan, dengan ini menerangkan bahwa*** ) :<br /><em>Based on quarantine measure, hereby explains that:</em> <br />
+                  <p>Berdasarkan hasil tindakan karantina yang telah dilakukan, dengan ini menerangkan bahwa*** ) :<br /><em>Based on quarantine measure, hereby explains that:</em> <br />
 
-<input type="checkbox" />&nbsp;Produk hewan tersebut di atas telah dilakukan tindakan, tidak ditemukan HPHK.<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<em>The animal product as stated above has (have) been conducted with quaratine measures, is (are) not infected of animal quarantine pets and diseases</em> <br />
-<input type="checkbox" />&nbsp;Produk Hewan tersebut di atas dalam keadaan sanitasi baik, kemasan utuh, tidak terjadi perubahan sifat, tidak terkontaminasi, dan dinilai tidak membahayakan kesehatan hewan dan/atau manusia. <br />&nbsp;&nbsp;&nbsp;<em>The animal product as stated above is (are) in good sanitation, intact in packaging, no change in characteristics, not contaminated, and is (are) considered not endangering animal and/or human health.</em> <br />
-<input type="checkbox" />&nbsp;Produk Hewan tersebut di atas telah memenuhi persyaratan dokumen lain.<br />&nbsp;&nbsp;&nbsp;<em>The animal products mentioned above have met the requirements of other documents</em> <br />
-<input type="checkbox" />&nbsp;Lainnya: ......<br />&nbsp;&nbsp;&nbsp;<em>Others</em><br /></p>
+                  {cetak.dataKH2?.m1 === '1' ? <strong>&#9745;</strong> : <><input type="checkbox" /></>}&nbsp;Telah memenuhi seluruh dokumen karantina hewan yang dipersyaratkan;<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<em>Has fulfilled all required animal quarantine documents</em> <br />
+                  {cetak.dataKH2?.m2 === '1' ? <strong>&#9745;</strong> : <><input type="checkbox" /></>}&nbsp;Dalam keadaan sehat dan baik serta telah memenuhi persyaratan sanitasi; <br />&nbsp;&nbsp;&nbsp;<em>Is (are) healthy and in good condition and </em><em>has (have) fulfilled</em><em> the sanitary requirements</em> <br />
+                  {cetak.dataKH2?.m3 === '1' ? <strong>&#9745;</strong> : <><input type="checkbox" /></>}&nbsp;Telah memenuhi seluruh dokumen lain yang dipersyaratkan;<br />&nbsp;&nbsp;&nbsp;<em>Has fulfilled</em><em> all </em><em>require</em><em>d </em><em>others document</em><em>s</em> <br />
+                  {cetak.dataKH2?.m_lain === '1' ? <strong>&#9745;</strong> : <><input type="checkbox" /></>}&nbsp;Lainnya: ......<br />&nbsp;&nbsp;&nbsp;<em>Others</em><br /></p>
 
-<p>***)&nbsp; Beri tanda &#10003; pada kotak yang sesuai<br />&nbsp; &nbsp; &nbsp; &nbsp; <em>Tick to the appropriate box(es)</em></p>
-<table style={{borderCollapse: 'collapse', width: '100%'}} border="1" id="tabel">
-<tbody>
-<tr>
-<td style={{width: '25%',verticalAlign:'top'}}>
-Tanggal dikeluarkan: <br />Date of Issued <br /><br />
-Di <br />At
-</td>
-<td style={{width: '50%'}}>
-<p>Dokter Hewan Karantina <br /><em>Quarantine Veterinanian</em></p>
-<p>Nama <br /><em>Name</em></p>
-<p>NIP&emsp; &emsp; &emsp;&emsp; &emsp; &emsp; &emsp; &emsp; &emsp; &emsp; &emsp; &emsp; &emsp; &emsp; &emsp; &emsp; &emsp; &emsp; Tanda tangan<br /><em>IQV&emsp; &emsp; &emsp; &emsp; &emsp; &emsp; &emsp; &emsp; &emsp; &emsp; &emsp; &emsp; &emsp; &emsp; &emsp; &emsp; &emsp; &emsp; Signature&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;</em></p>
-</td>
-<td style={{width: '25%',verticalAlign:'top'}}>Stempel <br /><em>Stamp</em></td>
-</tr>
-</tbody>
-</table>
-<p>Pernyataan lain dan hasil pemeriksaan laboratorium di halaman berikut. <br /> <em>Other declaration and laboratory results are in the next page.</em></p>
+                  <p>*)&nbsp; Beri tanda ✓ pada kotak yang sesuai<br />&nbsp; &nbsp; &nbsp; &nbsp; <em>Tick to the appropriate box(es)</em></p>
+                  <table style={{borderCollapse: 'collapse', width: '100%'}} border="1" id="tabel">
+                  <tbody>
+                  <tr>
+                  <td style={{width: '25%',verticalAlign:'top'}}>
+                  Tanggal dikeluarkan: <strong>{moment(cetak.dataKH2?.tanggal).format('DD/MM/YYYY')}</strong><br />Date of Issued <br /><br />
+                  Di : <strong>{cetak.dataKH2?.diterbitkan_di}</strong> <br />At
+                  </td>
+                  <td style={{width: '50%'}}>
+                  <p>Dokter Hewan Karantina <br /><em>Quarantine Veterinanian</em></p>
+                  <p>Nama <br /><em>Name</em></p>
+                  <p>NIP&emsp; &emsp; &emsp;&emsp; &emsp; &emsp; &emsp; &emsp; &emsp; &emsp; &emsp; &emsp; &emsp; &emsp; &emsp; &emsp; &emsp; &emsp; Tanda tangan<br /><em>IQV&emsp; &emsp; &emsp; &emsp; &emsp; &emsp; &emsp; &emsp; &emsp; &emsp; &emsp; &emsp; &emsp; &emsp; &emsp; &emsp; &emsp; &emsp; Signature&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;</em></p>
+                  </td>
+                  <td style={{verticalAlign:'top' ,width: '25%'}}>Stamp<br /><em>Stamp</em></td>
+                  </tr>
+                  </tbody>
+                  </table>
+                  <p>Pernyataan lain dan hasil pemeriksaan laboratorium di halaman berikut. <br /> <em>Other declaration and laboratory results are in the next page.</em></p>
                 <div/>
               </div>
               <div className="container " id="hal2">
-              
                 <p><img style={{display: 'block', marginLeft: 'auto', marginRight: 'auto'}} src={garuda} alt="garuda" width="100" height="100" /></p>
                 <p style={{textAlign: 'center'}}><strong>REPUBLIK INDONESIA<br />BADAN KARANTINA INDONESIA</strong></p>
                 <p style={{textAlign: 'center'}}><strong><em>REPUBLIC OF INDONESIA<br /><em>INDONESIAN QUARANTINE AGENCY</em></em></strong></p>
@@ -216,11 +219,11 @@ Di <br />At
                 <tr>
                 <td style={{width: '100%'}}>
                     <p>&nbsp;</p>
-                <p><input type="checkbox" />&nbsp;Pemenuhan persyaratan teknis negara tujuan (Untuk Media Pembawa Ekspor) <br /><em>The fulfillment of technical requirements of the country of destination (for the export carrier)</em></p>
+                <p><input type="checkbox" />Pemenuhan persyaratan teknis negara tujuan (Untuk Media Pembawa Ekspor) <br /><em>The fulfillment of technical requirements of the country of destination (for the export carrier)</em></p>
                 <p>&nbsp;</p>
-                <p><input type="checkbox" />&nbsp;Hasil Pemeriksaan Laboratorium (dilampirkan hasil pengujian) <br /> <em> Result(s) of Laboratory Testing (the result (s) is/are attached)</em></p>
+                <p><input type="checkbox" />Hasil Pemeriksaan Laboratorium (dilampirkan hasil pengujian) <br /> <em> Result(s) of Laboratory Testing (the result (s) is/are attached)</em></p>
                 <p>&nbsp;</p>
-                <p><input type="checkbox" />&nbsp;Lainnya <br /><em>Others</em></p>
+                <p><input type="checkbox" />Lainnya <br /><em>Others</em></p>
                 <p>&nbsp;</p>
                 <p>&nbsp;</p>
                 </td>
@@ -239,7 +242,7 @@ Di <br />At
                 </tr>
                 <tr>
                 <td style={{width: '20%', textAlign: 'left'}} colSpan="2">
-                <p>Nama : <br /><em>Name</em></p>
+                <p>Nama : &nbsp; ck{cetak.petugas?.filter(ttd=>ttd.penanda_tangan_id === cetak.dataKH2?.user_ttd_id).map(ptgs=>{ptgs.nama})} <br /><em>Name</em></p>
                 <p>&nbsp;</p>
                 <p>NIP :<br /><em> IQV</em></p>
                 </td>
@@ -267,10 +270,17 @@ Di <br />At
                 </table>
                 
               </div>
+              {/* <div className="container">
+                  <div className="row-md-1 ">
+                          <button className="btn btn-primary" onClick={printDocument}>Cetak Pelepasan</button>    
+                  </div>
+              </div> */}
             </div>
         </div>
     </div>
 </div>
+        </span>
+      </div>
   )
 }
 

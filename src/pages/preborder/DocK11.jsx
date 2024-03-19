@@ -25,6 +25,7 @@ import Cookies from 'js-cookie'
 import PtkHistory from '../../model/PtkHistory'
 import Swal from 'sweetalert2'
 import LoadBtn from '../../component/loading/LoadBtn'
+import PrintK11 from '../../component/cetak/preborder/PrintK11'
 
 const modelPemohon = new PtkModel()
 const modelMaster = new Master()
@@ -162,6 +163,7 @@ function DocK11() {
     let [ptkLengkap, setPtkLengkap] = useState(false);
     let [onLoad, setOnLoad] = useState(false);
     let [wizardPage, setWizardPage] = useState(1);
+    let [data, setData] = useState({})
     
     function handlePermohonan(e) {
         if(e.target.value == 'EX') {
@@ -1534,6 +1536,13 @@ function DocK11() {
             .then((response) => {
                 console.log(response)
                 if(response.data.status == 200) {
+                    setData(values => ({...values,
+                        errorPTKPage: "",
+                        // mpTercetak: namaUmumMP.join(";"),
+                        listPtk: response.data.data.ptk,
+                        listKomoditas: response.data.data.ptk_komoditi,
+                        listDokumen: response.data.data.ptk_dokumen
+                    }));
                     handlePelabuhan(response.data.data.ptk.negara_muat_id, "pelMuat")
                     handlePelabuhan(response.data.data.ptk.negara_bongkar_id, "pelBongkar")
                     if(response.data.data.ptk.negara_asal_id == 99) {
@@ -3606,7 +3615,7 @@ function DocK11() {
                                                 <button className='btn btn-dark' disabled={dataIdPage.noPermohonan == '' ? false : true} type='submit'>Verifikasi PTK</button>
                                             </div>
                                             <div className='col-sm-2'>
-                                                <a className='btn btn-warning pb-1' href={import("../../dok/k11.pdf")} rel="noopener noreferrer" target='_blank'>
+                                                <a className='btn btn-warning pb-1 ' data-bs-toggle="modal" data-bs-target="#modPrint" rel="noopener noreferrer" target='_blank'>
                                                     <i className="fa-solid fa-printer fa-sm"></i>
                                                     print
                                                 </a>
@@ -4288,6 +4297,19 @@ function DocK11() {
                             </button>
                         </div>
                         </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div className="modal fade" id="modPrint" tabIndex="-1">
+            <div className="modal-dialog modal-fullscreen">
+                <div className="modal-content p-3 pb-1">
+                    <div className="modal-body">
+                        <button type="button" className="btn-close float-end" data-bs-dismiss="modal" aria-label="Close"></button>
+                        <div className="text-center mb-4">
+                            <h3 className="address-title">Cetak Dokumen</h3>
+                        </div>
+                        <PrintK11 dataCetak={data} />
                     </div>
                 </div>
             </div>
