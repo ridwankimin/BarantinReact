@@ -3546,7 +3546,7 @@ function DocK11() {
                                             <span className="d-sm-inline-block d-none">Cek Kembali</span>
                                         </button>
                                         {onLoad ? <LoadBtn warna="btn-success" ukuran="" /> :
-                                            <button type="submit" className="btn btn-success ms-sm-n2" disabled={statusDraft}>
+                                            <button type="submit" className="btn btn-success ms-sm-n2" disabled={statusDraft ? false : true}>
                                                 <i className="fa-solid fa-save me-sm-2 me-1"></i>
                                                 <span className="d-sm-inline-block d-none me-sm-1">Ajukan PTK</span>
                                             </button>
