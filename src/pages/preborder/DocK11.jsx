@@ -1519,7 +1519,7 @@ function DocK11() {
             setValueMP(pel + "View", e.label);
         }
     }
-    
+    let [statusDraft, setStatusDraft] = useState(true)
     useEffect(()=>{
         if(idPtk) {
             let ptkDecode = idPtk ? base64_decode(idPtk) : "";
@@ -1534,7 +1534,9 @@ function DocK11() {
             const response = modelPemohon.getPtkId(base64_decode(ptkNomor[1]));
             response
             .then((response) => {
-                console.log(response)
+                if(import.meta.env.VITE_REACT_APP_BE_ENV == "DEV") {
+                    console.log(response)
+                }
                 if(response.data.status == 200) {
                     setData(values => ({...values,
                         errorPTKPage: "",
@@ -1543,6 +1545,9 @@ function DocK11() {
                         listKomoditas: response.data.data.ptk_komoditi,
                         listDokumen: response.data.data.ptk_dokumen
                     }));
+                    if(response.data.data.ptk.status_ptk != 0) {
+                        setStatusDraft(false)
+                    }
                     handlePelabuhan(response.data.data.ptk.negara_muat_id, "pelMuat")
                     handlePelabuhan(response.data.data.ptk.negara_bongkar_id, "pelBongkar")
                     if(response.data.data.ptk.negara_asal_id == 99) {
@@ -3541,9 +3546,9 @@ function DocK11() {
                                             <span className="d-sm-inline-block d-none">Cek Kembali</span>
                                         </button>
                                         {onLoad ? <LoadBtn warna="btn-success" ukuran="" /> :
-                                            <button type="submit" className="btn btn-success ms-sm-n2">
+                                            <button type="submit" className="btn btn-success ms-sm-n2" disabled={statusDraft}>
                                                 <i className="fa-solid fa-save me-sm-2 me-1"></i>
-                                                <span className="d-sm-inline-block d-none me-sm-1">Simpan & Kirim</span>
+                                                <span className="d-sm-inline-block d-none me-sm-1">Ajukan PTK</span>
                                             </button>
                                         }
                                     </div>
