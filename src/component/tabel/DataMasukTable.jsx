@@ -95,8 +95,7 @@ const tableCustomStyles = {
                 </div>
             </div>,
             ignoreRowClick: true,
-            allowOverflow: true,
-            button: true,
+            allowOverFlow: true,
             width: '3%' //14
         },
         {
