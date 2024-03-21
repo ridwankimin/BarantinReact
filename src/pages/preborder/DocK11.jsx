@@ -734,8 +734,8 @@ function DocK11() {
         const response = modelPemohon.pushDetilDokumen(data);
         response
         .then((response) => {
+            setOnLoad(false)
             if(response.data.status == 201) {
-                    setOnLoad(false)
                     Swal.fire({
                         icon: "success",
                         title: "Dokumen berhasil disimpan.",
@@ -770,6 +770,7 @@ function DocK11() {
     }
 
     const onSubmitDetilMP = (data) => {
+        setOnLoad(true)
         let cekNilai
         if(cekdataDiri.mediaPembawa == "T") {
             cekNilai = data.nilaiBarangMP?.length
@@ -783,6 +784,7 @@ function DocK11() {
                 const response = modelPemohon.pushKomoditi(data, cekdataDiri.mediaPembawa);
                 response
                 .then((response) => {
+                    setOnLoad(false)
                     if(response.data.status == 201) {
                         Swal.fire({
                             icon: "success",
@@ -814,6 +816,7 @@ function DocK11() {
                         });
                     }
                 })
+                setOnLoad(false)
                 .catch((error) => {
                     if(import.meta.env.VITE_REACT_APP_BE_ENV == "DEV") {
                         console.log(error)
@@ -821,6 +824,7 @@ function DocK11() {
                 });
             }
         } else {
+            setOnLoad(false)
             Swal.fire({
                 icon: "error",
                 title: "Error!",
@@ -835,8 +839,8 @@ function DocK11() {
             const response = modelPemohon.tabPemohonUpdate(data);
             response
             .then((response) => {
+                setOnLoad(false)
                 if(response.data.status == 201) {
-                    setOnLoad(false)
                     Swal.fire({
                         icon: "success",
                         title: "Data Pemohon berhasil disimpan.",
@@ -873,8 +877,8 @@ function DocK11() {
                     const response = modelPemohon.tabPemohonInsert(data);
                     response
                     .then((response) => {
+                        setOnLoad(false)
                         if(response.data.status == 201) {
-                            setOnLoad(false)
                             Swal.fire({
                                 icon: "success",
                                 title: "Data Pemohon berhasil disimpan.",
@@ -904,6 +908,7 @@ function DocK11() {
                             setValueKonfirmasi("idPtk", response.data.data.id);
                             setValueKonfirmasi("noAju", response.data.data.no_aju);
                         } else {
+                            setOnLoad(false)
                             Swal.fire({
                                 icon: "error",
                                 title: "Data Pemohon gagal disimpan.",
@@ -940,8 +945,8 @@ function DocK11() {
             const response = modelPemohon.tabPelabuhan(data);
             response
             .then((response) => {
+                setOnLoad(false)
                 if(response.data.status == 201) {
-                    setOnLoad(false)
                     Swal.fire({
                         icon: "success",
                         title: "Sukses!",
@@ -952,7 +957,6 @@ function DocK11() {
                     setFormTab(values => ({...values, tab3: false}))
                     setWizardPage(wizardPage + 1)
                 } else {
-                    setOnLoad(false)
                     Swal.fire({
                         icon: "error",
                         title: "Data Pelabuhan gagal disimpan.",
@@ -998,8 +1002,8 @@ function DocK11() {
                 const response = modelPemohon.tabKomoditas(data);
                 response
                 .then((response) => {
+                    setOnLoad(false)
                     if(response.data.status == 201) {
-                        setOnLoad(false)
                         Swal.fire({
                             icon: "success",
                             title: "Sukses!",
@@ -1010,7 +1014,6 @@ function DocK11() {
                         setFormTab(values => ({...values, tab4: false}))
                         setWizardPage(wizardPage + 1)
                     } else {
-                        setOnLoad(false)
                         Swal.fire({
                             icon: "error",
                             title: "Data Komoditas gagal disimpan.",
@@ -1050,8 +1053,8 @@ function DocK11() {
             const response = modelPemohon.tabTempatPeriksa(data);
             response
             .then((response) => {
+                setOnLoad(false)
                 if(response.data.status == 201) {
-                    setOnLoad(false)
                     Swal.fire({
                         icon: "success",
                         title: "Sukses!",
@@ -1062,7 +1065,6 @@ function DocK11() {
                     setFormTab(values => ({...values, tab5: false}))
                     setWizardPage(wizardPage + 1)
                 } else {
-                    setOnLoad(false)
                     Swal.fire({
                         icon: "error",
                         title: "Error!",
@@ -1102,13 +1104,12 @@ function DocK11() {
             const response = modelPemohon.tabKonfirmasi(data);
             response
             .then((response) => {
+                setOnLoad(false)
                 if(response.data.status == 201) {
-                    setOnLoad(false)
                     setPtkLengkap(true);
                     setValueVerify("idPtk", data.idPtk);
                     setValueVerify("noAju", data.noAju);
                     setValueVerify("mediaPembawaVerif", cekdataDiri.mediaPembawa);
-                    // alert(response.data.status + " - " + response.data.message)
                     Swal.fire({
                         icon: "success",
                         title: "Sukses!",
@@ -1117,7 +1118,6 @@ function DocK11() {
                         timer: 2000
                     })
                 } else {
-                    setOnLoad(false)
                     Swal.fire({
                         icon: "error",
                         title: "Error!",
@@ -1139,6 +1139,7 @@ function DocK11() {
                 })
             });
         } else {
+            setOnLoad(false)
             Swal.fire({
                 icon: "error",
                 title: "Data id kosong!",
@@ -1153,9 +1154,9 @@ function DocK11() {
             const response = modelPemohon.ptkVerify(data);
             response
             .then((response) => {
+                setOnLoad(false)
                 if(response.data.status == 201) {
                     // setPtkLengkap(true);
-                    setOnLoad(false)
                     setStatusDraft(false)
                     Cookies.set("idPtkPage", base64_encode(
                         base64_encode(cekdataDiri.noAju) + 'm0R3N0r1R' + 
@@ -1198,7 +1199,6 @@ function DocK11() {
                         }
                     })
                 } else {
-                    setOnLoad(false)
                     Swal.fire({
                         icon: "error",
                         title: response.data.message,
@@ -1218,6 +1218,7 @@ function DocK11() {
                 })
             });
         } else {
+            setOnLoad(false)
             Swal.fire({
                 icon: "error",
                 title: "Data id kosong",
@@ -1231,8 +1232,8 @@ function DocK11() {
         const response = modelPemohon.pushDetilKontainer(data);
         response
         .then((response) => {
+            setOnLoad(false)
             if(response.data.status == 201) {
-                setOnLoad(false)
                 Swal.fire({
                     icon: "success",
                     title: "Data Kontainer berhasil disimpan.",
@@ -1242,7 +1243,6 @@ function DocK11() {
                 resetFormKontainer();
                 dataKontainerPtk();
             } else {
-                setOnLoad(false)
                 Swal.fire({
                     icon: "error",
                     title: "Data Kontainer gagal disimpan!",
@@ -3429,7 +3429,7 @@ function DocK11() {
                                                                             <tr>
                                                                                 <th>No</th>
                                                                                 <th>Jenis Dokumen</th>
-                                                                                <th>No Dokumen</th>
+                                                                                <th>Nomor Dokumen</th>
                                                                                 <th>Tgl Dokumen</th>
                                                                                 <th>Asal Penerbit</th>
                                                                                 <th>Keterangan</th>
@@ -3671,7 +3671,7 @@ function DocK11() {
                             <input autoComplete="off" type="hidden" name='idDataKontainer' {...registerKontainer("idDataKontainer")} />
                             <input autoComplete="off" type="hidden" name='idPtk' {...registerKontainer("idPtk")} />
                         <div className="col-md-6">
-                        <label className="form-label" htmlFor="noKontainer">No Kontainer <span className='text-danger'>*</span></label>
+                        <label className="form-label" htmlFor="noKontainer">Nomor Kontainer <span className='text-danger'>*</span></label>
                         <div className="input-group input-group-merge">
                             <input
                             id="noKontainer"
@@ -3786,9 +3786,9 @@ function DocK11() {
                             {errorsDokumen.jenisDokumen && <small className="text-danger">{errorsDokumen.jenisDokumen.message}</small>}
                         </div>
                         <div className="col-md-6">
-                            <label className="form-label" htmlFor="noDokumen">No Dokumen {cekdataDiri.jenisForm == "BST" ? "" : <span className='text-danger'>*</span>}</label>
+                            <label className="form-label" htmlFor="noDokumen">Nomor Dokumen {cekdataDiri.jenisForm == "BST" ? "" : <span className='text-danger'>*</span>}</label>
                             <div className="input-group input-group-merge">
-                                <input autoComplete="off" type='text' name="noDokumen" id="noDokumen" placeholder='No Dokumen..' {...registerDokumen("noDokumen", { required: cekdataDiri.jenisForm == "BST" ? false : "Mohon isi nomor dokumen."})} className={errorsDokumen.noDokumen ? "form-control form-control-sm is-invalid" : "form-control form-control-sm"} />
+                                <input autoComplete="off" type='text' name="noDokumen" id="noDokumen" placeholder='Nomor Dokumen..' {...registerDokumen("noDokumen", { required: cekdataDiri.jenisForm == "BST" ? false : "Mohon isi nomor dokumen."})} className={errorsDokumen.noDokumen ? "form-control form-control-sm is-invalid" : "form-control form-control-sm"} />
                             </div>
                             <input autoComplete="off" type="hidden" name='cekPrior' id='cekPrior' {...registerDokumen("cekPrior")}/>
                             {errorsDokumen.noDokumen && <small className="text-danger">{errorsDokumen.noDokumen.message}</small>}
@@ -3866,7 +3866,7 @@ function DocK11() {
                     <div className="modal-body">
                         <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                         <div className="text-center mb-4">
-                            <h3 className="address-title">{cekdataDetilMP.idDetilMP ? "Edit" : "Tambah"} Media Pembawa {cekdataDiri.mediaPembawa == 'H' ? 'Hewan' : (cekdataDiri.mediaPembawa == 'I' ? 'Ikan' : 'Tumbuhan')}</h3>
+                            <h3 className="address-title">{cekdataDetilMP.idDetilMP ? "Edit" : "Tambah"} Media Pembawa {cekdataDiri.mediaPembawa == 'H' ? 'Hewan' : (cekdataDiri.mediaPembawa == 'I' ? 'Ikan' : (cekdataDiri.mediaPembawa == 'T' ? 'Tumbuhan' : ''))}</h3>
                         </div>
                         <form onSubmit={handleFormDetilMP(onSubmitDetilMP)} className="row g-3">
                         <input autoComplete="off" type="hidden" name='idDetilMP' {...registerDetilMP("idDetilMP")} />
@@ -3907,20 +3907,19 @@ function DocK11() {
                                 {errorsDetilMP.satuanNetto && <small className="text-danger">{errorsDetilMP.satuanNetto.message}</small>}
                             </div>
                             <div className="col-md-6">
-                                <label className="form-label" htmlFor="komoditasMP">Komoditas<span className='text-danger'>*</span></label>
-                                <input autoComplete="off" type="hidden" name="komoditasMP" id="komoditasMP" {...registerDetilMP("komoditasMP", {required: "Mohon isi Komoditas."})} />
+                                <label className="form-label" htmlFor="kodeHSMp">Kode HS<span className='text-warning'>*</span></label>
                                 <Controller
                                     control={controlDetilMP}
-                                    name={"selectKomoditasMP"}
+                                    name={"kodeHSMp"}
                                     defaultValue={""}
                                     className="form-control form-control-sm"
-                                    rules={{ required: false }}
+                                    rules={{ required: "Mohon pilih kode HS" }}
                                     render={({ field: { value,onChange, ...field } }) => (
-                                        <Select styles={customStyles} placeholder={"Pilih komoditas.."} value={{id: cekdataDetilMP.selectKomoditasMP, label: cekdataDetilMP.selectKomoditasMPView}} onChange={(e) => setValueDetilMP("selectKomoditasMP", e.value) & setValueDetilMP("selectKomoditasMPView", e.label) & handleSetKomoditasSelect(e)} {...field} options={dataSelect.selectKomoditasMP} />
+                                        <Select styles={customStyles} placeholder={"Pilih kode HS.."} value={{id: cekdataDetilMP.kodeHSMp, label: cekdataDetilMP.kodeHSMpView}} onChange={(e) => setValueDetilMP("kodeHSMp", e.value) & setValueDetilMP("kodeHSMpView", e.label)} {...field} options={dataSelect.kodeHSMp} />
                                     )}
                                 />
-                                <small className='text-danger'>{cekdataDetilMP.idDetilMP ? "*Tidak perlu dipilih ulang jika tidak ubah komoditas" : null}</small>
-                                {errorsDetilMP.komoditasMP && <small className="text-danger">{errorsDetilMP.komoditasMP.message}</small>}
+                                {errorsDetilMP.kodeHSMp && <small className="text-danger">{errorsDetilMP.kodeHSMp.message}</small>}
+                                <small className='text-danger'>{cekdataDetilMP.idDetilMP ? "*Tidak perlu dipilih ulang jika tidak ubah kode HS" : null}</small>
                             </div>
                             <div className="col-md-6">
                                 <label className="form-label" htmlFor="volumeBrutto">Volume Brutto</label>
@@ -3941,25 +3940,27 @@ function DocK11() {
                                 {errorsDetilMP.satuanBrutto && <small className="text-danger">{errorsDetilMP.satuanBrutto.message}</small>}
                             </div>
                             <div className="col-md-6">
-                                <label className="form-label" htmlFor="kodeHSMp">Kode HS<span className='text-warning'>*</span></label>
+                                <label className="form-label" htmlFor="komoditasMP">Komoditas<span className='text-danger'>*</span></label>
+                                <input autoComplete="off" type="hidden" name="komoditasMP" id="komoditasMP" {...registerDetilMP("komoditasMP", {required: "Mohon isi Komoditas."})} />
                                 <Controller
                                     control={controlDetilMP}
-                                    name={"kodeHSMp"}
+                                    name={"selectKomoditasMP"}
                                     defaultValue={""}
                                     className="form-control form-control-sm"
-                                    rules={{ required: "Mohon pilih kode HS" }}
+                                    rules={{ required: false }}
                                     render={({ field: { value,onChange, ...field } }) => (
-                                        <Select styles={customStyles} placeholder={"Pilih kode HS.."} value={{id: cekdataDetilMP.kodeHSMp, label: cekdataDetilMP.kodeHSMpView}} onChange={(e) => setValueDetilMP("kodeHSMp", e.value) & setValueDetilMP("kodeHSMpView", e.label)} {...field} options={dataSelect.kodeHSMp} />
+                                        <Select styles={customStyles} placeholder={"Pilih komoditas.."} value={{id: cekdataDetilMP.selectKomoditasMP, label: cekdataDetilMP.selectKomoditasMPView}} onChange={(e) => setValueDetilMP("selectKomoditasMP", e.value) & setValueDetilMP("selectKomoditasMPView", e.label) & handleSetKomoditasSelect(e)} {...field} options={dataSelect.selectKomoditasMP} />
                                     )}
                                 />
-                                {errorsDetilMP.kodeHSMp && <small className="text-danger">{errorsDetilMP.kodeHSMp.message}</small>}
-                                <small className='text-danger'>{cekdataDetilMP.idDetilMP ? "*Tidak perlu dipilih ulang jika tidak ubah kode HS" : null}</small>
+                                <small className='text-danger'>{cekdataDetilMP.idDetilMP ? "*Tidak perlu dipilih ulang jika tidak ubah komoditas" : null}</small>
+                                {errorsDetilMP.komoditasMP && <small className="text-danger">{errorsDetilMP.komoditasMP.message}</small>}
                             </div>
                             <div className="col-md-6">
                                 <label className="form-label" htmlFor="volumeLain">Volume Lain<span className='text-warning'>*</span></label>
                                 <div className='row'>
                                     <div className="col-md-5" style={{paddingRight: '2px'}}>
-                                        <input autoComplete="off" type="text" className='form-control form-control-sm' name='volumeLain' id='volumeLain' value={cekdataDetilMP.volumeLain ? addCommas(removeNonNumeric(cekdataDetilMP.volumeLain)) : ""} {...registerDetilMP("volumeLain")} />
+                                        <input autoComplete="off" type="text" className='form-control form-control-sm' name='volumeLain' id='volumeLain' value={cekdataDetilMP.volumeLain ? addCommas(removeNonNumeric(cekdataDetilMP.volumeLain)) : ""} {...registerDetilMP("volumeLain", { required: "Mohon isi volume MP"})} />
+                                        {errorsDetilMP.volumeLain && <small className="text-danger">{errorsDetilMP.volumeLain.message}</small>}
                                     </div>
                                     <div className="col-md-7" style={{paddingLeft: '2px'}}>
                                         <Controller
@@ -4093,6 +4094,7 @@ function DocK11() {
                                 <div className='row'>
                                     <div className='col-md-7' style={{paddingRight: '2px'}}>
                                         <input autoComplete="off" type="text" value={cekdataDetilMP.jumlahMP ? addCommas(removeNonNumeric(cekdataDetilMP.jumlahMP)) : ""} {...registerDetilMP("jumlahMP", {required: "Mohon isi jumlah."})} className={errorsDetilMP.jumlahMP ? "form-control form-control-sm is-invalid" : "form-control form-control-sm"} name='jumlahMP' id='jumlahMP' />
+                                        {errorsDetilMP.jumlahMP && <small className="text-danger">{errorsDetilMP.jumlahMP.message}</small>}
                                     </div>
                                     <div className='col-md-5' style={{paddingLeft: '2px'}}>
                                         <Controller
@@ -4105,14 +4107,23 @@ function DocK11() {
                                                 <Select styles={customStyles} placeholder={"Pilih Satuan.."} value={{id: cekdataDetilMP.satJumlahMP, label: cekdataDetilMP.satJumlahMPView}} onChange={(e) => setValueDetilMP("satJumlahMP", e.value) & setValueDetilMP("satJumlahMPView", e.label)} {...field} options={masterSatuanJson(cekdataDiri.mediaPembawa)} />
                                             )}
                                         />
-                                        {errorsDetilMP.jumlahMP && <small className="text-danger">{errorsDetilMP.jumlahMP.message}</small>}
                                         {errorsDetilMP.satJumlahMP && <small className="text-danger">{errorsDetilMP.satJumlahMP.message}</small>}
                                     </div>
                                 </div>
                             </div>
-                            <div className="col-md-6" style={{visibility: (cekdataDiri.jenisMp == '1' ? "visible" : "hidden")}}>
-                                <label className="form-label" htmlFor="breedMP">Breed</label>
-                                <input autoComplete="off" type='text' name="breedMP" id="breedMP" {...registerDetilMP("breedMP")} className="form-control form-control-sm" />
+                            <div className="col-md-6">
+                                <div style={{display: (cekdataDiri.jenisMp == '1' ? "block" : "none")}}>
+                                    <div className='row'>
+                                        <div className="col-md-4">
+                                            <label className="form-label" htmlFor="jantan">Jantan (Ekor)</label>
+                                            <input autoComplete="off" type="text" id="jantan" name="jantan" value={cekdataDetilMP.jantan ? addCommas(removeNonNumeric(cekdataDetilMP.jantan)) : ""} {...registerDetilMP("jantan")} className='form-control form-control-sm' />
+                                            </div>
+                                        <div className="col-md-4">
+                                            <label className="form-label" htmlFor="betina">Betina (Ekor)</label>
+                                            <input autoComplete="off" type="text" name='betina' id='betina' value={cekdataDetilMP.betina ? addCommas(removeNonNumeric(cekdataDetilMP.betina)) : ""} {...registerDetilMP("betina")} className='form-control form-control-sm' />
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
                             <div className="col-md-6">
                                 <label className="form-label" htmlFor="nettoMP">Netto<span className='text-warning'>*</span></label>
@@ -4128,6 +4139,24 @@ function DocK11() {
                                         <input autoComplete="off" type="text" className='form-control form-control-sm' value='KILOGRAM' readOnly />
                                     </div>
                                     {errorsDetilMP.nettoMP && <small className="text-danger">{errorsDetilMP.nettoMP.message}</small>}
+                                </div>
+                            </div>
+                            <div className="col-md-6" style={{visibility: (cekdataDiri.jenisMp == '1' ? "visible" : "hidden")}}>
+                                <label className="form-label" htmlFor="breedMP">Breed</label>
+                                <input autoComplete="off" type='text' name="breedMP" id="breedMP" {...registerDetilMP("breedMP")} className="form-control form-control-sm" />
+                            </div>
+                            <div className="col-md-6">
+                                <label className="form-label" htmlFor="brutoMP">Bruto<span className='text-warning'>*</span></label>
+                                <div className='row'>
+                                    <div className='col-md-7' style={{paddingRight: '2px'}}>
+                                        <input autoComplete="off" type="text" value={cekdataDetilMP.brutoMP ? addCommas(removeNonNumeric(cekdataDetilMP.brutoMP)) : ""} {...registerDetilMP("brutoMP", {required: "Mohon isi volume bruto"})} className='form-control form-control-sm' name='brutoMP' id='brutoMP' />
+                                    </div>
+                                    {/* ekor: 1122 || KG: 1356  */}
+                                    <div className='col-md-5' style={{paddingLeft: '2px'}}>
+                                        <input autoComplete="off" type="hidden" name='satBrutoMP' id='satBrutoMP' {...registerDetilMP("satBrutoMP")} value="1356" />
+                                        <input autoComplete="off" type="text" className='form-control form-control-sm' value="KILOGRAM" readOnly  />
+                                    </div>
+                                    {errorsDetilMP.brutoMP && <small className="text-danger">{errorsDetilMP.brutoMP.message}</small>}
                                 </div>
                             </div>
                             <div className="col-md-6">
@@ -4146,32 +4175,6 @@ function DocK11() {
                                     </div>
                                     {errorsDetilMP.nilaiBarangMPKH && <small className="text-danger">{errorsDetilMP.nilaiBarangMPKH.message}</small>}
                                     {/* {errorsDetilMP.satuanNilaiMPKH && <small className="text-danger">{errorsDetilMP.satuanNilaiMPKH.message}</small>} */}
-                                </div>
-                            </div>
-                            <div className="col-md-6">
-                                <label className="form-label" htmlFor="brutoMP">Bruto<span className='text-warning'>*</span></label>
-                                <div className='row'>
-                                    <div className='col-md-7' style={{paddingRight: '2px'}}>
-                                        <input autoComplete="off" type="text" value={cekdataDetilMP.brutoMP ? addCommas(removeNonNumeric(cekdataDetilMP.brutoMP)) : ""} {...registerDetilMP("brutoMP", {required: "Mohon isi volume bruto"})} className='form-control form-control-sm' name='brutoMP' id='brutoMP' />
-                                    </div>
-                                    {/* ekor: 1122 || KG: 1356  */}
-                                    <div className='col-md-5' style={{paddingLeft: '2px'}}>
-                                        <input autoComplete="off" type="hidden" name='satBrutoMP' id='satBrutoMP' {...registerDetilMP("satBrutoMP")} value="1356" />
-                                        <input autoComplete="off" type="text" className='form-control form-control-sm' value="KILOGRAM" readOnly  />
-                                    </div>
-                                    {errorsDetilMP.brutoMP && <small className="text-danger">{errorsDetilMP.brutoMP.message}</small>}
-                                </div>
-                            </div>
-                            <div className="col-md-6" style={{display: (cekdataDiri.jenisMp == '1' ? "block" : "none")}}>
-                                <div className='row'>
-                                    <div className="col-md-4">
-                                        <label className="form-label" htmlFor="jantan">Jantan (Ekor)</label>
-                                        <input autoComplete="off" type="text" id="jantan" name="jantan" value={cekdataDetilMP.jantan ? addCommas(removeNonNumeric(cekdataDetilMP.jantan)) : ""} {...registerDetilMP("jantan")} className='form-control form-control-sm' />
-                                        </div>
-                                    <div className="col-md-4">
-                                        <label className="form-label" htmlFor="betina">Betina (Ekor)</label>
-                                        <input autoComplete="off" type="text" name='betina' id='betina' value={cekdataDetilMP.betina ? addCommas(removeNonNumeric(cekdataDetilMP.betina)) : ""} {...registerDetilMP("betina")} className='form-control form-control-sm' />
-                                    </div>
                                 </div>
                             </div>
                         </> : (cekdataDiri.mediaPembawa == 'I' ?
@@ -4314,11 +4317,11 @@ function DocK11() {
                                 <button type="submit" className="btn btn-primary me-sm-3 me-1">{cekdataDetilMP.idDetilMP ? "Edit" : "Tambah"}</button>
                             }
                             <button
-                            type="reset"
-                            className="btn btn-label-secondary"
-                            data-bs-dismiss="modal"
-                            aria-label="Close">
-                            Tutup
+                                type="reset"
+                                className="btn btn-label-secondary"
+                                data-bs-dismiss="modal"
+                                aria-label="Close">
+                                Tutup
                             </button>
                         </div>
                         </form>

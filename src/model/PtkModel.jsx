@@ -192,7 +192,7 @@ export default class PtkModel {
             "dTo": input.dTo,
             "search": input.search, // AJU, DRAFT, DOK
             "jenis_permohonan": input.jenisPermohonan, //EX, IM dst
-            "jenis_karantina": input.jenisKarantina, // H, I, T
+            "jenis_karantina": Cookies.get("uptId") == "1000" ? input.jenisKarantina : Cookies.get("username").slice(-1).toLocaleUpperCase(), // H, I, T  /// dev
             "jenis_dokumen": input.jenisDokumen, // PTK, NHI, BST
             'upt_id': Cookies.get("uptId"), // PAKE SESSION
             "kode_satpel": Cookies.get("kodeSatpel") // PAKE SESSION

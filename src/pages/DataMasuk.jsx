@@ -1,6 +1,7 @@
 import React, {useState} from 'react'
 import DataMasukTable from '../component/tabel/DataMasukTable'
 import { useForm } from 'react-hook-form'
+import Cookies from 'js-cookie';
 // import Cookies from 'js-cookie';
 
 function datenow() {
@@ -126,7 +127,7 @@ const onSubmitPtk = (data) => {
                                     <option value="DOK">Verifikasi</option>
                                   </select>
                               </div>
-                              <div className='col-1'>
+                              <div className='col-1' style={{display: Cookies.get("uptId") == "1000" ? "block" : "none"}}>
                                   <label htmlFor="jenisKarantina">Karantina</label>
                                   <select name="jenisKarantina" id="jenisKarantina" {...registerPtk("jenisKarantina")} className='form-control form-control-sm'>
                                     <option value="">-Semua-</option>
