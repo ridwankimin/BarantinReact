@@ -769,7 +769,7 @@ function DocKI2() {
         }
     }
   return (
-    <div className="container-xxl flex-grow-1 container-p-y">
+    <div className="container-fluid flex-grow-1 container-p-y">
         <h4 className="py-3 breadcrumb-wrapper mb-4">
             KI-2 <span className="fw-light" style={{color: 'blue'}}>(Sertifikat Kesehatan Ikan dan Produk Ikan)</span>
             

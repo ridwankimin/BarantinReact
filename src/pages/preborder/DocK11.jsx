@@ -1913,7 +1913,7 @@ function DocK11() {
     },[idPtk, handleKota, handlePelabuhan, setValueDetilMP, setValueDokPeriksa, setValueDokumen, setValueKonfirmasi, setValueKontainer, setValueMP, setValuePelabuhan, setValuePemohon, setValueVerify])
 
     return (
-    <div className="container-xxl flex-grow-1 container-p-y">
+    <div className="container-fluid flex-grow-1 container-p-y">
         <h4 className="py-3 breadcrumb-wrapper mb-4">
             K-1.1 <span style={{color: "blue"}}>PERMOHONAN TINDAKAN KARANTINA</span>
         </h4>

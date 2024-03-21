@@ -2,7 +2,7 @@ import React from 'react'
 
 function DocK14() {
   return (
-    <div className="container-xxl flex-grow-1 container-p-y">
+    <div className="container-fluid flex-grow-1 container-p-y">
     <h4 className="py-3 breadcrumb-wrapper mb-4">
         K-1.4 <span className="text-muted fw-light">MUTASI MUATAN ALAT ANGKUT</span>
     </h4>

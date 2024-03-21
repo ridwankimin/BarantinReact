@@ -2,7 +2,7 @@ import React from 'react'
 
 function DocK13() {
   return (
-    <div className="container-xxl flex-grow-1 container-p-y">
+    <div className="container-fluid flex-grow-1 container-p-y">
     <h4 className="py-3 breadcrumb-wrapper mb-4">
         K-1.3 <span className="text-muted fw-light">KEDATANGAN ALAT ANGKUT</span>
     </h4>

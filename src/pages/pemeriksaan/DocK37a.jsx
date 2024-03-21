@@ -445,7 +445,7 @@ function DocK37a() {
         }
     }
   return (
-    <div className="container-xxl flex-grow-1 container-p-y">
+    <div className="container-fluid flex-grow-1 container-p-y">
         <h4 className="py-3 breadcrumb-wrapper mb-4">
             K-3.7a <span className="fw-light" style={{color: 'blue'}}>LAPORAN HASIL PEMERIKSAAN ADMINISTRATIF DAN KESESUAIAN DOKUMEN</span>
             
