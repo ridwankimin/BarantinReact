@@ -927,7 +927,9 @@ function DocK11() {
                             showConfirmButton: true
                         })
                     });
-                } else if (result.isDenied) { /* empty */ }
+                } else if (result.isDenied) { 
+                    setOnLoad(false)
+                 }
             });
         }
     };
@@ -1154,6 +1156,7 @@ function DocK11() {
                 if(response.data.status == 201) {
                     // setPtkLengkap(true);
                     setOnLoad(false)
+                    setStatusDraft(false)
                     Cookies.set("idPtkPage", base64_encode(
                         base64_encode(cekdataDiri.noAju) + 'm0R3N0r1R' + 
                         base64_encode(cekdataDiri.idPtk) + "m0R3N0r1R" + 
@@ -1188,8 +1191,11 @@ function DocK11() {
                         icon: "success",
                         title: "Sukses!",
                         text: "Permohonan AJU No: " + cekdataDiri.noAju + " berhasil diverifikasi",
-                        showConfirmButton: false,
-                        timer: 2000
+                        showConfirmButton: true,
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            window.location.reload()
+                        }
                     })
                 } else {
                     setOnLoad(false)
@@ -2027,9 +2033,9 @@ function DocK11() {
                                     </div>
                                     <div className="col-sm-5">
                                         <div className="row mb-3">
-                                            <label className="col-sm-4 col-form-label" htmlFor="mediaPembawa">Media Pembawa <span className='text-danger'>*</span></label>
+                                            <label className="col-sm-4 col-form-label" htmlFor="mediaPembawa">Media Pembawa {cekdataDiri.jenisForm == "BST" ? "" : <span className='text-danger'>*</span>}</label>
                                             <div className="col-sm-6">
-                                                <select name="mediaPembawa" id="mediaPembawa" {...registerPemohon("mediaPembawa", { required: "Mohon pilih media pembawa."})} disabled={dataIdPage.noAju ? true : false} className={errorsPemohon.mediaPembawa ? "form-select form-select-sm is-invalid" : "form-select form-select-sm"}>
+                                                <select name="mediaPembawa" id="mediaPembawa" {...registerPemohon("mediaPembawa", { required: cekdataDiri.jenisForm == "BST" ? false : "Mohon pilih media pembawa."})} disabled={dataIdPage.noAju ? true : false} className={errorsPemohon.mediaPembawa ? "form-select form-select-sm is-invalid" : "form-select form-select-sm"}>
                                                     <option value="">--</option>
                                                     <option value="H">Hewan</option>
                                                     <option value="I">Ikan</option>
@@ -2041,12 +2047,12 @@ function DocK11() {
                                     </div>
                                     <div className="col-sm-7">
                                         <div className="row mb-3">
-                                            <label className="col-sm-3 col-form-label" htmlFor="jenisMp">Jenis Media Pembawa <span className='text-danger'>*</span></label>
+                                            <label className="col-sm-3 col-form-label" htmlFor="jenisMp">Jenis Media Pembawa {cekdataDiri.jenisForm == "BST" ? "" : <span className='text-danger'>*</span>}</label>
                                             <div className="col-sm-9">
                                                 {/* <!-- Hewan --> */}
                                                 <div style={{display: cekdataDiri.mediaPembawa == 'H' ? 'block' : 'none'}}>
                                                     <div className="form-check form-check-inline">
-                                                        <input autoComplete="off" className="form-check-input" type="radio" onChange={() => handleKomKHIDetil()} disabled={dataIdPage.noAju ? (cekdataDiri.jenisMp == "1" ? false : true) : false} name="jenisMp" id="hidup" value="1" {...registerPemohon("jenisMp", { required: "Mohon pilih jenis media pembawa."})} />
+                                                        <input autoComplete="off" className="form-check-input" type="radio" onChange={() => handleKomKHIDetil()} disabled={dataIdPage.noAju ? (cekdataDiri.jenisMp == "1" ? false : true) : false} name="jenisMp" id="hidup" value="1" {...registerPemohon("jenisMp", { required: cekdataDiri.jenisForm == "BST" ? false : "Mohon pilih jenis media pembawa."})} />
                                                         <label className="form-check-label" htmlFor="hidup">Hewan Hidup</label>
                                                     </div>
                                                     <div className="form-check form-check-inline">
@@ -2110,23 +2116,29 @@ function DocK11() {
                         <div className="collapse show">
                             <div className="card-body pt-0">
                                 <div className="row mb-3">
-                                    <label className="col-sm-3 col-form-label" htmlFor="permohonan">Permohonan <span className='text-danger'>*</span></label>
+                                    <label className="col-sm-3 col-form-label" htmlFor="permohonan">Permohonan {cekdataDiri.jenisForm == "BST" ? "" : <span className='text-danger'>*</span>}</label>
                                     <div className="col-sm-9">
-                                            <select className={errorsPemohon.permohonan ? "form-control form-control-sm is-invalid" : "form-control form-control-sm"} disabled={dataIdPage.noAju ? true : false} name="permohonan" id="permohonan" {...registerPemohon("permohonan", { required: "Mohon pilih jenis permohonan."})} onChange={(e) => handlePermohonan(e)}>
+                                            <select className={errorsPemohon.permohonan ? "form-control form-control-sm is-invalid" : "form-control form-control-sm"} disabled={dataIdPage.noAju ? true : false} name="permohonan" id="permohonan" {...registerPemohon("permohonan", { required: cekdataDiri.jenisForm == "BST" ? false : "Mohon pilih jenis permohonan."})} onChange={(e) => handlePermohonan(e)}>
                                                 <option value="">--</option>
-                                                <option value="EX">Ekspor</option>
-                                                <option value="IM">Impor</option>
-                                                <option value="DM">Domestik Masuk</option>
-                                                <option value="DK">Domestik Keluar</option>
+                                                {cekdataDiri.jenisForm == "BST" ? 
+                                                    <option value="ST">Serah Terima</option>
+                                                :
+                                                <>
+                                                    <option value="EX">Ekspor</option>
+                                                    <option value="IM">Impor</option>
+                                                    <option value="DM">Domestik Masuk</option>
+                                                    <option value="DK">Domestik Keluar</option>
+                                                </> 
+                                                }
                                             </select>
                                         {errorsPemohon.permohonan && <small className="text-danger">{errorsPemohon.permohonan.message}</small>}
                                     </div>
                                 </div>
                                 <div className="row mb-3">
-                                    <label className="col-sm-3 col-form-label" htmlFor="statPemilik">Kepemilikan <span className='text-danger'>*</span></label>
+                                    <label className="col-sm-3 col-form-label" htmlFor="statPemilik">Kepemilikan {cekdataDiri.jenisForm == "BST" ? "" : <span className='text-danger'>*</span>}</label>
                                     <div className="col-sm-9">
                                             <div className="form-check form-check-inline">
-                                                <input autoComplete="off" className="form-check-input" type="radio" name="statPemilik" id="statPemilik1" value="PEMILIK" {...registerPemohon("statPemilik", { required: "Mohon pilih status kepemilikan."})} />
+                                                <input autoComplete="off" className="form-check-input" type="radio" name="statPemilik" id="statPemilik1" value="PEMILIK" {...registerPemohon("statPemilik", { required: cekdataDiri.jenisForm == "BST" ? false : "Mohon pilih status kepemilikan."})} />
                                                 <label className="form-check-label" htmlFor="statPemilik1">Pemilik</label>
                                             </div>
                                             <div className="form-check form-check-inline">
@@ -2137,10 +2149,10 @@ function DocK11() {
                                     </div>
                                 </div>
                                 <div className="row mb-3">
-                                    <label className="col-sm-3 col-form-label" htmlFor="pJRutin">PJ Terdaftar <span className='text-danger'>*</span></label>
+                                    <label className="col-sm-3 col-form-label" htmlFor="pJRutin">PJ Terdaftar {cekdataDiri.jenisForm == "BST" ? "" : <span className='text-danger'>*</span>}</label>
                                     <div className="col-sm-9">
                                             <div className="form-check form-check-inline">
-                                                <input autoComplete="off" className="form-check-input" type="radio" name="pJRutin" id="ya" value="0" {...registerPemohon("pJRutin", { required: "Mohon pilih jenis pengguna jasa."})} />
+                                                <input autoComplete="off" className="form-check-input" type="radio" name="pJRutin" id="ya" value="0" {...registerPemohon("pJRutin", { required: cekdataDiri.jenisForm == "BST" ? false : "Mohon pilih jenis pengguna jasa."})} />
                                                 <label className="form-check-label" htmlFor="ya">Ya</label>
                                             </div>
                                             <div className="form-check form-check-inline">
@@ -2151,28 +2163,28 @@ function DocK11() {
                                     </div>
                                 </div>
                                 <div className="row mb-3">
-                                    <label className="col-sm-3 col-form-label" htmlFor="namaPemohon">Nama <span className='text-danger'>*</span></label>
+                                    <label className="col-sm-3 col-form-label" htmlFor="namaPemohon">Nama {cekdataDiri.jenisForm == "BST" ? "" : <span className='text-danger'>*</span>}</label>
                                     <div className="col-sm-9">
-                                            <input autoComplete="off" type="text" id="namaPemohon" name="namaPemohon" {...registerPemohon("namaPemohon", { required: "Mohon isi nama pemohon."})} className={errorsPemohon.namaPemohon ? "form-control form-control-sm is-invalid" : "form-control form-control-sm"} placeholder="Nama Pemohon" />
+                                            <input autoComplete="off" type="text" id="namaPemohon" name="namaPemohon" {...registerPemohon("namaPemohon", { required: cekdataDiri.jenisForm == "BST" ? false : "Mohon isi nama pemohon."})} className={errorsPemohon.namaPemohon ? "form-control form-control-sm is-invalid" : "form-control form-control-sm"} placeholder="Nama Pemohon" />
                                             {errorsPemohon.namaPemohon && <small className="text-danger">{errorsPemohon.namaPemohon.message}</small>}
                                     </div>
                                 </div>
                                 <div className="row mb-3">
-                                    <label className="col-sm-3 col-form-label" htmlFor="alamatPemohon">Alamat <span className='text-danger'>*</span></label>
+                                    <label className="col-sm-3 col-form-label" htmlFor="alamatPemohon">Alamat {cekdataDiri.jenisForm == "BST" ? "" : <span className='text-danger'>*</span>}</label>
                                     <div className="col-sm-9">
-                                        <input autoComplete="off" type="text" id="alamatPemohon" name="alamatPemohon" {...registerPemohon("alamatPemohon", { required: "Mohon isi alamat pemohon."})} className={errorsPemohon.alamatPemohon ? "form-control form-control-sm is-invalid" : "form-control form-control-sm"} placeholder="Alamat Pemohon" />
+                                        <input autoComplete="off" type="text" id="alamatPemohon" name="alamatPemohon" {...registerPemohon("alamatPemohon", { required: cekdataDiri.jenisForm == "BST" ? false : "Mohon isi alamat pemohon."})} className={errorsPemohon.alamatPemohon ? "form-control form-control-sm is-invalid" : "form-control form-control-sm"} placeholder="Alamat Pemohon" />
                                         {errorsPemohon.alamatPemohon && <small className="text-danger">{errorsPemohon.alamatPemohon.message}</small>}
                                     </div>
                                 </div>
                                 <div className="row mb-3">
-                                    <label className="col-sm-3 col-form-label" htmlFor="provPemohon">Provinsi <span className='text-danger'>*</span></label>
+                                    <label className="col-sm-3 col-form-label" htmlFor="provPemohon">Provinsi {cekdataDiri.jenisForm == "BST" ? "" : <span className='text-danger'>*</span>}</label>
                                     <div className="col-sm-9">
                                             <Controller
                                                 control={controlPemohon}
                                                 name={"provPemohon"}
                                                 defaultValue={""}
                                                 className="form-control form-control-sm"
-                                                rules={{ required: "Mohon pilih provinsi pemohon." }}
+                                                rules={{ required: cekdataDiri.jenisForm == "BST" ? false : "Mohon pilih provinsi pemohon." }}
                                                 render={({ field: { value,onChange, ...field } }) => (
                                                     <Select styles={customStyles} placeholder={"Pilih provinsi pemohon.."} value={{id: cekdataDiri.provPemohon, label: cekdataDiri.provPemohonView}} {...field} options={dataSelect.provPemohon} onChange={(e) => handleSelectPemohon(e, "provPemohon") & handleKota(e.value, "kotaPemohon")} />
                                                 )}
@@ -2181,7 +2193,7 @@ function DocK11() {
                                     </div>
                                 </div>
                                 <div className="row mb-3">
-                                    <label className="col-sm-3 col-form-label" htmlFor="kotaPemohon">Kota/Kab <span className='text-danger'>*</span></label>
+                                    <label className="col-sm-3 col-form-label" htmlFor="kotaPemohon">Kota/Kab {cekdataDiri.jenisForm == "BST" ? "" : <span className='text-danger'>*</span>}</label>
                                     <div className="col-sm-9">
                                             <Controller
                                                 control={controlPemohon}
@@ -2209,9 +2221,9 @@ function DocK11() {
                                     </div>
                                 </div>
                                 <div className="row mb-3">
-                                    <label className="col-sm-3 col-form-label" htmlFor="jenisIdentitasPemohon">Identitas <span className='text-danger'>*</span></label>
+                                    <label className="col-sm-3 col-form-label" htmlFor="jenisIdentitasPemohon">Identitas {cekdataDiri.jenisForm == "BST" ? "" : <span className='text-danger'>*</span>}</label>
                                     <div className="col-sm-2">
-                                        <select className={errorsPemohon.jenisIdentitasPemohon ? "form-control form-control-sm is-invalid" : "form-control form-control-sm"} name="jenisIdentitasPemohon" id="jenisIdentitasPemohon" {...registerPemohon("jenisIdentitasPemohon", { required: true})}>
+                                        <select className={errorsPemohon.jenisIdentitasPemohon ? "form-control form-control-sm is-invalid" : "form-control form-control-sm"} name="jenisIdentitasPemohon" id="jenisIdentitasPemohon" {...registerPemohon("jenisIdentitasPemohon", { required: cekdataDiri.jenisForm == "BST" ? false : true})}>
                                             <option value="">--</option>
                                             <option value="NPWP">NPWP</option>
                                             <option value="KTP">KTP</option>
@@ -2220,7 +2232,7 @@ function DocK11() {
                                         </select>
                                     </div>
                                     <div className="col-sm-7">
-                                        <input autoComplete="off" type="text" name="noIdentitasPemohon" id="noIdentitasPemohon" value={cekdataDiri.noIdentitasPemohon ? removeNonNumeric(cekdataDiri.noIdentitasPemohon) : ""}  {...registerPemohon("noIdentitasPemohon", { required: "Mohon isi identitas pemohon."})} maxLength={20} className={errorsPemohon.noIdentitasPemohon ? "form-control form-control-sm is-invalid" : "form-control form-control-sm"} placeholder="Nomor Identitas" />
+                                        <input autoComplete="off" type="text" name="noIdentitasPemohon" id="noIdentitasPemohon" value={cekdataDiri.noIdentitasPemohon ? removeNonNumeric(cekdataDiri.noIdentitasPemohon) : ""}  {...registerPemohon("noIdentitasPemohon", { required: cekdataDiri.jenisForm == "BST" ? false : "Mohon isi identitas pemohon."})} maxLength={20} className={errorsPemohon.noIdentitasPemohon ? "form-control form-control-sm is-invalid" : "form-control form-control-sm"} placeholder="Nomor Identitas" />
                                             {errorsPemohon.noIdentitasPemohon && <small className="text-danger">{errorsPemohon.noIdentitasPemohon.message}</small>}
                                     </div>
                                     <div className="offset-sm-3 col-sm-9">
@@ -2252,23 +2264,23 @@ function DocK11() {
                         <div className="collapse show">
                             <div className="card-body pt-0">
                                 <div className="row mb-3">
-                                    <label className="col-sm-3 col-form-label" htmlFor="namaTtd">Nama <span className='text-danger'>*</span></label>
+                                    <label className="col-sm-3 col-form-label" htmlFor="namaTtd">Nama {cekdataDiri.jenisForm == "BST" ? "" : <span className='text-danger'>*</span>}</label>
                                     <div className="col-sm-9">
-                                        <input autoComplete="off" type="text" id="namaTtd" name="namaTtd" {...registerPemohon("namaTtd", { required: "Mohon isi nama penandatangan."})} className={errorsPemohon.namaTtd ? "form-control form-control-sm is-invalid" : "form-control form-control-sm"} placeholder="Nama Penandatangan" />
+                                        <input autoComplete="off" type="text" id="namaTtd" name="namaTtd" {...registerPemohon("namaTtd", { required: cekdataDiri.jenisForm == "BST" ? false : "Mohon isi nama penandatangan."})} className={errorsPemohon.namaTtd ? "form-control form-control-sm is-invalid" : "form-control form-control-sm"} placeholder="Nama Penandatangan" />
                                         {errorsPemohon.namaTtd && <small className="text-danger">{errorsPemohon.namaTtd.message}</small>}
                                     </div>
                                 </div>
                                 <div className="row mb-3">
-                                    <label className="col-sm-3 col-form-label" htmlFor="alamatTtd">Alamat <span className='text-danger'>*</span></label>
+                                    <label className="col-sm-3 col-form-label" htmlFor="alamatTtd">Alamat {cekdataDiri.jenisForm == "BST" ? "" : <span className='text-danger'>*</span>}</label>
                                     <div className="col-sm-9">
-                                        <input autoComplete="off" type="text" id="alamatTtd" name="alamatTtd" {...registerPemohon("alamatTtd", { required: "Mohon isi nama penandatangan."})} className={errorsPemohon.alamatTtd ? "form-control form-control-sm is-invalid" : "form-control form-control-sm"} placeholder="Alamat Penandatangan" />
+                                        <input autoComplete="off" type="text" id="alamatTtd" name="alamatTtd" {...registerPemohon("alamatTtd", { required: cekdataDiri.jenisForm == "BST" ? false : "Mohon isi nama penandatangan."})} className={errorsPemohon.alamatTtd ? "form-control form-control-sm is-invalid" : "form-control form-control-sm"} placeholder="Alamat Penandatangan" />
                                         {errorsPemohon.alamatTtd && <small className="text-danger">{errorsPemohon.alamatTtd.message}</small>}
                                     </div>
                                 </div>
                                 <div className="row mb-3">
-                                    <label className="col-sm-3 col-form-label" htmlFor="jenisIdentitasTtd">Identitas <span className='text-danger'>*</span></label>
+                                    <label className="col-sm-3 col-form-label" htmlFor="jenisIdentitasTtd">Identitas {cekdataDiri.jenisForm == "BST" ? "" : <span className='text-danger'>*</span>}</label>
                                     <div className="col-sm-2">
-                                        <select className={errorsPemohon.jenisIdentitasTtd ? "form-control form-control-sm is-invalid" : "form-control form-control-sm"} name="jenisIdentitasTtd" id="jenisIdentitasTtd" {...registerPemohon("jenisIdentitasTtd", { required: true})}>
+                                        <select className={errorsPemohon.jenisIdentitasTtd ? "form-control form-control-sm is-invalid" : "form-control form-control-sm"} name="jenisIdentitasTtd" id="jenisIdentitasTtd" {...registerPemohon("jenisIdentitasTtd", { required: cekdataDiri.jenisForm == "BST" ? false : true})}>
                                             <option value="">--</option>
                                             <option value="NPWP">NPWP</option>
                                             <option value="KTP">KTP</option>
@@ -2277,7 +2289,7 @@ function DocK11() {
                                         </select>
                                     </div>
                                     <div className="col-sm-7">
-                                        <input autoComplete="off" type="text" id="noIdentitasTtd" name="noIdentitasTtd" maxLength={20} className={errorsPemohon.noIdentitasTtd ? "form-control form-control-sm is-invalid" : "form-control form-control-sm"} value={cekdataDiri.noIdentitasTtd ? removeNonNumeric(cekdataDiri.noIdentitasTtd) : ""} {...registerPemohon("noIdentitasTtd", { required: "Mohon isi identitas penandatangan."})} placeholder="Nomor Identitas" />
+                                        <input autoComplete="off" type="text" id="noIdentitasTtd" name="noIdentitasTtd" maxLength={20} className={errorsPemohon.noIdentitasTtd ? "form-control form-control-sm is-invalid" : "form-control form-control-sm"} value={cekdataDiri.noIdentitasTtd ? removeNonNumeric(cekdataDiri.noIdentitasTtd) : ""} {...registerPemohon("noIdentitasTtd", { required: cekdataDiri.jenisForm == "BST" ? false : "Mohon isi identitas penandatangan."})} placeholder="Nomor Identitas" />
                                         {errorsPemohon.noIdentitasTtd && <small className="text-danger">{errorsPemohon.noIdentitasTtd.message}</small>}
                                     </div>
                                     <div className="offset-sm-3 col-sm-9">
@@ -2309,23 +2321,23 @@ function DocK11() {
                         <div className="collapse show">
                             <div className="card-body pt-0">
                                 <div className="row mb-3">
-                                    <label className="col-sm-3 col-form-label" htmlFor="namaCp">Nama<span className='text-danger'>*</span></label>
+                                    <label className="col-sm-3 col-form-label" htmlFor="namaCp">Nama{cekdataDiri.jenisForm == "BST" ? "" : <span className='text-danger'>*</span>}</label>
                                     <div className="col-sm-9">
-                                        <input autoComplete="off" type="text" id="namaCp" name="namaCp" {...registerPemohon("namaCp", {required: "Mohon isi nama CP"})} className="form-control form-control-sm" placeholder="Nama Contact Person" />
+                                        <input autoComplete="off" type="text" id="namaCp" name="namaCp" {...registerPemohon("namaCp", { required: cekdataDiri.jenisForm == "BST" ? false : "Mohon isi nama CP"})} className="form-control form-control-sm" placeholder="Nama Contact Person" />
                                         {errorsPemohon.namaCp && <small className="text-danger">{errorsPemohon.namaCp.message}</small>}
                                     </div>
                                 </div>
                                 <div className="row mb-3">
-                                    <label className="col-sm-3 col-form-label" htmlFor="alamatCp">Alamat<span className='text-danger'>*</span></label>
+                                    <label className="col-sm-3 col-form-label" htmlFor="alamatCp">Alamat{cekdataDiri.jenisForm == "BST" ? "" : <span className='text-danger'>*</span>}</label>
                                     <div className="col-sm-9">
-                                        <input autoComplete="off" type="text" id="alamatCp" name="alamatCp" {...registerPemohon("alamatCp", {required: "Mohon isi alamat CP"})} className="form-control form-control-sm" placeholder="Alamat Contact Person" />
+                                        <input autoComplete="off" type="text" id="alamatCp" name="alamatCp" {...registerPemohon("alamatCp", { required: cekdataDiri.jenisForm == "BST" ? false : "Mohon isi alamat CP"})} className="form-control form-control-sm" placeholder="Alamat Contact Person" />
                                         {errorsPemohon.alamatCp && <small className="text-danger">{errorsPemohon.alamatCp.message}</small>}
                                     </div>
                                 </div>
                                 <div className="row mb-3">
-                                    <label className="col-sm-3 col-form-label" htmlFor="teleponCp">Telepon<span className='text-danger'>*</span></label>
+                                    <label className="col-sm-3 col-form-label" htmlFor="teleponCp">Telepon{cekdataDiri.jenisForm == "BST" ? "" : <span className='text-danger'>*</span>}</label>
                                     <div className="col-sm-9">
-                                        <input autoComplete="off" type="text" id="teleponCp" name="teleponCp" value={cekdataDiri.teleponCp ? removeNonNumeric(cekdataDiri.teleponCp) : ""} {...registerPemohon("teleponCp", {required: "Mohon isi telepon CP"})} className="form-control form-control-sm" placeholder="Telepon Contact Person" />
+                                        <input autoComplete="off" type="text" id="teleponCp" name="teleponCp" value={cekdataDiri.teleponCp ? removeNonNumeric(cekdataDiri.teleponCp) : ""} {...registerPemohon("teleponCp", { required: cekdataDiri.jenisForm == "BST" ? false : "Mohon isi telepon CP"})} className="form-control form-control-sm" placeholder="Telepon Contact Person" />
                                         {errorsPemohon.teleponCp && <small className="text-danger">{errorsPemohon.teleponCp.message}</small>}
                                     </div>
                                 </div>
@@ -2350,23 +2362,23 @@ function DocK11() {
                         <div className="collapse show">
                             <div className="card-body pt-0">
                                 <div className="row mb-3">
-                                    <label className="col-sm-3 col-form-label" htmlFor="namaPengirim">Nama <span className='text-danger'>*</span></label>
+                                    <label className="col-sm-3 col-form-label" htmlFor="namaPengirim">Nama {cekdataDiri.jenisForm == "BST" ? "" : <span className='text-danger'>*</span>}</label>
                                     <div className="col-sm-9">
-                                        <input autoComplete="off" type="text" id="namaPengirim" name="namaPengirim" {...registerPemohon("namaPengirim", { required: "Mohon isi nama pengirim."})} className={errorsPemohon.namaPengirim ? "form-control form-control-sm is-invalid" : "form-control form-control-sm"} placeholder="Nama Pengirim" />
+                                        <input autoComplete="off" type="text" id="namaPengirim" name="namaPengirim" {...registerPemohon("namaPengirim", { required: cekdataDiri.jenisForm == "BST" ? false : "Mohon isi nama pengirim."})} className={errorsPemohon.namaPengirim ? "form-control form-control-sm is-invalid" : "form-control form-control-sm"} placeholder="Nama Pengirim" />
                                         {errorsPemohon.namaPengirim && <small className="text-danger">{errorsPemohon.namaPengirim.message}</small>}
                                     </div>
                                 </div>
                                 <div className="row mb-3">
-                                    <label className="col-sm-3 col-form-label" htmlFor="alamatPengirim">Alamat <span className='text-danger'>*</span></label>
+                                    <label className="col-sm-3 col-form-label" htmlFor="alamatPengirim">Alamat {cekdataDiri.jenisForm == "BST" ? "" : <span className='text-danger'>*</span>}</label>
                                     <div className="col-sm-9">
-                                        <input autoComplete="off" type="text" id="alamatPengirim" name="alamatPengirim" {...registerPemohon("alamatPengirim", { required: "Mohon isi alamat pengirim."})} className={errorsPemohon.alamatPengirim ? "form-control form-control-sm is-invalid" : "form-control form-control-sm"} placeholder="Alamat Pengirim" />
+                                        <input autoComplete="off" type="text" id="alamatPengirim" name="alamatPengirim" {...registerPemohon("alamatPengirim", { required: cekdataDiri.jenisForm == "BST" ? false : "Mohon isi alamat pengirim."})} className={errorsPemohon.alamatPengirim ? "form-control form-control-sm is-invalid" : "form-control form-control-sm"} placeholder="Alamat Pengirim" />
                                         {errorsPemohon.alamatPengirim && <small className="text-danger">{errorsPemohon.alamatPengirim.message}</small>}
                                     </div>
                                 </div>
                                 <div className="row mb-3">
-                                    <label className="col-sm-3 col-form-label" htmlFor="identitas">Identitas <span className='text-danger'>*</span></label>
+                                    <label className="col-sm-3 col-form-label" htmlFor="identitas">Identitas {cekdataDiri.jenisForm == "BST" ? "" : <span className='text-danger'>*</span>}</label>
                                     <div className="col-sm-2">
-                                        <select className={errorsPemohon.jenisIdentitasPengirim ? "form-control form-control-sm is-invalid" : "form-control form-control-sm"} name="jenisIdentitasPengirim" id="jenisIdentitasPengirim" {...registerPemohon("jenisIdentitasPengirim", { required: true})}>
+                                        <select className={errorsPemohon.jenisIdentitasPengirim ? "form-control form-control-sm is-invalid" : "form-control form-control-sm"} name="jenisIdentitasPengirim" id="jenisIdentitasPengirim" {...registerPemohon("jenisIdentitasPengirim", { required: cekdataDiri.jenisForm == "BST" ? false : true})}>
                                             <option value="">--</option>
                                             <option value="NPWP">NPWP</option>
                                             <option value="KTP">KTP</option>
@@ -2375,7 +2387,7 @@ function DocK11() {
                                         </select>
                                     </div>
                                     <div className="col-sm-7">
-                                        <input autoComplete="off" type="text" id="noIdentitasPengirim" name="noIdentitasPengirim" maxLength={20} value={cekdataDiri.noIdentitasPengirim ? removeNonNumeric(cekdataDiri.noIdentitasPengirim) : ""} {...registerPemohon("noIdentitasPengirim", { required: "Mohon isi identitas pengirim."})} className={errorsPemohon.noIdentitasPengirim ? "form-control form-control-sm is-invalid" : "form-control form-control-sm"} placeholder="Nomor Identitas" />
+                                        <input autoComplete="off" type="text" id="noIdentitasPengirim" name="noIdentitasPengirim" maxLength={20} value={cekdataDiri.noIdentitasPengirim ? removeNonNumeric(cekdataDiri.noIdentitasPengirim) : ""} {...registerPemohon("noIdentitasPengirim", { required: cekdataDiri.jenisForm == "BST" ? false : "Mohon isi identitas pengirim."})} className={errorsPemohon.noIdentitasPengirim ? "form-control form-control-sm is-invalid" : "form-control form-control-sm"} placeholder="Nomor Identitas" />
                                         {errorsPemohon.noIdentitasPengirim && <small className="text-danger">{errorsPemohon.noIdentitasPengirim.message}</small>}
                                     </div>
                                     <div className="offset-sm-3 col-sm-9">
@@ -2389,14 +2401,14 @@ function DocK11() {
                                     </div>
                                 </div>
                                 <div className="row mb-3">
-                                    <label className="col-sm-3 col-form-label" htmlFor="negaraPengirim">Negara <span className='text-danger'>*</span></label>
+                                    <label className="col-sm-3 col-form-label" htmlFor="negaraPengirim">Negara {cekdataDiri.jenisForm == "BST" ? "" : <span className='text-danger'>*</span>}</label>
                                     <div className="col-sm-9">
                                         <Controller
                                             control={controlPemohon}
                                             name={"negaraPengirim"}
                                             defaultValue={""}
                                             className="form-control form-control-sm"
-                                            rules={{ required: "Mohon pilih negara pengirim." }}
+                                            rules={{ required: cekdataDiri.jenisForm == "BST" ? false : "Mohon pilih negara pengirim." }}
                                             render={({ field: { value,onChange, ...field } }) => (
                                                 <Select styles={customStyles} placeholder={"Pilih negara pengirim.."} value={{id: cekdataDiri.negaraPengirim, label: cekdataDiri.negaraPengirimView}} {...field} options={cekdataDiri.permohonan != 'IM' ? [{value: "99", label: "ID - INDONESIA"}] : dataSelect.negaraPengirim} onChange={(e) => handleSelectPemohon(e, "negaraPengirim")} />
                                             )}
@@ -2461,23 +2473,23 @@ function DocK11() {
                         <div className="collapse show">
                             <div className="card-body pt-0">
                                 <div className="row mb-3">
-                                    <label className="col-sm-3 col-form-label" htmlFor="namaPenerima">Nama <span className='text-danger'>*</span></label>
+                                    <label className="col-sm-3 col-form-label" htmlFor="namaPenerima">Nama {cekdataDiri.jenisForm == "BST" ? "" : <span className='text-danger'>*</span>}</label>
                                     <div className="col-sm-9">
-                                        <input autoComplete="off" type="text" id="namaPenerima" name="namaPenerima" {...registerPemohon("namaPenerima", { required: "Mohon isi nama penerima."})} className={errorsPemohon.namaPenerima ? "form-control form-control-sm is-invalid" : "form-control form-control-sm"} placeholder="Nama Penerima" />
+                                        <input autoComplete="off" type="text" id="namaPenerima" name="namaPenerima" {...registerPemohon("namaPenerima", { required: cekdataDiri.jenisForm == "BST" ? false : "Mohon isi nama penerima."})} className={errorsPemohon.namaPenerima ? "form-control form-control-sm is-invalid" : "form-control form-control-sm"} placeholder="Nama Penerima" />
                                         {errorsPemohon.namaPenerima && <small className="text-danger">{errorsPemohon.namaPenerima.message}</small>}
                                     </div>
                                 </div>
                                 <div className="row mb-3">
-                                    <label className="col-sm-3 col-form-label" htmlFor="alamatPenerima">Alamat <span className='text-danger'>*</span></label>
+                                    <label className="col-sm-3 col-form-label" htmlFor="alamatPenerima">Alamat {cekdataDiri.jenisForm == "BST" ? "" : <span className='text-danger'>*</span>}</label>
                                     <div className="col-sm-9">
-                                        <input autoComplete="off" type="text" id="alamatPenerima" name="alamatPenerima" {...registerPemohon("alamatPenerima", { required: "Mohon isi alamat penerima."})} className={errorsPemohon.alamatPenerima ? "form-control form-control-sm is-invalid" : "form-control form-control-sm"} placeholder="Alamat Penerima" />
+                                        <input autoComplete="off" type="text" id="alamatPenerima" name="alamatPenerima" {...registerPemohon("alamatPenerima", { required: cekdataDiri.jenisForm == "BST" ? false : "Mohon isi alamat penerima."})} className={errorsPemohon.alamatPenerima ? "form-control form-control-sm is-invalid" : "form-control form-control-sm"} placeholder="Alamat Penerima" />
                                         {errorsPemohon.alamatPenerima && <small className="text-danger">{errorsPemohon.alamatPenerima.message}</small>}
                                     </div>
                                 </div>
                                 <div className="row mb-3">
-                                    <label className="col-sm-3 col-form-label" htmlFor="jenisIdentitasPenerima">Identitas <span className='text-danger'>*</span></label>
+                                    <label className="col-sm-3 col-form-label" htmlFor="jenisIdentitasPenerima">Identitas {cekdataDiri.jenisForm == "BST" ? "" : <span className='text-danger'>*</span>}</label>
                                     <div className="col-sm-2">
-                                        <select className={errorsPemohon.jenisIdentitasPenerima ? "form-control form-control-sm is-invalid" : "form-control form-control-sm"} name="jenisIdentitasPenerima" id="jenisIdentitasPenerima" {...registerPemohon("jenisIdentitasPenerima", { required: true})}>
+                                        <select className={errorsPemohon.jenisIdentitasPenerima ? "form-control form-control-sm is-invalid" : "form-control form-control-sm"} name="jenisIdentitasPenerima" id="jenisIdentitasPenerima" {...registerPemohon("jenisIdentitasPenerima", { required: cekdataDiri.jenisForm == "BST" ? false : true})}>
                                         <option value="">--</option>
                                             <option value="NPWP">NPWP</option>
                                             <option value="KTP">KTP</option>
@@ -2486,7 +2498,7 @@ function DocK11() {
                                         </select>
                                     </div>
                                     <div className="col-sm-7">
-                                        <input autoComplete="off" type="text" id="noIdentitasPenerima" name="noIdentitasPenerima" maxLength={20} value={cekdataDiri.noIdentitasPenerima ? removeNonNumeric(cekdataDiri.noIdentitasPenerima) : ""} className={errorsPemohon.noIdentitasPenerima ? "form-control form-control-sm is-invalid" : "form-control form-control-sm"} placeholder="Nomor Identitas" {...registerPemohon("noIdentitasPenerima", { required: "Mohon isi identitas penerima."})} />
+                                        <input autoComplete="off" type="text" id="noIdentitasPenerima" name="noIdentitasPenerima" maxLength={20} value={cekdataDiri.noIdentitasPenerima ? removeNonNumeric(cekdataDiri.noIdentitasPenerima) : ""} className={errorsPemohon.noIdentitasPenerima ? "form-control form-control-sm is-invalid" : "form-control form-control-sm"} placeholder="Nomor Identitas" {...registerPemohon("noIdentitasPenerima", { required: cekdataDiri.jenisForm == "BST" ? false : "Mohon isi identitas penerima."})} />
                                         {errorsPemohon.noIdentitasPenerima && <small className="text-danger">{errorsPemohon.noIdentitasPenerima.message}</small>}
                                     </div>
                                     <div className="offset-sm-3 col-sm-9">
@@ -2500,14 +2512,14 @@ function DocK11() {
                                     </div>
                                 </div>
                                 <div className="row mb-3">
-                                    <label className="col-sm-3 col-form-label" htmlFor="negaraPenerima">Negara <span className='text-danger'>*</span></label>
+                                    <label className="col-sm-3 col-form-label" htmlFor="negaraPenerima">Negara {cekdataDiri.jenisForm == "BST" ? "" : <span className='text-danger'>*</span>}</label>
                                     <div className="col-sm-9">
                                     <Controller
                                             control={controlPemohon}
                                             name={"negaraPenerima"}
                                             defaultValue={""}
                                             className="form-control form-control-sm"
-                                            rules={{ required: "Mohon pilih negara penerima." }}
+                                            rules={{ required: cekdataDiri.jenisForm == "BST" ? false : "Mohon pilih negara penerima." }}
                                             render={({ field: { value,onChange, ...field } }) => (
                                                 <Select styles={customStyles} placeholder={"Pilih negara penerima.."} value={{id: cekdataDiri.negaraPenerima, label: cekdataDiri.negaraPenerimaView}} {...field} options={cekdataDiri.permohonan != 'EX' ? [{value: "99", label: "ID - INDONESIA"}] : dataSelect.negaraPenerima} onChange={(e) => handleSelectPemohon(e, "negaraPenerima")} />
                                             )}
@@ -2594,14 +2606,14 @@ function DocK11() {
                                         <div className="collapse show">
                                             <div className="card-body pt-0">
                                                 <div className="row mb-3">
-                                                    <label className="col-sm-3 col-form-label" htmlFor="negaraAsal">Negara Muat <span className='text-danger'>*</span></label>
+                                                    <label className="col-sm-3 col-form-label" htmlFor="negaraAsal">Negara Muat {cekdataDiri.jenisForm == "BST" ? "" : <span className='text-danger'>*</span>}</label>
                                                     <div className="col-sm-9">
                                                         <Controller
                                                             control={controlPelabuhan}
                                                             name={"negaraAsal"}
                                                             defaultValue={""}
                                                             className="form-control form-control-sm"
-                                                            rules={{ required: "Mohon pilih negara pelabuhan pengirim." }}
+                                                            rules={{ required: cekdataDiri.jenisForm == "BST" ? false : "Mohon pilih negara pelabuhan pengirim." }}
                                                             render={({ field: { value,onChange, ...field } }) => (
                                                                 <Select styles={customStyles} placeholder={"Pilih negara muat.."} value={{id: cekdataPelabuhan.negaraAsal, label: cekdataPelabuhan.negaraAsalView}} {...field} options={cekdataDiri.permohonan != "IM" ? [{label: "ID - INDONESIA", value: 99}] : dataSelect.negaraAsal} onChange={(e) => e ? setValuePelabuhan("negaraAsal", e.value) & setValuePelabuhan("negaraAsalView", e.label) & handlePelabuhan(e.value, "pelMuat") : null} />
                                                             )}
@@ -2610,14 +2622,14 @@ function DocK11() {
                                                     </div>
                                                 </div>
                                                 <div className="row mb-3">
-                                                    <label className="col-sm-3 col-form-label" htmlFor="negaraTujuan">Negara Bongkar <span className='text-danger'>*</span></label>
+                                                    <label className="col-sm-3 col-form-label" htmlFor="negaraTujuan">Negara Bongkar {cekdataDiri.jenisForm == "BST" ? "" : <span className='text-danger'>*</span>}</label>
                                                     <div className="col-sm-9">
                                                         <Controller
                                                             control={controlPelabuhan}
                                                             name={"negaraTujuan"}
                                                             defaultValue={""}
                                                             className="form-control form-control-sm"
-                                                            rules={{ required: "Mohon pilih negara pelabuhan pengirim." }}
+                                                            rules={{ required: cekdataDiri.jenisForm == "BST" ? false : "Mohon pilih negara pelabuhan pengirim." }}
                                                             render={({ field: { value,onChange, ...field } }) => (
                                                                 <Select styles={customStyles} placeholder={"Pilih negara bongkar.."} value={{id: cekdataPelabuhan.negaraTujuan, label: cekdataPelabuhan.negaraTujuanView}} {...field} options={cekdataDiri.permohonan != "EX" ? [{value: "99", label: "ID - INDONESIA"}] : dataSelect.negaraTujuan} onChange={(e) => e ? setValuePelabuhan("negaraTujuan", e.value) & setValuePelabuhan("negaraTujuanView", e.label) & handlePelabuhan(e.value, "pelBongkar") : null} />
                                                             )}
@@ -2626,10 +2638,10 @@ function DocK11() {
                                                     </div>
                                                 </div>
                                                 <div className="row mb-3">
-                                                    <label className="col-sm-3 col-form-label" htmlFor="transitOpsi">Transit <span className='text-danger'>*</span></label>
+                                                    <label className="col-sm-3 col-form-label" htmlFor="transitOpsi">Transit {cekdataDiri.jenisForm == "BST" ? "" : <span className='text-danger'>*</span>}</label>
                                                     <div className="col-sm-9">
                                                         <div className="form-check form-check-inline">
-                                                            <input autoComplete="off" className="form-check-input" type="radio" name="transitOpsi" id="transitYa" value="1"  {...registerPelabuhan("transitOpsi", { required: "Mohon pilih transit."})}/>
+                                                            <input autoComplete="off" className="form-check-input" type="radio" name="transitOpsi" id="transitYa" value="1"  {...registerPelabuhan("transitOpsi", { required: cekdataDiri.jenisForm == "BST" ? false : "Mohon pilih transit."})}/>
                                                             <label className="form-check-label" htmlFor="transitYa">Ya</label>
                                                         </div>
                                                         <div className="form-check form-check-inline">
@@ -2677,14 +2689,14 @@ function DocK11() {
                                         <div className="collapse show">
                                             <div className="card-body pt-0">
                                                 <div className="row mb-3">
-                                                    <label className="col-sm-3 col-form-label" htmlFor="pelMuat">Muat / Asal <span className='text-danger'>*</span></label>
+                                                    <label className="col-sm-3 col-form-label" htmlFor="pelMuat">Muat / Asal {cekdataDiri.jenisForm == "BST" ? "" : <span className='text-danger'>*</span>}</label>
                                                     <div className="col-sm-9">
                                                         <Controller
                                                             control={controlPelabuhan}
                                                             name={"pelMuat"}
                                                             defaultValue={""}
                                                             className="form-control form-control-sm"
-                                                            rules={{ required: "Mohon pilih pelabuhan muat/asal." }}
+                                                            rules={{ required: cekdataDiri.jenisForm == "BST" ? false : "Mohon pilih pelabuhan muat/asal." }}
                                                             render={({ field: { value,onChange, ...field } }) => (
                                                                 <Select styles={customStyles} placeholder={"Pilih pelabuhan muat/asal.."} value={{id: cekdataPelabuhan.pelMuat, label: cekdataPelabuhan.pelMuatView}} {...field} options={dataSelect.pelMuat} onChange={(e) => e ? setValuePelabuhan("pelMuat", e.value) & setValuePelabuhan("pelMuatView", e.label) : null} />
                                                             )}
@@ -2693,14 +2705,14 @@ function DocK11() {
                                                     </div>
                                                 </div>
                                                 <div className="row mb-3">
-                                                    <label className="col-sm-3 col-form-label" htmlFor="pelBongkar">Bongkar / Tujuan <span className='text-danger'>*</span></label>
+                                                    <label className="col-sm-3 col-form-label" htmlFor="pelBongkar">Bongkar / Tujuan {cekdataDiri.jenisForm == "BST" ? "" : <span className='text-danger'>*</span>}</label>
                                                     <div className="col-sm-9">
                                                         <Controller
                                                             control={controlPelabuhan}
                                                             name={"pelBongkar"}
                                                             defaultValue={""}
                                                             className="form-control form-control-sm"
-                                                            rules={{ required: "Mohon pilih pelabuhan bongkar." }}
+                                                            rules={{ required: cekdataDiri.jenisForm == "BST" ? false : "Mohon pilih pelabuhan bongkar." }}
                                                             render={({ field: { value,onChange, ...field } }) => (
                                                                 <Select styles={customStyles} placeholder={"Pilih pelabuhan bongkar.."} value={{id: cekdataPelabuhan.pelBongkar, label: cekdataPelabuhan.pelBongkarView}} {...field} options={dataSelect.pelBongkar} onChange={(e) => e ? setValuePelabuhan("pelBongkar", e.value) & setValuePelabuhan("pelBongkarView", e.label) : null} />
                                                             )}
@@ -2849,9 +2861,9 @@ function DocK11() {
                                         <div className="collapse show">
                                             <div className="card-body pt-0">
                                                 <div className="row mb-3">
-                                                    <label className="col-sm-3 col-form-label" htmlFor="modaAkhir">Moda Transportasi <span className='text-danger'>*</span></label>
+                                                    <label className="col-sm-3 col-form-label" htmlFor="modaAkhir">Moda Transportasi {cekdataDiri.jenisForm == "BST" ? "" : <span className='text-danger'>*</span>}</label>
                                                     <div className="col-sm-9">
-                                                        <select id="modaAkhir" name="modaAkhir" {...registerPelabuhan("modaAkhir", { required: "Mohon pilih moda transportasi akhir."})} className={errorsPelabuhan.modaAkhir ? "form-control form-control-sm is-invalid" : "form-control form-control-sm"}>
+                                                        <select id="modaAkhir" name="modaAkhir" {...registerPelabuhan("modaAkhir", { required: cekdataDiri.jenisForm == "BST" ? false : "Mohon pilih moda transportasi akhir."})} className={errorsPelabuhan.modaAkhir ? "form-control form-control-sm is-invalid" : "form-control form-control-sm"}>
                                                             <option value="">--</option>
                                                             <option value="1">Laut</option>
                                                             <option value="2">Kereta Api</option>
@@ -2882,16 +2894,16 @@ function DocK11() {
                                                     </div>
                                                 </div>
                                                 <div className="row mb-3">
-                                                    <label className="col-sm-3 col-form-label" htmlFor="namaAlatAngkutAkhir">Nama Alat Angkut <span className='text-danger'>*</span></label>
+                                                    <label className="col-sm-3 col-form-label" htmlFor="namaAlatAngkutAkhir">Nama Alat Angkut {cekdataDiri.jenisForm == "BST" ? "" : <span className='text-danger'>*</span>}</label>
                                                     <div className="col-sm-9">
-                                                        <input autoComplete="off" type="text" id="namaAlatAngkutAkhir" name="namaAlatAngkutAkhir" {...registerPelabuhan("namaAlatAngkutAkhir", { required: "Mohon isi nama alat angkut akhir."})} className={errorsPelabuhan.namaAlatAngkutAkhir ? "form-control form-control-sm is-invalid" : "form-control form-control-sm"} placeholder="Nama Alat Angkut" />
+                                                        <input autoComplete="off" type="text" id="namaAlatAngkutAkhir" name="namaAlatAngkutAkhir" {...registerPelabuhan("namaAlatAngkutAkhir", { required: cekdataDiri.jenisForm == "BST" ? false : "Mohon isi nama alat angkut akhir."})} className={errorsPelabuhan.namaAlatAngkutAkhir ? "form-control form-control-sm is-invalid" : "form-control form-control-sm"} placeholder="Nama Alat Angkut" />
                                                         {errorsPelabuhan.namaAlatAngkutAkhir && <small className="text-danger">{errorsPelabuhan.namaAlatAngkutAkhir.message}</small>}
                                                     </div>
                                                 </div>
                                                 <div className="row mb-3">
-                                                    <label className="col-sm-3 col-form-label" htmlFor="nomorAlatAngkutAkhir">Nomor Alat Angkut <span className='text-danger'>*</span></label>
+                                                    <label className="col-sm-3 col-form-label" htmlFor="nomorAlatAngkutAkhir">Nomor Alat Angkut {cekdataDiri.jenisForm == "BST" ? "" : <span className='text-danger'>*</span>}</label>
                                                     <div className="col-sm-9">
-                                                        <input autoComplete="off" type="text" id="nomorAlatAngkutAkhir" name="nomorAlatAngkutAkhir" {...registerPelabuhan("nomorAlatAngkutAkhir", { required: "Mohon isi nomor alat angkut akhir."})} className={errorsPelabuhan.nomorAlatAngkutAkhir ? "form-control form-control-sm is-invalid" : "form-control form-control-sm"} placeholder="Nomor Alat Angkut" />
+                                                        <input autoComplete="off" type="text" id="nomorAlatAngkutAkhir" name="nomorAlatAngkutAkhir" {...registerPelabuhan("nomorAlatAngkutAkhir", { required: cekdataDiri.jenisForm == "BST" ? false : "Mohon isi nomor alat angkut akhir."})} className={errorsPelabuhan.nomorAlatAngkutAkhir ? "form-control form-control-sm is-invalid" : "form-control form-control-sm"} placeholder="Nomor Alat Angkut" />
                                                         {errorsPelabuhan.nomorAlatAngkutAkhir && <small className="text-danger">{errorsPelabuhan.nomorAlatAngkutAkhir.message}</small>}
                                                     </div>
                                                 </div>
@@ -2917,16 +2929,16 @@ function DocK11() {
                                                     </div>
                                                 </div>
                                                 <div className="row mb-3">
-                                                    <label className="col-sm-3 col-form-label" htmlFor="tglBerangkatAkhir">Tgl Berangkat <span className='text-danger'>*</span></label>
+                                                    <label className="col-sm-3 col-form-label" htmlFor="tglBerangkatAkhir">Tgl Berangkat {cekdataDiri.jenisForm == "BST" ? "" : <span className='text-danger'>*</span>}</label>
                                                     <div className="col-sm-4">
-                                                        <input autoComplete="off" type="date" id="tglBerangkatAkhir" name="tglBerangkatAkhir" {...registerPelabuhan("tglBerangkatAkhir", { required: "Mohon isi tanggal berangkat."})} className={errorsPelabuhan.tglBerangkatAkhir ? "form-control form-control-sm is-invalid" : "form-control form-control-sm"} placeholder="Tgl Berangkat" />
+                                                        <input autoComplete="off" type="date" id="tglBerangkatAkhir" name="tglBerangkatAkhir" {...registerPelabuhan("tglBerangkatAkhir", { required: cekdataDiri.jenisForm == "BST" ? false : "Mohon isi tanggal berangkat."})} className={errorsPelabuhan.tglBerangkatAkhir ? "form-control form-control-sm is-invalid" : "form-control form-control-sm"} placeholder="Tgl Berangkat" />
                                                         {errorsPelabuhan.tglBerangkatAkhir && <small className="text-danger">{errorsPelabuhan.tglBerangkatAkhir.message}</small>}
                                                     </div>
                                                 </div>
                                                 <div className="row mb-3">
-                                                    <label className="col-sm-3 col-form-label" htmlFor="tglTibaAkhir">Tgl Tiba <span className='text-danger'>*</span></label>
+                                                    <label className="col-sm-3 col-form-label" htmlFor="tglTibaAkhir">Tgl Tiba {cekdataDiri.jenisForm == "BST" ? "" : <span className='text-danger'>*</span>}</label>
                                                     <div className="col-sm-4">
-                                                        <input autoComplete="off" type="date" id="tglTibaAkhir" name="tglTibaAkhir" {...registerPelabuhan("tglTibaAkhir", { required: "Mohon isi tanggal tiba."})} className={errorsPelabuhan.tglTibaAkhir ? "form-control form-control-sm is-invalid" : "form-control form-control-sm"} placeholder="Tgl Tiba" />
+                                                        <input autoComplete="off" type="date" id="tglTibaAkhir" name="tglTibaAkhir" {...registerPelabuhan("tglTibaAkhir", { required: cekdataDiri.jenisForm == "BST" ? false : "Mohon isi tanggal tiba."})} className={errorsPelabuhan.tglTibaAkhir ? "form-control form-control-sm is-invalid" : "form-control form-control-sm"} placeholder="Tgl Tiba" />
                                                         {errorsPelabuhan.tglTibaAkhir && <small className="text-danger">{errorsPelabuhan.tglTibaAkhir.message}</small>}
                                                     </div>
                                                 </div>
@@ -2940,7 +2952,7 @@ function DocK11() {
                                             <div className="card-action-title">
                                                 <span className="mb-0 me-sm-2 me-1">Menggunakan Kontainer</span>
                                                 <div className="form-check form-check-inline">
-                                                    <input autoComplete="off" className="form-check-input" type="radio" name="cekKontainer" id="kontainerYa" value="1" {...registerPelabuhan("cekKontainer", { required: "Mohon isi pilihan kontainer."})} />
+                                                    <input autoComplete="off" className="form-check-input" type="radio" name="cekKontainer" id="kontainerYa" value="1" {...registerPelabuhan("cekKontainer", { required: cekdataDiri.jenisForm == "BST" ? false : "Mohon isi pilihan kontainer."})} />
                                                     <label className="form-check-label" htmlFor="kontainerYa">Ya</label>
                                                 </div>
                                                 <div className="form-check form-check-inline">
@@ -3049,18 +3061,20 @@ function DocK11() {
                                             <div className="row">
                                                 <div className="col-sm-6">
                                                     <div className="card-body pt-0">
-                                                        <div className="row mb-3" style={{display: cekdataDiri.mediaPembawa == 'T' ? 'block' : 'none'}}>
-                                                            <label className="col-sm-3 col-form-label" htmlFor="mediaPembawa">Muatan <span className='text-danger'>*</span></label>
-                                                            <div className="col-sm-8">
-                                                                <div className="form-check form-check-inline">
-                                                                    <input autoComplete="off" className="form-check-input" type="radio" name="jenisAngkut" id="curah" value="1" {...registerMP("jenisAngkut", { required: (cekdataDiri.mediaPembawa == "T" ? "Mohon pilih apakah komoditas curah atau tidak." : false)})} />
-                                                                    <label className="form-check-label" htmlFor="curah">Curah</label>
+                                                        <div style={{display: cekdataDiri.mediaPembawa == 'T' ? 'block' : 'none'}}>
+                                                            <div className="row mb-3">
+                                                                <label className="col-sm-3 col-form-label" htmlFor="mediaPembawa">Muatan {cekdataDiri.jenisForm == "BST" ? "" : <span className='text-danger'>*</span>}</label>
+                                                                <div className="col-sm-8">
+                                                                    <div className="form-check form-check-inline">
+                                                                        <input autoComplete="off" className="form-check-input" type="radio" name="jenisAngkut" id="curah" value="1" {...registerMP("jenisAngkut", { required: (cekdataDiri.mediaPembawa == "T" ? (cekdataDiri.jenisForm == "BST" ? false : "Mohon pilih apakah komoditas curah atau tidak.") : false)})} />
+                                                                        <label className="form-check-label" htmlFor="curah">Curah</label>
+                                                                    </div>
+                                                                    <div className="form-check form-check-inline">
+                                                                        <input autoComplete="off" className="form-check-input" type="radio" name="jenisAngkut" id="noncurah" value="0" {...registerMP("jenisAngkut")} />
+                                                                        <label className="form-check-label" htmlFor="noncurah">Non Curah</label>
+                                                                    </div>
+                                                                    {errorsMP.jenisAngkut && <div className="offset-3 col-sm-9"><small className="text-danger">{errorsMP.jenisAngkut.message}</small></div>}
                                                                 </div>
-                                                                <div className="form-check form-check-inline">
-                                                                    <input autoComplete="off" className="form-check-input" type="radio" name="jenisAngkut" id="noncurah" value="0" {...registerMP("jenisAngkut")} />
-                                                                    <label className="form-check-label" htmlFor="noncurah">Non Curah</label>
-                                                                </div>
-                                                                {errorsMP.jenisAngkut && <div className="offset-3 col-sm-9"><small className="text-danger">{errorsMP.jenisAngkut.message}</small></div>}
                                                             </div>
                                                         </div>
                                                         <div style={{display: (cekdataDiri.mediaPembawa == "I" ? "block" : "none")}}>
@@ -3068,7 +3082,7 @@ function DocK11() {
                                                                 <label className="col-sm-3 col-form-label" htmlFor="sumberMpTangkap">Sumber</label>
                                                                 <div className="col-sm-8">
                                                                     <div className="form-check form-check-inline">
-                                                                        <input autoComplete="off" className="form-check-input" type="radio" name="sumberMpTangkap" id="FARM" value="FARM" {...registerMP("sumberMpTangkap", { required: (cekdataDiri.mediaPembawa == "I" ? "Mohon pilih sumber komoditas." : false)})} />
+                                                                        <input autoComplete="off" className="form-check-input" type="radio" name="sumberMpTangkap" id="FARM" value="FARM" {...registerMP("sumberMpTangkap", { required: (cekdataDiri.mediaPembawa == "I" ? (cekdataDiri.jenisForm == "BST" ? false : "Mohon pilih sumber komoditas.") : false)})} />
                                                                         <label className="form-check-label" htmlFor="FARM">FARM / budidaya</label>
                                                                     </div>
                                                                     <div className="form-check form-check-inline">
@@ -3102,7 +3116,7 @@ function DocK11() {
                                                         <div className="row mb-3">
                                                             <label className="col-sm-3 col-form-label" htmlFor="peruntukan">Peruntukan</label>
                                                             <div className="col-sm-4">
-                                                                <select name="peruntukan" id="peruntukan" {...registerMP("peruntukan", { required: cekdataDiri.mediaPembawa == "T" ? "Mohon pilih jenis angkut." : false})} className={errorsMP.peruntukan ? "form-select form-select-sm is-invalid" : "form-select form-select-sm"}>
+                                                                <select name="peruntukan" id="peruntukan" {...registerMP("peruntukan", { required: cekdataDiri.jenisForm == "BST" ? false : "Mohon pilih jenis angkut."})} className={errorsMP.peruntukan ? "form-select form-select-sm is-invalid" : "form-select form-select-sm"}>
                                                                     <option value="">--</option>
                                                                     <option value="1">Ditanam/Budidaya/Peningkatan Mutu Genetik</option>
                                                                     <option value="2">Konsumsi</option>
@@ -3122,14 +3136,14 @@ function DocK11() {
                                                             {errorsMP.peruntukan && <div className="offset-3 col-sm-9"><small className="text-danger">{errorsMP.peruntukan.message}</small></div>}
                                                         </div>
                                                         <div className="row mb-3">
-                                                            <label className="col-sm-3 col-form-label" htmlFor="negaraAsalMP">Negara Asal Komoditas <span className='text-danger'>*</span></label>
+                                                            <label className="col-sm-3 col-form-label" htmlFor="negaraAsalMP">Negara Asal Komoditas {cekdataDiri.jenisForm == "BST" ? "" : <span className='text-danger'>*</span>}</label>
                                                             <div className="col-sm-6">
                                                                 <Controller
                                                                     control={controlMP}
                                                                     name={"negaraAsalMP"}
                                                                     defaultValue={""}
                                                                     className="form-control form-control-sm"
-                                                                    rules={{ required: "Mohon pilih negara asal komoditas." }}
+                                                                    rules={{ required: cekdataDiri.jenisForm == "BST" ? false : "Mohon pilih negara asal komoditas." }}
                                                                     render={({ field: { value,onChange, ...field } }) => (
                                                                         <Select styles={customStyles} placeholder={"Pilih negara.."}
                                                                         value={{id: cekdataMP.negaraAsalMP, label: cekdataMP.negaraAsalMPView}}
@@ -3139,31 +3153,33 @@ function DocK11() {
                                                             </div>
                                                             {errorsMP.negaraAsalMP && <div className="offset-3 col-sm-9"><small className="text-danger">{errorsMP.negaraAsalMP.message}</small></div>}
                                                         </div>
-                                                        <div className="row mb-3" style={{visibility: (cekdataMP.negaraAsalMP == 99 ? "visible" : "hidden")}}>
-                                                            <label className="col-sm-3 col-form-label" htmlFor="daerahAsalMP">Daerah Asal</label>
-                                                            <div className="col-sm-6">
-                                                                <Controller
-                                                                    control={controlMP}
-                                                                    name={"daerahAsalMP"}
-                                                                    defaultValue={""}
-                                                                    className="form-control form-control-sm"
-                                                                    rules={{ required: false }}
-                                                                    render={({ field: { value,onChange, ...field } }) => (
-                                                                        <Select styles={customStyles} placeholder={"Pilih daerah asal.."} value={{id: cekdataMP.daerahAsalMP, label: cekdataMP.daerahAsalMPView}} {...field} options={dataSelect.daerahAsalMP} onChange={(e) => handleSelectNegKomoditas(e, "daerahAsalMP")} />
-                                                                    )}
-                                                                />
-                                                                {errorsMP.daerahAsal && <small className="text-danger">{errorsMP.daerahAsalMP.message}</small>}
+                                                        <div style={{display: (cekdataMP.negaraAsalMP == 99 ? "block" : "none")}}>
+                                                            <div className="row mb-3">
+                                                                <label className="col-sm-3 col-form-label" htmlFor="daerahAsalMP">Daerah Asal</label>
+                                                                <div className="col-sm-6">
+                                                                    <Controller
+                                                                        control={controlMP}
+                                                                        name={"daerahAsalMP"}
+                                                                        defaultValue={""}
+                                                                        className="form-control form-control-sm"
+                                                                        rules={{ required: false }}
+                                                                        render={({ field: { value,onChange, ...field } }) => (
+                                                                            <Select styles={customStyles} placeholder={"Pilih daerah asal.."} value={{id: cekdataMP.daerahAsalMP, label: cekdataMP.daerahAsalMPView}} {...field} options={dataSelect.daerahAsalMP} onChange={(e) => handleSelectNegKomoditas(e, "daerahAsalMP")} />
+                                                                        )}
+                                                                    />
+                                                                    {errorsMP.daerahAsal && <small className="text-danger">{errorsMP.daerahAsalMP.message}</small>}
+                                                                </div>
                                                             </div>
                                                         </div>
                                                         <div className="row mb-3">
-                                                            <label className="col-sm-3 col-form-label" htmlFor="negaraTujuanMP">Negara Tujuan Komoditas <span className='text-danger'>*</span></label>
+                                                            <label className="col-sm-3 col-form-label" htmlFor="negaraTujuanMP">Negara Tujuan Komoditas {cekdataDiri.jenisForm == "BST" ? "" : <span className='text-danger'>*</span>}</label>
                                                             <div className="col-sm-6">
                                                                 <Controller
                                                                     control={controlMP}
                                                                     defaultValue={""}
                                                                     name={"negaraTujuanMP"}
                                                                     className="form-control form-control-sm"
-                                                                    rules={{ required: "Mohon pilih negara tujuan komoditas." }}
+                                                                    rules={{ required: cekdataDiri.jenisForm == "BST" ? false : "Mohon pilih negara tujuan komoditas." }}
                                                                     render={({ field: { value,onChange, ...field } }) => (
                                                                         <Select styles={customStyles} placeholder={"Pilih negara.."} value={{id: cekdataMP.negaraTujuanMP, label: cekdataMP.negaraTujuanMPView}} {...field} options={cekdataDiri.permohonan != "EX" ? [{value: "99", label: "ID - INDONESIA"}] :dataSelect.negaraTujuanMP} onChange={(e) => handleSelectNegKomoditas(e, "negaraTujuanMP") & (e.value == '99' ? handleKota(null, "daerahTujuanMP") : null)} />
                                                                     )}
@@ -3171,20 +3187,22 @@ function DocK11() {
                                                             </div>
                                                             {errorsMP.negaraTujuanMP && <div className="offset-3 col-sm-9"><small className="text-danger">{errorsMP.negaraTujuanMP.message}</small></div>}
                                                         </div>
-                                                        <div className="row mb-3" style={{visibility: (cekdataMP.negaraTujuanMP == 99 ? "visible" : "hidden")}}>
-                                                            <label className="col-sm-3 col-form-label" htmlFor="daerahTujuanMP">Daerah Tujuan</label>
-                                                            <div className="col-sm-6">
-                                                                <Controller
-                                                                    control={controlMP}
-                                                                    name={"daerahTujuanMP"}
-                                                                    defaultValue={""}
-                                                                    className="form-control form-control-sm"
-                                                                    rules={{ required: false }}
-                                                                    render={({ field: { value,onChange, ...field } }) => (
-                                                                        <Select styles={customStyles} placeholder={"Pilih daerah tujuan.."} value={{id: cekdataMP.daerahTujuanMP, label: cekdataMP.daerahTujuanMPView}} {...field} options={dataSelect.daerahTujuanMP} onChange={(e) => handleSelectNegKomoditas(e, "daerahTujuanMP")} />
-                                                                    )}
-                                                                />
-                                                                {errorsMP.daerahTujuanMP && <small className="text-danger">{errorsMP.daerahTujuanMP.message}</small>}
+                                                        <div style={{display: (cekdataMP.negaraTujuanMP == 99 ? "block" : "none")}}>
+                                                            <div className="row mb-3">
+                                                                <label className="col-sm-3 col-form-label" htmlFor="daerahTujuanMP">Daerah Tujuan</label>
+                                                                <div className="col-sm-6">
+                                                                    <Controller
+                                                                        control={controlMP}
+                                                                        name={"daerahTujuanMP"}
+                                                                        defaultValue={""}
+                                                                        className="form-control form-control-sm"
+                                                                        rules={{ required: false }}
+                                                                        render={({ field: { value,onChange, ...field } }) => (
+                                                                            <Select styles={customStyles} placeholder={"Pilih daerah tujuan.."} value={{id: cekdataMP.daerahTujuanMP, label: cekdataMP.daerahTujuanMPView}} {...field} options={dataSelect.daerahTujuanMP} onChange={(e) => handleSelectNegKomoditas(e, "daerahTujuanMP")} />
+                                                                        )}
+                                                                    />
+                                                                    {errorsMP.daerahTujuanMP && <small className="text-danger">{errorsMP.daerahTujuanMP.message}</small>}
+                                                                </div>
                                                             </div>
                                                         </div>
                                                     </div>
@@ -3196,7 +3214,7 @@ function DocK11() {
                                                             <div className="col-sm-9">
                                                                 <div className="col-sm-9">
                                                                     <div className="form-check form-check-inline">
-                                                                        <input autoComplete="off" className="form-check-input" type="radio" name="tingkatOlah" id="sudah_olah" value="diolah" {...registerMP("tingkatOlah", { required: "Mohon isi peruntukan lain."})} />
+                                                                        <input autoComplete="off" className="form-check-input" type="radio" name="tingkatOlah" id="sudah_olah" value="diolah" {...registerMP("tingkatOlah", { required: cekdataDiri.jenisForm == "BST" ? false : "Mohon isi peruntukan lain."})} />
                                                                         <label className="form-check-label" htmlFor="sudah_olah">Sudah Diolah</label>
                                                                     </div>
                                                                     <div className="form-check form-check-inline">
@@ -3547,7 +3565,7 @@ function DocK11() {
                                         </button>
                                         {onLoad ? <LoadBtn warna="btn-success" ukuran="" /> :
                                             <button type="submit" className="btn btn-success ms-sm-n2" disabled={statusDraft ? false : true}>
-                                                <i className="fa-solid fa-save me-sm-2 me-1"></i>
+                                                <i className="fa-solid fa-paper-plane me-sm-2 me-1"></i>
                                                 <span className="d-sm-inline-block d-none me-sm-1">Ajukan PTK</span>
                                             </button>
                                         }
@@ -3666,9 +3684,9 @@ function DocK11() {
                         {errorsKontainer.noKontainer && <small className="text-danger">{errorsKontainer.noKontainer.message}</small>}
                         </div>
                         <div className="col-md-6 col-md-6">
-                        <label className="form-label" htmlFor="tipeKontainer">Tipe Kontainer <span className='text-danger'>*</span></label>
+                        <label className="form-label" htmlFor="tipeKontainer">Tipe Kontainer {cekdataDiri.jenisForm == "BST" ? "" : <span className='text-danger'>*</span>}</label>
                         <div className="input-group input-group-merge">
-                            <select name="tipeKontainer" id="tipeKontainer" {...registerKontainer("tipeKontainer", { required: "Mohon pilih tipe kontainer."})} className={errorsKontainer.tipeKontainer ? "form-control form-control-sm is-invalid" : "form-control form-control-sm"}>
+                            <select name="tipeKontainer" id="tipeKontainer" {...registerKontainer("tipeKontainer", { required: cekdataDiri.jenisForm == "BST" ? false : "Mohon pilih tipe kontainer."})} className={errorsKontainer.tipeKontainer ? "form-control form-control-sm is-invalid" : "form-control form-control-sm"}>
                                 <option value="">--</option>
                                 <option value="1">General/Dry cargo</option>
                                 <option value="2">Tunnel type</option>
@@ -3682,9 +3700,9 @@ function DocK11() {
                         {errorsKontainer.tipeKontainer && <small className="text-danger">{errorsKontainer.tipeKontainer.message}</small>}
                         </div>
                         <div className="col-md-6 col-md-6">
-                        <label className="form-label" htmlFor="ukuranKontainer">Ukuran Kontainer <span className='text-danger'>*</span></label>
+                        <label className="form-label" htmlFor="ukuranKontainer">Ukuran Kontainer {cekdataDiri.jenisForm == "BST" ? "" : <span className='text-danger'>*</span>}</label>
                         <div className="input-group input-group-merge">
-                            <select name="ukuranKontainer" id="ukuranKontainer" {...registerKontainer("ukuranKontainer", { required: "Mohon pilih ukuran kontainer."})} className={errorsKontainer.ukuranKontainer ? "form-control form-control-sm is-invalid" : "form-control form-control-sm"}>
+                            <select name="ukuranKontainer" id="ukuranKontainer" {...registerKontainer("ukuranKontainer", { required: cekdataDiri.jenisForm == "BST" ? false : "Mohon pilih ukuran kontainer."})} className={errorsKontainer.ukuranKontainer ? "form-control form-control-sm is-invalid" : "form-control form-control-sm"}>
                                 <option value="">--</option>
                                 <option value="1">20 feet</option>
                                 <option value="2">40 feet</option>
@@ -3743,9 +3761,9 @@ function DocK11() {
                         <input autoComplete="off" type="hidden" name='idPtk' {...registerDokumen("idPtk")} />
                         <input autoComplete="off" type="hidden" name='noAju' {...registerDokumen("noAju")} />
                         <div className="col-md-6">
-                            <label className="form-label" htmlFor="kategoriDokumen">Kategori Dokumen <span className='text-danger'>*</span></label>
+                            <label className="form-label" htmlFor="kategoriDokumen">Kategori Dokumen {cekdataDiri.jenisForm == "BST" ? "" : <span className='text-danger'>*</span>}</label>
                             <div className="input-group input-group-merge">
-                                <select name="kategoriDokumen" id="kategoriDokumen"{...registerDokumen("kategoriDokumen", { required: "Mohon pilih kategori dokumen."})} className={errorsDokumen.kategoriDokumen ? "form-control form-control-sm is-invalid" : "form-control form-control-sm"}>
+                                <select name="kategoriDokumen" id="kategoriDokumen"{...registerDokumen("kategoriDokumen", { required: cekdataDiri.jenisForm == "BST" ? false : "Mohon pilih kategori dokumen."})} className={errorsDokumen.kategoriDokumen ? "form-control form-control-sm is-invalid" : "form-control form-control-sm"}>
                                     <option value="">--</option>
                                     <option value="S">Dokumen Persyaratan</option>
                                     <option value="P">Dokumen Pendukung</option>
@@ -3754,13 +3772,13 @@ function DocK11() {
                             {errorsDokumen.kategoriDokumen && <small className="text-danger">{errorsDokumen.kategoriDokumen.message}</small>}
                         </div>
                         <div className="col-md-6">
-                            <label className="form-label" htmlFor="jenisDokumen">Jenis Dokumen <span className='text-danger'>*</span></label>
+                            <label className="form-label" htmlFor="jenisDokumen">Jenis Dokumen {cekdataDiri.jenisForm == "BST" ? "" : <span className='text-danger'>*</span>}</label>
                             <Controller
                                 control={controlDokumen}
                                 name={"jenisDokumen"}
                                 defaultValue={""}
                                 className="form-control form-control-sm"
-                                rules={{ required: "Mohon pilih jenis dokumen." }}
+                                rules={{ required: cekdataDiri.jenisForm == "BST" ? false : "Mohon pilih jenis dokumen." }}
                                 render={({ field: { value,onChange, ...field } }) => (
                                     <Select styles={customStyles} placeholder={"Pilih jenis dokumen.."} value={{id: cekdataDokumen.jenisDokumen, label: cekdataDokumen.jenisDokumenView}} {...field} options={handleJenisDokumen(cekdataDiri.mediaPembawa)} onChange={(e) => setValueDokumen("jenisDokumen", e.value) & setValueDokumen("jenisDokumenView", e.label)} />
                                 )}
@@ -3768,21 +3786,21 @@ function DocK11() {
                             {errorsDokumen.jenisDokumen && <small className="text-danger">{errorsDokumen.jenisDokumen.message}</small>}
                         </div>
                         <div className="col-md-6">
-                            <label className="form-label" htmlFor="noDokumen">No Dokumen <span className='text-danger'>*</span></label>
+                            <label className="form-label" htmlFor="noDokumen">No Dokumen {cekdataDiri.jenisForm == "BST" ? "" : <span className='text-danger'>*</span>}</label>
                             <div className="input-group input-group-merge">
-                                <input autoComplete="off" type='text' name="noDokumen" id="noDokumen" placeholder='No Dokumen..' {...registerDokumen("noDokumen", { required: "Mohon isi nomor dokumen."})} className={errorsDokumen.noDokumen ? "form-control form-control-sm is-invalid" : "form-control form-control-sm"} />
+                                <input autoComplete="off" type='text' name="noDokumen" id="noDokumen" placeholder='No Dokumen..' {...registerDokumen("noDokumen", { required: cekdataDiri.jenisForm == "BST" ? false : "Mohon isi nomor dokumen."})} className={errorsDokumen.noDokumen ? "form-control form-control-sm is-invalid" : "form-control form-control-sm"} />
                             </div>
                             <input autoComplete="off" type="hidden" name='cekPrior' id='cekPrior' {...registerDokumen("cekPrior")}/>
                             {errorsDokumen.noDokumen && <small className="text-danger">{errorsDokumen.noDokumen.message}</small>}
                         </div>
                         <div className="col-md-6">
-                            <label className="form-label" htmlFor="negaraAsalDokumen">Negara Penerbit <span className='text-danger'>*</span></label>
+                            <label className="form-label" htmlFor="negaraAsalDokumen">Negara Penerbit {cekdataDiri.jenisForm == "BST" ? "" : <span className='text-danger'>*</span>}</label>
                             <Controller
                                 control={controlDokumen}
                                 name={"negaraAsalDokumen"}
                                 defaultValue={""}
                                 className="form-control form-control-sm"
-                                rules={{ required: "Mohon pilih negara penerbit dokumen." }}
+                                rules={{ required: cekdataDiri.jenisForm == "BST" ? false : "Mohon pilih negara penerbit dokumen." }}
                                 render={({ field: { value,onChange, ...field } }) => (
                                     <Select styles={customStyles} placeholder={"Pilih negara penerbit.."} value={{id: cekdataDokumen.negaraAsalDokumen, label: cekdataDokumen.negaraAsalDokumenView}} {...field} options={dataSelect.negaraAsalDokumen} onChange={(e) => setValueDokumen("negaraAsalDokumen", e.value) & setValueDokumen("negaraAsalDokumenView", e.label) & (e.value == 99 ? handleKota(null, "kotaAsalDokumen") : null)} />
                                 )}
@@ -3790,9 +3808,9 @@ function DocK11() {
                             {errorsDokumen.negaraAsalDokumen && <small className="text-danger">{errorsDokumen.negaraAsalDokumen.message}</small>}
                         </div>
                         <div className="col-md-6">
-                            <label className="form-label" htmlFor="tglDokumen">Tgl Dokumen <span className='text-danger'>*</span></label>
+                            <label className="form-label" htmlFor="tglDokumen">Tgl Dokumen {cekdataDiri.jenisForm == "BST" ? "" : <span className='text-danger'>*</span>}</label>
                             <div className="input-group input-group-merge">
-                                <input autoComplete="off" type='date' name="tglDokumen" id="tglDokumen" {...registerDokumen("tglDokumen", { required: "Mohon isi tanggal dokumen."})} className={errorsDokumen.tglDokumen ? "form-control form-control-sm is-invalid" : "form-control form-control-sm"} />
+                                <input autoComplete="off" type='date' name="tglDokumen" id="tglDokumen" {...registerDokumen("tglDokumen", { required: cekdataDiri.jenisForm == "BST" ? false : "Mohon isi tanggal dokumen."})} className={errorsDokumen.tglDokumen ? "form-control form-control-sm is-invalid" : "form-control form-control-sm"} />
                             </div>
                             {errorsDokumen.tglDokumen && <small className="text-danger">{errorsDokumen.tglDokumen.message}</small>}
                         </div>
@@ -3816,9 +3834,9 @@ function DocK11() {
                             </div>
                         </div>
                         <div className="col-md-6">
-                            <label className="form-label" htmlFor="fileDokumen">Upload <span className='text-danger'>*</span></label>
+                            <label className="form-label" htmlFor="fileDokumen">Upload {cekdataDiri.jenisForm == "BST" ? "" : <span className='text-danger'>*</span>}</label>
                             <div className="input-group input-group-merge">
-                                <input type="hidden" name='fileDokumen' {...registerDokumen("fileDokumen", {required: "Mohon upload dokumen persyaratan yang sesuai."})} />
+                                <input type="hidden" name='fileDokumen' {...registerDokumen("fileDokumen", { required: cekdataDiri.jenisForm == "BST" ? false : "Mohon upload dokumen persyaratan yang sesuai."})} />
                                 <input type='file' name="fileDokumenUpload" id="fileDokumenUpload" accept="application/pdf" value={dataIdPage.fileDokumenUpload || ""} onChange={handleBase64Upload} className="form-control form-control-sm" />
                             </div>
                             <small className='text-danger'>File: *.pdf || Max: 2MB</small>
@@ -3970,12 +3988,14 @@ function DocK11() {
                                 <label className="form-label" htmlFor="nilaiBarangMP">Nilai Barang<span className='text-warning'>*</span></label>
                                 <div className='row'>
                                     <div className="col-md-7" style={{paddingRight: '2px'}}>
-                                        <input autoComplete="off" type="text" className='form-control form-control-sm' value={cekdataDetilMP.nilaiBarangMP ? addCommas(removeNonNumeric(cekdataDetilMP.nilaiBarangMP)) : ""} {...registerDetilMP("nilaiBarangMP", {required: "Mohon isi detil nilai barang"})} name='nilaiBarangMP' id='nilaiBarangMP' />
+                                        <input autoComplete="off" type="text" className='form-control form-control-sm' value={cekdataDetilMP.nilaiBarangMP ? addCommas(removeNonNumeric(cekdataDetilMP.nilaiBarangMP)) : ""} {...registerDetilMP("nilaiBarangMP", { required: cekdataDiri.jenisForm == "BST" ? false : "Mohon isi detil nilai barang"})} name='nilaiBarangMP' id='nilaiBarangMP' />
                                     </div>
                                     <input type="hidden" value="IDR" id='satuanNilaiMP' name='satuanNilaiMP' {...registerMP("satuanNilaiMP")}/>
-                                    <input type="text" className='form-control form-control-sm' name='satuanNilaiMPView' id='satuanNilaiMPView' disabled value="IDR - Rupiah"/>
+                                    <div className="col-md-5" style={{paddingLeft: '2px'}}>
+                                        <input type="text" className='form-control form-control-sm' name='satuanNilaiMPView' id='satuanNilaiMPView' disabled value="IDR - Rupiah"/>
+                                    </div>
                                     {/* <div className="col-md-5" style={{paddingLeft: '2px'}}>
-                                        <select name="satuanNilaiMP" id="satuanNilaiMP" value={cekdataDetilMP.satuanNilaiMP || "IDR"} className='form-control form-control-sm' {...registerDetilMP("satuanNilaiMP", {required: "Mohonn pilih mata uang"})}>
+                                        <select name="satuanNilaiMP" id="satuanNilaiMP" value={cekdataDetilMP.satuanNilaiMP || "IDR"} className='form-control form-control-sm' {...registerDetilMP("satuanNilaiMP", { required: cekdataDiri.jenisForm == "BST" ? false : "Mohonn pilih mata uang"})}>
                                             <option value="">--</option>
                                             {dataSelect.satuanNilai}
                                         </select>
@@ -4114,7 +4134,7 @@ function DocK11() {
                                 <label className="form-label" htmlFor="nilaiBarangMPKH">Nilai Barang</label>
                                 <div className='row'>
                                     <div className="col-md-7" style={{paddingRight: '2px'}}>
-                                        <input autoComplete="off" type="text" className='form-control form-control-sm' value={cekdataDetilMP.nilaiBarangMPKH ? addCommas(removeNonNumeric(cekdataDetilMP.nilaiBarangMPKH))  : ""} name='nilaiBarangMPKH' id='nilaiBarangMPKH' {...registerDetilMP("nilaiBarangMPKH", {required: "Mohon isi nilai barang"})} />
+                                        <input autoComplete="off" type="text" className='form-control form-control-sm' value={cekdataDetilMP.nilaiBarangMPKH ? addCommas(removeNonNumeric(cekdataDetilMP.nilaiBarangMPKH))  : ""} name='nilaiBarangMPKH' id='nilaiBarangMPKH' {...registerDetilMP("nilaiBarangMPKH", { required: cekdataDiri.jenisForm == "BST" ? false : "Mohon isi nilai barang"})} />
                                     </div>
                                     <div className="col-md-5" style={{paddingLeft: '2px'}}>
                                         <input type="hidden" value="IDR" id='satuanNilaiMPKH' name='satuanNilaiMPKH' {...registerMP("satuanNilaiMPKH")}/>
@@ -4226,7 +4246,7 @@ function DocK11() {
                                             name={"satJumlahMPKI"}
                                             defaultValue={""}
                                             className="form-control form-control-sm"
-                                            rules={{ required: "Mohon isi satuan volume." }}
+                                            rules={{ required: cekdataDiri.jenisForm == "BST" ? false : "Mohon isi satuan volume." }}
                                             render={({ field: { value,onChange, ...field } }) => (
                                                 <Select styles={customStyles} placeholder={"Pilih Satuan.."} value={{id: cekdataDetilMP.satJumlahMPKI, label: cekdataDetilMP.satJumlahMPKIView}} onChange={(e) => setValueDetilMP("satJumlahMPKI", e.value) & setValueDetilMP("satJumlahMPKIView", e.label)} {...field} options={masterSatuanJson(cekdataDiri.mediaPembawa)} />
                                             )}
@@ -4258,7 +4278,7 @@ function DocK11() {
                                 <label className="form-label" htmlFor="nilaiBarangMPKI">Nilai Barang<span className='text-warning'>*</span></label>
                                 <div className='row'>
                                     <div className="col-md-7" style={{paddingRight: '2px'}}>
-                                        <input autoComplete="off" type="text" className='form-control form-control-sm' value={cekdataDetilMP.nilaiBarangMPKI ? addCommas(removeNonNumeric(cekdataDetilMP.nilaiBarangMPKI)) : ""} name='nilaiBarangMPKI' id='nilaiBarangMPKI' {...registerDetilMP("nilaiBarangMPKI", {required: "Mohon isi nilai barang"})} />
+                                        <input autoComplete="off" type="text" className='form-control form-control-sm' value={cekdataDetilMP.nilaiBarangMPKI ? addCommas(removeNonNumeric(cekdataDetilMP.nilaiBarangMPKI)) : ""} name='nilaiBarangMPKI' id='nilaiBarangMPKI' {...registerDetilMP("nilaiBarangMPKI", { required: cekdataDiri.jenisForm == "BST" ? false : "Mohon isi nilai barang"})} />
                                     </div>
                                     <div className="col-md-5" style={{paddingLeft: '2px'}}>
                                         <input type="hidden" value="IDR" id='satuanNilaiMPKI' name='satuanNilaiMPKI' {...registerMP("satuanNilaiMPKI")}/>

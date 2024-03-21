@@ -142,7 +142,7 @@ const columns = [
 
 function DataMasukTable(props) {
     let navigate = useNavigate();
-    let [dataTable, setDataTable] = useState({});
+    let [dataTable, setDataTable] = useState([]);
     let [dataTableBE, setDataTableBE] = useState({});
     let model = useMemo(() => new PtkModel(), []);
     const [filterText, setFilterText] = React.useState('');
@@ -287,7 +287,7 @@ function DataMasukTable(props) {
             selectableRowsSingle
             onSelectedRowsChange={handleClick}
             pagination
-            paginationServer
+            // paginationServer
             dense
             direction="auto"
             fixedHeader

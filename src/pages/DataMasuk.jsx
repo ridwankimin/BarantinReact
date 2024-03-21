@@ -37,7 +37,7 @@ const onSubmitPtk = (data) => {
 };
 
   return (
-    <div className="container-xxl flex-grow-1 container-p-y">
+    <div className="container-fluid flex-grow-1 container-p-y">
       <h6 className="text-muted">PROSES DATA MASUK</h6>
                   <div className="card shadow-none border mb-3">
                     <div className="card-header border-bottom">

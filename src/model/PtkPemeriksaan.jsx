@@ -332,10 +332,38 @@ export default class PtkPemeriksaan {
       let config = {
         method: 'get',
         maxBodyLength: Infinity,
-        url: url + 'pn-sp2mp/' + id,
+        url: url + 'sp2mp/' + id,
         headers: { 
           'Content-Type': 'application/json', 
         }
+      };
+      
+      return axios.request(config)
+    }
+    
+    pnSP2MP(data) {
+      const uuid = uuidv4();
+
+      let datasend = {
+        id: data.idDok310 == '' ? uuid : data.idDok310,
+        ptk_id: data.idPtk,
+        nomor: data.noDokumen,
+        tanggal: data.tglDok310,
+        gudang_id: data.gudangId,
+        agen: data.agen,
+        tgl_tiba: data.tglDatang,
+        diterbitkan_di: data.diterbitkan,
+        user_ttd_id: data.ttdPutusan,
+        user_id: Cookies.get("userId")
+      }
+      let config = {
+        method: data.idDok310 == '' ? 'post' : 'put',
+        maxBodyLength: Infinity,
+        url: url + (data.idDok310 == '' ? 'sp2mp' : 'sp2mp/' + data.idDok310),
+        headers: { 
+          'Content-Type': 'application/json', 
+        },
+        data: datasend
       };
       
       return axios.request(config)
