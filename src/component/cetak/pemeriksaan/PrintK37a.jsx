@@ -126,15 +126,15 @@ function PrintK37a(props) {
                     <tr>
                     <td style={{width: '50%'}}>
                     <ul>
-                    <li>Dilakukan penahanan</li>
-                    <li>Dilakukan pengasingan dan pengamatan</li>
+                    <input type="checkbox" />Dilakukan penahanan <br/>
+                    <input type="checkbox" />Dilakukan pengasingan dan pengamatan
                     </ul>
                     </td>
                     <td style={{width: '50%'}}>
                     <ul>
-                    <li>Ditolak</li>
-                    <li>Dilanjutkan pemeriksaan Kesehatan dan/atau uji Keamanan Pangan, uji Keamanan Pakan, uji Mutu Pangan, dan/atau uji Mutu Pakan.</li>
-                    <li>Diterbitkan surat keterangan karantina</li>
+                    <input type="checkbox" />Ditolak<br/>
+                    <input type="checkbox" />Dilanjutkan pemeriksaan Kesehatan dan/atau uji Keamanan Pangan, uji Keamanan Pakan, uji Mutu Pangan, dan/atau uji Mutu Pakan.<br/>
+                    <input type="checkbox" />Diterbitkan surat keterangan karantina
                     </ul>
                     </td>
                     </tr>
