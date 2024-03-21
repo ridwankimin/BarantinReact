@@ -11,6 +11,7 @@ import SpinnerDot from '../../component/loading/SpinnerDot';
 import Swal from 'sweetalert2';
 import PnPerlakuan from '../../model/PnPerlakuan';
 import LoadBtn from '../../component/loading/LoadBtn';
+import PrintK92T from '../../component/cetak/pembebasan/PrintK92T';
 
 const log = new PtkHistory()
 const modelPemohon = new PtkModel()
@@ -422,7 +423,8 @@ function DocK92t() {
                 if(response.data) {
                     if(typeof response.data != "string") {
                         setData(values => ({...values,
-                            errork92t: ""
+                            errork92t: "",
+                            dataK92t:response.data.data
                         }));
                         if(response.data.status == 200) {
                             setValue("idDok92t", response.data.data.id)
@@ -1162,6 +1164,7 @@ function DocK92t() {
                                             <button type="submit" className="btn btn-primary me-sm-3 me-1">Simpan</button>
                                         }
                                         <button type="reset" className="btn btn-danger btn-label-secondary me-sm-2 me-1">Batal</button>
+                                        <button type="button" className="btn btn-warning btn-label-secondary me-sm-2 me-1" data-bs-toggle="modal" data-bs-target="#modPrint"><i className='fa-solid fa-print me-sm-2 me-1'></i> Print</button>
                                         {/* <a href={require("../dok/K92t.pdf")} rel="noopener noreferrer" target='_blank' className="btn btn-warning"><i className="bx bx-printer bx-xs"></i>&nbsp; Print</a> */}
                                     </div>
                                 </div>
@@ -1229,6 +1232,19 @@ function DocK92t() {
                             </button>
                         </div>
                         </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div className="modal fade" id="modPrint" tabIndex="-1">
+            <div className="modal-dialog modal-fullscreen">
+                <div className="modal-content p-3 pb-1">
+                    <div className="modal-body">
+                        <button type="button" className="btn-close float-end" data-bs-dismiss="modal" aria-label="Close"></button>
+                        <div className="text-center mb-4">
+                            <h3 className="address-title">Cetak Dokumen</h3>
+                        </div>
+                        <PrintK92T dataCetak={data} />
                     </div>
                 </div>
             </div>

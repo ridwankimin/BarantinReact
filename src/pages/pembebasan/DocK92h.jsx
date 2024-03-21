@@ -12,6 +12,7 @@ import ModaAlatAngkut from '../../model/master/modaAlatAngkut.json';
 import Keterangan from '../../model/master/keterangan.json';
 import LoadBtn from '../../component/loading/LoadBtn';
 import Swal from 'sweetalert2';
+import PrintK92H from '../../component/cetak/pembebasan/Printk92h';
 
 const log = new PtkHistory()
 const modelPemohon = new PtkModel();
@@ -407,7 +408,8 @@ function DocK92h() {
                     if(typeof response.data != "string") {
                         if(response.data.status == 200) {
                             setData(values => ({...values,
-                                errorK92h: ""
+                                errorK92h: "",
+                                dataK92h:response.data.data
                             }));
                             setValue("idDok92h", response.data.data.id)
                             setValue("noDok92h", response.data.data.nomor)
@@ -968,6 +970,7 @@ function DocK92h() {
                                         <button type="submit" className="btn btn-primary me-sm-3 me-1">Simpan</button>
                                     }
                                     <button type="button" className="btn btn-danger btn-label-secondary me-sm-2 me-1">Batal</button>
+                                    <button type="button" className="btn btn-warning btn-label-secondary me-sm-2 me-1" data-bs-toggle="modal" data-bs-target="#modPrint"><i className='fa-solid fa-print me-sm-2 me-1'></i> Print</button>
                                 </div>
                             </div>
                         </div>
@@ -1058,6 +1061,19 @@ function DocK92h() {
                             </button>
                         </div>
                         </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div className="modal fade" id="modPrint" tabIndex="-1">
+            <div className="modal-dialog modal-fullscreen">
+                <div className="modal-content p-3 pb-1">
+                    <div className="modal-body">
+                        <button type="button" className="btn-close float-end" data-bs-dismiss="modal" aria-label="Close"></button>
+                        <div className="text-center mb-4">
+                            <h3 className="address-title">Cetak Dokumen</h3>
+                        </div>
+                        <PrintK92H dataCetak={data} />
                     </div>
                 </div>
             </div>

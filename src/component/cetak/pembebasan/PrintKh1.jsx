@@ -197,8 +197,8 @@ function PrintKh1(props) {
                   </td>
                   <td style={{width: '50%'}}>
                   <p>Dokter Hewan Karantina <br /><em>Quarantine Veterinanian</em></p>
-                  <p>Nama <br /><em>Name</em></p>
-                  <p>NIP&emsp; &emsp; &emsp;&emsp; &emsp; &emsp; &emsp; &emsp; &emsp; &emsp; &emsp; &emsp; &emsp; &emsp; &emsp; &emsp; &emsp; &emsp; Tanda tangan<br /><em>IQV&emsp; &emsp; &emsp; &emsp; &emsp; &emsp; &emsp; &emsp; &emsp; &emsp; &emsp; &emsp; &emsp; &emsp; &emsp; &emsp; &emsp; &emsp; Signature&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;</em></p>
+                  <p>Nama : <strong>{cetak.petugas?.length > 0 ? cetak.petugas[0].nama : ""}</strong>  <br /><em>Name</em></p>
+                  <p>NIP : <strong>{cetak.petugas?.length > 0 ? cetak.petugas[0].nip : ""}</strong>  &emsp; &emsp; &emsp; &emsp; &emsp; &emsp; &emsp; &emsp; &emsp; Tanda tangan<br /><em>IQV&emsp; &emsp; &emsp; &emsp; &emsp; &emsp; &emsp; &emsp; &emsp; &emsp; &emsp; &emsp; &emsp; &emsp; &emsp; &emsp; &emsp; &emsp; Signature&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;</em></p>
                   </td>
                   <td style={{verticalAlign:'top' ,width: '25%'}}>Stamp<br /><em>Stamp</em></td>
                   </tr>
@@ -219,11 +219,11 @@ function PrintKh1(props) {
                 <tr>
                 <td style={{width: '100%'}}>
                     <p>&nbsp;</p>
-                <p><input type="checkbox" />Pemenuhan persyaratan teknis negara tujuan (Untuk Media Pembawa Ekspor) <br /><em>The fulfillment of technical requirements of the country of destination (for the export carrier)</em></p>
+                <p>&nbsp;{cetak.dataKH1?.p_teknis !== null ? <strong>&#9745;</strong> : <><input type="checkbox" /></>} Pemenuhan persyaratan teknis negara tujuan (Untuk Media Pembawa Ekspor) <br /><em>The fulfillment of technical requirements of the country of destination (for the export carrier)</em><br /> <strong>{cetak.dataKH1?.p_teknis}</strong></p>
                 <p>&nbsp;</p>
-                <p><input type="checkbox" />Hasil Pemeriksaan Laboratorium (dilampirkan hasil pengujian) <br /> <em> Result(s) of Laboratory Testing (the result (s) is/are attached)</em></p>
+                <p>&nbsp;{cetak.dataKH1?.p_lab !== null ? <strong>&#9745;</strong> : <><input type="checkbox" /></>} Hasil Pemeriksaan Laboratorium (dilampirkan hasil pengujian) <br /> <em> Result(s) of Laboratory Testing (the result (s) is/are attached)</em><br /> <strong>{cetak.dataKH1?.p_lab}</strong></p>
                 <p>&nbsp;</p>
-                <p><input type="checkbox" />Lainnya <br /><em>Others</em></p>
+                <p>&nbsp;{cetak.dataKH1?.p_lain !== null ? <strong>&#9745;</strong> : <><input type="checkbox" /></>} Lainnya <br /><em>Others</em><br /> <strong>{cetak.dataKH1?.p_lain}</strong></p>
                 <p>&nbsp;</p>
                 <p>&nbsp;</p>
                 </td>
@@ -242,9 +242,9 @@ function PrintKh1(props) {
                 </tr>
                 <tr>
                 <td style={{width: '20%', textAlign: 'left'}} colSpan="2">
-                <p>Nama : &nbsp; {cetak.petugas?.length > 0 ? cetak.petugas[0].nama : ""} <br /><em>Name</em></p>
+                <p>Nama : &nbsp; <strong>{cetak.petugas?.length > 0 ? cetak.petugas[0].nama : ""}</strong> <br /><em>Name</em></p>
                 <p>&nbsp;</p>
-                <p>NIP : {cetak.petugas?.length > 0 ? cetak.petugas[0].nip : ""}<br /><em> IQV</em></p>
+                <p>NIP : <strong>{cetak.petugas?.length > 0 ? cetak.petugas[0].nip : ""}</strong><br /><em> IQV</em></p>
                 </td>
                 <td style={{width: '5%'}}>&nbsp;</td>
                 <td style={{width: '20%', textAlign: 'left'}}>
@@ -268,6 +268,7 @@ function PrintKh1(props) {
                 </tr>
                 </tbody>
                 </table>
+                <p>&nbsp;</p>
                 
               </div>
               {/* <div className="container">

@@ -15,6 +15,7 @@ import Swal from 'sweetalert2'
 import { useForm } from 'react-hook-form'
 import SpinnerDot from '../../../component/loading/SpinnerDot'
 import LoadBtn from '../../../component/loading/LoadBtn'
+import PrintKI1 from '../../../component/cetak/pembebasan/PrintKI1'
 
 
 const log = new PtkHistory()
@@ -592,7 +593,8 @@ function DocKI1() {
                 if(response.data) {
                     if(typeof response.data != "string") {
                         setData(values => ({...values,
-                            errorki1: ""
+                            errorki1: "",
+                            dataKi1:response.data.data
                         }));
                         if(response.data.status == 200) {
                             setValue("idDoki1", response.data.data.id)
@@ -1254,7 +1256,7 @@ function DocKI1() {
                                         <button type="submit" className="btn btn-primary me-sm-2 me-1"><i className='fa-solid fa-save me-sm-2 me-1'></i> Simpan</button>
                                     }
                                     <button type="button" className="btn btn-danger btn-label-secondary me-sm-2 me-1"><i className='fa-solid fa-cancel me-sm-2 me-1'></i> Batal</button>
-                                    <button type="button" className="btn btn-warning btn-label-secondary me-sm-2 me-1"><i className='fa-solid fa-print me-sm-2 me-1'></i> Print</button>
+                                    <button type="button" className="btn btn-warning btn-label-secondary me-sm-2 me-1" data-bs-toggle="modal" data-bs-target="#modPrint"><i className='fa-solid fa-print me-sm-2 me-1'></i> Print</button>
                                     <button type="button" style={{display: (cekWatch.idDoki1 ? "block" : "none")}} className="float-end btn btn-info btn-label-secondary"><i className='tf-icons fa-solid fa-paper-plane me-sm-2 me-1'></i> TTE</button>
                                 </div>
                             </div>
@@ -1325,7 +1327,19 @@ function DocKI1() {
                 </div>
             </div>
         </div>
-
+        <div className="modal fade" id="modPrint" tabIndex="-1">
+            <div className="modal-dialog modal-fullscreen">
+                <div className="modal-content p-3 pb-1">
+                    <div className="modal-body">
+                        <button type="button" className="btn-close float-end" data-bs-dismiss="modal" aria-label="Close"></button>
+                        <div className="text-center mb-4">
+                            <h3 className="address-title">Cetak Dokumen</h3>
+                        </div>
+                        <PrintKI1 dataCetak={data} />
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
   )
 }

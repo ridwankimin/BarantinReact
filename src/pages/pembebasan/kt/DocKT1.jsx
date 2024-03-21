@@ -494,7 +494,8 @@ function DocKT1() {
                     if(typeof response.data != "string") {
                         if(response.data.status == 200) {
                             setData(values => ({...values,
-                                errorKT1: ""
+                                errorKT1: "",
+                                dataKt1:response.data.data
                             }))
                             setValue("idDokKT1", response.data.data.id)
                             setValue("noDokKT1", response.data.data.nomor)
@@ -1186,7 +1187,7 @@ function DocKT1() {
                                             <button type="submit" className="btn btn-primary me-sm-2 me-1"><i className='fa-solid fa-save me-sm-2 me-1'></i> Simpan</button>
                                         }
                                         <button type="button" className="btn btn-danger btn-label-secondary me-sm-2 me-1"><i className='fa-solid fa-cancel me-sm-2 me-1'></i> Batal</button>
-                                        <button type="button" className="btn btn-warning btn-label-secondary me-sm-2 me-1"><i className='fa-solid fa-print me-sm-2 me-1'></i> Print</button>
+                                        <button type="button" className="btn btn-warning btn-label-secondary me-sm-2 me-1" data-bs-toggle="modal" data-bs-target="#modPrint"><i className='fa-solid fa-print me-sm-2 me-1'></i> Print</button>
                                         <button type="button" style={{display: (cekWatch.idDokKT1 ? "block" : "none")}} className="float-end btn btn-info btn-label-secondary"><i className='tf-icons fa-solid fa-paper-plane me-sm-2 me-1'></i> TTE</button>
                                     </div>
                                 </div>
@@ -1289,6 +1290,19 @@ function DocKT1() {
                             Tutup
                             </button>
                         </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div className="modal fade" id="modPrint" tabIndex="-1">
+            <div className="modal-dialog modal-fullscreen">
+                <div className="modal-content p-3 pb-1">
+                    <div className="modal-body">
+                        <button type="button" className="btn-close float-end" data-bs-dismiss="modal" aria-label="Close"></button>
+                        <div className="text-center mb-4">
+                            <h3 className="address-title">Cetak Dokumen</h3>
+                        </div>
+                        <PrintKI1 dataCetak={data} />
                     </div>
                 </div>
             </div>

@@ -370,7 +370,8 @@ function DocK92i() {
                 if(response.data) {
                     if(typeof response.data != "string") {
                         setData(values => ({...values,
-                            errork92i: ""
+                            errork92i: "",
+                            dataK92i:response.data.data
                         }));
                         if(response.data.status == 200) {
                             setValue("idDok92i", response.data.data.id)
@@ -577,7 +578,8 @@ function DocK92i() {
                 if(response.data) {
                     if(typeof response.data != "string") {
                         setData(values => ({...values,
-                            errork92i: ""
+                            errork92i: "",
+                            dataK92i:response.data.data
                         }));
                         if(response.data.status == 200) {
                             setValue("idDok92i", response.data.data.id)

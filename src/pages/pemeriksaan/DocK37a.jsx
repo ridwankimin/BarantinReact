@@ -13,6 +13,7 @@ import HasilAnalisis from '../../model/master/hasilAnalisis.json'
 import Rekomendasi from '../../model/master/rekomendasi.json'
 import Swal from 'sweetalert2';
 import LoadBtn from '../../component/loading/LoadBtn';
+import PrintK37a from '../../component/cetak/pemeriksaan/PrintK37a';
 
 const model = new PtkPemeriksaan()
 const modelSurtug = new PtkSurtug()
@@ -805,14 +806,29 @@ function DocK37a() {
                                         <button type="submit" className="btn btn-primary me-sm-2 me-1">Simpan</button>
                                     }
                                     <button type="button" className="btn btn-danger me-sm-2 me-1" onClick={handlebatal}>Batal</button>
-                                    <a href={import("../../dok/k37.pdf")} rel="noopener noreferrer" target='_blank' className="btn btn-warning"><i className="bx bx-printer bx-xs"></i>&nbsp; Print</a>
+
+                                    <button type="button" className="btn btn-warning btn-label-secondary me-sm-2 me-1" data-bs-toggle="modal" data-bs-target="#modPrint"><i className='fa-solid fa-print me-sm-2 me-1'></i> Print</button>
                                     <button style={{display: (dataWatch.idDok37a ? "block" : "none")}} type='button' onClick={() => navigate((dataWatch.rekomAdmin == "14" ? '/k37b' : '/k22'))} className="btn btn-info pb-1 float-end">
                                         <span className="d-sm-inline-block d-none me-sm-1">{dataWatch.rekomAdmin == "14" ? "Pemeriksaan Fisik/Kesehatan" : "Buat Surat Tugas"}</span>
-                                        <i className="fa-solid fa-angle-right"></i>
+                                        <i className="fa-solid fa-angle-right"></i> 
                                     </button>
+                                    
                                 </div>
                             </div>
                         </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div className="modal fade" id="modPrint" tabIndex="-1">
+            <div className="modal-dialog modal-fullscreen">
+                <div className="modal-content p-3 pb-1">
+                    <div className="modal-body">
+                        <button type="button" className="btn-close float-end" data-bs-dismiss="modal" aria-label="Close"></button>
+                        <div className="text-center mb-4">
+                            <h3 className="address-title">Cetak Dokumen</h3>
+                        </div>
+                        <PrintK37a dataCetak={data} />
                     </div>
                 </div>
             </div>
