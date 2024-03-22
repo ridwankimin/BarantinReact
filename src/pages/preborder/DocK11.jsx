@@ -2976,7 +2976,7 @@ function DocK11() {
                                                         <button type="button" className="btn btn-xs btn-primary" data-bs-toggle="modal" data-bs-target="#modKontainer">Tambah Kontainer</button>
                                                         <button type="button" onClick={dataKontainerPtk} className="btn btn-xs btn-info float-end"><i className="menu-icon tf-icons fa-solid fa-sync"></i> Refresh Data</button>
                                                     </div>
-                                                    <div className="table-responsive text-nowrap" style={{height: (kontainerPtk?.length > 8 ? "300px" : "")}}>
+                                                    <div className="text-wrap" style={{height: (kontainerPtk?.length > 8 ? "300px" : "")}}>
                                                         <table className="table table-sm table-bordered table-hover table-striped dataTable">
                                                             <thead style={{backgroundColor: '#123138' }}>
                                                                 <tr>
@@ -3295,7 +3295,7 @@ function DocK11() {
                                                                 <button type="button" className="btn btn-xs btn-primary" data-bs-toggle={cekdataDiri.jenisMp ? "modal" : ""} data-bs-target={cekdataDiri.jenisMp ? "#modKomoditas" : ""} onClick={() => cekdataDiri.jenisMp ? resetFormKomoditi() : Swal.fire({icon: "error", title: "Mohon Pilih Jenis Media Pembawa!", showConfirmButton: true})}>Tambah Komoditas</button>
                                                                 <button type="button" className="btn btn-xs btn-info float-end"  onClick={dataKomoditiPtk}><i className="menu-icon tf-icons fa-solid fa-sync"></i> Refresh Data</button>
                                                             </div>
-                                                            <div className="table-responsive text-nowrap" style={{height: (komoditiPtk?.length > 8 ? "300px" : "")}}>
+                                                            <div className="text-wrap" style={{height: (komoditiPtk?.length > 8 ? "300px" : "")}}>
                                                                 <table className="table table-sm table-bordered table-hover table-striped dataTable">
                                                                     <thead>
                                                                         <tr>
@@ -3423,7 +3423,7 @@ function DocK11() {
                                                                     <button type="button" className="btn btn-xs btn-primary" data-bs-toggle={cekdataDiri.mediaPembawa ? "modal" : ""} data-bs-target={cekdataDiri.mediaPembawa ? "#modDokumen" : ""} onClick={cekdataDiri.mediaPembawa ? null : () => {Swal.fire({icon: "error", title: "Mohon pilih media pembawa terlebih dahulu!", showConfirmButton: true})}}>Tambah Dokumen</button>
                                                                     <button type="button" className="btn btn-xs btn-info float-end"  onClick={dataDokumenPtk}><i className="menu-icon tf-icons fa-solid fa-sync"></i> Refresh Data</button>
                                                                 </div>
-                                                                <div className="table-responsive text-nowrap" style={{height: (dokumenPtk?.length > 8 ? "300px" : "")}}>
+                                                                <div className="text-wrap" style={{height: (dokumenPtk?.length > 8 ? "300px" : "")}}>
                                                                     <table className="table table-sm table-bordered table-hover table-striped dataTable">
                                                                         <thead>
                                                                             <tr>

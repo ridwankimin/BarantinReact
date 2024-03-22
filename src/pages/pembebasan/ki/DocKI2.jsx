@@ -129,8 +129,8 @@ function DocKI2() {
         const jenisPeriksa = [dataSubmit.isKlinis, data.isOrganoleptik, data.isLaboratoris]
         // console.log(jenisPeriksa)
         setOnLoad(true)
-        const dataCekKom = data.listKomoditas?.filter(item => item.volumeP8 == null || item.nettoP8 == null)
-        if(dataCekKom.length == 0) {
+        const dataCekKom = data.listKomoditas?.filter(item => item.volumeP8 != null || item.nettoP8 != null)
+        if(dataCekKom.length > 0) {
             const response = modelPelepasan.dokelKI(dataSubmit);
             response
             .then((response) => {

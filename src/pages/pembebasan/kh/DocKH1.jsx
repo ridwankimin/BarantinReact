@@ -175,9 +175,9 @@ function DocKH1() {
 
     const onSubmit = (dataSubmit) => {
         setOnLoad(true)
-        const dataCekKom = data.listKomoditas?.filter(item => item.volumeP8 == null || item.nettoP8 == null)
-        const dataCekKomJanBen = data.listKomoditas?.filter(item => (item.jantan != null && item.jantanP8 == null) || (item.betina != null && item.betinaP8 == null))
-        if(dataCekKom.length == 0 && dataCekKomJanBen.length == 0) {
+        const dataCekKom = data.listKomoditas?.filter(item => item.volumeP8 != null || item.nettoP8 != null)
+        const dataCekKomJanBen = data.listKomoditas?.filter(item => (item.jantanP8 != null) || (item.betinaP8 != null))
+        if(dataCekKom.length > 0 && dataCekKomJanBen.length > 0) {
             const response = modelPelepasan.eksporDokelHewanHidup(dataSubmit);
             response
             .then((response) => {

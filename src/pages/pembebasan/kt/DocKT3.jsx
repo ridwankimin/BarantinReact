@@ -158,8 +158,8 @@ function DocKT3() {
 
     const onSubmit = (dataSubmit) => {
         setOnLoad(true)
-        const dataCekKom = data.listKomoditas?.filter(item => item.volumeP8 == null || item.nettoP8 == null)
-        if(dataCekKom.length == 0) {
+        const dataCekKom = data.listKomoditas?.filter(item => item.volumeP8 != null || item.nettoP8 != null)
+        if(dataCekKom.length > 0) {
             const response = modelPelepasan.dokelKT(dataSubmit);
             response
             .then((response) => {

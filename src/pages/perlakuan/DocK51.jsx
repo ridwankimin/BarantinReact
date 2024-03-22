@@ -53,9 +53,10 @@ function DocK51() {
 
     const onSubmit = (dataSubmit) => {
         setOnLoad(true)
-        const dataCekKom = data.listKomoditas?.filter(item => item.volumeP4 == null || item.nettoP4 == null)
-        const dataCekKomJanBen = data.listKomoditas?.filter(item => (item.jantan != null && item.jantanP4 == null) || (item.betina != null && item.betinaP4 == null))
-        if(dataCekKom.length == 0 && dataCekKomJanBen.length == 0) {
+        const dataCekKom = data.listKomoditas?.filter(item => item.volumeP4 != null || item.nettoP4 != null)
+        // const dataCekKomJanBen = data.listKomoditas?.filter(item => (item.jantan != null && item.jantanP4 != null) || (item.betina != null && item.betinaP4 != null))
+        // if(dataCekKom.length > 0 && dataCekKomJanBen.length > 0) {
+        if(dataCekKom.length > 0) {
             const response = modelPerlakuan.sertifPerlakuan(dataSubmit)
             response
             .then((response) => {

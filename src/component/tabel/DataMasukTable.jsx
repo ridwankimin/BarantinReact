@@ -57,9 +57,9 @@ const tableCustomStyles = {
                 Cookies.set("jenisKarantina", e.jenisKarantina, {
                     expires: 7
                 });
-                // Cookies.set("jenisMp", dataPTK[0].jenis_karantina, {
-                    //     expires: 7
-                // });
+                Cookies.set("jenisMp", e.jenis_media_pembawa_id, {
+                    expires: 7
+                });
                 Cookies.set("jenisPermohonan", e.jenisPermohonanDb, {
                     expires: 7
                 });
@@ -269,7 +269,6 @@ const tableCustomStyles = {
     }, [getListPtk])
 
     const subHeaderComponentMemo = React.useMemo(() => {
-
 		return (
             <div className='col-sm-3'>
                 <input
@@ -296,8 +295,8 @@ const tableCustomStyles = {
             // paginationServer
             dense
             direction="center"
-            // fixedHeader
-            // fixedHeaderScrollHeight="350px"
+            fixedHeader
+            fixedHeaderScrollHeight="400px"
             highlightOnHover
             pointerOnHover
             // expandableRows 

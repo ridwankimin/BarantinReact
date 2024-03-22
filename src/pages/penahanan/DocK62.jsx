@@ -56,9 +56,10 @@ function DocK62() {
 
     function onSubmit(dataSubmit) {
         setOnLoad(true)
-        const dataCekKom = data.listKomoditas?.filter(item => item.volumeP5 == null || item.nettoP5 == null)
-        const dataCekKomJanBen = data.listKomoditas?.filter(item => (item.jantan != null && item.jantanP5 == null) || (item.betina != null && item.betinaP5 == null))
-        if(dataCekKom.length == 0 && dataCekKomJanBen.length == 0) {
+        const dataCekKom = data.listKomoditas?.filter(item => item.volumeP5 != null || item.nettoP5 != null)
+        // const dataCekKomJanBen = data.listKomoditas?.filter(item => (item.jantan != null && item.jantanP5 == null) || (item.betina != null && item.betinaP5 == null))
+        // if(dataCekKom.length == 0 && dataCekKomJanBen.length == 0) {
+        if(dataCekKom.length > 0) {
             const response = modelPenahanan.save62(dataSubmit, data.idDok61);
             response
             .then((response) => {

@@ -73,8 +73,8 @@ function DocK92i() {
         const jenisPeriksa = [dataSubmit.isKlinis, dataSubmit.isOrganoleptik, dataSubmit.isLaboratoris]
         console.log(jenisPeriksa)
         setOnLoad(true)
-        const dataCekKom = data.listKomoditas?.filter(item => item.volumeP8 == null || item.nettoP8 == null)
-        if(dataCekKom.length == 0) {
+        const dataCekKom = data.listKomoditas?.filter(item => item.volumeP8 != null || item.nettoP8 != null)
+        if(dataCekKom.length > 0) {
             const response = modelPelepasan.imporAreaKI(dataSubmit);
             response
             .then((response) => {

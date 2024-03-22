@@ -61,13 +61,13 @@ function range(size, startAt = 0) {
 
 function randomBetween(min, max) {
     return Math.floor(Math.random() * (max - min + 1)) + min;
-  }
+}
 
 function randomKey(jmlKont,rskLevel,jnsMP) {
     var jmlSampling = 0
     if(Cookies.get("jenisKarantina") == "T") {
         jmlKont = parseInt(jmlKont)
-        if (jnsMP == "PSAT") {
+        if (jnsMP == "1") {
             if (jmlKont > 0)  jmlSampling = jmlKont
             if (jmlKont > 5) jmlSampling = 5
             if (jmlKont > 10) jmlSampling = 5
@@ -75,7 +75,7 @@ function randomKey(jmlKont,rskLevel,jnsMP) {
             if (jmlKont > 50) jmlSampling = 10
             if (jmlKont > 100) jmlSampling = Math.ceil(sqrt(jmlKont))
             
-        } else if (jnsMP == "media pembawa") {
+        } else if (jnsMP == "0") {
             if (rskLevel == "L") {
                 if (jmlKont > 0) jmlSampling = jmlKont
                 if (jmlKont > 1) jmlSampling = 2
@@ -129,10 +129,16 @@ function randomKey(jmlKont,rskLevel,jnsMP) {
         if (jmlKont > 1) jmlSampling = 1
         if (jmlKont > 5) jmlSampling =  Math.ceil(jmlKont / 5)
     }
+console.log("jmlSampling")
+console.log(jmlSampling)
+console.log("jmlKont")
+console.log(jmlKont)
 
-    const arrayRan = Array.from({length: jmlKont}, () => randomBetween(1, jmlSampling))
+const arrayRan = Array.from({ length: jmlSampling }, () => Math.floor(Math.random() * (jmlKont - jmlSampling + 1)) + jmlSampling)
+console.log("arrayRan")
+console.log(arrayRan)
 
-    return arrayRan
+return arrayRan
 }
 
 function DocK310() {
@@ -244,23 +250,16 @@ function DocK310() {
                         
                         if(filterNullRisk.length == 0) {
                             setRiskLevel(riskLevel)
-                        } else if(filterNullRisk.length > 1) {
+                        } else if(filterNullRisk.length == 1) {
                             setRiskLevel([filterNullRisk[0].level_risiko])
-                            if(Cookies.get("jenisKarantina") == "T") {
-                                const groupedMP = response.data.data.ptk_komoditi?.reduce(
-                                    (entryMap, e) => entryMap.set(e.komoditas_id, [...entryMap.get(e.komoditas_id)||[], e]),
-                                    new Map()
-                                );
-                                console.log("groupedMP")
-                                console.log(groupedMP)
-                            }
-                            randomKey(response.data.data.ptk_kontainer.length,filterNullRisk[0].level_risiko,ListPsat)
+                            setKontainerRandom(randomKey(response.data.data.ptk_kontainer.length,filterNullRisk[0].level_risiko,"0"))
                         } else {
                             const groupedMap = filterNullRisk.reduce(
                                 (entryMap, e) => entryMap.set(e.level_risiko, [...entryMap.get(e.level_risiko)||[], e]),
                                 new Map()
-                                );
+                            );
                             setValue("riskLevel", groupedMap)
+                            setKontainerRandom(randomKey(response.data.data.ptk_kontainer.length,"M","0"))
                         }
                         setData(values => ({...values,
                             errorPTK: "",
@@ -572,6 +571,54 @@ function DocK310() {
                                                         </div>
                                                     </div>
                                                     <hr />
+                                                    <h6 className='mb-1'><b>Detil Komoditas</b></h6>
+                                                    <div className="text-wrap" style={{height: (data.listKomoditas?.length > 8 ? "300px" : "")}}>
+                                                    <table className="table table-sm table-bordered table-hover table-striped dataTable">
+                                                        <thead style={{backgroundColor: '#123138'}}>
+                                                            <tr>
+                                                                <th className='text-lightest'>No</th>
+                                                                <th className='text-lightest'>Kode HS</th>
+                                                                <th className='text-lightest'>Klasifikasi</th>
+                                                                <th className='text-lightest'>Komoditas Umum</th>
+                                                                <th className='text-lightest'>Komoditas En/Latin</th>
+                                                                <th className='text-lightest'>Netto</th>
+                                                                <th className='text-lightest'>Satuan</th>
+                                                                <th className='text-lightest'>Bruto</th>
+                                                                <th className='text-lightest'>Satuan</th>
+                                                                <th className='text-lightest'>Jumlah</th>
+                                                                <th className='text-lightest'>Satuan</th>
+                                                                <th className='text-lightest'>Jantan</th>
+                                                                <th className='text-lightest'>Betina</th>
+                                                                <th className='text-lightest'>Harga</th>
+                                                                <th className='text-lightest'>Mata Uang</th>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody>
+                                                            {data.listKomoditas ? (data.listKomoditas?.map((data, index) => (
+                                                                        <tr key={index}>
+                                                                            <td>{index + 1}</td>
+                                                                            <td>{data.kode_hs}</td>
+                                                                            <td>{data.klasifikasi}</td>
+                                                                            <td>{data.nama_umum_tercetak}</td>
+                                                                            <td>{data.nama_latin_tercetak}</td>
+                                                                            <td className='text-end'>{data.volume_netto?.toLocaleString()}</td>
+                                                                            <td>{data.sat_netto}</td>
+                                                                            <td className='text-end'>{data.volume_bruto?.toLocaleString()}</td>
+                                                                            <td>{data.sat_bruto}</td>
+                                                                            <td className='text-end'>{data.volume_lain?.toLocaleString()}</td>
+                                                                            <td>{data.sat_lain}</td>
+                                                                            <td className='text-end'>{data.jantan?.toLocaleString()}</td>
+                                                                            <td className='text-end'>{data.betina?.toLocaleString()}</td>
+                                                                            <td className='text-end'>{data.harga?.toLocaleString()}</td>
+                                                                            <td>{data.mata_uang}</td>
+                                                                        </tr>
+                                                                    ))
+                                                                ) : null
+                                                            }
+                                                        </tbody>
+                                                    </table>
+                                                    </div>
+                                                    <hr />
                                                     <h6 className='mb-1'><b>Lampiran dokumen</b></h6>
                                                     <table className="table table-sm table-bordered table-hover table-striped dataTable mb-4">
                                                         <thead style={{backgroundColor: '#123138'}}>
@@ -629,11 +676,11 @@ function DocK310() {
                                                                         <td>{data.segel}</td>
                                                                         <td>
                                                                             <div className="form-check form-check-inline">
-                                                                                <input autoComplete="off" className="form-check-input" type="radio" onChange={(e) => {data.chkstat = e.target.value; setListKontainer([...listKontainer])}} name={"chkstat" + index} id={"chkstatYa" + index} value="Y" />
+                                                                                <input autoComplete="off" className="form-check-input" type="radio" checked={kontainerRandom.includes(index+1) ? true : false} onChange={(e) => {data.chkstat = e.target.value; setListKontainer([...listKontainer])}} name={"chkstat" + index} id={"chkstatYa" + index} value="Y" />
                                                                                 <label className="form-check-label" htmlFor={"chkstatYa" + index}>Ya</label>
                                                                             </div>
                                                                             <div className="form-check form-check-inline">
-                                                                                <input autoComplete="off" className="form-check-input" type="radio" onChange={(e) => {data.chkstat = e.target.value; setListKontainer([...listKontainer])}} name={"chkstat" + index} id={"chkstatTidak" + index} value="N" />
+                                                                                <input autoComplete="off" className="form-check-input" type="radio" checked={kontainerRandom.includes(index+1) ? false : true} onChange={(e) => {data.chkstat = e.target.value; setListKontainer([...listKontainer])}} name={"chkstat" + index} id={"chkstatTidak" + index} value="N" />
                                                                                 <label className="form-check-label" htmlFor={"chkstatTidak" + index}>Tidak</label>
                                                                             </div>
                                                                         </td>

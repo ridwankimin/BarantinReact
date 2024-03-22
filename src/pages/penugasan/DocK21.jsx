@@ -471,7 +471,7 @@ function DocK21() {
                                         </h2>
                                         <div id="collapseInfoMP">
                                             <div className="accordion-body">
-                                                <div className="table-responsive text-nowrap" style={{height: (dataPtk.listKomoditas?.length > 8 ? "300px" : "")}}>
+                                                <div className="text-wrap" style={{height: (dataPtk.listKomoditas?.length > 8 ? "300px" : "")}}>
                                                     <table className="table table-sm table-bordered table-hover table-striped dataTable">
                                                         <thead>
                                                             <tr>
@@ -526,7 +526,7 @@ function DocK21() {
                                             <div className="accordion-body">
                                                 <div className="row">
                                                     <div className='col-md-12 mb-3'>
-                                                        <div className="table-responsive text-nowrap" style={{height: (data.listDokumen?.length > 8 ? "300px" : "")}}>
+                                                        <div className="text-wrap" style={{height: (data.listDokumen?.length > 8 ? "300px" : "")}}>
                                                             <table className="table table-sm table-bordered table-hover table-striped dataTable">
                                                                 <thead>
                                                                     <tr>
@@ -569,6 +569,34 @@ function DocK21() {
                                         </h2>
                                         <div id="collapseAnalisa">
                                             <div className="accordion-body">
+                                                <div className='row'>
+                                                    <div className="col-sm-4">
+                                                        <h6 className='mb-1'><b><u>Tingkat Risiko</u></b></h6>
+                                                        <div className="form-check form-check-inline">
+                                                            <label className="form-check-label" htmlFor="tingkatRisikoT">Tinggi</label>
+                                                            <input name="tingkatRisiko" value="H" {...register("tingkatRisiko", {required: "Mohon pilih level risiko"})} className={errors.tingkatRisiko ? "form-check-input is-invalid" : "form-check-input"} type="radio" id="tingkatRisikoT" />
+                                                        </div>
+                                                        <div className="form-check form-check-inline">
+                                                            <label className="form-check-label" htmlFor="tingkatRisikoM">Medium</label>
+                                                            <input name="tingkatRisiko" value="M" {...register("tingkatRisiko")} className={errors.tingkatRisiko ? "form-check-input is-invalid" : "form-check-input"} type="radio" id="tingkatRisikoM" />
+                                                        </div>
+                                                        <div className="form-check form-check-inline mb-3">
+                                                            <label className="form-check-label" htmlFor="tingkatRisikoR">Rendah</label>
+                                                            <input name="tingkatRisiko" value="L" {...register("tingkatRisiko")} className={errors.tingkatRisiko ? "form-check-input is-invalid" : "form-check-input"} type="radio" id="tingkatRisikoR" />
+                                                        </div>
+                                                    </div>
+                                                    <div className="col-sm-4" style={{display: (jenisKar == "T" ? "block" : "none")}}>
+                                                        <h6 className='mb-1'><b><u>Objek Tugas</u></b></h6>
+                                                        <div className="form-check form-check-inline">
+                                                            <label className="form-check-label" htmlFor="golonganMpPSAT">PSAT</label>
+                                                            <input name="golonganMp" value="PSAT" {...register("golonganMp", {required: "Mohon Objek Tugas"})} className={errors.golonganMp ? "form-check-input is-invalid" : "form-check-input"} type="radio" id="golonganMpPSAT" />
+                                                        </div>
+                                                        <div className="form-check form-check-inline">
+                                                            <label className="form-check-label" htmlFor="golonganMpPSAT">Non PSAT</label>
+                                                            <input name="golonganMp" value="PSAT" {...register("golonganMp")} className={errors.golonganMp ? "form-check-input is-invalid" : "form-check-input"} type="radio" id="golonganMpPSAT" />
+                                                        </div>
+                                                    </div>
+                                                </div>
                                                 <div className="col-md-12" style={{display: (jenisKar == "H" ? "block" : "none")}}>
                                                     <label className="col-form-label" htmlFor="mpHPHK">A. Media Pembawa HPHK</label>
                                                     <div className="row">
