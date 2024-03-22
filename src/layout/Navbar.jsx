@@ -109,7 +109,8 @@ function Navbar(props) {
                     </li>
                 </ul>
             </li>
-            <li className={(ketMenu === 'Analisa Awal & Penugasan' && menuOpen === true) || location.pathname.split("/")[1] === 'k21' || location.pathname.split("/")[1] === 'k22' ? 'menu-item open menu-item-animating open' : 'menu-item menu-item-animating menu-item-closing'}>
+            <li className={(ketMenu === 'Analisa Awal & Penugasan' && menuOpen === true) || location.pathname.split("/")[1] === 'k21' || location.pathname.split("/")[1] === 'k22' ? 'menu-item open menu-item-animating open' : 'menu-item menu-item-animating menu-item-closing'}
+            style={{display: (Cookies.get("idPtkPage") ? "block" : "none")}}>
                 <button type='button' style={{backgroundColor: "#123138"}} className="w-100 text-sm-start menu-link menu-toggle text-lightest" data-i18n="Analisa Awal & Penugasan" onClick={handleMenuOpen}>
                     <i className="menu-icon tf-icons fa-solid fa-user-clock"></i>
                     <div data-i18n="Analisa Awal & Penugasan">Analisa Awal & Penugasan</div>

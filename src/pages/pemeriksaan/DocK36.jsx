@@ -2,7 +2,7 @@ import React from 'react'
 
 function DocK36() {
   return (
-    <div className="container-xxl flex-grow-1 container-p-y">
+    <div className="container-fluid flex-grow-1 container-p-y">
     <h4 className="py-3 breadcrumb-wrapper mb-4">
         K-3.6 <span className="text-muted fw-light">LAPORAN HASIL PEMERIKSAAN MEDIA PEMBAWA DI ATAS ALAT ANGKUT</span>
     </h4>

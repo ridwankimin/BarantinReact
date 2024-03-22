@@ -648,7 +648,7 @@ function DocK81() {
     }
 
   return (
-    <div className="container-xxl flex-grow-1 container-p-y">
+    <div className="container-fluid flex-grow-1 container-p-y">
         <h4 className="py-3 breadcrumb-wrapper mb-4">
             K-8.1 <span className="fw-light" style={{color: 'blue'}}>SURAT PEMUSNAHAN</span>
 
@@ -779,7 +779,7 @@ function DocK81() {
                                                 <div className="row">
                                                     <label className="col-sm-4 col-form-label" htmlFor="identitasAngkut">Jenis, Nama Alat Angkut</label>
                                                     <div className="col-sm-8">
-                                                        <input type='text' name="identitasAngkut" className="form-control form-control-sm" disabled value={data.listPtk ? (modaAlatAngkut(data.listPtk.moda_alat_angkut_terakhir_id).nama + ", " + data.listPtk.nama_alat_angkut_terakhir) : ""} id="identitasAngkut" />
+                                                        <input type='text' name="identitasAngkut" className="form-control form-control-sm" disabled value={data.listPtk ? (modaAlatAngkut(data.listPtk.moda_alat_angkut_terakhir_id)?.nama + ", " + data.listPtk.nama_alat_angkut_terakhir) : ""} id="identitasAngkut" />
                                                     </div>
                                                 </div>
                                             </div>

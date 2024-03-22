@@ -776,7 +776,7 @@ function DocK91() {
         }
     }
   return (
-    <div className="container-xxl flex-grow-1 container-p-y">
+    <div className="container-fluid flex-grow-1 container-p-y">
         <h4 className="py-3 breadcrumb-wrapper mb-4">
             K-9.1 <span className="fw-light" style={{color: 'blue'}}>SURAT KETERANGAN MEDIA PEMBAWA LAIN</span>
 
@@ -1001,7 +1001,6 @@ function DocK91() {
                                                                 type="date"
                                                                 name='tglPeriksaAkhir'
                                                                 id='tglPeriksaAkhir'
-                                                                disabled
                                                                 className={errors.tglPeriksaAkhir ? "form-control form-control-sm is-invalid" : "form-control form-control-sm"}
                                                                 {...register("tglPeriksaAkhir", {required: "Mohon isi tgl pemeriksaan tindakan Karantina Akhir."})}
                                                             />

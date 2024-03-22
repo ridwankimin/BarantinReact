@@ -25,127 +25,180 @@ const tableCustomStyles = {
         }
     }
   }
-const columns = [
-    // {
-    //     name: 'No',
-	// 	selector: row => row.id,
-    //     sortable: true,
-    //     width: '4%'
-	// },
-	{
-        name: 'No Aju',
-		selector: row => row.noAju,
-        sortable: true,
-        width: '11%' //14
-	},
-	{
-        
-        name: 'Karantina',
-		selector: row => row.karantina,
-        sortable: true,
-        // width: '6%' //19
-	},
-	{
-        
-        name: 'No Dokumen',
-		selector: row => row.noDokumen,
-        sortable: true,
-        width: '10%' //29
-	},
-	{
-        
-        name: 'Tgl Dokumen',
-		selector: row => row.tglDokumen,
-        sortable: true,
-        // width: '8%' //37
-	},
-	{
-        
-        name: 'Jenis',
-		selector: row => row.jenisPermohonan,
-        sortable: true,
-        // width: '5%' //42
-	},
-	{
-        name: 'Status',
-		selector: row => row.status,
-        sortable: true,
-        // width: '5%' //47
-	},
-	{
-        name: 'Pemohon',
-		selector: row => row.pemohon,
-        sortable: true,
-        // width: '7%' //54
-	},
-	{
-        name: 'Pengirim',
-		selector: row => row.pengirim,
-        sortable: true,
-        // width: '7%' //61
-	},
-	{
-        name: 'Penerima',
-		selector: row => row.penerima,
-        sortable: true,
-        // width: '7%' //68
-	},
-	{
-        name: 'Kota Asal',
-		selector: row => row.kotaAsal,
-        sortable: true,
-        // width: '8%' //76
-	},
-	{
-        name: 'Negara Asal',
-		selector: row => row.negaraAsal,
-        sortable: true,
-        // width: '8%' //84
-	},
-	{
-        name: 'Kota Tujuan',
-		selector: row => row.kotaTujuan,
-        sortable: true,
-        // width: '8%' //94
-	},
-	{
-        name: 'Negara Tujuan',
-		selector: row => row.negaraTujuan,
-        sortable: true,
-        // width: '8%' //94
-	},
-	{
-        name: 'Tgl Tiba',
-		selector: row => row.tglTiba,
-        sortable: true,
-        // width: '7%' //94
-	},
-	{
-        name: 'Nama Alat Angkut',
-		selector: row => row.namaAngkut,
-        sortable: true,
-        // width: '8%' //94
-	},
-	{
-        name: 'No Alat Angkut',
-        selector: row => row.noAngkut,
-        sortable: true,
-        // width: '8%' //94
-	},
-	{
-        name: 'Status Bayar',
-        selector: row => row.statusBayar,
-        sortable: true,
-        // width: '7%' //94
-	},
-];
 
-function DataMasukTable(props) {
+  function DataMasukTable(props) {
     let navigate = useNavigate();
-    let [dataTable, setDataTable] = useState({});
-    let [dataTableBE, setDataTableBE] = useState({});
+    let [dataTable, setDataTable] = useState([]);
     let model = useMemo(() => new PtkModel(), []);
     const [filterText, setFilterText] = React.useState('');
+
+    function handleClick(e) {
+        console.log(e)
+        Swal.fire({
+            title: "Item dipilih",
+            text: "Karantina: " + e.karantina + " || No AJU: " + e.noAju,
+            icon: "question",
+            showCancelButton: true,
+            confirmButtonColor: "#086b06",
+            cancelButtonColor: "#d33",
+            confirmButtonText: "Buka form PTK",
+            cancelButtonText: "Batal",
+        }).then((result) => {
+            if (result.isConfirmed) {
+                Cookies.set("statusPtk", e.statusPtk, {
+                    expires: 7,
+                });
+                Cookies.set("idPtkPage", base64_encode(base64_encode(e.noAju) + 'm0R3N0r1R' + base64_encode(e.idPtk) + "m0R3N0r1R"  + base64_encode(e.noDokumen)), {
+                    expires: 7,
+                });
+                Cookies.set("tglPtk", e.tglDokumen, {
+                    expires: 7
+                });
+                Cookies.set("jenisKarantina", e.jenisKarantina, {
+                    expires: 7
+                });
+                // Cookies.set("jenisMp", dataPTK[0].jenis_karantina, {
+                    //     expires: 7
+                // });
+                Cookies.set("jenisPermohonan", e.jenisPermohonanDb, {
+                    expires: 7
+                });
+                Cookies.set("jenisForm", "PTK", {
+                    expires: 7
+                });
+                navigate('/k11')
+                window.location.reload()
+            }
+        });
+    }
+
+    const copyPtk = (e) => {
+        Swal.fire({
+            title: "Cooming Soon .. 😉",
+            text: "Karantina: " + e.karantina + " || No AJU: " + e.noAju,
+            icon: "question",
+        })
+    }
+
+    const columns = useMemo (
+        () => [
+        {
+            cell: (e) => 
+            <div className='d-flex'>
+                <button className="btn btn-sm btn-outline-dark me-1" type="button" title='Buka Form PTK' onClick={() => handleClick(e)}><i className="fa-solid fa-magnifying-glass"></i></button>
+                <button className="btn btn-sm btn-outline-dark me-1" type="button" title='Copy PTK' onClick={() => copyPtk(e)}><i className="fa-regular fa-copy"></i></button>
+            </div>,
+            ignoreRowClick: true,
+            allowOverFlow: true,
+            width: '135px' //14
+        },
+        {
+            name: 'No Aju',
+            selector: row => row.noAju,
+            sortable: true,
+            width: '11%' //14
+        },
+        {
+            
+            name: 'No Dokumen',
+            selector: row => row.noDokumen,
+            sortable: true,
+            width: '10%' //29
+        },
+        {
+            
+            name: 'Tgl Dokumen',
+            selector: row => row.tglDokumen,
+            sortable: true,
+            // width: '8%' //37
+        },
+        {
+            
+            name: 'Jenis',
+            selector: row => row.jenisPermohonan,
+            sortable: true,
+            // width: '5%' //42
+        },
+        {
+            name: 'Status',
+            selector: row => row.status,
+            sortable: true,
+            // width: '5%' //47
+        },
+        {
+            name: 'Pemohon',
+            selector: row => row.pemohon,
+            sortable: true,
+            // width: '7%' //54
+        },
+        {
+            name: 'Pengirim',
+            selector: row => row.pengirim,
+            sortable: true,
+            // width: '7%' //61
+        },
+        {
+            name: 'Penerima',
+            selector: row => row.penerima,
+            sortable: true,
+            // width: '7%' //68
+        },
+        {
+            name: 'Kota Asal',
+            selector: row => row.kotaAsal,
+            sortable: true,
+            // width: '8%' //76
+        },
+        {
+            name: 'Negara Asal',
+            selector: row => row.negaraAsal,
+            sortable: true,
+            // width: '8%' //84
+        },
+        {
+            name: 'Kota Tujuan',
+            selector: row => row.kotaTujuan,
+            sortable: true,
+            // width: '8%' //94
+        },
+        {
+            name: 'Negara Tujuan',
+            selector: row => row.negaraTujuan,
+            sortable: true,
+            // width: '8%' //94
+        },
+        {
+            name: 'Tgl Tiba',
+            selector: row => row.tglTiba,
+            sortable: true,
+            // width: '7%' //94
+        },
+        {
+            name: 'Nama Alat Angkut',
+            selector: row => row.namaAngkut,
+            sortable: true,
+            // width: '8%' //94
+        },
+        {
+            name: 'No Alat Angkut',
+            selector: row => row.noAngkut,
+            sortable: true,
+            // width: '8%' //94
+        },
+        {
+            
+            name: 'Karantina',
+            selector: row => row.karantina,
+            sortable: true,
+            // width: '6%' //19
+        },
+        {
+            name: 'Status Bayar',
+            selector: row => row.statusBayar,
+            sortable: true,
+            // width: '7%' //94
+        },
+    ])
 
     const getListPtk = useCallback(async () => {
         try {
@@ -153,15 +206,17 @@ function DataMasukTable(props) {
             if(response.data.status == 200) {
                 const dataReturn = response.data.data;
                 console.log(response.data.data)
-                setDataTableBE(response.data.data)
                 const arrayData = dataReturn.map((item, index) => {
                     return {
                         id: index + 1,
                         idPtk: item.id,
                         noAju: item.no_aju,
+                        jenisKarantina: item.jenis_karantina,
                         karantina: (item.jenis_karantina == 'T' ? 'Tumbuhan' : (item.jenis_karantina == 'I' ? 'Ikan' : 'Hewan')),
                         noDokumen: item.no_dok_permohonan,
                         tglDokumen: item.tgl_dok_permohonan,
+                        statusPtk: item.status_ptk,
+                        jenisPermohonanDb: item.jenis_permohonan,
                         jenisPermohonan: (item.jenis_permohonan == 'EX' ? 'Ekspor' : (item.jenis_permohonan == 'IM' ? 'Impor' : (item.jenis_permohonan == 'DK' ? 'Dokel' : (item.jenis_permohonan == 'DM' ? 'Domas' : (item.jenis_permohonan == 'RE' ? 'Re Ekspor' : (item.jenis_permohonan == 'RI' ? 'Re Impor' : (item.jenis_permohonan == 'TR' ? 'Transit' : 'Serah Terima'))))))),
                         status: (item.status_ptk == 0 ? 'Draft' : (item.status_ptk == 9 ? 'Pengajuan' : (item.status_ptk == 1 ? 'Diterima' : (item.status_ptk == 2 ? 'Ditolak' : 'blm diset')))),
                         pemohon: item.nama_pemohon,
@@ -199,17 +254,13 @@ function DataMasukTable(props) {
                     );
                 setDataTable(filteredItems);
             } else {
-                setDataTable();
+                setDataTable([]);
             }
         } catch (error) {
             if(import.meta.env.VITE_BE_ENV == "DEV") {
                 console.log(error)
             }
-            Swal.fire({
-                icon: "error",
-                title: "Data kosong"
-            })
-            setDataTable();
+            setDataTable([]);
         }
     }, [model, props.dataIn, filterText])
     
@@ -234,66 +285,24 @@ function DataMasukTable(props) {
 		);
 	}, [filterText]);
 
-    function handleClick(e) {
-        if(e.selectedCount == 1) {
-            Swal.fire({
-                title: "Item dipilih",
-                text: "Karantina: " + e.selectedRows[0].karantina + " || No AJU: " + e.selectedRows[0].noAju,
-                icon: "question",
-                showCancelButton: true,
-                confirmButtonColor: "#086b06",
-                cancelButtonColor: "#d33",
-                confirmButtonText: "Buka form PTK",
-                cancelButtonText: "Batal",
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    const dataPTK = dataTableBE?.filter((element) => element.no_aju == e.selectedRows[0].noAju)
-                    
-                    Cookies.set("statusPtk", dataPTK[0].status_ptk, {
-                        expires: 7,
-                    });
-                    Cookies.set("idPtkPage", base64_encode(base64_encode(e.selectedRows[0].noAju) + 'm0R3N0r1R' + base64_encode(e.selectedRows[0].idPtk) + "m0R3N0r1R"  + base64_encode(e.selectedRows[0].noDokumen)), {
-                        expires: 7,
-                    });
-                    Cookies.set("tglPtk", e.selectedRows[0].tglDokumen, {
-                        expires: 7
-                    });
-                    Cookies.set("jenisKarantina", dataPTK[0].jenis_karantina, {
-                        expires: 7
-                    });
-                    // Cookies.set("jenisMp", dataPTK[0].jenis_karantina, {
-                        //     expires: 7
-                    // });
-                    Cookies.set("jenisPermohonan", dataPTK[0].jenis_permohonan, {
-                        expires: 7
-                    });
-                    Cookies.set("jenisForm", "PTK", {
-                        expires: 7
-                    });
-                    navigate('/k11')
-                    window.location.reload()
-                }
-            });
-        }
-    }
-
   return (
+    <div style={{height: (dataTable?.length > 8 ? "300px" : "")}}>
         <DataTable
             title='Table Data PTK'
             customStyles={tableCustomStyles}
             columns={columns}
             data={dataTable}
-            selectableRows
-            selectableRowsSingle
-            onSelectedRowsChange={handleClick}
             pagination
-            paginationServer
+            // paginationServer
             dense
-            direction="auto"
-            fixedHeader
-            fixedHeaderScrollHeight="350px"
+            direction="center"
+            // fixedHeader
+            // fixedHeaderScrollHeight="350px"
             highlightOnHover
             pointerOnHover
+            // expandableRows 
+            // expandableRowsComponent={""}
+            // expandableRowsComponentProps={{"someTitleProp": ""}}
             responsive
             striped
             subHeader
@@ -301,6 +310,7 @@ function DataMasukTable(props) {
             subHeaderComponent={subHeaderComponentMemo}
             // persistTableHead
         />
+    </div>
     )
 }
 

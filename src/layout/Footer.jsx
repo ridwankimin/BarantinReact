@@ -24,7 +24,7 @@ function Footer(props) {
                 <button type='button' onClick={() => navigate(+1)} style={{backgroundColor: "#123138"}} className='btn rounded-pill text-lightest'>Next &nbsp;<i className='fa-solid fa-chevron-right'></i></button>
         </div>
 
-        <div className="content-wrapper">
+        <div className="content-wrapper container-fluid">
             <Content page={props.page} refreshNavbar={props.refreshNavbar} />
             
             <footer className="content-footer footer bg-footer-theme">

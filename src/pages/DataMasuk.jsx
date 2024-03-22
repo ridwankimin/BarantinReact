@@ -1,6 +1,7 @@
-import React, {useState} from 'react'
+import React, {useEffect, useState} from 'react'
 import DataMasukTable from '../component/tabel/DataMasukTable'
 import { useForm } from 'react-hook-form'
+import Cookies from 'js-cookie';
 // import Cookies from 'js-cookie';
 
 function datenow() {
@@ -30,15 +31,17 @@ function DataMasuk() {
 })
 
 // const cekdataDokumen = watchPtk();
+useEffect(() => {
+
+})
 
 const onSubmitPtk = (data) => {
-  const dataMasuk = <DataMasukTable dataIn={data} />;
-  setTabel(values => ({...values, "ptk": dataMasuk }));
+  setTabel(values => ({...values, "ptk": data }));
 };
 
   return (
-    <div className="container-xxl flex-grow-1 container-p-y">
-      <h6 className="text-muted">PROSES DATA MASUK</h6>
+    <div className="container-fluid flex-grow-1 container-p-y">
+      <h6>PROSES DATA MASUK</h6>
                   <div className="card shadow-none border mb-3">
                     <div className="card-header border-bottom">
                       <ul className="nav nav-tabs card-header-tabs" role="tablist">
@@ -106,7 +109,7 @@ const onSubmitPtk = (data) => {
                     </div>
                     <div className="tab-content">
                       <div className="tab-pane fade show active" id="navs-justified-ppk-active" role="tabpanel">
-                        <form onSubmit={handleFormPtk(onSubmitPtk)}>
+                        <form onSubmit={handleFormPtk(onSubmitPtk)} id='formPTK'>
                           <div className='row'>
                               <div className='col-2'>
                                   <label htmlFor="dFrom">Tgl Awal</label>
@@ -126,7 +129,7 @@ const onSubmitPtk = (data) => {
                                     <option value="DOK">Verifikasi</option>
                                   </select>
                               </div>
-                              <div className='col-1'>
+                              <div className='col-1' style={{display: Cookies.get("uptId") == "1000" ? "block" : "none"}}>
                                   <label htmlFor="jenisKarantina">Karantina</label>
                                   <select name="jenisKarantina" id="jenisKarantina" {...registerPtk("jenisKarantina")} className='form-control form-control-sm'>
                                     <option value="">-Semua-</option>
@@ -155,8 +158,9 @@ const onSubmitPtk = (data) => {
                               </div>
                           </div>
                         </form>
-                        <hr />
-                        {tabel.ptk ? tabel.ptk : null}
+                        <div style={{minHeight: "100px", height:"550px"}}>
+                          <DataMasukTable dataIn={tabel.ptk} />
+                        </div>
                       </div>
                       <div className="tab-pane fade" id="navs-justified-ssm" role="tabpanel">
                         <h4 className="card-title">Special link title</h4>

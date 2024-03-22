@@ -404,7 +404,7 @@ function DocK21() {
     }
 
   return (
-    <div className="container-xxl flex-grow-1 container-p-y">
+    <div className="container-fluid flex-grow-1 container-p-y">
     <h4 className="py-3 breadcrumb-wrapper mb-4">
         K-2.1 <span className="fw-light" style={{color: 'blue'}}>HASIL ANALISA PERMOHONAN/SERAH TERIMA MEDIA PEMBAWA/NHI</span>
 
@@ -572,7 +572,8 @@ function DocK21() {
                                                 <div className="col-md-12" style={{display: (jenisKar == "H" ? "block" : "none")}}>
                                                     <label className="col-form-label" htmlFor="mpHPHK">A. Media Pembawa HPHK</label>
                                                     <div className="row">
-                                                        <div className="col-sm-3">
+                                                        <div className="col-sm-4">
+                                                            <h6 className='mb-2'><u><b>Cara dan Tingkat Pengolahan</b></u></h6>
                                                             <div className="form-check">
                                                                 <label className="form-check-label" htmlFor="opsiOlah2H">Belum Diolah</label>
                                                                 <input name="opsiOlahH" value="2" {...register("opsiOlahH", {required: (data.jenisKarantina == "H" ? "Mohon pilih salah satu (belum/sudah diolah)" : false)})} className={errors.opsiOlahH ? "form-check-input is-invalid" : "form-check-input"} type="radio" id="opsiOlah2H" />
@@ -581,12 +582,20 @@ function DocK21() {
                                                                 <label className="form-check-label" htmlFor="opsiOlah3H">Sudah Diolah</label>
                                                                 <input name="opsiOlahH" value="3" {...register("opsiOlahH")} className={errors.opsiOlahH ? "form-check-input is-invalid" : "form-check-input"} type="radio" id="opsiOlah3H" />
                                                             </div>
+                                                            {errors.opsiOlahH && <small className="text-danger">{errors.opsiOlahH.message}</small>}
+                                                            <h6 className='mb-2 mt-2'><u><b>MP Dilarang</b></u></h6>
+                                                            <div className="form-check">
+                                                                <label className="form-check-label" htmlFor="opsiKH1">Dilarang Pemasukan / Pengeluarannya</label>
+                                                                <input name="opsiKH" value="1" {...register("opsiKH")} className="form-check-input" type="checkbox" id="opsiKH1" />
+                                                            </div>
+                                                            <hr className='mb-1' />
+                                                        </div>
+                                                        <div className="col-sm-3">
+                                                            <h6 className='mb-2'><u><b>Kategori Wasdal</b></u></h6>
                                                             <div className="form-check">
                                                                 <label className="form-check-label" htmlFor="opsiKH4">Termasuk Pangan</label>
                                                                 <input name="opsiKH" value="4" {...register("opsiKH", { required: (data.jenisKarantina == "H" ? "Mohon isi analisa minimal 1 pilihan." : false)})} className={errors.opsiKH ? "form-check-input is-invalid" : "form-check-input"} type="checkbox" id="opsiKH4" />
                                                             </div>
-                                                        </div>
-                                                        <div className="col-sm-3">
                                                             <div className="form-check">
                                                                 <label className="form-check-label" htmlFor="opsiKH5">Termasuk Pakan</label>
                                                                 <input name="opsiKH" value="5" {...register("opsiKH")} className={errors.opsiKH ? "form-check-input is-invalid" : "form-check-input"} type="checkbox" id="opsiKH5" />
@@ -599,9 +608,10 @@ function DocK21() {
                                                                 <label className="form-check-label" htmlFor="opsiKH7">Sumber Daya Genetik</label>
                                                                 <input name="opsiKH" value="7" {...register("opsiKH")} className={errors.opsiKH ? "form-check-input is-invalid" : "form-check-input"} type="checkbox" id="opsiKH7" />
                                                             </div>
+                                                            {errors.opsiKH && <small className="text-danger">{errors.opsiKH.message}</small>}
                                                         </div>
                                                         <div className="col-sm-3">
-                                                            <div className="form-check">
+                                                            <div className="form-check mt-4">
                                                                 <label className="form-check-label" htmlFor="opsiKH8">Agensia Hayati</label>
                                                                 <input name="opsiKH" value="8" {...register("opsiKH")} className={errors.opsiKH ? "form-check-input is-invalid" : "form-check-input"} type="checkbox" id="opsiKH8" />
                                                             </div>
@@ -614,25 +624,20 @@ function DocK21() {
                                                                 <input name="opsiKH" value="10" {...register("opsiKH")} className={errors.opsiKH ? "form-check-input is-invalid" : "form-check-input"} type="checkbox" id="opsiKH10" />
                                                             </div>
                                                         </div>
-                                                        <div className="col-sm-3">
+                                                        <div className="col-sm-4">
                                                             <div className="form-check">
-                                                                <label className="form-check-label" htmlFor="opsiKH1">Dilarang Pemasukan / Pengeluarannya</label>
-                                                                <input name="opsiKH" value="1" {...register("opsiKH")} className={errors.opsiKH ? "form-check-input is-invalid" : "form-check-input"} type="checkbox" id="opsiKH1" />
-                                                            </div>
-                                                            <div className="form-check">
-                                                                <label className="form-check-label" htmlFor="opsiKH11">Lainnya</label>
-                                                                <input name="opsiKH" value="11" {...register("opsiKH")} className={errors.opsiKH ? "form-check-input is-invalid" : "form-check-input"} type="checkbox" id="opsiKH11" />
-                                                                <input style={{display: (dataWatch.opsiKH ? (dataWatch.opsiKH.indexOf('11') >= 0 ? 'block' : 'none') : 'none')}} type="text" name='opsiKHLainnya' id='opsiKHLainnya' {...register("opsiKHLainnya")} className='form-control form-control-sm' />
+                                                                <label className="form-check-label" htmlFor="opsiKH11">Lainnya..</label>
+                                                                <input name="opsiKH" value="11" {...register("opsiKH")} className="form-check-input" type="checkbox" id="opsiKH11" />
+                                                                <input style={{display: (dataWatch.opsiKH ? (dataWatch.opsiKH.indexOf('11') >= 0 ? 'block' : 'none') : 'none')}} type="text" placeholder='Lainnya..' name='opsiKHLainnya' id='opsiKHLainnya' {...register("opsiKHLainnya")} className='form-control form-control-sm' />
                                                             </div>
                                                         </div>
-                                                        {errors.opsiOlah2H && <small className="text-danger">{errors.opsiOlah2H.message}</small>}
-                                                        {errors.opsiKH && <small className="text-danger">{errors.opsiKH.message}</small>}
                                                     </div>
                                                 </div>
                                                 <div className="col-md-12" style={{display: (jenisKar == "I" ? "block" : "none")}}>
                                                     <label className="col-form-label" htmlFor="mpHPIK">B. Media Pembawa HPIK</label>
                                                     <div className="row">
-                                                        <div className="col-sm-3">
+                                                        <div className="col-sm-4">
+                                                            <h6 className='mb-2'><u><b>Cara dan Tingkat Pengolahan</b></u></h6>
                                                             <div className="form-check">
                                                                 <label className="form-check-label" htmlFor="opsiOlah13I">Belum Diolah</label>
                                                                 <input name="opsiOlahI" value="13" {...register("opsiOlahI", {required: (data.jenisKarantina == "I" ? "Mohon pilih salah satu (belum/sudah diolah)" : false)})} className={errors.opsiOlahI ? "form-check-input is-invalid" : "form-check-input"} type="radio" id="opsiOlah13I" />
@@ -641,12 +646,20 @@ function DocK21() {
                                                                 <label className="form-check-label" htmlFor="opsiOlah14I">Sudah Diolah</label>
                                                                 <input name="opsiOlahI" value="14" {...register("opsiOlahI")} className={errors.opsiOlahI ? "form-check-input is-invalid" : "form-check-input"} type="radio" id="opsiOlah14I" />
                                                             </div>
+                                                            {errors.opsiOlahI && <small className="text-danger">{errors.opsiOlahI.message}</small>}
+                                                            <h6 className='mb-2 mt-2'><u><b>MP Dilarang</b></u></h6>
+                                                            <div className="form-check">
+                                                                <label className="form-check-label" htmlFor="opsiKI11">Dilarang Pemasukan / Pengeluarannya</label>
+                                                                <input name="opsiKI" value="12" {...register("opsiKI")} className="form-check-input" type="checkbox" id="opsiKI11" />
+                                                            </div>
+                                                            <hr className='mb-1' />
+                                                        </div>
+                                                        <div className="col-sm-3">
+                                                            <h6 className='mb-2 mt-2'><u><b>Kategori Wasdal</b></u></h6>
                                                             <div className="form-check">
                                                                 <label className="form-check-label" htmlFor="opsiKI15">Termasuk Pangan</label>
                                                                 <input name="opsiKI" value="15" {...register("opsiKI", { required: (data.jenisKarantina == "I" ? "Mohon isi analisa minimal 1 pilihan." : false)})} className={errors.opsiKI ? "form-check-input is-invalid" : "form-check-input"} type="checkbox" id="opsiKI15" />
                                                             </div>
-                                                        </div>
-                                                        <div className="col-sm-3">
                                                             <div className="form-check">
                                                                 <label className="form-check-label" htmlFor="opsiKI16">Termasuk Pakan</label>
                                                                 <input name="opsiKI" value="16" {...register("opsiKI")} className={errors.opsiKI ? "form-check-input is-invalid" : "form-check-input"} type="checkbox" id="opsiKI16" />
@@ -659,9 +672,10 @@ function DocK21() {
                                                                 <label className="form-check-label" htmlFor="opsiKI18">Sumber Daya Genetik</label>
                                                                 <input name="opsiKI" value="18" {...register("opsiKI")} className={errors.opsiKI ? "form-check-input is-invalid" : "form-check-input"} type="checkbox" id="opsiKI18" />
                                                             </div>
+                                                            {errors.opsiKI && <small className="text-danger">{errors.opsiKI.message}</small>}
                                                         </div>
                                                         <div className="col-sm-3">
-                                                            <div className="form-check">
+                                                            <div className="form-check mt-4">
                                                                 <label className="form-check-label" htmlFor="opsiKI19">Agensia Hayati</label>
                                                                 <input name="opsiKI" value="19" {...register("opsiKI")} className={errors.opsiKI ? "form-check-input is-invalid" : "form-check-input"} type="checkbox" id="opsiKI19" />
                                                             </div>
@@ -674,19 +688,13 @@ function DocK21() {
                                                                 <input name="opsiKI" value="21" {...register("opsiKI")} className={errors.opsiKI ? "form-check-input is-invalid" : "form-check-input"} type="checkbox" id="opsiKI21" />
                                                             </div>
                                                         </div>
-                                                        <div className="col-sm-3">
+                                                        <div className="col-sm-4">
                                                             <div className="form-check">
-                                                                <label className="form-check-label" htmlFor="opsiKI11">Dilarang Pemasukan / Pengeluarannya</label>
-                                                                <input name="opsiKI" value="12" {...register("opsiKI")} className={errors.opsiKI ? "form-check-input is-invalid" : "form-check-input"} type="checkbox" id="opsiKI11" />
-                                                            </div>
-                                                            <div className="form-check">
-                                                                <label className="form-check-label" htmlFor="opsiKI22">Lainnya</label>
-                                                                <input name="opsiKI" value="22" {...register("opsiKI")} className={errors.opsiKI ? "form-check-input is-invalid" : "form-check-input"} type="checkbox" id="opsiKI22" />
-                                                                <input style={{display: (dataWatch.opsiKI ? (dataWatch.opsiKI.indexOf('22') >= 0 ? 'block' : 'none') : 'none')}} type="text" name='opsiKILainnya' id='opsiKILainnya' {...register("opsiKILainnya")} className='form-control form-control-sm' />
+                                                                <label className="form-check-label" htmlFor="opsiKI22">Lainnya..</label>
+                                                                <input name="opsiKI" value="22" {...register("opsiKI")} className="form-check-input" type="checkbox" id="opsiKI22" />
+                                                                <input style={{display: (dataWatch.opsiKI ? (dataWatch.opsiKI.indexOf('22') >= 0 ? 'block' : 'none') : 'none')}} type="text" placeholder='Lainnya..' name='opsiKILainnya' id='opsiKILainnya' {...register("opsiKILainnya")} className='form-control form-control-sm' />
                                                             </div>
                                                         </div>
-                                                        {errors.opsiOlahI && <small className="text-danger">{errors.opsiOlahI.message}</small>}
-                                                        {errors.opsiKI && <small className="text-danger">{errors.opsiKI.message}</small>}
                                                     </div>
                                                 </div>
                                                 <div className="col-md-12" style={{display: (jenisKar == "T" ? "block" : "none")}}>
@@ -757,11 +765,11 @@ function DocK21() {
                                                             {errors.opsiDilarangOPTK && <small className="text-danger">{errors.opsiDilarangOPTK.message}</small>}
                                                         </div>
                                                     </div>
-                                                </div>
-                                                <div className="form-check">
-                                                    <label className="form-check-label" htmlFor="opsiKT36">Lainnya...</label>
-                                                    <input name="opsiKT" value="36" {...register("opsiKT")} className={errors.opsiKT ? "form-check-input is-invalid" : "form-check-input"} type="checkbox" id="opsiKT36" />
-                                                    <input style={{display: (dataWatch.opsiKT ? (dataWatch.opsiKT.indexOf('36') >= 0 ? 'block' : 'none') : 'none')}} type="text" placeholder='Lainnya..' name='opsiKTLainnya' id='opsiKTLainnya' {...register("opsiKTLainnya")} className='form-control form-control-sm' />
+                                                    <div className="form-check">
+                                                        <label className="form-check-label" htmlFor="opsiKT36">Lainnya...</label>
+                                                        <input name="opsiKT" value="36" {...register("opsiKT")} className="form-check-input" type="checkbox" id="opsiKT36" />
+                                                        <input style={{display: (dataWatch.opsiKT ? (dataWatch.opsiKT.indexOf('36') >= 0 ? 'block' : 'none') : 'none')}} type="text" placeholder='Lainnya..' name='opsiKTLainnya' id='opsiKTLainnya' {...register("opsiKTLainnya")} className='form-control form-control-sm' />
+                                                    </div>
                                                 </div>
                                                 {/* </div> */}
                                                 <hr />
@@ -799,7 +807,7 @@ function DocK21() {
                                                                 <div className='col-sm-3'>
                                                                     <div className="form-check">
                                                                         <label className="form-check-label" htmlFor="opsiNHI43">Lainnya...</label>
-                                                                        <input name="opsiNHI" value={43} {...register("opsiNHI")} className={errors.opsiNHI ? "form-check-input is-invalid" : "form-check-input"} type="radio" id="opsiNHI43" />
+                                                                        <input name="opsiNHI" value={43} {...register("opsiNHI")} className="form-check-input" type="radio" id="opsiNHI43" />
                                                                     </div>
                                                                 </div>
                                                                 <div className='col-sm-9'>
