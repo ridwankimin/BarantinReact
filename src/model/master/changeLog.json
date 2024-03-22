@@ -3,7 +3,7 @@
         "id": 2,
         "versi": "0.1.1",
         "tanggal": "17 Mar 2024 12:00 WIB",
-        "deskripsi": "Perbaikan tambilan content; Perbaikan tombol simpan detil komoditas; Perbaikan format form detil komoditas KH;Perubahan tampilan ceklis form analisa permohonan;Filter data masuk berdasarkan user (KH, KI, KT);Perbaikan total nilai barang;Perbaikan format angka setelah desimal;Perbaikan simpan/edit form analisa (K-2.1);Perbaikan Form K-9.2T;Penambahan fitur loading di semua tombol simpan;Penambahan Kota/kab Papua;Penambahan Master Bahan pestisida;Penambahan tipe perlakuan (Form K-5..);Penambahan Edit volume P1 di form periksa fisik/kesehatan;Penambahan/Perbaikan Validasi volume P1-8;Implementasi menu yang aktif berdasarkan surat tugas"
+        "deskripsi": "Perbaikan tampilan content; Perbaikan tombol simpan detil komoditas; Perbaikan format form detil komoditas KH;Perubahan tampilan ceklis form analisa permohonan;Filter data masuk berdasarkan user (KH, KI, KT);Perbaikan total nilai barang;Perbaikan format angka setelah desimal;Perbaikan simpan/edit form analisa (K-2.1);Perbaikan Form K-9.2T;Penambahan fitur loading di semua tombol simpan;Penambahan Kota/kab Papua;Penambahan Master Bahan pestisida;Penambahan tipe perlakuan (Form K-5..);Penambahan Edit volume P1 di form periksa fisik/kesehatan;Penambahan/Perbaikan Validasi volume P1-8;Implementasi menu yang aktif berdasarkan surat tugas"
     },
     {
         "id": 1,

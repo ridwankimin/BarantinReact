@@ -1001,7 +1001,6 @@ function DocK91() {
                                                                 type="date"
                                                                 name='tglPeriksaAkhir'
                                                                 id='tglPeriksaAkhir'
-                                                                disabled
                                                                 className={errors.tglPeriksaAkhir ? "form-control form-control-sm is-invalid" : "form-control form-control-sm"}
                                                                 {...register("tglPeriksaAkhir", {required: "Mohon isi tgl pemeriksaan tindakan Karantina Akhir."})}
                                                             />

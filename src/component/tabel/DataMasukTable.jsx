@@ -84,32 +84,19 @@ const tableCustomStyles = {
         () => [
         {
             cell: (e) => 
-            <div className="d-grid gap-2">
-                <button type="button" className="btn btn-sm btn-outline-dark hide-arrow dropdown-toggle" aria-expanded="false" data-bs-toggle="dropdown">
-                    Act
-                </button>
-                <div className="dropdown-menu">
-                    <button className="dropdown-item" type="button" onClick={() => handleClick(e)}><i className="fa-solid fa-pen-to-square me-1"></i> Buka Form PTK</button>
-                    <button className="dropdown-item" type="button" onClick={() => copyPtk(e)}><i className="fa-regular fa-copy me-1"></i> Copy PTK</button>
-                    <button className="dropdown-item" type='button' onClick={() => copyPtk(e)}><i className="fa-solid fa-arrow-right-arrow-left"></i> Buka Form Serah Terima</button>
-                </div>
+            <div className='d-flex'>
+                <button className="btn btn-sm btn-outline-dark me-1" type="button" title='Buka Form PTK' onClick={() => handleClick(e)}><i className="fa-solid fa-magnifying-glass"></i></button>
+                <button className="btn btn-sm btn-outline-dark me-1" type="button" title='Copy PTK' onClick={() => copyPtk(e)}><i className="fa-regular fa-copy"></i></button>
             </div>,
             ignoreRowClick: true,
             allowOverFlow: true,
-            width: '3%' //14
+            width: '135px' //14
         },
         {
             name: 'No Aju',
             selector: row => row.noAju,
             sortable: true,
             width: '11%' //14
-        },
-        {
-            
-            name: 'Karantina',
-            selector: row => row.karantina,
-            sortable: true,
-            // width: '6%' //19
         },
         {
             
@@ -199,6 +186,13 @@ const tableCustomStyles = {
             // width: '8%' //94
         },
         {
+            
+            name: 'Karantina',
+            selector: row => row.karantina,
+            sortable: true,
+            // width: '6%' //19
+        },
+        {
             name: 'Status Bayar',
             selector: row => row.statusBayar,
             sortable: true,
@@ -260,17 +254,13 @@ const tableCustomStyles = {
                     );
                 setDataTable(filteredItems);
             } else {
-                setDataTable();
+                setDataTable([]);
             }
         } catch (error) {
             if(import.meta.env.VITE_BE_ENV == "DEV") {
                 console.log(error)
             }
-            Swal.fire({
-                icon: "error",
-                title: "Data kosong"
-            })
-            setDataTable();
+            setDataTable([]);
         }
     }, [model, props.dataIn, filterText])
     
@@ -296,6 +286,7 @@ const tableCustomStyles = {
 	}, [filterText]);
 
   return (
+    <div style={{height: (dataTable?.length > 8 ? "300px" : "")}}>
         <DataTable
             title='Table Data PTK'
             customStyles={tableCustomStyles}
@@ -304,11 +295,14 @@ const tableCustomStyles = {
             pagination
             // paginationServer
             dense
-            direction="auto"
-            fixedHeader
-            fixedHeaderScrollHeight="350px"
+            direction="center"
+            // fixedHeader
+            // fixedHeaderScrollHeight="350px"
             highlightOnHover
             pointerOnHover
+            // expandableRows 
+            // expandableRowsComponent={""}
+            // expandableRowsComponentProps={{"someTitleProp": ""}}
             responsive
             striped
             subHeader
@@ -316,6 +310,7 @@ const tableCustomStyles = {
             subHeaderComponent={subHeaderComponentMemo}
             // persistTableHead
         />
+    </div>
     )
 }
 

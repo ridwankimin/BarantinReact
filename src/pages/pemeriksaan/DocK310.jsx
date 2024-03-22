@@ -6,6 +6,7 @@ import PtkModel from '../../model/PtkModel'
 import PtkPemeriksaan from '../../model/PtkPemeriksaan'
 import Select from 'react-select'
 import PegawaiJson from '../../model/master/pegawaiPertanian.json'
+import ListPsat from '../../model/master/psat.json'
 import LoadBtn from '../../component/loading/LoadBtn'
 import Swal from 'sweetalert2'
 import PtkHistory from '../../model/PtkHistory'
@@ -58,7 +59,11 @@ function range(size, startAt = 0) {
     return [...Array(size).keys()].map(i => i + startAt);
 }
 
-function randSampling(jmlKont,rskLevel,jnsMP){
+function randomBetween(min, max) {
+    return Math.floor(Math.random() * (max - min + 1)) + min;
+  }
+
+function randomKey(jmlKont,rskLevel,jnsMP) {
     var jmlSampling = 0
     if(Cookies.get("jenisKarantina") == "T") {
         jmlKont = parseInt(jmlKont)
@@ -99,8 +104,6 @@ function randSampling(jmlKont,rskLevel,jnsMP){
                 if (jmlKont > 50) jmlSampling = Math.ceil(jmlKont / 5)
             }
         }
-        
-        return jmlSampling;
     } else if(Cookies.get("jenisKarantina") == "H") {
         if (rskLevel=="L") {
             if (jmlKont > 0) jmlSampling = jmlKont
@@ -121,9 +124,15 @@ function randSampling(jmlKont,rskLevel,jnsMP){
         } else if (rskLevel=="H"){
             jmlSampling = jmlKont;	//untuk resiko tinggi tidak ada diaturan permentan
         }
-        return jmlSampling;
     } else if(Cookies.get("jenisKarantina") == "I") {
+        if (jmlKont > 0) jmlSampling = jmlKont
+        if (jmlKont > 1) jmlSampling = 1
+        if (jmlKont > 5) jmlSampling =  Math.ceil(jmlKont / 5)
     }
+
+    const arrayRan = Array.from({length: jmlKont}, () => randomBetween(1, jmlSampling))
+
+    return arrayRan
 }
 
 function DocK310() {
@@ -135,6 +144,8 @@ function DocK310() {
         tglDokumen: "",
     })
     let [onLoad, setOnLoad] = useState(false)
+    let [listKontainer, setListKontainer] = useState([])
+    let [kontainerRandom, setKontainerRandom] = useState([])
     let [riskLevel, setRiskLevel] = useState(["L", "M", "H"])
 
     const {
@@ -223,17 +234,27 @@ function DocK310() {
             response
             .then((response) => {
                 if(import.meta.env.VITE_REACT_APP_BE_ENV == "DEV") {
+                    console.log("response ptk")
                     console.log(response)
                 }
                 if(typeof response.data != "string") {
                     if(response.data.status == 200) {
-                        const filterNullRisk = response.data.data.ptk_komoditi.filter(item => item.level_risiko != null)
+                        const filterNullRisk = response.data.data.ptk_komoditi?.filter(item => item.level_risiko != null)
                         // let levelRiskOk = []
                         
                         if(filterNullRisk.length == 0) {
                             setRiskLevel(riskLevel)
-                        } else if(filterNullRisk.length == 1) {
+                        } else if(filterNullRisk.length > 1) {
                             setRiskLevel([filterNullRisk[0].level_risiko])
+                            if(Cookies.get("jenisKarantina") == "T") {
+                                const groupedMP = response.data.data.ptk_komoditi?.reduce(
+                                    (entryMap, e) => entryMap.set(e.komoditas_id, [...entryMap.get(e.komoditas_id)||[], e]),
+                                    new Map()
+                                );
+                                console.log("groupedMP")
+                                console.log(groupedMP)
+                            }
+                            randomKey(response.data.data.ptk_kontainer.length,filterNullRisk[0].level_risiko,ListPsat)
                         } else {
                             const groupedMap = filterNullRisk.reduce(
                                 (entryMap, e) => entryMap.set(e.level_risiko, [...entryMap.get(e.level_risiko)||[], e]),
@@ -245,9 +266,10 @@ function DocK310() {
                             errorPTK: "",
                             listPtk: response.data.data.ptk,
                             listKomoditas: response.data.data.ptk_komoditi,
-                            listKontainer: response.data.data.ptk_kontainer,
+                            // listKontainer: response.data.data.ptk_kontainer,
                             listDokumen: response.data.data.ptk_dokumen
                         }));
+                        setListKontainer(response.data.data.ptk_kontainer)
                         setValue("idPtk", base64_decode(ptkNomor[1]))
                         setValue("noDokumen", base64_decode(ptkNomor[2]))
                         setValue("tglDatang", response.data.data.ptk?.tanggal_rencana_tiba_terakhir)
@@ -308,6 +330,8 @@ function DocK310() {
             });
         }
     },[idPtk, setValue])
+
+    console.log(listKontainer)
 
     function refreshData() {
 
@@ -578,9 +602,9 @@ function DocK310() {
                                                             {/* <div className="col-md-8">
                                                             </div>
                                                         </div>  */}
-                                                            <button className='btn btn-sm btn-outline-warning'>Ganerate Random Sampling</button>
+                                                            <button className='btn btn-sm btn-outline-dark text-black'>Generate Random Sampling</button>
                                                     </span>
-                                                    <h6 className='mb-1'><b>List Kontainer : {data.listKontainer?.length + " kontainer"}</b></h6>
+                                                    <h6 className='mb-1'><b>List Kontainer : {listKontainer?.length + " kontainer"}</b></h6>
                                                     <table className="table table-sm table-bordered table-hover table-striped dataTable">
                                                         <thead style={{backgroundColor: '#123138' }}>
                                                             <tr>
@@ -594,8 +618,8 @@ function DocK310() {
                                                             </tr>
                                                         </thead>
                                                         <tbody>
-                                                            {data.listKontainer ? (
-                                                                data.listKontainer?.map((data, index) => (
+                                                            {listKontainer ? (
+                                                                listKontainer?.map((data, index) => (
                                                                     <tr key={index}>
                                                                         <td>{index + 1}</td>
                                                                         <td>{data.nomor}</td>
@@ -605,11 +629,11 @@ function DocK310() {
                                                                         <td>{data.segel}</td>
                                                                         <td>
                                                                             <div className="form-check form-check-inline">
-                                                                                <input autoComplete="off" className="form-check-input" type="radio" name="chkstat" id={"chkstatYa" + index} value="Y" />
+                                                                                <input autoComplete="off" className="form-check-input" type="radio" onChange={(e) => {data.chkstat = e.target.value; setListKontainer([...listKontainer])}} name={"chkstat" + index} id={"chkstatYa" + index} value="Y" />
                                                                                 <label className="form-check-label" htmlFor={"chkstatYa" + index}>Ya</label>
                                                                             </div>
                                                                             <div className="form-check form-check-inline">
-                                                                                <input autoComplete="off" className="form-check-input" type="radio" name="chkstat" id={"chkstatTidak" + index} value="T" />
+                                                                                <input autoComplete="off" className="form-check-input" type="radio" onChange={(e) => {data.chkstat = e.target.value; setListKontainer([...listKontainer])}} name={"chkstat" + index} id={"chkstatTidak" + index} value="N" />
                                                                                 <label className="form-check-label" htmlFor={"chkstatTidak" + index}>Tidak</label>
                                                                             </div>
                                                                         </td>
