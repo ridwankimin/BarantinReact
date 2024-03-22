@@ -178,7 +178,8 @@ function DocK310() {
         watch,
         formState: { errors },
     } = useForm({
-        noDok310: ""
+        noDok310: "",
+        riskLevel: "M"
     });
 
     const dataWatch = watch()
@@ -717,10 +718,10 @@ function DocK310() {
                                                             <div className="row">
                                                                 <label className="col-sm-4 col-form-label" htmlFor="agen">Level Resiko MP</label>
                                                                 <div className="col-sm-4">
-                                                                    <select className='form-select form-select-sm' name="riskLevel" id="riskLevel" {...register("riskLevel", {required: "Mohon pilih level risiko"})}>
+                                                                    <select className={errors.riskLevel ? 'form-select form-select-sm is-invalid' : 'form-select form-select-sm'} name="riskLevel" id="riskLevel" {...register("riskLevel", {required: "Mohon pilih level risiko"})}>
                                                                         <option value="">--</option>
-                                                                        {riskLevel.map((data,index) => (
-                                                                            <option value={data} key={index}>{data == "L" ? "Rendah" : (data == "M" ? "Sedang" : (data == "H" ? "Tinggi" : ""))}</option>
+                                                                        {riskLevel.map((item,index) => (
+                                                                            <option value={item} key={index}>{item == "L" ? "Rendah" : (item == "M" ? "Sedang" : (item == "H" ? "Tinggi" : ""))}</option>
                                                                         ))}
                                                                     </select>
                                                                     {errors.riskLevel && <small className="text-danger">{errors.riskLevel.message}</small>}

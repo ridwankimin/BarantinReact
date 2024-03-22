@@ -1069,7 +1069,7 @@ function DocK61() {
                                     </div>
                                     <div className="col-sm-6 mb-3">
                                         <div className='col-form-label mb-0'>Penandatangan</div>
-                                        <select className={errors.ttdPutusan == '' ? 'form-select form-select-sm is-invalid' : 'form-select form-select-sm'} name="ttdPutusan" id="ttdPutusan" {...register("ttdPutusan", { required: "Mohon pilih penandatangan."})}>
+                                        <select className={errors.ttdPutusan ? 'form-select form-select-sm is-invalid' : 'form-select form-select-sm'} name="ttdPutusan" id="ttdPutusan" {...register("ttdPutusan", { required: "Mohon pilih penandatangan."})}>
                                             <option value="">--</option>
                                             {data.petugas?.map((item, index) => (
                                                 <option value={item.petugas_id} key={index}>{item.nama + " - " + item.nip}</option>
