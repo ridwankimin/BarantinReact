@@ -347,9 +347,10 @@ export default class PtkPemeriksaan {
       let datasend = {
         id: data.idDok310 == '' ? uuid : data.idDok310,
         ptk_id: data.idPtk,
-        nomor: data.noDokumen,
+        nomor: data.noDokumen.replace("K.1.1", "K.3.10"),
         tanggal: data.tglDok310,
         gudang_id: data.gudangId,
+        risk_level: data.riskLevel,
         agen: data.agen,
         tgl_tiba: data.tglDatang,
         diterbitkan_di: data.diterbitkan,

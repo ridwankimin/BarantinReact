@@ -600,4 +600,26 @@ export default class PtkModel {
       
       return axios.request(config)
     }
+    
+    samplingKontainer(id, noSp2mp, idPtk, dataKontainer) {
+      let datasend = {
+        id: id,
+        sp2mp: noSp2mp,
+        ptk_id: idPtk,
+        sampling: dataKontainer
+      };
+      // 
+      let config = {
+        method: 'post',
+        maxBodyLength: Infinity,
+        url: url + 'ptk-kont/sampling',
+        headers: { 
+          'Content-Type': 'application/json', 
+          // 'Content-Type': 'multipart/form-data'
+        },
+        data: datasend
+      };
+      
+      return axios.request(config)
+    }
 }
