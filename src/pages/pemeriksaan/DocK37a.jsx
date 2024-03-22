@@ -273,6 +273,7 @@ function DocK37a() {
                         if(response.data.status == 200) {
                             setData(values => ({...values,
                                 errorAdmin: "",
+                                dataK37a:response.data.data
                             }));
                             setValueAdministratif("idDok37a", response.data.data.id)
                             setValueAdministratif("noDok37a", response.data.data.nomor)

@@ -21,7 +21,7 @@ function makeid(length) {
     return result;
   }
 
-function PrintK22(props) {
+function PrintK37b(props) {
     let [isLoading, setIsLoading] = useState(false)
     let [noSeri, setNoSeri] = useState(false)
     const cetak = props.dataCetak
@@ -97,66 +97,93 @@ function PrintK22(props) {
                         <p>&nbsp;</p>
                         <h2> KH-1</h2>
                     </div>
-                    <br /><br /><br /><br /><br /><br />
-                    <p style={{textAlign: 'center'}}><strong>SURAT TUGAS</strong></p>
+                    <p style={{textAlign: 'center'}}><strong>LAPORAN HASIL PEMERIKSAAN KESEHATAN</strong><br />Nomor: ..............</p>
                     <p style={{textAlign: 'center'}}>&nbsp;</p>
-                    <p style={{textAlign: 'left'}}>Nomor :<br />Perihal :</p>
-                    <p style={{textAlign: 'left'}}><br />Menugaskan :</p>
+                    <p style={{textAlign: 'left'}}>Yth,<br />Kepala ....<br />di<br />&emsp;&emsp;tempat</p>
+                    <p style={{textAlign: 'justify'}}>&emsp;&emsp;Menindaklanjuti Surat Tugas No. ....................................... Tanggal&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; bersama ini dilaporkan hasil pemeriksaan media pembawa sebagai berikut:</p>
                     <table style={{borderCollapse: 'collapse', width: '100%'}} border="1" id="tabel">
                     <tbody>
                     <tr>
-                    <td style={{width: '4.95542%'}}>No</td>
-                    <td style={{width: '31.1557%'}}>Nama</td>
-                    <td style={{width: '29.9383%'}}>NIP</td>
-                    <td style={{width: '33.9506%'}}>Jabatan</td>
+                    <td style={{width: '100%', textAlign: 'center'}} colspan="4"><strong>A. PEMERIKSAAN KESEHATAN. PEMERIKSAAN HPHK/HPIK/OPTK</strong></td>
                     </tr>
                     <tr>
-                    <td style={{width: '4.95542%'}}>&nbsp;</td>
-                    <td style={{width: '31.1557%'}}>
+                    <td style={{width: '75%'}} colspan="3">
+                        <table style={{borderCollapse: 'collapse', width: '100%'}} border="1">
+                        <tbody>
+                        <tr>
+                        <td style={{width: '50%', textAlign: 'center'}}>Nama Media Pembawa</td>
+                        <td style={{width: '50%', textAlign: 'center'}}>Jumlah Media Pembawa</td>
+                        </tr>
+                        </tbody>
+                        </table>
+                    </td>
+                    <td style={{width: '25%'}} rowspan="4">Catatan :</td>
+                    </tr>
+                    <tr>
+                    <td style={{width: '25%', textAlign: 'center'}}>Target/Sasaran</td>
+                    <td style={{width: '25%', textAlign: 'center'}}>Metode</td>
+                    <td style={{width: '25%', textAlign: 'center'}}>Temuan</td>
+                    </tr>
+                    <tr>
+                    <td style={{width: '75%', textAlign: 'left'}} colspan="3"><strong>B. PENGAWASAN DAN PENGENDALIAN PANGAN/PAKAN/SDG/PRG/AGENSIA HAYATI/JAI/TUMBUHAN DAN SATWA LIAR/TUMBUHAN DAN SATWA LANGKA</strong></td>
+                    </tr>
+                    <tr>
+                    <td style={{width: '25%', textAlign: 'center'}}>Target/Sasaran</td>
+                    <td style={{width: '25%', textAlign: 'center'}}>Metode</td>
+                    <td style={{width: '25%', textAlign: 'center'}}>Temuan</td>
+                    </tr>
+                    <tr>
+                    <td style={{width: '50%'}} colspan="2">Kesimpulan</td>
+                    <td style={{width: '50%'}} colspan="2">
+                    <table style={{borderCollapse: 'collapse', width: '100%'}} border="1">
+                    <tbody>
+                    <tr>
+                    <td style={{width: '29.4551%'}}>
+                    <p>Tanggal</p>
                     <p>&nbsp;</p>
                     <p>&nbsp;</p>
                     </td>
-                    <td style={{width: '29.9383%'}}>&nbsp;</td>
-                    <td style={{width: '33.9506%'}}>&nbsp;</td>
+                    <td style={{width: '37.2115%'}}>
+                    <p>Pejabat Karantina</p>
+                    <p>&nbsp;</p>
+                    <p>NIP</p>
+                    </td>
+                    <td style={{width: '33.3333%'}}>
+                    <p>Tanda tangan</p>
+                    <p>&nbsp;</p>
+                    <p>&nbsp;</p>
+                    </td>
                     </tr>
                     </tbody>
                     </table>
-                    <p>Berdasarkan Laporan Permohonan Rencana Kedatangan Alat Angkut/ Pemasukan/Pengeluaran/Serah Terima/Nota Intelejen atas media pembawa , Nomor&hellip;&hellip;&hellip; tanggal&hellip;&hellip;&hellip;. dan hasil Analisis Laporan No&hellip;Tanggal&hellip;</p>
-                    <p>Ditugaskan kepada Saudara, untuk melakukan :</p>
+                    </td>
+                    </tr>
+                    </tbody>
+                    </table>
+                    <p>&nbsp;</p>
                     <table style={{borderCollapse: 'collapse', width: '100%'}} border="1" id="tabel">
+                    <thead>
+                    <tr>
+                    <td style={{width: '25%'}} colspan="4"><strong>REKOMENDASI</strong></td>
+                    </tr>
+                    </thead>
                     <tbody>
                     <tr>
-                    <td style={{width: '99.9999%', textAlign: 'center'}} colSpan="3">A. Tindakan Karantina dan hal terkait lainnya, berupa:</td>
-                    </tr>
-                    <tr>
-                    <td style={{width: '33.3333%',verticalAlign:'top'}}>
-                    {cetak.dataKH1?.m1 === '1' ? <strong>&#9745;</strong> : <><input type="checkbox" /></>} Pemeriksaan Administrasi &amp; Kesesuaian<br />Pemeriksaan Kesehatan<br />Pengasingan &amp; Pengamatan<br />Pemeriksaan diatas Alat Angkut</td>
-                    <td style={{width: '33.3333%',verticalAlign:'top'}}>Pemeriksaan Alat Angkut<br />Pengawasan Pihak Lain<br />Pengawalan Media <br />Pembawa<br />Perlakuan<br />Penahanan<br />Penolakan&nbsp;</td>
-                    <td style={{width: '33.3333%',verticalAlign:'top'}}>
-                    <p>Penerbitan Surat Keterangan<br />Pemusnahan<br />Pembebasan sebagian<br />Pembebasan seluruh<br />Serah Terima<br />Monitoring<br />Lainnya</p>
-                    </td>
-                    </tr>
-                    <tr>
-                    <td style={{textAlign: 'center', width: '99.9999%'}} colSpan="3">B. Penegakkan Hukum dan hal terkait lainnya, berupa</td>
-                    </tr>
-                    <tr>
-                    <td style={{textAlign: 'center', width: '33.3333%'}}>&nbsp;</td>
-                    <td style={{width: '33.3333%', textAlign: 'left'}}>Wasmalitrik<br />Gelar Perkara<br />Penyidikan<br />Melengkapi Pemberkasan<br />Lainnya</td>
-                    <td style={{textAlign: 'center', width: '33.3333%'}}>&nbsp;</td>
+                    <td style={{width: '25%'}}><input type="checkbox" /> Diberi pelakuan</td>
+                    <td style={{width: '25%'}}><input type="checkbox" /> Ditolak</td>
+                    <td style={{width: '25%'}}><input type="checkbox" /> Dimusnahkan</td>
+                    <td style={{width: '25%'}}><input type="checkbox" /> Dibebaskan</td>
                     </tr>
                     </tbody>
                     </table>
-                    <p>Demikian agar dilaksanakan dengan penuh tanggung jawab dan melaporkan hasil pelaksanaan&nbsp; tugas selambat-lambatnya 1 x 24 jam setelah selesai dilaksanakan.</p>
-                    <table style={{borderStyle: 'none', width: '100%'}} border="0">
+                    <p>Demikian laporan hasil tindakan karantina dibuat dengan penuh rasa tanggung jawab sesuai peraturan perundangan yang berlaku</p>
+                    <table style={{borderCollapse: 'collapse',borderStyle:'none', width: '100%'}} border="1">
                     <tbody>
                     <tr>
-                    <td style={{width: '65.7303%'}}>&nbsp;</td>
-                    <td style={{width: '34.2697%'}}>
-                    <p>Kepala UPT/ Pejabat</p>
-                    <p>&nbsp;</p>
-                    <p>&nbsp;</p>
-                    <p>Nama <br />NIP</p>
-                    </td>
+                    <td style={{width: '25%'}}>Tanggal</td>
+                    <td style={{width: '25%'}}>Pejabat Karantina</td>
+                    <td style={{width: '25%'}}>NIP</td>
+                    <td style={{width: '25%'}}>Tanda Tangan</td>
                     </tr>
                     </tbody>
                     </table>
@@ -170,4 +197,4 @@ function PrintK22(props) {
   )
 }
 
-export default PrintK22
+export default PrintK37b

@@ -97,71 +97,61 @@ function PrintK37a(props) {
                         <p>&nbsp;</p>
                         <h2> KH-1</h2>
                     </div>
-                    <p style={{textAlign:'center'}}><strong>LAPORAN HASIL PEMERIKSAAN ADMINISTRATIF DAN KESESUAIAN DOKUMEN</strong><br />Nomor: ..............</p>
+                    <p style={{textAlign:'center'}}><strong>LAPORAN HASIL PEMERIKSAAN ADMINISTRATIF DAN KESESUAIAN DOKUMEN</strong><br />Nomor: <strong>{cetak.dataK37a?.nomor}</strong></p>
                     <p style={{textAlign:'center'}}>&nbsp;</p>
-                    <p style={{textAlign:'left'}}>Yth,<br />Kepala ....<br />di<br />&emsp;&emsp;tempat</p>
-                    <p>&emsp;&emsp;Menindaklanjuti Surat Tugas No. ....................................... Tanggal&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; bersama ini dilaporkan hasil pemeriksaan media pembawa sebagai berikut:</p>
+                    <p style={{textAlign:'left'}}>Yth,<br />Kepala <strong>{cetak.listPtk?.upt}</strong><br />di<br />&emsp;&emsp;tempat</p>
+                    <p>&emsp;&emsp;Menindaklanjuti Surat Tugas No. <strong>{cetak?.noSurtug}</strong> Tanggal <strong>{cetak?.tglSurtug}</strong> bersama ini dilaporkan hasil pemeriksaan media pembawa sebagai berikut:</p>
                     <table style={{borderCollapse: 'collapse', width: '100%'}} id="tabel">
-                    <tbody>
-                    <tr>
-                    <td style={{width:'100%', textAlign:'center'}}><strong>PEMERIKSAAN ADMINISTRATIF DAN KESESUAIAN DOKUMEN*</strong></td>
-                    </tr>
-                    <tr>
-                        <td style={{width: '100%'}}>
-                            <input type="checkbox" /> Semua persyaratan yang diperlukan bagi pemasukan/pengeluaran* media pembawa tersebut telah lengkap, benar dan sah serta sesuai. <br/>
-                            <input type="checkbox" /> Dokumen yang dipersyaratkan tidak lengkap/tidak benar/tidak sah/tidak sesuai** <br/>
-                            <input type="checkbox" /> Media pembawa merupakan jenis yang dilarang pemasukan/pengeluarannya ke/dari wilayah Negara Republik Indonesia/area tujuan/asal** <br/>
-                            <input type="checkbox" /> Media pembawa memerlukan tindakan pengasingan dan pengamatan <br/>
-                            <input type="checkbox" /> Media pembawa tergolong pangan/pakan/SDG/PRG/agensia hayati/JAI/tumbuhan dan satwa liar/tumbuhan dan satwa langka**<br/>
-                            <input type="checkbox" /> Bukan termasuk media pembawa/tidak dikenai tindakan karantina dan/atau pengawasan**<br/>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td style={{width: '100%', textAlign: 'center'}}><strong>REKOMENDASI</strong></td>
-                    </tr>
-                    <tr>
-                        <td style={{width: '100%'}}>
-                    <table style={{borderStyle: 'none', width: '100%'}}>
-                    <tbody>
-                    <tr>
-                    <td style={{width: '50%'}}>
-                    <ul>
-                    <input type="checkbox" />Dilakukan penahanan <br/>
-                    <input type="checkbox" />Dilakukan pengasingan dan pengamatan
-                    </ul>
-                    </td>
-                    <td style={{width: '50%'}}>
-                    <ul>
-                    <input type="checkbox" />Ditolak<br/>
-                    <input type="checkbox" />Dilanjutkan pemeriksaan Kesehatan dan/atau uji Keamanan Pangan, uji Keamanan Pakan, uji Mutu Pangan, dan/atau uji Mutu Pakan.<br/>
-                    <input type="checkbox" />Diterbitkan surat keterangan karantina
-                    </ul>
-                    </td>
-                    </tr>
-                    </tbody>
-                    </table>
-                    </td>
-                    </tr>
-                    </tbody>
+                        <tbody>
+                            <tr>
+                            <td style={{width:'100%', textAlign:'center'}}><strong>PEMERIKSAAN ADMINISTRATIF DAN KESESUAIAN DOKUMEN*</strong></td>
+                            </tr>
+                            <tr>
+                                <td style={{width: '100%'}}>
+                                {cetak.dataK37a?.hasil_periksa_id === 1 ? <strong>&#9745;</strong> : <><input type="checkbox" /></>} Semua persyaratan yang diperlukan bagi pemasukan/pengeluaran* media pembawa tersebut telah lengkap, benar dan sah serta sesuai. <br/>
+                                {cetak.dataK37a?.hasil_periksa_id === 2 ? <strong>&#9745;</strong> : <><input type="checkbox" /></>} Dokumen yang dipersyaratkan tidak lengkap/tidak benar/tidak sah/tidak sesuai** <br/>
+                                {cetak.dataK37a?.hasil_periksa_id === 3 ? <strong>&#9745;</strong> : <><input type="checkbox" /></>} Media pembawa merupakan jenis yang dilarang pemasukan/pengeluarannya ke/dari wilayah Negara Republik Indonesia/area tujuan/asal** <br/>
+                                {cetak.dataK37a?.hasil_periksa_id === 4 ? <strong>&#9745;</strong> : <><input type="checkbox" /></>} Media pembawa memerlukan tindakan pengasingan dan pengamatan <br/>
+                                {cetak.dataK37a?.hasil_periksa_id === 5 ? <strong>&#9745;</strong> : <><input type="checkbox" /></>} Media pembawa tergolong pangan/pakan/SDG/PRG/agensia hayati/JAI/tumbuhan dan satwa liar/tumbuhan dan satwa langka**<br/>
+                                {cetak.dataK37a?.hasil_periksa_id === 6 ? <strong>&#9745;</strong> : <><input type="checkbox" /></>} Bukan termasuk media pembawa/tidak dikenai tindakan karantina dan/atau pengawasan**<br/>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td style={{width: '100%', textAlign: 'center'}}><strong>REKOMENDASI</strong></td>
+                            </tr>
+                            <tr>
+                                <td style={{width: '100%'}}>
+                                    <table style={{borderStyle: 'none', width: '100%'}}>
+                                        <tbody>
+                                            <tr>
+                                                <td style={{width: '30%'}}>
+                                                {cetak.dataK37a?.rekomendasi_id === 8 ? <strong>&#9745;</strong> : <><input type="checkbox" /></>} Dilakukan penahanan <br/>
+                                                {cetak.dataK37a?.rekomendasi_id === 12 ? <strong>&#9745;</strong> : <><input type="checkbox" /></>} Dilakukan pengasingan dan pengamatan
+                                                </td>
+                                                <td style={{width: '70%'}}>
+                                                {cetak.dataK37a?.rekomendasi_id === 13 ? <strong>&#9745;</strong> : <><input type="checkbox" /></>} Ditolak<br/>
+                                                {cetak.dataK37a?.rekomendasi_id === 14 ? <strong>&#9745;</strong> : <><input type="checkbox" /></>} Dilanjutkan pemeriksaan Kesehatan dan/atau uji Keamanan Pangan, uji Keamanan Pakan, uji Mutu Pangan, dan/atau uji Mutu Pakan.<br/>
+                                                {cetak.dataK37a?.rekomendasi_id === 15 ? <strong>&#9745;</strong> : <><input type="checkbox" /></>} Diterbitkan surat keterangan karantina
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </td>
+                            </tr>
+                        </tbody>
                     </table>
                     <p>&nbsp;</p>
-                    <table style={{borderCollapse: 'collapse', width: '100%'}} >
-                    <tbody>
-                    <tr>
-                    <td style={{width: '65.0281%'}}>&nbsp;</td>
-                    <td style={{width: '34.9719%'}}>Kota, tanggal <br />Pejabat Karantina<br /><br /><br /><br />nama<br />NIP.</td>
-                    </tr>
-                    </tbody>
+                    <table style={{borderStyle: 'hidden', width: '100%'}} >
+                        <tbody>
+                            <tr>
+                                <td style={{width: '65.0281%'}}>&nbsp;</td>
+                                <td style={{width: '34.9719%'}}>{moment(cetak.dataK371?.tanggal).format('DD MMM YYYY')} <br />Pejabat Karantina<br /><br /><br /><br /><strong>{cetak.petugas?.length >= 1 ? cetak.petugas[0]?.nama : ""}</strong><br /><strong>NIP.{cetak.petugas?.length >= 1 ? cetak.petugas[0]?.nip : ""}</strong></td>
+                            </tr>
+                        </tbody>
                     </table>
                     <p></p>
                 <div/>
               </div>
-
-              {/* <div className="container">
-                  <div className="row-md-1 ">
-                          <button className="btn btn-primary" onClick={printDocument}>Cetak Pelepasan</button>    
-                  </div>
-              </div> */}
             </div>
         </div>
     </div>

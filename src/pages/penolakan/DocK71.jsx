@@ -14,6 +14,7 @@ import PtkSurtug from '../../model/PtkSurtug';
 import SpinnerDot from '../../component/loading/SpinnerDot';
 import Swal from 'sweetalert2';
 import LoadBtn from '../../component/loading/LoadBtn';
+import PrintK71 from '../../component/cetak/penolakan/PrintK71';
 
 function modaAlatAngkut(e){
     return ModaAlatAngkut.find((element) => element.id == parseInt(e))
@@ -428,7 +429,8 @@ function DocK71() {
                 if(response.data) {
                     if(typeof response.data != "string") {
                         setData(values => ({...values,
-                            errorPenolakan: ""
+                            errorPenolakan: "",
+                            dataK71:response.data.data
                         }));
                         if(response.data.status == 200) {
                             setValue("idDok71", response.data.data[0].id)
@@ -1065,6 +1067,7 @@ function DocK71() {
                                     <button type="submit" className="btn btn-primary me-sm-2 me-1">Simpan</button>
                                 }
                                 <button type="button" className="btn btn-danger btn-label-secondary me-sm-2 me-1">Batal</button>
+                                <button type="button" className="btn btn-warning btn-label-secondary me-sm-2 me-1" data-bs-toggle="modal" data-bs-target="#modPrint"><i className='fa-solid fa-print me-sm-2 me-1'></i> Print</button>
                             </div>
                         </div>
                     </form>
@@ -1225,6 +1228,19 @@ function DocK71() {
                             </button>
                         </div>
                         </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div className="modal fade" id="modPrint" tabIndex="-1">
+            <div className="modal-dialog modal-fullscreen">
+                <div className="modal-content p-3 pb-1">
+                    <div className="modal-body">
+                        <button type="button" className="btn-close float-end" data-bs-dismiss="modal" aria-label="Close"></button>
+                        <div className="text-center mb-4">
+                            <h3 className="address-title">Cetak Dokumen</h3>
+                        </div>
+                        <PrintK71 dataCetak={data} />
                     </div>
                 </div>
             </div>

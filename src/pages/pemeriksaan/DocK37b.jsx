@@ -13,6 +13,7 @@ import Swal from 'sweetalert2';
 import PtkSurtug from '../../model/PtkSurtug';
 import LoadBtn from '../../component/loading/LoadBtn';
 import SpinnerDot from '../../component/loading/SpinnerDot';
+import PrintK37b from '../../component/cetak/pemeriksaan/PrintK37b';
 
 const modelPemohon = new PtkModel()
 const modelOPTK = new Master()
@@ -444,7 +445,8 @@ function DocK37b() {
                     if(typeof response.data != "string") {
                         if(response.data.status == 200) {
                             setData(values => ({...values,
-                                errorKesehatan: ""
+                                errorKesehatan: "",
+                                dataK37b:response.data.data
                             }));
                             setValue("idDok37a", response.data.data[0].pn_administrasi_id)
                             setValue("idDok37b", response.data.data[0].id)
@@ -1217,7 +1219,7 @@ function DocK37b() {
                                         <button type="submit" className="btn btn-primary me-sm-2 me-1">Simpan</button>
                                     }
                                     <button type="button" className="btn btn-danger me-sm-2 me-1">Batal</button>
-                                    <a href={import("../../dok/k37a.pdf")} rel="noopener noreferrer" target='_blank' className="btn btn-warning"><i className="bx bx-printer bx-xs"></i>&nbsp; Print</a>
+                                    <button type="button" className="btn btn-warning btn-label-secondary me-sm-2 me-1" data-bs-toggle="modal" data-bs-target="#modPrint"><i className='fa-solid fa-print me-sm-2 me-1'></i> Print</button>
                                     <button style={{display: (data.cekSimpan37b ? "block" : "none")}} type='button' onClick={() => navigate('/k22')} className="btn btn-info pb-1 float-end">
                                         <span className="d-sm-inline-block d-none me-sm-1">Buat Surat Tugas</span>
                                         <i className="fa-solid fa-angle-right"></i>
@@ -1454,6 +1456,19 @@ function DocK37b() {
                             </button>
                         </div>
                         </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div className="modal fade" id="modPrint" tabIndex="-1">
+            <div className="modal-dialog modal-fullscreen">
+                <div className="modal-content p-3 pb-1">
+                    <div className="modal-body">
+                        <button type="button" className="btn-close float-end" data-bs-dismiss="modal" aria-label="Close"></button>
+                        <div className="text-center mb-4">
+                            <h3 className="address-title">Cetak Dokumen</h3>
+                        </div>
+                        <PrintK37b dataCetak={data} />
                     </div>
                 </div>
             </div>

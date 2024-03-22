@@ -12,6 +12,7 @@ import Swal from 'sweetalert2';
 import Select from 'react-select';
 import PegawaiJson from '../../model/master/pegawaiPertanian.json'
 import LoadBtn from '../../component/loading/LoadBtn';
+import PrintK22 from '../../component/cetak/penugasan/PrintK22';
 
 const modelSurtug = new PtkSurtug()
 
@@ -328,7 +329,7 @@ function DocK22(props) {
                         if(res.data.status == 200) {
                             setListDataHeader(res.data.data)
                             setData(values => ({...values,
-                                errorSurtug: "",
+                                errorSurtug: ""
                             }))
                         } else {
                             setData(values => ({...values,
@@ -520,6 +521,7 @@ function DocK22(props) {
                                                         <div className="dropdown-menu">
                                                             <button className="dropdown-item" data-key={data.id} data-ttd={data.penanda_tangan_id} type="button" onClick={() => handleEditHeader(index)}><i className="fa-solid fa-pen-to-square me-1"></i> Edit</button>
                                                             <button className="dropdown-item" type='button'><i className="fa-solid fa-trash me-1"></i> Delete</button>
+                                                            <button className="dropdown-item" data-key={data.id} data-ttd={data.penanda_tangan_id} type="button" onClick={() => handleEditHeader(index)}><i className="fa-solid fa-print me-1"></i> Cetak</button>
                                                         </div>
                                                     </div>
                                                 </td>
@@ -545,7 +547,7 @@ function DocK22(props) {
                                     <input type="datetime-local" value={data.tglSurtug || ""} id="tglDok22" className="form-control form-control-sm" placeholder="Tanggal" disabled />
                                 </div>
                                 <div className="col-sm-4">
-                                    <a href="#" rel="noopener noreferrer" target='_blank' className='btn btn-info pb-1 float-end'>
+                                    <a href="#" rel="noopener noreferrer" target='_blank' className='btn btn-info pb-1 float-end' data-bs-toggle="modal" data-bs-target="#modPrint">
                                         <i className="bx bx-printer bx-sm"></i>
                                         Print
                                     </a>
@@ -830,6 +832,19 @@ function DocK22(props) {
                         </div>
                     </div>
                 </div>
+                </div>
+            </div>
+        </div>
+        <div className="modal fade" id="modPrint" tabIndex="-1">
+            <div className="modal-dialog modal-fullscreen">
+                <div className="modal-content p-3 pb-1">
+                    <div className="modal-body">
+                        <button type="button" className="btn-close float-end" data-bs-dismiss="modal" aria-label="Close"></button>
+                        <div className="text-center mb-4">
+                            <h3 className="address-title">Cetak Dokumen</h3>
+                        </div>
+                        <PrintK22 dataCetak={data} />
+                    </div>
                 </div>
             </div>
         </div>
