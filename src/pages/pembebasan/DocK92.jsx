@@ -1048,7 +1048,7 @@ function DocK92() {
                                                                             <td>{data.sat_netto}</td>
                                                                             <td className='text-end'>{data.volume_lain?.toLocaleString()}</td>
                                                                             <td>{data.sat_lain}</td>
-                                                                            {Cookies.get("jenisMp") == "1" ? 
+                                                                            {Cookies.get("jenisMp") == 1 ? 
                                                                             <>
                                                                             <td>{data.jantan}</td>
                                                                             <td>{data.betina}</td> 
@@ -1056,7 +1056,7 @@ function DocK92() {
                                                                             : ""}
                                                                             <td className='text-end'>{data.volumeP8?.toLocaleString()}</td>
                                                                             <td className='text-end'>{data.nettoP8?.toLocaleString()}</td>
-                                                                            {Cookies.get("jenisMp") == "1" ? 
+                                                                            {Cookies.get("jenisMp") == 1 ? 
                                                                             <>
                                                                             <td>{data.jantanP8}</td>
                                                                             <td>{data.betinaP8}</td> 

@@ -1,5 +1,17 @@
 [ 
 { 
+"id":112,
+"kode":"077",
+"nama":"Catch Sertificate",
+"komoditas_hewan":"0",
+"komoditas_tumbuhan":"0",
+"komoditas_ikan":"1",
+"keterangan":"Sertifikat Penangkapan",
+"kategori_dokumen":null,
+"created_at":null,
+"updated_at":null
+},
+{ 
 "id":1,
 "kode":"11",
 "nama":"Material Safety Data Sheets (MSDS)",
@@ -60,30 +72,6 @@
 "updated_at":"2017-01-25 19:28:55"
 },
 { 
-"id":6,
-"kode":"851",
-"nama":"Phytosanitary Certificate",
-"komoditas_hewan":"0",
-"komoditas_tumbuhan":"1",
-"komoditas_ikan":null,
-"keterangan":"Phytosanitary Certificate",
-"kategori_dokumen":"P",
-"created_at":"2017-01-25 19:28:55",
-"updated_at":"2017-12-22 00:33:27"
-},
-{ 
-"id":7,
-"kode":"852",
-"nama":"Sanitary Certififate",
-"komoditas_hewan":"1",
-"komoditas_tumbuhan":"0",
-"komoditas_ikan":"1",
-"keterangan":"Sanitary Certififate",
-"kategori_dokumen":"P",
-"created_at":"2017-01-25 19:28:55",
-"updated_at":"2017-12-22 00:33:51"
-},
-{ 
 "id":8,
 "kode":"21",
 "nama":"Sertifikat Kesehatan Bahan Baku",
@@ -96,12 +84,24 @@
 "updated_at":"2017-01-25 19:28:55"
 },
 { 
+"id":99,
+"kode":"217",
+"nama":"Packing List",
+"komoditas_hewan":"1",
+"komoditas_tumbuhan":"1",
+"komoditas_ikan":"1",
+"keterangan":null,
+"kategori_dokumen":"P",
+"created_at":"2017-01-25 19:28:59",
+"updated_at":"2017-01-25 19:28:59"
+},
+{ 
 "id":9,
 "kode":"22",
 "nama":"Surat Kuasa",
 "komoditas_hewan":"1",
-"komoditas_tumbuhan":"0",
-"komoditas_ikan":null,
+"komoditas_tumbuhan":"1",
+"komoditas_ikan":"1",
 "keterangan":null,
 "kategori_dokumen":"P",
 "created_at":"2017-01-25 19:28:55",
@@ -192,6 +192,102 @@
 "updated_at":"2017-01-25 19:28:55"
 },
 { 
+"id":33,
+"kode":"343",
+"nama":"Shiping Order",
+"komoditas_hewan":"0",
+"komoditas_tumbuhan":"0",
+"komoditas_ikan":null,
+"keterangan":null,
+"kategori_dokumen":null,
+"created_at":"2017-01-25 19:28:56",
+"updated_at":"2017-01-25 19:28:56"
+},
+{ 
+"id":100,
+"kode":"380",
+"nama":"Invoice",
+"komoditas_hewan":"1",
+"komoditas_tumbuhan":"1",
+"komoditas_ikan":"1",
+"keterangan":null,
+"kategori_dokumen":"P",
+"created_at":"2017-01-25 19:28:59",
+"updated_at":"2017-01-25 19:28:59"
+},
+{ 
+"id":34,
+"kode":"383",
+"nama":"SSTB",
+"komoditas_hewan":"0",
+"komoditas_tumbuhan":"0",
+"komoditas_ikan":null,
+"keterangan":null,
+"kategori_dokumen":null,
+"created_at":"2017-01-25 19:28:56",
+"updated_at":"2017-01-25 19:28:56"
+},
+{ 
+"id":35,
+"kode":"410",
+"nama":"Surat Sanggup Bayar / SSB",
+"komoditas_hewan":"0",
+"komoditas_tumbuhan":"0",
+"komoditas_ikan":null,
+"keterangan":null,
+"kategori_dokumen":null,
+"created_at":"2017-01-25 19:28:56",
+"updated_at":"2017-01-25 19:28:56"
+},
+{ 
+"id":36,
+"kode":"430",
+"nama":"Bank Garansi",
+"komoditas_hewan":"0",
+"komoditas_tumbuhan":"0",
+"komoditas_ikan":null,
+"keterangan":null,
+"kategori_dokumen":null,
+"created_at":"2017-01-25 19:28:56",
+"updated_at":"2017-01-25 19:28:56"
+},
+{ 
+"id":37,
+"kode":"440",
+"nama":"Surat Tanda Bukti Setor / STBS",
+"komoditas_hewan":"0",
+"komoditas_tumbuhan":"0",
+"komoditas_ikan":null,
+"keterangan":null,
+"kategori_dokumen":null,
+"created_at":"2017-01-25 19:28:56",
+"updated_at":"2017-01-25 19:28:56"
+},
+{ 
+"id":38,
+"kode":"454",
+"nama":"SSPCP",
+"komoditas_hewan":"0",
+"komoditas_tumbuhan":"0",
+"komoditas_ikan":null,
+"keterangan":null,
+"kategori_dokumen":null,
+"created_at":"2017-01-25 19:28:56",
+"updated_at":"2017-01-25 19:28:56"
+},
+{ 
+"id":39,
+"kode":"465",
+"nama":"L/C",
+"komoditas_hewan":"1",
+"komoditas_tumbuhan":"1",
+"komoditas_ikan":"1",
+"keterangan":null,
+"kategori_dokumen":"P",
+"created_at":"2017-01-25 19:28:56",
+"updated_at":"2017-01-25 19:28:56"
+},
+{ 
 "id":17,
 "kode":"51",
 "nama":"Hasil Analisa Uji Logam Berat",
@@ -202,6 +298,18 @@
 "kategori_dokumen":null,
 "created_at":"2017-01-25 19:28:55",
 "updated_at":"2017-01-25 19:28:55"
+},
+{ 
+"id":98,
+"kode":"56",
+"nama":"BAST Transit",
+"komoditas_hewan":"0",
+"komoditas_tumbuhan":"0",
+"komoditas_ikan":null,
+"keterangan":null,
+"kategori_dokumen":null,
+"created_at":"2017-01-25 19:28:59",
+"updated_at":"2017-01-25 19:28:59"
 },
 { 
 "id":18,
@@ -300,6 +408,18 @@
 "updated_at":"2017-01-25 19:28:56"
 },
 { 
+"id":40,
+"kode":"666",
+"nama":"Pengecualian Dengan Surat Keputusan",
+"komoditas_hewan":"1",
+"komoditas_tumbuhan":"1",
+"komoditas_ikan":null,
+"keterangan":null,
+"kategori_dokumen":"P",
+"created_at":"2017-01-25 19:28:57",
+"updated_at":"2017-01-25 19:28:57"
+},
+{ 
 "id":26,
 "kode":"67",
 "nama":"Sertifikat Produk Hewan",
@@ -322,6 +442,30 @@
 "kategori_dokumen":"P",
 "created_at":"2017-01-25 19:28:56",
 "updated_at":"2017-01-25 19:28:56"
+},
+{ 
+"id":41,
+"kode":"704",
+"nama":"Master BL",
+"komoditas_hewan":"1",
+"komoditas_tumbuhan":"1",
+"komoditas_ikan":"1",
+"keterangan":null,
+"kategori_dokumen":"P",
+"created_at":"2017-01-25 19:28:57",
+"updated_at":"2017-01-25 19:28:57"
+},
+{ 
+"id":101,
+"kode":"705",
+"nama":"Bill of Lading (BL)",
+"komoditas_hewan":"1",
+"komoditas_tumbuhan":"1",
+"komoditas_ikan":"1",
+"keterangan":null,
+"kategori_dokumen":"P",
+"created_at":"2017-01-25 19:28:59",
+"updated_at":"2017-01-25 19:28:59"
 },
 { 
 "id":28,
@@ -360,6 +504,30 @@
 "updated_at":"2017-01-25 19:28:56"
 },
 { 
+"id":102,
+"kode":"740",
+"nama":"Airway Bill (AWB)",
+"komoditas_hewan":"1",
+"komoditas_tumbuhan":"1",
+"komoditas_ikan":"1",
+"keterangan":null,
+"kategori_dokumen":"P",
+"created_at":"2017-01-25 19:28:59",
+"updated_at":"2017-01-25 19:28:59"
+},
+{ 
+"id":42,
+"kode":"741",
+"nama":"Master AWB",
+"komoditas_hewan":"1",
+"komoditas_tumbuhan":"0",
+"komoditas_ikan":null,
+"keterangan":null,
+"kategori_dokumen":"P",
+"created_at":"2017-01-25 19:28:57",
+"updated_at":"2017-01-25 19:28:57"
+},
+{ 
 "id":31,
 "kode":"75",
 "nama":"Surat Izin Menteri Kelautan dan Perikanan",
@@ -382,126 +550,6 @@
 "kategori_dokumen":"P",
 "created_at":"2017-01-25 19:28:56",
 "updated_at":"2017-01-25 19:28:56"
-},
-{ 
-"id":33,
-"kode":"343",
-"nama":"Shiping Order",
-"komoditas_hewan":"0",
-"komoditas_tumbuhan":"0",
-"komoditas_ikan":null,
-"keterangan":null,
-"kategori_dokumen":null,
-"created_at":"2017-01-25 19:28:56",
-"updated_at":"2017-01-25 19:28:56"
-},
-{ 
-"id":34,
-"kode":"383",
-"nama":"SSTB",
-"komoditas_hewan":"0",
-"komoditas_tumbuhan":"0",
-"komoditas_ikan":null,
-"keterangan":null,
-"kategori_dokumen":null,
-"created_at":"2017-01-25 19:28:56",
-"updated_at":"2017-01-25 19:28:56"
-},
-{ 
-"id":35,
-"kode":"410",
-"nama":"Surat Sanggup Bayar / SSB",
-"komoditas_hewan":"0",
-"komoditas_tumbuhan":"0",
-"komoditas_ikan":null,
-"keterangan":null,
-"kategori_dokumen":null,
-"created_at":"2017-01-25 19:28:56",
-"updated_at":"2017-01-25 19:28:56"
-},
-{ 
-"id":36,
-"kode":"430",
-"nama":"Bank Garansi",
-"komoditas_hewan":"0",
-"komoditas_tumbuhan":"0",
-"komoditas_ikan":null,
-"keterangan":null,
-"kategori_dokumen":null,
-"created_at":"2017-01-25 19:28:56",
-"updated_at":"2017-01-25 19:28:56"
-},
-{ 
-"id":37,
-"kode":"440",
-"nama":"Surat Tanda Bukti Setor / STBS",
-"komoditas_hewan":"0",
-"komoditas_tumbuhan":"0",
-"komoditas_ikan":null,
-"keterangan":null,
-"kategori_dokumen":null,
-"created_at":"2017-01-25 19:28:56",
-"updated_at":"2017-01-25 19:28:56"
-},
-{ 
-"id":38,
-"kode":"454",
-"nama":"SSPCP",
-"komoditas_hewan":"0",
-"komoditas_tumbuhan":"0",
-"komoditas_ikan":null,
-"keterangan":null,
-"kategori_dokumen":null,
-"created_at":"2017-01-25 19:28:56",
-"updated_at":"2017-01-25 19:28:56"
-},
-{ 
-"id":39,
-"kode":"465",
-"nama":"L/C",
-"komoditas_hewan":"1",
-"komoditas_tumbuhan":"1",
-"komoditas_ikan":"1",
-"keterangan":null,
-"kategori_dokumen":"P",
-"created_at":"2017-01-25 19:28:56",
-"updated_at":"2017-01-25 19:28:56"
-},
-{ 
-"id":40,
-"kode":"666",
-"nama":"Pengecualian Dengan Surat Keputusan",
-"komoditas_hewan":"1",
-"komoditas_tumbuhan":"1",
-"komoditas_ikan":null,
-"keterangan":null,
-"kategori_dokumen":"P",
-"created_at":"2017-01-25 19:28:57",
-"updated_at":"2017-01-25 19:28:57"
-},
-{ 
-"id":41,
-"kode":"704",
-"nama":"Master BL",
-"komoditas_hewan":"1",
-"komoditas_tumbuhan":"1",
-"komoditas_ikan":"1",
-"keterangan":null,
-"kategori_dokumen":"P",
-"created_at":"2017-01-25 19:28:57",
-"updated_at":"2017-01-25 19:28:57"
-},
-{ 
-"id":42,
-"kode":"741",
-"nama":"Master AWB",
-"komoditas_hewan":"1",
-"komoditas_tumbuhan":"0",
-"komoditas_ikan":null,
-"keterangan":null,
-"kategori_dokumen":"P",
-"created_at":"2017-01-25 19:28:57",
-"updated_at":"2017-01-25 19:28:57"
 },
 { 
 "id":43,
@@ -706,6 +754,30 @@
 "kategori_dokumen":null,
 "created_at":"2017-01-25 19:28:57",
 "updated_at":"2017-01-25 19:28:57"
+},
+{ 
+"id":6,
+"kode":"851",
+"nama":"Phytosanitary Certificate",
+"komoditas_hewan":"0",
+"komoditas_tumbuhan":"1",
+"komoditas_ikan":null,
+"keterangan":"Phytosanitary Certificate",
+"kategori_dokumen":"P",
+"created_at":"2017-01-25 19:28:55",
+"updated_at":"2017-12-22 00:33:27"
+},
+{ 
+"id":7,
+"kode":"852",
+"nama":"Sanitary Certififate",
+"komoditas_hewan":"1",
+"komoditas_tumbuhan":"0",
+"komoditas_ikan":"1",
+"keterangan":"Sanitary Certififate",
+"kategori_dokumen":"P",
+"created_at":"2017-01-25 19:28:55",
+"updated_at":"2017-12-22 00:33:51"
 },
 { 
 "id":61,
@@ -936,42 +1008,6 @@
 "updated_at":"2017-01-25 19:28:58"
 },
 { 
-"id":80,
-"kode":"D01",
-"nama":"Dok. Karantina Hewan KH11",
-"komoditas_hewan":"1",
-"komoditas_tumbuhan":"0",
-"komoditas_ikan":null,
-"keterangan":"Sertifikat Kesehatan Hewan",
-"kategori_dokumen":"P",
-"created_at":"2017-01-25 19:28:58",
-"updated_at":"2017-12-23 07:22:44"
-},
-{ 
-"id":81,
-"kode":"D02",
-"nama":"Dok. Karantina Hewan KH12",
-"komoditas_hewan":"1",
-"komoditas_tumbuhan":"0",
-"komoditas_ikan":null,
-"keterangan":"Sertifikat Sanitasi",
-"kategori_dokumen":"P",
-"created_at":"2017-01-25 19:28:58",
-"updated_at":"2017-12-23 07:16:06"
-},
-{ 
-"id":82,
-"kode":"D03",
-"nama":"Dok. Karantina Hewan KH14",
-"komoditas_hewan":"1",
-"komoditas_tumbuhan":"0",
-"komoditas_ikan":null,
-"keterangan":"Sertifikat Pelepasan Karantina Hewan",
-"kategori_dokumen":"P",
-"created_at":"2017-01-25 19:28:58",
-"updated_at":"2017-12-23 07:17:41"
-},
-{ 
 "id":83,
 "kode":"946",
 "nama":"Dok. Karantina Ikan KID3",
@@ -1152,100 +1188,40 @@
 "updated_at":"2017-01-25 19:28:59"
 },
 { 
-"id":98,
-"kode":"56",
-"nama":"BAST Transit",
-"komoditas_hewan":"0",
-"komoditas_tumbuhan":"0",
-"komoditas_ikan":null,
-"keterangan":null,
-"kategori_dokumen":null,
-"created_at":"2017-01-25 19:28:59",
-"updated_at":"2017-01-25 19:28:59"
-},
-{ 
-"id":99,
-"kode":"217",
-"nama":"Packing List",
-"komoditas_hewan":"1",
-"komoditas_tumbuhan":"1",
-"komoditas_ikan":"1",
-"keterangan":null,
-"kategori_dokumen":"P",
-"created_at":"2017-01-25 19:28:59",
-"updated_at":"2017-01-25 19:28:59"
-},
-{ 
-"id":100,
-"kode":"380",
-"nama":"Invoice",
-"komoditas_hewan":"1",
-"komoditas_tumbuhan":"1",
-"komoditas_ikan":"1",
-"keterangan":null,
-"kategori_dokumen":"P",
-"created_at":"2017-01-25 19:28:59",
-"updated_at":"2017-01-25 19:28:59"
-},
-{ 
-"id":101,
-"kode":"705",
-"nama":"Bill of Lading (BL)",
-"komoditas_hewan":"1",
-"komoditas_tumbuhan":"1",
-"komoditas_ikan":"1",
-"keterangan":null,
-"kategori_dokumen":"P",
-"created_at":"2017-01-25 19:28:59",
-"updated_at":"2017-01-25 19:28:59"
-},
-{ 
-"id":102,
-"kode":"740",
-"nama":"Airway Bill (AWB)",
-"komoditas_hewan":"1",
-"komoditas_tumbuhan":"1",
-"komoditas_ikan":"1",
-"keterangan":null,
-"kategori_dokumen":"P",
-"created_at":"2017-01-25 19:28:59",
-"updated_at":"2017-01-25 19:28:59"
-},
-{ 
-"id":104,
-"kode":"D10",
-"nama":"Prior Notice",
-"komoditas_hewan":"1",
-"komoditas_tumbuhan":"1",
-"komoditas_ikan":"1",
-"keterangan":"Prior Notice",
-"kategori_dokumen":"P",
-"created_at":"2017-01-25 19:28:59",
-"updated_at":"2017-12-23 07:49:09"
-},
-{ 
-"id":105,
-"kode":"D07",
-"nama":"Surat Keterangan Kesehatan Hewan",
+"id":80,
+"kode":"D01",
+"nama":"Dok. Karantina Hewan KH11",
 "komoditas_hewan":"1",
 "komoditas_tumbuhan":"0",
 "komoditas_ikan":null,
-"keterangan":"Surat Keterangan Kesehatan Hewan dari Dinas",
+"keterangan":"Sertifikat Kesehatan Hewan",
 "kategori_dokumen":"P",
-"created_at":"2017-01-25 19:28:59",
-"updated_at":"2017-12-23 07:23:28"
+"created_at":"2017-01-25 19:28:58",
+"updated_at":"2017-12-23 07:22:44"
 },
 { 
-"id":106,
-"kode":"D06",
-"nama":"Surat Keterangan Vaksinasi",
+"id":81,
+"kode":"D02",
+"nama":"Dok. Karantina Hewan KH12",
 "komoditas_hewan":"1",
 "komoditas_tumbuhan":"0",
 "komoditas_ikan":null,
-"keterangan":"Surat Keterangan Vaksinasi Dari Dokter Hewan",
+"keterangan":"Sertifikat Sanitasi",
 "kategori_dokumen":"P",
-"created_at":"2017-01-25 19:28:59",
-"updated_at":"2017-12-23 07:41:57"
+"created_at":"2017-01-25 19:28:58",
+"updated_at":"2017-12-23 07:16:06"
+},
+{ 
+"id":82,
+"kode":"D03",
+"nama":"Dok. Karantina Hewan KH14",
+"komoditas_hewan":"1",
+"komoditas_tumbuhan":"0",
+"komoditas_ikan":null,
+"keterangan":"Sertifikat Pelepasan Karantina Hewan",
+"kategori_dokumen":"P",
+"created_at":"2017-01-25 19:28:58",
+"updated_at":"2017-12-23 07:17:41"
 },
 { 
 "id":107,
@@ -1272,6 +1248,30 @@
 "updated_at":"2017-12-23 07:28:46"
 },
 { 
+"id":106,
+"kode":"D06",
+"nama":"Surat Keterangan Vaksinasi",
+"komoditas_hewan":"1",
+"komoditas_tumbuhan":"0",
+"komoditas_ikan":null,
+"keterangan":"Surat Keterangan Vaksinasi Dari Dokter Hewan",
+"kategori_dokumen":"P",
+"created_at":"2017-01-25 19:28:59",
+"updated_at":"2017-12-23 07:41:57"
+},
+{ 
+"id":105,
+"kode":"D07",
+"nama":"Surat Keterangan Kesehatan Hewan",
+"komoditas_hewan":"1",
+"komoditas_tumbuhan":"0",
+"komoditas_ikan":null,
+"keterangan":"Surat Keterangan Kesehatan Hewan dari Dinas",
+"kategori_dokumen":"P",
+"created_at":"2017-01-25 19:28:59",
+"updated_at":"2017-12-23 07:23:28"
+},
+{ 
 "id":109,
 "kode":"D08",
 "nama":"Dok. Karantina Tumbuhan DP4",
@@ -1294,6 +1294,18 @@
 "kategori_dokumen":"P",
 "created_at":"2017-12-23 07:48:11",
 "updated_at":"2018-01-08 14:38:03"
+},
+{ 
+"id":104,
+"kode":"D10",
+"nama":"Prior Notice",
+"komoditas_hewan":"1",
+"komoditas_tumbuhan":"1",
+"komoditas_ikan":"1",
+"keterangan":"Prior Notice",
+"kategori_dokumen":"P",
+"created_at":"2017-01-25 19:28:59",
+"updated_at":"2017-12-23 07:49:09"
 },
 { 
 "id":111,

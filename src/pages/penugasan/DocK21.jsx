@@ -632,7 +632,7 @@ function DocK21() {
                                                             <h6 className='mb-2'><u><b>Kategori Wasdal</b></u></h6>
                                                             <div className="form-check">
                                                                 <label className="form-check-label" htmlFor="opsiKH4">Termasuk Pangan</label>
-                                                                <input name="opsiKH" value="4" {...register("opsiKH", { required: (data.jenisKarantina == "H" ? "Mohon isi analisa minimal 1 pilihan." : false)})} className={errors.opsiKH ? "form-check-input is-invalid" : "form-check-input"} type="checkbox" id="opsiKH4" />
+                                                                <input name="opsiKH" value="4" {...register("opsiKH")} className={errors.opsiKH ? "form-check-input is-invalid" : "form-check-input"} type="checkbox" id="opsiKH4" />
                                                             </div>
                                                             <div className="form-check">
                                                                 <label className="form-check-label" htmlFor="opsiKH5">Termasuk Pakan</label>
@@ -696,7 +696,7 @@ function DocK21() {
                                                             <h6 className='mb-2 mt-2'><u><b>Kategori Wasdal</b></u></h6>
                                                             <div className="form-check">
                                                                 <label className="form-check-label" htmlFor="opsiKI15">Termasuk Pangan</label>
-                                                                <input name="opsiKI" value="15" {...register("opsiKI", { required: (data.jenisKarantina == "I" ? "Mohon isi analisa minimal 1 pilihan." : false)})} className={errors.opsiKI ? "form-check-input is-invalid" : "form-check-input"} type="checkbox" id="opsiKI15" />
+                                                                <input name="opsiKI" value="15" {...register("opsiKI")} className={errors.opsiKI ? "form-check-input is-invalid" : "form-check-input"} type="checkbox" id="opsiKI15" />
                                                             </div>
                                                             <div className="form-check">
                                                                 <label className="form-check-label" htmlFor="opsiKI16">Termasuk Pakan</label>
@@ -758,7 +758,7 @@ function DocK21() {
                                                             <h6 className='mb-2'><u><b>Ketegori Wasdal</b></u></h6>
                                                             <div className="form-check">
                                                                 <label className="form-check-label" htmlFor="opsiKT25">Termasuk Pangan</label>
-                                                                <input name="opsiKT" value="25" {...register("opsiKT", { required: (data.jenisKarantina == "T" ? "Mohon isi analisa minimal 1 pilihan." : false)})} className={errors.opsiKT ? "form-check-input is-invalid" : "form-check-input"} type="checkbox" id="opsiKT25" />
+                                                                <input name="opsiKT" value="25" {...register("opsiKT")} className={errors.opsiKT ? "form-check-input is-invalid" : "form-check-input"} type="checkbox" id="opsiKT25" />
                                                             </div>
                                                             <div className="form-check">
                                                                 <label className="form-check-label" htmlFor="opsiKT26">Termasuk Pakan</label>

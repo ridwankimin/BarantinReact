@@ -33,7 +33,6 @@ const tableCustomStyles = {
     const [filterText, setFilterText] = React.useState('');
 
     function handleClick(e) {
-        console.log(e)
         Swal.fire({
             title: "Item dipilih",
             text: "Karantina: " + e.karantina + " || No AJU: " + e.noAju,
@@ -57,7 +56,8 @@ const tableCustomStyles = {
                 Cookies.set("jenisKarantina", e.jenisKarantina, {
                     expires: 7
                 });
-                Cookies.set("jenisMp", e.jenis_media_pembawa_id, {
+                
+                Cookies.set("jenisMp", e.jenisMp, {
                     expires: 7
                 });
                 Cookies.set("jenisPermohonan", e.jenisPermohonanDb, {
@@ -205,7 +205,6 @@ const tableCustomStyles = {
             const response = await model.getPtkList(props.dataIn)
             if(response.data.status == 200) {
                 const dataReturn = response.data.data;
-                console.log(response.data.data)
                 const arrayData = dataReturn.map((item, index) => {
                     return {
                         id: index + 1,
@@ -216,6 +215,7 @@ const tableCustomStyles = {
                         noDokumen: item.no_dok_permohonan,
                         tglDokumen: item.tgl_dok_permohonan,
                         statusPtk: item.status_ptk,
+                        jenisMp: item.jenis_media_pembawa_id,
                         jenisPermohonanDb: item.jenis_permohonan,
                         jenisPermohonan: (item.jenis_permohonan == 'EX' ? 'Ekspor' : (item.jenis_permohonan == 'IM' ? 'Impor' : (item.jenis_permohonan == 'DK' ? 'Dokel' : (item.jenis_permohonan == 'DM' ? 'Domas' : (item.jenis_permohonan == 'RE' ? 'Re Ekspor' : (item.jenis_permohonan == 'RI' ? 'Re Impor' : (item.jenis_permohonan == 'TR' ? 'Transit' : 'Serah Terima'))))))),
                         status: (item.status_ptk == 0 ? 'Draft' : (item.status_ptk == 9 ? 'Pengajuan' : (item.status_ptk == 1 ? 'Diterima' : (item.status_ptk == 2 ? 'Ditolak' : 'blm diset')))),

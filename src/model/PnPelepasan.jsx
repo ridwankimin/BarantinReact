@@ -94,7 +94,7 @@ export default class PnPelepasan {
         ptk_id: data.idPtk,
         dokumen_karantina_id: "38",
         nomor: data.noDokumen.replace("K.1.1", "K.9.2"),
-        tanggal: data.tglDok92h,
+        tanggal: data.tglDok92,
         nomor_seri: data.noSeri,
         karantina_tujuan: "",
         upt_tujuan_id: "",

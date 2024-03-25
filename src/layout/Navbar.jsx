@@ -414,6 +414,7 @@ function Navbar(props) {
                                 </div>
                             </li>
                         </ul>
+                        {console.log(Cookies.get("jenisMp"))}
                     </li>
                     <li className={(ketMenu === 'Pembebasan' && ketSubMenu === 'KI' && subMenuOpen === true) || location.pathname.split("/")[1] === 'ki1' || location.pathname.split("/")[1] === 'ki2' ? 'menu-item open menu-item-animating open' : 'menu-item menu-item-animating menu-item-closing'}
                     style={{display: (props.navbar.pPembebasan > 0 && Cookies.get("jenisKarantina") == "I" ? "block" : "none")}}>
