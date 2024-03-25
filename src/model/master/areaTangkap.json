@@ -2,55 +2,125 @@
 { 
 "id":1,
 "kode_area":"WPPNRI 571",
-"deskripsi":"perairan Selat Malaka dan Laut Andaman"
+"deskripsi":"Perairan Selat Malaka dan Laut Andaman"
 },
 { 
 "id":2,
 "kode_area":"WPPNRI 572",
-"deskripsi":"perairan Samudera Hindia sebelah Barat Sumatera dan Selat Sunda"
+"deskripsi":"Perairan Samudera Hindia sebelah Barat Sumatera dan Selat Sunda"
 },
 { 
 "id":3,
 "kode_area":"WPPNRI 573",
-"deskripsi":"perairan Samudera Hindia sebelah Selatan Jawa hingga sebelah Selatan Nusa Tenggara, Laut Sawu, dan Laut Timor bagian Barat"
+"deskripsi":"Perairan Samudera Hindia sebelah Selatan Jawa hingga sebelah Selatan Nusa Tenggara, Laut Sawu, dan Laut Timor bagian Barat"
 },
 { 
 "id":4,
 "kode_area":"WPPNRI 711",
-"deskripsi":"perairan Selat Karimata, Laut Natuna, dan Laut China Selatan"
+"deskripsi":"Perairan Selat Karimata, Laut Natuna, dan Laut China Selatan"
 },
 { 
 "id":5,
 "kode_area":"WPPNRI 712",
-"deskripsi":"perairan Laut Jawa"
+"deskripsi":"Perairan Laut Jawa"
 },
 { 
 "id":6,
 "kode_area":"WPPNRI 713",
-"deskripsi":"perairan Selat Makassar, Teluk Bone, Laut Flores, dan Laut Bali"
+"deskripsi":"Perairan Selat Makassar, Teluk Bone, Laut Flores, dan Laut Bali"
 },
 { 
 "id":7,
 "kode_area":"WPPNRI 714",
-"deskripsi":"perairan Teluk Tolo dan Laut Banda"
+"deskripsi":"Perairan Teluk Tolo dan Laut Banda"
 },
 { 
 "id":8,
 "kode_area":"WPPNRI 715",
-"deskripsi":"perairan Teluk Tomini, Laut Maluku, Laut Halmahera, Laut Seram dan Teluk Berau"
+"deskripsi":"Perairan Teluk Tomini, Laut Maluku, Laut Halmahera, Laut Seram dan Teluk Berau"
 },
 { 
 "id":9,
 "kode_area":"WPPNRI 716",
-"deskripsi":"perairan Laut Sulawesi dan sebelah Utara Pulau Halmahera"
+"deskripsi":"Perairan Laut Sulawesi dan sebelah Utara Pulau Halmahera"
 },
 { 
 "id":10,
 "kode_area":"WPPNRI 717",
-"deskripsi":"perairan Teluk Cendrawasih dan Samudera Pasifik"
+"deskripsi":"Perairan Teluk Cendrawasih dan Samudera Pasifik"
 },
 { 
 "id":11,
 "kode_area":"WPPNRI 718",
-"deskripsi":"perairan Laut Aru, Laut Arafuru, dan Laut Timor bagian Timur"
+"deskripsi":"Perairan Laut Aru, Laut Arafuru, dan Laut Timor bagian Timur"
+},
+{ 
+"id":12,
+"kode_area":"WPPNRI PD 411",
+"deskripsi":"Meliputi sungai, danau, waduk, rawa, dan/atau genangan air lainnya di Pulau Papua bagian utara, Kepulauan Yapen, Pulau Numfor, Pulau Biak dan Pulau Yerui."
+},
+{ 
+"id":13,
+"kode_area":"WPPNRI PD 412",
+"deskripsi":"Meliputi sungai, danau, waduk, rawa, dan/atau genangan air lainnya di Pulau Papua bagian selatan, Kepulauan Romang, Kepulauan Letti, Kepulauan Damer, Kepulauan Babar, Kepulauan Tanimbar, Kepulauan Kur, Kepulauan Tayando, Kepulauan Kai, Kepulauan Aru, Pula"
+},
+{ 
+"id":14,
+"kode_area":"WPPNRI PD 413",
+"deskripsi":"Meliputi sungai, danau, waduk, rawa, dan/atau genangan air lainnya di Pulau Papua bagian barat, Kepulauan Sula, Kepulauan Raja Ampat, Kepulauan Banda, Kepulauan Gorom, Kepulauan Watubela, Kepulauan Obi, Pulau Morotai, Pulau Halmahera, Pulau Ternate, Pulau"
+},
+{ 
+"id":15,
+"kode_area":"WPPNRI PD 421",
+"deskripsi":"Meliputi sungai, danau, waduk, rawa, dan/atau genangan air lainnya di Pulau Sulawesi, Kepulauan Talaud, Kepulauan Sangihe, Kepulauan Sitaro, Kepulauan Banggai, Kepulauan Selayar, Kepulauan Wakatobi, Pulau Unauna, Pulau Togian, Pulau Batudaka, Pulau Walea "
+},
+{ 
+"id":16,
+"kode_area":"WPPNRI PD 422",
+"deskripsi":"Meliputi sungai, danau, waduk, rawa, dan/atau genangan air lainnya di Pulau Timor (bagian wilayah Indonesia), Pulau Lombok, Pulau Sumbawa, Pulau Flores, Pulau Sumba, Kepulauan Solor, Kepulauan Alor, Pulau Sabu, Pulau Wetar, dan Pulau Rote."
+},
+{ 
+"id":17,
+"kode_area":"WPPNRI PD 431",
+"deskripsi":"Meliputi sungai, danau, waduk, rawa, dan/atau genangan air lainnya di Pulau Jawa bagian timur, Kepulauan Kangean, Pulau Madura, Pulau -5- Giliraja, Pulau Puteran, Pulau Giligenting, Pulau Sapudi, Pulau Raas, Pulau Nusabarong, Pulau Bali, dan Pulau Nusapen"
+},
+{ 
+"id":18,
+"kode_area":"WPPNRI PD 432",
+"deskripsi":"Meliputi sungai, danau, waduk, rawa, dan/atau genangan air lainnya di Pulau Jawa bagian selatan, Pulau Panaitan, dan Pulau Tinjil."
+},
+{ 
+"id":19,
+"kode_area":"WPPNRI PD 433",
+"deskripsi":"Meliputi sungai, danau, waduk, rawa, dan/atau genangan air lainnya di Pulau Jawa bagian barat-utara, Kepulauan Seribu, Pulau Sangiang, Pulau Panjang, dan Pulau Tunda."
+},
+{ 
+"id":20,
+"kode_area":"WPPNRI PD 434",
+"deskripsi":"Meliputi sungai, danau, waduk, rawa, dan/atau genangan air lainnya di Pulau Jawa bagian tengah-utara, Kepulauan Karimun Jawa, dan Pulau Bawean."
+},
+{ 
+"id":21,
+"kode_area":"WPPNRI PD 435",
+"deskripsi":"Meliputi sungai, danau, waduk, rawa, dan/atau genangan air lainnya di Pulau Kalimantan bagian barat-selatan, Kepulauan Karimata, Pulau Maya, Pulau Laut, dan Pulau Sebuku."
+},
+{ 
+"id":22,
+"kode_area":"WPPNRI PD 436",
+"deskripsi":"Meliputi sungai, danau, waduk, rawa, dan/atau genangan air lainnya di Pulau Kalimantan bagian timur dan Kepulauan Derawan."
+},
+{ 
+"id":23,
+"kode_area":"WPPNRI PD 437",
+"deskripsi":"Meliputi sungai, danau, waduk, rawa, dan/atau genangan air lainnya di Pulau Kalimantan bagian utara, Pulau Tarakan, Pulau Bunyu, Pulau Nunukan, dan Pulau Sebatik (bagian wilayah Indonesia)."
+},
+{ 
+"id":24,
+"kode_area":"WPPNRI PD 438",
+"deskripsi":"Meliputi sungai, danau, waduk, rawa, dan/atau genangan air lainnya di Pulau Sumatera bagian timur, Kepulauan Bangka Belitung, Kepulauan Riau, Kepulauan Meranti, Kepulauan Anambas, Kepulauan Natuna, dan Pulau Rupat."
+},
+{ 
+"id":25,
+"kode_area":"WPPNRI PD 439",
+"deskripsi":"Meliputi sungai, danau, waduk, rawa, dan/atau genangan air lainnya di Pulau Sumatera bagian barat-utara, Kepulauan Banyak, Kepulauan Batu, Kepulauan Mentawai, Kepulauan Pagai, Pulau Weh, Pulau Bateeleblah, Pulau Simeuleu, Pulau Nias, dan Pulau Enggano"
 }]
