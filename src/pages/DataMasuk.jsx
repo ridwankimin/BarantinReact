@@ -15,7 +15,12 @@ function datenow() {
 }
 
 function DataMasuk() {
-  let [tabel, setTabel] = useState({})
+  let [tabel, setTabel] = useState({
+    dFrom: datenow(),
+    dTo: datenow(),
+    jenisKarantina: "",
+    jenisDokumen: "AJU"
+  })
 
   const {
     register: registerPtk,
@@ -159,7 +164,7 @@ const onSubmitPtk = (data) => {
                           </div>
                         </form>
                         <div style={{minHeight: "100px", height:"550px"}}>
-                          <DataMasukTable dataIn={tabel.ptk} />
+                          <DataMasukTable dataIn={tabel} />
                         </div>
                       </div>
                       <div className="tab-pane fade" id="navs-justified-ssm" role="tabpanel">

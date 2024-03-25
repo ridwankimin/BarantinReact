@@ -583,7 +583,6 @@ export default class PtkModel {
         },
         data: datasend
       };
-      console.log(JSON.stringify(config))
       
       return axios.request(config)
     }

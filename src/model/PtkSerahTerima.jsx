@@ -37,7 +37,7 @@ export default class PtkSerahTerima {
             satuan_id: "",
             kemasan_id: "",
             info_tambahan: "",
-            user_id: ""
+            user_id: Cookies.get("userId")
         }
         let config = {
             method: data.idDokBst === '' ? 'post' : 'put',
