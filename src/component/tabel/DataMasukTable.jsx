@@ -287,7 +287,7 @@ const tableCustomStyles = {
   return (
     <div style={{height: (dataTable?.length > 8 ? "300px" : "")}}>
         <DataTable
-            title='Table Data PTK'
+            title={props.dataIn.search + ' PTK Periode tgl ' + props.dataIn.dFrom + " s/d " + props.dataIn.dTo}
             customStyles={tableCustomStyles}
             columns={columns}
             data={dataTable}
