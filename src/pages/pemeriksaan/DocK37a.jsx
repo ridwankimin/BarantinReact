@@ -807,13 +807,7 @@ function DocK37a() {
                                         <button type="submit" className="btn btn-primary me-sm-2 me-1">Simpan</button>
                                     }
                                     <button type="button" className="btn btn-danger me-sm-2 me-1" onClick={handlebatal}>Batal</button>
-
                                     <button type="button" className="btn btn-warning btn-label-secondary me-sm-2 me-1" data-bs-toggle="modal" data-bs-target="#modPrint"><i className='fa-solid fa-print me-sm-2 me-1'></i> Print</button>
-                                    <button style={{display: (dataWatch.idDok37a ? "block" : "none")}} type='button' onClick={() => navigate((dataWatch.rekomAdmin == "14" ? '/k37b' : '/k22'))} className="btn btn-info pb-1 float-end">
-                                        <span className="d-sm-inline-block d-none me-sm-1">{dataWatch.rekomAdmin == "14" ? "Pemeriksaan Fisik/Kesehatan" : "Buat Surat Tugas"}</span>
-                                        <i className="fa-solid fa-angle-right"></i> 
-                                    </button>
-                                    
                                 </div>
                             </div>
                         </form>

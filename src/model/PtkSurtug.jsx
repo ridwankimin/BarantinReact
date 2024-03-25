@@ -78,64 +78,94 @@ export default class PtkSurtug {
     
     ptkAnalisis(data) {
         const uuid = uuidv4();
-        let arrayAnalisa
-        if(data.opsiKH) {
-          arrayAnalisa = data.opsiKH?.map(item => {
-            return {
-                id: uuidv4(),
-                hasil_analisis_id: item,
-                lainnya: (item === '11' ? data.opsiKHLainnya : ""),
-            }
-          })
-          arrayAnalisa.push({
-            id: uuidv4(),
-            hasil_analisis_id: data.opsiOlahH,
-            lainnya: ""
-          })
+        let arrayAnalisa = []
+        if(Cookies.get("jenisKarantina") == "H") {
+          if(data.opsiKH) {
+            arrayAnalisa = data.opsiKH?.map(item => {
+              return {
+                  id: uuidv4(),
+                  hasil_analisis_id: item,
+                  lainnya: (item === '11' ? data.opsiKHLainnya : ""),
+              }
+            })
+            arrayAnalisa.push({
+              id: uuidv4(),
+              hasil_analisis_id: data.opsiOlahH,
+              lainnya: ""
+            })
+          } else {
+            arrayAnalisa.push({
+              id: uuidv4(),
+              hasil_analisis_id: data.opsiOlahH,
+              lainnya: ""
+            })
+          }
           // arrayAnalisa = [...arrayAnalisa, ...olahKH1]
         }
-        if(data.opsiKI) {
-          arrayAnalisa = data.opsiKI?.map(item => {
-            return {
-                id: uuidv4(),
-                hasil_analisis_id: item,
-                lainnya: (item === '22' ? data.opsiKILainnya : ""),
-            }
-          })
-          const olahKI1 = {
+        if(Cookies.get("jenisKarantina") == "I") {
+          if(data.opsiKI) {
+            arrayAnalisa = data.opsiKI?.map(item => {
+              return {
+                  id: uuidv4(),
+                  hasil_analisis_id: item,
+                  lainnya: (item === '22' ? data.opsiKILainnya : ""),
+              }
+            })
+            arrayAnalisa.push({
+              id: uuidv4(),
+              hasil_analisis_id: data.opsiOlahI,
+              lainnya: ""
+            })
+          }
+        } else {
+          arrayAnalisa.push({
             id: uuidv4(),
             hasil_analisis_id: data.opsiOlahI,
             lainnya: ""
-          }
-          arrayAnalisa = [...arrayAnalisa, olahKI1]
-        }
-        if(data.opsiKT) {
-          arrayAnalisa = data.opsiKT?.map(item => {
-            return {
-                id: uuidv4(),
-                hasil_analisis_id: item,
-                lainnya: (item === '36' ? data.opsiKTLainnya : ""),
-            }
           })
-          const olahKT1 = {
+        }
+        if(Cookies.get("jenisKarantina") == "T") {
+          if(data.opsiKT) {
+            arrayAnalisa = data.opsiKT?.map(item => {
+              return {
+                  id: uuidv4(),
+                  hasil_analisis_id: item,
+                  lainnya: (item === '36' ? data.opsiKTLainnya : ""),
+              }
+            })
+            arrayAnalisa.push({
+              id: uuidv4(),
+              hasil_analisis_id: data.opsiOlahT,
+              lainnya: ""
+            })
+            if(data.opsiDilarangOPTK) {
+              arrayAnalisa.push({
+                id: uuidv4(),
+                hasil_analisis_id: data.opsiDilarangOPTK,
+                lainnya: ""
+              })
+            }
+          }
+        } else {
+          arrayAnalisa.push({
             id: uuidv4(),
             hasil_analisis_id: data.opsiOlahT,
             lainnya: ""
+          })
+          if(data.opsiDilarangOPTK) {
+            arrayAnalisa.push({
+              id: uuidv4(),
+              hasil_analisis_id: data.opsiDilarangOPTK,
+              lainnya: ""
+            })
           }
-          arrayAnalisa = [...arrayAnalisa, olahKT1]
-          const olahKT2 = {
-            id: uuidv4(),
-            hasil_analisis_id: data.opsiDilarangOPTK,
-            lainnya: ""
-          }
-          arrayAnalisa = [...arrayAnalisa, olahKT2]
         }
         if(data.opsiNHI) {
-          arrayAnalisa =  {
-                id: uuidv4(),
-                hasil_analisis_id: data.opsiNHI,
-                lainnya: (data.opsiNHI === '43' ? data.opsiNHILainnya : ""),
-            }
+          arrayAnalisa.push({
+            id: uuidv4(),
+            hasil_analisis_id: data.opsiNHI,
+            lainnya: (data.opsiNHI === '43' ? data.opsiNHILainnya : ""),
+          })
         }
         let datasend = {
             'id': data.idDok21 == '' ? uuid : data.idDok21,
