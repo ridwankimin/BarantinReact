@@ -59,6 +59,7 @@ import DocK53 from '../pages/perlakuan/DocK53';
 import DocK54 from '../pages/perlakuan/DocK54';
 import DocK55 from '../pages/perlakuan/DocK55';
 import DocK37b from '../pages/pemeriksaan/DocK37b';
+import DocK92 from '../pages/pembebasan/DocK92';
 // import DataDiri1 from '../component/DocK11/DataDiri1';
 
 
@@ -138,12 +139,14 @@ function Content(props) {
       return <DocK82 />
     } else if(props.page == "/k91") {
       return <DocK91 />
-    } else if(props.page == "/k92h") {
-      return <DocK92h />
-    } else if(props.page == "/k92i") {
-      return <DocK92i />
-    } else if(props.page == "/k92t") {
-      return <DocK92t />
+    } else if(props.page == "/k92") {
+      return <DocK92 />
+    // } else if(props.page == "/k92h") {
+    //   return <DocK92h />
+    // } else if(props.page == "/k92i") {
+    //   return <DocK92i />
+    // } else if(props.page == "/k92t") {
+    //   return <DocK92t />
     } else if(props.page == "/k93") {
       return <DocK93 />
     } else if(props.page == "/k94") {

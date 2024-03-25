@@ -126,7 +126,6 @@ function DocKI2() {
     const cekWatch = watch()
 
     const onSubmit = (dataSubmit) => {
-        const jenisPeriksa = [dataSubmit.isKlinis, data.isOrganoleptik, data.isLaboratoris]
         // console.log(jenisPeriksa)
         setOnLoad(true)
         const dataCekKom = data.listKomoditas?.filter(item => item.volumeP8 != null || item.nettoP8 != null)
@@ -441,10 +440,11 @@ function DocKI2() {
                             setValue("uptTujuan", response.data.data.upt_tujuan_id)
                             setValue("uptTujuanView", response.data.data.upt_tujuan_id ? listUptNewById(response.data.data?.upt_tujuan_id) : "")
                             setValue("hasilPemeriksaan", response.data.data.hasil_periksa)
-                            setValue("hasilPemeriksaanKet1", response.data.data.p1)
+                            setValue("hasilPemeriksaanKet1", response.data.data.p1 ? "1" : "")
+                            setValue("hasilPemeriksaanKet1Text", response.data.data.p1)
                             setValue("hasilPemeriksaanKet2", response.data.data.p2)
                             setValue("hasilPemeriksaanKet3", response.data.data.p3)
-                            setValue("hasilPemeriksaanKet4", response.data.data.p4)
+                            setValue("hasilPemeriksaanKet4", response.data.data.p5)
                             setValue("isAttach", response.data.data.is_attachment)
                             setValue("ttdPutusan", response.data.data.user_ttd_id?.toString())
                             setValue("diterbitkan", response.data.data.diterbitkan_di)
@@ -649,10 +649,11 @@ function DocKI2() {
                             setValue("uptTujuan", response.data.data.upt_tujuan_id)
                             setValue("uptTujuanView", response.data.data.upt_tujuan_id ? listUptNewById(response.data.data?.upt_tujuan_id) : "")
                             setValue("hasilPemeriksaan", response.data.data.hasil_periksa)
-                            setValue("hasilPemeriksaanKet1", response.data.data.p1)
+                            setValue("hasilPemeriksaanKet1", response.data.data.p1 ? "1" : "")
+                            setValue("hasilPemeriksaanKet1Text", response.data.data.p1)
                             setValue("hasilPemeriksaanKet2", response.data.data.p2)
                             setValue("hasilPemeriksaanKet3", response.data.data.p3)
-                            setValue("hasilPemeriksaanKet4", response.data.data.p4)
+                            setValue("hasilPemeriksaanKet4", response.data.data.p5)
                             setValue("isAttach", response.data.data.is_attachment)
                             setValue("ttdPutusan", response.data.data.user_ttd_id?.toString())
                             setValue("diterbitkan", response.data.data.diterbitkan_di)
@@ -1105,15 +1106,15 @@ function DocKI2() {
                                                     <div className="mt-1">
                                                     Hasil pemeriksaan: &emsp;
                                                         <div className="form-check form-check-inline">
-                                                            <input className="form-check-input" type="checkbox" name="isKlinis" id="klinis" value="KLINIS" {...register("isKlinis")} />
+                                                            <input className="form-check-input" type="checkbox" name="isKlinis" id="klinis" value="1" {...register("isKlinis")} />
                                                             <label className="form-check-label" htmlFor="klinis">Klinis</label>
                                                         </div>
                                                         <div className="form-check form-check-inline">
-                                                            <input className="form-check-input" type="checkbox" name="isOrganoleptik" id="organoleptik" value="ORGANOLEPTIK" {...register("isOrganoleptik")} />
+                                                            <input className="form-check-input" type="checkbox" name="isOrganoleptik" id="organoleptik" value="1" {...register("isOrganoleptik")} />
                                                             <label className="form-check-label" htmlFor="organoleptik">Organoleptik</label>
                                                         </div>
                                                         <div className="form-check form-check-inline">
-                                                            <input className="form-check-input" type="checkbox" name="isLaboratoris" id="laboratoris" value="LABORATORIS" {...register("isLaboratoris")} />
+                                                            <input className="form-check-input" type="checkbox" name="isLaboratoris" id="laboratoris" value="1" {...register("isLaboratoris")} />
                                                             <label className="form-check-label" htmlFor="laboratoris">Laboratoris</label>
                                                         </div>
                                                         {/* {errors.hasilPemeriksaan && <small className="text-danger">{errors.hasilPemeriksaan.message}</small>} */}
@@ -1124,6 +1125,9 @@ function DocKI2() {
                                                     <div className="form-check" key={index}>
                                                         <label className="form-check-label" htmlFor={'hasilPemeriksaanKet' + (index+1)}>{data.deskripsi}</label>
                                                         <input className="form-check-input" type="checkbox" {...register('hasilPemeriksaanKet' + (index+1))} name={'hasilPemeriksaanKet' + (index+1)} value="1" id={'hasilPemeriksaanKet' + (index+1)} />
+                                                        {index == 0 && cekWatch.hasilPemeriksaanKet1 == "1" ?
+                                                        <input className="form-control form-control-sm" type="text" {...register('hasilPemeriksaanKet1Text')} placeholder='Sebutkan..' name={'hasilPemeriksaanKet1Text'} id={'hasilPemeriksaanKet1Text'} />
+                                                        : ""}
                                                     </div>
                                                 ))}
                                             </div>

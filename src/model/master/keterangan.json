@@ -190,4 +190,44 @@
 "flag":"KETERANGAN",
 "karantina":"I",
 "dokumen":"KI-1"
+},
+{ 
+"id":25,
+"deskripsi":"Bebas dari HPHK/HPIK/OPTK",
+"deskripsi_en":null,
+"flag":"KETERANGAN",
+"karantina":null,
+"dokumen":"K-9.2"
+},
+{ 
+"id":26,
+"deskripsi":"Memenuhi persyaratan keamanan dan Mutu Pangan/Pakan",
+"deskripsi_en":null,
+"flag":"KETERANGAN",
+"karantina":null,
+"dokumen":"K-9.2"
+},
+{ 
+"id":27,
+"deskripsi":"Dalam keadaan sehat, baik, bebas kontaminan serta memenuhi persyaratan sanitasi",
+"deskripsi_en":null,
+"flag":"KETERANGAN",
+"karantina":null,
+"dokumen":"K-9.2"
+},
+{ 
+"id":28,
+"deskripsi":"Memenuhi dokumen persyaratan tindakan karantina",
+"deskripsi_en":null,
+"flag":"KETERANGAN",
+"karantina":null,
+"dokumen":"K-9.2"
+},
+{ 
+"id":29,
+"deskripsi":"Lainnya",
+"deskripsi_en":null,
+"flag":"KETERANGAN",
+"karantina":null,
+"dokumen":"K-9.2"
 }]

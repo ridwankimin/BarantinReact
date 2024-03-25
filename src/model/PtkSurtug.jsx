@@ -143,8 +143,8 @@ export default class PtkSurtug {
             'nomor': data.noDokumen.replace("K.1.1", "K.2.1"),
             'tanggal': data.tglDok21,
             'rekomendasi_id': data.rekomAnalis,
-            // 'level_risiko': data.tingkatRisiko,
-            // 'is_psat': data.golonganMp,
+            'level_risiko': data.tingkatRisiko,
+            'is_psat': data.golonganMp ? data.golonganMp : "",
             'catatan': data.catatan,
             'user_ttd_id': data.ttdAnalis,
             'user_id': Cookies.get("userId"), //session
@@ -160,6 +160,7 @@ export default class PtkSurtug {
           },
           data: datasend
         };
+        console.log(config)
         return axios.request(config)
     }
 

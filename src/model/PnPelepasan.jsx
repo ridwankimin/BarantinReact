@@ -6,6 +6,134 @@ import { v4 as uuidv4 } from 'uuid';
 const url = import.meta.env.VITE_REACT_APP_BE_LINK;
 
 export default class PnPelepasan {
+
+  imporAreaAll(data) {
+    const uuid = uuidv4()
+    let datasend
+    const jenisKarantina = Cookies.get("jenisKarantina")
+
+    if(jenisKarantina == "I") {
+      datasend = {
+        id: data.idDok92 == '' ? uuid : data.idDok92,
+        ptk_id: data.idPtk,
+        dokumen_karantina_id: "38",
+        nomor: data.noDokumen.replace("K.1.1", "K.9.2"),
+        tanggal: data.tglDok92,
+        nomor_seri: data.noSeri,
+        karantina_tujuan: "",
+        upt_tujuan_id: "",
+        tgl_awal: data.tglPeriksaAwal,
+        tgl_akhir: data.tglPeriksaAkhir,
+        tipe_usaha: "",
+        temperatur_mp: "",
+        // hasil_periksa: data.hasilPemeriksaan,
+        is_klinis: data.isKlinis,
+        is_organoleptik: data.isOrganoleptik,
+        is_laboratoris: data.isLaboratoris,
+        p1: data.pernyataan1 == "1" ? data.pernyataan1Text : "",
+        p2: data.pernyataan2,
+        p3: data.pernyataan3,
+        p4: data.pernyataan4,
+        p5: data.pernyataan5 == "1" ? data.pernyataanLainnya : "",
+        nama_labuji: "",
+        alamat_labuji: "",
+        attestation_a: "",
+        attestation_b: "",
+        attestation_c: "",
+        attestation_d: "",
+        attestation_lain: "",
+        attestation_free_from: "",
+        attestation_nosign: "",
+        add_information: "",
+        status_dok: data.jenisDokumen,
+        replaced_dok_id: "", // nanti data.idDokReplaced
+        is_attachment: data.isAttach,
+        diterbitkan_di: data.diterbitkan,
+        user_ttd_id: data.ttdPutusan,
+        user_id: Cookies.get("userId") //session
+      }
+    } else if(jenisKarantina == "T") {
+      datasend = {
+        id: data.idDok92 == '' ? uuid : data.idDok92,
+        ptk_id: data.idPtk,
+        dokumen_karantina_id: "38",
+        nomor: data.noDokumen.replace("K.1.1", "K.9.2"),
+        tanggal: data.tglDok92,
+        nomor_seri: data.noSeri,
+        karantina_tujuan: "",
+        entry_point: "",
+        upt_tujuan_id: "",
+        // nama_umum_tercetak: "",
+        // nama_ilmiah_tercetak: "",
+        // bentuk_tercetak: "", //description of packages / kemasan
+        // jumlah_tercetak: "",
+        additional_declaration: "", //data.adDeclare
+        additional_information: data.keteranganTambahan,
+        pn_perlakuan_id: data.idPerlakuan ? data.idPerlakuan : "",
+        p1: data.pernyataan1 == "1" ? data.pernyataan1Text : "",
+        p2: data.pernyataan2,
+        p3: data.pernyataan3,
+        p4: data.pernyataan4,
+        p5: data.pernyataan5 == "1" ? data.pernyataanLainnya : "",
+        pc_no: "", //
+        is_pc: "", //
+        is_commodity: "",
+        is_container: "",
+        ori_pc: "",
+        add_inspection: "", //data.addInspect
+        status_dok: data.jenisDokumen, // 'WITHDRAWN','REPLACEMENT','ISSUED'
+        replaced_dok_id: data.replacedDokId,
+        is_attachment: data.isAttach,
+        diterbitkan_di: data.diterbitkan,
+        user_ttd_id: data.ttdPutusan,
+        user_id: Cookies.get("userId"), //session
+      }
+    }  else if(jenisKarantina == "H") {
+      datasend = {
+        id: data.idDok92 == '' ? uuid : data.idDok92,
+        ptk_id: data.idPtk,
+        dokumen_karantina_id: "38",
+        nomor: data.noDokumen.replace("K.1.1", "K.9.2"),
+        tanggal: data.tglDok92h,
+        nomor_seri: data.noSeri,
+        karantina_tujuan: "",
+        upt_tujuan_id: "",
+        m1: data.pernyataan1,
+        m2: data.pernyataan2,
+        m3: data.pernyataan3,
+        m_lain: data.pernyataan5 == "1" ? data.pernyataanLainnya : null,
+        p_teknis: "",
+        p_lab: "",
+        p_lain: data.adDeclare,
+        p1: data.pernyataan1 == "1" ? data.pernyataan1Text : "",
+        p2: data.pernyataan2,
+        p3: data.pernyataan3,
+        p4: data.pernyataan4,
+        p5: data.pernyataan5 == "1" ? data.pernyataanLainnya : "",
+        status_dok: data.jenisDokumen, // 'WITHDRAWN','REPLACEMENT','ISSUED'
+        replaced_dok_id: "",
+        is_attachment: data.isAttach,
+        diterbitkan_di: data.diterbitkan,
+        user_ttd_id: data.ttdPutusan,
+        user_id: Cookies.get("userId") //session
+      }
+    }
+
+    let config = {
+      method: data.idDok92 == '' ? 'post' : 'put',
+      maxBodyLength: Infinity,
+      url: url + (data.idDok92 == '' ? 'pn-pelepasan-k' + jenisKarantina.toLowerCase() : 'pn-pelepasan-k' + jenisKarantina.toLowerCase() + "/" + data.idDok92),
+      headers: { 
+        'Content-Type': 'application/json', 
+      },
+      data: datasend
+    };
+    if(import.meta.env.VITE_BE_ENV == "DEV") {
+      console.log("dok k92: " + JSON.stringify(config))
+    }
+    return axios.request(config)
+  }
+
   imporAreaKI(data) {
     const uuid = uuidv4()
     let datasend = {
@@ -122,10 +250,11 @@ export default class PnPelepasan {
         is_klinis: data.isKlinis,
         is_organoleptik: data.isOrganoleptik,
         is_laboratoris: data.isLaboratoris,
-        p1: data.hasilPemeriksaanKet1,
+        p1: data.hasilPemeriksaanKet1 == "1" ? data.hasilPemeriksaanKet1Text : "",
         p2: data.hasilPemeriksaanKet2,
         p3: data.hasilPemeriksaanKet3,
-        p4: data.hasilPemeriksaanKet4,
+        p4: "",
+        p5: data.hasilPemeriksaanKet4,
         nama_labuji: "",
         alamat_labuji: "",
         attestation_a: "",

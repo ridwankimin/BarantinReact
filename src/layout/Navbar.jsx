@@ -333,7 +333,7 @@ function Navbar(props) {
                     </li>
                 </ul>
             </li>
-            <li className={(ketMenu === 'Pembebasan' && menuOpen === true) || location.pathname.split("/")[1] === 'k91' || location.pathname.split("/")[1] === 'k92h' || location.pathname.split("/")[1] === 'k92i' || location.pathname.split("/")[1] === 'k92t' || location.pathname.split("/")[1] === 'k93' || location.pathname.split("/")[1] === 'k94' || location.pathname.split("/")[1] === 'kh1' || location.pathname.split("/")[1] === 'kh2' || location.pathname.split("/")[1] === 'ki1' || location.pathname.split("/")[1] === 'ki2' || location.pathname.split("/")[1] === 'kt1' || location.pathname.split("/")[1] === 'kt2' || location.pathname.split("/")[1] === 'kt3' || location.pathname.split("/")[1] === 'kt4' ? 'menu-item open menu-item-animating open' : 'menu-item menu-item-animating menu-item-closing'}
+            <li className={(ketMenu === 'Pembebasan' && menuOpen === true) || location.pathname.split("/")[1] === 'k91' || location.pathname.split("/")[1] === 'k92' || location.pathname.split("/")[1] === 'k93' || location.pathname.split("/")[1] === 'k94' || location.pathname.split("/")[1] === 'kh1' || location.pathname.split("/")[1] === 'kh2' || location.pathname.split("/")[1] === 'ki1' || location.pathname.split("/")[1] === 'ki2' || location.pathname.split("/")[1] === 'kt1' || location.pathname.split("/")[1] === 'kt2' || location.pathname.split("/")[1] === 'kt3' || location.pathname.split("/")[1] === 'kt4' ? 'menu-item open menu-item-animating open' : 'menu-item menu-item-animating menu-item-closing'}
             style={{display: (props.navbar.pPembebasan > 0 || props.navbar.pSuratKeterangan > 0 ? "block" : "none")}}>
                 <button type='button' style={{backgroundColor: "#123138"}} className="w-100 text-sm-start menu-link menu-toggle text-lightest" data-i18n="Pembebasan" onClick={handleMenuOpen}>
                     <i className="menu-icon tf-icons fa-solid fa-file-archive"></i>
@@ -346,7 +346,13 @@ function Navbar(props) {
                             <div data-i18n="K-9.1">K-9.1</div>
                         </div>
                     </li>
-                    <li className={(ketMenu === 'Pembebasan' && ketSubMenu === 'K-9.2' && subMenuOpen === true) || location.pathname.split("/")[1] === 'k92h' || location.pathname.split("/")[1] === 'k92i' || location.pathname.split("/")[1] === 'k92t' ? 'menu-item open menu-item-animating open' : 'menu-item menu-item-animating menu-item-closing'}
+                    <li className={location.pathname.split("/")[1] === 'k92' ? "menu-item active" : "menu-item"}
+                    style={{display: (Cookies.get("jenisPermohonan") == "IM" || Cookies.get("jenisPermohonan") == "DM" ? "block" : "none")}}>
+                        <div type="button" onClick={() => navigate('/k92')} className="menu-link" title='SERTIFIKAT PELEPASAN KARANTINA'>
+                            <div data-i18n="K-9.2">K-9.2</div>
+                        </div>
+                    </li>
+                    {/* <li className={(ketMenu === 'Pembebasan' && ketSubMenu === 'K-9.2' && subMenuOpen === true) || location.pathname.split("/")[1] === 'k92h' || location.pathname.split("/")[1] === 'k92i' || location.pathname.split("/")[1] === 'k92t' ? 'menu-item open menu-item-animating open' : 'menu-item menu-item-animating menu-item-closing'}
                     style={{display: (props.navbar.pPembebasan > 0 && (Cookies.get("jenisPermohonan") == "IM" || Cookies.get("jenisPermohonan") == "DM") ? "block" : "none")}}>
                         <button type='button' style={{backgroundColor: "#123138"}} className="w-100 text-sm-start menu-link menu-toggle text-lightest" data-i18n="K-9.2" onClick={handleSubMenuOpen}>
                             <div data-i18n="K-9.2">K-9.2</div>
@@ -368,7 +374,7 @@ function Navbar(props) {
                                 </div>
                             </li>
                         </ul>
-                    </li>
+                    </li> */}
                     <li className={location.pathname.split("/")[1] === 'k93' ? "menu-item active" : "menu-item"}
                     style={{display: (props.navbar.pSuratKeterangan > 0 ? "block" : "none")}}>
                         <div type="button" onClick={() => navigate('/k93')} className="menu-link" title='SURAT KETERANGAN KARANTINA'>

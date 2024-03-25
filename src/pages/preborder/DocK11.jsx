@@ -1162,9 +1162,28 @@ function DocK11() {
                         base64_encode(cekdataDiri.noAju) + 'm0R3N0r1R' + 
                         base64_encode(cekdataDiri.idPtk) + "m0R3N0r1R" + 
                         base64_encode(response.data.data.no_dok_permohonan)
-                        )
+                        ), {
+                            expires: 7
+                        }
                     )
-                    Cookies.set("tglPtk", cekdataVerify.tglTerimaVerif)
+                    Cookies.set("tglPtk", cekdataVerify.tglTerimaVerif, {
+                        expires: 7
+                    });
+                    Cookies.set("statusPtk", cekdataVerify.opsiVerif, {
+                        expires: 7,
+                    });
+                    Cookies.set("jenisKarantina", cekdataDiri.mediaPembawa, {
+                        expires: 7
+                    });
+                    Cookies.set("jenisMp", cekdataDiri.jenisMp, {
+                        expires: 7
+                    });
+                    Cookies.set("jenisPermohonan", cekdataDiri.permohonan, {
+                        expires: 7
+                    });
+                    Cookies.set("jenisForm", "PTK", {
+                        expires: 7
+                    });
                     
                     setDataIdPage(values => ({...values,
                         noPermohonan: response.data.data.no_dok_permohonan,

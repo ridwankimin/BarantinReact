@@ -63,6 +63,10 @@ function DocK21() {
     const jenisKar = Cookies.get("jenisKarantina")
     let [dataPtk, setDataPtk] = useState([])
     let [onLoad,setOnload] = useState(false)
+    let [data,setData] = useState({
+        noDokumen: "",
+        tglDokumen: ""
+    })
 
     const {
         register,
@@ -75,11 +79,16 @@ function DocK21() {
 
     const dataWatch = watch()
 
+    const onInvalid = (errors) => import.meta.env.VITE_REACT_APP_BE_ENV == "DEV" ? console.log(errors) : null
+
     const onSubmit = (data) => {
         setOnload(true)
         const response = modelSurtug.ptkAnalisis(data);
         response
         .then((response) => {
+            if(import.meta.env.VITE_REACT_APP_BE_ENV == "DEV") {
+                console.log(response)
+            }
             if(response.data) {
                 if(response.data.status == 201) {
                     setOnload(false)
@@ -132,10 +141,7 @@ function DocK21() {
         });
     }
 
-    let [data,setData] = useState({
-        noDokumen: "",
-        tglDokumen: ""
-    })
+    
     useEffect(() => {
         if(idPtk) {
             setValue("tglDok21", (new Date()).toLocaleString('en-CA', { hourCycle: 'h24' }).replace(',', '').slice(0,16))
@@ -213,6 +219,8 @@ function DocK21() {
                             setValue("idDok21", response.data.data[0].id)
                             setValue("noDok21", response.data.data[0].nomor)
                             setValue("tglDok21", response.data.data[0].tanggal)
+                            setValue("golonganMp", response.data.data[0].is_psat)
+                            setValue("tingkatRisiko", response.data.data[0].level_risiko)
                             setValue("rekomAnalis", response.data.data[0].rekomendasi_id)
                             setValue("ttdAnalis", response.data.data[0].user_ttd_id)
                             setValue("catatan", response.data.data[0].catatan)
@@ -337,6 +345,8 @@ function DocK21() {
                             setValue("noDok21", response.data.data[0].nomor)
                             setValue("tglDok21", response.data.data[0].tanggal)
                             setValue("rekomAnalis", response.data.data[0].rekomendasi_id)
+                            setValue("golonganMp", response.data.data[0].is_psat)
+                            setValue("tingkatRisiko", response.data.data[0].level_risiko)
                             setValue("ttdAnalis", response.data.data[0].user_ttd_id)
                             setValue("catatan", response.data.data[0].catatan)
                             const arrayOlah = response.data.data?.map(item => {
@@ -441,7 +451,7 @@ function DocK21() {
                     </div>
                 </div>
                 <div className="card-body">
-                    <form onSubmit={handleSubmit(onSubmit)}>
+                    <form onSubmit={handleSubmit(onSubmit, onInvalid)}>
                         <input type="hidden" name='idDok21' {...register("idDok21")} />
                         <input type="hidden" name='idPtk' {...register("idPtk")} />
                         <input type="hidden" name='noDokumen' {...register("noDokumen")} />
@@ -589,11 +599,11 @@ function DocK21() {
                                                         <h6 className='mb-1'><b><u>Objek Tugas</u></b></h6>
                                                         <div className="form-check form-check-inline">
                                                             <label className="form-check-label" htmlFor="golonganMpPSAT">PSAT</label>
-                                                            <input name="golonganMp" value="PSAT" {...register("golonganMp", {required: "Mohon Objek Tugas"})} className={errors.golonganMp ? "form-check-input is-invalid" : "form-check-input"} type="radio" id="golonganMpPSAT" />
+                                                            <input name="golonganMp" value="1" {...register("golonganMp", {required: (jenisKar == "T" ? "Mohon pilih Objek Tugas" : false)})} className={errors.golonganMp ? "form-check-input is-invalid" : "form-check-input"} type="radio" id="golonganMpPSAT" />
                                                         </div>
                                                         <div className="form-check form-check-inline">
-                                                            <label className="form-check-label" htmlFor="golonganMpPSAT">Non PSAT</label>
-                                                            <input name="golonganMp" value="PSAT" {...register("golonganMp")} className={errors.golonganMp ? "form-check-input is-invalid" : "form-check-input"} type="radio" id="golonganMpPSAT" />
+                                                            <label className="form-check-label" htmlFor="golonganNonPSAT">Non PSAT</label>
+                                                            <input name="golonganNonPSAT" value="0" {...register("golonganMp")} className={errors.golonganMp ? "form-check-input is-invalid" : "form-check-input"} type="radio" id="golonganNonPSAT" />
                                                         </div>
                                                     </div>
                                                 </div>
