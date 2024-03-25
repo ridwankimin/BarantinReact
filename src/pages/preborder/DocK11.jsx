@@ -1584,7 +1584,7 @@ function DocK11() {
 
                     if(response.data.data.ptk.jenis_karantina != null) {
                         // kode hs ikan sementara pake kode hs hewan
-                        const resHs = modelMaster.masterHS(response.data.data.ptk.jenis_karantina == "I" ? "H" : response.data.data.ptk.jenis_karantina)
+                        const resHs = modelMaster.masterHS(response.data.data.ptk.jenis_karantina)
                         resHs
                         .then((response) => {
                             let dataHS = response.data.data;

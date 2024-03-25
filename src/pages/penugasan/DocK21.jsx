@@ -17,7 +17,7 @@ const modelSurtug = new PtkSurtug()
 const modelPemohon = new PtkModel()
 const modelHistory = new PtkHistory()
 
-function masterPegawai() {
+function masterPegawai(id) {
     var arrayPegawai = PegawaiJson.map(item => {
         return {
             value: item.id,
@@ -210,6 +210,9 @@ function DocK21() {
             const response21 = modelSurtug.getAnalisByPtk(base64_decode(ptkNomor[1]));
             response21
             .then((response) => {
+                if(import.meta.env.VITE_REACT_APP_BE_ENV == "DEV") {
+                    console.log(response)
+                }
                 if(response.data) {
                     if(typeof response.data != "string") {
                         if(response.data.status == 200) {
@@ -225,7 +228,7 @@ function DocK21() {
                             setValue("ttdAnalis", response.data.data[0].user_ttd_id)
                             setValue("catatan", response.data.data[0].catatan)
                             const arrayOlah = response.data.data?.map(item => {
-                                return item.hasil_analisis_id.toString()
+                                return item.hasil_analisis_id?.toString()
                             })
                             const arrayOpsi = arrayOlah.filter((element) => element != "2" && element != "3" && element != "13" && element != "14" && element != "24" && element != "34" && element != "35" && element != "32" && element != "33" && element != "23" && element != "37" && element != "38" && element != "39" && element != "40" && element != "41" && element != "42" && element != "43")
                             
@@ -234,13 +237,13 @@ function DocK21() {
                                 setValue("opsiKH", arrayOpsi)
                                 
                                 const arrayOlahText = response.data.data?.filter((element) => element.hasil_analisis_id == 11)
-                                setValue("opsiKHLainnya", arrayOlahText[0].lainnya)
+                                setValue("opsiKHLainnya", arrayOlahText[0]?.lainnya)
                             } else if(response.data.data[0].karantina == "I"){
                                 setValue("opsiOlahI", (arrayOlah.indexOf('13') >= 0 ? "13" : (arrayOlah.indexOf('14') >= 0 ? "14" : "")))
                                 setValue("opsiKI", arrayOpsi)
                                 
                                 const arrayOlahText = response.data.data?.filter((element) => element.hasil_analisis_id == 22)
-                                setValue("opsiKILainnya", arrayOlahText[0].lainnya)
+                                setValue("opsiKILainnya", arrayOlahText[0]?.lainnya)
                             } else if(response.data.data[0].karantina == "T"){
                                 setValue("opsiOlahT", (arrayOlah.indexOf('24') >= 0 ? "24" : (arrayOlah.indexOf('34') >= 0 ? "34" : (arrayOlah.indexOf('35') >= 0 ? "35" : ""))))
                                 setValue("opsiKT", arrayOpsi)
@@ -251,7 +254,7 @@ function DocK21() {
                             }
                             
                             const arrayOlahText = response.data.data?.filter((element) => element.hasil_analisis_id == 37 || element.hasil_analisis_id == 38 || element.hasil_analisis_id == 39 || element.hasil_analisis_id == 40 || element.hasil_analisis_id == 41 || element.hasil_analisis_id == 42 || element.hasil_analisis_id == 43)
-                            setValue("opsiNHI", arrayOlahText[0]?.hasil_analisis_id.toString())
+                            setValue("opsiNHI", arrayOlahText[0]?.hasil_analisis_id?.toString())
                             setValue("opsiNHILainnya", arrayOlahText[0]?.lainnya)
                         } else if(response.data.status == 404) {
                             setData(values => ({...values,
@@ -359,20 +362,20 @@ function DocK21() {
                                 setValue("opsiKH", arrayOpsi)
                                 
                                 const arrayOlahText = response.data.data?.filter((element) => element.hasil_analisis_id == 11)
-                                setValue("opsiKHLainnya", arrayOlahText[0].lainnya)
+                                setValue("opsiKHLainnya", arrayOlahText[0]?.lainnya)
                             } else if(response.data.data[0].karantina == "I"){
                                 setValue("opsiOlahI", (arrayOlah.indexOf('13') >= 0 ? "13" : (arrayOlah.indexOf('14') >= 0 ? "14" : "")))
                                 setValue("opsiKI", arrayOpsi)
                                 
                                 const arrayOlahText = response.data.data?.filter((element) => element.hasil_analisis_id == 22)
-                                setValue("opsiKILainnya", arrayOlahText[0].lainnya)
+                                setValue("opsiKILainnya", arrayOlahText[0]?.lainnya)
                             } else if(response.data.data[0].karantina == "T"){
                                 setValue("opsiOlahT", (arrayOlah.indexOf('24') >= 0 ? "24" : (arrayOlah.indexOf('34') >= 0 ? "34" : (arrayOlah.indexOf('35') >= 0 ? "35" : ""))))
                                 setValue("opsiKT", arrayOpsi)
                                 setValue("opsiDilarangOPTK", (arrayOlah.indexOf('32') >= 0 ? "32" : (arrayOlah.indexOf('33') >= 0 ? "33" : (arrayOlah.indexOf('23') >= 0 ? "23" : ""))))
                                 
                                 const arrayOlahText = response.data.data?.filter((element) => element.hasil_analisis_id == 36)
-                                setValue("opsiKTLainnya", arrayOlahText[0].lainnya)
+                                setValue("opsiKTLainnya", arrayOlahText[0]?.lainnya)
                             }
                             
                             const arrayOlahText = response.data.data?.filter((element) => element.hasil_analisis_id == 37 || element.hasil_analisis_id == 38 || element.hasil_analisis_id == 39 || element.hasil_analisis_id == 40 || element.hasil_analisis_id == 41 || element.hasil_analisis_id == 42 || element.hasil_analisis_id == 43)

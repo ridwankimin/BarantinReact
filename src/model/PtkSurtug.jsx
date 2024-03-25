@@ -88,12 +88,8 @@ export default class PtkSurtug {
                   lainnya: (item === '11' ? data.opsiKHLainnya : ""),
               }
             })
-            arrayAnalisa.push({
-              id: uuidv4(),
-              hasil_analisis_id: data.opsiOlahH,
-              lainnya: ""
-            })
-          } else {
+          } 
+          if(data.opsiOlahH) {
             arrayAnalisa.push({
               id: uuidv4(),
               hasil_analisis_id: data.opsiOlahH,
@@ -111,18 +107,14 @@ export default class PtkSurtug {
                   lainnya: (item === '22' ? data.opsiKILainnya : ""),
               }
             })
+          }
+          if(data.opsiOlahI) {
             arrayAnalisa.push({
               id: uuidv4(),
               hasil_analisis_id: data.opsiOlahI,
               lainnya: ""
             })
           }
-        } else {
-          arrayAnalisa.push({
-            id: uuidv4(),
-            hasil_analisis_id: data.opsiOlahI,
-            lainnya: ""
-          })
         }
         if(Cookies.get("jenisKarantina") == "T") {
           if(data.opsiKT) {
@@ -133,25 +125,14 @@ export default class PtkSurtug {
                   lainnya: (item === '36' ? data.opsiKTLainnya : ""),
               }
             })
+          }
+          if(data.opsiOlahT) {
             arrayAnalisa.push({
               id: uuidv4(),
               hasil_analisis_id: data.opsiOlahT,
               lainnya: ""
             })
-            if(data.opsiDilarangOPTK) {
-              arrayAnalisa.push({
-                id: uuidv4(),
-                hasil_analisis_id: data.opsiDilarangOPTK,
-                lainnya: ""
-              })
-            }
           }
-        } else {
-          arrayAnalisa.push({
-            id: uuidv4(),
-            hasil_analisis_id: data.opsiOlahT,
-            lainnya: ""
-          })
           if(data.opsiDilarangOPTK) {
             arrayAnalisa.push({
               id: uuidv4(),
@@ -159,13 +140,6 @@ export default class PtkSurtug {
               lainnya: ""
             })
           }
-        }
-        if(data.opsiNHI) {
-          arrayAnalisa.push({
-            id: uuidv4(),
-            hasil_analisis_id: data.opsiNHI,
-            lainnya: (data.opsiNHI === '43' ? data.opsiNHILainnya : ""),
-          })
         }
         let datasend = {
             'id': data.idDok21 == '' ? uuid : data.idDok21,
