@@ -72,8 +72,13 @@ function DocKH2() {
         tglDokumen: "",
     })
 
-    function listUptNew() {
-        const dataUpt = UptNew.filter((element) => element.id !== 1 & element.id !== 77 & element.id !== 78)
+    function listUptNew(id) {
+        let dataUpt
+        if(id) {
+            dataUpt = UptNew.filter((element) => element.id == id)
+        } else {
+            dataUpt = UptNew.filter((element) => element.id != 1 & element.id != 77 & element.id != 78)
+        }
         
         var arrayUpt = dataUpt.map(item => {
             return {
@@ -175,8 +180,8 @@ function DocKH2() {
 
     const onSubmit = (dataSubmit) => {
         setOnLoad(true)
-        const dataCekKom = data.listKomoditas?.filter(item => item.volumeP8 == null || item.nettoP8 == null)
-        if(dataCekKom.length == 0) {
+        const dataCekKom = data.listKomoditas?.filter(item => item.volumeP8 != null || item.nettoP8 != null)
+        if(dataCekKom.length > 0) {
             const response = modelPelepasan.eksporDokelProdukHewan(dataSubmit);
             response
             .then((response) => {
@@ -431,6 +436,7 @@ function DocKH2() {
             const resPelId = modelPelepasan.getById(base64_decode(ptkNomor[1]), "H");
             resPelId
             .then((response) => {
+                console.log(response)
                 if(response.data) {
                     if(typeof response.data != "string") {
                         if(response.data.status == 200) {
@@ -447,6 +453,8 @@ function DocKH2() {
                             setValue("m3", response.data.data.m3 !== null ? response.data.data.m3.toString() : "")
                             setValue("m4", response.data.data.m_lain !== null ? "1" : "")
                             setValue("m4Lain", response.data.data.m_lain)
+                            setValue("uptTujuan", response.data.data.upt_tujuan_id)
+                            setValue("uptTujuanView", listUptNew(response.data.data.upt_tujuan_id)[0].label)
                             setValue("p1", response.data.data.p_teknis)
                             setValue("p2", response.data.data.p_lab)
                             setValue("p3", response.data.data.p_lain)
@@ -634,6 +642,8 @@ function DocKH2() {
                             setValue("m3", response.data.data.m3 !== null ? response.data.data.m3.toString() : "")
                             setValue("m4", response.data.data.m_lain !== null ? "1" : "")
                             setValue("m4Lain", response.data.data.m_lain)
+                            setValue("uptTujuan", response.data.data.upt_tujuan_id)
+                            setValue("uptTujuanView", listUptNew(response.data.data.upt_tujuan_id)[0].label)
                             setValue("p1", response.data.data.p_teknis)
                             setValue("p2", response.data.data.p_lab)
                             setValue("p3", response.data.data.p_lain)
@@ -929,8 +939,8 @@ function DocKH2() {
                                                             name={"uptTujuan"}
                                                             className="form-control form-control-sm"
                                                             rules={{ required: (data.listPtk?.jenis_permohonan == "DK" ? "Mohon pilih UPT Tujuan." : false)}}
-                                                            render={({ field: {value, ...field } }) => (
-                                                                <Select styles={customStyles} value={value ? {id: cekWatch.uptTujuan, label: cekWatch.uptTujuanView} : ""} onChange={(e) => setValue("uptTujuan", e.value) & setValue("uptTujuanView", e.label)} placeholder={"Pilih upt tujuan.."} {...field} options={listUptNew()} />
+                                                            render={({ field: {value, onChange, ...field } }) => (
+                                                                <Select styles={customStyles} value={{id: cekWatch.uptTujuan, label: cekWatch.uptTujuanView}} onChange={(e) => setValue("uptTujuan", e.value) & setValue("uptTujuanView", e.label)} placeholder={"Pilih upt tujuan.."} {...field} options={listUptNew()} />
                                                             )}
                                                         />
                                                         {errors.uptTujuan && <small className="text-danger">{errors.uptTujuan.message}</small>}
@@ -958,7 +968,7 @@ function DocKH2() {
                                             <span className='text-danger'>{loadKomoditiPesan}</span>
                                             </h5>
                                             <div className='col-md-12 mb-3'>
-                                                <div className="table-responsive text-nowrap" style={{height: (data.listKomoditas?.length > 8 ? "300px" : "")}}>
+                                                <div className="table-responsive text-wrap" style={{height: (data.listKomoditas?.length > 8 ? "300px" : "")}}>
                                                     <table className="table table-sm table-bordered table-hover table-striped dataTable">
                                                         <thead>
                                                             <tr>
@@ -971,12 +981,20 @@ function DocKH2() {
                                                                 <th>Satuan</th>
                                                                 <th>Jumlah</th>
                                                                 <th>Satuan</th>
+                                                                {Cookies.get("jenisMp") == "1" ? 
+                                                                <>
                                                                 <th>Jantan</th>
-                                                                <th>Betina</th>
+                                                                <th>Betina</th> 
+                                                                </>
+                                                                : ""}
                                                                 <th>Volume P8</th>
                                                                 <th>Netto P8</th>
+                                                                {Cookies.get("jenisMp") == "1" ? 
+                                                                <>
                                                                 <th>Jantan P8</th>
-                                                                <th>Betina P8</th>
+                                                                <th>Betina P8</th> 
+                                                                </>
+                                                                : ""}
                                                                 <th>Act</th>
                                                             </tr>
                                                         </thead>
@@ -992,12 +1010,20 @@ function DocKH2() {
                                                                             <td>{data.sat_netto}</td>
                                                                             <td className='text-end'>{data.volume_lain?.toLocaleString()}</td>
                                                                             <td>{data.sat_lain}</td>
-                                                                            <td className='text-end'>{data.jantan?.toLocaleString()}</td>
-                                                                            <td className='text-end'>{data.betina?.toLocaleString()}</td>
+                                                                            {Cookies.get("jenisMp") == 1 ? 
+                                                                            <>
+                                                                            <td>{data.jantan}</td>
+                                                                            <td>{data.betina}</td> 
+                                                                            </>
+                                                                            : ""}
                                                                             <td className='text-end'>{data.volumeP8?.toLocaleString()}</td>
                                                                             <td className='text-end'>{data.nettoP8?.toLocaleString()}</td>
-                                                                            <td className='text-end'>{data.jantanP8?.toLocaleString()}</td>
-                                                                            <td className='text-end'>{data.betinaP8?.toLocaleString()}</td>
+                                                                            {Cookies.get("jenisMp") == 1 ? 
+                                                                            <>
+                                                                            <td>{data.jantanP8}</td>
+                                                                            <td>{data.betinaP8}</td> 
+                                                                            </>
+                                                                            : ""}
                                                                             <td>
                                                                                 <button type="button" className="btn btn-default dropdown-item" onClick={() => handleEditKomoditas(index)} data-bs-toggle="modal" data-bs-target="#modKomoditas"><i className="fa-solid fa-pen-to-square me-1"></i> Edit</button>
                                                                             </td>

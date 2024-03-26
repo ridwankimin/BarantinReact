@@ -15,7 +15,14 @@ function datenow() {
 }
 
 function DataMasuk() {
-  let [tabel, setTabel] = useState({})
+  let [tabel, setTabel] = useState({
+    ptk: {
+      dFrom: datenow(),
+      dTo: datenow(),
+      jenisKarantina: "",
+      search: "AJU"
+    }
+  })
 
   const {
     register: registerPtk,

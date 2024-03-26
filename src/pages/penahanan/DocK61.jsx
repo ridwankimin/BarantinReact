@@ -62,11 +62,12 @@ function DocK61() {
 
     const cekWatch = watch()
 
-    const dataCekKom = data.listKomoditas?.filter(item => item.volumeP6 == null || item.nettoP6 == null)
-    const dataCekKomJanBen = data.listKomoditas?.filter(item => (item.jantan != null && item.jantanP6 == null) || (item.betina != null && item.betinaP6 == null))
     function onSubmit(dataSubmit) {
         setOnLoad(true)
-        if(dataCekKom.length == 0 && dataCekKomJanBen.length == 0) {
+        const dataCekKom = data.listKomoditas?.filter(item => item.volumeP5 != null || item.nettoP5 != null)
+        // const dataCekKomJanBen = data.listKomoditas?.filter(item => (item.jantan != null && item.jantanP5 == null) || (item.betina != null && item.betinaP5 == null))
+        // if(dataCekKom.length == 0 && dataCekKomJanBen.length == 0) {
+        if(dataCekKom.length > 0) {
             const response = modelPenahanan.save61(dataSubmit);
             response
             .then((response) => {
@@ -1068,7 +1069,7 @@ function DocK61() {
                                     </div>
                                     <div className="col-sm-6 mb-3">
                                         <div className='col-form-label mb-0'>Penandatangan</div>
-                                        <select className={errors.ttdPutusan == '' ? 'form-select form-select-sm is-invalid' : 'form-select form-select-sm'} name="ttdPutusan" id="ttdPutusan" {...register("ttdPutusan", { required: "Mohon pilih penandatangan."})}>
+                                        <select className={errors.ttdPutusan ? 'form-select form-select-sm is-invalid' : 'form-select form-select-sm'} name="ttdPutusan" id="ttdPutusan" {...register("ttdPutusan", { required: "Mohon pilih penandatangan."})}>
                                             <option value="">--</option>
                                             {data.petugas?.map((item, index) => (
                                                 <option value={item.petugas_id} key={index}>{item.nama + " - " + item.nip}</option>

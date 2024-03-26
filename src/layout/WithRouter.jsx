@@ -43,9 +43,10 @@ function WithRouter() {
           <Route path={"/k81"} element={<Wrapper page="/k81" />} />
           <Route path={"/k82"} element={<Wrapper page="/k82" />} />
           <Route path={"/k91"} element={<Wrapper page="/k91" />} />
-          <Route path={"/k92h"} element={<Wrapper page="/k92h" />} />
+          <Route path={"/k92"} element={<Wrapper page="/k92" />} />
+          {/* <Route path={"/k92h"} element={<Wrapper page="/k92h" />} />
           <Route path={"/k92i"} element={<Wrapper page="/k92i" />} />
-          <Route path={"/k92t"} element={<Wrapper page="/k92t" />} />
+          <Route path={"/k92t"} element={<Wrapper page="/k92t" />} /> */}
           <Route path={"/k93"} element={<Wrapper page="/k93" />} />
           <Route path={"/k94"} element={<Wrapper page="/k94" />} />
           <Route path={"/kh1"} element={<Wrapper page="/kh1" />} />

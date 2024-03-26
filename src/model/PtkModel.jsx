@@ -583,7 +583,6 @@ export default class PtkModel {
         },
         data: datasend
       };
-      console.log(JSON.stringify(config))
       
       return axios.request(config)
     }
@@ -596,6 +595,28 @@ export default class PtkModel {
         headers: { 
           'Content-Type': 'application/json', 
         }
+      };
+      
+      return axios.request(config)
+    }
+    
+    samplingKontainer(id, noSp2mp, idPtk, dataKontainer) {
+      let datasend = {
+        id: id,
+        sp2mp: noSp2mp,
+        ptk_id: idPtk,
+        sampling: dataKontainer
+      };
+      // 
+      let config = {
+        method: 'post',
+        maxBodyLength: Infinity,
+        url: url + 'ptk-kont/sampling',
+        headers: { 
+          'Content-Type': 'application/json', 
+          // 'Content-Type': 'multipart/form-data'
+        },
+        data: datasend
       };
       
       return axios.request(config)

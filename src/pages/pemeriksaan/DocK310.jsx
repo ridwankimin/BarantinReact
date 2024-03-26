@@ -61,13 +61,20 @@ function range(size, startAt = 0) {
 
 function randomBetween(min, max) {
     return Math.floor(Math.random() * (max - min + 1)) + min;
-  }
+}
+
+function shuffle(arr) {
+   return arr
+        .map((a) => ({ sort: Math.random(), value: a }))
+        .sort((a, b) => a.sort - b.sort)
+        .map((a) => a.value)
+}
 
 function randomKey(jmlKont,rskLevel,jnsMP) {
     var jmlSampling = 0
     if(Cookies.get("jenisKarantina") == "T") {
         jmlKont = parseInt(jmlKont)
-        if (jnsMP == "PSAT") {
+        if (jnsMP == "1") {
             if (jmlKont > 0)  jmlSampling = jmlKont
             if (jmlKont > 5) jmlSampling = 5
             if (jmlKont > 10) jmlSampling = 5
@@ -75,7 +82,7 @@ function randomKey(jmlKont,rskLevel,jnsMP) {
             if (jmlKont > 50) jmlSampling = 10
             if (jmlKont > 100) jmlSampling = Math.ceil(sqrt(jmlKont))
             
-        } else if (jnsMP == "media pembawa") {
+        } else if (jnsMP == "0") {
             if (rskLevel == "L") {
                 if (jmlKont > 0) jmlSampling = jmlKont
                 if (jmlKont > 1) jmlSampling = 2
@@ -130,7 +137,9 @@ function randomKey(jmlKont,rskLevel,jnsMP) {
         if (jmlKont > 5) jmlSampling =  Math.ceil(jmlKont / 5)
     }
 
-    const arrayRan = Array.from({length: jmlKont}, () => randomBetween(1, jmlSampling))
+    const arrayCreate = Array.from(Array(jmlKont).keys())
+    const samplingMin = shuffle(arrayCreate)
+    const arrayRan = samplingMin.slice(0, jmlSampling)
 
     return arrayRan
 }
@@ -144,7 +153,20 @@ function DocK310() {
         tglDokumen: "",
     })
     let [onLoad, setOnLoad] = useState(false)
-    let [listKontainer, setListKontainer] = useState([])
+    let [listKontainer, setListKontainer] = useState([ {
+        chkstat: "",
+        id: "",
+        nomor: "",
+        ptk_id: "",
+        segel: "",
+        stuff: "",
+        stuff_kontainer_id: "",
+        tipe: "",
+        tipe_kontainer_id: "",
+        ukuran: "",
+        ukuran_kontainer_id: "",
+    }
+    ])
     let [kontainerRandom, setKontainerRandom] = useState([])
     let [riskLevel, setRiskLevel] = useState(["L", "M", "H"])
 
@@ -156,7 +178,8 @@ function DocK310() {
         watch,
         formState: { errors },
     } = useForm({
-        noDok310: ""
+        noDok310: "",
+        riskLevel: "M"
     });
 
     const dataWatch = watch()
@@ -170,8 +193,27 @@ function DocK310() {
                 console.log(response)
             }
             if(response.data) {
+                if(import.meta.env.VITE_REACT_APP_BE_ENV == "DEV") {
+                    console.log(response)
+                }
                 setOnLoad(false)
                 if(response.data.status == 201) {
+                    const responseSamp = modelPemohon.samplingKontainer(response.data.data.id, response.data.data.nomor, data.noIdPtk, listKontainer)
+                    responseSamp
+                    .then((response) => {
+                        if(import.meta.env.VITE_REACT_APP_BE_ENV == "DEV") {
+                            console.log(response)
+                        }
+                        if(response.data.status == 201) {
+                            console.log("kont berhasil")
+                        }
+                    })
+                    .catch((error) => {
+                        if(import.meta.env.VITE_REACT_APP_BE_ENV == "DEV") {
+                            console.log(error)
+                        }
+                    })
+
                     //start save history
                     const resHsy = log.pushHistory(dataSubmit.idPtk, "P1a", "K-3.10", (dataSubmit.idDok310 ? 'UPDATE' : 'NEW'));
                     resHsy
@@ -186,7 +228,8 @@ function DocK310() {
                         if(import.meta.env.VITE_REACT_APP_BE_ENV == "DEV") {
                             console.log(error)
                         }
-                    });
+                    })
+
                     //end save history
                     Swal.fire({
                         icon: "success",
@@ -212,7 +255,7 @@ function DocK310() {
             Swal.fire({
                 icon: "error",
                 title: "Error!",
-                text: error.response.data.message
+                text: error.response?.data.message
             })
         });
     }
@@ -244,23 +287,24 @@ function DocK310() {
                         
                         if(filterNullRisk.length == 0) {
                             setRiskLevel(riskLevel)
-                        } else if(filterNullRisk.length > 1) {
+                        } else if(filterNullRisk.length == 1) {
                             setRiskLevel([filterNullRisk[0].level_risiko])
-                            if(Cookies.get("jenisKarantina") == "T") {
-                                const groupedMP = response.data.data.ptk_komoditi?.reduce(
-                                    (entryMap, e) => entryMap.set(e.komoditas_id, [...entryMap.get(e.komoditas_id)||[], e]),
-                                    new Map()
-                                );
-                                console.log("groupedMP")
-                                console.log(groupedMP)
-                            }
-                            randomKey(response.data.data.ptk_kontainer.length,filterNullRisk[0].level_risiko,ListPsat)
+                            const arrRandomKey = randomKey(response.data.data.ptk_kontainer.length,filterNullRisk[0].level_risiko,"0") // "0": Non PSAT || "1": PSAT
+                            setKontainerRandom(arrRandomKey)
+                            response.data.data.ptk_kontainer?.map((data,index) => (
+                                arrRandomKey.includes(index) ? data.chkstat = "Y" : data.chkstat = "N"
+                            ))
                         } else {
                             const groupedMap = filterNullRisk.reduce(
                                 (entryMap, e) => entryMap.set(e.level_risiko, [...entryMap.get(e.level_risiko)||[], e]),
                                 new Map()
-                                );
+                            );
                             setValue("riskLevel", groupedMap)
+                            const arrRandomKey = randomKey(response.data.data.ptk_kontainer.length,"M","0")  // "0": Non PSAT || "1": PSAT
+                            setKontainerRandom(arrRandomKey)
+                            response.data.data.ptk_kontainer?.map((data,index) => (
+                                arrRandomKey.includes(index) ? data.chkstat = "Y" : data.chkstat = "N"
+                            ))
                         }
                         setData(values => ({...values,
                             errorPTK: "",
@@ -297,16 +341,22 @@ function DocK310() {
             const response310 = modelPeriksa.getPnSP2MP(base64_decode(ptkNomor[1]));
             response310
             .then((response) => {
+                console.log("sp2mp")
+                console.log(response)
                 if(typeof response.data != "string") {
                     if(response.data.status == 200) {
                         setData(values => ({...values,
                             errorSp2mp: "",
                         }))
-                        // setValue("idPtk", response.data.data.id)
-                        // setValue("noDok31", response.data.data.nomor)
-                        // setValue("tglDok31", response.data.data.tanggal)
-                        // setValue("putusanBongkar", response.data.data.setuju_bongkar_muat)
-                        // setValue("ttdPutusan", response.data.data.user_ttd_id?.toString())
+                        setValue("idDok310", response.data.data.id)
+                        setValue("noDok310", response.data.data.nomor)
+                        setValue("tglDok310", response.data.data.tanggal)
+                        setValue("gudangId", response.data.data.gudang_id)
+                        setValue("riskLevel", response.data.data.risk_level)
+                        setValue("agen", response.data.data.agen)
+                        setValue("tglDatang", response.data.data.tgl_tiba)
+                        setValue("diterbitkan", response.data.data.diterbitkan_di)
+                        setValue("ttdPutusan", response.data.data.user_ttd_id?.toString())
                     }
                 } else {
                     setData(values => ({...values,
@@ -316,6 +366,7 @@ function DocK310() {
             })
             .catch((error) => {
                 if(import.meta.env.VITE_REACT_APP_BE_ENV == "DEV") {
+                    console.log("sp2mp")
                     console.log(error)
                 }
                 if(error.response.data.status == 404) {
@@ -331,10 +382,117 @@ function DocK310() {
         }
     },[idPtk, setValue])
 
-    console.log(listKontainer)
-
     function refreshData() {
+        if(data.errorPTK) {
+            const response = modelPemohon.getPtkId(data.noIdPtk)
+            response
+            .then((response) => {
+                if(import.meta.env.VITE_REACT_APP_BE_ENV == "DEV") {
+                    console.log("response ptk")
+                    console.log(response)
+                }
+                if(typeof response.data != "string") {
+                    if(response.data.status == 200) {
+                        const filterNullRisk = response.data.data.ptk_komoditi?.filter(item => item.level_risiko != null)
+                        // let levelRiskOk = []
+                        
+                        if(filterNullRisk.length == 0) {
+                            setRiskLevel(riskLevel)
+                        } else if(filterNullRisk.length == 1) {
+                            setRiskLevel([filterNullRisk[0].level_risiko])
+                            const arrRandomKey = randomKey(response.data.data.ptk_kontainer.length,filterNullRisk[0].level_risiko,"0") // "0": Non PSAT || "1": PSAT
+                            setKontainerRandom(arrRandomKey)
+                            response.data.data.ptk_kontainer?.map((data,index) => (
+                                arrRandomKey.includes(index) ? data.chkstat = "Y" : data.chkstat = "N"
+                            ))
+                        } else {
+                            const groupedMap = filterNullRisk.reduce(
+                                (entryMap, e) => entryMap.set(e.level_risiko, [...entryMap.get(e.level_risiko)||[], e]),
+                                new Map()
+                            );
+                            setValue("riskLevel", groupedMap)
+                            const arrRandomKey = randomKey(response.data.data.ptk_kontainer.length,"M","0")  // "0": Non PSAT || "1": PSAT
+                            setKontainerRandom(arrRandomKey)
+                            response.data.data.ptk_kontainer?.map((data,index) => (
+                                arrRandomKey.includes(index) ? data.chkstat = "Y" : data.chkstat = "N"
+                            ))
+                        }
+                        setData(values => ({...values,
+                            errorPTK: "",
+                            listPtk: response.data.data.ptk,
+                            listKomoditas: response.data.data.ptk_komoditi,
+                            // listKontainer: response.data.data.ptk_kontainer,
+                            listDokumen: response.data.data.ptk_dokumen
+                        }));
+                        setListKontainer(response.data.data.ptk_kontainer)
+                        setValue("idPtk", data.noIdPtk)
+                        setValue("noDokumen", data.noDokumen)
+                        setValue("tglDatang", response.data.data.ptk?.tanggal_rencana_tiba_terakhir)
+                        setValue("gudangId", response.data.data.ptk?.gudang_id)
+                    } else {
+                        setData(values => ({...values,
+                            errorPTK: "Gagal load data PTK",
+                        }))
+                    }
+                } else {
+                    setData(values => ({...values,
+                        errorPTK: "Gagal load data PTK",
+                    }))
+                }
+            })
+            .catch((error) => {
+                if(import.meta.env.VITE_REACT_APP_BE_ENV == "DEV") {
+                    console.log(error)
+                }
+                setData(values => ({...values,
+                    errorPTK: "Gagal load data PTK",
+                }))
+            });
+        }
 
+        if(data.errorSp2mp) {
+            const response310 = modelPeriksa.getPnSP2MP(data.noIdPtk);
+            response310
+            .then((response) => {
+                console.log("sp2mp")
+                console.log(response)
+                if(typeof response.data != "string") {
+                    if(response.data.status == 200) {
+                        setData(values => ({...values,
+                            errorSp2mp: "",
+                        }))
+                        setValue("idDok310", response.data.data.id)
+                        setValue("noDok310", response.data.data.nomor)
+                        setValue("tglDok310", response.data.data.tanggal)
+                        setValue("gudangId", response.data.data.gudang_id)
+                        setValue("riskLevel", response.data.data.risk_level)
+                        setValue("agen", response.data.data.agen)
+                        setValue("tglDatang", response.data.data.tgl_tiba)
+                        setValue("diterbitkan", response.data.data.diterbitkan_di)
+                        setValue("ttdPutusan", response.data.data.user_ttd_id?.toString())
+                    }
+                } else {
+                    setData(values => ({...values,
+                        errorSp2mp: "Gagal load data history SP2MP",
+                    }))
+                }
+            })
+            .catch((error) => {
+                if(import.meta.env.VITE_REACT_APP_BE_ENV == "DEV") {
+                    console.log("sp2mp")
+                    console.log(error)
+                }
+                if(error.response.data.status == 404) {
+                    setData(values => ({...values,
+                        errorSp2mp: ""
+                    }));
+                } else {
+                    setData(values => ({...values,
+                        errorSp2mp: "Gagal load data history SP2MP"
+                    }));
+                }
+            });
+        }
     }
 
   return (
@@ -560,16 +718,64 @@ function DocK310() {
                                                             <div className="row">
                                                                 <label className="col-sm-4 col-form-label" htmlFor="agen">Level Resiko MP</label>
                                                                 <div className="col-sm-4">
-                                                                    <select className='form-select form-select-sm' name="riskLevel" id="riskLevel" value={riskLevel.length == 1 ? riskLevel[0] : ""} {...register("riskLevel", {required: "Mohon pilih level risiko"})}>
+                                                                    <select className={errors.riskLevel ? 'form-select form-select-sm is-invalid' : 'form-select form-select-sm'} name="riskLevel" id="riskLevel" {...register("riskLevel", {required: "Mohon pilih level risiko"})}>
                                                                         <option value="">--</option>
-                                                                        {riskLevel.map((data,index) => (
-                                                                            <option value={data} key={index}>{data == "L" ? "Rendah" : (data == "M" ? "Sedang" : (data == "H" ? "Tinggi" : ""))}</option>
+                                                                        {riskLevel.map((item,index) => (
+                                                                            <option value={item} key={index}>{item == "L" ? "Rendah" : (item == "M" ? "Sedang" : (item == "H" ? "Tinggi" : ""))}</option>
                                                                         ))}
                                                                     </select>
                                                                     {errors.riskLevel && <small className="text-danger">{errors.riskLevel.message}</small>}
                                                                 </div>
                                                             </div>
                                                         </div>
+                                                    </div>
+                                                    <hr />
+                                                    <h6 className='mb-1'><b>Detil Komoditas</b></h6>
+                                                    <div className="text-wrap" style={{height: (data.listKomoditas?.length > 8 ? "300px" : "")}}>
+                                                    <table className="table table-sm table-bordered table-hover table-striped dataTable">
+                                                        <thead style={{backgroundColor: '#123138'}}>
+                                                            <tr>
+                                                                <th className='text-lightest'>No</th>
+                                                                <th className='text-lightest'>Kode HS</th>
+                                                                <th className='text-lightest'>Klasifikasi</th>
+                                                                <th className='text-lightest'>Komoditas Umum</th>
+                                                                <th className='text-lightest'>Komoditas En/Latin</th>
+                                                                <th className='text-lightest'>Netto</th>
+                                                                <th className='text-lightest'>Satuan</th>
+                                                                <th className='text-lightest'>Bruto</th>
+                                                                <th className='text-lightest'>Satuan</th>
+                                                                <th className='text-lightest'>Jumlah</th>
+                                                                <th className='text-lightest'>Satuan</th>
+                                                                <th className='text-lightest'>Jantan</th>
+                                                                <th className='text-lightest'>Betina</th>
+                                                                <th className='text-lightest'>Harga</th>
+                                                                <th className='text-lightest'>Mata Uang</th>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody>
+                                                            {data.listKomoditas ? (data.listKomoditas?.map((data, index) => (
+                                                                        <tr key={index}>
+                                                                            <td>{index + 1}</td>
+                                                                            <td>{data.kode_hs}</td>
+                                                                            <td>{data.klasifikasi}</td>
+                                                                            <td>{data.nama_umum_tercetak}</td>
+                                                                            <td>{data.nama_latin_tercetak}</td>
+                                                                            <td className='text-end'>{data.volume_netto?.toLocaleString()}</td>
+                                                                            <td>{data.sat_netto}</td>
+                                                                            <td className='text-end'>{data.volume_bruto?.toLocaleString()}</td>
+                                                                            <td>{data.sat_bruto}</td>
+                                                                            <td className='text-end'>{data.volume_lain?.toLocaleString()}</td>
+                                                                            <td>{data.sat_lain}</td>
+                                                                            <td className='text-end'>{data.jantan?.toLocaleString()}</td>
+                                                                            <td className='text-end'>{data.betina?.toLocaleString()}</td>
+                                                                            <td className='text-end'>{data.harga?.toLocaleString()}</td>
+                                                                            <td>{data.mata_uang}</td>
+                                                                        </tr>
+                                                                    ))
+                                                                ) : null
+                                                            }
+                                                        </tbody>
+                                                    </table>
                                                     </div>
                                                     <hr />
                                                     <h6 className='mb-1'><b>Lampiran dokumen</b></h6>
@@ -602,9 +808,12 @@ function DocK310() {
                                                             {/* <div className="col-md-8">
                                                             </div>
                                                         </div>  */}
-                                                            <button className='btn btn-sm btn-outline-dark text-black'>Generate Random Sampling</button>
                                                     </span>
-                                                    <h6 className='mb-1'><b>List Kontainer : {listKontainer?.length + " kontainer"}</b></h6>
+                                                    <h6 className='mb-1'><b>List Kontainer : {listKontainer?.length + " kontainer"} </b>
+                                                        <span className='float-end'>
+                                                            (Minimal Sampling: {kontainerRandom.length} kontainer) <i className="fa-solid fa-arrow-right-long"></i>  Dipilih: <span className={listKontainer.filter((item) => item.chkstat == "Y").length < kontainerRandom.length ? 'text-danger' : 'text-secondary'}>{listKontainer.filter((item) => item.chkstat == "Y").length} kontainer</span>
+                                                        </span>
+                                                    </h6>
                                                     <table className="table table-sm table-bordered table-hover table-striped dataTable">
                                                         <thead style={{backgroundColor: '#123138' }}>
                                                             <tr>
@@ -629,11 +838,11 @@ function DocK310() {
                                                                         <td>{data.segel}</td>
                                                                         <td>
                                                                             <div className="form-check form-check-inline">
-                                                                                <input autoComplete="off" className="form-check-input" type="radio" onChange={(e) => {data.chkstat = e.target.value; setListKontainer([...listKontainer])}} name={"chkstat" + index} id={"chkstatYa" + index} value="Y" />
+                                                                                <input autoComplete="off" className="form-check-input" checked={data.chkstat == "Y" ? true : false} type="radio" onChange={(e) => {data.chkstat = e.target.value; setListKontainer([...listKontainer])}} name={"chkstat" + index} id={"chkstatYa" + index} value="Y" />
                                                                                 <label className="form-check-label" htmlFor={"chkstatYa" + index}>Ya</label>
                                                                             </div>
                                                                             <div className="form-check form-check-inline">
-                                                                                <input autoComplete="off" className="form-check-input" type="radio" onChange={(e) => {data.chkstat = e.target.value; setListKontainer([...listKontainer])}} name={"chkstat" + index} id={"chkstatTidak" + index} value="N" />
+                                                                                <input autoComplete="off" className="form-check-input" checked={data.chkstat == "N" ? true : false} type="radio" onChange={(e) => {data.chkstat = e.target.value; setListKontainer([...listKontainer])}} name={"chkstat" + index} id={"chkstatTidak" + index} value="N" />
                                                                                 <label className="form-check-label" htmlFor={"chkstatTidak" + index}>Tidak</label>
                                                                             </div>
                                                                         </td>

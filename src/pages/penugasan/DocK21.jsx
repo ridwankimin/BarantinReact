@@ -17,7 +17,7 @@ const modelSurtug = new PtkSurtug()
 const modelPemohon = new PtkModel()
 const modelHistory = new PtkHistory()
 
-function masterPegawai() {
+function masterPegawai(id) {
     var arrayPegawai = PegawaiJson.map(item => {
         return {
             value: item.id,
@@ -63,6 +63,10 @@ function DocK21() {
     const jenisKar = Cookies.get("jenisKarantina")
     let [dataPtk, setDataPtk] = useState([])
     let [onLoad,setOnload] = useState(false)
+    let [data,setData] = useState({
+        noDokumen: "",
+        tglDokumen: ""
+    })
 
     const {
         register,
@@ -75,11 +79,16 @@ function DocK21() {
 
     const dataWatch = watch()
 
+    const onInvalid = (errors) => import.meta.env.VITE_REACT_APP_BE_ENV == "DEV" ? console.log(errors) : null
+
     const onSubmit = (data) => {
         setOnload(true)
         const response = modelSurtug.ptkAnalisis(data);
         response
         .then((response) => {
+            if(import.meta.env.VITE_REACT_APP_BE_ENV == "DEV") {
+                console.log(response)
+            }
             if(response.data) {
                 if(response.data.status == 201) {
                     setOnload(false)
@@ -132,10 +141,7 @@ function DocK21() {
         });
     }
 
-    let [data,setData] = useState({
-        noDokumen: "",
-        tglDokumen: ""
-    })
+    
     useEffect(() => {
         if(idPtk) {
             setValue("tglDok21", (new Date()).toLocaleString('en-CA', { hourCycle: 'h24' }).replace(',', '').slice(0,16))
@@ -204,6 +210,9 @@ function DocK21() {
             const response21 = modelSurtug.getAnalisByPtk(base64_decode(ptkNomor[1]));
             response21
             .then((response) => {
+                if(import.meta.env.VITE_REACT_APP_BE_ENV == "DEV") {
+                    console.log(response)
+                }
                 if(response.data) {
                     if(typeof response.data != "string") {
                         if(response.data.status == 200) {
@@ -213,11 +222,13 @@ function DocK21() {
                             setValue("idDok21", response.data.data[0].id)
                             setValue("noDok21", response.data.data[0].nomor)
                             setValue("tglDok21", response.data.data[0].tanggal)
+                            setValue("golonganMp", response.data.data[0].is_psat)
+                            setValue("tingkatRisiko", response.data.data[0].level_risiko)
                             setValue("rekomAnalis", response.data.data[0].rekomendasi_id)
                             setValue("ttdAnalis", response.data.data[0].user_ttd_id)
                             setValue("catatan", response.data.data[0].catatan)
                             const arrayOlah = response.data.data?.map(item => {
-                                return item.hasil_analisis_id.toString()
+                                return item.hasil_analisis_id?.toString()
                             })
                             const arrayOpsi = arrayOlah.filter((element) => element != "2" && element != "3" && element != "13" && element != "14" && element != "24" && element != "34" && element != "35" && element != "32" && element != "33" && element != "23" && element != "37" && element != "38" && element != "39" && element != "40" && element != "41" && element != "42" && element != "43")
                             
@@ -226,13 +237,13 @@ function DocK21() {
                                 setValue("opsiKH", arrayOpsi)
                                 
                                 const arrayOlahText = response.data.data?.filter((element) => element.hasil_analisis_id == 11)
-                                setValue("opsiKHLainnya", arrayOlahText[0].lainnya)
+                                setValue("opsiKHLainnya", arrayOlahText[0]?.lainnya)
                             } else if(response.data.data[0].karantina == "I"){
                                 setValue("opsiOlahI", (arrayOlah.indexOf('13') >= 0 ? "13" : (arrayOlah.indexOf('14') >= 0 ? "14" : "")))
                                 setValue("opsiKI", arrayOpsi)
                                 
                                 const arrayOlahText = response.data.data?.filter((element) => element.hasil_analisis_id == 22)
-                                setValue("opsiKILainnya", arrayOlahText[0].lainnya)
+                                setValue("opsiKILainnya", arrayOlahText[0]?.lainnya)
                             } else if(response.data.data[0].karantina == "T"){
                                 setValue("opsiOlahT", (arrayOlah.indexOf('24') >= 0 ? "24" : (arrayOlah.indexOf('34') >= 0 ? "34" : (arrayOlah.indexOf('35') >= 0 ? "35" : ""))))
                                 setValue("opsiKT", arrayOpsi)
@@ -243,7 +254,7 @@ function DocK21() {
                             }
                             
                             const arrayOlahText = response.data.data?.filter((element) => element.hasil_analisis_id == 37 || element.hasil_analisis_id == 38 || element.hasil_analisis_id == 39 || element.hasil_analisis_id == 40 || element.hasil_analisis_id == 41 || element.hasil_analisis_id == 42 || element.hasil_analisis_id == 43)
-                            setValue("opsiNHI", arrayOlahText[0]?.hasil_analisis_id.toString())
+                            setValue("opsiNHI", arrayOlahText[0]?.hasil_analisis_id?.toString())
                             setValue("opsiNHILainnya", arrayOlahText[0]?.lainnya)
                         } else if(response.data.status == 404) {
                             setData(values => ({...values,
@@ -337,6 +348,8 @@ function DocK21() {
                             setValue("noDok21", response.data.data[0].nomor)
                             setValue("tglDok21", response.data.data[0].tanggal)
                             setValue("rekomAnalis", response.data.data[0].rekomendasi_id)
+                            setValue("golonganMp", response.data.data[0].is_psat)
+                            setValue("tingkatRisiko", response.data.data[0].level_risiko)
                             setValue("ttdAnalis", response.data.data[0].user_ttd_id)
                             setValue("catatan", response.data.data[0].catatan)
                             const arrayOlah = response.data.data?.map(item => {
@@ -349,20 +362,20 @@ function DocK21() {
                                 setValue("opsiKH", arrayOpsi)
                                 
                                 const arrayOlahText = response.data.data?.filter((element) => element.hasil_analisis_id == 11)
-                                setValue("opsiKHLainnya", arrayOlahText[0].lainnya)
+                                setValue("opsiKHLainnya", arrayOlahText[0]?.lainnya)
                             } else if(response.data.data[0].karantina == "I"){
                                 setValue("opsiOlahI", (arrayOlah.indexOf('13') >= 0 ? "13" : (arrayOlah.indexOf('14') >= 0 ? "14" : "")))
                                 setValue("opsiKI", arrayOpsi)
                                 
                                 const arrayOlahText = response.data.data?.filter((element) => element.hasil_analisis_id == 22)
-                                setValue("opsiKILainnya", arrayOlahText[0].lainnya)
+                                setValue("opsiKILainnya", arrayOlahText[0]?.lainnya)
                             } else if(response.data.data[0].karantina == "T"){
                                 setValue("opsiOlahT", (arrayOlah.indexOf('24') >= 0 ? "24" : (arrayOlah.indexOf('34') >= 0 ? "34" : (arrayOlah.indexOf('35') >= 0 ? "35" : ""))))
                                 setValue("opsiKT", arrayOpsi)
                                 setValue("opsiDilarangOPTK", (arrayOlah.indexOf('32') >= 0 ? "32" : (arrayOlah.indexOf('33') >= 0 ? "33" : (arrayOlah.indexOf('23') >= 0 ? "23" : ""))))
                                 
                                 const arrayOlahText = response.data.data?.filter((element) => element.hasil_analisis_id == 36)
-                                setValue("opsiKTLainnya", arrayOlahText[0].lainnya)
+                                setValue("opsiKTLainnya", arrayOlahText[0]?.lainnya)
                             }
                             
                             const arrayOlahText = response.data.data?.filter((element) => element.hasil_analisis_id == 37 || element.hasil_analisis_id == 38 || element.hasil_analisis_id == 39 || element.hasil_analisis_id == 40 || element.hasil_analisis_id == 41 || element.hasil_analisis_id == 42 || element.hasil_analisis_id == 43)
@@ -441,7 +454,7 @@ function DocK21() {
                     </div>
                 </div>
                 <div className="card-body">
-                    <form onSubmit={handleSubmit(onSubmit)}>
+                    <form onSubmit={handleSubmit(onSubmit, onInvalid)}>
                         <input type="hidden" name='idDok21' {...register("idDok21")} />
                         <input type="hidden" name='idPtk' {...register("idPtk")} />
                         <input type="hidden" name='noDokumen' {...register("noDokumen")} />
@@ -471,7 +484,7 @@ function DocK21() {
                                         </h2>
                                         <div id="collapseInfoMP">
                                             <div className="accordion-body">
-                                                <div className="table-responsive text-nowrap" style={{height: (dataPtk.listKomoditas?.length > 8 ? "300px" : "")}}>
+                                                <div className="text-wrap" style={{height: (dataPtk.listKomoditas?.length > 8 ? "300px" : "")}}>
                                                     <table className="table table-sm table-bordered table-hover table-striped dataTable">
                                                         <thead>
                                                             <tr>
@@ -526,7 +539,7 @@ function DocK21() {
                                             <div className="accordion-body">
                                                 <div className="row">
                                                     <div className='col-md-12 mb-3'>
-                                                        <div className="table-responsive text-nowrap" style={{height: (data.listDokumen?.length > 8 ? "300px" : "")}}>
+                                                        <div className="text-wrap" style={{height: (data.listDokumen?.length > 8 ? "300px" : "")}}>
                                                             <table className="table table-sm table-bordered table-hover table-striped dataTable">
                                                                 <thead>
                                                                     <tr>
@@ -569,6 +582,34 @@ function DocK21() {
                                         </h2>
                                         <div id="collapseAnalisa">
                                             <div className="accordion-body">
+                                                <div className='row'>
+                                                    <div className="col-sm-4">
+                                                        <h6 className='mb-1'><b><u>Tingkat Risiko</u></b></h6>
+                                                        <div className="form-check form-check-inline">
+                                                            <label className="form-check-label" htmlFor="tingkatRisikoT">Tinggi</label>
+                                                            <input name="tingkatRisiko" value="H" {...register("tingkatRisiko", {required: "Mohon pilih level risiko"})} className={errors.tingkatRisiko ? "form-check-input is-invalid" : "form-check-input"} type="radio" id="tingkatRisikoT" />
+                                                        </div>
+                                                        <div className="form-check form-check-inline">
+                                                            <label className="form-check-label" htmlFor="tingkatRisikoM">Medium</label>
+                                                            <input name="tingkatRisiko" value="M" {...register("tingkatRisiko")} className={errors.tingkatRisiko ? "form-check-input is-invalid" : "form-check-input"} type="radio" id="tingkatRisikoM" />
+                                                        </div>
+                                                        <div className="form-check form-check-inline mb-3">
+                                                            <label className="form-check-label" htmlFor="tingkatRisikoR">Rendah</label>
+                                                            <input name="tingkatRisiko" value="L" {...register("tingkatRisiko")} className={errors.tingkatRisiko ? "form-check-input is-invalid" : "form-check-input"} type="radio" id="tingkatRisikoR" />
+                                                        </div>
+                                                    </div>
+                                                    <div className="col-sm-4" style={{display: (jenisKar == "T" ? "block" : "none")}}>
+                                                        <h6 className='mb-1'><b><u>Objek Tugas</u></b></h6>
+                                                        <div className="form-check form-check-inline">
+                                                            <label className="form-check-label" htmlFor="golonganMpPSAT">PSAT</label>
+                                                            <input name="golonganMp" value="1" {...register("golonganMp", {required: (jenisKar == "T" ? "Mohon pilih Objek Tugas" : false)})} className={errors.golonganMp ? "form-check-input is-invalid" : "form-check-input"} type="radio" id="golonganMpPSAT" />
+                                                        </div>
+                                                        <div className="form-check form-check-inline">
+                                                            <label className="form-check-label" htmlFor="golonganNonPSAT">Non PSAT</label>
+                                                            <input name="golonganNonPSAT" value="0" {...register("golonganMp")} className={errors.golonganMp ? "form-check-input is-invalid" : "form-check-input"} type="radio" id="golonganNonPSAT" />
+                                                        </div>
+                                                    </div>
+                                                </div>
                                                 <div className="col-md-12" style={{display: (jenisKar == "H" ? "block" : "none")}}>
                                                     <label className="col-form-label" htmlFor="mpHPHK">A. Media Pembawa HPHK</label>
                                                     <div className="row">
@@ -594,7 +635,7 @@ function DocK21() {
                                                             <h6 className='mb-2'><u><b>Kategori Wasdal</b></u></h6>
                                                             <div className="form-check">
                                                                 <label className="form-check-label" htmlFor="opsiKH4">Termasuk Pangan</label>
-                                                                <input name="opsiKH" value="4" {...register("opsiKH", { required: (data.jenisKarantina == "H" ? "Mohon isi analisa minimal 1 pilihan." : false)})} className={errors.opsiKH ? "form-check-input is-invalid" : "form-check-input"} type="checkbox" id="opsiKH4" />
+                                                                <input name="opsiKH" value="4" {...register("opsiKH")} className={errors.opsiKH ? "form-check-input is-invalid" : "form-check-input"} type="checkbox" id="opsiKH4" />
                                                             </div>
                                                             <div className="form-check">
                                                                 <label className="form-check-label" htmlFor="opsiKH5">Termasuk Pakan</label>
@@ -658,7 +699,7 @@ function DocK21() {
                                                             <h6 className='mb-2 mt-2'><u><b>Kategori Wasdal</b></u></h6>
                                                             <div className="form-check">
                                                                 <label className="form-check-label" htmlFor="opsiKI15">Termasuk Pangan</label>
-                                                                <input name="opsiKI" value="15" {...register("opsiKI", { required: (data.jenisKarantina == "I" ? "Mohon isi analisa minimal 1 pilihan." : false)})} className={errors.opsiKI ? "form-check-input is-invalid" : "form-check-input"} type="checkbox" id="opsiKI15" />
+                                                                <input name="opsiKI" value="15" {...register("opsiKI")} className={errors.opsiKI ? "form-check-input is-invalid" : "form-check-input"} type="checkbox" id="opsiKI15" />
                                                             </div>
                                                             <div className="form-check">
                                                                 <label className="form-check-label" htmlFor="opsiKI16">Termasuk Pakan</label>
@@ -720,7 +761,7 @@ function DocK21() {
                                                             <h6 className='mb-2'><u><b>Ketegori Wasdal</b></u></h6>
                                                             <div className="form-check">
                                                                 <label className="form-check-label" htmlFor="opsiKT25">Termasuk Pangan</label>
-                                                                <input name="opsiKT" value="25" {...register("opsiKT", { required: (data.jenisKarantina == "T" ? "Mohon isi analisa minimal 1 pilihan." : false)})} className={errors.opsiKT ? "form-check-input is-invalid" : "form-check-input"} type="checkbox" id="opsiKT25" />
+                                                                <input name="opsiKT" value="25" {...register("opsiKT")} className={errors.opsiKT ? "form-check-input is-invalid" : "form-check-input"} type="checkbox" id="opsiKT25" />
                                                             </div>
                                                             <div className="form-check">
                                                                 <label className="form-check-label" htmlFor="opsiKT26">Termasuk Pakan</label>

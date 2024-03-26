@@ -78,64 +78,68 @@ export default class PtkSurtug {
     
     ptkAnalisis(data) {
         const uuid = uuidv4();
-        let arrayAnalisa
-        if(data.opsiKH) {
-          arrayAnalisa = data.opsiKH?.map(item => {
-            return {
-                id: uuidv4(),
-                hasil_analisis_id: item,
-                lainnya: (item === '11' ? data.opsiKHLainnya : ""),
-            }
-          })
-          arrayAnalisa.push({
-            id: uuidv4(),
-            hasil_analisis_id: data.opsiOlahH,
-            lainnya: ""
-          })
+        let arrayAnalisa = []
+        if(Cookies.get("jenisKarantina") == "H") {
+          if(data.opsiKH) {
+            arrayAnalisa = data.opsiKH?.map(item => {
+              return {
+                  id: uuidv4(),
+                  hasil_analisis_id: item,
+                  lainnya: (item === '11' ? data.opsiKHLainnya : ""),
+              }
+            })
+          } 
+          if(data.opsiOlahH) {
+            arrayAnalisa.push({
+              id: uuidv4(),
+              hasil_analisis_id: data.opsiOlahH,
+              lainnya: ""
+            })
+          }
           // arrayAnalisa = [...arrayAnalisa, ...olahKH1]
         }
-        if(data.opsiKI) {
-          arrayAnalisa = data.opsiKI?.map(item => {
-            return {
-                id: uuidv4(),
-                hasil_analisis_id: item,
-                lainnya: (item === '22' ? data.opsiKILainnya : ""),
-            }
-          })
-          const olahKI1 = {
-            id: uuidv4(),
-            hasil_analisis_id: data.opsiOlahI,
-            lainnya: ""
+        if(Cookies.get("jenisKarantina") == "I") {
+          if(data.opsiKI) {
+            arrayAnalisa = data.opsiKI?.map(item => {
+              return {
+                  id: uuidv4(),
+                  hasil_analisis_id: item,
+                  lainnya: (item === '22' ? data.opsiKILainnya : ""),
+              }
+            })
           }
-          arrayAnalisa = [...arrayAnalisa, olahKI1]
+          if(data.opsiOlahI) {
+            arrayAnalisa.push({
+              id: uuidv4(),
+              hasil_analisis_id: data.opsiOlahI,
+              lainnya: ""
+            })
+          }
         }
-        if(data.opsiKT) {
-          arrayAnalisa = data.opsiKT?.map(item => {
-            return {
-                id: uuidv4(),
-                hasil_analisis_id: item,
-                lainnya: (item === '36' ? data.opsiKTLainnya : ""),
-            }
-          })
-          const olahKT1 = {
-            id: uuidv4(),
-            hasil_analisis_id: data.opsiOlahT,
-            lainnya: ""
+        if(Cookies.get("jenisKarantina") == "T") {
+          if(data.opsiKT) {
+            arrayAnalisa = data.opsiKT?.map(item => {
+              return {
+                  id: uuidv4(),
+                  hasil_analisis_id: item,
+                  lainnya: (item === '36' ? data.opsiKTLainnya : ""),
+              }
+            })
           }
-          arrayAnalisa = [...arrayAnalisa, olahKT1]
-          const olahKT2 = {
-            id: uuidv4(),
-            hasil_analisis_id: data.opsiDilarangOPTK,
-            lainnya: ""
+          if(data.opsiOlahT) {
+            arrayAnalisa.push({
+              id: uuidv4(),
+              hasil_analisis_id: data.opsiOlahT,
+              lainnya: ""
+            })
           }
-          arrayAnalisa = [...arrayAnalisa, olahKT2]
-        }
-        if(data.opsiNHI) {
-          arrayAnalisa =  {
-                id: uuidv4(),
-                hasil_analisis_id: data.opsiNHI,
-                lainnya: (data.opsiNHI === '43' ? data.opsiNHILainnya : ""),
-            }
+          if(data.opsiDilarangOPTK) {
+            arrayAnalisa.push({
+              id: uuidv4(),
+              hasil_analisis_id: data.opsiDilarangOPTK,
+              lainnya: ""
+            })
+          }
         }
         let datasend = {
             'id': data.idDok21 == '' ? uuid : data.idDok21,
@@ -143,6 +147,8 @@ export default class PtkSurtug {
             'nomor': data.noDokumen.replace("K.1.1", "K.2.1"),
             'tanggal': data.tglDok21,
             'rekomendasi_id': data.rekomAnalis,
+            'level_risiko': data.tingkatRisiko,
+            'is_psat': data.golonganMp ? data.golonganMp : "",
             'catatan': data.catatan,
             'user_ttd_id': data.ttdAnalis,
             'user_id': Cookies.get("userId"), //session
@@ -158,6 +164,7 @@ export default class PtkSurtug {
           },
           data: datasend
         };
+        console.log(config)
         return axios.request(config)
     }
 
