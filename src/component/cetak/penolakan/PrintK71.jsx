@@ -6,6 +6,8 @@ import '../../../assets/css/test.scss'
 import jsPDF from "jspdf";
 import SpinnerDot from "../../loading/SpinnerDot";
 import Swal from "sweetalert2";
+import ModaAlatAngkut from '../../../model/master/modaAlatAngkut.json';
+
 
 moment.locale("en");
 
@@ -21,11 +23,16 @@ function makeid(length) {
     return result;
   }
 
+function modaAlatAngkut(e){
+    return ModaAlatAngkut.find((element) => element.id == parseInt(e))
+}
+
 function PrintK71(props) {
     let [isLoading, setIsLoading] = useState(false)
     let [noSeri, setNoSeri] = useState(false)
     const cetak = props.dataCetak
     console.log(props)
+    const tgl_dok = (cetak.dataK71?.length >= 1 ? cetak.dataK71[0]?.tanggal : "");
     
     const printToPdf = () => {
         setIsLoading(true)
@@ -97,7 +104,7 @@ function PrintK71(props) {
                         <p>&nbsp;</p>
                         <h2> K7-1</h2>
                     </div>
-                        <p style={{textAlign: 'center'}}><strong><u>SURAT PENOLAKAN</u></strong><br />Nomor: <strong>{cetak.dataK71?.length >= 1 ? cetak.dataK71[0]?.nomor : ""}</strong></p>
+                        <p style={{textAlign: 'center'}}><strong style={{ fontFamily:'Arial', fontSize:'20px'}}><u>SURAT PENOLAKAN</u></strong><br />Nomor: <strong>{cetak.dataK71?.length >= 1 ? cetak.dataK71[0]?.nomor : ""}</strong></p>
                         <p style={{textAlign: 'center'}}>&nbsp;</p>
                         <p style={{textAlign: 'left'}}>Yth,<br />Sdr <strong>{cetak.listPtk?.nama_penerima}</strong><br />di<br />&emsp;&emsp;tempat</p>
                         <p style={{textAlign: 'justify'}}>&emsp;&emsp;Berdasarkan Undang-Undang Nomor 21 Tahun 2019 tentang Karantina Hewan, Ikan, dan Tumbuhan dan Peraturan Pemerintah Nomor 29 Tahun 2023 tentang Peraturan Pelaksanaa Undang-Undang Nomor 21 Tahun 2019 tentang Karantina Hewan, Ikan, dan Tumbuhan, serta menindaklanjuti Permohonan Tindakan Karantina Dan Pengawasan Dan/Atau Pengendalian Media Pembawa Di Tempat Pemasukan, Pengeluaran Dan/Atau Transit Nomor <strong>{cetak.listPtk?.no_dok_permohonan}</strong> Tanggal <strong>{cetak.listPtk?.tgl_dok_permohonan}</strong>, bersama ini diberitahukan bahwa terhadap media pembawa tersebut di bawah ini <strong>ditolak pemasukan/pengeluarannya*)</strong>.</p>
@@ -110,27 +117,57 @@ function PrintK71(props) {
                         <td style={{width: '99.9999%'}} colSPan="3">Jenis Media Pembawa:<br /><strong>{cetak.listPtk?.jenis_media_pembawa}</strong></td>
                         </tr>
                         <tr>
-                        <td style={{width: '33.3333%'}}>Nama umum/dagang:</td>
-                        <td style={{width: '33.3333%'}}>Nama ilmiah**):</td>
-                        <td style={{width: '33.3333%'}}>Kode HS:</td>
+                        <td style={{width: '33.3333%'}}>Nama umum/dagang:{cetak.listKomoditas ? (cetak.listKomoditas?.map((data, index)=>(
+                            <strong key={index}>&nbsp;
+                            {data.nama_umum_tercetak}
+                            </strong>      
+                            ))
+                            ):null
+                        }</td>
+                        <td style={{width: '33.3333%'}}>Nama ilmiah**):{cetak.listKomoditas ? (cetak.listKomoditas?.map((data, index)=>(
+                            <strong key={index}>&nbsp;
+                            {data.nama_latin_tercetak}
+                            </strong>      
+                            ))
+                            ):null
+                        }</td>
+                        <td style={{width: '33.3333%'}}>Kode HS:{cetak.listKomoditas ? (cetak.listKomoditas?.map((data, index)=>(
+                            <strong key={index}>&nbsp;
+                            {data.kode_hs}
+                            </strong>      
+                            ))
+                            ):null
+                        }</td>
                         </tr>
                         <tr>
-                        <td>Bentuk</td>
-                        <td>Jumlah</td>
-                        <td>Negara/area asal*) dan tempat pengeluaran</td>
+                        <td>Bentuk: {cetak.listKomoditas ? (cetak.listKomoditas?.map((data, index)=>(
+                            <strong key={index}>&nbsp;
+                            {data.klasifikasi}
+                            </strong>      
+                            ))
+                            ):null
+                        }</td>
+                        <td>Jumlah: {cetak.listKomoditas ? (cetak.listKomoditas?.map((data, index)=>(
+                            <strong key={index}>&nbsp;
+                            {data.volumeP6} {data.sat_lain}
+                            </strong>      
+                            ))
+                            ):null
+                        }</td>
+                        <td>Negara/area asal*) dan tempat pengeluaran:<br/> <strong>{cetak.listPtk?.negara_asal} - {cetak.listPtk?.pelabuhan_muat}</strong></td>
                         </tr>
                         <tr>
-                        <td>Negara/area tujuan*) dan tempat pemasukan</td>
+                        <td>Negara/area tujuan*) dan tempat pemasukan:<br/> <strong>{cetak.listPtk?.negara_tujuan} - {cetak.listPtk?.pelabuhan_bongkar}</strong></td>
                         <td>Lokasi media pembawa</td>
-                        <td>Jenis dan nama alat angkut</td>
+                        <td>Jenis dan nama alat angkut : <br /><strong>{cetak.listPtk ? (modaAlatAngkut(cetak.listPtk.moda_alat_angkut_terakhir_id).nama + ", " + cetak.listPtk.nama_alat_angkut_terakhir) : ""}</strong></td>
                         </tr>
                         <tr>
                         <td style={{width: '99.9999%'}} colSPan="3">
                         <table style={{borderCollapse: 'collapse', width: '100%'}} border="1">
                         <tbody>
                         <tr>
-                        <td style={{width: '50%'}}>Tanggal berangkat dari negara/area asal:</td>
-                        <td style={{width: '50%'}}>Tanggal tiba di negara/area tujuan</td>
+                        <td style={{width: '50%'}}>Tanggal berangkat dari negara/area asal:<strong> {moment(cetak.listPtk?.tanggal_rencana_berangkat_terakhir).format('DD/MM/YYYY')}</strong></td>
+                        <td style={{width: '50%'}}>Tanggal tiba di negara/area tujuan: <strong>{moment(cetak.listPtk?.tanggal_rencana_tiba_terakhir).format('DD/MM/YYYY')}</strong></td>
                         </tr>
                         </tbody>
                         </table>
@@ -142,24 +179,23 @@ function PrintK71(props) {
                         <tr>
                         <td style={{width: '99.9999%'}} colSPan="3">
                         
-                        {cetak.dataK37a?.rekomendasi_id === 8 ? <strong>&#9745;</strong> : <><input type="checkbox" /></>} Tidak dapat melengkapi dokumen persyaratan dalam waktu yang ditetapkan
-                        Persyaratan dokumen lain tidak dapat dipenuhi dalam waktu yang ditetapkan
-                        Berasal dari negara/daerah/tempat yang dilarang
-                        Berasal dari negara/daerah tertular/berjangkit wabah*) penyakit hewan menular
-                        Jenis media pembawa yang dilarang
-                        Sanitasi tidak baik, kemasan tidak utuh/rusak, terjadi perubahan sifat, terkontaminasi, membahayakan kesehatan hewan dan atau manusia.
-                        Laporan pemeriksaan di atas alat angkut ditemukan HPHK/HPIK/OPTK
-                        Tidak bebas dan/atau tidak dapat dibebaskan dari HPHK/HPIK/OPTK
-                        
-                        Lainnya:</td>
+                        {cetak.dataK71?.length >= 1 ?(cetak.dataK71[0]?.alasan1 === '1' ? <strong>&#9745;</strong> : <><input type="checkbox" /></>):("")} Tidak dapat melengkapi dokumen persyaratan dalam waktu yang ditetapkan <br/>
+                        {cetak.dataK71?.length >= 1 ?(cetak.dataK71[0]?.alasan2 === '1' ? <strong>&#9745;</strong> : <><input type="checkbox" /></>):("")} Persyaratan dokumen lain tidak dapat dipenuhi dalam waktu yang ditetapkan <br/>
+                        {cetak.dataK71?.length >= 1 ?(cetak.dataK71[0]?.alasan3 === '1' ? <strong>&#9745;</strong> : <><input type="checkbox" /></>):("")} Berasal dari negara/daerah/tempat yang dilarang <br/>
+                        {cetak.dataK71?.length >= 1 ?(cetak.dataK71[0]?.alasan4 === '1' ? <strong>&#9745;</strong> : <><input type="checkbox" /></>):("")} Berasal dari negara/daerah tertular/berjangkit wabah*) penyakit hewan menular <br/>
+                        {cetak.dataK71?.length >= 1 ?(cetak.dataK71[0]?.alasan5 === '1' ? <strong>&#9745;</strong> : <><input type="checkbox" /></>):("")} Jenis media pembawa yang dilarang<br/>
+                        {cetak.dataK71?.length >= 1 ?(cetak.dataK71[0]?.alasan6 === '1' ? <strong>&#9745;</strong> : <><input type="checkbox" /></>):("")} Sanitasi tidak baik, kemasan tidak utuh/rusak, terjadi perubahan sifat, terkontaminasi, membahayakan kesehatan hewan dan atau manusia.<br/>
+                        {cetak.dataK71?.length >= 1 ?(cetak.dataK71[0]?.alasan7 === '1' ? <strong>&#9745;</strong> : <><input type="checkbox" /></>):("")} Laporan pemeriksaan di atas alat angkut ditemukan HPHK/HPIK/OPTK <br />
+                        {cetak.dataK71?.length >= 1 ?(cetak.dataK71[0]?.alasan8 === '1' ? <strong>&#9745;</strong> : <><input type="checkbox" /></>):("")} Tidak bebas dan/atau tidak dapat dibebaskan dari HPHK/HPIK/OPTK<br/>
+                        {cetak.dataK71?.length >= 1 ?(cetak.dataK71[0]?.alasan_lain === '1' ? <strong>&#9745;</strong> : <><input type="checkbox" /></>):("")} Lainnya:</td>
                         </tr>
                         <tr>
                         <td style={{width: '99.9999%'}} colSPan="3">
                         <p>Sehubungan dengan itu, Saudara diwajibkan untuk***):</p>
-                        mengeluarkan media pembawa tersebut dari wilayah Negara Republik Indonesia dan apabila dalam jangka waktu 3 (tiga) hari kerja sejak diterimanya Surat Penolakan ini kewajiban tersebut tidak dilaksanakan, terhadap media pembawa dimaksud akan dilakukan pemusnahan.
-                        mengeluarkan media pembawa tersebut dari area tujuan ke area asal dan apabila dalam jangka waktu 3 (tiga) hari kerja sejak diterimanya Surat Penolakan ini kewajiban tersebut tidak dilaksanakan, terhadap media pembawa dimaksud akan dilakukan pemusnahan.
-                        mengeluarkan media pembawa tersebut dari tempat pengeluaran dan apabila dalam jangka waktu 3 (tiga) hari kerja sejak diterimanya Surat Penolakan ini kewajiban tersebut tidak dilaksanakan, terhadap media pembawa dimaksud akan dilakukan pemusnahan
-                        tidak mengirim media pembawa tersebut ke negara/area tujuan.
+                        {cetak.dataK71?.length >= 1 ?(cetak.dataK71[0]?.diwajibkan1 === '1' ? <strong>&#9745;</strong> : <><input type="checkbox" /></>):("")} Mengeluarkan media pembawa tersebut dari wilayah Negara Republik Indonesia dan apabila dalam jangka waktu 3 (tiga) hari kerja sejak diterimanya Surat Penolakan ini kewajiban tersebut tidak dilaksanakan, terhadap media pembawa dimaksud akan dilakukan pemusnahan.<br/>
+                        {cetak.dataK71?.length >= 1 ?(cetak.dataK71[0]?.diwajibkan2 === '1' ? <strong>&#9745;</strong> : <><input type="checkbox" /></>):("")} Mengeluarkan media pembawa tersebut dari area tujuan ke area asal dan apabila dalam jangka waktu 3 (tiga) hari kerja sejak diterimanya Surat Penolakan ini kewajiban tersebut tidak dilaksanakan, terhadap media pembawa dimaksud akan dilakukan pemusnahan.<br/>
+                        {cetak.dataK71?.length >= 1 ?(cetak.dataK71[0]?.diwajibkan3 === '1' ? <strong>&#9745;</strong> : <><input type="checkbox" /></>):("")} Mengeluarkan media pembawa tersebut dari tempat pengeluaran dan apabila dalam jangka waktu 3 (tiga) hari kerja sejak diterimanya Surat Penolakan ini kewajiban tersebut tidak dilaksanakan, terhadap media pembawa dimaksud akan dilakukan pemusnahan.<br/>
+                        {cetak.dataK71?.length >= 1 ?(cetak.dataK71[0]?.diwajibkan4 === '1' ? <strong>&#9745;</strong> : <><input type="checkbox" /></>):("")} Tidak mengirim media pembawa tersebut ke negara/area tujuan.
                         </td>
                         </tr>
                         </tbody>
@@ -169,15 +205,15 @@ function PrintK71(props) {
                         <tbody>
                         <tr>
                         <td style={{width: '65.0281%'}}>&nbsp;</td>
-                        <td style={{width: '34.9719%'}}>Diterbitkan di<br />Pada Tanggal <br />Pejabat Karantina<br /><br /><br /><br />nama<br />NIP.</td>
+                        <td style={{width: '34.9719%'}}>Diterbitkan di <strong>{cetak.dataK71?.length >=1 ? cetak.dataK71[0]?.diterbitkan_di:""}</strong><br />Pada Tanggal <strong>{moment(tgl_dok).format('DD/MM/YYYY')}</strong><br />Pejabat Karantina<br /><br /><br /><br /><strong>{cetak.petugas?.length >=1 ? cetak.petugas[0]?.nama:""}<br/>NIP.{cetak.petugas?.length >=1 ? cetak.petugas[0]?.nip:""}</strong></td>
                         </tr>
                         </tbody>
                         </table>
                         <p>
                         Tembusan Yth.: <br/>
-                        1. Otoritas Pelabuhan Laut/Bandara/Lainnya*) <br/>
-                        2. Kepala Kantor Pelayanan Bea dan Cukai di  <br />	
-                        3.   ………………………………………… (Pengelola Pelabuhan/Bandara/Kantor Pos/Lainnya)
+                        1. Otoritas {cetak.dataK71?.length >= 1 ? cetak.dataK71[0]?.otoritas_pelabuhan : ""} <br/>
+                        2. Kepala Kantor Pelayanan Bea dan Cukai {cetak.dataK71?.length >= 1 ? cetak.dataK71[0]?.kepala_kantor_bc : ""}  <br />	
+                        3. Pengelola {cetak.dataK71?.length >= 1 ? cetak.dataK71[0]?.nama_pengelola : ""}
 
                         </p>
                     <p></p>
