@@ -374,6 +374,9 @@ function DocK73() {
                             errorPenolakan: ""
                         }));
                         if(response.data.status == 200) {
+                            setData(values => ({...values,
+                                dataK71:response.data.data
+                            }));
                             setValue("idDok71", response.data.data[0].id)
                             setValue("noDok71", response.data.data[0].nomor)
                             setValue("tglDok71", response.data.data[0].tanggal)
@@ -435,12 +438,16 @@ function DocK73() {
                                             errorLapPenolakan: ""
                                         }));
                                         if(response.data.status == 200) {
+                                            
                                             setValue("idDok73", response.data.data[0].id)
                                             setValue("noDok73", response.data.data[0].nomor)
                                             setValue("tglDok73", response.data.data[0].tanggal)
                                             setValue("namaPemilik", response.data.data[0].kepada)
                                             setValue("diterbitkan", response.data.data[0].diterbitkan_di)
                                             setValue("ttdPutusan", response.data.data[0].user_ttd_id)
+                                            setData(values => ({...values,
+                                                dataK73:response.data.data
+                                            }));
                                         }
                                     } else {
                                         setData(values => ({...values,

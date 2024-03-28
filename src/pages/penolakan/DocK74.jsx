@@ -11,7 +11,7 @@ import PtkModel from '../../model/PtkModel';
 import Swal from 'sweetalert2';
 import PtkSurtug from '../../model/PtkSurtug';
 import LoadBtn from '../../component/loading/LoadBtn';
-import PrintK75 from '../../component/cetak/penolakan/PrintK75';
+import PrintK74 from '../../component/cetak/penolakan/PrintK74';
 
 function modaAlatAngkut(e){
     return ModaAlatAngkut.find((element) => element.id == parseInt(e))
@@ -900,7 +900,7 @@ function DocK74() {
                         <div className="text-center mb-4">
                             <h3 className="address-title">Cetak Dokumen</h3>
                         </div>
-                        <PrintK75 dataCetak={data} />
+                        <PrintK74 dataCetak={data} />
                     </div>
                 </div>
             </div>

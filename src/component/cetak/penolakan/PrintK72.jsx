@@ -29,14 +29,12 @@ function PrintK72(props) {
     const cetak = props.dataCetak
     console.log(props)
     const tgl_dok = cetak.data72?.length >= 1 ? cetak.data72[0]?.tanggal : "";
-    const secondColumnStart = Math.ceil(cetak.data72?.length / 2);
     function modaAlatAngkut(e){
         return ModaAlatAngkut.find((element) => element.id == parseInt(e))
     }
     const printToPdf = () => {
         setIsLoading(true)
         const input = document.getElementById('hal1');
-        const input2 = document.getElementById('hal2');
         const pdf = new jsPDF({compress: true});
         html2canvas(input)
           .then((canvas) => {
@@ -92,7 +90,7 @@ function PrintK72(props) {
         
 <div className="container-xxl flex-grow-1 container-p-y">
     <h4 className="py-3 breadcrumb-wrapper mb-4">
-        K7.2 <span className="text-muted fw-light">(BERITA ACARA PENOLAKAN)</span>
+        K-7.2 <span className="text-muted fw-light">(BERITA ACARA PENOLAKAN)</span>
     </h4>
  
     <div className="row">
@@ -101,7 +99,7 @@ function PrintK72(props) {
                 <div className="container" id="hal1">
                     <div className="row text-end">
                         <p>&nbsp;</p>
-                        <h2> K.7-2</h2>
+                        <h2> K-7.2</h2>
                     </div>
                     <p style={{textAlign: 'center'}}><strong><u>BERITA ACARA PENOLAKAN</u></strong><br />Nomor: {cetak.data72?.nomor}.</p>
                     <p style={{textAlign: 'center'}}>&nbsp;</p>
@@ -110,7 +108,7 @@ function PrintK72(props) {
                     <table style={{borderCollapse: 'collapse', width: '100%', height: '190px'}} border="1" id="tabel">
                     <tbody>
                     <tr style={{height: '10px'}}>
-                    <td style={{width: '99.9999%', height: '10px'}} colspan="3">Jenis Media Pembawa:<br /><strong>{cetak.listPtk?.jenis_media_pembawa}</strong></td>
+                    <td style={{width: '99.9999%', height: '10px'}} colSpan="3">Jenis Media Pembawa:<br /><strong>{cetak.listPtk?.jenis_media_pembawa}</strong></td>
                     </tr>
                     <tr style={{height: '18px'}}>
                     <td style={{width: '25%', height: '18px'}}>Nama umum/dagang: {cetak.listKomoditas ? (cetak.listKomoditas?.map((data, index)=>(
@@ -153,7 +151,7 @@ function PrintK72(props) {
                     <td style={{height: '72px'}}>Identitas Pemilik<br />Nama : {cetak.data72?.length >=1 ? cetak.data72[0]?.nama:""}<br />Alamat : {cetak.data72?.length >=1 ? cetak.data72[0]?.alamat:""}<br />NIB/NPWP/KTP/SIM/Passpor</td>
                     </tr>
                     <tr style={{height: '36px'}}>
-                    <td style={{width: '99.9999%', height: '36px'}} colspan="3">Nomor dan tanggal Permohonan Tindakan Karantina dan/atau Pengawasan terhadap Pemasukan/Pengeluaran/Transit**) Media Pembawa<br /> <strong>{cetak.listPtk?.no_dok_permohonan}</strong></td>
+                    <td style={{width: '99.9999%', height: '36px'}} colSpan="3">Nomor dan tanggal Permohonan Tindakan Karantina dan/atau Pengawasan terhadap Pemasukan/Pengeluaran/Transit**) Media Pembawa<br /> <strong>{cetak.listPtk?.no_dok_permohonan}</strong></td>
                     </tr>
                     <tr style={{height: '36px'}}>
                     <td style={{height: '36px'}}>Nomor dan tanggal Surat Penolakan: <br/><strong>{cetak.dataK72?.length >= 1 ? cetak.dataK72[0]?.nomor : ""}</strong></td>
@@ -173,92 +171,24 @@ function PrintK72(props) {
                     </tbody>
                     </table>
                     <p>&nbsp;</p>
-                    <div className="row">
-                        
-                        <div className="col-md-6 wrup">
-                            <table className="tkanan" id="tabel">
-                                <tr>
-                                    <td style={{width: '43.6798%'}}>&nbsp;</td>
-                                    <td style={{width: '43.6798%'}}><b>
-                                    {cetak.data72?.slice(0, secondColumnStart).map((data, index) => {
-                                        return (
-                                    <>
-                                        <td>{index + 1}</td>
-                                        <td>{data.nama}</td>
-                                        <td>{data.alamat}</td>
-                                    </>  
-                                        )
-                                    })}
-                                    </b></td>
-                                </tr>
-                                {cetak.data72?.slice(0, secondColumnStart).map((data, index) => {
-                                    return (
-                                <>
-                                    <td>{index + 1}</td>
-                                    <td>{data.nama}</td>
-                                    <td>{data.alamat}</td>
-                                </>  
-                                    )
-                                })}
-                                <tr>
-                                    <td>
-                                    </td>
 
-                                    <td>
-                                    </td>
-                                </tr>
-                                
-                            </table>
-                        </div>
-                        <div className="col-md-6 wrep">
-                            <table>
+                    <div style={{marginLeft:'130px', display: "grid", gridTemplateColumns: "repeat(2, 1fr)", gridGap: 10 }}>
+                            {cetak.data72 ? (cetak.data72?.map((data, index)=>(
                                 <tr>
-                                    <td rowSpan={2} colSpan={2}>
-                                        &nbsp;informasi_tambahan: {cetak.listPtk?.informasi_tambahan}
-                                    </td>
-                                    
+                                <td>&nbsp;{index + 1}.&nbsp;</td>
+                                <td>Nama: {data.nama}<br />Alamat: {data.alamat}<br />Jabatan/pekerjaan: {data.jabatan_pekerjaan}<br />Tanda tangan <br/><br/><br/><br/><br/>
+                                </td>
                                 </tr>
-                                <tr>
-                                    <td><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /></td>
-                                </tr>
-                            </table>
-
-                        </div>
+                                ))
+                                ):null
+                            } 
                     </div>
-                    <table style={{width: '100%', borderCollapse: 'collapse', borderStyle: 'dotted'}} id="tabel">
-                    <tbody>
-                    <tr>
-                    {cetak.data72 ? (cetak.data72?.map((data, index)=>(
-                       <>
-                       {index %2 == 0 ? "<tr>" : ""}
-                       <td style={{width: '4.49437%'}}>{index + 1}</td>
-                       <td style={{width: '43.6798%'}}>Nama:<br />Alamat:<br />Jabatan/pekerjaan:<br />Tanda tangan
-                       <p>&nbsp;</p>
-                       </td>
-                       {index %2 == 1 ? "</tr>" : ""}
-                       </>
-                        ))
-                        ):null
-                    }
-                    </tr>
-                        <tr>
-                            <td style={{width: '13.4831%'}}>&nbsp;</td>
-                            <td style={{width: '4.49437%'}}>2</td>
-                            <td style={{width: '43.6798%'}}>Nama:<br />Alamat:<br />Jabatan/pekerjaan:<br />Tanda tangan
-                            <p>&nbsp;</p>
-                            </td>
-                            <td style={{width: '4.2135%'}}>3</td>
-                            <td style={{width: '34.1292%'}}>Nama:<br />Alamat:<br />Jabatan/pekerjaan:<br />Tanda tangan
-                            <p>&nbsp;</p>
-                            </td>
-                        </tr>
-                    </tbody>
-                    </table>
                     <p></p>
                 <div/>
               </div>
             </div>
         </div>
+        
     </div>
 </div>
 </div>        

@@ -27,7 +27,8 @@
     "styled-components": "^6.1.8",
     "sweetalert2": "^11.10.5",
     "uuid": "^9.0.1",
-    "web-vitals": "^2.1.4"
+    "web-vitals": "^2.1.4",
+    "xml-js": "^1.6.11"
   },
   "scripts": {
     "start": "vite",
